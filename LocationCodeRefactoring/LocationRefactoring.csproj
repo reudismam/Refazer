@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{638186DB-E7E4-4E76-B51E-1C35EFAE6280}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LocationCodeRefactoring</RootNamespace>
+    <AssemblyName>LocationCodeRefactoring</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>..\packages\Microsoft.Bcl.Metadata.1.0.9-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Spg.LocationCodeRefactoring.Controller\EditorController.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\ILocationsObserver.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\LocationEvent.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\ILocationsTransformedObserver.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\LocationsTransformedEvent.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\EndPosFilterLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\MethodFilterLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\StatementFilterLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Map\StatementMapLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\MergeLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Map\MethodMapLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Map\EndPosMapLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\FilterLearnerBase.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\ILearn.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Learner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Map\MapLearnerBase.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\PairLearn.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\CodeLocation.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\Strategy.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\LocationExtractor.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\StatementExtrategy.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\RangeExtrategy.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\MethodExtrategy.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramRefactoredObserver.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramsGeneratedObserver.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\ProgramRefactoredEvent.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Filter\EndPosFilter.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Filter\MethodFilter.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Filter\StatementFilter.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Map\MethodMap.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Map\EndPosMap.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Filter\FilterBase.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\IOperator.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Map\MapBase.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Map\StatementMap.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Merge.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Pair.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\Contains.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\EndsWith.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\IPredicate.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\PredicateFactory.cs" />
+    <Compile Include="Spg.LocationRefactor.Program\Prog.cs" />
+    <Compile Include="Spg.LocationRefactor.Schema\Field.cs" />
+    <Compile Include="Spg.LocationRefactor.Schema\IElement.cs" />
+    <Compile Include="Spg.LocationRefactor.Schema\Sequence.cs" />
+    <Compile Include="Spg.LocationRefactor.Schema\Structure.cs" />
+    <Compile Include="Spg.LocationRefactor.State\StateDoc.cs" />
+    <Compile Include="Spg.LocationRefactor.Synthesize\Synthesizer.cs" />
+    <Compile Include="Spg.LocationRefactor.TextRegion\TRegion.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\HighlightEvent.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\IHilightObserver.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spg.LocationCodeRefactoring.Observer\ProgramGeneratedEvent.cs" />
+    <Compile Include="Spg.LocationRefactor.Transformation\CodeTransformation.cs" />
+    <Compile Include="Spg.LocationRefactor.Transformation\TransformationManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Key.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DirectedGraph\DirectedGraph\DirectedGraph.csproj">
+      <Project>{e4bcc550-8993-4d14-b2dc-b6d778a025fc}</Project>
+      <Name>DirectedGraph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExampleRefactoring\ExampleRefactoring.csproj">
+      <Project>{6060b3c1-8b16-47ae-a7a5-b34eb1c170ad}</Project>
+      <Name>ExampleRefactoring</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

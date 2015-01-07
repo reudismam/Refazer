@@ -1,0 +1,44 @@
+﻿using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Setting;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Program;
+using System;
+using System.Collections.Generic;
+
+namespace Spg.LocationRefactor.Learn
+{
+    public class PairLearn:ILearn
+    {
+        public PairLearn() { 
+        }
+
+        /// <summary>
+        /// Learn a Pair operator
+        /// </summary>
+        /// <param name="examples">Examples</param>
+        /// <returns>Pair operators</returns>
+        public List<Prog> Learn(List<Tuple<ListNode, ListNode>> examples) {
+            SynthesizerSetting setting = new SynthesizerSetting(true, 2, false, true);
+            ASTProgram program = new ASTProgram(setting, examples);
+            //program.boundary = BoundaryManager.GetInstance().boundary;
+
+            List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
+
+            List<Prog> progs = new List<Prog>();
+            foreach(SynthesizedProgram sprog in synthesizedProgs){
+                foreach (IExpression solution in sprog.solutions) {
+                    Pair pair = new Pair();
+                    Prog prog = new Prog();
+                    if (solution is SubStr)
+                    {
+                        pair.expression = ((SubStr)solution);
+                        prog.ioperator = pair;
+                        progs.Add(prog);
+                    }
+                }
+            }
+            return progs;
+        }
+    }
+}
