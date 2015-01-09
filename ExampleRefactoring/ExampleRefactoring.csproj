@@ -149,6 +149,7 @@
     <Compile Include="Spg.ExampleRefactoring.LCS\CollectionDiffer.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ComparisonObject.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ComparisonResult.cs" />
+    <Compile Include="Spg.ExampleRefactoring.LCS\LCA.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ModificationType.cs" />
     <Compile Include="Spg.ExampleRefactoring.RegularExpression\Regex.cs" />
     <Compile Include="Spg.ExampleRefactoring.Setting\SynthesizerSetting.cs" />

@@ -26,6 +26,7 @@ namespace Spg.LocationRefactor.Location
     {
         private Learner learn;
         string solutionPath;
+        List<SyntaxKind> syntaxKind = new List<SyntaxKind>();
 
         public LocationExtractor(SyntaxKind syntaxKind, string solutionPath)
         {
@@ -50,15 +51,11 @@ namespace Spg.LocationRefactor.Location
             else
             {
                 examples = learn.Decompose(regions[color]);
-                //Tuple<String, String> exBoundary = Tuple.Create(regions[color][0].Parent.Text, regions[color][0].Text);
-                //List<int> boundary = SynthesisManager.CreateBoundaryPoints(exBoundary.Item1, exBoundary.Item2, examples[0]);
-                //BoundaryManager bManager = BoundaryManager.GetInstance(boundary);
 
                 programs = learn.LearnSeqRegion(examples);
             }
             return programs;
         }
-
 
         /// <summary>
         /// Return a list of examples on the format: method, selection.
