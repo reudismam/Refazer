@@ -13,7 +13,7 @@ namespace Spg.LocationRefactor.Operator
 {
     public class EndPosMap : MapBase
     {
-        public EndPosMap()
+        public EndPosMap(List<TRegion> list)
         {
         }
 

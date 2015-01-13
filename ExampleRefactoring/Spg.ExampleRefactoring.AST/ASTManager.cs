@@ -71,34 +71,7 @@ namespace Spg.ExampleRefactoring.AST
             return nodes;
         }
 
-        /// <summary>
-        /// Elements with syntax kind in the source code
-        /// </summary>
-        /// <param name="sourceCode">Source code</param>
-        /// <param name="kind">Syntax kind</param>
-        /// <returns>Elements with syntax kind in the source code</returns>
-        public static List<SyntaxNode> SyntaxElements(string sourceCode, SyntaxKind kind)
-        {
-            if (sourceCode == null)
-            {
-                throw new Exception("source code cannot be null");
-            }
 
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
-
-            List<SyntaxNode> nodes = new List<SyntaxNode>();
-            var descendentNodes = from node in tree.GetRoot().DescendantNodes()
-                                  where node.IsKind(kind)
-                                  select node;
-
-            foreach (SyntaxNode node in descendentNodes)
-            {
-                nodes.Add(node);
-            }
-
-            //nodes = ASTManager.Nodes(tree.GetRoot(), nodes, kind);
-            return nodes;
-        }
 
         /// <summary>
         /// Syntax or tokens nodes between i and length j
@@ -187,6 +160,24 @@ namespace Spg.ExampleRefactoring.AST
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*/// <summary>
         /// Convert string to nodes

@@ -27,7 +27,6 @@ namespace Spg.LocationRefactor.Location
         private Learner learn;
         string solutionPath;
         List<SyntaxKind> syntaxKind = new List<SyntaxKind>();
-
         public LocationExtractor(SyntaxKind syntaxKind, string solutionPath)
         {
             this.solutionPath = solutionPath;
@@ -51,40 +50,9 @@ namespace Spg.LocationRefactor.Location
             else
             {
                 examples = learn.Decompose(regions[color]);
-
                 programs = learn.LearnSeqRegion(examples);
             }
             return programs;
-        }
-
-        /// <summary>
-        /// Return a list of examples on the format: method, selection.
-        /// </summary>
-        /// <param name="list">List of regions selected by the user</param>
-        /// <returns>list of examples</returns>
-        private List<String> ParentRegion(List<TRegion> list, String tree)
-        {
-            List<String> examples = new List<String>();
-
-            TRegion region = list[0];
-
-            IEnumerable<SyntaxNode> methods = learn.map.SyntaxNodes(tree); //ASTManager.SyntaxElements(tree);
-
-            foreach (SyntaxNode me in methods)
-            {
-                TextSpan span = me.Span;
-                int start = span.Start;
-                int length = span.Length;
-                foreach (TRegion re in list)
-                {
-                    if (start <= re.Start && re.Start <= start + length)
-                    {
-                        String te = me.ToString();
-                        examples.Add(te);
-                    }
-                }
-            }
-            return examples;
         }
 
         /// <summary>
@@ -98,7 +66,7 @@ namespace Spg.LocationRefactor.Location
 
             TRegion region = list[0];
 
-            IEnumerable<SyntaxNode> methods = learn.map.SyntaxNodes(tree); //ASTManager.SyntaxElements(tree);
+            IEnumerable<SyntaxNode> methods = learn.map.SyntaxNodes(tree, list); //ASTManager.SyntaxElements(tree);
 
             foreach (SyntaxNode syntaxNode in methods)
             {
@@ -162,7 +130,7 @@ namespace Spg.LocationRefactor.Location
             return sourceFiles;
         }
 
-        public String TransformProgram(Dictionary<Color, List<TRegion>> regionsBeforeEdit, Dictionary<Color, List<TRegion>> regionsAfterEdit, Color color, Prog prog)
+        /*public String TransformProgram(Dictionary<Color, List<TRegion>> regionsBeforeEdit, Dictionary<Color, List<TRegion>> regionsAfterEdit, Color color, Prog prog)
         {
             SynthesizedProgram validated = null;
             EditorController controler = EditorController.GetInstance();
@@ -206,7 +174,76 @@ namespace Spg.LocationRefactor.Location
                 }
             }
             return text;     
-       }
+       }*/
+
+        public String TransformProgram(Dictionary<Color, List<TRegion>> regionsBeforeEdit, Dictionary<Color, List<TRegion>> regionsAfterEdit, Color color, Prog prog)
+        {
+            SynthesizedProgram validated = null;
+            EditorController controler = EditorController.GetInstance();
+
+            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocations(controler.CodeBefore, controler.CodeAfter, learn.syntaxKind);
+            List<Tuple<ListNode, ListNode>> examples = Nodes(exampleRegions);
+
+            SynthesizerSetting setting = new SynthesizerSetting();
+            setting.dynamicTokens = true;
+            setting.deviation = 2;
+            setting.considerEmpty = true;
+            setting.considerConstrStr = true;
+
+            ASTProgram program = new ASTProgram(setting, examples);
+
+            List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
+            validated = synthesizedProgs.Single();
+
+            String text = controler.CodeBefore;
+            List<TRegion> regions = prog.RetrieveString(text);
+
+            List<TRegion> strRegions = TRegionParent(regions, text);
+            var locations = controler.locations;
+            List<SyntaxNode> nodeLocation = Locations(locations);
+            foreach (SyntaxNode node in nodeLocation)
+            {
+                try
+                {
+                    ASTTransformation tree = ASTProgram.TransformString(node.GetText().ToString(), validated);
+                    String transformation = tree.transformation;
+
+                    String escaped = Regex.Escape(node.GetText().ToString());
+                    String replacement = Regex.Replace(text, escaped, transformation);
+                    text = replacement;
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            return text;
+        }
+
+        private List<SyntaxNode> Locations(List<CodeLocation> locations)
+        {
+            List<TRegion> regions = new List<TRegion>();
+            foreach (CodeLocation location in locations)
+            {
+                bool distinct = true;
+                foreach (TRegion region in regions)
+                {
+                    if (region.Start == location.Region.Start && region.Length == location.Region.Length)
+                    {
+                        distinct = false;
+                        break;
+                    }
+                }
+                if (distinct)
+                {
+                    regions.Add(location.Region);
+                }
+            }
+            Strategy strategy = StatementStrategy.GetInstance(SyntaxKind.MethodDeclaration);
+            var result = strategy.SyntaxNodesRegion(locations[0].SourceCode, regions);
+            return result;
+        }
+
 
         /// <summary>
         /// Return program able to transform locations.
@@ -225,41 +262,6 @@ namespace Spg.LocationRefactor.Location
             return TransformationManager.TransformationProgram(examples);
         }
 
-        public List<Tuple<string, string>> TransformLocations(Dictionary<Color, List<TRegion>> regionsBeforeEdit, Dictionary<Color, List<TRegion>> regionsAfterEdit, Color color, Prog prog)
-        {
-            SynthesizedProgram validated = null;
-
-            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocations(regionsBeforeEdit[Color.White][0].Text, regionsAfterEdit[Color.White][0].Text, learn.syntaxKind);
-            List<Tuple<ListNode, ListNode>> examples = Nodes(exampleRegions);
-
-            ASTProgram program = new ASTProgram();
-
-            List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
-            validated = synthesizedProgs.Single();
-
-            String text = regionsBeforeEdit[Color.White][0].Text;
-            List<TRegion> regions = prog.RetrieveString(text);
-
-            List<TRegion> strRegions = TRegionParent(regions, text);
-            List<Tuple<string, string>> transformedLocations = new List<Tuple<string, string>>();
-            foreach (TRegion region in strRegions)
-            {
-                try
-                {
-                    ASTTransformation tree = ASTProgram.TransformString(region.Node, validated);
-                    String transformation = tree.transformation;
-
-                    Tuple<string, string> transformedLocation = Tuple.Create(region.Text, transformation);
-                    transformedLocations.Add(transformedLocation);
-                }
-                catch (ArgumentOutOfRangeException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-            return transformedLocations;
-        }
-
         private List<Tuple<ListNode, ListNode>> Nodes(List<Tuple<TRegion, TRegion>> examples)
         {
             List<Tuple<ListNode, ListNode>> nodes = new List<Tuple<ListNode, ListNode>>();
@@ -272,13 +274,11 @@ namespace Spg.LocationRefactor.Location
             return nodes;
         }
 
-
         public List<Tuple<TRegion, TRegion>> ExtractLocations(String codeBefore, String codeAfter, SyntaxKind kind)
         {
             Strategy strategy = StatementStrategy.GetInstance(kind);
-
-            List<SyntaxNode> nodesBefore = strategy.SyntaxNodes(codeBefore);
-            List<SyntaxNode> nodesAfter = strategy.SyntaxNodes(codeAfter);
+            List<SyntaxNode> nodesBefore = strategy.SyntaxNodesRegion(codeBefore, EditorController.GetInstance().RegionsBeforeEdit[Color.LightGreen]);
+            List<SyntaxNode> nodesAfter = strategy.SyntaxNodesRegion(codeAfter, EditorController.GetInstance().RegionsBeforeEdit[Color.LightGreen]);
 
             List<Tuple<TRegion, TRegion>> examples = new List<Tuple<TRegion, TRegion>>();
             for (int i = 0; i < nodesBefore.Count; i++)
@@ -305,18 +305,75 @@ namespace Spg.LocationRefactor.Location
             }
             return examples;
         }
-
     }
 }
 
 
 
+//public List<Tuple<string, string>> TransformLocations(Dictionary<Color, List<TRegion>> regionsBeforeEdit, Dictionary<Color, List<TRegion>> regionsAfterEdit, Color color, Prog prog)
+//{
+//    SynthesizedProgram validated = null;
 
+//    List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocations(regionsBeforeEdit[Color.White][0].Text, regionsAfterEdit[Color.White][0].Text, learn.syntaxKind);
+//    List<Tuple<ListNode, ListNode>> examples = Nodes(exampleRegions);
 
+//    ASTProgram program = new ASTProgram();
 
+//    List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
+//    validated = synthesizedProgs.Single();
 
+//    String text = regionsBeforeEdit[Color.White][0].Text;
+//    List<TRegion> regions = prog.RetrieveString(text);
 
+//    List<TRegion> strRegions = TRegionParent(regions, text);
+//    List<Tuple<string, string>> transformedLocations = new List<Tuple<string, string>>();
+//    foreach (TRegion region in strRegions)
+//    {
+//        try
+//        {
+//            ASTTransformation tree = ASTProgram.TransformString(region.Node, validated);
+//            String transformation = tree.transformation;
 
+//            Tuple<string, string> transformedLocation = Tuple.Create(region.Text, transformation);
+//            transformedLocations.Add(transformedLocation);
+//        }
+//        catch (ArgumentOutOfRangeException e)
+//        {
+//            Console.WriteLine(e.Message);
+//        }
+//    }
+//    return transformedLocations;
+//}
+
+///// <summary>
+///// Return a list of examples on the format: method, selection.
+///// </summary>
+///// <param name="list">List of regions selected by the user</param>
+///// <returns>list of examples</returns>
+//private List<String> ParentRegion(List<TRegion> list, String tree)
+//{
+//    List<String> examples = new List<String>();
+
+//    TRegion region = list[0];
+
+//    IEnumerable<SyntaxNode> methods = learn.map.SyntaxNodes(tree); //ASTManager.SyntaxElements(tree);
+
+//    foreach (SyntaxNode me in methods)
+//    {
+//        TextSpan span = me.Span;
+//        int start = span.Start;
+//        int length = span.Length;
+//        foreach (TRegion re in list)
+//        {
+//            if (start <= re.Start && re.Start <= start + length)
+//            {
+//                String te = me.ToString();
+//                examples.Add(te);
+//            }
+//        }
+//    }
+//    return examples;
+//}
 
 //    public String TransformProgram(Dictionary<Color, List<TRegion>> regionsBeforeEdit, Dictionary<Color, List<TRegion>> regionsAfterEdit, Color color, Prog prog)
 //        {

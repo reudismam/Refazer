@@ -27,18 +27,18 @@ namespace Spg.LocationRefactor.Learn
         /// Map for EndPosMap
         /// </summary>
         /// <returns>Map</returns>
-        protected override MapBase GetMap()
+        protected override MapBase GetMap(List<TRegion> list)
         {
-            return new EndPosMap();
+            return new EndPosMap(list);
         }
 
         /// <summary>
         /// Returns a new EndPosFilter
         /// </summary>
         /// <returns></returns>
-        protected override FilterLearnerBase GetFilter()
+        protected override FilterLearnerBase GetFilter(List<TRegion> list)
         {
-            return new EndPosFilterLearner(); 
+            return new EndPosFilterLearner(list); 
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Spg.LocationRefactor.Learn
         /// </summary>
         /// <param name="sourceCode">Source code</param>
         /// <returns>Syntax nodes</returns>
-        public override List<SyntaxNode> SyntaxNodes(string sourceCode)
+        public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
             throw new NotImplementedException();
         }

@@ -1,14 +1,21 @@
-﻿using Spg.ExampleRefactoring.Expression;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using Microsoft.CodeAnalysis.CSharp;
+using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.Program;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Learn
 {
+    /// <summary>
+    /// Merge Learner
+    /// </summary>
     public class MergeLearner: ILearn
     {
         /// <summary>
@@ -27,7 +34,9 @@ namespace Spg.LocationRefactor.Learn
             List<IExpression> X = new List<IExpression>();
 
             Predicate.IPredicate pred = GetPredicate();
-            FilterLearnerBase S = GetFilter();
+            EditorController contoller = EditorController.GetInstance();
+            List<TRegion> list = contoller.RegionsBeforeEdit[Color.LightGreen];
+            FilterLearnerBase S = GetFilter(list);
             S.predicate = pred;
 
             List<Prog> predicates = S.Learn(examples);
@@ -41,7 +50,8 @@ namespace Spg.LocationRefactor.Learn
 
                     scalar.ioperator = pair;
 
-                    MapBase map = GetMap();
+                    
+                    MapBase map = GetMap(list);
                     map.scalarExpression = scalar;
                     map.sequenceExpression = predicate;
                     Prog prog = new Prog();
@@ -64,16 +74,16 @@ namespace Spg.LocationRefactor.Learn
         /// Map
         /// </summary>
         /// <returns>Map</returns>
-        protected MapBase GetMap() {
-            return new MethodMap();
+        protected MapBase GetMap(List<TRegion> list) {
+            return new MethodMap(list);
         }
 
         /// <summary>
         /// Filter
         /// </summary>
         /// <returns>Filter</returns>
-        protected FilterLearnerBase GetFilter() {
-            return new MethodFilterLearner();
+        protected FilterLearnerBase GetFilter(List<TRegion> list) {
+            return new StatementFilterLearner(SyntaxKind.MethodDeclaration, list);
         }
     }
 }

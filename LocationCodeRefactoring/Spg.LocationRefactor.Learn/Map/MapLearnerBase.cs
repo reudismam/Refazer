@@ -6,6 +6,8 @@ using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
+using Spg.LocationCodeRefactoring.Controller;
+using System.Drawing;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -24,20 +26,21 @@ namespace Spg.LocationRefactor.Learn
             PairLearn F = new PairLearn();
             List<Prog> hypo = F.Learn(Q);
 
-            Predicate.IPredicate pred = GetPredicate();
-            FilterLearnerBase S = GetFilter();
+            IPredicate pred = GetPredicate();
+            EditorController contoller = EditorController.GetInstance();
+            List<TRegion> list = contoller.RegionsBeforeEdit[Color.LightGreen];
+            FilterLearnerBase S = GetFilter(list);
             S.predicate = pred;
 
             List<Prog> predicates = S.Learn(examples);
 
             if (hypo.Count == 1)
             {
-
                 foreach (Prog h in hypo)
                 {
                     foreach (Prog predicate in predicates)
                     {
-                        MapBase map = GetMap();
+                        MapBase map = GetMap(list);
                         map.scalarExpression = h;
                         map.sequenceExpression = predicate;
                         Prog prog = new Prog();
@@ -54,7 +57,7 @@ namespace Spg.LocationRefactor.Learn
                     programs = new List<Prog>();
                     foreach (Prog predicate in predicates)
                     {
-                        MapBase map = GetMap();
+                        MapBase map = GetMap(list);
                         map.scalarExpression = h;
                         map.sequenceExpression = predicate;
                         Prog prog = new Prog();
@@ -98,13 +101,13 @@ namespace Spg.LocationRefactor.Learn
         /// <param name="list">Selection</param>
         /// <returns>Decomposition</returns>
         public abstract List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list);
-  
+
         /// <summary>
         /// SyntaxNode specific for map
         /// </summary>
         /// <param name="sourceCode">Source code</param>
         /// <returns>Syntax nodes</returns>
-        public abstract List<SyntaxNode> SyntaxNodes(string sourceCode);
+        public abstract List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list);
 
         /// <summary>
         /// Predicate for map
@@ -116,12 +119,12 @@ namespace Spg.LocationRefactor.Learn
         /// Map
         /// </summary>
         /// <returns>Map</returns>
-        protected abstract MapBase GetMap();
+        protected abstract MapBase GetMap(List<TRegion> list);
 
         /// <summary>
         /// Filter for map
         /// </summary>
         /// <returns>Filter for map</returns>
-        protected abstract FilterLearnerBase GetFilter();
+        protected abstract FilterLearnerBase GetFilter(List<TRegion> list);
     }
 }

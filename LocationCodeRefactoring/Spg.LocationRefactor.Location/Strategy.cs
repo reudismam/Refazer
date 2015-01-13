@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
+using LeastCommonAncestor;
 
 namespace LocationCodeRefactoring.Br.Spg.Location
 {
@@ -15,7 +17,7 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
 
             TRegion region = list[0];
-            List<SyntaxNode> statements = SyntaxNodes(region.Parent.Text);
+            List<SyntaxNode> statements = SyntaxNodes(region.Parent.Text, list);
             Dictionary<SyntaxNode, Tuple<ListNode, ListNode>> methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
             Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, list);
             foreach (KeyValuePair<TRegion, SyntaxNode> pair in pairs)
@@ -86,42 +88,48 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             return dicRegions;
         }
 
-        public List<Tuple<String, String>> ExtractText(List<TRegion> list)
+        internal static List<SyntaxNode> SyntaxElements(string input, string sourceCode, List<TRegion> list)
         {
-            List<Tuple<String, String>> examples = new List<Tuple<String, String>>();
-            TRegion region = list[0];
-            List<SyntaxNode> statements = SyntaxNodes(region.Parent.Text);
-            Dictionary<String, String> methodsDic = new Dictionary<String, String>();
-            Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, list);
-            foreach (KeyValuePair<TRegion, SyntaxNode> pair in pairs)
+            if (sourceCode == null)
             {
-                TRegion re = pair.Key;
-                SyntaxNode statment = pair.Value;
-
-                //foreach (SyntaxNode statement in statements)
-                //{
-                //    TextSpan span = statement.Span;
-                //    int start = span.Start;
-                //    int length = span.Length;
-                //    foreach (TRegion re in list)
-                //    {
-                //        if (start <= re.Start && re.Start <= start + length)
-                //        {
-                String value = null;
-                if (!methodsDic.TryGetValue(statment.GetText().ToString(), out value))
-                {
-                    Tuple<String, String> tuple = Tuple.Create(re.Text, statment.GetText().ToString());
-                    examples.Add(tuple);
-                    methodsDic.Add(statment.GetText().ToString(), value);
-                }
-                //}
-                //    }
-                //}
+                throw new Exception("source code cannot be null");
             }
-            return examples;
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+
+            List<SyntaxNode> nodes = new List<SyntaxNode>();
+            foreach (TRegion region in list)
+            {
+                var descendentNodes = from node in tree.GetRoot().DescendantNodes()
+                                      where node.SpanStart == region.Start
+                                      select node;
+                nodes.AddRange(descendentNodes);
+            }
+
+            LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
+            SyntaxNodeOrToken lca = nodes[0];
+            for (int i = 1; i < nodes.Count; i++)
+            {
+                SyntaxNodeOrToken node = nodes[i];
+                lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+            }
+
+            SyntaxNode snode = lca.AsNode();
+
+            SyntaxTree inputTree = CSharpSyntaxTree.ParseText(input);
+            var rootList        = from node in inputTree.GetRoot().DescendantNodes()
+                                  where node.RawKind == snode.RawKind
+                                  select node;
+            List<SyntaxNode> result = new List<SyntaxNode>();
+            foreach (SyntaxNode sn in rootList)
+            {
+                result.AddRange(sn.DescendantNodes());
+            }
+            return result;
+            //return snode.DescendantNodes().ToList();
+
         }
 
-        public abstract List<SyntaxNode> SyntaxNodes(string sourceCode);
+        public abstract List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list);
 
         /// <summary>
         /// Covert the region on a method to an example ListNode
@@ -164,5 +172,188 @@ namespace LocationCodeRefactoring.Br.Spg.Location
 
             return t;
         }
+
+        /// <summary>
+        /// Elements with syntax kind in the source code
+        /// </summary>
+        /// <param name="sourceCode">Source code</param>
+        /// <param name="kind">Syntax kind</param>
+        /// <returns>Elements with syntax kind in the source code</returns>
+        public static List<SyntaxNode> SyntaxElements(string sourceCode, SyntaxNode root)
+        {
+            if (sourceCode == null)
+            {
+                throw new Exception("source code cannot be null");
+            }
+
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+
+            List<SyntaxNode> nodes = new List<SyntaxNode>();
+            var descendentNodes = from node in root.DescendantNodes()
+                                  select node;
+
+            foreach (SyntaxNode node in descendentNodes)
+            {
+                nodes.Add(node);
+            }
+
+            return nodes;
+        }
+
+        /// <summary>
+        /// Elements with syntax kind in the source code
+        /// </summary>
+        /// <param name="sourceCode">Source code</param>
+        /// <param name="kind">Syntax kind</param>
+        /// <returns>Elements with syntax kind in the source code</returns>
+        public static List<SyntaxNode> SyntaxElements(string sourceCode, List<TRegion> list)
+        {
+            if (sourceCode == null)
+            {
+                throw new Exception("source code cannot be null");
+            }
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+
+            List<SyntaxNode> nodes = new List<SyntaxNode>();
+            foreach (TRegion region in list)
+            {
+                var descendentNodes = from node in tree.GetRoot().DescendantNodes()
+                                      where node.SpanStart == region.Start
+                                      select node;
+                nodes.AddRange(descendentNodes);
+            }
+
+            LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
+            SyntaxNodeOrToken lca = nodes[0];
+            for (int i = 1; i < nodes.Count; i++)
+            {
+                SyntaxNodeOrToken node = nodes[i];
+                lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+            }
+
+            SyntaxNode snode = lca.AsNode();
+
+            return snode.DescendantNodes().ToList();
+        }
+
+        internal List<SyntaxNode> SyntaxNodesRegion(string sourceCode, List<TRegion> list)
+        {
+            if (sourceCode == null)
+            {
+                throw new Exception("source code cannot be null");
+            }
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+
+            List<SyntaxNode> nodes = new List<SyntaxNode>();
+            foreach (TRegion region in list)
+            {
+                List<SyntaxNode> nodesSelection = new List<SyntaxNode>();
+                var descedentsBegin = from node in tree.GetRoot().DescendantNodes()
+                                      where node.SpanStart == region.Start
+                                      select node;
+                nodesSelection.AddRange(descedentsBegin);
+
+                var descedentsEnd = from node in tree.GetRoot().DescendantNodes()
+                                    where node.SpanStart + node.Span.Length == region.Start + region.Length
+                                      select node;
+                nodesSelection.AddRange(descedentsEnd);
+
+                LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
+                SyntaxNodeOrToken lca = nodesSelection[0];
+                for (int i = 1; i < nodesSelection.Count; i++)
+                {
+                    SyntaxNodeOrToken node = nodesSelection[i];
+                    lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+                }
+                SyntaxNode snode = lca.AsNode();
+                nodes.Add(snode);
+            }
+
+            return nodes;
+            //return snode.DescendantNodes().ToList();
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*/// <summary>
+       /// Elements with syntax kind in the source code
+       /// </summary>
+       /// <param name="sourceCode">Source code</param>
+       /// <param name="kind">Syntax kind</param>
+       /// <returns>Elements with syntax kind in the source code</returns>
+       public static List<SyntaxNode> SyntaxElements(string sourceCode, SyntaxKind kind)
+       {
+           if (sourceCode == null)
+           {
+               throw new Exception("source code cannot be null");
+           }
+
+           SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+
+           List<SyntaxNode> nodes = new List<SyntaxNode>();
+           var descendentNodes = from node in tree.GetRoot().DescendantNodes()
+                                 where node.IsKind(kind)
+                                 select node;
+
+           foreach (SyntaxNode node in descendentNodes)
+           {
+               nodes.Add(node);
+           }
+
+           //remove
+           //LCA <SyntaxNodeOrToken> lca = new LCA<SyntaxNodeOrToken>();
+           //var result = lca.LeastCommonAncestor(tree.GetRoot(), nodes[0], nodes[1]);
+           //remove
+
+           //nodes = ASTManager.Nodes(tree.GetRoot(), nodes, kind);
+           return nodes;
+       }*/
+
+
+//public List<Tuple<String, String>> ExtractText(List<TRegion> list)
+//{
+//    List<Tuple<String, String>> examples = new List<Tuple<String, String>>();
+//    TRegion region = list[0];
+//    List<SyntaxNode> statements = SyntaxNodes(region.Parent.Text, list);
+//    Dictionary<String, String> methodsDic = new Dictionary<String, String>();
+//    Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, list);
+//    foreach (KeyValuePair<TRegion, SyntaxNode> pair in pairs)
+//    {
+//        TRegion re = pair.Key;
+//        SyntaxNode statment = pair.Value;
+
+//        //foreach (SyntaxNode statement in statements)
+//        //{
+//        //    TextSpan span = statement.Span;
+//        //    int start = span.Start;
+//        //    int length = span.Length;
+//        //    foreach (TRegion re in list)
+//        //    {
+//        //        if (start <= re.Start && re.Start <= start + length)
+//        //        {
+//        String value = null;
+//        if (!methodsDic.TryGetValue(statment.GetText().ToString(), out value))
+//        {
+//            Tuple<String, String> tuple = Tuple.Create(re.Text, statment.GetText().ToString());
+//            examples.Add(tuple);
+//            methodsDic.Add(statment.GetText().ToString(), value);
+//        }
+//        //}
+//        //    }
+//        //}
+//    }
+//    return examples;
+//}

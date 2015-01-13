@@ -8,12 +8,27 @@ using System.Collections.Generic;
 
 namespace Spg.LocationRefactor.Learn
 {
+    /// <summary>
+    /// Learner
+    /// </summary>
     public class Learner
     {
+        /// <summary>
+        /// Map
+        /// </summary>
+        /// <returns>map</returns>
         public MapLearnerBase map { get; set; }
 
+        /// <summary>
+        /// Syntax kind
+        /// </summary>
+        /// <returns>Syntax kind</returns>
         public SyntaxKind syntaxKind { get; set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="syntaxKind"></param>
         public Learner(SyntaxKind syntaxKind)
         {
             this.syntaxKind = syntaxKind;

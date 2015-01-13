@@ -2,18 +2,24 @@
 using Spg.LocationRefactor.Learn;
 using System;
 using System.Collections.Generic;
+using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator
 {
     public class EndPosFilter: FilterBase
     {
+
+        public EndPosFilter(List<TRegion> list) :base(list)
+        {
+
+        }
         /// <summary>
         /// Filter learner
         /// </summary>
         /// <returns>Filter Learner</returns>
-        protected override FilterLearnerBase GetFilterLearner()
+        protected override FilterLearnerBase GetFilterLearner(List<TRegion> list)
         {
-            return new EndPosFilterLearner();
+            return new EndPosFilterLearner(list);
         }
 
         /// <summary>

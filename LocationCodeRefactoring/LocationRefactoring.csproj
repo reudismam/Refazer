@@ -109,7 +109,6 @@
     <Compile Include="Spg.LocationRefactor.Location\Strategy.cs" />
     <Compile Include="Spg.LocationRefactor.Location\LocationExtractor.cs" />
     <Compile Include="Spg.LocationRefactor.Location\StatementExtrategy.cs" />
-    <Compile Include="Spg.LocationRefactor.Location\RangeExtrategy.cs" />
     <Compile Include="Spg.LocationRefactor.Location\MethodExtrategy.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramRefactoredObserver.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramsGeneratedObserver.cs" />

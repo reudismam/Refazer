@@ -2,12 +2,22 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
+using Spg.LocationRefactor.TextRegion;
 
 namespace LocationCodeRefactoring.Br.Spg.Location
 {
     public class MethodExtrategy : Strategy
     {
-        /*public List<Tuple<ListNode, ListNode>> Extract(List<TRegion> list)
+        public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
+        {
+            //return SyntaxElements(sourceCode, SyntaxKind.MethodDeclaration);
+            return SyntaxElements(sourceCode, list);
+        }
+    }
+}
+
+
+/*public List<Tuple<ListNode, ListNode>> Extract(List<TRegion> list)
         {
             List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
 
@@ -43,46 +53,38 @@ namespace LocationCodeRefactoring.Br.Spg.Location
         }*/
 
 
-        /* /// <summary>
-         /// Covert the region on a method to a example listnode
-         /// </summary>
-         /// <param name="me">Method</param>
-         /// <param name="re">Region within the method</param>
-         /// <returns>A example</returns>
-         private Tuple<ListNode, ListNode> Example(SyntaxNode me, TRegion re)
-         {
+/* /// <summary>
+ /// Covert the region on a method to a example listnode
+ /// </summary>
+ /// <param name="me">Method</param>
+ /// <param name="re">Region within the method</param>
+ /// <returns>A example</returns>
+ private Tuple<ListNode, ListNode> Example(SyntaxNode me, TRegion re)
+ {
 
-             List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-             list = ASTManager.EnumerateSyntaxNodesAndTokens(me, list);
-             ListNode listNode = new ListNode(list);
+     List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+     list = ASTManager.EnumerateSyntaxNodesAndTokens(me, list);
+     ListNode listNode = new ListNode(list);
 
-             TextSpan span = list[0].Span;
+     TextSpan span = list[0].Span;
 
-             int i = 0;
-             while (re.Start > span.Start)
-             {
-                 span = list[i++].Span;
-             }
+     int i = 0;
+     while (re.Start > span.Start)
+     {
+         span = list[i++].Span;
+     }
 
-             int j = i - 1;
-             while (re.Start + re.Length >= span.Start)
-             {
-                 if (j == list.Count)
-                     break;
-                 span = list[j++].Span;
-             }
+     int j = i - 1;
+     while (re.Start + re.Length >= span.Start)
+     {
+         if (j == list.Count)
+             break;
+         span = list[j++].Span;
+     }
 
-             ListNode subNodes = ASTManager.SubNotes(listNode, i - 1, (j - i));
+     ListNode subNodes = ASTManager.SubNotes(listNode, i - 1, (j - i));
 
-             Tuple<ListNode, ListNode> t = Tuple.Create(listNode, subNodes);
+     Tuple<ListNode, ListNode> t = Tuple.Create(listNode, subNodes);
 
-             return t;
-         }*/
-
-
-        public override List<SyntaxNode> SyntaxNodes(string sourceCode)
-        {
-            return ASTManager.SyntaxElements(sourceCode, SyntaxKind.MethodDeclaration);
-        }
-    }
-}
+     return t;
+ }*/

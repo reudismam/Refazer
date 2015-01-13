@@ -83,6 +83,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// </summary>
         /// <param name="synthesizedProgramList">Synthesized programs list</param>
         /// <param name="expressionList">Expression list</param>
+        /// <param name="examples">Examples</param>
         /// <returns>Synthesized programs list</returns>
         private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
         {
@@ -398,18 +399,18 @@ namespace Spg.ExampleRefactoring.Synthesis
 
         /// <summary>
         /// Create boundary points
-        /// </summary>
-        /// <param name="input">Input string</param>
-        /// <param name="output">Output string</param>
-        /// <param name="data">ListNode</param>
-        /// <returns>Boundary points</returns>
-        [Obsolete]
-        public static List<int> CreateBoundaryPoints(string input, string output, Tuple<ListNode, ListNode> data)
-        {
-            List<int> points = Differ(data.Item1, data.Item2);
-            points.Sort();
-            return points;
-        }
+        ///// </summary>
+        ///// <param name="input">Input string</param>
+        ///// <param name="output">Output string</param>
+        ///// <param name="data">ListNode</param>
+        ///// <returns>Boundary points</returns>
+        //[Obsolete]
+        //public static List<int> CreateBoundaryPoints(string input, string output, Tuple<ListNode, ListNode> data)
+        //{
+        //    List<int> points = Differ(data.Item1, data.Item2);
+        //    points.Sort();
+        //    return points;
+        //}
 
         /// <summary>
         /// Create boundary points

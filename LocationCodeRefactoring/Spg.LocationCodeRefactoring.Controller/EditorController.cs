@@ -1,15 +1,14 @@
-﻿//using FastColoredTextBoxNS;
+﻿using System;
+using System.Drawing;
+using System.Collections.Generic;
+using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis.CSharp;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationCodeRefactoring.Observer;
+using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Spg.LocationRefactor.Location;
-using Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
-using Spg.ExampleRefactoring.AST;
 
 namespace Spg.LocationCodeRefactoring.Controller
 {
@@ -24,7 +23,7 @@ namespace Spg.LocationCodeRefactoring.Controller
         private List<ILocationsTransformedObserver> locationsTransformedObserver;
         private List<ILocationsObserver> locationsObversers;
 
-        private List<CodeLocation> locations;
+        public List<CodeLocation> locations { get; set; }
 
         /// <summary>
         /// Regions before the transformation
@@ -85,29 +84,6 @@ namespace Spg.LocationCodeRefactoring.Controller
             return instance;
         }
 
-        /*/// <summary>
-        /// Extract locations
-        /// </summary>
-        /// <param name="color"></param>
-        public void Extract(Color color)
-        {
-            LocationRefactor.Location.LocationExtractor extractor = new LocationRefactor.Location.LocationExtractor(syntaxKind, solutionPath);
-            List<Prog> programs = extractor.Extract(RegionsBeforeEdit, (Color)color);
-
-            List<Prog> filtereds = new List<Prog>();
-            foreach (Prog program in programs)
-            {
-                Prog val;
-                if (!Progs.TryGetValue(program.ToString(), out val))
-                {
-                    Progs.Add(program.ToString(), program);
-                    filtereds.Add(program);
-                }
-            }
-
-            NotifyProgramGeneratedObservers(filtereds);
-        }*/
-
         /// <summary>
         /// Extract locations
         /// </summary>
@@ -131,51 +107,6 @@ namespace Spg.LocationCodeRefactoring.Controller
 
             NotifyProgramGeneratedObservers(filtereds);
         }
-
-        /* /// <summary>
-         /// Edit locations
-         /// </summary>
-         /// <param name="start">Start position</param>
-         /// <param name="length">Region length</param>
-         /// <param name="sourceCode">Source code</param>
-         /// <param name="color">Color region</param>
-         /// <param name="range">Region range</param>
-         public void Edit(int start, int length, String sourceCode, Color color, Range range)
-         {
-             TRegion tregion = new TRegion();
-
-             tregion.Start = start;
-             tregion.Length = length;
-             tregion.Text = sourceCode;
-             tregion.Color = color;
-             tregion.Range = range;
-
-             List<TRegion> values;
-
-             if (!RegionsBeforeEdit.TryGetValue(color, out values))
-             {
-                 values = new List<TRegion>();
-                 RegionsBeforeEdit.Add(color, values);
-             }
-
-             values.Add(tregion);
-
-             foreach (KeyValuePair<Color, List<TRegion>> dic in RegionsBeforeEdit)
-             {
-                 foreach (TRegion tr in dic.Value)
-                 {
-                     if (tregion.IsParent(tr))
-                     {
-                         tregion.Parent = tr;
-                     }
-                 }
-             }
-
-             if (tregion.Parent == null)
-             {
-                 tregion.Parent = RegionsBeforeEdit[Color.White][0];
-             }
-         }*/
 
         /// <summary>
         /// Edit locations
@@ -228,32 +159,6 @@ namespace Spg.LocationCodeRefactoring.Controller
         }
 
         /// <summary>
-        /// Load from file
-        /// </summary>
-        /// <param name="fileName">File name</param>
-        /// <returns>file content</returns>
-        public string Load(String fileName)
-        {
-            System.IO.StreamReader sr = new
-            System.IO.StreamReader(fileName);
-
-            String text = sr.ReadToEnd();
-
-            text = text.Replace("\r\n", "\n");
-            TRegion tRegion = new TRegion();
-            tRegion.Text = text;
-            tRegion.Color = Color.White;
-
-            List<TRegion> tRegions = new List<TRegion>();
-            tRegions.Add(tRegion);
-
-            RegionsBeforeEdit.Add(Color.White, tRegions);
-            sr.Close();
-
-            return text;
-        }
-
-        /// <summary>
         /// Retrieve locations
         /// </summary>
         /// <param name="selected">Selected region</param>
@@ -290,80 +195,6 @@ namespace Spg.LocationCodeRefactoring.Controller
         }
 
         /// <summary>
-        /// Edit done
-        /// </summary>
-        /// <param name="code">Source code</param>
-        /// <param name="start">Start position</param>
-        /// <param name="length">Region length</param>
-        public void EditDone(String code, int start, int length)
-        {
-            code = code.Replace("\r\n", "\n");
-            TRegion tRegion = new TRegion();
-            tRegion.Text = code;
-            tRegion.Color = Color.White;
-
-            List<TRegion> tRegions = new List<TRegion>();
-            tRegions.Add(tRegion);
-
-            RegionsAfterEdit[Color.White] = tRegions;
-
-            String text = code.Substring(start, length);
-            TRegion tregion = new TRegion();
-
-            Color color = Color.LightGreen;
-
-            tregion.Start = start;
-            tregion.Length = length;
-            tregion.Text = text;
-            tregion.Color = color;
-
-            List<TRegion> values;
-
-            if (!RegionsAfterEdit.TryGetValue(color, out values))
-            {
-                values = new List<TRegion>();
-                RegionsAfterEdit.Add(color, values);
-            }
-
-            values.Add(tregion);
-
-            foreach (KeyValuePair<Color, List<TRegion>> dic in RegionsAfterEdit)
-            {
-                foreach (TRegion tr in dic.Value)
-                {
-                    if (tregion.IsParent(tr))
-                    {
-                        tregion.Parent = tr;
-                    }
-                }
-            }
-
-            if (tregion.Parent == null)
-            {
-                tregion.Parent = RegionsAfterEdit[Color.White][0];
-            }
-        }
-
-        ///// <summary>
-        ///// Refact a region
-        ///// </summary>
-        ///// <param name="program">Source code</param>
-        ///// <param name="color">Selected color</param>
-        //public void Refact(String program, Color color)
-        //{
-        //    Prog prog = Progs[program];
-
-        //    LocationRefactor.Location.LocationExtractor extractor = new LocationRefactor.Location.LocationExtractor(syntaxKind, solutionPath);
-        //    String transformation = extractor.TransformProgram(RegionsBeforeEdit, RegionsAfterEdit, color, prog);
-
-        //    //List<Tuple<string, string>> transformedLocations = extractor.TransformLocations(RegionsBeforeEdit, RegionsAfterEdit, color, prog);
-        //    SynthesizedProgram synthesized = extractor.TransformationProgram(RegionsBeforeEdit, RegionsAfterEdit, color);
-
-        //    NotifyProgramRefactoredObservers(transformation);
-        //    NotifyLocationsTransformedObservers(synthesized, locations);
-        //}
-
-        /// <summary>
         /// Refact a region
         /// </summary>
         /// <param name="program">Source code</param>
@@ -373,7 +204,7 @@ namespace Spg.LocationCodeRefactoring.Controller
             Prog prog = Progs[selec];
             Color color = Color.LightGreen;
 
-            LocationRefactor.Location.LocationExtractor extractor = new LocationRefactor.Location.LocationExtractor(syntaxKind, solutionPath);
+            LocationExtractor extractor = new LocationExtractor(syntaxKind, solutionPath);
             String transformation = extractor.TransformProgram(RegionsBeforeEdit, RegionsAfterEdit, color, prog);
 
             //List<Tuple<string, string>> transformedLocations = extractor.TransformLocations(RegionsBeforeEdit, RegionsAfterEdit, color, prog);
@@ -459,15 +290,6 @@ namespace Spg.LocationCodeRefactoring.Controller
             this.locationsTransformedObserver.Add(observer);
         }
 
-        /* private void NotifyLocationsTransformedObservers(List<Tuple<string, string>> transformedLocations)
-         {
-             LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(transformedLocations);
-
-             foreach (ILocationsTransformedObserver observer in locationsTransformedObserver) {
-                 observer.NotifyLocationsTransformed(ltEvent);
-             }
-         }*/
-
         private void NotifyLocationsTransformedObservers(SynthesizedProgram program, List<CodeLocation> locations)
         {
             List<CodeTransformation> transformations = new List<CodeTransformation>();
@@ -533,3 +355,182 @@ namespace Spg.LocationCodeRefactoring.Controller
         }
     }
 }
+
+/*/// <summary>
+       /// Extract locations
+       /// </summary>
+       /// <param name="color"></param>
+       public void Extract(Color color)
+       {
+           LocationRefactor.Location.LocationExtractor extractor = new LocationRefactor.Location.LocationExtractor(syntaxKind, solutionPath);
+           List<Prog> programs = extractor.Extract(RegionsBeforeEdit, (Color)color);
+
+           List<Prog> filtereds = new List<Prog>();
+           foreach (Prog program in programs)
+           {
+               Prog val;
+               if (!Progs.TryGetValue(program.ToString(), out val))
+               {
+                   Progs.Add(program.ToString(), program);
+                   filtereds.Add(program);
+               }
+           }
+
+           NotifyProgramGeneratedObservers(filtereds);
+       }*/
+
+/* private void NotifyLocationsTransformedObservers(List<Tuple<string, string>> transformedLocations)
+         {
+             LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(transformedLocations);
+
+             foreach (ILocationsTransformedObserver observer in locationsTransformedObserver) {
+                 observer.NotifyLocationsTransformed(ltEvent);
+             }
+         }*/
+
+
+/* /// <summary>
+         /// Edit locations
+         /// </summary>
+         /// <param name="start">Start position</param>
+         /// <param name="length">Region length</param>
+         /// <param name="sourceCode">Source code</param>
+         /// <param name="color">Color region</param>
+         /// <param name="range">Region range</param>
+         public void Edit(int start, int length, String sourceCode, Color color, Range range)
+         {
+             TRegion tregion = new TRegion();
+
+             tregion.Start = start;
+             tregion.Length = length;
+             tregion.Text = sourceCode;
+             tregion.Color = color;
+             tregion.Range = range;
+
+             List<TRegion> values;
+
+             if (!RegionsBeforeEdit.TryGetValue(color, out values))
+             {
+                 values = new List<TRegion>();
+                 RegionsBeforeEdit.Add(color, values);
+             }
+
+             values.Add(tregion);
+
+             foreach (KeyValuePair<Color, List<TRegion>> dic in RegionsBeforeEdit)
+             {
+                 foreach (TRegion tr in dic.Value)
+                 {
+                     if (tregion.IsParent(tr))
+                     {
+                         tregion.Parent = tr;
+                     }
+                 }
+             }
+
+             if (tregion.Parent == null)
+             {
+                 tregion.Parent = RegionsBeforeEdit[Color.White][0];
+             }
+         }*/
+
+///// <summary>
+///// Load from file
+///// </summary>
+///// <param name="fileName">File name</param>
+///// <returns>file content</returns>
+//public string Load(String fileName)
+//{
+//    System.IO.StreamReader sr = new
+//    System.IO.StreamReader(fileName);
+
+//    String text = sr.ReadToEnd();
+
+//    text = text.Replace("\r\n", "\n");
+//    TRegion tRegion = new TRegion();
+//    tRegion.Text = text;
+//    tRegion.Color = Color.White;
+
+//    List<TRegion> tRegions = new List<TRegion>();
+//    tRegions.Add(tRegion);
+
+//    RegionsBeforeEdit.Add(Color.White, tRegions);
+//    sr.Close();
+
+//    return text;
+//}
+
+///// <summary>
+///// Refact a region
+///// </summary>
+///// <param name="program">Source code</param>
+///// <param name="color">Selected color</param>
+//public void Refact(String program, Color color)
+//{
+//    Prog prog = Progs[program];
+
+//    LocationRefactor.Location.LocationExtractor extractor = new LocationRefactor.Location.LocationExtractor(syntaxKind, solutionPath);
+//    String transformation = extractor.TransformProgram(RegionsBeforeEdit, RegionsAfterEdit, color, prog);
+
+//    //List<Tuple<string, string>> transformedLocations = extractor.TransformLocations(RegionsBeforeEdit, RegionsAfterEdit, color, prog);
+//    SynthesizedProgram synthesized = extractor.TransformationProgram(RegionsBeforeEdit, RegionsAfterEdit, color);
+
+//    NotifyProgramRefactoredObservers(transformation);
+//    NotifyLocationsTransformedObservers(synthesized, locations);
+//}
+
+
+///// <summary>
+///// Edit done
+///// </summary>
+///// <param name="code">Source code</param>
+///// <param name="start">Start position</param>
+///// <param name="length">Region length</param>
+//public void EditDone(String code, int start, int length)
+//{
+//    code = code.Replace("\r\n", "\n");
+//    TRegion tRegion = new TRegion();
+//    tRegion.Text = code;
+//    tRegion.Color = Color.White;
+
+//    List<TRegion> tRegions = new List<TRegion>();
+//    tRegions.Add(tRegion);
+
+//    RegionsAfterEdit[Color.White] = tRegions;
+
+//    String text = code.Substring(start, length);
+//    TRegion tregion = new TRegion();
+
+//    Color color = Color.LightGreen;
+
+//    tregion.Start = start;
+//    tregion.Length = length;
+//    tregion.Text = text;
+//    tregion.Color = color;
+
+//    List<TRegion> values;
+
+//    if (!RegionsAfterEdit.TryGetValue(color, out values))
+//    {
+//        values = new List<TRegion>();
+//        RegionsAfterEdit.Add(color, values);
+//    }
+
+//    values.Add(tregion);
+
+//    foreach (KeyValuePair<Color, List<TRegion>> dic in RegionsAfterEdit)
+//    {
+//        foreach (TRegion tr in dic.Value)
+//        {
+//            if (tregion.IsParent(tr))
+//            {
+//                tregion.Parent = tr;
+//            }
+//        }
+//    }
+
+//    if (tregion.Parent == null)
+//    {
+//        tregion.Parent = RegionsAfterEdit[Color.White][0];
+//    }
+//}

@@ -48,6 +48,10 @@ namespace SPG.Refactor
             controller.AddProgramRefactoredObserver(this);
         }
 
+        /// <summary>
+        /// Update view when a refactor occur.
+        /// </summary>
+        /// <param name="pEvent">Event</param>
         public void NotifyProgramRefactored(ProgramRefactoredEvent pEvent)
         {
             EditorController controller = EditorController.GetInstance();
@@ -70,9 +74,6 @@ namespace SPG.Refactor
             viewHost = (IWpfTextViewHost)holder;
             Connector.Update(viewHost, transformation);
         }
-
-
-
 
         /////////////////////////////////////////////////////////////////////////////
         // Overridden Package Implementation

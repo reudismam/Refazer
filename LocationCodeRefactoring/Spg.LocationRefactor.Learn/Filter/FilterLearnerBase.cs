@@ -11,6 +11,7 @@ using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Learn
@@ -30,7 +31,10 @@ namespace Spg.LocationRefactor.Learn
         /// </summary>
         public IPredicate predicate { get; set; }
 
-        public FilterLearnerBase() {
+        public List<TRegion> list { get; set; }
+
+        public FilterLearnerBase(List<TRegion> list) {
+            this.list = list;
             calculated = new Dictionary<TokenSeq, Boolean>();
         }
 
@@ -38,8 +42,9 @@ namespace Spg.LocationRefactor.Learn
         /// Create a new instance
         /// </summary>
         /// <param name="predicate">Predicate</param>
-        public FilterLearnerBase(Predicate.IPredicate predicate)
+        public FilterLearnerBase(Predicate.IPredicate predicate, List<TRegion> list)
         {
+            this.list = list;
             calculated = new Dictionary<TokenSeq, Boolean>();
             this.predicate = predicate;
         }
@@ -69,7 +74,7 @@ namespace Spg.LocationRefactor.Learn
             foreach (Predicate.IPredicate ipredicate in predicates)
             {
                 Prog prog = new Prog();
-                FilterBase filter = GetFilter();
+                FilterBase filter = GetFilter(list);
                 filter.predicate = ipredicate;
 
                 prog.ioperator = filter;
@@ -239,6 +244,6 @@ namespace Spg.LocationRefactor.Learn
             return b;
         }
 
-        protected abstract FilterBase GetFilter();
+        protected abstract FilterBase GetFilter(List<TRegion> list);
     }
 }

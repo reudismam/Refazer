@@ -1,13 +1,17 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp;
+using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator
 {
     public class StatementMap : MapBase
     {
         private SyntaxKind syntaxKind;
+        private List<TRegion> list;
 
-        public StatementMap(SyntaxKind syntaxKind)
+        public StatementMap(SyntaxKind syntaxKind, List<TRegion> list)
         {
+            this.list = list;
             this.syntaxKind = syntaxKind;
         }
         public override string ToString()

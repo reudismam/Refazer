@@ -23,18 +23,18 @@ namespace Spg.LocationRefactor.Learn
         /// Filter
         /// </summary>
         /// <returns>Filter</returns>
-        protected override FilterLearnerBase GetFilter()
+        protected override FilterLearnerBase GetFilter(List<TRegion> list)
         {
-            return new StatementFilterLearner(syntaxKind);
+            return new StatementFilterLearner(syntaxKind, list);
         }
 
         /// <summary>
         /// Map
         /// </summary>
         /// <returns>Map</returns>
-        protected override MapBase GetMap()
+        protected override MapBase GetMap(List<TRegion> list)
         {
-            return new StatementMap(syntaxKind);
+            return new StatementMap(syntaxKind, list);
         }
 
         /// <summary>
@@ -62,10 +62,10 @@ namespace Spg.LocationRefactor.Learn
         /// </summary>
         /// <param name="sourceCode">Source code</param>
         /// <returns>Syntax nodes</returns>
-        public override List<SyntaxNode> SyntaxNodes(string sourceCode)
+        public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
             Strategy strategy = StatementStrategy.GetInstance(syntaxKind);
-            return strategy.SyntaxNodes(sourceCode);
+            return strategy.SyntaxNodes(sourceCode, list);
         }
     }
 }
