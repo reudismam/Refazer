@@ -272,6 +272,41 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             return nodes;
             //return snode.DescendantNodes().ToList();
         }
+
+        internal SyntaxNode SyntaxNodesRegion(string sourceCode, TRegion region)
+        {
+            if (sourceCode == null)
+            {
+                throw new Exception("source code cannot be null");
+            }
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+
+            //List<SyntaxNode> nodes = new List<SyntaxNode>();
+            
+            List<SyntaxNode> nodesSelection = new List<SyntaxNode>();
+            var descedentsBegin = from node in tree.GetRoot().DescendantNodes()
+                                  where node.SpanStart == region.Start
+                                  select node;
+            nodesSelection.AddRange(descedentsBegin);
+
+            var descedentsEnd = from node in tree.GetRoot().DescendantNodes()
+                                where node.SpanStart + node.Span.Length == region.Start + region.Length
+                                select node;
+            nodesSelection.AddRange(descedentsEnd);
+
+            LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
+            SyntaxNodeOrToken lca = nodesSelection[0];
+            for (int i = 1; i < nodesSelection.Count; i++)
+            {
+                 SyntaxNodeOrToken node = nodesSelection[i];
+                 lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+            }
+            SyntaxNode snode = lca.AsNode();
+            //nodes.Add(snode);
+
+            return snode;
+            //return snode.DescendantNodes().ToList();
+        }
     }
 }
 

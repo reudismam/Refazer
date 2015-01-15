@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
@@ -68,16 +70,27 @@ namespace LocateAdornment
                 return document.GetText();
         }
 
-        static public void Update(IWpfTextViewHost host, string newText)
+        static public void Update(IWpfTextViewHost host, List<Transformation> transformations)
         {
             IWpfTextView view = host.TextView;
             LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
             ITextSnapshot current = view.TextBuffer.CurrentSnapshot;
-            SnapshotSpan sspan = new SnapshotSpan(current, 0, view.TextSnapshot.GetText().Length);
-            provider.RemoveComments(sspan);
+            //SnapshotSpan sspan = new SnapshotSpan(current, 0, view.TextSnapshot.GetText().Length);
+            //provider.RemoveComments(sspan);
+            EditorController controller = EditorController.GetInstance();
+            string newText = "";
+            foreach (Transformation transformation in transformations)
+            {
+                if (controller.CodeBefore.Equals(transformation.transformation.Item1))
+                {
+                    newText = transformation.transformation.Item2;
+                    break;
+                }
+            }
 
             Span span = new Span(0, view.TextSnapshot.GetText().Length);
             view.TextBuffer.Delete(span);
+
             view.TextBuffer.Insert(0, newText);
         }
     }

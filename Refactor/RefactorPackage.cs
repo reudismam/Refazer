@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using LocateAdornment;
+using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
@@ -55,7 +57,7 @@ namespace SPG.Refactor
         public void NotifyProgramRefactored(ProgramRefactoredEvent pEvent)
         {
             EditorController controller = EditorController.GetInstance();
-            String transformation = pEvent.transformation;
+            List<Transformation> transformations = pEvent.transformations;
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
             int mustHaveFocus = 1;
@@ -72,7 +74,7 @@ namespace SPG.Refactor
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
             viewHost = (IWpfTextViewHost)holder;
-            Connector.Update(viewHost, transformation);
+            Connector.Update(viewHost, transformations);
         }
 
         /////////////////////////////////////////////////////////////////////////////

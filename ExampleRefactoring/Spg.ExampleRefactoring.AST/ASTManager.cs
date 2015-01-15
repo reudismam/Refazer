@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Comparator;
@@ -40,6 +41,26 @@ namespace Spg.ExampleRefactoring.AST
                     EnumerateSyntaxNodesAndTokens(n, nodes);
                 }
             }
+            return nodes;
+        }
+
+        /// <summary>
+        /// Convert syntax node to a list
+        /// </summary>
+        /// <param name="root">Syntax node root</param>
+        /// <param name="nodes">Syntax node or token list</param>
+        /// <returns>Syntax node list</returns>
+        public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens2(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
+        {
+            if (root == null || nodes == null)
+            {
+                throw new Exception("Root node and list cannot be null and list must not be empty.");
+            }
+
+            ASTSyntaxWalker walker = new ASTSyntaxWalker();
+            walker.Visit(root.AsNode());
+            List<SyntaxNodeOrToken> walkerNodes = walker.tokenList;
+
             return nodes;
         }
 

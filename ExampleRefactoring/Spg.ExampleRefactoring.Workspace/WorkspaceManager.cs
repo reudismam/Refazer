@@ -77,6 +77,18 @@ namespace Spg.ExampleRefactoring.Workspace
             var solution = workspace.OpenSolutionAsync(solutionPath).Result;
         }
 
+        /// <summary>
+        /// Source files in solution
+        /// </summary>
+        /// <param name="solutionPath">Solution path</param>
+        /// <returns>List of source file in the solution</returns>
+        public List<Tuple<string, string>> SourceFiles(string solutionPath)
+        {
+            //WorkspaceManager manager = new WorkspaceManager();
+            List<Tuple<string, string>> sourceFiles = GetSourcesFiles(solutionPath);
+            return sourceFiles;
+        }
+
         private static void ReportMethods(INamespaceSymbol namespaceSymbol)
         {
             foreach (var type in namespaceSymbol.GetTypeMembers())

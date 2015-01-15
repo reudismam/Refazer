@@ -53,7 +53,7 @@ namespace Spg.LocationRefactor.Learn
         /// <returns>Examples</returns>
         public override List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
         {
-            Strategy strategy = StatementStrategy.GetInstance(syntaxKind);
+            Strategy strategy = StatementStrategy.GetInstance();
             return strategy.Extract(list);
         }
 
@@ -64,7 +64,7 @@ namespace Spg.LocationRefactor.Learn
         /// <returns>Syntax nodes</returns>
         public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
-            Strategy strategy = StatementStrategy.GetInstance(syntaxKind);
+            Strategy strategy = StatementStrategy.GetInstance();
             return strategy.SyntaxNodes(sourceCode, list);
         }
     }

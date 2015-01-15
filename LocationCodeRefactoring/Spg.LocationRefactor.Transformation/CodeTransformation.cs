@@ -24,7 +24,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// <returns>Before and after transformation</returns>
         public Tuple<string, string> transformation { get; set; }
 
-
         /// <summary>
         /// Constructor
         /// </summary>

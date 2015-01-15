@@ -88,6 +88,7 @@
       <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
@@ -104,9 +105,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Spg.ExampleRefactoring.AST\ASTManager.cs" />
+    <Compile Include="Spg.ExampleRefactoring.AST\ASTRewriter.cs" />
+    <Compile Include="Spg.ExampleRefactoring.AST\ASTSyntaxWalker.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\ASTTransformation.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\SyntacticalDecomposer.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\UpdateASTManager.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Bean\Selection.cs" />
     <Compile Include="Spg.ExampleRefactoring.Change\ChangeManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\Automato.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\ComparerBase.cs" />
@@ -163,6 +167,7 @@
     <Compile Include="Spg.ExampleRefactoring.Position\IPosition.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\ListNode.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\ASTProgram.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Util\JsonUtil.cs" />
     <Compile Include="Spg.ExampleRefactoring.Workspace\WorkspaceManager.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\DymToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\Token.cs" />

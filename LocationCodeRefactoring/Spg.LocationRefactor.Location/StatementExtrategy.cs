@@ -12,17 +12,14 @@ namespace LocationCodeRefactoring.Br.Spg.Location
     public class StatementStrategy : Strategy
     {
         private static StatementStrategy instance;
-        private SyntaxKind syntaxKind;
 
         private Dictionary<string, List<SyntaxNode>> computed;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="syntaxKind"></param>
-        private StatementStrategy(SyntaxKind syntaxKind)
+        private StatementStrategy()
         {
-            this.syntaxKind = syntaxKind;
             computed = new Dictionary<string, List<SyntaxNode>>();
         }
 
@@ -31,11 +28,11 @@ namespace LocationCodeRefactoring.Br.Spg.Location
         /// </summary>
         /// <param name="syntaxKind">Syntax kind</param>
         /// <returns>Statement strategy instance</returns>
-        public static StatementStrategy GetInstance(SyntaxKind syntaxKind)
+        public static StatementStrategy GetInstance()
         {
             if(instance == null)
             {
-                instance = new StatementStrategy(syntaxKind);
+                instance = new StatementStrategy();
             }
 
             return instance;
