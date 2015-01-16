@@ -19,20 +19,14 @@ namespace Spg.LocationRefactor.Learn
         /// <returns>map</returns>
         public MapLearnerBase map { get; set; }
 
-        /// <summary>
-        /// Syntax kind
-        /// </summary>
-        /// <returns>Syntax kind</returns>
-        public SyntaxKind syntaxKind { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="syntaxKind"></param>
-        public Learner(SyntaxKind syntaxKind)
+        public Learner()
         {
-            this.syntaxKind = syntaxKind;
-            map = new StatementMapLearner(syntaxKind);
+
+            map = new StatementMapLearner();
         }
 
         /// <summary>

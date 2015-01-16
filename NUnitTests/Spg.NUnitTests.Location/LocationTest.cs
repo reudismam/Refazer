@@ -22,7 +22,7 @@ namespace Spg.NUnitTests.Location
         {
             EditorController controller = EditorController.GetInstance();
             List<TRegion> selections = JsonUtil<List<TRegion>>.Read(FilePath.SIMPLE_API_CHANGE_INPUT);
-            controller.RegionsBeforeEdit[Color.LightGreen] = selections;
+            controller.RegionsBeforeEdition = selections;
             controller.CodeBefore = FileUtil.ReadFile(FilePath.MAIN_CLASS_PATH);
 
             controller.Extract();

@@ -75,8 +75,7 @@ namespace LocateAdornment
             IWpfTextView view = host.TextView;
             LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
             ITextSnapshot current = view.TextBuffer.CurrentSnapshot;
-            //SnapshotSpan sspan = new SnapshotSpan(current, 0, view.TextSnapshot.GetText().Length);
-            //provider.RemoveComments(sspan);
+
             EditorController controller = EditorController.GetInstance();
             string newText = "";
             foreach (Transformation transformation in transformations)
@@ -89,9 +88,9 @@ namespace LocateAdornment
             }
 
             Span span = new Span(0, view.TextSnapshot.GetText().Length);
-            view.TextBuffer.Delete(span);
-
-            view.TextBuffer.Insert(0, newText);
+            view.TextBuffer.Replace(span, newText);
+           // view.TextBuffer.Delete(span);
+           //view.TextBuffer.Insert(0, newText);
         }
     }
 }

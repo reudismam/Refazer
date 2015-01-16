@@ -2,26 +2,24 @@
 using System.Collections.Generic;
 using LocationCodeRefactoring.Br.Spg.Location;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator
 {
+    /// <summary>
+    /// Statement filter
+    /// </summary>
     public class StatementFilter : FilterBase
     {
-        private SyntaxKind syntaxKind { get; set; }
-
-        public StatementFilter(SyntaxKind syntaxKind, List<TRegion> list): base(list)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="list">Region list</param>
+        public StatementFilter(List<TRegion> list): base(list)
         {
-            if (list == null)
-            {
-                throw new Exception("List cannot be null");
-            }
-            this.syntaxKind = syntaxKind;
+            if (list == null) { throw new Exception("List cannot be null"); }
         }
-
-
 
         /// <summary>
         /// Filter learner
@@ -29,7 +27,7 @@ namespace Spg.LocationRefactor.Operator
         /// <returns>Filter learner</returns>
         protected override FilterLearnerBase GetFilterLearner(List<TRegion> list)
         {
-            return new StatementFilterLearner(syntaxKind, list);
+            return new StatementFilterLearner(list);
         }
 
         /// <summary>
@@ -39,7 +37,6 @@ namespace Spg.LocationRefactor.Operator
         /// <returns>Syntax nodes</returns>
         protected override IEnumerable<SyntaxNode> SyntaxNodes(string sourceCode)
         {
-            //return Strategy.SyntaxElements(sourceCode, syntaxKind);
             return Strategy.SyntaxElements(sourceCode, list);
         }
     }

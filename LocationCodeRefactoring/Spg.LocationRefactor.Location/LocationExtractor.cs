@@ -43,10 +43,10 @@ namespace Spg.LocationRefactor.Location
         /// </summary>
         /// <param name="syntaxKind"></param>
         /// <param name="solutionPath"></param>
-        public LocationExtractor(SyntaxKind syntaxKind, string solutionPath)
+        public LocationExtractor(string solutionPath)
         {
             this.solutionPath = solutionPath;
-            learn = new Learner(syntaxKind);
+            learn = new Learner();
         }
 
         /// <summary>
@@ -55,14 +55,14 @@ namespace Spg.LocationRefactor.Location
         /// <param name="regions">List of selected regions</param>
         /// <param name="color">Color of the region</param>
         /// <returns>Extracted locations</returns>
-        public List<Prog> Extract(Dictionary<Color, List<TRegion>> regions, Color color)
+        public List<Prog> Extract(List<TRegion> regions, Color color)
         {
             List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
             List<Prog> programs = null;
 
-            if (regions[color].Count() == 1)
+            if (regions.Count() == 1)
             {
-                foreach (TRegion region in regions[color])
+                foreach (TRegion region in regions)
                 {
                     Tuple<String, String> ex = Tuple.Create(region.Parent.Text, region.Text);
                     Tuple<ListNode, ListNode> lex = ASTProgram.Example(ex);
@@ -72,7 +72,7 @@ namespace Spg.LocationRefactor.Location
             }
             else
             {
-                examples = learn.Decompose(regions[color]);
+                examples = learn.Decompose(regions);
                 programs = learn.LearnSeqRegion(examples);
             }
             return programs;
@@ -135,9 +135,9 @@ namespace Spg.LocationRefactor.Location
         /// <param name="color">Color</param>
         /// <param name="prog">Program selected</param>
         /// <returns></returns>
-        public List<Transformation> TransformProgram(Dictionary<Color, List<TRegion>> regionsBeforeEdit, Dictionary<Color, List<TRegion>> regionsAfterEdit, Color color, Prog prog)
+        public List<Transformation> TransformProgram(string CodeBefore, string CodeAfter)
         {
-            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocations(controller.CodeBefore, controller.CodeAfter);
+            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocations(CodeBefore, CodeAfter);
             List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
 
             SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
@@ -158,6 +158,12 @@ namespace Spg.LocationRefactor.Location
             return transformations;
         }
 
+        /// <summary>
+        /// Transform a program
+        /// </summary>
+        /// <param name="program">Synthesized program</param>
+        /// <param name="locations">Locations</param>
+        /// <returns>Transformed program</returns>
         public string Transform(SynthesizedProgram program, List<CodeLocation> locations)
         {
             string text = "";
@@ -191,6 +197,9 @@ namespace Spg.LocationRefactor.Location
                 }
             }
 
+            SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(text);
+            SyntaxNode nodeFormat = treeFormat.GetRoot().NormalizeWhitespace();
+            text = nodeFormat.GetText().ToString();
             return text;
         }
 
@@ -222,7 +231,7 @@ namespace Spg.LocationRefactor.Location
         /// <param name="color">Color of statement</param>
         /// <param name="prog">Locations program</param>
         /// <returns></returns>
-        public SynthesizedProgram TransformationProgram(Dictionary<Color, List<TRegion>> regionsBeforeEdit, Dictionary<Color, List<TRegion>> regionsAfterEdit, Color color)
+        public SynthesizedProgram TransformationProgram(List<TRegion> regionsBeforeEdit)
         {
             List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocations(controller.CodeBefore, controller.CodeAfter);
             List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
@@ -256,27 +265,22 @@ namespace Spg.LocationRefactor.Location
         public List<Tuple<TRegion, TRegion>> ExtractLocations(String codeBefore, String codeAfter)
         {
             Strategy strategy = StatementStrategy.GetInstance();
-            List<SyntaxNode> nodesBefore = strategy.SyntaxNodesRegion(codeBefore, EditorController.GetInstance().RegionsBeforeEdit[Color.LightGreen]);
-            List<SyntaxNode> nodesAfter = strategy.SyntaxNodesRegion(codeAfter, EditorController.GetInstance().RegionsBeforeEdit[Color.LightGreen]);
-
+            List<Tuple<SyntaxNode, SyntaxNode>> pairs = strategy.SyntaxNodesRegion(codeBefore, codeAfter, controller.locations);
             List<Tuple<TRegion, TRegion>> examples = new List<Tuple<TRegion, TRegion>>();
-            for (int i = 0; i < nodesBefore.Count; i++)
+            for (int i = 0; i < pairs.Count; i++)
             {
-                String statementBefore = nodesBefore[i].GetText().ToString();
-                SyntaxNode nodeBefore = nodesBefore[i];
-
-                String statementAfter = nodesAfter[i].GetText().ToString();
-                SyntaxNode nodeAfter = nodesAfter[i];
+                String statementBefore = pairs[i].Item1.GetText().ToString();
+                String statementAfter = pairs[i].Item2.GetText().ToString();
 
                 if (!statementBefore.Equals(statementAfter))
                 {
                     TRegion regionBefore = new TRegion();
                     regionBefore.Text = statementBefore;
-                    regionBefore.Node = nodeBefore;
+                    regionBefore.Node = pairs[i].Item1;
 
                     TRegion regionAfter = new TRegion();
                     regionAfter.Text = statementAfter;
-                    regionAfter.Node = nodeAfter;
+                    regionAfter.Node = pairs[i].Item2;
 
                     Tuple<TRegion, TRegion> example = Tuple.Create(regionBefore, regionAfter);
                     examples.Add(example);
@@ -287,6 +291,44 @@ namespace Spg.LocationRefactor.Location
     }
 }
 
+
+///// <summary>
+///// Extract location
+///// </summary>
+///// <param name="codeBefore">Code before transformation</param>
+///// <param name="codeAfter">Code after transformation</param>
+///// <returns>Locations</returns>
+//public List<Tuple<TRegion, TRegion>> ExtractLocations(String codeBefore, String codeAfter)
+//{
+//    Strategy strategy = StatementStrategy.GetInstance();
+//    List<SyntaxNode> nodesBefore = strategy.SyntaxNodesRegion(codeBefore, EditorController.GetInstance().RegionsBeforeEdit[Color.LightGreen]);
+//    List<SyntaxNode> nodesAfter = strategy.SyntaxNodesRegion(codeAfter, EditorController.GetInstance().RegionsBeforeEdit[Color.LightGreen]);
+
+//    List<Tuple<TRegion, TRegion>> examples = new List<Tuple<TRegion, TRegion>>();
+//    for (int i = 0; i < nodesBefore.Count; i++)
+//    {
+//        String statementBefore = nodesBefore[i].GetText().ToString();
+//        SyntaxNode nodeBefore = nodesBefore[i];
+
+//        String statementAfter = nodesAfter[i].GetText().ToString();
+//        SyntaxNode nodeAfter = nodesAfter[i];
+
+//        if (!statementBefore.Equals(statementAfter))
+//        {
+//            TRegion regionBefore = new TRegion();
+//            regionBefore.Text = statementBefore;
+//            regionBefore.Node = nodeBefore;
+
+//            TRegion regionAfter = new TRegion();
+//            regionAfter.Text = statementAfter;
+//            regionAfter.Node = nodeAfter;
+
+//            Tuple<TRegion, TRegion> example = Tuple.Create(regionBefore, regionAfter);
+//            examples.Add(example);
+//        }
+//    }
+//    return examples;
+//}
 
 ///// <summary>
 ///// Return a list of examples on the format: method, selection.

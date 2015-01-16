@@ -28,7 +28,7 @@ namespace Spg.LocationRefactor.Learn
 
             IPredicate pred = GetPredicate();
             EditorController contoller = EditorController.GetInstance();
-            List<TRegion> list = contoller.RegionsBeforeEdit[Color.LightGreen];
+            List<TRegion> list = contoller.RegionsBeforeEdition;
             FilterLearnerBase S = GetFilter(list);
             S.predicate = pred;
 

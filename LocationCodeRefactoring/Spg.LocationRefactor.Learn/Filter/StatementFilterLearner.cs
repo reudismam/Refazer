@@ -12,15 +12,13 @@ namespace Spg.LocationRefactor.Learn
     public class StatementFilterLearner : FilterLearnerBase
     {
 
-        private SyntaxKind syntaxKind;
 
-        public StatementFilterLearner(SyntaxKind syntaxKind, List<TRegion> list) :base(list)
+        public StatementFilterLearner(List<TRegion> list) :base(list)
         {
-            this.syntaxKind = syntaxKind;
         }
         protected override FilterBase GetFilter(List<TRegion> list)
         {
-            return new StatementFilter(syntaxKind, list);
+            return new StatementFilter(list);
         }
     }
 }

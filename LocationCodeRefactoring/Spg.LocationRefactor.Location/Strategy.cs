@@ -7,6 +7,8 @@ using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
 using LeastCommonAncestor;
+using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Location;
 
 namespace LocationCodeRefactoring.Br.Spg.Location
 {
@@ -116,9 +118,9 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             SyntaxNode snode = lca.AsNode();
 
             SyntaxTree inputTree = CSharpSyntaxTree.ParseText(input);
-            var rootList        = from node in inputTree.GetRoot().DescendantNodes()
-                                  where node.RawKind == snode.RawKind
-                                  select node;
+            var rootList = from node in inputTree.GetRoot().DescendantNodes()
+                           where node.RawKind == snode.RawKind
+                           select node;
             List<SyntaxNode> result = new List<SyntaxNode>();
             foreach (SyntaxNode sn in rootList)
             {
@@ -236,41 +238,97 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             return snode.DescendantNodes().ToList();
         }
 
-        internal List<SyntaxNode> SyntaxNodesRegion(string sourceCode, List<TRegion> list)
+        internal List<Tuple<SyntaxNode, SyntaxNode>> SyntaxNodesRegion(string sourceBefore, string sourceAfter, List<CodeLocation> locations)
         {
-            if (sourceCode == null)
-            {
-                throw new Exception("source code cannot be null");
-            }
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+            if (sourceBefore == null || sourceAfter == null) { throw new Exception("source code cannot be null"); }
+
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceBefore);
+            SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(EditorController.GetInstance().CodeAfter);
 
             List<SyntaxNode> nodes = new List<SyntaxNode>();
-            foreach (TRegion region in list)
+
+            foreach (CodeLocation location in locations)
             {
-                List<SyntaxNode> nodesSelection = new List<SyntaxNode>();
-                var descedentsBegin = from node in tree.GetRoot().DescendantNodes()
-                                      where node.SpanStart == region.Start
-                                      select node;
-                nodesSelection.AddRange(descedentsBegin);
-
-                var descedentsEnd = from node in tree.GetRoot().DescendantNodes()
-                                    where node.SpanStart + node.Span.Length == region.Start + region.Length
-                                      select node;
-                nodesSelection.AddRange(descedentsEnd);
-
-                LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
-                SyntaxNodeOrToken lca = nodesSelection[0];
-                for (int i = 1; i < nodesSelection.Count; i++)
+                if (sourceBefore.Equals(location.SourceCode))
                 {
-                    SyntaxNodeOrToken node = nodesSelection[i];
-                    lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+                    List<SyntaxNode> nodesSelection = new List<SyntaxNode>();
+                    var descedentsBegin = from node in tree.GetRoot().DescendantNodes()
+                                          where node.SpanStart == location.Region.Start
+                                          select node;
+                    nodesSelection.AddRange(descedentsBegin);
+
+                    var descedentsEnd = from node in tree.GetRoot().DescendantNodes()
+                                        where node.SpanStart + node.Span.Length == location.Region.Start + location.Region.Length
+                                        select node;
+                    nodesSelection.AddRange(descedentsEnd);
+
+                    LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
+                    SyntaxNodeOrToken lca = nodesSelection[0];
+                    for (int i = 1; i < nodesSelection.Count; i++)
+                    {
+                        SyntaxNodeOrToken node = nodesSelection[i];
+                        lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+                    }
+                    SyntaxNode snode = lca.AsNode();
+                    nodes.Add(snode);
                 }
-                SyntaxNode snode = lca.AsNode();
-                nodes.Add(snode);
             }
 
-            return nodes;
-            //return snode.DescendantNodes().ToList();
+            List<Tuple<int, SyntaxNode>> locationAndKing = CalculatePositionAndSyntaxKind(tree.GetRoot(), nodes);
+            List<Tuple<SyntaxNode, SyntaxNode>> result = CalculatePair(treeAfter.GetRoot(), locationAndKing);
+            //return nodes;
+            return result;
+        }
+
+        /// <summary>
+        /// Calculate selection position index and syntax node
+        /// </summary>
+        /// <param name="tree">Syntax tree root</param>
+        /// <param name="nodes">Selected nodes</param>
+        /// <returns>Index and syntax node</returns>
+        private List<Tuple<int, SyntaxNode>> CalculatePositionAndSyntaxKind(SyntaxNode tree, List<SyntaxNode> nodes)
+        {
+            List<Tuple<int, SyntaxNode>> kinds = new List<Tuple<int, SyntaxNode>>();
+            foreach (SyntaxNode node in nodes)
+            {
+                var descendents = from snode in tree.DescendantNodes()
+                                  where snode.CSharpKind() == node.CSharpKind()
+                                  select snode;
+
+                int i = 0;
+                foreach (SyntaxNode parent in descendents)
+                {
+                    if (parent.Equals(node))
+                    {
+                        Tuple<int, SyntaxNode> tuple = Tuple.Create(i, node);
+                        kinds.Add(tuple);
+                    }
+                    i++;
+                }
+            }
+            return kinds;
+        }
+
+        /// <summary>
+        /// Calculate pair transformation
+        /// </summary>
+        /// <param name="tree">Syntax tree root</param>
+        /// <param name="nodes">Index of nodes with respective positions</param>
+        /// <returns>Transformation pair</returns>
+        private List<Tuple<SyntaxNode, SyntaxNode>> CalculatePair(SyntaxNode tree, List<Tuple<int, SyntaxNode>> nodes)
+        {
+            List<Tuple<SyntaxNode, SyntaxNode>> kinds = new List<Tuple<SyntaxNode, SyntaxNode>>();
+            foreach (Tuple<int, SyntaxNode> pair in nodes)
+            {
+                var descendents = from node in tree.DescendantNodes()
+                                  where node.CSharpKind() == pair.Item2.CSharpKind()
+                                  select node;
+
+                Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(pair.Item2, descendents.ElementAt(pair.Item1));
+                kinds.Add(tuple);
+            }
+
+            return kinds;
         }
 
         internal SyntaxNode SyntaxNodesRegion(string sourceCode, TRegion region)
@@ -282,7 +340,7 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
 
             //List<SyntaxNode> nodes = new List<SyntaxNode>();
-            
+
             List<SyntaxNode> nodesSelection = new List<SyntaxNode>();
             var descedentsBegin = from node in tree.GetRoot().DescendantNodes()
                                   where node.SpanStart == region.Start
@@ -298,8 +356,8 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             SyntaxNodeOrToken lca = nodesSelection[0];
             for (int i = 1; i < nodesSelection.Count; i++)
             {
-                 SyntaxNodeOrToken node = nodesSelection[i];
-                 lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+                SyntaxNodeOrToken node = nodesSelection[i];
+                lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
             }
             SyntaxNode snode = lca.AsNode();
             //nodes.Add(snode);
@@ -316,12 +374,55 @@ namespace LocationCodeRefactoring.Br.Spg.Location
 
 
 
+//internal List<SyntaxNode> SyntaxNodesRegion(string sourceCode, List<TRegion> list)
+//{
+//    if (sourceCode == null)
+//    {
+//        throw new Exception("source code cannot be null");
+//    }
+//    SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
 
+//    //remove
+//    EditorController controller = EditorController.GetInstance();
+//    SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(controller.CodeAfter);
+//    SyntaxNodesRegion(sourceCode, controller.CodeAfter, controller.locations);
+//    //remove
 
+//    List<SyntaxNode> nodes = new List<SyntaxNode>();
 
+//    foreach (TRegion region in list)
+//    {
+//        List<SyntaxNode> nodesSelection = new List<SyntaxNode>();
+//        var descedentsBegin = from node in tree.GetRoot().DescendantNodes()
+//                              where node.SpanStart == region.Start
+//                              select node;
+//        nodesSelection.AddRange(descedentsBegin);
 
+//        var descedentsEnd = from node in tree.GetRoot().DescendantNodes()
+//                            where node.SpanStart + node.Span.Length == region.Start + region.Length
+//                            select node;
+//        nodesSelection.AddRange(descedentsEnd);
 
+//        LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
+//        SyntaxNodeOrToken lca = nodesSelection[0];
+//        for (int i = 1; i < nodesSelection.Count; i++)
+//        {
+//            SyntaxNodeOrToken node = nodesSelection[i];
+//            lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+//        }
+//        SyntaxNode snode = lca.AsNode();
+//        nodes.Add(snode);
+//    }
 
+//    //var result = treeAfter.GetRoot().TrackNodes(nodes);
+//    //foreach (SyntaxNode node in result.GetCurrentNodes(nodes[0]))
+//    //{
+//    //    Console.WriteLine();
+//    //}
+
+//    return nodes;
+//    //return snode.DescendantNodes().ToList();
+//}
 
 /*/// <summary>
        /// Elements with syntax kind in the source code

@@ -35,7 +35,7 @@ namespace Spg.LocationRefactor.Learn
 
             Predicate.IPredicate pred = GetPredicate();
             EditorController contoller = EditorController.GetInstance();
-            List<TRegion> list = contoller.RegionsBeforeEdit[Color.LightGreen];
+            List<TRegion> list = contoller.RegionsBeforeEdition;
             FilterLearnerBase S = GetFilter(list);
             S.predicate = pred;
 
@@ -83,7 +83,7 @@ namespace Spg.LocationRefactor.Learn
         /// </summary>
         /// <returns>Filter</returns>
         protected FilterLearnerBase GetFilter(List<TRegion> list) {
-            return new StatementFilterLearner(SyntaxKind.MethodDeclaration, list);
+            return new StatementFilterLearner(list);
         }
     }
 }

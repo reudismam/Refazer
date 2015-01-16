@@ -12,12 +12,6 @@ namespace Spg.LocationRefactor.Learn
 {
     public class StatementMapLearner : MapLearnerBase
     {
-        private SyntaxKind syntaxKind;
-
-        public StatementMapLearner(SyntaxKind syntaxKind)
-        {
-            this.syntaxKind = syntaxKind;
-        }
 
         /// <summary>
         /// Filter
@@ -25,7 +19,7 @@ namespace Spg.LocationRefactor.Learn
         /// <returns>Filter</returns>
         protected override FilterLearnerBase GetFilter(List<TRegion> list)
         {
-            return new StatementFilterLearner(syntaxKind, list);
+            return new StatementFilterLearner(list);
         }
 
         /// <summary>
@@ -34,7 +28,7 @@ namespace Spg.LocationRefactor.Learn
         /// <returns>Map</returns>
         protected override MapBase GetMap(List<TRegion> list)
         {
-            return new StatementMap(syntaxKind, list);
+            return new StatementMap(list);
         }
 
         /// <summary>

@@ -24,6 +24,8 @@ namespace LeastCommonAncestor
             ITreeNode<SyntaxNodeOrToken> x = new TreeNode<SyntaxNodeOrToken>(n1);
             ITreeNode<SyntaxNodeOrToken> y = new TreeNode<SyntaxNodeOrToken>(n2);
 
+            if (x.Equals(y)) return x.Value;
+
             LeastCommonAncestorFinder<SyntaxNodeOrToken> finder = new LeastCommonAncestorFinder<SyntaxNodeOrToken>(rootNode);
             ITreeNode<SyntaxNodeOrToken> result = finder.FindCommonParent(x, y);
             return result.Value;
@@ -54,6 +56,10 @@ namespace LeastCommonAncestor
             return tree;
         }
 
+        /// <summary>
+        /// TreeNode class
+        /// </summary>
+        /// <typeparam name="T">Node type</typeparam>
         public class TreeNode<T> : ITreeNode<T>
         {
             private readonly ITreeNode<T>[] _children;
@@ -98,11 +104,20 @@ namespace LeastCommonAncestor
                 }
             }
 
+            /// <summary>
+            /// String representation of this object
+            /// </summary>
+            /// <returns>String representation of this object</returns>
             public override string ToString()
             {
                 return Value.ToString();
             }
 
+            /// <summary>
+            /// Equals
+            /// </summary>
+            /// <param name="obj">Another object</param>
+            /// <returns>True if objects are equals</returns>
             public override bool Equals(object obj)
             {
                 if (!(obj is TreeNode<T>))
@@ -113,6 +128,10 @@ namespace LeastCommonAncestor
                 return this.Value.Equals(compare.Value);
             }
 
+            /// <summary>
+            /// Hash code
+            /// </summary>
+            /// <returns>Hash code</returns>
             public override int GetHashCode()
             {
                 return ToString().GetHashCode();
