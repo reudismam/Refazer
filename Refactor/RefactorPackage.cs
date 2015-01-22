@@ -127,7 +127,7 @@ namespace SPG.Refactor
             viewHost = (IWpfTextViewHost)holder;
 
             EditorController controler = EditorController.GetInstance();
-            controler.CodeAfter = Connector.GetText(viewHost);
+            controler.CurrentViewCodeAfter = Connector.GetText(viewHost);
 
             controler.Refact();
         }

@@ -49,6 +49,26 @@ namespace Spg.LocationRefactor.Learn
         }
 
         /// <summary>
+        /// Learn sequence region
+        /// </summary>
+        /// <param name="positiveExamples">Positive examples</param>
+        /// <param name="negativeExamples">Negative examples</param>
+        /// <returns>List of programs that match the example pattern</returns>
+        internal List<Prog> LearnSeqRegion(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples)
+        {
+            List<Prog> programs = new List<Prog>();
+            List<IOperator> operators = new List<IOperator>();
+            List<ILearn> learns = new List<ILearn>();
+
+            learns.Add(map);
+            foreach (ILearn learn in learns)
+            {
+                programs = learn.Learn(positiveExamples, negativeExamples);
+            }
+            return programs;
+        }
+
+        /// <summary>
         /// Tuples (Statement, Selection)
         /// </summary>
         /// <param name="list">User selection regions</param>

@@ -9,6 +9,7 @@ using Spg.LocationRefactor.TextRegion;
 using LeastCommonAncestor;
 using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.Location;
+using Microsoft.CodeAnalysis.Text;
 
 namespace LocationCodeRefactoring.Br.Spg.Location
 {
@@ -210,12 +211,10 @@ namespace LocationCodeRefactoring.Br.Spg.Location
         /// <returns>Elements with syntax kind in the source code</returns>
         public static List<SyntaxNode> SyntaxElements(string sourceCode, List<TRegion> list)
         {
-            if (sourceCode == null)
-            {
-                throw new Exception("source code cannot be null");
-            }
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+            if (sourceCode == null || list == null) { throw new Exception("source code and selection list cannot be null"); }
+            if (list.Count() == 0) { throw new Exception("Selection list cannot be empty"); }
 
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
             List<SyntaxNode> nodes = new List<SyntaxNode>();
             foreach (TRegion region in list)
             {
@@ -238,15 +237,58 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             return snode.DescendantNodes().ToList();
         }
 
+        //internal List<Tuple<SyntaxNode, SyntaxNode>> SyntaxNodesRegion(string sourceBefore, string sourceAfter, List<CodeLocation> locations)
+        //{
+        //    if (sourceBefore == null || sourceAfter == null) { throw new Exception("source code cannot be null"); }
+
+        //    SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceBefore);
+        //    SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(EditorController.GetInstance().CurrentViewCodeAfter);
+        //    List<SyntaxNode> nodes = new List<SyntaxNode>();
+
+        //    foreach (CodeLocation location in locations)
+        //    {
+        //        if (sourceBefore.Equals(location.SourceCode))
+        //        {
+        //            List<SyntaxNode> nodesSelection = new List<SyntaxNode>();
+        //            var descedentsBegin = from node in tree.GetRoot().DescendantNodes()
+        //                                  where node.SpanStart == location.Region.Start
+        //                                  select node;
+        //            nodesSelection.AddRange(descedentsBegin);
+
+        //            var descedentsEnd = from node in tree.GetRoot().DescendantNodes()
+        //                                where node.SpanStart + node.Span.Length == location.Region.Start + location.Region.Length
+        //                                select node;
+        //            nodesSelection.AddRange(descedentsEnd);
+
+        //            LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
+        //            SyntaxNodeOrToken lca = nodesSelection[0];
+        //            for (int i = 1; i < nodesSelection.Count; i++)
+        //            {
+        //                SyntaxNodeOrToken node = nodesSelection[i];
+        //                lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+        //            }
+        //            SyntaxNode snode = lca.AsNode();
+        //            nodes.Add(snode);
+        //        }
+        //    }
+
+        //    List<Tuple<int, SyntaxNode>> locationAndKing = CalculatePositionAndSyntaxKind(tree.GetRoot(), nodes);
+        //    List<Tuple<SyntaxNode, SyntaxNode>> result = CalculatePair(treeAfter.GetRoot(), locationAndKing);
+        //    //return nodes;
+        //    return result;
+        //}
+
         internal List<Tuple<SyntaxNode, SyntaxNode>> SyntaxNodesRegion(string sourceBefore, string sourceAfter, List<CodeLocation> locations)
         {
             if (sourceBefore == null || sourceAfter == null) { throw new Exception("source code cannot be null"); }
 
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceBefore);
-            SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(EditorController.GetInstance().CodeAfter);
-
+            SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(EditorController.GetInstance().CurrentViewCodeAfter);
             List<SyntaxNode> nodes = new List<SyntaxNode>();
 
+            SyntaxNodeOrToken globalLCA;
+            SyntaxNode globalNode = null;
+            LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
             foreach (CodeLocation location in locations)
             {
                 if (sourceBefore.Equals(location.SourceCode))
@@ -262,7 +304,6 @@ namespace LocationCodeRefactoring.Br.Spg.Location
                                         select node;
                     nodesSelection.AddRange(descedentsEnd);
 
-                    LCA<SyntaxNodeOrToken> lcaCalculator = new LCA<SyntaxNodeOrToken>();
                     SyntaxNodeOrToken lca = nodesSelection[0];
                     for (int i = 1; i < nodesSelection.Count; i++)
                     {
@@ -274,8 +315,16 @@ namespace LocationCodeRefactoring.Br.Spg.Location
                 }
             }
 
-            List<Tuple<int, SyntaxNode>> locationAndKing = CalculatePositionAndSyntaxKind(tree.GetRoot(), nodes);
-            List<Tuple<SyntaxNode, SyntaxNode>> result = CalculatePair(treeAfter.GetRoot(), locationAndKing);
+            globalLCA = nodes[0];
+            for (int i = 1; i < nodes.Count; i++)
+            {
+                SyntaxNodeOrToken node = nodes[i];
+                globalLCA = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), globalLCA, node);
+            }
+            globalNode = globalLCA.AsNode();
+
+            //List<Tuple<int, SyntaxNode>> locationAndKing = CalculatePositionAndSyntaxKind(tree.GetRoot(), treeAfter.GetRoot(), nodes, globalNode);
+            List<Tuple<SyntaxNode, SyntaxNode>> result = CalculatePositionAndSyntaxKind(tree.GetRoot(), treeAfter.GetRoot(), nodes, globalNode);
             //return nodes;
             return result;
         }
@@ -308,6 +357,173 @@ namespace LocationCodeRefactoring.Br.Spg.Location
             }
             return kinds;
         }
+
+        /// <summary>
+        /// Calculate selection position index and syntax node
+        /// </summary>
+        /// <param name="treeBefore">Syntax tree root</param>
+        /// <param name="nodes">Selected nodes</param>
+        /// <returns>Index and syntax node</returns>
+        private List<Tuple<SyntaxNode, SyntaxNode>> CalculatePositionAndSyntaxKind(SyntaxNode treeBefore, SyntaxNode treeAfter, List<SyntaxNode> nodes, SyntaxNode globalLCA)
+        {
+            var treeDescendents = from snode in treeBefore.DescendantNodes()
+                                  where snode.CSharpKind() == globalLCA.CSharpKind()
+                                  select snode;
+
+            LCA<SyntaxNode> lcaCalculator = new LCA<SyntaxNode>();
+
+            int position = Position(globalLCA, treeDescendents);
+
+            List<Tuple<int, SyntaxNode>> pairsNodes = new List<Tuple<int, SyntaxNode>>();
+            Tuple<int, SyntaxNode> t = Tuple.Create(position, globalLCA);
+            pairsNodes.Add(t);
+
+            List<Tuple<SyntaxNode, SyntaxNode>> tuplePair = CalculatePair(treeAfter, pairsNodes); //least common ancestor before and after
+
+            Tuple<string, string> estring = Tuple.Create(treeBefore.GetText().ToString(), treeAfter.GetText().ToString());
+            Tuple<ListNode, ListNode> elnode = ASTProgram.Example(estring);
+
+            var changes = treeBefore.SyntaxTree.GetChanges(treeAfter.SyntaxTree);
+            List<SyntaxNode> nodesList = new List<SyntaxNode>();
+            foreach (TextChange change in changes)
+            {
+                var descendents = from snode in treeAfter.DescendantNodes()
+                                  where change.Span.Start <= snode.SpanStart && snode.SpanStart <= change.Span.End
+                                  select snode;
+                nodesList.AddRange(descendents);
+            }
+
+            Dictionary<int, SyntaxNodeOrToken> dic = new Dictionary<int, SyntaxNodeOrToken>();
+            List<Tuple<int, SyntaxNode>> kinds = new List<Tuple<int, SyntaxNode>>();
+
+            int lcas = 0;
+            SyntaxNodeOrToken lca = nodesList.First();
+            dic[lcas] = lca;
+            for (int i = 1; i < nodesList.Count; i++)
+            {
+                SyntaxNode node = nodesList[i];
+                if (node.SpanStart <= lca.SpanStart && lca.Span.Length <= node.Span.Length)
+                {
+                    lca = node;
+                }
+                else
+                {
+                    lca = lcaCalculator.LeastCommonAncestor(tuplePair.First().Item2, lca, node);
+                }
+
+                if (lca.Equals(tuplePair.First().Item2))
+                {
+                    lca = node;
+                    lcas++;
+                }
+                else
+                {
+                    dic[lcas] = lca;
+                }
+            }
+
+            List<Tuple<SyntaxNode, SyntaxNode>> pairsMatches = new List<Tuple<SyntaxNode, SyntaxNode>>();
+            foreach (KeyValuePair<int, SyntaxNodeOrToken> item in dic)
+            {
+                Tuple<SyntaxNode, SyntaxNode> titem = Tuple.Create(nodes[item.Key], item.Value.AsNode());
+                pairsMatches.Add(titem);
+            }
+
+            pairsMatches = EquivaleInKind(pairsMatches, tuplePair.First().Item1, tuplePair.First().Item2);
+
+            return pairsMatches;
+        }
+
+        ///// <summary>
+        ///// Calculate selection position index and syntax node
+        ///// </summary>
+        ///// <param name="treeBefore">Syntax tree root</param>
+        ///// <param name="nodes">Selected nodes</param>
+        ///// <returns>Index and syntax node</returns>
+        //private List<Tuple<SyntaxNode, SyntaxNode>> CalculatePositionAndSyntaxKind(SyntaxNode treeBefore, SyntaxNode treeAfter, List<SyntaxNode> nodes, SyntaxNode globalLCA)
+        //{
+        //    var treeDescendents = from snode in treeBefore.DescendantNodes()
+        //                          where snode.CSharpKind() == globalLCA.CSharpKind()
+        //                          select snode;
+
+        //    LCA<SyntaxNode> lcaCalculator = new LCA<SyntaxNode>();
+
+        //    int position = Position(globalLCA, treeDescendents);
+
+        //    List<Tuple<int, SyntaxNode>> pairsNodes = new List<Tuple<int, SyntaxNode>>();
+        //    Tuple<int, SyntaxNode> t = Tuple.Create(position, globalLCA);
+        //    pairsNodes.Add(t);
+
+        //    List<Tuple<SyntaxNode, SyntaxNode>> tuplePair = CalculatePair(treeAfter, pairsNodes); //least common ancestor before and after
+
+        //    var childrens01 = tuplePair.First().Item1.ChildNodes();
+
+        //    var childrens02 = tuplePair.First().Item2.ChildNodes();
+
+        //    List<Tuple<SyntaxNode, SyntaxNode>> pairsMatches = new List<Tuple<SyntaxNode, SyntaxNode>>();
+
+        //    for (int i = 0; i < childrens01.Count(); i++)
+        //    {
+        //        Tuple<SyntaxNode, SyntaxNode> tsnode = Tuple.Create(childrens01.ElementAt(i), childrens02.ElementAt(i));
+        //        pairsMatches.Add(tsnode);
+        //    }
+
+        //    return pairsMatches;
+
+        //}
+
+        private List<Tuple<SyntaxNode, SyntaxNode>> EquivaleInKind(List<Tuple<SyntaxNode, SyntaxNode>> pairsMatches, SyntaxNode item1, SyntaxNode item2)
+        {
+            List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
+            foreach (Tuple<SyntaxNode, SyntaxNode> tuple in pairsMatches)
+            {
+                if (tuple.Item1.CSharpKind() == tuple.Item2.CSharpKind())
+                {
+                    tuples.Add(tuple); continue;
+                }
+
+                SyntaxNode parent1 = tuple.Item1;
+                while (parent1.CSharpKind() != tuple.Item2.CSharpKind() && !parent1.Equals(item1))
+                {
+                    parent1 = parent1.Parent;
+                }
+
+                SyntaxNode parent2 = tuple.Item2;
+                while (parent2.CSharpKind() != tuple.Item1.CSharpKind() && !parent2.Equals(item2))
+                {
+                    parent2 = parent2.Parent;
+                }
+
+                if (parent1.Equals(item1)) //then pair 1 is bigger than pair 2
+                {
+                    Tuple<SyntaxNode, SyntaxNode> t = Tuple.Create(tuple.Item1, parent2);
+                    tuples.Add(t);
+                }
+                else
+                {
+                    Tuple<SyntaxNode, SyntaxNode> t = Tuple.Create(parent1, tuple.Item2);
+                    tuples.Add(t);
+                }
+            }
+            return tuples;
+        }
+
+        private int Position(SyntaxNode node, IEnumerable<SyntaxNode> descendents)
+        {
+            int i = 0;
+            foreach (SyntaxNode parent in descendents)
+            {
+                if (parent.Equals(node))
+                {
+                    Tuple<int, SyntaxNode> tuple = Tuple.Create(i, node);
+                    return i;
+                }
+                i++;
+            }
+            return i - 1;
+        }
+
+
 
         /// <summary>
         /// Calculate pair transformation

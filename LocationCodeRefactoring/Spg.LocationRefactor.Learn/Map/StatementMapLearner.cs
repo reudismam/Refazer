@@ -10,9 +10,11 @@ using System.Collections.Generic;
 
 namespace Spg.LocationRefactor.Learn
 {
+    /// <summary>
+    /// Statement map learner
+    /// </summary>
     public class StatementMapLearner : MapLearnerBase
     {
-
         /// <summary>
         /// Filter
         /// </summary>

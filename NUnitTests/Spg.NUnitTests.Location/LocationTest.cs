@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
@@ -20,22 +19,73 @@ namespace Spg.NUnitTests.Location
         [Test]
         public void SimpleAPIChangeTest()
         {
+            bool isValid = LocaleTest(FilePath.SIMPLE_API_CHANGE_INPUT, FilePath.SIMPLE_API_CHANGE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_SIMPLE_API_CHANGE_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Introduce parameter on if
+        /// </summary>
+        [Test]
+        public void IntroduceParamOnIf()
+        {
+            bool isValid = LocaleTest(FilePath.INTRODUCE_PARAM_ON_IF_INPUT, FilePath.INTRODUCE_PARAM_ON_IF_OUTPUT_SELECTION, FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void MethodCallToIdentifierTest()
+        {
+            bool isValid = LocaleTest(FilePath.METHOD_CALL_TO_IDENTIFIER_INPUT, FilePath.METHOD_CALL_TO_IDENTIFIER_OUTPUT_SELECTION, FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test case for parameter to constant value
+        /// </summary>
+        [Test]
+        public void ParameterToConstantValueTest()
+        {
+            bool isValid = LocaleTest(FilePath.PARAMETER_TO_CONSTANT_VALUE_INPUT, FilePath.PARAMETER_TO_CONSTANT_VALUE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void ParameterChangeOnMethodTest()
+        {
+            bool isValid = LocaleTest(FilePath.PARAMETER_CHANGE_ON_METHOD_INPUT, FilePath.PARAMETER_CHANGE_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_CHANGE_ON_METHOD_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Locale test base method
+        /// </summary>
+        /// <param name="input">Input file</param>
+        /// <param name="output">Output file</param>
+        /// <param name="mainClass">Main class</param>
+        /// <returns>True if locale passed</returns>
+        public static bool LocaleTest(string input, string output, string mainClass)
+        {
             EditorController controller = EditorController.GetInstance();
-            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(FilePath.SIMPLE_API_CHANGE_INPUT);
-            controller.RegionsBeforeEdition = selections;
-            controller.CodeBefore = FileUtil.ReadFile(FilePath.MAIN_CLASS_PATH);
+            controller.Init();
+            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(input);
+            controller.SelectedLocations = selections;
+            controller.CurrentViewCodeBefore = FileUtil.ReadFile(mainClass);
 
             controller.Extract();
             controller.solutionPath = FilePath.SOLUTION_PATH;
-            controller.RetrieveRegions(controller.Progs.First().Key, controller.CodeBefore);
+            controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
-            List<Selection> locations = JsonUtil<List<Selection>>.Read(FilePath.SIMPLE_API_CHANGE_OUTPUT_SELECTION);
+            List<Selection> locations = JsonUtil<List<Selection>>.Read(output);
             bool passed = true;
             for (int i = 0; i < locations.Count; i++)
             {
-                if (locations.Count != controller.locations.Count) { passed = false; break;  }
+                if (locations.Count != controller.locations.Count) { passed = false; break; }
 
-                if (!locations[i].SourcePath.Equals(controller.locations[i].SourceClass)){ passed = false; break; }
+                if (!locations[i].SourcePath.Equals(controller.locations[i].SourceClass)) { passed = false; break; }
 
                 if (locations[i].Start != controller.locations[i].Region.Start || locations[i].Length != controller.locations[i].Region.Length)
                 {
@@ -43,7 +93,7 @@ namespace Spg.NUnitTests.Location
                     break;
                 }
             }
-            Assert.IsTrue(passed);
+            return passed;
         }
     }
 }

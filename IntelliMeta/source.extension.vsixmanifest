@@ -15,5 +15,6 @@
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="IntelliLocation" d:VsixSubPath="Locate" Path="|IntelliLocation;PkgdefProjectOutputGroup|" />
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="IntelliExtract" d:VsixSubPath="Extract" Path="|IntelliExtract;PkgdefProjectOutputGroup|" />
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:VsixSubPath="Refactor" Path="|Refactor;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="IntelliUndo" d:VsixSubPath="IntelliUndo" Path="|IntelliUndo;PkgdefProjectOutputGroup|" />
   </Assets>
 </PackageManifest>

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
-using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Util;
 using Spg.ExampleRefactoring.Workspace;
 using Spg.LocationCodeRefactoring.Observer;
 using Spg.LocationRefactor.Location;
@@ -48,12 +49,13 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// Regions before the transformation
         /// </summary>
         /// <returns></returns>
-        public List<TRegion> RegionsBeforeEdition { get; set; }
+        public List<TRegion> SelectedLocations { get; set; }
 
         /// <summary>
         /// Learned programs
         /// </summary>
-        public Dictionary<String, Prog> Progs { get; set; }
+        //public Dictionary<String, Prog> Progs { get; set; }
+        public List<Prog> Progs { get; set; }
 
         /// <summary>
         /// Solution path
@@ -64,29 +66,31 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// Code before transformation
         /// </summary>
         /// <returns></returns>
-        public string CodeBefore { get; set; }
+        public string CurrentViewCodeBefore { get; set; }
 
         /// <summary>
         /// Code before transformation
         /// </summary>
         /// <returns>Code before transformation</returns>
-        public string CodeAfter { get; set; }
+        public string CurrentViewCodeAfter { get; set; }
 
         /// <summary>
         /// Singleton instance
         /// </summary>
-        private static EditorController instance;
+        private static EditorController Instance;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="syntaxKind"></param>
-        /// <param name="solutionPath"></param>
-        private EditorController(SyntaxKind syntaxKind, string solutionPath)
+        private EditorController()
         {
-            this.solutionPath = solutionPath;
-            this.RegionsBeforeEdition = new List<TRegion>();
-            this.Progs = new Dictionary<String, Prog>();
+            Init();
+        }
+
+        //Start controller
+        public void Init()
+        {
+            this.SelectedLocations = new List<TRegion>();
             this.hilightObservers = new List<IHilightObserver>();
             this.programGeneratedObservers = new List<IProgramsGeneratedObserver>();
             this.programsRefactoredObserver = new List<IProgramRefactoredObserver>();
@@ -100,11 +104,11 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// <returns>Editor controller instance</returns>
         public static EditorController GetInstance()
         {
-            if (instance == null)
+            if (Instance == null)
             {
-                instance = new EditorController(SyntaxKind.MethodDeclaration, "");
+                Instance = new EditorController();
             }
-            return instance;
+            return Instance;
         }
 
         /// <summary>
@@ -112,25 +116,84 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// </summary>
         public void Extract()
         {
-            Color color = Color.LightGreen;
             LocationExtractor extractor = new LocationExtractor(solutionPath);
             //remove
-            JsonUtil<List<TRegion>>.Write(RegionsBeforeEdition, "simple_api_change_input.json");
+            JsonUtil<List<TRegion>>.Write(SelectedLocations, "simple_api_change_input.json");
             //remove
-            List<Prog> programs = extractor.Extract(RegionsBeforeEdition, (Color)color);
+            Progs = extractor.Extract(SelectedLocations);
 
-            List<Prog> filtereds = new List<Prog>();
-            foreach (Prog program in programs)
+            Progs = AnaliseLocations();
+
+            NotifyLocationProgramGeneratedObservers(Progs);
+        }
+
+        /// <summary>
+        /// Analise locations
+        /// </summary>
+        /// <returns>Location programs</returns>
+        private List<Prog> AnaliseLocations()
+        {
+            if (SelectedLocations == null || SelectedLocations.Count == 0) { throw new Exception("Selected regions cannot be null or empty."); }
+
+            List<TRegion> regions = RetrieveLocations(CurrentViewCodeBefore, Progs.First());
+            regions = NonDuplicateLocations(regions);
+
+            TRegion deepestRegion = SelectedLocations.First();
+            for (int i = 1; i < SelectedLocations.Count; i++)
             {
-                Prog val;
-                if (!Progs.TryGetValue(program.ToString(), out val))
+                if (SelectedLocations[i].Start > deepestRegion.Start)
                 {
-                    Progs.Add(program.ToString(), program);
-                    filtereds.Add(program);
+                    deepestRegion = SelectedLocations[i];
                 }
             }
 
-            NotifyProgramGeneratedObservers(filtereds);
+            List<TRegion> negativesExamples = new List<TRegion>();
+            foreach (TRegion region in regions)
+            {
+                if (region.Start > deepestRegion.Start) { break; } //after deepest region does not work as negative example.
+
+                bool negative = true;
+                foreach (TRegion selectedRegion in SelectedLocations)
+                {
+                    if (selectedRegion.Start <= region.Start && region.Start <= selectedRegion.Start + selectedRegion.Length)
+                    {
+                        negative = false;
+                        break;
+                    }
+                }
+
+                if (negative)
+                {
+                    region.Parent = deepestRegion.Parent;
+                    negativesExamples.Add(region);
+                }
+            }
+
+            if (negativesExamples.Count == 0)
+            {
+                return Progs;
+            }
+            else
+            {
+                LocationExtractor extrator = new LocationExtractor(solutionPath);
+                Progs = extrator.Extract(SelectedLocations, negativesExamples);
+            }
+
+            return Progs;
+        }
+
+        /// <summary>
+        /// Undo systematic editing
+        /// </summary>
+        public void Undo()
+        {
+            foreach (Transformation transformation in SourceTransformations)
+            {
+                string path = transformation.SourcePath;
+                string sourceCode = transformation.transformation.Item1;
+                FileUtil.WriteToFile(path, sourceCode);
+            }
+            this.CodeTransformations = null;
         }
 
         /// <summary>
@@ -150,8 +213,7 @@ namespace Spg.LocationCodeRefactoring.Controller
             tregion.Text = span;
             tregion.Color = color;
 
-            List<TRegion> values = values = new List<TRegion>();
-            values.Add(tregion);
+            SelectedLocations.Add(tregion);
 
             if (tregion.Parent == null)
             {
@@ -169,9 +231,9 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// </summary>
         /// <param name="selected">Selected region</param>
         /// <param name="program">Selected program</param>
-        public void RetrieveRegions(String selected, String program)
+        public void RetrieveLocations(String program)
         {
-            Prog prog = Progs[selected];
+            Prog prog = Progs.First();
             LocationExtractor extractor = new LocationExtractor(solutionPath);
             List<Tuple<string, string>> sourceFiles = (new WorkspaceManager()).SourceFiles(solutionPath);
 
@@ -179,7 +241,7 @@ namespace Spg.LocationCodeRefactoring.Controller
 
             foreach (Tuple<string, string> source in sourceFiles)
             {
-                List<TRegion> regions = extractor.RetrieveString(prog, source.Item1);
+                List<TRegion> regions = RetrieveLocations(source.Item1, prog);
                 foreach (TRegion region in regions)
                 {
                     CodeLocation location = new CodeLocation();
@@ -187,10 +249,8 @@ namespace Spg.LocationCodeRefactoring.Controller
                     location.SourceCode = source.Item1;
                     location.SourceClass = source.Item2;
                     sourceLocations.Add(location);
-
                 }
             }
-
             List<TRegion> rs = extractor.RetrieveString(prog, program);
 
             this.locations = NonDuplicateLocations(sourceLocations);
@@ -202,11 +262,23 @@ namespace Spg.LocationCodeRefactoring.Controller
                 Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode);
                 selections.Add(selection);
             }
-            JsonUtil <List<Selection>>.Write(selections, "simple_api_change_output.json");
+            JsonUtil<List<Selection>>.Write(selections, "simple_api_change_output.json");
             //remove
 
             NotifyHilightObservers(rs);
-            NotifyLocationsObservers(sourceLocations);
+            NotifyLocationsObservers(locations);
+        }
+
+        /// <summary>
+        /// Retrieve locations
+        /// </summary>
+        /// <param name="selected">Selected region</param>
+        /// <param name="sourceCode">Selected program</param>
+        public List<TRegion> RetrieveLocations(string sourceCode, Prog prog)
+        {
+            LocationExtractor extractor = new LocationExtractor(solutionPath);
+            List<TRegion> regions = extractor.RetrieveString(prog, sourceCode);
+            return regions;
         }
 
         /// <summary>
@@ -236,18 +308,59 @@ namespace Spg.LocationCodeRefactoring.Controller
         }
 
         /// <summary>
+        /// Selected only non duplicate locations
+        /// </summary>
+        /// <param name="locations">All locations</param>
+        /// <returns>Non duplicate locations</returns>
+        private List<TRegion> NonDuplicateLocations(List<TRegion> locations)
+        {
+            List<TRegion> nonDuplicateLocations = new List<TRegion>();
+            foreach (TRegion location in locations)
+            {
+                bool distinct = true;
+                foreach (TRegion region in nonDuplicateLocations)
+                {
+                    if (region.Start == location.Start && region.Length == location.Length)
+                    {
+                        distinct = false; break;
+                    }
+                }
+                if (distinct)
+                {
+                    nonDuplicateLocations.Add(location);
+                }
+            }
+            return nonDuplicateLocations;
+        }
+
+        /// <summary>
         /// Refactor a region
         /// </summary>
         public void Refact()
         {
             LocationExtractor extractor = new LocationExtractor(solutionPath);
-            List<Transformation> transformations = extractor.TransformProgram(CodeBefore, CodeAfter);
+            List<Transformation> transformations = extractor.TransformProgram(CurrentViewCodeBefore, CurrentViewCodeAfter);
             this.SourceTransformations = transformations;
 
-            SynthesizedProgram synthesized = extractor.TransformationProgram(RegionsBeforeEdition);
+            SynthesizedProgram synthesized = extractor.TransformationProgram(SelectedLocations);
 
             NotifyProgramRefactoredObservers(transformations);
             NotifyLocationsTransformedObservers(synthesized, locations);
+
+            ClearAfterRefact();
+
+        }
+
+        /// <summary>
+        /// Clear and start
+        /// </summary>
+        private void ClearAfterRefact()
+        {
+            Init();
+            this.Progs = new List<Prog>();
+            this.locations = null;
+            this.CurrentViewCodeBefore = null;
+            this.CurrentViewCodeAfter = null;
         }
 
         /// <summary>
@@ -285,7 +398,7 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// Notify generated observers
         /// </summary>
         /// <param name="programs">Generated observers</param>
-        private void NotifyProgramGeneratedObservers(List<Prog> programs)
+        private void NotifyLocationProgramGeneratedObservers(List<Prog> programs)
         {
             ProgramGeneratedEvent pEvent = new ProgramGeneratedEvent(programs);
             foreach (IProgramsGeneratedObserver observer in programGeneratedObservers)
@@ -326,6 +439,11 @@ namespace Spg.LocationCodeRefactoring.Controller
             this.locationsTransformedObserver.Add(observer);
         }
 
+        /// <summary>
+        /// Notify locations transformation observers
+        /// </summary>
+        /// <param name="program">Synthesized program</param>
+        /// <param name="locations">Code locations</param>
         private void NotifyLocationsTransformedObservers(SynthesizedProgram program, List<CodeLocation> locations)
         {
             List<CodeTransformation> transformations = new List<CodeTransformation>();
@@ -364,7 +482,8 @@ namespace Spg.LocationCodeRefactoring.Controller
                 Tuple<string, string> transformedLocation = Tuple.Create(region.Node.GetText().ToString(), transformation);
                 return transformedLocation;
             }
-            catch (ArgumentOutOfRangeException e) { Console.WriteLine(e.Message); }
+            catch (ArgumentOutOfRangeException e)
+            { Console.WriteLine(e.Message); }
 
             return null;
         }
@@ -394,6 +513,30 @@ namespace Spg.LocationCodeRefactoring.Controller
     }
 }
 
+///// <summary>
+///// Extract locations
+///// </summary>
+//public void Extract()
+//{
+//    LocationExtractor extractor = new LocationExtractor(solutionPath);
+//    //remove
+//    JsonUtil<List<TRegion>>.Write(RegionsBeforeEdition, "simple_api_change_input.json");
+//    //remove
+//    //List<Prog> programs = extractor.Extract(RegionsBeforeEdition);
+//    Progs = extractor.Extract(RegionsBeforeEdition);
+
+//    //List<Prog> filtereds = new List<Prog>();
+//    //foreach (Prog program in programs)
+//    //{
+//    //    Prog val;
+//    //    if (!Progs.TryGetValue(program.ToString(), out val))
+//    //    {
+//    //        Progs.Add(program.ToString(), program);
+//    //        filtereds.Add(program);
+//    //    }
+//    //}
+//    //NotifyProgramGeneratedObservers(filtereds);
+//}
 
 ///// <summary>
 ///// Regions after the transformation

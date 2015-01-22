@@ -80,7 +80,7 @@ namespace Spg.LocationRefactor.Operator
         {
             return "Pair(p1, p2, LS)\n" +
             "p1 = " + expression.p1 + "\n" +
-            "p2 = " + expression.p2 + "";
+            "p2 = " + expression.p2;
         }
     }
 }

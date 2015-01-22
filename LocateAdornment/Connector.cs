@@ -80,7 +80,7 @@ namespace LocateAdornment
             string newText = "";
             foreach (Transformation transformation in transformations)
             {
-                if (controller.CodeBefore.Equals(transformation.transformation.Item1))
+                if (controller.CurrentViewCodeBefore.Equals(transformation.transformation.Item1))
                 {
                     newText = transformation.transformation.Item2;
                     break;

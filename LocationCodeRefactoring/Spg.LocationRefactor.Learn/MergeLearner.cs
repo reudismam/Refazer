@@ -33,9 +33,9 @@ namespace Spg.LocationRefactor.Learn
 
             List<IExpression> X = new List<IExpression>();
 
-            Predicate.IPredicate pred = GetPredicate();
+            IPredicate pred = GetPredicate();
             EditorController contoller = EditorController.GetInstance();
-            List<TRegion> list = contoller.RegionsBeforeEdition;
+            List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
             S.predicate = pred;
 
@@ -51,6 +51,51 @@ namespace Spg.LocationRefactor.Learn
                     scalar.ioperator = pair;
 
                     
+                    MapBase map = GetMap(list);
+                    map.scalarExpression = scalar;
+                    map.sequenceExpression = predicate;
+                    Prog prog = new Prog();
+                    prog.ioperator = map;
+                    programs.Add(prog);
+                }
+            }
+            return programs;
+        }
+
+        /// <summary>
+        /// Learn
+        /// </summary>
+        /// <param name="positiveExamples">Positive examples</param>
+        /// <param name="negativeExamples">Negative examples</param>
+        /// <returns>Location programs</returns>
+        public List<Prog> Learn(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples)
+        {
+            List<Prog> programs = new List<Prog>();
+            List<Tuple<ListNode, ListNode>> Q = MapBase.Decompose(positiveExamples);
+
+            ASTProgram P = new ASTProgram();
+            SynthesizedProgram h = P.GenerateStringProgram(positiveExamples).Single();
+
+            List<IExpression> X = new List<IExpression>();
+
+            IPredicate pred = GetPredicate();
+            EditorController contoller = EditorController.GetInstance();
+            List<TRegion> list = contoller.SelectedLocations;
+            FilterLearnerBase S = GetFilter(list);
+            S.predicate = pred;
+
+            List<Prog> predicates = S.Learn(positiveExamples);
+            foreach (IExpression e in X)
+            {
+                foreach (Prog predicate in predicates)
+                {
+                    Prog scalar = new Prog();
+                    Pair pair = new Pair();
+                    pair.expression = (SubStr)e;
+
+                    scalar.ioperator = pair;
+
+
                     MapBase map = GetMap(list);
                     map.scalarExpression = scalar;
                     map.sequenceExpression = predicate;

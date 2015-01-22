@@ -1,13 +1,22 @@
 ﻿using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator
 {
+    /// <summary>
+    /// Statement map
+    /// </summary>
     public class StatementMap : MapBase
     {
+        /// <summary>
+        /// List of regions
+        /// </summary>
         private List<TRegion> list;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="list"></param>
         public StatementMap(List<TRegion> list)
         {
             this.list = list;

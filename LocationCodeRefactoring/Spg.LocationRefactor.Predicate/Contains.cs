@@ -5,6 +5,9 @@ using System;
 
 namespace Spg.LocationRefactor.Predicate
 {
+    /// <summary>
+    /// Predicate contains
+    /// </summary>
     public class Contains: IPredicate
     {
         /// <summary>

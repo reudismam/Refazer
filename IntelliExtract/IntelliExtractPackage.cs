@@ -81,7 +81,7 @@ namespace SPG.IntelliExtract
                 Connector.Select(viewHost, r);
             }
             EditorController controler = EditorController.GetInstance();
-            controler.CodeBefore = Connector.GetText(viewHost);
+            controler.CurrentViewCodeBefore = Connector.GetText(viewHost);
         }
 
         public void NotifyLocationsSelected(LocationEvent lEvent)
@@ -91,7 +91,6 @@ namespace SPG.IntelliExtract
 
         public void NotifyProgramGenerated(ProgramGeneratedEvent pEvent)
         {
-
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
             int mustHaveFocus = 1;
@@ -113,14 +112,9 @@ namespace SPG.IntelliExtract
 
             this.programs = pEvent.programs;
 
-            String selected = programs[0].ToString();
-
             EditorController controler = EditorController.GetInstance();
-            controler.RetrieveRegions(selected, text);
+            controler.RetrieveLocations(text);
         }
-
-
-
 
         /////////////////////////////////////////////////////////////////////////////
         // Overridden Package Implementation
@@ -165,9 +159,15 @@ namespace SPG.IntelliExtract
                 Console.WriteLine("No text view is currently open");
                 return;
             }
+            IWpfTextViewHost viewHost;
+            object holder;
+            Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
+            userData.GetData(ref guidViewHost, out holder);
+            viewHost = (IWpfTextViewHost)holder;
 
-            EditorController controler = EditorController.GetInstance();
-            controler.Extract();
+            EditorController controller = EditorController.GetInstance();
+            controller.CurrentViewCodeBefore = Connector.GetText(viewHost);
+            controller.Extract();
         }
 
     }

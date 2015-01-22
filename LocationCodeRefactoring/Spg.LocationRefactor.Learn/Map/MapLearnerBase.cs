@@ -11,6 +11,9 @@ using System.Drawing;
 
 namespace Spg.LocationRefactor.Learn
 {
+    /// <summary>
+    /// Map Learner base
+    /// </summary>
     public abstract class MapLearnerBase:ILearn
     {
         /// <summary>
@@ -28,12 +31,11 @@ namespace Spg.LocationRefactor.Learn
 
             IPredicate pred = GetPredicate();
             EditorController contoller = EditorController.GetInstance();
-            List<TRegion> list = contoller.RegionsBeforeEdition;
+            List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
             S.predicate = pred;
 
             List<Prog> predicates = S.Learn(examples);
-
             if (hypo.Count == 1)
             {
                 foreach (Prog h in hypo)
@@ -80,6 +82,84 @@ namespace Spg.LocationRefactor.Learn
                         for (int i = 0; i < merges.Count; i++)
                         {
                             merges[i].AddMap((MapBase) programs[i].ioperator);
+                        }
+                    }
+                }
+
+                programs = new List<Prog>();
+                foreach (Merge merge in merges)
+                {
+                    Prog prog = new Prog();
+                    prog.ioperator = merge;
+                    programs.Add(prog);
+                }
+            }
+            return programs;
+        }
+
+        public List<Prog> Learn(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples)
+        {
+            List<Prog> programs = new List<Prog>();
+            List<Tuple<ListNode, ListNode>> Q = MapBase.Decompose(positiveExamples);
+
+            PairLearn F = new PairLearn();
+            List<Prog> hypo = F.Learn(Q);
+
+            IPredicate pred = GetPredicate();
+            EditorController contoller = EditorController.GetInstance();
+            List<TRegion> list = contoller.SelectedLocations;
+            FilterLearnerBase S = GetFilter(list);
+            S.predicate = pred;
+
+            List<Prog> predicates = S.Learn(positiveExamples, negativeExamples);
+            if (hypo.Count == 1)
+            {
+                foreach (Prog h in hypo)
+                {
+                    foreach (Prog predicate in predicates)
+                    {
+                        MapBase map = GetMap(list);
+                        map.scalarExpression = h;
+                        map.sequenceExpression = predicate;
+                        Prog prog = new Prog();
+                        prog.ioperator = map;
+                        programs.Add(prog);
+                    }
+                }
+            }
+            else
+            {
+                Boolean firstSynthesizedProg = true;
+                List<Merge> merges = new List<Merge>();
+                foreach (Prog h in hypo)
+                {
+                    programs = new List<Prog>();
+                    foreach (Prog predicate in predicates)
+                    {
+                        MapBase map = GetMap(list);
+                        map.scalarExpression = h;
+                        map.sequenceExpression = predicate;
+                        Prog prog = new Prog();
+                        prog.ioperator = map;
+                        programs.Add(prog);
+                    }
+
+                    if (firstSynthesizedProg)
+                    {
+                        foreach (Prog prog in programs)
+                        {
+                            Merge merge = new Merge();
+                            merge.AddMap((MapBase)prog.ioperator);
+                            merges.Add(merge);
+                        }
+                        firstSynthesizedProg = false;
+
+                    }
+                    else
+                    {
+                        for (int i = 0; i < merges.Count; i++)
+                        {
+                            merges[i].AddMap((MapBase)programs[i].ioperator);
                         }
                     }
                 }

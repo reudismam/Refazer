@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
-using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationCodeRefactoring.Controller;
-using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.TextRegion;
+using Spg.NUnitTests.Location;
 using Spg.NUnitTests.Util;
 
 namespace NUnitTests.Spg.NUnitTests.Complete
@@ -31,31 +22,62 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         [Test]
         public void SimpleAPIChangeTest()
         {
+            bool passLocation = LocationTest.LocaleTest(FilePath.SIMPLE_API_CHANGE_INPUT, FilePath.SIMPLE_API_CHANGE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_SIMPLE_API_CHANGE_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_SIMPLE_API_CHANGE_AFTER_EDITING, @"files\change_api\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Parameter test on if
+        /// </summary>
+        [Test]
+        public void ParameterChangeOnIfTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.INTRODUCE_PARAM_ON_IF_INPUT, FilePath.INTRODUCE_PARAM_ON_IF_OUTPUT_SELECTION, FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_AFTER_EDITING, @"files\parameter_change_on_if\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void MethodCallToIdentifierTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.METHOD_CALL_TO_IDENTIFIER_INPUT, FilePath.METHOD_CALL_TO_IDENTIFIER_OUTPUT_SELECTION, FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH_AFTER_EDITING, @"files\method_call_to_identifier\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void ParameterToConstantValueTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.PARAMETER_TO_CONSTANT_VALUE_INPUT, FilePath.PARAMETER_TO_CONSTANT_VALUE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_AFTER_EDITING, @"files\parameter_to_constant_value\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Complete test
+        /// </summary>
+        /// <param name="mainClassAfterEditing">Main class after edit</param>
+        /// <param name="complement">Complement information</param>
+        /// <returns></returns>
+        public static bool CompleteTestBase(string mainClassAfterEditing, string complement)
+        {
             EditorController controller = EditorController.GetInstance();
-            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(FilePath.SIMPLE_API_CHANGE_INPUT);
-            controller.RegionsBeforeEdition = selections;
-            controller.CodeBefore = FileUtil.ReadFile(FilePath.MAIN_CLASS_PATH);
-
-            controller.Extract();
-            controller.solutionPath = FilePath.SOLUTION_PATH;
-            controller.RetrieveRegions(controller.Progs.First().Key, controller.CodeBefore);
-
-            List<Selection> locations = JsonUtil<List<Selection>>.Read(FilePath.SIMPLE_API_CHANGE_OUTPUT_SELECTION);
-            bool passLocation = true;
-            for (int i = 0; i < locations.Count; i++)
-            {
-                if (locations.Count != controller.locations.Count) { passLocation = false; break; }
-
-                if (!locations[i].SourcePath.Equals(controller.locations[i].SourceClass)) { passLocation = false; break; }
-
-                if (locations[i].Start != controller.locations[i].Region.Start || locations[i].Length != controller.locations[i].Region.Length)
-                {
-                    passLocation = false;
-                    break;
-                }
-            }
-
-            controller.CodeAfter = FileUtil.ReadFile(FilePath.MAIN_CLASS_AFTER_EDITING);
+            controller.CurrentViewCodeAfter = FileUtil.ReadFile(complement + mainClassAfterEditing);
             controller.Refact();
 
             bool passTransformation = true;
@@ -63,21 +85,20 @@ namespace NUnitTests.Spg.NUnitTests.Complete
             {
                 string classPath = transformation.SourcePath;
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
+                className = complement + className;
 
                 Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(className), transformation.transformation.Item2);
                 Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);
 
                 NodeComparer comparator = new NodeComparer();
-                Boolean isEqual = comparator.SequenceEqual(lnode.Item1, lnode.Item2);
+                bool isEqual = comparator.SequenceEqual(lnode.Item1, lnode.Item2);
                 if (!isEqual)
                 {
                     passTransformation = false;
                     break;
                 }
-
             }
-
-            Assert.IsTrue(passLocation || passTransformation);
+            return passTransformation;
         }
     }
 }

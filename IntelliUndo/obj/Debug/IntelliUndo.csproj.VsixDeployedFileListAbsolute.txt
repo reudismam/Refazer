@@ -1,0 +1,15 @@
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\IntelliUndo.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\LocationCodeRefactoring.exe
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\IntelliUndo.pkgdef
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\extension.vsixmanifest
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\DirectedGraph.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\ExampleRefactoring.exe
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\Microsoft.CodeAnalysis.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\Microsoft.CodeAnalysis.Workspaces.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\System.Collections.Immutable.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\System.Reflection.Metadata.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\Newtonsoft.Json.dll
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\IntelliUndo.pdb
+C:\Users\SPG\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\SPG\IntelliUndo\1.0\\LocationCodeRefactoring.pdb

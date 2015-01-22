@@ -7,7 +7,7 @@ namespace LeastCommonAncestor
     /// <summary>
     /// Least common ancestor
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Type of data</typeparam>
     public class LCA<T>
     {
         /// <summary>
@@ -141,7 +141,7 @@ namespace LeastCommonAncestor
         /// <summary>
         /// Helps find the least common ancestor in a graph 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">Type of object</typeparam>
         public class LeastCommonAncestorFinder<T>
         {
             private ITreeNode<T> _rootNode;

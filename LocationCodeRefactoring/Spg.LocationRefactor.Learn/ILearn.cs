@@ -13,5 +13,13 @@ namespace Spg.LocationRefactor.Learn
         /// <param name="examples">Examples</param>
         /// <returns>Learned programs</returns>
         List<Prog> Learn(List<Tuple<ListNode, ListNode>> examples);
+
+        /// <summary>
+        /// Learn location from examples
+        /// </summary>
+        /// <param name="positiveExamples">Positive examples</param>
+        /// <param name="negativeExamples">Negative examples</param>
+        /// <returns>Locations programs</returns>
+        List<Prog> Learn(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples);
     }
 }

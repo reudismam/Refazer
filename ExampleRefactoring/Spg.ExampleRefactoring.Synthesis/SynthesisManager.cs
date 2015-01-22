@@ -146,10 +146,10 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>True if valid</returns>
         private bool ValidateSynthesizedProgram(List<IExpression> solutions, List<Tuple<ListNode, ListNode>> examples/*, StreamWriter file*/)
         {
-            if (setting.considerConstrStr && solutions.Count == 1 && solutions[0] is ConstruStr)
+            /*if (setting.considerConstrStr && solutions.Count == 1 && solutions[0] is ConstruStr)
             {
                 return false;
-            }
+            }*/
 
             foreach (Tuple<ListNode, ListNode> example in examples)
             {
@@ -310,7 +310,6 @@ namespace Spg.ExampleRefactoring.Synthesis
 
         private static void HandleEmpty(Dictionary<FeatureType, int> features, Pos p1)
         {
-
             int value;
             FeatureType key = FeatureType.EMPTY;
 
@@ -397,8 +396,8 @@ namespace Spg.ExampleRefactoring.Synthesis
         }
 
 
-        /// <summary>
-        /// Create boundary points
+        ///// <summary>
+        ///// Create boundary points
         ///// </summary>
         ///// <param name="input">Input string</param>
         ///// <param name="output">Output string</param>
@@ -424,7 +423,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             return points;
         }
 
-        private static List<int> Differ(ListNode input, ListNode output)
+        public static List<int> Differ(ListNode input, ListNode output)
         {
             List<int> indexes = new List<int>();
             indexes.Add(0);

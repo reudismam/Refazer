@@ -65,7 +65,7 @@
         <Parent guid="guidIntelliExtractCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Locate</ButtonText>
+          <ButtonText>IntelliExtract</ButtonText>
         </Strings>
       </Button>
 
