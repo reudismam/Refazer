@@ -46,5 +46,17 @@ namespace Spg.NUnitTests.Util
 
         public static string PARAMETER_CHANGE_ON_METHOD_INPUT = @"json\parameter_change_on_method_input.json";
         public static string PARAMETER_CHANGE_ON_METHOD_OUTPUT_SELECTION = @"json\parameter_change_on_method_output.json";
+
+        public static string MAIN_CLASS_METHOD_TO_PROPERTY_IF_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.MethodToPropertyOnIf\MethodToPropertyOnIf.cs";
+        public static string MAIN_CLASS_METHOD_TO_PROPERTY_IF_AFTER_EDITING = @"MethodToPropertyOnIf.cs";
+
+        public static string METHOD_TO_PROPERTY_IF_INPUT = @"json\method_to_property_if_input.json";
+        public static string METHOD_TO_PROPERTY_IF_OUTPUT_SELECTION = @"json\method_to_property_if_output.json";
+
+        public static string MAIN_CLASS_CHANGE_EXCEPTION_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ChangeException\ChangeException.cs";
+        public static string MAIN_CLASS_CHANGE_EXCEPTION_AFTER_EDITING = @"ChangeException.cs";
+
+        public static string CHANGE_EXCEPTION_INPUT = @"json\change_exception_input.json";
+        public static string CHANGE_EXCEPTION_OUTPUT_SELECTION = @"json\change_exception_output.json";
     }
 }

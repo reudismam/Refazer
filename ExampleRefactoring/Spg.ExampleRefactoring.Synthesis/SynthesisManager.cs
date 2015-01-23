@@ -482,7 +482,62 @@ namespace Spg.ExampleRefactoring.Synthesis
         }
 
 
-       
+        public static List<ComparisonResult<ComparisonObject>> Differ2(ListNode input, ListNode output)
+        {
+            List<ComparisonResult<ComparisonObject>> rs = new List<ComparisonResult<ComparisonObject>>();
+            List<int> indexes = new List<int>();
+            List<ComparisonObject> tinput = new List<ComparisonObject>();
+            for (int i = 0; i < input.List.Count; i++)
+            {
+                SyntaxNodeOrToken st = input.List[i];
+                DymToken token = new DymToken(st);
+                ComparisonObject obj = new ComparisonObject(token, i);
+                tinput.Add(obj);
+            }
+
+            List<ComparisonObject> touput = new List<ComparisonObject>();
+            for (int i = 0; i < output.List.Count; i++)
+            {
+                SyntaxNodeOrToken st = output.List[i];
+                DymToken token = new DymToken(st);
+                ComparisonObject obj = new ComparisonObject(token, i);
+                touput.Add(obj);
+            }
+
+
+            ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
+            List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
+            //for (int i = 0; i < result.Count; i++)
+            //{
+            //    ComparisonResult<ComparisonObject> r = result[i];
+            //    if (!r.ModificationType.Equals(ModificationType.None))
+            //    {
+            //        Console.WriteLine(r.DataCompared);
+            //        if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
+            //        {
+            //            //if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
+            //            //{
+            //            //    continue;
+            //            //}
+            //            indexes.Add(r.DataCompared.Index);
+            //            rs.Add(r);
+            //        }
+            //    }
+
+            //    if (r.ModificationType.Equals(ModificationType.Inserted))
+            //    {
+            //        if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
+            //        {
+            //            indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
+            //        }
+            //    }
+            //}
+
+            ////return indexes;
+            //return rs;
+            return result;
+        }
+
     }
 }
 

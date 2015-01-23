@@ -157,8 +157,12 @@ namespace Spg.LocationCodeRefactoring.Controller
                 {
                     if (selectedRegion.Start <= region.Start && region.Start <= selectedRegion.Start + selectedRegion.Length)
                     {
-                        negative = false;
-                        break;
+                        negative = false; break;
+                    }
+
+                    if (region.Start <= selectedRegion.Start && selectedRegion.Start <= region.Start + region.Length)
+                    {
+                        negative = false; break;
                     }
                 }
 

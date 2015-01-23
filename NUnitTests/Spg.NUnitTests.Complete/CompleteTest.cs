@@ -68,6 +68,26 @@ namespace NUnitTests.Spg.NUnitTests.Complete
             Assert.IsTrue(passLocation && passTransformation);
         }
 
+        [Test]
+        public void MethodToPropertyIfTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.METHOD_TO_PROPERTY_IF_INPUT, FilePath.METHOD_TO_PROPERTY_IF_OUTPUT_SELECTION, FilePath.MAIN_CLASS_METHOD_TO_PROPERTY_IF_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_METHOD_TO_PROPERTY_IF_AFTER_EDITING, @"files\method_to_property_if\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void ChangeExceptionTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.CHANGE_EXCEPTION_INPUT, FilePath.CHANGE_EXCEPTION_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_EXCEPTION_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_EXCEPTION_AFTER_EDITING, @"files\change_exception\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
         /// <summary>
         /// Complete test
         /// </summary>

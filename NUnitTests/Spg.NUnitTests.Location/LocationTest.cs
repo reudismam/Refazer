@@ -60,6 +60,19 @@ namespace Spg.NUnitTests.Location
             Assert.IsTrue(isValid);
         }
 
+        [Test]
+        public void MethodToPropertyIfTest()
+        {
+            bool isValid = LocaleTest(FilePath.METHOD_TO_PROPERTY_IF_INPUT, FilePath.METHOD_TO_PROPERTY_IF_OUTPUT_SELECTION, FilePath.MAIN_CLASS_METHOD_TO_PROPERTY_IF_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void ChangeExceptionTest()
+        {
+            bool isValid = LocaleTest(FilePath.CHANGE_EXCEPTION_INPUT, FilePath.CHANGE_EXCEPTION_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_EXCEPTION_PATH);
+            Assert.IsTrue(isValid);
+        }
         /// <summary>
         /// Locale test base method
         /// </summary>
