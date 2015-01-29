@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Tok;
 
@@ -68,7 +69,7 @@ namespace Spg.LocationRefactoring.Tok
 
             DymToken st = (DymToken)obj;
             ComparerBase comparator = new NodeComparer();
-            return comparator.IsEqual(this.token, st.token);
+            return comparator.IsEqual(this.token, st.token) && ASTManager.Parent(this.token).RawKind == ASTManager.Parent(st.token).RawKind;
         }
     }
 }

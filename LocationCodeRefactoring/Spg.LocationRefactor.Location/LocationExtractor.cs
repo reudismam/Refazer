@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
-using LocationCodeRefactoring.Br.Spg.Location;
+using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.Learn;
-using Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
-namespace Spg.LocationRefactor.Location
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 {
     /// <summary>
     /// Location extractor
@@ -26,34 +26,32 @@ namespace Spg.LocationRefactor.Location
         /// <summary>
         /// Learner
         /// </summary>
-        private Learner learn;
+        private readonly Learner _learn;
 
         /// <summary>
         /// Solution path
         /// </summary>
-        string solutionPath;
+        string _solutionPath;
 
         /// <summary>
         /// Controller
         /// </summary>
-        public EditorController controller = EditorController.GetInstance();
+        public EditorController Controller = EditorController.GetInstance();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="syntaxKind"></param>
         /// <param name="solutionPath"></param>
         public LocationExtractor(string solutionPath)
         {
-            this.solutionPath = solutionPath;
-            learn = new Learner();
+            this._solutionPath = solutionPath;
+            _learn = new Learner();
         }
 
         /// <summary>
         /// Extract location
         /// </summary>
         /// <param name="regions">List of selected regions</param>
-        /// <param name="color">Color of the region</param>
         /// <returns>Extracted locations</returns>
         public List<Prog> Extract(List<TRegion> regions)
         {
@@ -68,20 +66,25 @@ namespace Spg.LocationRefactor.Location
                     Tuple<ListNode, ListNode> lex = ASTProgram.Example(ex);
                     examples.Add(lex);
                 }
-                programs = learn.LearnRegion(examples);
+                programs = _learn.LearnRegion(examples);
             }
             else
             {
-                examples = learn.Decompose(regions);
-                programs = learn.LearnSeqRegion(examples);
+                examples = _learn.Decompose(regions);
+                programs = _learn.LearnSeqRegion(examples);
             }
             return programs;
         }
 
+        /// <summary>
+        /// Extract method
+        /// </summary>
+        /// <param name="positiveRegions">Positives examples</param>
+        /// <param name="negativeRegions">Negative examples</param>
+        /// <returns>List of learned programs</returns>
         internal List<Prog> Extract(List<TRegion> positiveRegions, List<TRegion> negativeRegions)
         {
             List<Tuple<ListNode, ListNode>> positiveExamples = new List<Tuple<ListNode, ListNode>>();
-            List<Tuple<ListNode, ListNode>> negativeExamples = new List<Tuple<ListNode, ListNode>>();
             List<Prog> programs = null;
 
             if (positiveRegions.Count() == 1)
@@ -92,13 +95,13 @@ namespace Spg.LocationRefactor.Location
                     Tuple<ListNode, ListNode> lex = ASTProgram.Example(ex);
                     positiveExamples.Add(lex);
                 }
-                programs = learn.LearnRegion(positiveExamples);
+                programs = _learn.LearnRegion(positiveExamples);
             }
             else
             {
-                positiveExamples = learn.Decompose(positiveRegions);
-                negativeExamples = learn.Decompose(negativeRegions);
-                programs = learn.LearnSeqRegion(positiveExamples, negativeExamples);
+                positiveExamples = _learn.Decompose(positiveRegions);
+                var negativeExamples = _learn.Decompose(negativeRegions);
+                programs = _learn.LearnSeqRegion(positiveExamples, negativeExamples);
             }
             return programs;
         }
@@ -111,9 +114,13 @@ namespace Spg.LocationRefactor.Location
         /// <returns>Regions list</returns>
         public List<TRegion> RetrieveString(Prog program, String input)
         {
-            SyntaxTree tree1 = CSharpSyntaxTree.ParseText(input);
-
             List<TRegion> regions = program.RetrieveString(input);
+            return regions;
+        }
+
+        internal List<TRegion> RetrieveString(Prog program, string sourceCode, SyntaxNode input)
+        {
+            List<TRegion> regions = program.RetrieveString(input, sourceCode);
             return regions;
         }
 
@@ -125,7 +132,7 @@ namespace Spg.LocationRefactor.Location
         private SynthesizedProgram LearnSynthesizerProgram(List<Tuple<ListNode, ListNode>> examples)
         {
             SynthesizerSetting setting = new SynthesizerSetting(); //configure setting
-            setting.dynamicTokens = true; setting.deviation = 2; setting.considerEmpty = true; setting.considerConstrStr = true;
+            setting.DynamicTokens = true; setting.Deviation = 2; setting.ConsiderEmpty = true; setting.ConsiderConstrStr = true;
 
             ASTProgram program = new ASTProgram(setting, examples); //create a new AST program and learn synthesizer
             List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
@@ -136,29 +143,26 @@ namespace Spg.LocationRefactor.Location
         /// <summary>
         /// Transform selection regions
         /// </summary>
-        /// <param name="regionsBeforeEdit">Regions before edition</param>
-        /// <param name="regionsAfterEdit">Regions after edition</param>
-        /// <param name="color">Color</param>
-        /// <param name="prog">Program selected</param>
+        /// <param name="codeBefore">Regions before edition</param>
+        /// <param name="codeAfter">Regions after edition</param>
         /// <returns></returns>
-        public List<Transformation> TransformProgram(string CodeBefore, string CodeAfter)
+        public List<Transformation.Transformation> TransformProgram(string codeBefore, string codeAfter)
         {
-            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocationToAutomaticEdit(CodeBefore, CodeAfter);
+            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocationToAutomaticEdit(codeBefore, codeAfter);
             List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
 
             SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
 
-            var locations = controller.locations; //previous locations
+            var locations = Controller.Locations; //previous locations
 
             Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
-            StatementStrategy strategy = StatementStrategy.GetInstance();
 
-            List<Transformation> transformations = new List<Transformation>();
+            List<Transformation.Transformation> transformations = new List<Transformation.Transformation>();
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
             {
                 string text = Transform(validated, item.Value);
                 Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
-                Transformation transformation = new Transformation(beforeAfter, item.Key);
+                Transformation.Transformation transformation = new Transformation.Transformation(beforeAfter, item.Key);
                 transformations.Add(transformation);
             }
             return transformations;
@@ -173,16 +177,17 @@ namespace Spg.LocationRefactor.Location
         public string Transform(SynthesizedProgram program, List<CodeLocation> locations)
         {
             string text = "";
-            StatementStrategy strategy = StatementStrategy.GetInstance();
             SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
             List<SyntaxNode> update = new List<SyntaxNode>();
             foreach (CodeLocation location in locations)
             {
-                 SyntaxNode selection = strategy.SyntaxNodesRegion(location.SourceCode, location.Region);
-                 var decedents = from snode in tree.GetRoot().DescendantNodes()
-                                 where snode.Span.Start == selection.Span.Start && snode.Span.Length == selection.Span.Length
-                                 select snode;
-                 update.AddRange(decedents);
+                //SyntaxNode selection = strategy.SyntaxNodesRegion(location.SourceCode, location.Region);
+                SyntaxNode selection = location.Region.Node;
+
+                var decedents = from snode in tree.GetRoot().DescendantNodes()
+                                where snode.Span.Start == selection.Span.Start && snode.Span.Length == selection.Span.Length
+                                select snode;
+                update.AddRange(decedents);
             }
 
             text = FileUtil.ReadFile(locations[0].SourceClass);
@@ -232,13 +237,10 @@ namespace Spg.LocationRefactor.Location
         /// Return program able to transform locations.
         /// </summary>
         /// <param name="regionsBeforeEdit">Regions before edit list</param>
-        /// <param name="regionsAfterEdit">Regions after edit list</param>
-        /// <param name="color">Color of statement</param>
-        /// <param name="prog">Locations program</param>
         /// <returns></returns>
         public SynthesizedProgram TransformationProgram(List<TRegion> regionsBeforeEdit)
         {
-            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocationToAutomaticEdit(controller.CurrentViewCodeBefore, controller.CurrentViewCodeAfter);
+            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocationToAutomaticEdit(Controller.CurrentViewCodeBefore, Controller.CurrentViewCodeAfter);
             List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
 
             return TransformationManager.TransformationProgram(examples);
@@ -270,7 +272,7 @@ namespace Spg.LocationRefactor.Location
         public List<Tuple<TRegion, TRegion>> ExtractLocationToAutomaticEdit(String codeBefore, String codeAfter)
         {
             Strategy strategy = StatementStrategy.GetInstance();
-            List<Tuple<SyntaxNode, SyntaxNode>> pairs = strategy.SyntaxNodesRegion(codeBefore, codeAfter, controller.locations);
+            List<Tuple<SyntaxNode, SyntaxNode>> pairs = strategy.SyntaxNodesRegion(codeBefore, codeAfter, Controller.Locations);
             List<Tuple<TRegion, TRegion>> examples = new List<Tuple<TRegion, TRegion>>();
             for (int i = 0; i < pairs.Count; i++)
             {
@@ -295,6 +297,51 @@ namespace Spg.LocationRefactor.Location
         }
     }
 }
+
+///// <summary>
+///// Transform a program
+///// </summary>
+///// <param name="program">Synthesized program</param>
+///// <param name="locations">Locations</param>
+///// <returns>Transformed program</returns>
+//public string Transform(SynthesizedProgram program, List<CodeLocation> locations)
+//{
+//    string text = "";
+//    StatementStrategy strategy = StatementStrategy.GetInstance();
+//    SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
+//    List<SyntaxNode> update = new List<SyntaxNode>();
+//    foreach (CodeLocation location in locations)
+//    {
+//         SyntaxNode selection = strategy.SyntaxNodesRegion(location.SourceCode, location.Region);
+
+//         var decedents = from snode in tree.GetRoot().DescendantNodes()
+//                         where snode.Span.Start == selection.Span.Start && snode.Span.Length == selection.Span.Length
+//                         select snode;
+//         update.AddRange(decedents);
+//    }
+
+//    text = FileUtil.ReadFile(locations[0].SourceClass);
+//    foreach (SyntaxNode node in update)
+//    {
+//        try
+//        {
+//            ASTTransformation treeNode = ASTProgram.TransformString(node, program);
+//            String transformation = treeNode.transformation;
+//            string nodeText = node.GetText().ToString();
+//            String escaped = Regex.Escape(nodeText);
+//            String replacement = Regex.Replace(text, escaped, transformation);
+//            text = replacement;
+//        }
+//        catch (ArgumentOutOfRangeException e)
+//        {
+//            Console.WriteLine(e.Message);
+//        }
+//    }
+//    SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(text);
+//    SyntaxNode nodeFormat = treeFormat.GetRoot().NormalizeWhitespace();
+//    text = nodeFormat.GetText().ToString();
+//    return text;
+//}
 
 ///// <summary>
 ///// Retrieve the list of region in input

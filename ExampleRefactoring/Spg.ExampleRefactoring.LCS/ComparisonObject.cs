@@ -24,15 +24,21 @@ namespace LCS2
         /// <returns>Index element</returns>
         public int Index { get; set; }
 
+        public int Indicator { get; set; }
+
+        public static int INPUT = 0;
+        public static int OUTPUT = 1;
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="Token">Token element</param>
         /// <param name="Index">Index of the element</param>
-        public ComparisonObject(Token Token, int Index)
+        public ComparisonObject(Token Token, int Index, int Indicator)
         {
             this.Token = Token;
             this.Index = Index;
+            this.Indicator = Indicator;
         }
 
         /// <summary>

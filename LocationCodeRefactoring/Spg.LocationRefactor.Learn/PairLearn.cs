@@ -1,10 +1,12 @@
 ﻿using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Operator;
-using Spg.LocationRefactor.Program;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -36,7 +38,7 @@ namespace Spg.LocationRefactor.Learn
                     if (solution is SubStr)
                     {
                         pair.expression = ((SubStr)solution);
-                        prog.ioperator = pair;
+                        prog.Ioperator = pair;
                         progs.Add(prog);
                     }
                 }
@@ -62,7 +64,7 @@ namespace Spg.LocationRefactor.Learn
                     if (solution is SubStr)
                     {
                         pair.expression = ((SubStr)solution);
-                        prog.ioperator = pair;
+                        prog.Ioperator = pair;
                         progs.Add(prog);
                     }
                 }

@@ -1,14 +1,18 @@
-﻿using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Operator;
-using Spg.LocationRefactor.TextRegion;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
+using Microsoft.CodeAnalysis;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.TextRegion;
 
-namespace Spg.LocationRefactor.Program
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Program
 {
+    /// <summary>
+    /// Location program
+    /// </summary>
     public class Prog
     {
-        public IOperator ioperator {get; set;}
+        public IOperator Ioperator {get; set;}
 
         /// <summary>
         /// Execute the operator
@@ -17,7 +21,12 @@ namespace Spg.LocationRefactor.Program
         /// <returns>Transformation</returns>
         public ListNode Execute(String input)
         {
-            return ioperator.Execute(input);
+            return Ioperator.Execute(input);
+        }
+
+        public ListNode Execute(SyntaxNode input)
+        {
+            return Ioperator.Execute(input);
         }
 
         /// <summary>
@@ -25,13 +34,18 @@ namespace Spg.LocationRefactor.Program
         /// </summary>
         /// <param name="input">Source code</param>
         /// <returns>Region result</returns>
-        public List<TRegion> RetrieveString(String input) {
-            return ioperator.RetrieveRegion(input);
+        public List<TRegion> RetrieveString(string input) {
+            return Ioperator.RetrieveRegion(input);
+        }
+
+        internal List<TRegion> RetrieveString(SyntaxNode input, string sourceCode)
+        {
+            return Ioperator.RetrieveRegion(input, sourceCode);
         }
 
         public override string ToString()
         {
-            return ioperator.ToString();
+            return Ioperator.ToString();
         }
     }
 }

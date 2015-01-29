@@ -1,21 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
+using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Operator;
-using Microsoft.CodeAnalysis.CSharp;
 using Spg.LocationRefactor.TextRegion;
 
-namespace Spg.LocationRefactor.Learn
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter
 {
+
+    /// <summary>
+    /// Filter statements
+    /// </summary>
     public class StatementFilterLearner : FilterLearnerBase
     {
-
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="list">List of selected regions</param>
         public StatementFilterLearner(List<TRegion> list) :base(list)
         {
         }
+
+        /// <summary>
+        /// Return a statement filter
+        /// </summary>
+        /// <param name="list">List of selected regions</param>
+        /// <returns>List of selected regions</returns>
         protected override FilterBase GetFilter(List<TRegion> list)
         {
             return new StatementFilter(list);

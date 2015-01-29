@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
 

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Comparator
@@ -89,7 +89,7 @@ namespace Spg.ExampleRefactoring.Comparator
             model.Add(FeatureType.SYNTAX, 0.5f);
             model.Add(FeatureType.SIZE, 0);
 
-            if (setting.considerEmpty)
+            if (setting.ConsiderEmpty)
             {
                 model.Add(FeatureType.EMPTY, 100);
             }
@@ -97,7 +97,7 @@ namespace Spg.ExampleRefactoring.Comparator
                 model.Add(FeatureType.EMPTY, 0);
             }
 
-            if (setting.dynamicTokens)
+            if (setting.DynamicTokens)
             {
                 model.Add(FeatureType.DYMTOKEN, 1000);
             }

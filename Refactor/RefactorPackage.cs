@@ -5,12 +5,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using LocateAdornment;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationCodeRefactoring.Observer;
 
 namespace SPG.Refactor

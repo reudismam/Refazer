@@ -313,7 +313,7 @@
             </summary>
             <returns>True is consider empty string</returns>
         </member>
-        <member name="M:Spg.ExampleRefactoring.Comparator.SelectorManager.#ctor(Spg.ExampleRefactoring.Setting.SynthesizerSetting)">
+        <member name="M:Spg.ExampleRefactoring.Comparator.SelectorManager.#ctor(ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting)">
             <summary>
             Constructor
             </summary>
@@ -940,11 +940,11 @@
             <param name="dag">Synthesized expressions</param>
             <param name="examples">Examples</param>
         </member>
-        <member name="M:Spg.ExampleRefactoring.Expression.ExpressionManager.ValidateExpression(Spg.ExampleRefactoring.Synthesis.SynthesizedProgram,System.Collections.Generic.List{System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode}})">
+        <member name="M:Spg.ExampleRefactoring.Expression.ExpressionManager.ValidateExpression(Spg.ExampleRefactoring.Expression.IExpression,System.Collections.Generic.List{System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode}})">
             <summary>
             Validate an expression in function of the examples
             </summary>
-            <param name="hypothese">Expression to be tested</param>
+            <param name="expression">Expression to be tested</param>
             <param name="examples">Set of examples</param>
             <returns>True if expression match the examples, false otherwise</returns>
         </member>
@@ -1046,49 +1046,6 @@
             All matches
             </summary>
             <returns>Matches</returns>
-        </member>
-        <member name="T:Spg.ExampleRefactoring.Setting.SynthesizerSetting">
-            <summary>
-            Synthesizer setting
-            </summary>
-        </member>
-        <member name="P:Spg.ExampleRefactoring.Setting.SynthesizerSetting.dynamicTokens">
-            <summary>
-            Indicate if we are using dynamic tokens or not
-            </summary>
-            <returns>Get of set dynamic tokens</returns>
-        </member>
-        <member name="P:Spg.ExampleRefactoring.Setting.SynthesizerSetting.considerConstrStr">
-            <summary>
-            Indicate if we are using ConstStr expression or not
-            </summary>
-            <returns>Get or set consider ConstrStr</returns>
-        </member>
-        <member name="P:Spg.ExampleRefactoring.Setting.SynthesizerSetting.considerEmpty">
-            <summary>
-            Indicate if we are using empty regular expression or not
-            </summary>
-            <returns>Get or set consider empty</returns>
-        </member>
-        <member name="P:Spg.ExampleRefactoring.Setting.SynthesizerSetting.deviation">
-            <summary>
-            Indicate the value of deviation when generating positions
-            </summary>
-            <returns>Get or set deviation value</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Setting.SynthesizerSetting.#ctor">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Setting.SynthesizerSetting.#ctor(System.Boolean,System.Int32,System.Boolean,System.Boolean)">
-            <summary>
-            Parameterized constructor
-            </summary>
-            <param name="dynamicTokens">Indicate if we are using dynamic tokens</param>
-            <param name="deviation">Deviation value</param>
-            <param name="considerConstrStr">Indicate if we are using ConstrStr</param>
-            <param name="considerEmpty">Indicate if we are using empty token or not</param>
         </member>
         <member name="T:Spg.ExampleRefactoring.Synthesis.BoundaryManager">
             <summary>
@@ -1219,7 +1176,7 @@
             Default constructor
             </summary>
         </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.SynthesisManager.#ctor(Spg.ExampleRefactoring.Setting.SynthesizerSetting)">
+        <member name="M:Spg.ExampleRefactoring.Synthesis.SynthesisManager.#ctor(ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting)">
             <summary>
             Constructor
             </summary>
@@ -1289,6 +1246,22 @@
             <param name="data">ListNode</param>
             <returns>Boundary points</returns>
         </member>
+        <member name="M:Spg.ExampleRefactoring.Synthesis.SynthesisManager.Differ(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode)">
+            <summary>
+            Calculate the difference point between input and output
+            </summary>
+            <param name="input">Input</param>
+            <param name="output">Output</param>
+            <returns>Index of the difference</returns>
+        </member>
+        <member name="M:Spg.ExampleRefactoring.Synthesis.SynthesisManager.DynTokens(Spg.ExampleRefactoring.Synthesis.ListNode,System.Int32)">
+            <summary>
+            Create comparison objects
+            </summary>
+            <param name="listNode">List of nodes</param>
+            <param name="indicator">Indicator of input or output</param>
+            <returns>Comparison objects</returns>
+        </member>
         <member name="T:Spg.ExampleRefactoring.Synthesis.ListNode">
             <summary>
             Representation of a list of nodes
@@ -1340,191 +1313,6 @@
             Hash code
             </summary>
             <returns>Hash code</returns>
-        </member>
-        <member name="T:Spg.ExampleRefactoring.Synthesis.ASTProgram">
-            <summary>
-            Class to generate programs
-            </summary>
-        </member>
-        <member name="P:Spg.ExampleRefactoring.Synthesis.ASTProgram.dict">
-            <summary>
-            Dynamic tokens and occurrences
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.#ctor">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.#ctor(Spg.ExampleRefactoring.Setting.SynthesizerSetting,System.Collections.Generic.List{System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode}})">
-            <summary>
-            Constructor
-            </summary>
-            <param name="setting">Configuration setting</param>
-            <param name="examples">Example list</param>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateStringProgram(System.Collections.Generic.List{System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode}})">
-            <summary>
-            Generate synthesized programs
-            </summary>
-            <param name="examples">Example set</param>
-            <returns>Synthesized program list</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.CreateDymTokens(System.Collections.Generic.List{System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode}})">
-            <summary>
-            Create dynamic tokens
-            </summary>
-            <param name="examples">Examples</param>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.IsDym(Microsoft.CodeAnalysis.SyntaxNodeOrToken,Microsoft.CodeAnalysis.SyntaxNodeOrToken)">
-            <summary>
-            Is dynamic token
-            </summary>
-            <param name="st">Syntax token or node</param>
-            <param name="next">Syntax token or node</param>
-            <returns>True if is a dynamic token</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.Clear(Spg.ExampleRefactoring.Digraph.Dag)">
-            <summary>
-            Clear entry of the graph that does not contains expressions.
-            </summary>
-            <param name="dag">Dag</param>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateString2(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode)">
-            <summary>
-            Return Dag of expressions
-            </summary>
-            <param name="input">Input nodes</param>
-            <param name="output">Output nodes</param>
-            <returns>Dag of expressions</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateStringBoundary(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode,System.Collections.Generic.List{System.Int32})">
-            <summary>
-            Dag of expressions
-            </summary>
-            <param name="input">Input nodes</param>
-            <param name="output">Output nodes</param>
-            <param name="boundaryPoints">boundaryPoints</param>
-            <returns>Dag of expressions</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateTokenSeq(Spg.ExampleRefactoring.Synthesis.ListNode)">
-            <summary>
-            Generate a list of sequence or tokens given the information of the nodes 
-            of the tree.
-            </summary>
-            <param name="subNodesLeft">Nodes of the tree that is being analyzed.</param>
-            <returns>List of tokens seq</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.CreateTokenSeq(Spg.ExampleRefactoring.Synthesis.ListNode)">
-            <summary>
-            Create token sequence
-            </summary>
-            <param name="subNodes">Sub nodes</param>
-            <returns>Token sequence</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.Substitute(System.Collections.Generic.List{Spg.ExampleRefactoring.Synthesis.ListNode},Microsoft.CodeAnalysis.SyntaxNodeOrToken,System.Collections.Generic.Dictionary{Microsoft.CodeAnalysis.SyntaxNodeOrToken,System.Collections.Generic.List{Microsoft.CodeAnalysis.SyntaxNodeOrToken}})">
-            <summary>
-            Substitute
-            </summary>
-            <param name="previousTransfosrmations">Previous transformation list.</param>
-            <param name="parentNode">Parent node of elements in the list.</param>
-            <param name="parentDictionary">Parent dictionary, the key are the parent and the value are the childrens</param>
-            <returns>List of transformation after substitution of all children for parent</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.Examples(System.Collections.Generic.List{System.Tuple{System.String,System.String}})">
-            <summary>
-            String examples to ListNode examples
-            </summary>
-            <param name="examples">Examples</param>
-            <returns>ListNode representation</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.Example(System.Tuple{System.String,System.String})">
-            <summary>
-            String example to ListNode example
-            </summary>
-            <param name="example"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.Example(System.Tuple{Microsoft.CodeAnalysis.SyntaxNode,Microsoft.CodeAnalysis.SyntaxNode})">
-            <summary>
-            Convert syntax node example to ListNode example
-            </summary>
-            <param name="example">Syntax nodes example</param>
-            <returns>ListNode example</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateNodes(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode,System.Collections.Generic.Dictionary{System.Int32,System.Collections.Generic.List{Spg.ExampleRefactoring.Position.IPosition}})">
-            <summary>
-            Generate nodes
-            </summary>
-            <param name="inputTree">Input ListNode</param>
-            <param name="subNodes">Substring ListNode</param>
-            <param name="kpositions">K positions</param>
-            <returns>Expression list</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.GetIndexesSubNodes(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode)">
-            <summary>
-            Return the list of indexes that match the regular expression
-            </summary>
-            <param name="input">Input nodes</param>
-            <param name="regex">Regular expressions nodes</param>
-            <returns>List of index matches.</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.ConstructCombinations(System.Collections.Generic.IEnumerable{Spg.ExampleRefactoring.Position.IPosition},System.Collections.Generic.IEnumerable{Spg.ExampleRefactoring.Position.IPosition})">
-            <summary>
-            Construct all combination for y1 and y2
-            </summary>
-            <param name="y1">First position list</param>
-            <param name="y2">Second position list</param>
-            <returns>Combinations</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.ConcatenateRegularExpression(Spg.ExampleRefactoring.Tok.TokenSeq,Spg.ExampleRefactoring.Tok.TokenSeq)">
-            <summary>
-            Concatenate regular expressions r1 and r2
-            </summary>
-            <param name="r1">First regular expression</param>
-            <param name="r2">Second regular expression</param>
-            <returns>Regular expression concatenation</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.RetrieveNodes(System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode},System.Collections.Generic.List{Spg.ExampleRefactoring.Expression.IExpression})">
-            <summary>
-            Return nodes that match the solution
-            </summary>
-            <param name="example">List of examples</param>
-            <param name="solutions">Hypothesis</param>
-            <returns>Nodes that match the hypothesis</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.TransformString(System.String,Spg.ExampleRefactoring.Synthesis.SynthesizedProgram)">
-            <summary>
-            Extract ASTTransfomration using synthesized program
-            </summary>
-            <param name="example"></param>
-            <param name="synthesizedProgram"></param>
-            <returns>ASTTransformation extracted</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.TransformString(Microsoft.CodeAnalysis.SyntaxNode,Spg.ExampleRefactoring.Synthesis.SynthesizedProgram)">
-            <summary>
-            Retrieve the string corresponding to the hypothesis passed as parameter.
-            </summary>
-            <param name="input">Input syntax node</param>
-            <param name="synthesizedProgram">Synthesized program</param>
-            <returns></returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.CPos(System.Int32)">
-            <summary>
-            Return CPos a expression
-            </summary>
-            <param name="k">CPos index</param>
-            <returns>CPos expression</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Synthesis.ASTProgram.Pos(Spg.ExampleRefactoring.Tok.TokenSeq,Spg.ExampleRefactoring.Tok.TokenSeq,System.Int32)">
-            <summary>
-            Returns a Pos expression.
-            </summary>
-            <param name="r1">First regular expression</param>
-            <param name="r2">Second regular expression</param>
-            <param name="k">position</param>
-            <returns>Pos expression.</returns>
         </member>
         <member name="T:Spg.ExampleRefactoring.Position.CPos">
             <summary>
@@ -1659,25 +1447,6 @@
             Return the size of the position expression
             </summary>
             <returns>The size of the position expression</returns>
-        </member>
-        <member name="T:Spg.ExampleRefactoring.Workspace.WorkspaceManager">
-            <summary>
-            Manager the workspace
-            </summary>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Workspace.WorkspaceManager.GetSourcesFiles(System.String)">
-            <summary>
-            Return .cs files in the solution
-            </summary>
-            <param name="solutionPath">Solution path</param>
-            <returns>.cs files</returns>
-        </member>
-        <member name="M:Spg.ExampleRefactoring.Workspace.WorkspaceManager.SourceFiles(System.String)">
-            <summary>
-            Source files in solution
-            </summary>
-            <param name="solutionPath">Solution path</param>
-            <returns>List of source file in the solution</returns>
         </member>
         <member name="T:Spg.ExampleRefactoring.Tok.Token">
             <summary>
@@ -1919,6 +1688,49 @@
             <param name="SourcePath">Path to the class file</param>
             <param name="SourceCode">Source code</param>
         </member>
+        <member name="T:ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting">
+            <summary>
+            Synthesizer setting
+            </summary>
+        </member>
+        <member name="P:ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting.DynamicTokens">
+            <summary>
+            Indicate if we are using dynamic tokens or not
+            </summary>
+            <returns>Get of set dynamic tokens</returns>
+        </member>
+        <member name="P:ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting.ConsiderConstrStr">
+            <summary>
+            Indicate if we are using ConstStr expression or not
+            </summary>
+            <returns>Get or set consider ConstrStr</returns>
+        </member>
+        <member name="P:ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting.ConsiderEmpty">
+            <summary>
+            Indicate if we are using empty regular expression or not
+            </summary>
+            <returns>Get or set consider empty</returns>
+        </member>
+        <member name="P:ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting.Deviation">
+            <summary>
+            Indicate the value of deviation when generating positions
+            </summary>
+            <returns>Get or set deviation value</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting.#ctor(System.Boolean,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Parameterized constructor
+            </summary>
+            <param name="dynamicTokens">Indicate if we are using dynamic tokens</param>
+            <param name="deviation">Deviation value</param>
+            <param name="considerConstrStr">Indicate if we are using ConstrStr</param>
+            <param name="considerEmpty">Indicate if we are using empty token or not</param>
+        </member>
         <member name="T:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.IntersectManager">
             <summary>
             Intersect manager
@@ -1937,6 +1749,14 @@
             <param name="dags">Dag list</param>
             <returns>Intersection among dags</returns>
         </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.IntersectManager.Intersect(Spg.ExampleRefactoring.Digraph.Dag,Spg.ExampleRefactoring.Digraph.Dag)">
+            <summary>
+            Intersect dags
+            </summary>
+            <param name="dag1">Fist dag</param>
+            <param name="dag2">Second dag</param>
+            <returns>Dag intersection</returns>
+        </member>
         <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.IntersectManager.Intersect(Spg.ExampleRefactoring.Digraph.Dag,Spg.ExampleRefactoring.Digraph.Dag,System.Tuple{DiGraph.Vertex,DiGraph.Vertex},System.Tuple{DiGraph.Vertex,DiGraph.Vertex})">
             <summary>
             Intersection between two expression Dags
@@ -1946,6 +1766,215 @@
             <param name="tuple1">First edge</param>
             <param name="tuple2">Second edge</param>
             <returns>Intersection</returns>
+        </member>
+        <member name="T:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram">
+            <summary>
+            Class to generate programs
+            </summary>
+        </member>
+        <member name="P:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.Setting">
+            <summary>
+            Setting for AST synthesis computation
+            </summary>
+            <returns>Setting</returns>
+        </member>
+        <member name="F:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram._computed">
+            <summary>
+            Previous computed token sequences
+            </summary>
+        </member>
+        <member name="P:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.Dict">
+            <summary>
+            Dynamic tokens and occurrences
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.#ctor(ExampleRefactoring.Spg.ExampleRefactoring.Setting.SynthesizerSetting,System.Collections.Generic.List{System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode}})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="setting">Configuration setting</param>
+            <param name="examples">Example list</param>
+            <exception cref="T:System.Exception">Argument exception</exception>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateStringProgram(System.Collections.Generic.List{System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode}})">
+            <summary>
+            Generate synthesized programs
+            </summary>
+            <param name="examples">Example set</param>
+            <returns>Synthesized program list</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.CreateDymTokens(System.Collections.Generic.List{System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode}})">
+            <summary>
+            Create dynamic tokens
+            </summary>
+            <param name="examples">Examples</param>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.IsDym(Microsoft.CodeAnalysis.SyntaxNodeOrToken,Microsoft.CodeAnalysis.SyntaxNodeOrToken)">
+            <summary>
+            Is dynamic token
+            </summary>
+            <param name="st">Syntax token or node</param>
+            <param name="next">Syntax token or node</param>
+            <returns>True if is a dynamic token</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.Clear(Spg.ExampleRefactoring.Digraph.Dag)">
+            <summary>
+            Clear entry of the graph that does not contains expressions.
+            </summary>
+            <param name="dag">Dag</param>
+            <exception cref="T:System.ArgumentNullException">Exception if dag is null</exception>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateString2(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode)">
+            <summary>
+            Return Dag of expressions
+            </summary>
+            <param name="input">Input nodes</param>
+            <param name="output">Output nodes</param>
+            <returns>Dag of expressions</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateStringBoundary(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Dag of expressions
+            </summary>
+            <param name="input">Input nodes</param>
+            <param name="output">Output nodes</param>
+            <param name="boundaryPoints">boundaryPoints</param>
+            <returns>Dag of expressions</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateTokenSeq(Spg.ExampleRefactoring.Synthesis.ListNode)">
+            <summary>
+            Generate a list of sequence or tokens given the information of the nodes 
+            of the tree.
+            </summary>
+            <param name="subNodesLeft">Nodes of the tree that is being analyzed.</param>
+            <returns>List of tokens seq</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.CreateTokenSeq(Spg.ExampleRefactoring.Synthesis.ListNode)">
+            <summary>
+            Create token sequence
+            </summary>
+            <param name="subNodes">Sub nodes</param>
+            <returns>Token sequence</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.Substitute(System.Collections.Generic.List{Spg.ExampleRefactoring.Synthesis.ListNode},Microsoft.CodeAnalysis.SyntaxNodeOrToken,System.Collections.Generic.Dictionary{Microsoft.CodeAnalysis.SyntaxNodeOrToken,System.Collections.Generic.List{Microsoft.CodeAnalysis.SyntaxNodeOrToken}})">
+            <summary>
+            Substitute
+            </summary>
+            <param name="previousTransfosrmations">Previous transformation list.</param>
+            <param name="parentNode">Parent node of elements in the list.</param>
+            <param name="parentDictionary">Parent dictionary, the key are the parent and the value are the childrens</param>
+            <returns>List of transformation after substitution of all children for parent</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.Examples(System.Collections.Generic.List{System.Tuple{System.String,System.String}})">
+            <summary>
+            String examples to ListNode examples
+            </summary>
+            <param name="examples">Examples</param>
+            <returns>ListNode representation</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.Example(System.Tuple{System.String,System.String})">
+            <summary>
+            String example to ListNode example
+            </summary>
+            <param name="example"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.Example(System.Tuple{Microsoft.CodeAnalysis.SyntaxNode,Microsoft.CodeAnalysis.SyntaxNode})">
+            <summary>
+            Convert syntax node example to ListNode example
+            </summary>
+            <param name="example">Syntax nodes example</param>
+            <returns>ListNode example</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.GenerateNodes(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode,System.Collections.Generic.Dictionary{System.Int32,System.Collections.Generic.List{Spg.ExampleRefactoring.Position.IPosition}})">
+            <summary>
+            Generate nodes
+            </summary>
+            <param name="inputTree">Input ListNode</param>
+            <param name="subNodes">Substring ListNode</param>
+            <param name="kpositions">K positions</param>
+            <returns>Expression list</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.IndexOfMatchOfTheNodes(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Tok.TokenSeq,Spg.ExampleRefactoring.Tok.TokenSeq,System.Int32,System.Int32)">
+            <summary>
+            Index of matches
+            </summary>
+            <param name="input">Input list nodes</param>
+            <param name="r1">Left regular expression</param>
+            <param name="r2">Right regular expression</param>
+            <param name="k1">Index of begin search</param>
+            <param name="k2">Index of end search</param>
+            <returns>Index of matches</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.GetIndexesSubNodes(Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode)">
+            <summary>
+            Return the list of indexes that match the regular expression
+            </summary>
+            <param name="input">Input nodes</param>
+            <param name="regex">Regular expressions nodes</param>
+            <returns>List of index matches.</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.ConstructCombinations(System.Collections.Generic.IEnumerable{Spg.ExampleRefactoring.Position.IPosition},System.Collections.Generic.IEnumerable{Spg.ExampleRefactoring.Position.IPosition})">
+            <summary>
+            Construct all combination for y1 and y2
+            </summary>
+            <param name="y1">First position list</param>
+            <param name="y2">Second position list</param>
+            <returns>Combinations</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.ConcatenateRegularExpression(Spg.ExampleRefactoring.Tok.TokenSeq,Spg.ExampleRefactoring.Tok.TokenSeq)">
+            <summary>
+            Concatenate regular expressions r1 and r2
+            </summary>
+            <param name="r1">First regular expression</param>
+            <param name="r2">Second regular expression</param>
+            <returns>Regular expression concatenation</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.RetrieveNodes(System.Tuple{Spg.ExampleRefactoring.Synthesis.ListNode,Spg.ExampleRefactoring.Synthesis.ListNode},System.Collections.Generic.List{Spg.ExampleRefactoring.Expression.IExpression})">
+            <summary>
+            Return nodes that match the solution
+            </summary>
+            <param name="example">List of examples</param>
+            <param name="solutions">Hypothesis</param>
+            <returns>Nodes that match the hypothesis</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.TransformString(System.String,Spg.ExampleRefactoring.Synthesis.SynthesizedProgram)">
+            <summary>
+            Extract ASTTransfomration using synthesized program
+            </summary>
+            <param name="example"></param>
+            <param name="synthesizedProgram"></param>
+            <returns>ASTTransformation extracted</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.TransformString(Microsoft.CodeAnalysis.SyntaxNode,Spg.ExampleRefactoring.Synthesis.SynthesizedProgram)">
+            <summary>
+            Retrieve the string corresponding to the hypothesis passed as parameter.
+            </summary>
+            <param name="input">Input syntax node</param>
+            <param name="synthesizedProgram">Synthesized program</param>
+            <returns></returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.CPos(System.Int32)">
+            <summary>
+            Return CPos a expression
+            </summary>
+            <param name="k">CPos index</param>
+            <returns>CPos expression</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Synthesis.ASTProgram.Pos(Spg.ExampleRefactoring.Tok.TokenSeq,Spg.ExampleRefactoring.Tok.TokenSeq,System.Int32)">
+            <summary>
+            Returns a Pos expression.
+            </summary>
+            <param name="r1">First regular expression</param>
+            <param name="r2">Second regular expression</param>
+            <param name="k">position</param>
+            <returns>Pos expression.</returns>
         </member>
         <member name="T:ExampleRefactoring.Spg.ExampleRefactoring.Util.JsonUtil`1">
             <summary>
@@ -1965,6 +1994,25 @@
             </summary>
             <param name="path">File path</param>
             <returns>Object</returns>
+        </member>
+        <member name="T:ExampleRefactoring.Spg.ExampleRefactoring.Workspace.WorkspaceManager">
+            <summary>
+            Manager the workspace
+            </summary>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Workspace.WorkspaceManager.GetSourcesFiles(System.String)">
+            <summary>
+            Return .cs files in the solution
+            </summary>
+            <param name="solutionPath">Solution path</param>
+            <returns>.cs files</returns>
+        </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Workspace.WorkspaceManager.SourceFiles(System.String)">
+            <summary>
+            Source files in solution on the format source code, source code path
+            </summary>
+            <param name="solutionPath">Solution path</param>
+            <returns>List of source file in the solution</returns>
         </member>
         <member name="T:LCS2.ListDiffer`1">
             <summary>
@@ -2017,7 +2065,7 @@
             </summary>
             <returns>Index element</returns>
         </member>
-        <member name="M:LCS2.ComparisonObject.#ctor(Spg.ExampleRefactoring.Tok.Token,System.Int32)">
+        <member name="M:LCS2.ComparisonObject.#ctor(Spg.ExampleRefactoring.Tok.Token,System.Int32,System.Int32)">
             <summary>
             Constructor
             </summary>

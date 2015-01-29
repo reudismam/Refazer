@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.TextRegion;
 

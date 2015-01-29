@@ -1,41 +1,38 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Spg.ExampleRefactoring.AST;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Br.Spg.Location
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 {
     /// <summary>
     /// Statement Strategy
     /// </summary>
     public class StatementStrategy : Strategy
     {
-        private static StatementStrategy instance;
+        private static StatementStrategy _instance;
 
-        private Dictionary<string, List<SyntaxNode>> computed;
+        private readonly Dictionary<string, List<SyntaxNode>> _computed;
 
         /// <summary>
         /// Constructor
         /// </summary>
         private StatementStrategy()
         {
-            computed = new Dictionary<string, List<SyntaxNode>>();
+            _computed = new Dictionary<string, List<SyntaxNode>>();
         }
 
         /// <summary>
         /// Singleton instance
         /// </summary>
-        /// <param name="syntaxKind">Syntax kind</param>
         /// <returns>Statement strategy instance</returns>
         public static StatementStrategy GetInstance()
         {
-            if(instance == null)
+            if(_instance == null)
             {
-                instance = new StatementStrategy();
+                _instance = new StatementStrategy();
             }
 
-            return instance;
+            return _instance;
         }
 
         /// <summary>
@@ -46,13 +43,13 @@ namespace LocationCodeRefactoring.Br.Spg.Location
         public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
             List<SyntaxNode> nodes = null;
-            if (!computed.TryGetValue(sourceCode, out nodes))
+            if (!_computed.TryGetValue(sourceCode, out nodes))
             {
                 nodes = SyntaxElements(sourceCode, list);
-                computed.Add(sourceCode, nodes);
+                _computed.Add(sourceCode, nodes);
             }
 
-            return computed[sourceCode];
+            return _computed[sourceCode];
         }
     }
 }

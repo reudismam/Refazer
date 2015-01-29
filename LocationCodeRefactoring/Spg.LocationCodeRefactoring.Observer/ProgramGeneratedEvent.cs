@@ -1,5 +1,5 @@
-using Spg.LocationRefactor.Program;
 using System.Collections.Generic;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 
 namespace Spg.LocationCodeRefactoring.Observer
 {

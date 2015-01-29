@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using LocationCodeRefactoring.Br.Spg.Location;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
+using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
 using Microsoft.CodeAnalysis;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.TextRegion;
@@ -37,7 +39,7 @@ namespace Spg.LocationRefactor.Operator
         /// <returns>Syntax nodes</returns>
         protected override IEnumerable<SyntaxNode> SyntaxNodes(string sourceCode)
         {
-            return Strategy.SyntaxElements(sourceCode, list);
+            return Strategy.SyntaxElements(sourceCode, List);
         }
     }
 }

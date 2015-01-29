@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
-using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
 
@@ -79,8 +82,8 @@ namespace Spg.LocationRefactor.Learn
                 {
                     prog = new Prog();
                     FilterBase filter = GetFilter(list);
-                    filter.predicate = ipredicate;
-                    prog.ioperator = filter;
+                    filter.Predicate = ipredicate;
+                    prog.Ioperator = filter;
                     dic.Add(ipredicate, prog);
                     programs.Add(prog);
                 }
@@ -124,8 +127,8 @@ namespace Spg.LocationRefactor.Learn
                 {
                     prog = new Prog();
                     FilterBase filter = GetFilter(list);
-                    filter.predicate = ipredicate;
-                    prog.ioperator = filter;
+                    filter.Predicate = ipredicate;
+                    prog.Ioperator = filter;
                     dic.Add(ipredicate, prog);
                     programs.Add(prog);
                 }
@@ -217,8 +220,8 @@ namespace Spg.LocationRefactor.Learn
 
             List<Dag> dags = new List<Dag>();
             SynthesizerSetting setting = new SynthesizerSetting();
-            setting.dynamicTokens = true;
-            setting.deviation = 2;
+            setting.DynamicTokens = true;
+            setting.Deviation = 2;
             ASTProgram program = new ASTProgram(setting, exs);
             foreach (Tuple<ListNode, ListNode> e in exs)
             {

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Spg.ExampleRefactoring.Workspace;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Data;
 using Spg.ExampleRefactoring.Synthesis;
 

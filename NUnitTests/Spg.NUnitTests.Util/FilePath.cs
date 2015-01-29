@@ -58,5 +58,11 @@ namespace Spg.NUnitTests.Util
 
         public static string CHANGE_EXCEPTION_INPUT = @"json\change_exception_input.json";
         public static string CHANGE_EXCEPTION_OUTPUT_SELECTION = @"json\change_exception_output.json";
+
+        public static string MAIN_CLASS_CHANGE_PARAM_ON_METHOD_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ChangeParamOnMethod\ChangeParamOnMethod.cs";
+        public static string MAIN_CLASS_CHANGE_PARAM_ON_METHOD_EDITING = @"ChangeParamOnMethod.cs";
+
+        public static string CHANGE_PARAM_ON_METHOD_INPUT = @"json\change_param_on_method_input.json";
+        public static string CHANGE_PARAM_ON_METHOD_OUTPUT_SELECTION = @"json\change_param_on_method_output.json";
     }
 }

@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using LocateAdornment;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationCodeRefactoring.Observer;
-using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 
 namespace SPG.IntelliExtract
@@ -45,7 +45,7 @@ namespace SPG.IntelliExtract
         /// initialization is the Initialize method.
         /// </summary>
 
-        private List<Prog> programs;
+        private List<Prog> _programs;
         public IntelliExtractPackage()
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
@@ -110,7 +110,7 @@ namespace SPG.IntelliExtract
 
             string text = Connector.GetText(viewHost);
 
-            this.programs = pEvent.programs;
+            this._programs = pEvent.programs;
 
             EditorController controler = EditorController.GetInstance();
             controler.RetrieveLocations(text);
@@ -134,8 +134,8 @@ namespace SPG.IntelliExtract
             if ( null != mcs )
             {
                 // Create the command for the menu item.
-                CommandID menuCommandID = new CommandID(GuidList.guidIntelliExtractCmdSet, (int)PkgCmdIDList.cmdidExtract);
-                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID );
+                CommandID menuCommandId = new CommandID(GuidList.guidIntelliExtractCmdSet, (int)PkgCmdIDList.cmdidExtract);
+                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandId );
                 mcs.AddCommand( menuItem );
             }
         }
@@ -150,7 +150,7 @@ namespace SPG.IntelliExtract
         {
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
-            int mustHaveFocus = 1;
+            const int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 
             IVsUserData userData = vTextView as IVsUserData;
@@ -159,11 +159,10 @@ namespace SPG.IntelliExtract
                 Console.WriteLine("No text view is currently open");
                 return;
             }
-            IWpfTextViewHost viewHost;
             object holder;
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
-            viewHost = (IWpfTextViewHost)holder;
+            var viewHost = (IWpfTextViewHost)holder;
 
             EditorController controller = EditorController.GetInstance();
             controller.CurrentViewCodeBefore = Connector.GetText(viewHost);

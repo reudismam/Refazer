@@ -2,12 +2,14 @@
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
-using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
-using Spg.LocationCodeRefactoring.Controller;
 using System.Drawing;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -43,10 +45,10 @@ namespace Spg.LocationRefactor.Learn
                     foreach (Prog predicate in predicates)
                     {
                         MapBase map = GetMap(list);
-                        map.scalarExpression = h;
-                        map.sequenceExpression = predicate;
+                        map.ScalarExpression = h;
+                        map.SequenceExpression = predicate;
                         Prog prog = new Prog();
-                        prog.ioperator = map;
+                        prog.Ioperator = map;
                         programs.Add(prog);
                     }
                 }
@@ -60,10 +62,10 @@ namespace Spg.LocationRefactor.Learn
                     foreach (Prog predicate in predicates)
                     {
                         MapBase map = GetMap(list);
-                        map.scalarExpression = h;
-                        map.sequenceExpression = predicate;
+                        map.ScalarExpression = h;
+                        map.SequenceExpression = predicate;
                         Prog prog = new Prog();
-                        prog.ioperator = map;
+                        prog.Ioperator = map;
                         programs.Add(prog);
                     }
 
@@ -72,7 +74,7 @@ namespace Spg.LocationRefactor.Learn
                         foreach (Prog prog in programs)
                         {
                             Merge merge = new Merge();
-                            merge.AddMap((MapBase) prog.ioperator);
+                            merge.AddMap((MapBase) prog.Ioperator);
                             merges.Add(merge);
                         }
                         firstSynthesizedProg = false;
@@ -81,7 +83,7 @@ namespace Spg.LocationRefactor.Learn
                     {
                         for (int i = 0; i < merges.Count; i++)
                         {
-                            merges[i].AddMap((MapBase) programs[i].ioperator);
+                            merges[i].AddMap((MapBase) programs[i].Ioperator);
                         }
                     }
                 }
@@ -90,7 +92,7 @@ namespace Spg.LocationRefactor.Learn
                 foreach (Merge merge in merges)
                 {
                     Prog prog = new Prog();
-                    prog.ioperator = merge;
+                    prog.Ioperator = merge;
                     programs.Add(prog);
                 }
             }
@@ -119,10 +121,10 @@ namespace Spg.LocationRefactor.Learn
                     foreach (Prog predicate in predicates)
                     {
                         MapBase map = GetMap(list);
-                        map.scalarExpression = h;
-                        map.sequenceExpression = predicate;
+                        map.ScalarExpression = h;
+                        map.SequenceExpression = predicate;
                         Prog prog = new Prog();
-                        prog.ioperator = map;
+                        prog.Ioperator = map;
                         programs.Add(prog);
                     }
                 }
@@ -137,10 +139,10 @@ namespace Spg.LocationRefactor.Learn
                     foreach (Prog predicate in predicates)
                     {
                         MapBase map = GetMap(list);
-                        map.scalarExpression = h;
-                        map.sequenceExpression = predicate;
+                        map.ScalarExpression = h;
+                        map.SequenceExpression = predicate;
                         Prog prog = new Prog();
-                        prog.ioperator = map;
+                        prog.Ioperator = map;
                         programs.Add(prog);
                     }
 
@@ -149,7 +151,7 @@ namespace Spg.LocationRefactor.Learn
                         foreach (Prog prog in programs)
                         {
                             Merge merge = new Merge();
-                            merge.AddMap((MapBase)prog.ioperator);
+                            merge.AddMap((MapBase)prog.Ioperator);
                             merges.Add(merge);
                         }
                         firstSynthesizedProg = false;
@@ -159,7 +161,7 @@ namespace Spg.LocationRefactor.Learn
                     {
                         for (int i = 0; i < merges.Count; i++)
                         {
-                            merges[i].AddMap((MapBase)programs[i].ioperator);
+                            merges[i].AddMap((MapBase)programs[i].Ioperator);
                         }
                     }
                 }
@@ -168,7 +170,7 @@ namespace Spg.LocationRefactor.Learn
                 foreach (Merge merge in merges)
                 {
                     Prog prog = new Prog();
-                    prog.ioperator = merge;
+                    prog.Ioperator = merge;
                     programs.Add(prog);
                 }
             }

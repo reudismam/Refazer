@@ -1,12 +1,14 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
-using System;
-using System.Collections.Generic;
 
-namespace Spg.LocationRefactor.Learn
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
 {
     public class EndPosMapLearner: MapLearnerBase
     {

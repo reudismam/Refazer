@@ -3,18 +3,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
-using Microsoft.Win32;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using LocateAdornment;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Editor;
 using EnvDTE;
-using EnvDTE80;
-using Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 
 namespace SPG.IntelliLocation
 {
@@ -112,17 +107,18 @@ namespace SPG.IntelliLocation
                 Console.WriteLine("No text view is currently open");
                 return;
             }
-            IWpfTextViewHost viewHost;
             object holder;
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
-            viewHost = (IWpfTextViewHost)holder;
+            var viewHost = (IWpfTextViewHost)holder;
 
             DTE dte; 
             dte = (DTE)GetService(typeof(DTE)); // we have access to GetService here.
             string fullName = dte.Solution.FullName;
+            var document = dte.ActiveDocument;
 
-            EditorController.GetInstance().solutionPath = fullName;
+            EditorController.GetInstance().SolutionPath = fullName;
+            EditorController.GetInstance().CurrentViewCodePath = document.FullName;
 
             Connector.Execute(viewHost);
         }

@@ -35,14 +35,30 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             for (int i = 1; i < dags.Count; i++)
             {
                 Dag dag = dags[i];
-                composition = Intersect(composition, dag);
+                try
+                {
+                    composition = Intersect(composition, dag);
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
             }
             return composition;
         }
 
+        /// <summary>
+        /// Intersect dags
+        /// </summary>
+        /// <param name="dag1">Fist dag</param>
+        /// <param name="dag2">Second dag</param>
+        /// <returns>Dag intersection</returns>
         private Dag Intersect(Dag dag1, Dag dag2)
         {
-            Dag composition = null;
+            if (dag1 == null) throw new ArgumentNullException("dag1");
+            if (dag2 == null) throw new ArgumentNullException("dag2");
+
+            Dag composition;
             DirectedGraph graph = new DirectedGraph();
             Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> W = new Dictionary<Tuple<Vertex, Vertex>, List<IExpression>>();
 
@@ -76,7 +92,15 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
                }
             }
-            composition = new Dag(graph, vertexes[(dag1.init.Id + " : " + dag2.init.Id)], vertexes[(dag1.end.Id + " : " + dag2.end.Id).ToString()], W, vertexes);
+
+            try
+            {
+                composition = new Dag(graph, vertexes[(dag1.init.Id + " : " + dag2.init.Id)], vertexes[(dag1.end.Id + " : " + dag2.end.Id).ToString()], W, vertexes);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
             return composition;
         }
 

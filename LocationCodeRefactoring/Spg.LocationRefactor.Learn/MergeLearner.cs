@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Microsoft.CodeAnalysis.CSharp;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
-using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 
-namespace Spg.LocationRefactor.Learn
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
 {
     /// <summary>
     /// Merge Learner
@@ -48,14 +50,14 @@ namespace Spg.LocationRefactor.Learn
                     Pair pair = new Pair();
                     pair.expression = (SubStr)e;
 
-                    scalar.ioperator = pair;
+                    scalar.Ioperator = pair;
 
                     
                     MapBase map = GetMap(list);
-                    map.scalarExpression = scalar;
-                    map.sequenceExpression = predicate;
+                    map.ScalarExpression = scalar;
+                    map.SequenceExpression = predicate;
                     Prog prog = new Prog();
-                    prog.ioperator = map;
+                    prog.Ioperator = map;
                     programs.Add(prog);
                 }
             }
@@ -93,14 +95,14 @@ namespace Spg.LocationRefactor.Learn
                     Pair pair = new Pair();
                     pair.expression = (SubStr)e;
 
-                    scalar.ioperator = pair;
+                    scalar.Ioperator = pair;
 
 
                     MapBase map = GetMap(list);
-                    map.scalarExpression = scalar;
-                    map.sequenceExpression = predicate;
+                    map.ScalarExpression = scalar;
+                    map.SequenceExpression = predicate;
                     Prog prog = new Prog();
-                    prog.ioperator = map;
+                    prog.Ioperator = map;
                     programs.Add(prog);
                 }
             }

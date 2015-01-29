@@ -1,10 +1,11 @@
 ﻿using System;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.NUnitTests.Location;
 using Spg.NUnitTests.Util;
 
@@ -33,7 +34,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         /// Parameter test on if
         /// </summary>
         [Test]
-        public void ParameterChangeOnIfTest()
+        public void IntroduceParamOnIf()
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.INTRODUCE_PARAM_ON_IF_INPUT, FilePath.INTRODUCE_PARAM_ON_IF_OUTPUT_SELECTION, FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_PATH);
 
@@ -78,12 +79,38 @@ namespace NUnitTests.Spg.NUnitTests.Complete
             Assert.IsTrue(passLocation && passTransformation);
         }
 
+        /// <summary>
+        /// Change exception test
+        /// </summary>
         [Test]
         public void ChangeExceptionTest()
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.CHANGE_EXCEPTION_INPUT, FilePath.CHANGE_EXCEPTION_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_EXCEPTION_PATH);
 
             bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_EXCEPTION_AFTER_EDITING, @"files\change_exception\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Change parameter on method test
+        /// </summary>
+        [Test]
+        public void ChangeParamOnMethodTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.CHANGE_PARAM_ON_METHOD_INPUT, FilePath.CHANGE_PARAM_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_PARAM_ON_METHOD_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_PARAM_ON_METHOD_EDITING, @"files\change_param_on_method\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void ParameterChangeOnMethodTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.PARAMETER_CHANGE_ON_METHOD_INPUT, FilePath.PARAMETER_CHANGE_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_CHANGE_ON_METHOD_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_PARAMETER_CHANGE_ON_METHOD_AFTER_EDITING, @"files\parameter_change_on_method\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }

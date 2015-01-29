@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.RegularExpression;

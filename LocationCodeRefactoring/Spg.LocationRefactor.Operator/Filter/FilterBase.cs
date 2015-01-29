@@ -1,4 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using Spg.ExampleRefactoring.AST;
@@ -7,32 +11,26 @@ using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
-using System;
-using System.Collections.Generic;
-using LocationCodeRefactoring.Br.Spg.Location;
 
-namespace Spg.LocationRefactor.Operator
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter
 {
     /// <summary>
     /// Filter base
     /// </summary>
-    public abstract class FilterBase:IOperator
+    public abstract class FilterBase: IOperator
     {
-        public IPredicate predicate { get; set; }
+        public IPredicate Predicate { get; set; }
 
-        private Dictionary<String, Boolean> calculated;
+        public List<TRegion> List;
 
-        public List<TRegion> list;
-
-        public FilterBase(List<TRegion> list)
+        protected FilterBase(List<TRegion> list)
         {
-            this.list = list;
-            calculated = new Dictionary<String, Boolean>();
+            this.List = list;
         }
 
         public override string ToString()
         {
-            return predicate.ToString();
+            return Predicate.ToString();
         }
 
         /// <summary>
@@ -42,18 +40,24 @@ namespace Spg.LocationRefactor.Operator
         /// <returns>Statements that follows the predicate</returns>
         public ListNode Execute(String input)
         {
-            FilterLearnerBase learn = GetFilterLearner(list);
-            TokenSeq tokenSeq = predicate.r1;
+            SyntaxTree tree1 = CSharpSyntaxTree.ParseText(input);
+            return Execute(tree1.GetRoot());
+        }
+
+        public ListNode Execute(SyntaxNode input)
+        {
+            FilterLearnerBase learn = GetFilterLearner(List);
+            TokenSeq tokenSeq = Predicate.r1;
             TokenSeq regex = tokenSeq;
 
-            SyntaxTree tree1 = CSharpSyntaxTree.ParseText(input);
             List<SyntaxNodeOrToken> inputNodes = new List<SyntaxNodeOrToken>();
-            inputNodes = ASTManager.EnumerateSyntaxNodesAndTokens(tree1.GetRoot(), inputNodes);
+            inputNodes = ASTManager.EnumerateSyntaxNodesAndTokens(input, inputNodes);
 
             ListNode listNode = new ListNode(inputNodes);
-            Boolean indicator = learn.Indicator(predicate, listNode, regex);
+            Boolean indicator = learn.Indicator(Predicate, listNode, regex);
 
-            if(indicator){
+            if (indicator)
+            {
                 return listNode;
             }
             return null;
@@ -64,11 +68,33 @@ namespace Spg.LocationRefactor.Operator
         /// </summary>
         /// <param name="input">Source code</param>
         /// <returns>Retrieved regions</returns>
-        public List<TRegion> RetrieveRegion(String input)
+        public List<TRegion> RetrieveRegion(string input)
+        {
+            IEnumerable<SyntaxNode> regions = SyntaxNodes(input, List);
+            return RetrieveRegionsBase(regions);
+        }
+
+        /// <summary>
+        /// Retrieve region given a syntax node
+        /// </summary>
+        /// <param name="syntaxNode">Syntax node</param>
+        /// <param name="sourceCode">Source code</param>
+        /// <returns></returns>
+        public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
+        {
+            IEnumerable<SyntaxNode> regions = SyntaxNodes(syntaxNode, List);
+            return RetrieveRegionsBase(regions);
+        }
+
+        /// <summary>
+        /// Base processing for RetrieveRegion
+        /// </summary>
+        /// <param name="regions">regions</param>
+        /// <returns>List of regions</returns>
+        private List<TRegion> RetrieveRegionsBase(IEnumerable<SyntaxNode> regions)
         {
             List<TRegion> tRegions = new List<TRegion>();
-            //IEnumerable<SyntaxNode> regions = SyntaxNodes(input);
-            IEnumerable<SyntaxNode> regions = SyntaxNodes(input, list);
+            //IEnumerable<SyntaxNode> regions = SyntaxNodes(syntaxNode, List);
 
             foreach (SyntaxNode node in regions)
             {
@@ -76,7 +102,7 @@ namespace Spg.LocationRefactor.Operator
                 tokens = ASTManager.EnumerateSyntaxNodesAndTokens(node, tokens);
                 ListNode lNode = new ListNode(tokens);
 
-                TokenSeq regexs = ASTProgram.ConcatenateRegularExpression(predicate.r1, predicate.r2);
+                TokenSeq regexs = ASTProgram.ConcatenateRegularExpression(Predicate.r1, Predicate.r2);
                 TokenSeq regex = regexs;
 
                 if (ASTManager.IsMatch(lNode, regex))
@@ -93,6 +119,13 @@ namespace Spg.LocationRefactor.Operator
                 }
             }
             return tRegions;
+        } 
+
+        
+
+        private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode input, List<TRegion> list)
+        {
+            return input.DescendantNodes();
         }
 
         private IEnumerable<SyntaxNode> SyntaxNodes(string input, List<TRegion> list)
@@ -101,7 +134,7 @@ namespace Spg.LocationRefactor.Operator
             return nodes;
         }
 
-
+        
         /// <summary>
         /// Syntax nodes
         /// </summary>
@@ -114,40 +147,43 @@ namespace Spg.LocationRefactor.Operator
         /// </summary>
         /// <returns></returns>
         protected abstract FilterLearnerBase GetFilterLearner(List<TRegion> list);
+
     }
-
-
-    /*/// <summary>
-        /// Retrieve regions
-        /// </summary>
-        /// <param name="input">Source code</param>
-        /// <returns>Retrieved regions</returns>
-        public List<TRegion> RetrieveRegion(String input)
-        {
-            List<TRegion> tRegions = new List<TRegion>();
-            IEnumerable<SyntaxNode> regions = SyntaxNodes(input);
-
-            foreach (SyntaxNode node in regions){
-                List<SyntaxNodeOrToken> tokens = new List<SyntaxNodeOrToken>();
-                tokens = ASTManager.EnumerateSyntaxNodesAndTokens(node, tokens);
-                ListNode lNode = new ListNode(tokens);
-
-                TokenSeq regexs = ASTProgram.ConcatenateRegularExpression(predicate.r1, predicate.r2);
-                TokenSeq regex = regexs;
-
-                if (ASTManager.IsMatch(lNode, regex))
-                {
-                    TRegion tRegion = new TRegion();
-
-                    TextSpan span = node.Span;
-                    tRegion.Text = node.GetText().ToString();
-                    tRegion.Start = span.Start;
-                    tRegion.Length = span.Length;
-                    tRegion.Node = node;
-
-                    tRegions.Add(tRegion);
-                }
-            }
-            return tRegions;
-        }*/
 }
+
+///// <summary>
+///// Retrieve regions
+///// </summary>
+///// <param name="input">Source code</param>
+///// <returns>Retrieved regions</returns>
+//public List<TRegion> RetrieveRegion(string input)
+//{
+//    IEnumerable<SyntaxNode> regions = SyntaxNodes(input, List);
+//    return RetrieveRegionsBase(regions);
+//    //List<TRegion> tRegions = new List<TRegion>();
+//    //IEnumerable<SyntaxNode> regions = SyntaxNodes(input, List);
+
+//    //foreach (SyntaxNode node in regions)
+//    //{
+//    //    List<SyntaxNodeOrToken> tokens = new List<SyntaxNodeOrToken>();
+//    //    tokens = ASTManager.EnumerateSyntaxNodesAndTokens(node, tokens);
+//    //    ListNode lNode = new ListNode(tokens);
+
+//    //    TokenSeq regexs = ASTProgram.ConcatenateRegularExpression(Predicate.r1, Predicate.r2);
+//    //    TokenSeq regex = regexs;
+
+//    //    if (ASTManager.IsMatch(lNode, regex))
+//    //    {
+//    //        TRegion tRegion = new TRegion();
+
+//    //        TextSpan span = node.Span;
+//    //        tRegion.Text = node.GetText().ToString();
+//    //        tRegion.Start = span.Start;
+//    //        tRegion.Length = span.Length;
+//    //        tRegion.Node = node;
+
+//    //        tRegions.Add(tRegion);
+//    //    }
+//    //}
+//    //return tRegions;
+//}

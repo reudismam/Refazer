@@ -1,9 +1,9 @@
-﻿using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Program;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.ExampleRefactoring.Synthesis;
 
-namespace Spg.LocationRefactor.Learn
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
 {
     public interface ILearn
     {

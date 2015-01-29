@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.TextRegion;
 
 namespace LocateAdornment

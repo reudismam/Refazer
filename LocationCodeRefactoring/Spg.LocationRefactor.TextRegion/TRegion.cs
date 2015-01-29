@@ -38,6 +38,12 @@ namespace Spg.LocationRefactor.TextRegion
         public Color Color { get; set; }
 
         /// <summary>
+        /// Source code path
+        /// </summary>
+        /// <returns>Source code path</returns>
+        public string Path { get; set; }
+
+        /// <summary>
         /// Region range
         /// </summary>
        // public Range Range { get; internal set; }

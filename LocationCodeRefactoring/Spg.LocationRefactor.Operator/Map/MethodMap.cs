@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.TextRegion;
 
-namespace Spg.LocationRefactor.Operator
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
 {
     class MethodMap : MapBase
     {
@@ -12,9 +13,9 @@ namespace Spg.LocationRefactor.Operator
         public override string ToString()
         {
             return "MethodMap(λM: Pair(Pos(M, p1), Pos(M, p2)), MS) "
-                + "\n\tp1 = " + ((Pair)scalarExpression.ioperator).expression.p1.ToString()
-                + "\n\tp2 = " + ((Pair)scalarExpression.ioperator).expression.p2.ToString()
-                + "\n\tMS=" + sequenceExpression.ToString();
+                   + "\n\tp1 = " + ((Pair)ScalarExpression.Ioperator).expression.p1
+                   + "\n\tp2 = " + ((Pair)ScalarExpression.Ioperator).expression.p2
+                   + "\n\tMS=" + SequenceExpression;
         }
     }
 }

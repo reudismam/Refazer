@@ -2,9 +2,9 @@
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.TextRegion;
 using Spg.NUnitTests.Util;
 
@@ -67,10 +67,20 @@ namespace Spg.NUnitTests.Location
             Assert.IsTrue(isValid);
         }
 
+        /// <summary>
+        /// Change Exception test
+        /// </summary>
         [Test]
         public void ChangeExceptionTest()
         {
             bool isValid = LocaleTest(FilePath.CHANGE_EXCEPTION_INPUT, FilePath.CHANGE_EXCEPTION_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_EXCEPTION_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void ChangeParamOnMethodTest()
+        {
+            bool isValid = LocaleTest(FilePath.CHANGE_PARAM_ON_METHOD_INPUT, FilePath.CHANGE_PARAM_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_PARAM_ON_METHOD_PATH);
             Assert.IsTrue(isValid);
         }
         /// <summary>
@@ -87,20 +97,21 @@ namespace Spg.NUnitTests.Location
             List<TRegion> selections = JsonUtil<List<TRegion>>.Read(input);
             controller.SelectedLocations = selections;
             controller.CurrentViewCodeBefore = FileUtil.ReadFile(mainClass);
+            controller.CurrentViewCodePath = mainClass;
 
             controller.Extract();
-            controller.solutionPath = FilePath.SOLUTION_PATH;
+            controller.SolutionPath = FilePath.SOLUTION_PATH;
             controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
             List<Selection> locations = JsonUtil<List<Selection>>.Read(output);
             bool passed = true;
             for (int i = 0; i < locations.Count; i++)
             {
-                if (locations.Count != controller.locations.Count) { passed = false; break; }
+                if (locations.Count != controller.Locations.Count) { passed = false; break; }
 
-                if (!locations[i].SourcePath.Equals(controller.locations[i].SourceClass)) { passed = false; break; }
+                if (!locations[i].SourcePath.Equals(controller.Locations[i].SourceClass)) { passed = false; break; }
 
-                if (locations[i].Start != controller.locations[i].Region.Start || locations[i].Length != controller.locations[i].Region.Length)
+                if (locations[i].Start != controller.Locations[i].Region.Start || locations[i].Length != controller.Locations[i].Region.Length)
                 {
                     passed = false;
                     break;

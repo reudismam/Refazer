@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Change;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Comparator;
-using System.Text.RegularExpressions;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Tok;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Digraph;
+using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Expression
 {
@@ -19,41 +14,6 @@ namespace Spg.ExampleRefactoring.Expression
     /// </summary>
     public class ExpressionManager
     {
-
-        /* /// <summary>
-         /// Filter expression
-         /// </summary>
-         /// <param name="expressions">Synthesized expressions</param>
-         /// <param name="examples">Examples</param>
-         public void FilterExpressions(Dictionary<Tuple<int, int>, List<IExpression>> expressions, List<Tuple<ListNode, ListNode>> examples)
-         {
-             foreach (KeyValuePair<Tuple<int, int>, List<IExpression>> entry in expressions)
-             {
-                 List<IExpression> removes = new List<IExpression>();
-                 int i = 0;
-                 foreach (IExpression expression in entry.Value)
-                 {
-                     SynthesizedProgram synthesizedProg = new SynthesizedProgram();
-                     synthesizedProg.Add(expression);
-
-
-                     Boolean isValid = ValidateExpression(synthesizedProg, examples);
-
-                     if (!isValid)
-                     {
-                         removes.Add(expression);
-                     }
-                     i++;
-                 }
-
-                 foreach (IExpression expression in removes)
-                 {
-                     entry.Value.Remove(expression);
-                 }
-
-             }
-         }*/
-
         /// <summary>
         /// Filter expression
         /// </summary>
@@ -69,10 +29,7 @@ namespace Spg.ExampleRefactoring.Expression
                 int i = 0;
                 foreach (IExpression expression in entry.Value)
                 {
-                    SynthesizedProgram synthesizedProg = new SynthesizedProgram();
-                    synthesizedProg.Add(expression);
-
-                    Boolean isValid = ValidateExpression(synthesizedProg, examples);
+                    Boolean isValid = ValidateExpression(expression, examples);
 
                     if (!isValid)
                     {
@@ -91,16 +48,18 @@ namespace Spg.ExampleRefactoring.Expression
         /// <summary>
         /// Validate an expression in function of the examples
         /// </summary>
-        /// <param name="hypothese">Expression to be tested</param>
+        /// <param name="expression">Expression to be tested</param>
         /// <param name="examples">Set of examples</param>
         /// <returns>True if expression match the examples, false otherwise</returns>
-        public Boolean ValidateExpression(SynthesizedProgram hypothese, List<Tuple<ListNode, ListNode>> examples)
+        public Boolean ValidateExpression(IExpression expression, List<Tuple<ListNode, ListNode>> examples)
         {
+            SynthesizedProgram syntheProg = new SynthesizedProgram();
+            syntheProg.Add(expression);
+
             Boolean isValid = false;
             foreach (Tuple<ListNode, ListNode> example in examples)
             {
-                //ASTProgram program = new ASTProgram();
-                ListNode solution = ASTProgram.RetrieveNodes(example, hypothese.solutions);
+                ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.solutions);
 
                 if (solution != null && ASTManager.Matches(example.Item2, solution, new NodeComparer()).Count > 0)
                 {
