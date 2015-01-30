@@ -3,6 +3,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Operator;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
@@ -32,7 +33,7 @@ namespace Spg.LocationRefactor.Learn
 
             List<Prog> progs = new List<Prog>();
             foreach(SynthesizedProgram sprog in synthesizedProgs){
-                foreach (IExpression solution in sprog.solutions) {
+                foreach (IExpression solution in sprog.Solutions) {
                     Pair pair = new Pair();
                     Prog prog = new Prog();
                     if (solution is SubStr)
@@ -57,7 +58,7 @@ namespace Spg.LocationRefactor.Learn
             List<Prog> progs = new List<Prog>();
             foreach (SynthesizedProgram sprog in synthesizedProgs)
             {
-                foreach (IExpression solution in sprog.solutions)
+                foreach (IExpression solution in sprog.Solutions)
                 {
                     Pair pair = new Pair();
                     Prog prog = new Prog();

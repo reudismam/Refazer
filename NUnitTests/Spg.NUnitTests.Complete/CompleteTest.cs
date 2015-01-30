@@ -115,6 +115,47 @@ namespace NUnitTests.Spg.NUnitTests.Complete
             Assert.IsTrue(passLocation && passTransformation);
         }
 
+        [Test]
+        public void ReturnToGetTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.RETURN_TO_GET_INPUT, FilePath.RETURN_TO_GET_OUTPUT_SELECTION, FilePath.MAIN_CLASS_RETURN_TO_GET_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_RETURN_TO_GET_AFTER_EDITING, @"files\return_to_get\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+       }
+
+        [Test]
+        public void AddIOParamTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.ADD_IO_PARAM_INPUT, FilePath.ADD_IO_PARAM_OUTPUT_SELECTION, FilePath.MAIN_CLASS_ADD_IO_PARAM_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_ADD_IO_PARAM_AFTER_EDITING, @"files\add_io_param\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void AddContextParamTest()
+        {
+            bool passLocation = LocationTest.LocaleTest(FilePath.ADD_CONTEXR_PARAM_INPUT, FilePath.ADD_CONTEXR_PARAM_OUTPUT_SELECTION, FilePath.MAIN_CLASS_ADD_CONTEXT_PARAM_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_ADD_CONTEXT_PARAM_AFTER_EDITING, @"files\add_context_param\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void ChangeAnnotationOnClassTest()
+        {
+
+            bool passLocation = LocationTest.LocaleTest(FilePath.CHANGE_ANNOTATION_ON_CLASS_INPUT, FilePath.CHANGE_ANNOTATION_ON_CLASS_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_AFTER_EDITING, @"files\change_annotation_on_class\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
         /// <summary>
         /// Complete test
         /// </summary>

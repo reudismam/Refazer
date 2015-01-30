@@ -49,7 +49,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
 
         /// <summary>
-        /// Extract location
+        /// Decompose location
         /// </summary>
         /// <param name="regions">List of selected regions</param>
         /// <returns>Extracted locations</returns>
@@ -77,7 +77,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
 
         /// <summary>
-        /// Extract method
+        /// Decompose method
         /// </summary>
         /// <param name="positiveRegions">Positives examples</param>
         /// <param name="negativeRegions">Negative examples</param>
@@ -264,14 +264,14 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
 
         /// <summary>
-        /// Extract location
+        /// Decompose location
         /// </summary>
         /// <param name="codeBefore">Code before transformation</param>
         /// <param name="codeAfter">Code after transformation</param>
         /// <returns>Locations</returns>
         public List<Tuple<TRegion, TRegion>> ExtractLocationToAutomaticEdit(String codeBefore, String codeAfter)
         {
-            Strategy strategy = StatementStrategy.GetInstance();
+            RegionManager strategy = RegionManager.GetInstance();
             List<Tuple<SyntaxNode, SyntaxNode>> pairs = strategy.SyntaxNodesRegion(codeBefore, codeAfter, Controller.Locations);
             List<Tuple<TRegion, TRegion>> examples = new List<Tuple<TRegion, TRegion>>();
             for (int i = 0; i < pairs.Count; i++)
@@ -363,7 +363,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 //}
 
 ///// <summary>
-///// Extract location
+///// Decompose location
 ///// </summary>
 ///// <param name="codeBefore">Code before transformation</param>
 ///// <param name="codeAfter">Code after transformation</param>

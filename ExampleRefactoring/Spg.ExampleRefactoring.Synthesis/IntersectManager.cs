@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
@@ -63,9 +66,9 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> W = new Dictionary<Tuple<Vertex, Vertex>, List<IExpression>>();
 
             Dictionary<string, Vertex> vertexes = new Dictionary<string, Vertex>();
-            foreach (Tuple<Vertex, Vertex> edge1 in dag1.mapping.Keys)
+            foreach (Tuple<Vertex, Vertex> edge1 in dag1.Mapping.Keys)
             {
-                foreach (Tuple<Vertex, Vertex> edge2 in dag2.mapping.Keys)
+                foreach (Tuple<Vertex, Vertex> edge2 in dag2.Mapping.Keys)
                 {
                     List<IExpression> intersection = Intersect(dag1, dag2, edge1, edge2);
                     Vertex vertex1 = new Vertex(edge1.Item1.Id + " : " + edge2.Item1.Id, 0.0);
@@ -95,7 +98,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             try
             {
-                composition = new Dag(graph, vertexes[(dag1.init.Id + " : " + dag2.init.Id)], vertexes[(dag1.end.Id + " : " + dag2.end.Id).ToString()], W, vertexes);
+                composition = new Dag(graph, vertexes[(dag1.Init.Id + " : " + dag2.Init.Id)], vertexes[(dag1.End.Id + " : " + dag2.End.Id).ToString()], W, vertexes);
             }
             catch (KeyNotFoundException e)
             {
@@ -119,8 +122,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             List<IExpression> expressions = new List<IExpression>();
 
-            List<IExpression> expressions1 = dag1.mapping[tuple1];
-            List<IExpression> expressions2 = dag2.mapping[tuple2];
+            List<IExpression> expressions1 = dag1.Mapping[tuple1];
+            List<IExpression> expressions2 = dag2.Mapping[tuple2];
             if (expressions1.Count > 0 && expressions2.Count > 0 && expressions1[0] is ConstruStr && expressions1[0].Equals(expressions2[0]))
             {
                 expressions.Add(expressions1[0]);
@@ -151,7 +154,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         {
             
             Tuple<Dag, Tuple<Vertex, Vertex>> tupleposition = Tuple.Create(dag1, tuple);
-            List<IExpression> expressions = dag1.mapping[tuple];
+            List<IExpression> expressions = dag1.Mapping[tuple];
             Tuple<HashSet<IPosition>, HashSet<IPosition>> positions = null;
             if (!positionMap.TryGetValue(tupleposition, out positions))
             {

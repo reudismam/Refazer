@@ -106,7 +106,7 @@
     <Compile Include="Spg.LocationRefactor.Learn\Map\MapLearnerBase.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\PairLearn.cs" />
     <Compile Include="Spg.LocationRefactor.Location\CodeLocation.cs" />
-    <Compile Include="Spg.LocationRefactor.Location\Strategy.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\RegionManager.cs" />
     <Compile Include="Spg.LocationRefactor.Location\LocationExtractor.cs" />
     <Compile Include="Spg.LocationRefactor.Location\StatementExtrategy.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramRefactoredObserver.cs" />

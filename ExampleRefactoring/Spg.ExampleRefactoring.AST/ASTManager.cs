@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 
-namespace Spg.ExampleRefactoring.AST
+namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
 {
     /// <summary>
     /// Abstract syntax tree (AST) operations
@@ -28,7 +29,7 @@ namespace Spg.ExampleRefactoring.AST
                 throw new Exception("Root node and list cannot be null and list must not be empty.");
             }
 
-            if (root.ChildNodesAndTokens().Count() == 0)
+            if (!root.ChildNodesAndTokens().Any())
             {
                 nodes.Add(root);
                 return nodes;
@@ -41,26 +42,6 @@ namespace Spg.ExampleRefactoring.AST
                     EnumerateSyntaxNodesAndTokens(n, nodes);
                 }
             }
-            return nodes;
-        }
-
-        /// <summary>
-        /// Convert syntax node to a list
-        /// </summary>
-        /// <param name="root">Syntax node root</param>
-        /// <param name="nodes">Syntax node or token list</param>
-        /// <returns>Syntax node list</returns>
-        public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens2(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
-        {
-            if (root == null || nodes == null)
-            {
-                throw new Exception("Root node and list cannot be null and list must not be empty.");
-            }
-
-            ASTSyntaxWalker walker = new ASTSyntaxWalker();
-            walker.Visit(root.AsNode());
-            List<SyntaxNodeOrToken> walkerNodes = walker.tokenList;
-
             return nodes;
         }
 
@@ -91,8 +72,6 @@ namespace Spg.ExampleRefactoring.AST
             }
             return nodes;
         }
-
-
 
         /// <summary>
         /// Syntax or tokens nodes between i and length j
@@ -182,7 +161,25 @@ namespace Spg.ExampleRefactoring.AST
     }
 }
 
+///// <summary>
+///// Convert syntax node to a list
+///// </summary>
+///// <param name="root">Syntax node root</param>
+///// <param name="nodes">Syntax node or token list</param>
+///// <returns>Syntax node list</returns>
+//public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens2(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
+//{
+//    if (root == null || nodes == null)
+//    {
+//        throw new Exception("Root node and list cannot be null and list must not be empty.");
+//    }
 
+//    ASTSyntaxWalker walker = new ASTSyntaxWalker();
+//    walker.Visit(root.AsNode());
+//    List<SyntaxNodeOrToken> walkerNodes = walker.tokenList;
+
+//    return nodes;
+//}
 
 
 
@@ -221,22 +218,22 @@ namespace Spg.ExampleRefactoring.AST
 
             return transformed;
         }*/
- /*//private static List<SyntaxNode> Nodes(SyntaxNode syntaxNode, List<SyntaxNode> nodes, SyntaxKind kind)
-        //{
-        //    /*if (nodes.Contains(syntaxNode))
-        //    {
-        //        return nodes;
-        //    }
-        //    if (syntaxNode.IsKind(kind))
-        //    {*/
+/*//private static List<SyntaxNode> Nodes(SyntaxNode syntaxNode, List<SyntaxNode> nodes, SyntaxKind kind)
+       //{
+       //    /*if (nodes.Contains(syntaxNode))
+       //    {
+       //        return nodes;
+       //    }
+       //    if (syntaxNode.IsKind(kind))
+       //    {*/
 //        nodes.Add(syntaxNode);
 //    //    return nodes;
 //    //}
 
-    //    foreach (SyntaxNode node in syntaxNode.DescendantNodes())
-    //    {
-    //        nodes = Nodes(node, nodes, kind);
-    //    }
+//    foreach (SyntaxNode node in syntaxNode.DescendantNodes())
+//    {
+//        nodes = Nodes(node, nodes, kind);
+//    }
 
-    //    return nodes;
-    //}        */
+//    return nodes;
+//}        */

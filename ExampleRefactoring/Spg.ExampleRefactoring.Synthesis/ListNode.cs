@@ -1,13 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 
-namespace Spg.ExampleRefactoring.Synthesis
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Representation of a list of nodes
@@ -83,11 +80,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             for (int i = 0; i < List.Count - 1; i++)
             {
                 SyntaxNodeOrToken st = List[i];
-                s += st.CSharpKind().ToString() + ", "; 
+                s += st.CSharpKind() + ", "; 
             }
 
             if (List.Count > 0) {
-                s += List[List.Count - 1].CSharpKind().ToString() + "]";
+                s += List[List.Count - 1].CSharpKind() + "]";
             }
             return s;
         }

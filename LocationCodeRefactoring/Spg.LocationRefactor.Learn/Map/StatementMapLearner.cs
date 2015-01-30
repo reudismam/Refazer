@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
@@ -17,6 +18,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
     /// </summary>
     public class StatementMapLearner : MapLearnerBase
     {
+        RegionManager strategy = RegionManager.GetInstance();
         /// <summary>
         /// Filter
         /// </summary>
@@ -51,8 +53,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         /// <returns>Examples</returns>
         public override List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
         {
-            Strategy strategy = StatementStrategy.GetInstance();
-            return strategy.Extract(list);
+            return strategy.Decompose(list);
         }
 
         /// <summary>
@@ -62,7 +63,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         /// <returns>Syntax nodes</returns>
         public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
-            Strategy strategy = StatementStrategy.GetInstance();
             return strategy.SyntaxNodes(sourceCode, list);
         }
     }

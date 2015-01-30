@@ -83,6 +83,34 @@ namespace Spg.NUnitTests.Location
             bool isValid = LocaleTest(FilePath.CHANGE_PARAM_ON_METHOD_INPUT, FilePath.CHANGE_PARAM_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_PARAM_ON_METHOD_PATH);
             Assert.IsTrue(isValid);
         }
+
+        [Test]
+        public void ReturnToGetTest()
+        {
+            bool isValid = LocaleTest(FilePath.RETURN_TO_GET_INPUT, FilePath.RETURN_TO_GET_OUTPUT_SELECTION, FilePath.MAIN_CLASS_RETURN_TO_GET_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void AddIOParamTest()
+        {
+            bool isValid = LocaleTest(FilePath.ADD_IO_PARAM_INPUT, FilePath.ADD_IO_PARAM_OUTPUT_SELECTION, FilePath.MAIN_CLASS_ADD_IO_PARAM_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void AddContextParamTest()
+        {
+            bool isValid = LocaleTest(FilePath.ADD_CONTEXR_PARAM_INPUT, FilePath.ADD_CONTEXR_PARAM_OUTPUT_SELECTION, FilePath.MAIN_CLASS_ADD_CONTEXT_PARAM_PATH);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void ChangeAnnotationOnClassTest()
+        {
+            bool isValid = LocaleTest(FilePath.CHANGE_ANNOTATION_ON_CLASS_INPUT, FilePath.CHANGE_ANNOTATION_ON_CLASS_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_PATH);
+            Assert.IsTrue(isValid);
+        }
         /// <summary>
         /// Locale test base method
         /// </summary>

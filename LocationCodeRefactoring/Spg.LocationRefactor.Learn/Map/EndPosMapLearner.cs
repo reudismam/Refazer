@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;

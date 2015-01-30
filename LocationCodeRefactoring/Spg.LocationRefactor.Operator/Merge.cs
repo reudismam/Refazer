@@ -7,7 +7,9 @@ using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
@@ -103,7 +105,7 @@ namespace Spg.LocationRefactor.Operator
                 Tuple<String, String> tu = Tuple.Create(input.Substring(r.Start, r.Length), input.Substring(r.Start, r.Length));
                 Tuple<ListNode, ListNode> tnodes = ASTProgram.Example(tu);
 
-                ListNode lnode = ASTProgram.RetrieveNodes(tnodes, synt.solutions);
+                ListNode lnode = ASTProgram.RetrieveNodes(tnodes, synt.Solutions);
 
                 List<int> matches= ASTManager.Matches(tnodes.Item1, lnode, new NodeComparer());
                 if (matches.Count == 1) {

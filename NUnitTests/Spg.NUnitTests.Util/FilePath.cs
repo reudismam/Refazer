@@ -64,5 +64,29 @@ namespace Spg.NUnitTests.Util
 
         public static string CHANGE_PARAM_ON_METHOD_INPUT = @"json\change_param_on_method_input.json";
         public static string CHANGE_PARAM_ON_METHOD_OUTPUT_SELECTION = @"json\change_param_on_method_output.json";
+
+        public static string MAIN_CLASS_RETURN_TO_GET_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ExampleProject.ReturnToGet\ReturnToGet.cs";
+        public static string MAIN_CLASS_RETURN_TO_GET_AFTER_EDITING = @"ReturnToGet.cs";
+
+        public static string RETURN_TO_GET_INPUT = @"json\return_to_get_input.json";
+        public static string RETURN_TO_GET_OUTPUT_SELECTION = @"json\return_to_get_output.json";
+
+        public static string MAIN_CLASS_ADD_IO_PARAM_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ExampleProject.AddIOParam\AddIOParam.cs";
+        public static string MAIN_CLASS_ADD_IO_PARAM_AFTER_EDITING = @"AddIOParam.cs";
+
+        public static string ADD_IO_PARAM_INPUT = @"json\add_io_param_input.json";
+        public static string ADD_IO_PARAM_OUTPUT_SELECTION = @"json\add_io_param_output.json";
+
+        public static string MAIN_CLASS_ADD_CONTEXT_PARAM_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.AddContextParam\AddContextParam.cs";
+        public static string MAIN_CLASS_ADD_CONTEXT_PARAM_AFTER_EDITING = @"AddContextParam.cs";
+
+        public static string ADD_CONTEXR_PARAM_INPUT = @"json\add_context_param_input.json";
+        public static string ADD_CONTEXR_PARAM_OUTPUT_SELECTION = @"json\add_context_param_output.json";
+
+        public static string MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ChangeAnnotationOnClass\ChangeAnnotationOnClass.cs";
+        public static string MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_AFTER_EDITING = @"ChangeAnnotationOnClass.cs";
+
+        public static string CHANGE_ANNOTATION_ON_CLASS_INPUT = @"json\change_annotation_on_class_input.json";
+        public static string CHANGE_ANNOTATION_ON_CLASS_OUTPUT_SELECTION = @"json\change_annotation_on_class_output.json";
     }
 }

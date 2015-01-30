@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Comparator;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Position;
 using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LCS2;
@@ -57,9 +60,9 @@ namespace Spg.ExampleRefactoring.Synthesis
                 {
                     foreach (IExpression e2 in expressionList)
                     {
-                        List<IExpression> solutions = new List<IExpression>(sd1.solutions);
+                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
                         SynthesizedProgram sp = new SynthesizedProgram();
-                        sp.solutions = solutions;
+                        sp.Solutions = solutions;
                         sp.Add(e2);
 
                         synthesizedProgList.Add(sp);
@@ -93,9 +96,9 @@ namespace Spg.ExampleRefactoring.Synthesis
                 {
                     foreach (IExpression e2 in expressionList)
                     {
-                        List<IExpression> solutions = new List<IExpression>(sd1.solutions);
+                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
                         SynthesizedProgram sp = new SynthesizedProgram();
-                        sp.solutions = solutions;
+                        sp.Solutions = solutions;
                         sp.Add(e2);
 
                         //ExpressionManager manager = new ExpressionManager();
@@ -229,7 +232,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 CPos cpos = (CPos)p1;
 
-                int position = cpos.position;
+                int position = cpos.Position;
 
                 switch (position)
                 {
@@ -362,7 +365,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             var sorted = from hypothesis in hypotheses
-                         orderby (new SelectorManager(setting)).Order(hypothesis.solutions) descending
+                         orderby (new SelectorManager(setting)).Order(hypothesis.Solutions) descending
                          select hypothesis;
 
             int count = 0;
@@ -370,7 +373,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 count++;
 
-                bool isValid = ValidateSynthesizedProgram(sp.solutions, examples/*, file*/);
+                bool isValid = ValidateSynthesizedProgram(sp.Solutions, examples/*, file*/);
                 Console.WriteLine("Processing ....");
                 if (isValid)
                 {

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
@@ -21,7 +24,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <param name="examples">Examples</param>
         public void FilterExpressions(Dag dag, List<Tuple<ListNode, ListNode>> examples)
         {
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> expressions = dag.mapping;
+            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> expressions = dag.Mapping;
 
             foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in expressions)
             {
@@ -59,7 +62,7 @@ namespace Spg.ExampleRefactoring.Expression
             Boolean isValid = false;
             foreach (Tuple<ListNode, ListNode> example in examples)
             {
-                ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.solutions);
+                ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.Solutions);
 
                 if (solution != null && ASTManager.Matches(example.Item2, solution, new NodeComparer()).Count > 0)
                 {

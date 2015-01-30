@@ -6,6 +6,8 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
@@ -54,7 +56,7 @@ namespace Spg.LocationRefactor.Operator
             List<IExpression> expressions = new List<IExpression>();
             expressions.Add(expression);
 
-            hypothesis.solutions = expressions;
+            hypothesis.Solutions = expressions;
 
             SyntaxTree result = ASTProgram.TransformString(input, hypothesis).tree;
 

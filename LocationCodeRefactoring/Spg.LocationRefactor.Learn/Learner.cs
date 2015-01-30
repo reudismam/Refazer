@@ -4,6 +4,7 @@ using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;

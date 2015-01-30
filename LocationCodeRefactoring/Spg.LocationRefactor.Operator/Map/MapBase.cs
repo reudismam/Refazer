@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
@@ -53,23 +54,20 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
             return filtered;
         }
 
+
         /// <summary>
         /// Retrieve region from input
         /// </summary>
         /// <param name="input">Syntax tree</param>
         /// <returns>Region list</returns>
-        public virtual List<TRegion> RetrieveRegion(string input)
+        private List<TRegion> RetrieveRegionBase(List<TRegion> filtereds, string input)
         {
             List<TRegion> tRegions = new List<TRegion>();
-            FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
+            //FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
 
-            Pair pair = (Pair) ScalarExpression.Ioperator;
-            SubStr synthesizer = pair.expression;
+            Pair pair = (Pair)ScalarExpression.Ioperator;
 
-            TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.Predicate.r1, filter.Predicate.r2);
-            List<Token> regex = tokens.Regex();
-
-            List<TRegion> filtereds = filter.RetrieveRegion(input);
+            //List<TRegion> filtereds = filter.RetrieveRegion(input);
             foreach (TRegion r in filtereds)
             {
                 TRegion region = new TRegion();
@@ -107,6 +105,21 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
             }
             return tRegions;
         }
+        /// <summary>
+        /// Retrieve region from input
+        /// </summary>
+        /// <param name="input">Syntax tree</param>
+        /// <returns>Region list</returns>
+        public virtual List<TRegion> RetrieveRegion(string input)
+        {
+            List<TRegion> tRegions = new List<TRegion>();
+            FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
+
+            List<TRegion> filtereds = filter.RetrieveRegion(input);
+            tRegions = RetrieveRegionBase(filtereds, input);
+
+            return tRegions;
+        }
 
         /// <summary>
         /// Retrieve region of the source code
@@ -119,45 +132,10 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
             List<TRegion> tRegions = new List<TRegion>();
             FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
 
-            Pair pair = (Pair)ScalarExpression.Ioperator;
-
             List<TRegion> filtereds = filter.RetrieveRegion(syntaxNode, sourceCode);
 
-            foreach (TRegion r in filtereds)
-            {
-                TRegion region = new TRegion();
-                List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-                list = ASTManager.EnumerateSyntaxNodesAndTokens(r.Node, list);
-                ListNode node = new ListNode(list);
-                Tuple<ListNode, ListNode> tnodes = Tuple.Create(node, node);
-                ListNode lnode = new ListNode();
-
-                try
-                {
-                    lnode = pair.expression.RetrieveSubNodes(tnodes.Item1);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Map cannot operate on this input." + e.Message);
-                }
-
-                if (lnode.Length() > 0)
-                {
-                    SyntaxNodeOrToken first = lnode.List[0];
-                    SyntaxNodeOrToken last = lnode.List[lnode.Length() - 1];
-
-                    TextSpan span = first.Span;
-                    int start = span.Start;
-                    int length = last.Span.Start + last.Span.Length - span.Start;
-
-                    region.Start = start;
-                    region.Length = length;
-                    region.Node = r.Node;
-                    region.Text = sourceCode.Substring(start, length);
-
-                    tRegions.Add(region);
-                }
-            }
+            tRegions = RetrieveRegionBase(filtereds, sourceCode);
+            
             return tRegions;
         }
 
@@ -172,3 +150,58 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
         }
     }
 }
+
+///// <summary>
+///// Retrieve region from input
+///// </summary>
+///// <param name="input">Syntax tree</param>
+///// <returns>Region list</returns>
+//private List<TRegion> RetrieveRegionBase(List<TRegion> filtereds, string input)
+//{
+//    List<TRegion> tRegions = new List<TRegion>();
+//    FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
+
+//    Pair pair = (Pair)ScalarExpression.Ioperator;
+//    SubStr synthesizer = pair.expression;
+
+//    TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.Predicate.r1, filter.Predicate.r2);
+//    List<Token> regex = tokens.Regex();
+
+//    //List<TRegion> filtereds = filter.RetrieveRegion(input);
+//    foreach (TRegion r in filtereds)
+//    {
+//        TRegion region = new TRegion();
+//        List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+//        list = ASTManager.EnumerateSyntaxNodesAndTokens(r.Node, list);
+//        ListNode node = new ListNode(list);
+//        Tuple<ListNode, ListNode> tnodes = Tuple.Create(node, node);
+//        ListNode lnode = new ListNode();
+
+//        try
+//        {
+//            lnode = pair.expression.RetrieveSubNodes(tnodes.Item1);
+//        }
+//        catch (Exception e)
+//        {
+//            Console.WriteLine("Map cannot operate on this input." + e.Message);
+//        }
+
+//        if (lnode.Length() > 0)
+//        {
+//            SyntaxNodeOrToken first = lnode.List[0];
+//            SyntaxNodeOrToken last = lnode.List[lnode.Length() - 1];
+
+//            TextSpan span = first.Span;
+//            int start = span.Start;
+//            int length = last.Span.Start + last.Span.Length - span.Start;
+
+//            region.Start = start;
+//            region.Length = length;
+//            region.Node = r.Node;
+//            region.Text = input.Substring(start, length);
+
+//            tRegions.Add(region);
+//        }
+//    }
+//    return tRegions;
+//}

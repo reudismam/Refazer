@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Comparator;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 
-namespace Spg.ExampleRefactoring.RegularExpression
+namespace ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression
 {
     /// <summary>
     /// Regular expression
@@ -49,7 +52,7 @@ namespace Spg.ExampleRefactoring.RegularExpression
                 }
             }
 
-            if ((signal == Automato.Start || signal == Automato.Continue) && aut.next == null)
+            if ((signal == Automato.Start || signal == Automato.Continue) && aut.Next == null)
             {
                 length = (input.Length()) - begin;
                 Tuple<int, ListNode> tuple = Tuple.Create(begin, ASTManager.SubNotes(input, begin, length));

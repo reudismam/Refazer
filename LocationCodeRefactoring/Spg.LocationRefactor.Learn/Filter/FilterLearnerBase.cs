@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Position;
 using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
@@ -167,7 +171,7 @@ namespace Spg.LocationRefactor.Learn
 
             T = CreateDag(examples);
 
-            foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in T.mapping)
+            foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in T.Mapping)
             {
                 List<IExpression> expressions = entry.Value;
                 foreach (IExpression exp in expressions)

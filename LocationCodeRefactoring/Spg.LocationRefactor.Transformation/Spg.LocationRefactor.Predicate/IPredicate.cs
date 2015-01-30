@@ -3,6 +3,7 @@ using Spg.ExampleRefactoring.Tok;
 using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.Comparator;
 
 namespace Spg.LocationRefactor.Predicate

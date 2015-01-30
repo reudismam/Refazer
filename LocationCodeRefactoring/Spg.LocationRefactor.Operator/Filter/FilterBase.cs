@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter
+namespace Spg.LocationRefactor.Operator.Filter
 {
     /// <summary>
     /// Filter base
@@ -119,21 +119,30 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter
                 }
             }
             return tRegions;
-        } 
+        }
 
-        
-
+        /// <summary>
+        /// Syntax nodes correspondents to selection
+        /// </summary>
+        /// <param name="input">Source code.</param>
+        /// <param name="list">Selection location on source code.</param>
+        /// <returns>Syntax nodes correspondents to selection on source code</returns>
         private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode input, List<TRegion> list)
         {
-            return input.DescendantNodes();
+            return input.DescendantNodes(); //simply return descendants nodes
         }
 
+        /// <summary>
+        /// Syntax nodes correspondents to selection
+        /// </summary>
+        /// <param name="input">Source code.</param>
+        /// <param name="list">Selection location on source code.</param>
+        /// <returns>Syntax nodes correspondents to selection on source code</returns>
         private IEnumerable<SyntaxNode> SyntaxNodes(string input, List<TRegion> list)
         {
-            List<SyntaxNode> nodes = Strategy.SyntaxElements(input, list[0].Parent.Text, list);
+            List<SyntaxNode> nodes = RegionManager.SyntaxElements(input, list[0].Parent.Text, list);
             return nodes;
         }
-
         
         /// <summary>
         /// Syntax nodes

@@ -49,7 +49,7 @@
 //        public override List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
 //        {
 //            Strategy strategy = new MethodExtrategy();
-//            return strategy.Extract(list);
+//            return strategy.Decompose(list);
 //        }
 
 //        /// <summary>

@@ -1,8 +1,9 @@
 ﻿using System;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Tok;
 
-namespace Spg.ExampleRefactoring.Comparator
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Comparator
 {
     /// <summary>
     /// Automaton representation
@@ -30,20 +31,20 @@ namespace Spg.ExampleRefactoring.Comparator
         /// read token
         /// </summary>
         /// <returns>Get or set read token</returns>
-        public TokenSeq r { get; set; }
+        public TokenSeq R { get; set; }
 
         /// <summary>
         /// current token
         /// </summary>
         /// <returns>Get or set current token</returns>
-        public Token current { get; set; }
+        public Token Current { get; set; }
         /// <summary>
         /// Next token
         /// </summary>
         /// <returns>Get or set next token</returns>
-        public Token next { get; set; }
+        public Token Next { get; set; }
 
-        private int indexNext;
+        private int _indexNext;
 
         /// <summary>
         /// Constructor
@@ -51,7 +52,7 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <param name="r">current token</param>
         public Automato(TokenSeq r)
         {
-            this.r = r;
+            this.R = r;
             Init();
         }
 
@@ -60,9 +61,9 @@ namespace Spg.ExampleRefactoring.Comparator
         /// </summary>
         private void Init()
         {
-                next = r.Tokens[0];
-                current = null;
-                this.indexNext = 0;
+                Next = R.Tokens[0];
+                Current = null;
+                this._indexNext = 0;
         }
 
         /// <summary>
@@ -72,58 +73,58 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>Next state index</returns>
         public int Transition(SyntaxNodeOrToken node)
         {
-            if (r.Tokens == null) throw new Exception("Tokens cannot be null");
+            if (R.Tokens == null) throw new Exception("Tokens cannot be null");
            
             //Reach final state
-            if (next == null && !current.Match(node))
+            if (Next == null && !Current.Match(node))
             {
                 Init();
                 return Final;
             }
 
             //Current don't match node and next don't match node, returns inconsistent state
-            if (current != null && next != null && !current.Match(node) && !next.Match(node))
+            if (Current != null && Next != null && !Current.Match(node) && !Next.Match(node))
             {
                 Init();
                 return Inconssistente;
             }
 
             //First matching detected, returns start state
-            if (current == null && next.Match(node))
+            if (Current == null && Next.Match(node))
             {
-                current = next;
-                indexNext++;
+                Current = Next;
+                _indexNext++;
 
-                if (indexNext < r.Tokens.Count)
+                if (_indexNext < R.Tokens.Count)
                 {
-                    next = r.Tokens[indexNext];
+                    Next = R.Tokens[_indexNext];
                 }
                 else
                 {
-                    next = null;
+                    Next = null;
                 }
 
                 return Start;
             }
 
             //Transition detected
-            if (next != null && next.Match(node))
+            if (Next != null && Next.Match(node))
             {
-                current = next;
-                indexNext++;
+                Current = Next;
+                _indexNext++;
 
-                if (indexNext < r.Tokens.Count)
+                if (_indexNext < R.Tokens.Count)
                 {
-                    next = r.Tokens[indexNext];
+                    Next = R.Tokens[_indexNext];
                 }
                 else
                 {
-                    next = null;
+                    Next = null;
                 }
             }
 
             //no match occurred yet.
-            if (current == null)
+            if (Current == null)
             {
                 return Inconssistente;
             }

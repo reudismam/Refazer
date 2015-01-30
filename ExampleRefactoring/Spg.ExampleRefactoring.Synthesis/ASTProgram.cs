@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Position;
 using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -91,19 +96,19 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             Clear(T);
 
-            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.init.Id);
-            double dist = bfs.DistTo(T.end.Id);
+            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.Init.Id);
+            double dist = bfs.DistTo(T.End.Id);
             Console.WriteLine(dist);
 
             List<Vertex> solutions = new List<Vertex>();
 
-            foreach (string s in bfs.PathTo(T.end.Id))
+            foreach (string s in bfs.PathTo(T.End.Id))
             {
-                solutions.Add(T.vertexes[s]);
+                solutions.Add(T.Vertexes[s]);
             }
 
             SynthesisManager manager = new SynthesisManager(Setting);
-            SynthesizedProgram valid = manager.FilterASTPrograms(T.mapping, solutions, examples);
+            SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
             Console.WriteLine(valid);
 
             List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
@@ -135,7 +140,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         {
             if (examples == null) { throw new ArgumentNullException("examples"); }
 
-            Dictionary<DymToken, int> temp = null;
+            Dictionary<DymToken, int> temp;
             foreach (Tuple<ListNode, ListNode> t in examples)
             {
                 temp = new Dictionary<DymToken, int>();
@@ -149,7 +154,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                         if (!dym) continue;
 
                         DymToken dt = new DymToken(st);
-                        int v = 0;
+                        int v;
                         if (!temp.TryGetValue(dt, out v))
                         {
                             temp.Add(dt, 0);
@@ -159,7 +164,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
                 foreach (DymToken dt in temp.Keys)
                 {
-                    int v = 0;
+                    int v;
                     if (!Dict.TryGetValue(dt, out v))
                     {
                         Dict.Add(dt, 0);
@@ -189,13 +194,18 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <returns>True if is a dynamic token</returns>
         private static bool IsDym(SyntaxNodeOrToken st, SyntaxNodeOrToken next)
         {
-            if (st == null || next == null) { throw new ArgumentNullException("st cannot be null and next cannot be null."); }
+            if (st == null) { throw new ArgumentNullException("st"); }
+            if(next == null) { throw  new ArgumentNullException("next");}
 
             if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
+
+            SyntaxNodeOrToken parent = ASTManager.Parent(st);
 
             if (ASTManager.Parent(st).IsKind(SyntaxKind.VariableDeclaration)){ return true; }
 
             if (ASTManager.Parent(st).IsKind(SyntaxKind.ObjectCreationExpression)) { return true;  }
+
+            if(ASTManager.Parent(st).IsKind(SyntaxKind.AttributeList)) { return true; }
 
             if (ASTManager.Parent(st).IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
@@ -215,9 +225,9 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         {
             if (dag == null) { throw new ArgumentNullException("dag"); }
 
-            if (dag.vertexes == null || dag.dag == null || dag.mapping == null) { throw new ArgumentException("Some property of Dag is null"); }
+            if (dag.Vertexes == null || dag.dag == null || dag.Mapping == null) { throw new ArgumentException("Some property of Dag is null"); }
 
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> dictionary = dag.mapping;
+            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> dictionary = dag.Mapping;
             List<Tuple<Vertex, Vertex>> removes = new List<Tuple<Vertex, Vertex>>();
             foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in dictionary)
             {

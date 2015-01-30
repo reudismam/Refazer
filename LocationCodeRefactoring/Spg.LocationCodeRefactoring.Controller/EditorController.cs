@@ -121,7 +121,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         }
 
         /// <summary>
-        /// Extract locations
+        /// Decompose locations
         /// </summary>
         public void Extract()
         {
@@ -280,7 +280,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             LocationExtractor extractor = new LocationExtractor(SolutionPath);
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
 
-            SyntaxNode lca = Strategy.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
+            SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
 
             List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
             foreach (TRegion region in regions)
@@ -595,16 +595,16 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 }
 
 ///// <summary>
-///// Extract locations
+///// Decompose locations
 ///// </summary>
-//public void Extract()
+//public void Decompose()
 //{
 //    LocationExtractor extractor = new LocationExtractor(solutionPath);
 //    //remove
 //    JsonUtil<List<TRegion>>.Write(RegionsBeforeEdition, "simple_api_change_input.json");
 //    //remove
-//    //List<Prog> programs = extractor.Extract(RegionsBeforeEdition);
-//    Progs = extractor.Extract(RegionsBeforeEdition);
+//    //List<Prog> programs = extractor.Decompose(RegionsBeforeEdition);
+//    Progs = extractor.Decompose(RegionsBeforeEdition);
 
 //    //List<Prog> filtereds = new List<Prog>();
 //    //foreach (Prog program in programs)
@@ -625,13 +625,13 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 ///// <returns></returns>
 //public Dictionary<Color, List<TRegion>> RegionsAfterEdit { get; set; }
 /*/// <summary>
-       /// Extract locations
+       /// Decompose locations
        /// </summary>
        /// <param name="color"></param>
-       public void Extract(Color color)
+       public void Decompose(Color color)
        {
            LocationRefactor.Location.LocationExtractor extractor = new LocationRefactor.Location.LocationExtractor(syntaxKind, solutionPath);
-           List<Prog> programs = extractor.Extract(RegionsBeforeEdit, (Color)color);
+           List<Prog> programs = extractor.Decompose(RegionsBeforeEdit, (Color)color);
 
            List<Prog> filtereds = new List<Prog>();
            foreach (Prog program in programs)

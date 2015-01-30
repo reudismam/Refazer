@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LeastCommonAncestor;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using Microsoft.CodeAnalysis;
@@ -15,35 +17,108 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
     /// <summary>
     /// Strategy
     /// </summary>
-    public abstract class Strategy
+    public class RegionManager
     {
-        public List<Tuple<ListNode, ListNode>> Extract(List<TRegion> list)
+        private readonly Dictionary<string, List<SyntaxNode>> _computed;
+
+        private static RegionManager _instance;
+
+        private RegionManager()
+        {
+            _computed = new Dictionary<string, List<SyntaxNode>>();
+        }
+
+        public static RegionManager GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new RegionManager();
+            }
+            return _instance;
+        }
+
+        public List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
         {
             List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
 
-            TRegion region = list[0];
-            List<SyntaxNode> statements = SyntaxNodes(region.Parent.Text, list);
-            Dictionary<SyntaxNode, Tuple<ListNode, ListNode>> methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
-            Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, list);
-            foreach (KeyValuePair<TRegion, SyntaxNode> pair in pairs)
+            Dictionary<string, List<TRegion>> dicRegion = GroupRegionBySourceFile(list);
+            foreach (var entry in dicRegion)
             {
-                TRegion re = pair.Key;
-                SyntaxNode node = pair.Value;
-              
-                Tuple<ListNode, ListNode> val = null;
-                Tuple<ListNode, ListNode> te = Example(node, re);
-                if (!methodsDic.TryGetValue(node, out val))
+                List<SyntaxNode> statements = SyntaxNodes(entry.Key, entry.Value);
+                Dictionary<SyntaxNode, Tuple<ListNode, ListNode>> methodsDic =
+                    new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
+                Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, entry.Value);
+                foreach (KeyValuePair<TRegion, SyntaxNode> pair in pairs)
                 {
-                    examples.Add(te);
-                    methodsDic.Add(node, te);
-                }
-                else
-                {
-                    val.Item2.List.AddRange(te.Item2.List);
+                    TRegion re = pair.Key;
+                    SyntaxNode node = pair.Value;
+
+                    Tuple<ListNode, ListNode> val = null;
+                    Tuple<ListNode, ListNode> te = Example(node, re);
+                    if (!methodsDic.TryGetValue(node, out val))
+                    {
+                        examples.Add(te);
+                        methodsDic.Add(node, te);
+                    }
+                    else
+                    {
+                        val.Item2.List.AddRange(te.Item2.List);
+                    }
                 }
             }
             return examples;
         }
+
+        /// <summary>
+        /// Group region by source file
+        /// </summary>
+        /// <param name="list">List of no grouped regions</param>
+        /// <returns>Regions grouped by source file</returns>
+        private Dictionary<string, List<TRegion>> GroupRegionBySourceFile(List<TRegion> list)
+        {
+            Dictionary<string, List<TRegion>> dic = new Dictionary<string, List<TRegion>>();
+            foreach (var item in list)
+            {
+                List<TRegion > value;
+                if (!dic.TryGetValue(item.Parent.Text, out value))
+                {
+                    value = new List<TRegion>();
+                    dic[item.Parent.Text] = value;
+                }
+
+                dic[item.Parent.Text].Add(item);
+            }
+
+            return dic;
+        }
+
+        //public List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
+        //{
+        //    List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
+
+        //    TRegion region = list[0];
+        //    List<SyntaxNode> statements = SyntaxNodes(region.Parent.Text, list);
+        //    Dictionary<SyntaxNode, Tuple<ListNode, ListNode>> methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
+        //    Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, list);
+        //    foreach (KeyValuePair<TRegion, SyntaxNode> pair in pairs)
+        //    {
+        //        TRegion re = pair.Key;
+        //        SyntaxNode node = pair.Value;
+
+        //        Tuple<ListNode, ListNode> val = null;
+        //        Tuple<ListNode, ListNode> te = Example(node, re);
+        //        if (!methodsDic.TryGetValue(node, out val))
+        //        {
+        //            examples.Add(te);
+        //            methodsDic.Add(node, te);
+        //        }
+        //        else
+        //        {
+        //            val.Item2.List.AddRange(te.Item2.List);
+        //        }
+        //    }
+        //    return examples;
+        //}
 
         /// <summary>
         /// Choose corresponding syntax node for the region
@@ -175,6 +250,23 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 
             SyntaxNode snode = LeastCommonAncestor(sourceCode, list);
             return snode.DescendantNodes().ToList();
+        }
+
+        /// <summary>
+        /// Syntax nodes 
+        /// </summary>
+        /// <param name="sourceCode">Source code</param>
+        /// <returns>Syntax nodes</returns>
+        public List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
+        {
+            List<SyntaxNode> nodes = null;
+            if (!_computed.TryGetValue(sourceCode, out nodes))
+            {
+                nodes = SyntaxElements(sourceCode, list);
+                _computed.Add(sourceCode, nodes);
+            }
+
+            return _computed[sourceCode];
         }
 
         /// <summary>
@@ -361,7 +453,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return kinds;
         }
 
-        public abstract List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list);
+        //public abstract List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list);
     }
 }
 
@@ -752,7 +844,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 //}
 
 
-//public List<Tuple<ListNode, ListNode>> Extract(List<TRegion> list)
+//public List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
 //{
 //    List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
 

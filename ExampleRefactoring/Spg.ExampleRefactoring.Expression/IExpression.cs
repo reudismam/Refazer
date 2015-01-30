@@ -1,7 +1,7 @@
 ﻿using System;
-using Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 
-namespace Spg.ExampleRefactoring.Expression
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
 {
     /// <summary>
     /// IExpression
