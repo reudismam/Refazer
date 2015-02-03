@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DiGraph;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
@@ -24,6 +25,10 @@ namespace Spg.ExampleRefactoring.Expression
         /// <param name="examples">Examples</param>
         public void FilterExpressions(Dag dag, List<Tuple<ListNode, ListNode>> examples)
         {
+            if (dag == null) throw new ArgumentNullException("dag");
+            if (examples == null) throw new ArgumentNullException("examples");
+            if(!examples.Any()) throw new ArgumentException("Examples cannot be null");
+
             Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> expressions = dag.Mapping;
 
             foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in expressions)

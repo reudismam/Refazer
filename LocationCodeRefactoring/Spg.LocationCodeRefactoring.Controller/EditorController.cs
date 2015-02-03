@@ -187,7 +187,13 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                 return Progs;
             }
             LocationExtractor extrator = new LocationExtractor(SolutionPath);
-            Progs = extrator.Extract(SelectedLocations, negativesExamples);
+
+            var withNegatives = extrator.Extract(SelectedLocations, negativesExamples);
+
+            if (withNegatives.Any())
+            {
+                Progs = withNegatives;
+            }
 
             return Progs;
         }

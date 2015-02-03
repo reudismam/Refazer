@@ -208,7 +208,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 }
             }
             SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(text);
-            SyntaxNode nodeFormat = treeFormat.GetRoot().NormalizeWhitespace();
+            SyntaxNode nodeFormat = treeFormat.GetRoot();//.NormalizeWhitespace();
             text = nodeFormat.GetText().ToString();
             return text;
         }

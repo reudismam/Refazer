@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
+using Spg.LocationRefactor.Operator.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;

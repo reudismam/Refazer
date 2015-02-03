@@ -104,7 +104,7 @@ namespace Spg.ExampleRefactoring.AST
             {
                 SyntaxNodeOrToken n = nodes.List[i];
                 String node = n.ToString();
-                if (n.HasLeadingTrivia && i != 0)
+                if (n.HasLeadingTrivia /*&& i != 0*/)
                 {
                     String leadingTrivial = "";
 
@@ -123,7 +123,7 @@ namespace Spg.ExampleRefactoring.AST
                 }
                 method += node;
 
-                if (n.HasTrailingTrivia && i != nodes.List.Count - 1)
+                if (n.HasTrailingTrivia/* && i != nodes.List.Count - 1*/)
                 {
                     String trailingTrivia = "";
 

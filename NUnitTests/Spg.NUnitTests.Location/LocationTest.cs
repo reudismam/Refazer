@@ -111,6 +111,13 @@ namespace Spg.NUnitTests.Location
             bool isValid = LocaleTest(FilePath.CHANGE_ANNOTATION_ON_CLASS_INPUT, FilePath.CHANGE_ANNOTATION_ON_CLASS_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_PATH);
             Assert.IsTrue(isValid);
         }
+
+        [Test]
+        public void ASTManagerToParentTest()
+        {
+            bool isValid = LocationTest.LocaleTest(FilePath.ASTMANAGER_TO_PARENT_INPUT, FilePath.ASTMANAGER_TO_PARENT_OUTPUT_SELECTION, FilePath.MAIN_CLASS_ASTMANAGER_TO_PARENT_PATH);
+            Assert.IsTrue(isValid);
+        }
         /// <summary>
         /// Locale test base method
         /// </summary>

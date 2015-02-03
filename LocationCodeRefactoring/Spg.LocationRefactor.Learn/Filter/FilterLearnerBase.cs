@@ -8,7 +8,7 @@ using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
+using Spg.LocationRefactor.Operator.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis.CSharp;

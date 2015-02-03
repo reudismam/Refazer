@@ -88,5 +88,11 @@ namespace Spg.NUnitTests.Util
 
         public static string CHANGE_ANNOTATION_ON_CLASS_INPUT = @"json\change_annotation_on_class_input.json";
         public static string CHANGE_ANNOTATION_ON_CLASS_OUTPUT_SELECTION = @"json\change_annotation_on_class_output.json";
+
+        public static string MAIN_CLASS_ASTMANAGER_TO_PARENT_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\IntelliMeta.ASTManagerChange\ASTManagerChange.cs";
+        public static string MAIN_CLASS_ASTMANAGER_TO_PARENT_AFTER_EDITING = @"ASTManagerChange.cs";
+
+        public static string ASTMANAGER_TO_PARENT_INPUT = @"json\astmanager_to_parent_input.json";
+        public static string ASTMANAGER_TO_PARENT_OUTPUT_SELECTION = @"json\astmanager_to_parent_output.json";
     }
 }

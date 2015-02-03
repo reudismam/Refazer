@@ -2,7 +2,7 @@
 using Spg.LocationRefactor.Learn;
 using System;
 using System.Collections.Generic;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Filter;
+using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
@@ -201,13 +201,15 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             SyntaxNodeOrToken parent = ASTManager.Parent(st);
 
-            if (ASTManager.Parent(st).IsKind(SyntaxKind.VariableDeclaration)){ return true; }
+            if (parent.IsKind(SyntaxKind.VariableDeclaration)){ return true; }
 
-            if (ASTManager.Parent(st).IsKind(SyntaxKind.ObjectCreationExpression)) { return true;  }
+            if (parent.IsKind(SyntaxKind.ObjectCreationExpression)) { return true;  }
 
-            if(ASTManager.Parent(st).IsKind(SyntaxKind.AttributeList)) { return true; }
+            if (parent.IsKind(SyntaxKind.AttributeList)) { return true; }
 
-            if (ASTManager.Parent(st).IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            if (parent.IsKind(SyntaxKind.InvocationExpression)) { return true; }
+
+            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
                 string value = next.ToString();
                 if (value.Equals("("))

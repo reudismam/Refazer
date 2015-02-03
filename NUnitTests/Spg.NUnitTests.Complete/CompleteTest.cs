@@ -156,6 +156,17 @@ namespace NUnitTests.Spg.NUnitTests.Complete
             Assert.IsTrue(passLocation && passTransformation);
         }
 
+        [Test]
+        public void ASTManagerToParentTest()
+        {
+
+            bool passLocation = LocationTest.LocaleTest(FilePath.ASTMANAGER_TO_PARENT_INPUT, FilePath.ASTMANAGER_TO_PARENT_OUTPUT_SELECTION, FilePath.MAIN_CLASS_ASTMANAGER_TO_PARENT_PATH);
+
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_ASTMANAGER_TO_PARENT_AFTER_EDITING, @"files\astmanager_to_parent\");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
         /// <summary>
         /// Complete test
         /// </summary>
