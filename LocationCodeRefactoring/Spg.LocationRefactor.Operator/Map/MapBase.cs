@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
-using Spg.LocationRefactor.Operator.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.TextRegion;
+
 //using Spg.LocationRefactor.Program;
 
 namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
@@ -58,6 +54,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
         /// <summary>
         /// Retrieve region from input
         /// </summary>
+        /// <param name="filtereds">Filtered regions</param>
         /// <param name="input">Syntax tree</param>
         /// <returns>Region list</returns>
         private List<TRegion> RetrieveRegionBase(List<TRegion> filtereds, string input)
@@ -71,12 +68,10 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
             foreach (TRegion r in filtereds)
             {
                 TRegion region = new TRegion();
-                List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-                list = ASTManager.EnumerateSyntaxNodesAndTokens(r.Node, list);
-                ListNode node = new ListNode(list);
-                Tuple<ListNode, ListNode> tnodes = Tuple.Create(node, node);
+                Tuple<SyntaxNode, SyntaxNode> tuplesn = Tuple.Create(r.Node, r.Node);
+                var tnodes = ASTProgram.Example(tuplesn);
+                
                 ListNode lnode = new ListNode();
-
                 try
                 {
                     lnode = pair.expression.RetrieveSubNodes(tnodes.Item1);
@@ -112,11 +107,10 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
         /// <returns>Region list</returns>
         public virtual List<TRegion> RetrieveRegion(string input)
         {
-            List<TRegion> tRegions = new List<TRegion>();
             FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
 
             List<TRegion> filtereds = filter.RetrieveRegion(input);
-            tRegions = RetrieveRegionBase(filtereds, input);
+            var tRegions = RetrieveRegionBase(filtereds, input);
 
             return tRegions;
         }
@@ -129,12 +123,11 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
         /// <returns>List of region on the source code</returns>
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
-            List<TRegion> tRegions = new List<TRegion>();
             FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
 
             List<TRegion> filtereds = filter.RetrieveRegion(syntaxNode, sourceCode);
 
-            tRegions = RetrieveRegionBase(filtereds, sourceCode);
+            var tRegions = RetrieveRegionBase(filtereds, sourceCode);
             
             return tRegions;
         }

@@ -77,6 +77,31 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
 
         /// <summary>
+        /// Decompose location
+        /// </summary>
+        /// <param name="regions">List of selected regions</param>
+        /// <returns>Extracted locations</returns>
+        public List<Tuple<ListNode, ListNode>> SelectionExamples(List<TRegion> regions)
+        {
+            List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
+            if (regions.Count() == 1)
+            {
+                foreach (TRegion region in regions)
+                {
+                    Tuple<String, String> ex = Tuple.Create(region.Parent.Text, region.Text);
+                    Tuple<ListNode, ListNode> lex = ASTProgram.Example(ex);
+                    examples.Add(lex);
+                }
+            }
+            else
+            {
+                examples = _learn.Decompose(regions);
+                
+            }
+            return examples;
+        }
+
+        /// <summary>
         /// Decompose method
         /// </summary>
         /// <param name="positiveRegions">Positives examples</param>
@@ -140,6 +165,34 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return validated;
         }
 
+        ///// <summary>
+        ///// Transform selection regions
+        ///// </summary>
+        ///// <param name="codeBefore">Regions before edition</param>
+        ///// <param name="codeAfter">Regions after edition</param>
+        ///// <returns></returns>
+        //public List<Transformation.Transformation> TransformProgram(string codeBefore, string codeAfter)
+        //{
+        //    List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocationToAutomaticEdit(codeBefore, codeAfter);
+        //    List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
+
+        //    SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
+
+        //    var locations = Controller.Locations; //previous locations
+
+        //    Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
+
+        //    List<Transformation.Transformation> transformations = new List<Transformation.Transformation>();
+        //    foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
+        //    {
+        //        string text = Transform(validated, item.Value);
+        //        Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
+        //        Transformation.Transformation transformation = new Transformation.Transformation(beforeAfter, item.Key);
+        //        transformations.Add(transformation);
+        //    }
+        //    return transformations;
+        //}
+
         /// <summary>
         /// Transform selection regions
         /// </summary>
@@ -167,6 +220,34 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             }
             return transformations;
         }
+
+        ///// <summary>
+        ///// Transform selection regions
+        ///// </summary>
+        ///// <param name="codeBefore">Regions before edition</param>
+        ///// <param name="codeAfter">Regions after edition</param>
+        ///// <returns></returns>
+        //public List<Transformation.Transformation> TransformProgram(string codeBefore, string codeAfter)
+        //{
+        //    List<Tuple<TRegion, TRegion>> exampleRegions = ExtractLocationToAutomaticEdit(codeBefore, codeAfter);
+        //    List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
+
+        //    SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
+
+        //    var locations = Controller.Locations; //previous locations
+
+        //    Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
+
+        //    List<Transformation.Transformation> transformations = new List<Transformation.Transformation>();
+        //    foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
+        //    {
+        //        string text = Transform(validated, item.Value);
+        //        Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
+        //        Transformation.Transformation transformation = new Transformation.Transformation(beforeAfter, item.Key);
+        //        transformations.Add(transformation);
+        //    }
+        //    return transformations;
+        //}
 
         /// <summary>
         /// Transform a program
@@ -272,7 +353,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         public List<Tuple<TRegion, TRegion>> ExtractLocationToAutomaticEdit(String codeBefore, String codeAfter)
         {
             RegionManager strategy = RegionManager.GetInstance();
-            List<Tuple<SyntaxNode, SyntaxNode>> pairs = strategy.SyntaxNodesRegion(codeBefore, codeAfter, Controller.Locations);
+            List<Tuple<SyntaxNode, SyntaxNode>> pairs = strategy.SyntaxNodesRegionBeforeAndAfterEditing(codeBefore, codeAfter, Controller.Locations);
             List<Tuple<TRegion, TRegion>> examples = new List<Tuple<TRegion, TRegion>>();
             for (int i = 0; i < pairs.Count; i++)
             {

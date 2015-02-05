@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Drawing;
-//using FastColoredTextBoxNS;
 using Microsoft.CodeAnalysis;
 
 namespace Spg.LocationRefactor.TextRegion
 {
+    /// <summary>
+    /// Text region
+    /// </summary>
     public class TRegion
     {
         /// <summary>

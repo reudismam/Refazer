@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using LocateAdornment;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Spg.LocationCodeRefactoring.Observer;
+using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 
 namespace SPG.Refactor
 {
@@ -56,7 +61,6 @@ namespace SPG.Refactor
         /// <param name="pEvent">Event</param>
         public void NotifyProgramRefactored(ProgramRefactoredEvent pEvent)
         {
-            EditorController controller = EditorController.GetInstance();
             List<Transformation> transformations = pEvent.transformations;
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
@@ -77,6 +81,56 @@ namespace SPG.Refactor
             Connector.Update(viewHost, transformations);
         }
 
+        private List<Tuple<string, string>> DocumentsBeforeAndAfter()
+        {
+            EditorController controller = EditorController.GetInstance();
+            var groupedLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(controller.Locations);
+
+            List<Tuple<string, string>> tuples = new List<Tuple<string, string>>();
+            foreach (var item in groupedLocation)
+            {
+                string documentContent = CurrrentDocumentContent(item.Key);
+                if (!documentContent.Equals(item.Value.First().SourceCode))
+                {
+                    Tuple<string, string> tuple = Tuple.Create(item.Value.First().SourceCode, documentContent);
+                    tuples.Add(tuple);
+                }
+            }
+            return tuples;
+        } 
+
+        private string CurrrentDocumentContent(string document)
+        {
+            var rdt = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
+            IEnumRunningDocuments value;
+            rdt.GetRunningDocumentsEnum(out value);
+
+            IVsHierarchy hierarchy;
+            uint pitemid;
+            IntPtr ppunkDocData;
+            uint pdwCookie;
+            rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_CantSave, document, out hierarchy, out pitemid,
+                out ppunkDocData, out pdwCookie);
+
+            string pbstrMkDocument;
+            uint pwdReadLooks, pwdEditLocks, pgrfRDTFlags;
+            var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
+                out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
+
+            IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
+
+            //var bufferData = (IVsEditorAdaptersFactoryService)GetService(typeof(IVsEditorAdaptersFactoryService));
+            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+            IVsEditorAdaptersFactoryService bufferData = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+            Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
+                typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
+                as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
+            var textBuffer = bufferData.GetDataBuffer(x);
+            string text = textBuffer.CurrentSnapshot.GetText();
+            return text;
+        }
+
         /////////////////////////////////////////////////////////////////////////////
         // Overridden Package Implementation
         #region Package Members
@@ -87,17 +141,17 @@ namespace SPG.Refactor
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if ( null != mcs )
+            if (null != mcs)
             {
                 // Create the command for the menu item.
                 CommandID menuCommandID = new CommandID(GuidList.guidRefactorCmdSet, (int)PkgCmdIDList.cmdidRefactor);
-                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID );
-                mcs.AddCommand( menuItem );
+                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
+                mcs.AddCommand(menuItem);
             }
         }
         #endregion
@@ -128,6 +182,9 @@ namespace SPG.Refactor
 
             EditorController controler = EditorController.GetInstance();
             controler.CurrentViewCodeAfter = Connector.GetText(viewHost);
+
+            EditorController controller = EditorController.GetInstance();
+            controller.DocumentsBeforeAndAfter = DocumentsBeforeAndAfter();
 
             controler.Refact();
         }

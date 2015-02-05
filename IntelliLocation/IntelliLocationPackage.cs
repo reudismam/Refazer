@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -10,6 +11,9 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Editor;
 using EnvDTE;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Shell.Interop;
+using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 
 namespace SPG.IntelliLocation
 {
@@ -41,6 +45,8 @@ namespace SPG.IntelliLocation
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
+
+
         public IntelliLocationPackage()
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
@@ -122,6 +128,37 @@ namespace SPG.IntelliLocation
 
             Connector.Execute(viewHost);
         }
+
+        //public void Nothing(string document)
+        //{
+        //    var rdt = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
+        //    IEnumRunningDocuments value;
+        //    rdt.GetRunningDocumentsEnum(out value);
+
+        //    IVsHierarchy hierarchy;
+        //    uint pitemid;
+        //    IntPtr ppunkDocData;
+        //    uint pdwCookie;
+        //    rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_CantSave, document, out hierarchy, out pitemid,
+        //        out ppunkDocData, out pdwCookie);
+
+        //    string pbstrMkDocument;
+        //    uint pwdReadLooks, pwdEditLocks, pgrfRDTFlags;
+        //    var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
+        //        out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
+
+        //    IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
+
+        //    //var bufferData = (IVsEditorAdaptersFactoryService)GetService(typeof(IVsEditorAdaptersFactoryService));
+        //    IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+        //    IVsEditorAdaptersFactoryService bufferData = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+        //    Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
+        //        typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
+        //        as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
+        //    var textBuffer = bufferData.GetDataBuffer(x);
+        //    string text = textBuffer.CurrentSnapshot.GetText();
+        //}
 
     }
 }

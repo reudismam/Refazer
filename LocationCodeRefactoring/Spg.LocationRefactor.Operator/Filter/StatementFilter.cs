@@ -39,7 +39,7 @@ namespace Spg.LocationRefactor.Operator
         /// <returns>Syntax nodes</returns>
         protected override IEnumerable<SyntaxNode> SyntaxNodes(string sourceCode)
         {
-            return RegionManager.SyntaxElements(sourceCode, List);
+            return RegionManager.SyntaxElementsSingleSourceClassSelection(sourceCode, List);
         }
     }
 }

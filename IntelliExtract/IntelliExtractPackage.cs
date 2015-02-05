@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using LocateAdornment;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Spg.LocationCodeRefactoring.Observer;
@@ -46,6 +49,7 @@ namespace SPG.IntelliExtract
         /// </summary>
 
         private List<Prog> _programs;
+
         public IntelliExtractPackage()
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
@@ -59,7 +63,7 @@ namespace SPG.IntelliExtract
         {
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
-            int mustHaveFocus = 1;
+            const int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 
             IVsUserData userData = vTextView as IVsUserData;
@@ -68,13 +72,10 @@ namespace SPG.IntelliExtract
                 Console.WriteLine("No text view is currently open");
                 return;
             }
-            IWpfTextViewHost viewHost;
             object holder;
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
-            viewHost = (IWpfTextViewHost)holder;
-
-            string sourceCode = Connector.GetText(viewHost);
+            var viewHost = (IWpfTextViewHost)holder;
 
             foreach (TRegion r in hEvent.regions)
             {
@@ -86,13 +87,17 @@ namespace SPG.IntelliExtract
 
         public void NotifyLocationsSelected(LocationEvent lEvent)
         {
-            Console.WriteLine("Locations Selected");
+            var locations = lEvent.locations;
+            foreach (var location in locations)
+            {
+                MessageBox.Show(location.Region.Node.GetText() + "\n");
+            }
         }
 
         public void NotifyProgramGenerated(ProgramGeneratedEvent pEvent)
         {
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
-            IVsTextView vTextView = null;
+            IVsTextView vTextView;
             int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 

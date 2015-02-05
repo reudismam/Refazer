@@ -11,7 +11,6 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationCodeRefactoring.Observer;
 using Spg.LocationRefactor.Location;
@@ -83,10 +82,15 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// <returns></returns>
         public string CurrentViewCodePath { get; set; }
 
+        public List<Tuple<string, string>> DocumentsBeforeAndAfter { get; set; }
+
+
         /// <summary>
         /// Singleton instance
         /// </summary>
         private static EditorController _instance;
+
+
 
         /// <summary>
         /// Constructor
@@ -160,7 +164,6 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             foreach (TRegion region in regions)
             {
                 if (region.Start > deepestRegion.Start) { break; } //after deepest region does not work as negative example.
-
                 bool negative = true;
                 foreach (TRegion selectedRegion in SelectedLocations)
                 {
@@ -281,6 +284,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             NotifyLocationsObservers(Locations);
         }
 
+       
+
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog, List<Tuple<string, string>> sourceFiles)
         {
             LocationExtractor extractor = new LocationExtractor(SolutionPath);
@@ -289,13 +294,17 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
 
             List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
+            List<SyntaxNode> lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
+
+            regions = RegionManager.GroupRegionBySyntaxKind(regions, lcas);
+
             foreach (TRegion region in regions)
             {
                 CodeLocation location = new CodeLocation { Region = region, SourceCode = CurrentViewCodeBefore, SourceClass = CurrentViewCodePath };
                 sourceLocations.Add(location);
             }
-            var rs = extractor.RetrieveString(prog, CurrentViewCodeBefore, lca);
-            Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
+            
+            Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, regions);
 
             return tuple;
         }
@@ -308,6 +317,10 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             foreach (Tuple<string, string> source in sourceFiles)
             {
                 List<TRegion> regions = RetrieveLocations(source.Item1, prog);
+
+                List<SyntaxNode> lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
+                regions = RegionManager.GroupRegionBySyntaxKind(regions, lcas);
+
                 foreach (TRegion region in regions)
                 {
                     CodeLocation location = new CodeLocation
@@ -371,25 +384,31 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// <returns>Non duplicate locations</returns>
         private List<CodeLocation> NonDuplicateLocations(List<CodeLocation> locations)
         {
-            Dictionary<Tuple<int, int>, CodeLocation> dic = new Dictionary<Tuple<int, int>, CodeLocation>();
-            foreach (CodeLocation location in locations)
+            List<CodeLocation> clocations = new List<CodeLocation>();
+            var groupedLocations = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
+            foreach (var item in groupedLocations)
             {
-                Tuple<int, int> tuple = Tuple.Create(location.Region.Start, location.Region.Length);
-                CodeLocation value;
-                if (!dic.TryGetValue(tuple, out value))
+                Dictionary<Tuple<int, int>, CodeLocation> dic = new Dictionary<Tuple<int, int>, CodeLocation>();
+                foreach (CodeLocation location in item.Value)
                 {
-                    dic.Add(tuple, location);
-                }
-                else
-                {
-                    if (value.Region.Node.GetText().ToString().Length < location.Region.Node.GetText().Length)
+                    Tuple<int, int> tuple = Tuple.Create(location.Region.Start, location.Region.Length);
+                    CodeLocation value;
+                    if (!dic.TryGetValue(tuple, out value))
                     {
-                        dic[tuple] = location;
+                        dic.Add(tuple, location);
+                    }
+                    else
+                    {
+                        if (value.Region.Node.GetText().ToString().Length < location.Region.Node.GetText().Length)
+                        {
+                            dic[tuple] = location;
+                        }
                     }
                 }
+                var nonDuplicateLocations = dic.Values.ToList();
+                clocations.AddRange(nonDuplicateLocations);
             }
-            var nonDuplicateLocations = dic.Values.ToList();
-            return nonDuplicateLocations;
+            return clocations;
         }
 
         /// <summary>

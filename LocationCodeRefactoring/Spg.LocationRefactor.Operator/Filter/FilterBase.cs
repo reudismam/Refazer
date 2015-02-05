@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
@@ -17,7 +18,7 @@ namespace Spg.LocationRefactor.Operator.Filter
     /// <summary>
     /// Filter base
     /// </summary>
-    public abstract class FilterBase: IOperator
+    public abstract class FilterBase : IOperator
     {
         public IPredicate Predicate { get; set; }
 
@@ -44,34 +45,47 @@ namespace Spg.LocationRefactor.Operator.Filter
             return Execute(tree1.GetRoot());
         }
 
-        public ListNode Execute(SyntaxNode input)
+        /// <summary>
+        /// Run the filter on input. Verify if input nodes match with the filter
+        /// </summary>
+        /// <param name="syntaxNode"></param>
+        /// <returns>True if this filter match with the input</returns>
+        public ListNode Execute(SyntaxNode syntaxNode)
         {
             FilterLearnerBase learn = GetFilterLearner(List);
-            TokenSeq tokenSeq = Predicate.r1;
-            TokenSeq regex = tokenSeq;
+            TokenSeq regex = Predicate.r1;
 
-            List<SyntaxNodeOrToken> inputNodes = new List<SyntaxNodeOrToken>();
-            inputNodes = ASTManager.EnumerateSyntaxNodesAndTokens(input, inputNodes);
+            Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(syntaxNode, syntaxNode);
+            ListNode listNode = ASTProgram.Example(tuple).Item1;
 
-            ListNode listNode = new ListNode(inputNodes);
-            Boolean indicator = learn.Indicator(Predicate, listNode, regex);
+            bool indicator = learn.Indicator(Predicate, listNode, regex);
+            if (indicator) return listNode;
 
-            if (indicator)
-            {
-                return listNode;
-            }
             return null;
         }
 
         /// <summary>
         /// Retrieve regions
         /// </summary>
-        /// <param name="input">Source code</param>
+        /// <param name="sourceClass">Source code</param>
         /// <returns>Retrieved regions</returns>
-        public List<TRegion> RetrieveRegion(string input)
+        public List<TRegion> RetrieveRegion(string sourceClass)
         {
-            IEnumerable<SyntaxNode> regions = SyntaxNodes(input, List);
-            return RetrieveRegionsBase(regions);
+            var result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
+            if (result.Count == 1)
+            {
+                IEnumerable<SyntaxNode> regions = SyntaxNodesMatchingFilter(sourceClass, List);
+                return RetrieveRegionsBase(regions);
+            }
+
+            //var x = Execute(sourceClass);
+            //return null;
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
+            IEnumerable<SyntaxNode> descedants = tree.GetRoot().DescendantNodesAndSelf();
+            List<TRegion> tregions = RetrieveRegionsBase(descedants);
+
+            //tregions = RegionManager.GroupRegionByStartAndEndPosition(tregions);
+            return tregions;
         }
 
         /// <summary>
@@ -82,7 +96,8 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns></returns>
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
-            IEnumerable<SyntaxNode> regions = SyntaxNodes(syntaxNode, List);
+            //IEnumerable<SyntaxNode> regions = SyntaxNodes(syntaxNode, List);
+            IEnumerable<SyntaxNode> regions = syntaxNode.DescendantNodesAndSelf();
             return RetrieveRegionsBase(regions);
         }
 
@@ -135,15 +150,15 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <summary>
         /// Syntax nodes correspondents to selection
         /// </summary>
-        /// <param name="input">Source code.</param>
+        /// <param name="sourceCode">Source code.</param>
         /// <param name="list">Selection location on source code.</param>
         /// <returns>Syntax nodes correspondents to selection on source code</returns>
-        private IEnumerable<SyntaxNode> SyntaxNodes(string input, List<TRegion> list)
+        private IEnumerable<SyntaxNode> SyntaxNodesMatchingFilter(string sourceCode, List<TRegion> list)
         {
-            List<SyntaxNode> nodes = RegionManager.SyntaxElements(input, list[0].Parent.Text, list);
+            List<SyntaxNode> nodes = RegionManager.SyntaxElementsSingleSourceClassSelection(sourceCode, list);
             return nodes;
         }
-        
+
         /// <summary>
         /// Syntax nodes
         /// </summary>
