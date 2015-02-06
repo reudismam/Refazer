@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Runtime.InteropServices;
+using System.Windows.Media;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.VisualStudio.Text;
@@ -91,8 +92,22 @@ namespace LocateAdornment
 
             Span span = new Span(0, view.TextSnapshot.GetText().Length);
             view.TextBuffer.Replace(span, newText);
-           // view.TextBuffer.Delete(span);
-           //view.TextBuffer.Insert(0, newText);
+
+            Transform(transformations);
+            // view.TextBuffer.Delete(span);
+            //view.TextBuffer.Insert(0, newText);
+        }
+
+        private static void Transform(List<Transformation> transformations)
+        {
+            foreach (var transformation in transformations)
+            {
+                System.IO.StreamWriter file = new System.IO.StreamWriter(transformation.SourcePath);
+                file.WriteLine(transformation.transformation.Item2);
+
+                file.Close();
+            }
+
         }
     }
 }

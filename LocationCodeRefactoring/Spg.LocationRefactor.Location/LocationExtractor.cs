@@ -10,7 +10,6 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Location;
@@ -56,7 +55,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         public List<Prog> Extract(List<TRegion> regions)
         {
             List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
-            List<Prog> programs = null;
+            List<Prog> programs;
 
             if (regions.Count() == 1)
             {

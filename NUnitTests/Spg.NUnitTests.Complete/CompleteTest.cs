@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
@@ -177,6 +179,13 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             EditorController controller = EditorController.GetInstance();
             controller.CurrentViewCodeAfter = FileUtil.ReadFile(complement + mainClassAfterEditing);
+
+            Tuple<string, string> beforeAfter = Tuple.Create(controller.CurrentViewCodeBefore, controller.CurrentViewCodeAfter);
+            List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
+            documents.Add(beforeAfter);
+            controller.DocumentsBeforeAndAfter = documents;
+            
+  
             controller.Refact();
 
             bool passTransformation = true;

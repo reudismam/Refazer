@@ -39,7 +39,7 @@ namespace SPG.Refactor
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(GuidList.guidRefactorPkgString)]
-    public sealed class RefactorPackage : Package, IProgramRefactoredObserver
+    public sealed class RefactorPackage : Package, IProgramRefactoredObserver/*, ILocationsTransformedObserver*/
     {
         /// <summary>
         /// Default constructor of the package.
@@ -53,6 +53,7 @@ namespace SPG.Refactor
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
             EditorController controller = EditorController.GetInstance();
             controller.AddProgramRefactoredObserver(this);
+            //controller.AddLocationsTransformedObvserver(this);
         }
 
         /// <summary>
@@ -189,5 +190,16 @@ namespace SPG.Refactor
             controler.Refact();
         }
 
+        //public void NotifyLocationsTransformed(LocationsTransformedEvent ltEvent)
+        //{
+        //    List<CodeTransformation> transformations = ltEvent.transformations;
+        //    foreach (var transformation in transformations)
+        //    {
+        //        System.IO.StreamWriter file = new System.IO.StreamWriter(transformation.location.SourceClass);
+        //        file.WriteLine(transformation.transformation.Item2);
+
+        //        file.Close();
+        //    }
+        //}
     }
 }

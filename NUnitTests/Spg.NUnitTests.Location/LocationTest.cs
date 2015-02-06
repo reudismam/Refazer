@@ -112,6 +112,9 @@ namespace Spg.NUnitTests.Location
             Assert.IsTrue(isValid);
         }
 
+        /// <summary>
+        /// ASTManager to parent test case
+        /// </summary>
         [Test]
         public void ASTManagerToParentTest()
         {

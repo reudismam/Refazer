@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LCS2;
@@ -10,6 +12,7 @@ using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.SqlServer.Server;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
@@ -45,7 +48,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <param name="treeBefore">Syntax tree root</param>
         /// <param name="nodes">Selected nodes</param>
         /// <returns>Index and syntax node</returns>
-        private List<Tuple<SyntaxNode, SyntaxNode>> CalculatePositionAndSyntaxKind(SyntaxTree treeBefore, SyntaxTree treeAfter, List<SyntaxNode> nodes, SyntaxNode globalLCA)
+        private List<Tuple<SyntaxNode, SyntaxNode>> CalculatePositionAndSyntaxKind(SyntaxTree treeBefore, SyntaxTree treeAfter, List<SyntaxNode> nodes, List<CodeLocation> locations, SyntaxNode globalLCA)
         {
             IEnumerable<SyntaxNode> descendentWithSyntaxKind = NodesWithTheSameSyntaxKind(treeBefore.GetRoot(), globalLCA.CSharpKind());
 
@@ -55,16 +58,16 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             Tuple<int, SyntaxNode> t = Tuple.Create(position, globalLCA);
             pairsNodes.Add(t);
 
-            SyntaxNode snnode = RemoveSelection(treeBefore, nodes);
+            //SyntaxNode snnode = RemoveSelection(treeBefore, locations);
 
-            List<Tuple<SyntaxNode, SyntaxNode>> tuplePair1 = CalculatePair(snnode, pairsNodes);
+            //List<Tuple<SyntaxNode, SyntaxNode>> tuplePair1 = CalculatePair(snnode, pairsNodes);
             List<Tuple<SyntaxNode, SyntaxNode>> tuplePair2 = CalculatePair(treeAfter.GetRoot(), pairsNodes); //least common ancestor before and after
-            Tuple<SyntaxNode, SyntaxNode> lnexample = Tuple.Create(tuplePair1.First().Item2, tuplePair2.First().Item2);
+            Tuple<SyntaxNode, SyntaxNode> lnexample = tuplePair2.First();//Tuple.Create(tuplePair2.First().Item1, tuplePair2.First().Item2);
 
-
+            ListNode ssnode = RemoveSelection(treeBefore, locations);
             Tuple<ListNode, ListNode> example = ASTProgram.Example(lnexample);
 
-            List<SyntaxNodeOrToken> lsn = SynthesisManager.DiffSN(example.Item1, example.Item2);
+            List<SyntaxNodeOrToken> lsn = SynthesisManager.DiffSN(ssnode, example.Item2);
 
             List<SyntaxNode> nnodes = ConnectedEdition(lsn, lnexample.Item2);
 
@@ -76,7 +79,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 tuples.Add(tuple);
             }
 
-             tuples = EquivaleInKind(tuples, lnexample.Item1, lnexample.Item2);
+             //tuples = EquivaleInKind(tuples, lnexample.Item1, lnexample.Item2);
 
             //return null;
             return tuples;
@@ -133,6 +136,34 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             //    tuples.Add(tuple);
             //}
             //remove
+        }
+
+        private ListNode RemoveSelection(SyntaxTree treeBefore, List<CodeLocation> locations)
+        {
+            List<TRegion> regions = new List<TRegion>();
+            foreach (var location in locations)
+            {
+                regions.Add(location.Region);
+                TRegion region = new TRegion();
+                region.Start = 0;
+                region.Length = location.SourceCode.Length;
+                region.Text = location.SourceCode;
+                location.Region.Parent = region;
+            }
+            var examples = Decompose(regions);
+
+            Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(treeBefore.GetRoot(), treeBefore.GetRoot());
+            Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
+            ListNode sourceNodes = lnode.Item1; // can be also Item2
+
+            foreach (var example in examples)
+            { 
+                sourceNodes.List.RemoveAll(
+                    sn =>
+                        example.Item2.List.Exists(
+                            selected => sn.SpanStart == selected.SpanStart && sn.Span.End == selected.Span.End));
+            }
+            return sourceNodes;
         }
 
         private SyntaxNode RemoveSelection(SyntaxTree treeBefore, List<SyntaxNode> nodes)
@@ -223,7 +254,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 
         //    return list;
         //}
-        private List<SyntaxNode> ConnectedEdition(List<SyntaxNodeOrToken> nodesList, SyntaxNode tree)
+        private List<SyntaxNode> ConnectedEdition(List<SyntaxNodeOrToken> nodesList, SyntaxNode leastCommonAncestor)
         {
             LCA<SyntaxNode> lcaCalculator = new LCA<SyntaxNode>();
             Dictionary<int, SyntaxNodeOrToken> dic = new Dictionary<int, SyntaxNodeOrToken>();
@@ -242,8 +273,8 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     {
                         if (ancestrors[j] == 0)
                         {
-                            SyntaxNodeOrToken lca = lcaCalculator.LeastCommonAncestor(tree, dic[anc], nodesList[j]);
-                            if (!lca.Equals(tree))
+                            SyntaxNodeOrToken lca = lcaCalculator.LeastCommonAncestor(leastCommonAncestor, dic[anc], nodesList[j]);
+                            if (!lca.Equals(leastCommonAncestor))
                             {
                                 ancestrors[j] = anc;
                                 dic[anc] = lca;
@@ -256,15 +287,23 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             List<SyntaxNode> parentNodes = new List<SyntaxNode>();
             foreach (KeyValuePair<int, SyntaxNodeOrToken> item in dic)
             {
-                parentNodes.Add(item.Value.AsNode());
+                if (item.Value.AsNode() != null)
+                {
+                    parentNodes.Add(item.Value.AsNode());
+                }
+            }
+
+            if (!parentNodes.Any())
+            {
+                parentNodes.Add(leastCommonAncestor);
             }
             return parentNodes;
         }
 
-        private bool IsContained(SyntaxNode syntaxNode, SyntaxNode snode)
-        {
-            return syntaxNode.SpanStart <= snode.SpanStart && snode.Span.End <= syntaxNode.Span.End;
-        }
+        //private bool IsContained(SyntaxNode syntaxNode, SyntaxNode snode)
+        //{
+        //    return syntaxNode.SpanStart <= snode.SpanStart && snode.Span.End <= syntaxNode.Span.End;
+        //}
 
 
         /// <summary>
@@ -326,6 +365,11 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return dicRegions;
         }
 
+        /// <summary>
+        /// Decompose set of selected region to list of examples
+        /// </summary>
+        /// <param name="list">List of selected regions</param>
+        /// <returns>Decomposed examples</returns>
         public List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
         {
             List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
@@ -342,7 +386,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     TRegion re = pair.Key;
                     SyntaxNode node = pair.Value;
 
-                    Tuple<ListNode, ListNode> val = null;
+                    Tuple<ListNode, ListNode> val;
                     Tuple<ListNode, ListNode> te = Example(node, re);
                     if (!methodsDic.TryGetValue(node, out val))
                     {
@@ -651,7 +695,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <param name="sourceBefore">Source code before</param>
         /// <param name="sourceAfter">Source code after</param>
         /// <param name="locations">Selected locations</param>
-        /// <returns></returns>
+        /// <returns>Pair of syntax node before and after transformation</returns>
         internal List<Tuple<SyntaxNode, SyntaxNode>> SyntaxNodesRegionBeforeAndAfterEditing(string sourceBefore, string sourceAfter, List<CodeLocation> locations)
         {
             if (locations == null) throw new ArgumentNullException("locations");
@@ -660,35 +704,55 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             Dictionary<string, List<CodeLocation>> groupLocations = GroupLocationsBySourceFile(locations);
 
             EditorController controller = EditorController.GetInstance();
+            List < Tuple < SyntaxNode, SyntaxNode >> result = new List<Tuple<SyntaxNode, SyntaxNode>>();
             foreach (var item in groupLocations)
             {
-                SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceBefore);
-                SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(EditorController.GetInstance().CurrentViewCodeAfter);
-                List<SyntaxNode> nodes = new List<SyntaxNode>();
-                foreach (var location in locations)
+                //SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceBefore);
+                string sourceCode = item.Value.First().SourceCode;
+                string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
+                if (sourceCodeAfter != null)
                 {
-                    TextSpan span = location.Region.Node.Span;
-                    var dnodes = NodesWithSameStartEndAndKind(tree.GetRoot(), span.Start, span.End, location.Region.Node.CSharpKind());
-                    nodes.AddRange(dnodes);
+                    SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+                    //SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(EditorController.GetInstance().CurrentViewCodeAfter);
+                    SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter);
+                    List<SyntaxNode> nodes = new List<SyntaxNode>();
+                    foreach (var location in item.Value)
+                    {
+                        TextSpan span = location.Region.Node.Span;
+                        var dnodes = NodesWithSameStartEndAndKind(tree.GetRoot(), span.Start, span.End,
+                            location.Region.Node.CSharpKind());
+                        nodes.AddRange(dnodes);
+                    }
+
+                    var globalNode = LeastCommonAncestor(nodes, tree).AsNode();
+
+                    List<Tuple<SyntaxNode, SyntaxNode>> res = CalculatePositionAndSyntaxKind(tree, treeAfter, nodes,
+                        item.Value, globalNode);
+                    //return result;
+                    result.AddRange(res);
                 }
-
-                var globalNode = LeastCommonAncestor(nodes, tree).AsNode();
-
-                List<Tuple<SyntaxNode, SyntaxNode>> result = CalculatePositionAndSyntaxKind(tree, treeAfter, nodes, globalNode);
-                return result;
             }
 
-            return null;
+            return result;
+        }
 
+        private string GetDocumentAfterEdition(string documentBeforeEdition, List<Tuple<string,string>> documents)
+        {
+            foreach (var document in documents)
+            {
+                if (document.Item1.Equals(documentBeforeEdition)) return document.Item2;
+            }
+            return null;
         }
 
         private static SyntaxNode LeastCommonAncestor(string sourceCode, TRegion region)
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
-            List<SyntaxNodeOrToken> nodesSelection = NodesWithTheSameStartPosition(tree, region.Start).ToList();
+            List<SyntaxNodeOrToken> nodesSelection = NodesBetweenStartAndEndPosition(tree, region.Start, region.Start + region.Length);
+            //List<SyntaxNodeOrToken> nodesSelection = NodesWithTheSameStartPosition(tree, region.Start).ToList();
 
-            var descedentsEnd = NodesWithTheSameEndPosition(tree, region.Start + region.Length);
-            nodesSelection.AddRange(descedentsEnd);
+            //var descedentsEnd = NodesWithTheSameEndPosition(tree, region.Start + region.Length);
+            //nodesSelection.AddRange(descedentsEnd);
 
             SyntaxNodeOrToken lca = LeastCommonAncestor(nodesSelection, tree);
             SyntaxNode snode = lca.AsNode();
@@ -696,6 +760,15 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return snode;
         }
 
+        private static List<SyntaxNodeOrToken> NodesBetweenStartAndEndPosition(SyntaxTree tree, int startPosition, int end)
+        {
+            List<SyntaxNodeOrToken> nodesSelection = new List<SyntaxNodeOrToken>();
+            var descedentsBegin = from node in tree.GetRoot().DescendantNodesAndTokens()
+                                  where startPosition <= node.SpanStart && node.Span.End <= end
+                                  select node;
+            nodesSelection.AddRange(descedentsBegin);
+            return nodesSelection;
+        } 
         public static List<SyntaxNode> LeastCommonAncestors(string sourceCode, List<TRegion> regions)
         {
             List<SyntaxNode> slist = new List<SyntaxNode>();
@@ -743,30 +816,83 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return list;
         }
 
-        /// <summary>
-        /// Convert syntax nodes to its equivalent kinds
-        /// </summary>
-        /// <param name="pairOfMatches">Nodes</param>
-        /// <param name="firstRoot">First root</param>
-        /// <param name="secondRoot">Second root</param>
-        /// <returns></returns>
-        private List<Tuple<SyntaxNode, SyntaxNode>> EquivaleInKind(List<Tuple<SyntaxNode, SyntaxNode>> pairOfMatches, SyntaxNode firstRoot, SyntaxNode secondRoot)
-        {
-            List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
-            foreach (var match in pairOfMatches)
-            {
-                if (match.Item1.IsKind(match.Item2.CSharpKind()))
-                {
-                    tuples.Add(match);
-                    continue;
-                }
+        ///// <summary>
+        ///// Convert syntax nodes to its equivalent kinds
+        ///// </summary>
+        ///// <param name="pairOfMatches">Nodes</param>
+        ///// <param name="firstRoot">First root</param>
+        ///// <param name="secondRoot">Second root</param>
+        ///// <returns></returns>
+        //private List<Tuple<SyntaxNode, SyntaxNode>> EquivaleInKind(List<Tuple<SyntaxNode, SyntaxNode>> pairOfMatches, SyntaxNode firstRoot, SyntaxNode secondRoot)
+        //{
+        //    List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
+        //    foreach (var match in pairOfMatches)
+        //    {
+        //        if (match.Item1.IsKind(match.Item2.CSharpKind()))
+        //        {
+        //            tuples.Add(match);
+        //            continue;
+        //        }
 
-                var desce = NodesWithTheSameSyntaxKind(match.Item2, match.Item1.CSharpKind());
-                Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(match.Item1, desce.First());
-                tuples.Add(tuple);
-            }
-            return tuples;
-        }
+        //        var desce = NodesWithTheSameSyntaxKind(match.Item2, match.Item1.CSharpKind());
+        //        Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(match.Item1, desce.First());
+        //        tuples.Add(tuple);
+        //    }
+        //    return tuples;
+        //}
+
+        ///// <summary>
+        ///// Convert syntax nodes to its equivalent kinds
+        ///// </summary>
+        ///// <param name="pairOfMatches">Nodes</param>
+        ///// <param name="firstRoot">First root</param>
+        ///// <param name="secondRoot">Second root</param>
+        ///// <returns></returns>
+        //private List<Tuple<SyntaxNode, SyntaxNode>> EquivaleInKind(List<Tuple<SyntaxNode, SyntaxNode>> pairOfMatches, SyntaxNode firstRoot, SyntaxNode secondRoot)
+        //{
+        //    List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
+        //    foreach (Tuple<SyntaxNode, SyntaxNode> tuple in pairOfMatches)
+        //    {
+        //        if (tuple.Item1.CSharpKind() == tuple.Item2.CSharpKind())
+        //        {
+        //            tuples.Add(tuple); continue;
+        //        }
+
+        //        SyntaxNode parent1 = tuple.Item1;
+        //        List<SyntaxNode> sn1 = new List<SyntaxNode>();
+        //        while (!parent1.Equals(firstRoot))
+        //        {
+        //            sn1.Add(parent1);
+        //            parent1 = parent1.Parent;
+        //        }
+
+        //        SyntaxNode parent2 = tuple.Item2;
+        //        List<SyntaxNode> sn2 = new List<SyntaxNode>();
+        //        while (!parent2.Equals(secondRoot))
+        //        {
+        //            sn2.Add(parent2);
+        //            parent2 = parent2.Parent;
+        //        }
+
+        //        foreach (SyntaxNode i in sn1)
+        //        {
+        //            bool found = false;
+        //            foreach (SyntaxNode j in sn2)
+        //            {
+        //                if (i.CSharpKind() == j.CSharpKind())
+        //                {
+        //                    Tuple<SyntaxNode, SyntaxNode> te = Tuple.Create(i, j);
+        //                    tuples.Add(te);
+        //                    found = true;
+        //                    break;
+        //                }
+        //            }
+        //            if (found) break;
+        //        }
+
+        //    }
+        //    return tuples;
+        //}
     }
 }
 
