@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IO.Packaging;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Microsoft.Build.BuildEngine;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using Spg.LocationRefactor.TextRegion;
+
 
 namespace LocateAdornment
 {

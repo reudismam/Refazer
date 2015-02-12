@@ -83,6 +83,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         public string CurrentViewCodePath { get; set; }
 
         public List<Tuple<string, string>> DocumentsBeforeAndAfter { get; set; }
+        public string CurrentProject { get; set; }
 
 
         /// <summary>
@@ -350,7 +351,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                 var slocation = SelectedLocations[index];
                 if (!slocation.Path.Equals(sourceCodePath))
                 {
-                    return new WorkspaceManager().SourceFiles(SolutionPath);
+                    return new WorkspaceManager().SourceFiles(CurrentProject, SolutionPath);
                 }
             }
             Tuple<string, string> sourceFile = Tuple.Create<string, string>(SelectedLocations.First().Parent.Text, sourceCodePath);

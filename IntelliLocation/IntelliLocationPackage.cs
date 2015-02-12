@@ -123,6 +123,11 @@ namespace SPG.IntelliLocation
             string fullName = dte.Solution.FullName;
             var document = dte.ActiveDocument;
 
+            var proj = dte.Solution.FindProjectItem(document.FullName);
+
+            var project = proj.ContainingProject;
+
+            EditorController.GetInstance().CurrentProject = project.Name;
             EditorController.GetInstance().SolutionPath = fullName;
             EditorController.GetInstance().CurrentViewCodePath = document.FullName;
 

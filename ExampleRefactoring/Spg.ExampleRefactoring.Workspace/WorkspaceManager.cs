@@ -16,7 +16,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         /// </summary>
         /// <param name="solutionPath">Solution path</param>
         /// <returns>.cs files</returns>
-        public List<Tuple<string, string>> GetSourcesFiles(string solutionPath = "")
+        public List<Tuple<string, string>> GetSourcesFiles(string projectName, string solutionPath)
         {
             //SymbolTable(solutionPath);
             List<Tuple<string, string>> sourceFiles = new List<Tuple<string, string>>();
@@ -30,43 +30,46 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             foreach (var projectId in originalSolution.ProjectIds)
             {
                 var project = newSolution.GetProject(projectId);
-                //remove
-                var compilation = project.GetCompilationAsync().Result;
-                var globalNamespace = compilation.GlobalNamespace;
-                var diagnostics = compilation.GetDiagnostics();
-                //remove
-                foreach (var documentId in project.DocumentIds)
+                if (project.Name.Equals(projectName))
                 {
-                    var document = newSolution.GetDocument(documentId);
-                    
-                    ////remove
-                    //SyntaxTree tree;
-                    //document.TryGetSyntaxTree(out tree);
-                    //SemanticModel model2 = compilation.GetSemanticModel(tree);
-                    ////SemanticModel model;
-                    ////document.TryGetSemanticModel(out model);
-                    //foreach (ISymbol symbol in model2.LookupSymbols(241))
-                    //{
-                    //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
-                    //    {
-                    //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
-                    //        var rlts = symbol.DeclaringSyntaxReferences;
-                    //    }
-                    //}
-                    ////remove
-
-                    try
+                    //remove
+                    var compilation = project.GetCompilationAsync().Result;
+                    var globalNamespace = compilation.GlobalNamespace;
+                    var diagnostics = compilation.GetDiagnostics();
+                    //remove
+                    foreach (var documentId in project.DocumentIds)
                     {
-                        StreamReader sr = new StreamReader(document.FilePath);
-                        string text = sr.ReadToEnd();
+                        var document = newSolution.GetDocument(documentId);
 
-                        Tuple<string, string> tuple = Tuple.Create(text, document.FilePath);
-                        sourceFiles.Add(tuple);
+                        ////remove
+                        //SyntaxTree tree;
+                        //document.TryGetSyntaxTree(out tree);
+                        //SemanticModel model2 = compilation.GetSemanticModel(tree);
+                        ////SemanticModel model;
+                        ////document.TryGetSemanticModel(out model);
+                        //foreach (ISymbol symbol in model2.LookupSymbols(241))
+                        //{
+                        //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
+                        //    {
+                        //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
+                        //        var rlts = symbol.DeclaringSyntaxReferences;
+                        //    }
+                        //}
+                        ////remove
+
+                        try
+                        {
+                            StreamReader sr = new StreamReader(document.FilePath);
+                            string text = sr.ReadToEnd();
+
+                            Tuple<string, string> tuple = Tuple.Create(text, document.FilePath);
+                            sourceFiles.Add(tuple);
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Could not load document on the path: " + document.FilePath);
+                        }
                     }
-                    catch (Exception)
-                    {
-                       Console.WriteLine("Could not load document on the path: " + document.FilePath);
-                    }     
                 }
             }
 
@@ -84,10 +87,10 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         /// </summary>
         /// <param name="solutionPath">Solution path</param>
         /// <returns>List of source file in the solution</returns>
-        public List<Tuple<string, string>> SourceFiles(string solutionPath)
+        public List<Tuple<string, string>> SourceFiles(string projectName, string solutionPath)
         {
             //WorkspaceManager manager = new WorkspaceManager();
-            List<Tuple<string, string>> sourceFiles = GetSourcesFiles(solutionPath);
+            List<Tuple<string, string>> sourceFiles = GetSourcesFiles(projectName, solutionPath);
             return sourceFiles;
         }
 

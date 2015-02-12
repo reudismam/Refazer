@@ -813,14 +813,14 @@
             Manager the workspace
             </summary>
         </member>
-        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Workspace.WorkspaceManager.GetSourcesFiles(System.String)">
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Workspace.WorkspaceManager.GetSourcesFiles(System.String,System.String)">
             <summary>
             Return .cs files in the solution
             </summary>
             <param name="solutionPath">Solution path</param>
             <returns>.cs files</returns>
         </member>
-        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Workspace.WorkspaceManager.SourceFiles(System.String)">
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.Workspace.WorkspaceManager.SourceFiles(System.String,System.String)">
             <summary>
             Source files in solution on the format source code, source code path
             </summary>
