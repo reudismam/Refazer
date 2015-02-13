@@ -52,17 +52,16 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         {
             IEnumerable<SyntaxNode> descendentWithSyntaxKind = NodesWithTheSameSyntaxKind(treeBefore.GetRoot(), globalLCA.CSharpKind());
 
+            var list = descendentWithSyntaxKind.ToList();
             int position = Position(globalLCA, descendentWithSyntaxKind);
 
             List<Tuple<int, SyntaxNode>> pairsNodes = new List<Tuple<int, SyntaxNode>>();
             Tuple<int, SyntaxNode> t = Tuple.Create(position, globalLCA);
             pairsNodes.Add(t);
 
-            //SyntaxNode snnode = RemoveSelection(treeBefore, locations);
-
-            //List<Tuple<SyntaxNode, SyntaxNode>> tuplePair1 = CalculatePair(snnode, pairsNodes);
+            var str = treeAfter.GetRoot().ToFullString();
             List<Tuple<SyntaxNode, SyntaxNode>> tuplePair2 = CalculatePair(treeAfter.GetRoot(), pairsNodes); //least common ancestor before and after
-            Tuple<SyntaxNode, SyntaxNode> lnexample = tuplePair2.First();//Tuple.Create(tuplePair2.First().Item1, tuplePair2.First().Item2);
+            Tuple<SyntaxNode, SyntaxNode> lnexample = tuplePair2.First();
 
             ListNode ssnode = RemoveSelection(treeBefore, locations);
             Tuple<ListNode, ListNode> example = ASTProgram.Example(lnexample);
@@ -79,63 +78,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 tuples.Add(tuple);
             }
 
-             //tuples = EquivaleInKind(tuples, lnexample.Item1, lnexample.Item2);
-
-            //return null;
             return tuples;
-            //remove
-            //List<SyntaxNode> update = new List<SyntaxNode>();
-            //foreach (CodeLocation location in EditorController.GetInstance().Locations)
-            //{
-            //    SyntaxNode selection = location.Region.Node;
-            //    var decedents = NodesWithSameStartEndAndKind(tuplePair.First().Item1, selection.Span.Start,
-            //        selection.Span.End, selection.CSharpKind());
-
-            //    update.AddRange(decedents);
-            //} 
-
-            //List<SyntaxNode> snodesList = tuplePair.First().Item1.ChildNodes().ToList();
-
-            //List<int> positions = new List<int>();
-
-            //for (int i = 0; i < snodesList.Count; i++)
-            //{
-            //    foreach (SyntaxNode snode in nodes)
-            //    {
-            //        if (IsContained(snodesList[i], snode))
-            //        {
-            //            positions.Add(i);
-            //        }
-            //    }
-            //}
-
-            //List<Tuple<int, SyntaxNode>> ltuple = new List<Tuple<int, SyntaxNode>>();
-            //foreach (var node in nodes)
-            //{
-            //    IEnumerable<SyntaxNode> snodesList = NodesWithTheSameSyntaxKind(tuplePair.First().Item1, node.CSharpKind());
-            //    List<SyntaxNode> d = snodesList.ToList();
-            //    int p = Position(node, snodesList);
-            //    Tuple<int, SyntaxNode> tuple = Tuple.Create(p, node);
-            //    ltuple.Add(tuple);
-            //}
-
-            //List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
-            //foreach (var tuple in ltuple)
-            //{
-            //    IEnumerable<SyntaxNode> snodesList = NodesWithTheSameSyntaxKind(tuplePair.First().Item2, tuple.Item2.CSharpKind());
-            //    List<SyntaxNode> d = snodesList.ToList();
-            //    Tuple<SyntaxNode, SyntaxNode> tu = Tuple.Create(tuple.Item2, snodesList.ElementAt(tuple.Item1));
-            //    tuples.Add(tu);
-            //}
-
-            //List<SyntaxNode> snodeList2 = tuplePair.First().Item2.ChildNodes().ToList();
-            //List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
-            //foreach (int i in positions)
-            //{
-            //    Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(snodesList[i], snodeList2[i]);
-            //    tuples.Add(tuple);
-            //}
-            //remove
         }
 
         private ListNode RemoveSelection(SyntaxTree treeBefore, List<CodeLocation> locations)
@@ -646,13 +589,18 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             int i = 0;
             foreach (SyntaxNode parent in descendants)
             {
-                if (parent.Equals(node))
+                if (IsEqual(parent, node))
                 {
                     return i;
                 }
                 i++;
             }
             return i - 1;
+        }
+
+        private bool IsEqual(SyntaxNode parent, SyntaxNode node)
+        {
+            return parent.Span.Equals(node.Span) && parent.IsKind(node.CSharpKind());
         }
 
         /// <summary>
@@ -895,6 +843,102 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         //}
     }
 }
+
+///// <summary>
+///// Calculate selection position index and syntax node
+///// </summary>
+///// <param name="treeBefore">Syntax tree root</param>
+///// <param name="nodes">Selected nodes</param>
+///// <returns>Index and syntax node</returns>
+//private List<Tuple<SyntaxNode, SyntaxNode>> CalculatePositionAndSyntaxKind(SyntaxTree treeBefore, SyntaxTree treeAfter, List<SyntaxNode> nodes, List<CodeLocation> locations, SyntaxNode globalLCA)
+//{
+//    IEnumerable<SyntaxNode> descendentWithSyntaxKind = NodesWithTheSameSyntaxKind(treeBefore.GetRoot(), globalLCA.CSharpKind());
+
+//    int position = Position(globalLCA, descendentWithSyntaxKind);
+
+//    List<Tuple<int, SyntaxNode>> pairsNodes = new List<Tuple<int, SyntaxNode>>();
+//    Tuple<int, SyntaxNode> t = Tuple.Create(position, globalLCA);
+//    pairsNodes.Add(t);
+
+//    //SyntaxNode snnode = RemoveSelection(treeBefore, locations);
+
+//    //List<Tuple<SyntaxNode, SyntaxNode>> tuplePair1 = CalculatePair(snnode, pairsNodes);
+//    List<Tuple<SyntaxNode, SyntaxNode>> tuplePair2 = CalculatePair(treeAfter.GetRoot(), pairsNodes); //least common ancestor before and after
+//    Tuple<SyntaxNode, SyntaxNode> lnexample = tuplePair2.First();//Tuple.Create(tuplePair2.First().Item1, tuplePair2.First().Item2);
+
+//    ListNode ssnode = RemoveSelection(treeBefore, locations);
+//    Tuple<ListNode, ListNode> example = ASTProgram.Example(lnexample);
+
+//    List<SyntaxNodeOrToken> lsn = SynthesisManager.DiffSN(ssnode, example.Item2);
+
+//    List<SyntaxNode> nnodes = ConnectedEdition(lsn, lnexample.Item2);
+
+//    List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
+//    for (int i = 0; i < nodes.Count; i++)
+//    {
+//        var node = nodes[i];
+//        Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(node, nnodes[i]);
+//        tuples.Add(tuple);
+//    }
+
+//    //tuples = EquivaleInKind(tuples, lnexample.Item1, lnexample.Item2);
+
+//    //return null;
+//    return tuples;
+//    //remove
+//    //List<SyntaxNode> update = new List<SyntaxNode>();
+//    //foreach (CodeLocation location in EditorController.GetInstance().Locations)
+//    //{
+//    //    SyntaxNode selection = location.Region.Node;
+//    //    var decedents = NodesWithSameStartEndAndKind(tuplePair.First().Item1, selection.Span.Start,
+//    //        selection.Span.End, selection.CSharpKind());
+
+//    //    update.AddRange(decedents);
+//    //} 
+
+//    //List<SyntaxNode> snodesList = tuplePair.First().Item1.ChildNodes().ToList();
+
+//    //List<int> positions = new List<int>();
+
+//    //for (int i = 0; i < snodesList.Count; i++)
+//    //{
+//    //    foreach (SyntaxNode snode in nodes)
+//    //    {
+//    //        if (IsContained(snodesList[i], snode))
+//    //        {
+//    //            positions.Add(i);
+//    //        }
+//    //    }
+//    //}
+
+//    //List<Tuple<int, SyntaxNode>> ltuple = new List<Tuple<int, SyntaxNode>>();
+//    //foreach (var node in nodes)
+//    //{
+//    //    IEnumerable<SyntaxNode> snodesList = NodesWithTheSameSyntaxKind(tuplePair.First().Item1, node.CSharpKind());
+//    //    List<SyntaxNode> d = snodesList.ToList();
+//    //    int p = Position(node, snodesList);
+//    //    Tuple<int, SyntaxNode> tuple = Tuple.Create(p, node);
+//    //    ltuple.Add(tuple);
+//    //}
+
+//    //List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
+//    //foreach (var tuple in ltuple)
+//    //{
+//    //    IEnumerable<SyntaxNode> snodesList = NodesWithTheSameSyntaxKind(tuplePair.First().Item2, tuple.Item2.CSharpKind());
+//    //    List<SyntaxNode> d = snodesList.ToList();
+//    //    Tuple<SyntaxNode, SyntaxNode> tu = Tuple.Create(tuple.Item2, snodesList.ElementAt(tuple.Item1));
+//    //    tuples.Add(tu);
+//    //}
+
+//    //List<SyntaxNode> snodeList2 = tuplePair.First().Item2.ChildNodes().ToList();
+//    //List<Tuple<SyntaxNode, SyntaxNode>> tuples = new List<Tuple<SyntaxNode, SyntaxNode>>();
+//    //foreach (int i in positions)
+//    //{
+//    //    Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(snodesList[i], snodeList2[i]);
+//    //    tuples.Add(tuple);
+//    //}
+//    //remove
+//}
 
 ///// <summary>
 ///// Pair of syntax node before and after transformation

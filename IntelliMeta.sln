@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliMeta", "IntelliMeta\IntelliMeta.csproj", "{E58856BB-13E3-4828-B548-08E7343B2FD9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6060B3C1-8B16-47AE-A7A5-B34EB1C170AD} = {6060B3C1-8B16-47AE-A7A5-B34EB1C170AD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliLocation", "IntelliLocation\IntelliLocation.csproj", "{383AB69B-75EC-49D5-A6CF-3B2830EBE854}"
 EndProject

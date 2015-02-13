@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
 
 namespace LeastCommonAncestor
@@ -19,41 +21,20 @@ namespace LeastCommonAncestor
         /// <returns>The least common ancestor of node n1 and n2.</returns>
         public SyntaxNodeOrToken LeastCommonAncestor(SyntaxNodeOrToken root, SyntaxNodeOrToken n1, SyntaxNodeOrToken n2)
         {
-            TreeNode<SyntaxNodeOrToken> rootNode = ConvertToTreeNode(root);
+            //TreeNode<SyntaxNodeOrToken> rootNode = ConvertToTreeNode(root);
 
-            ITreeNode<SyntaxNodeOrToken> x = new TreeNode<SyntaxNodeOrToken>(n1);
-            ITreeNode<SyntaxNodeOrToken> y = new TreeNode<SyntaxNodeOrToken>(n2);
+            //ITreeNode<SyntaxNodeOrToken> x = new TreeNode<SyntaxNodeOrToken>(n1);
+            //ITreeNode<SyntaxNodeOrToken> y = new TreeNode<SyntaxNodeOrToken>(n2);
+            LCAManager manager = LCAManager.GetInstance();
+            TreeNode<SyntaxNodeOrToken> rootNode = manager.ConvertToTreeNode(root.AsNode()) as TreeNode<SyntaxNodeOrToken>;
+            ITreeNode<SyntaxNodeOrToken> x = manager.Find(root, n1) as ITreeNode<SyntaxNodeOrToken>;
+            ITreeNode<SyntaxNodeOrToken> y = manager.Find(root, n2) as ITreeNode<SyntaxNodeOrToken>;
 
             if (x.Equals(y)) return x.Value;
 
-            LeastCommonAncestorFinder<SyntaxNodeOrToken> finder = new LeastCommonAncestorFinder<SyntaxNodeOrToken>(rootNode);
+            LeastCommonAncestorFinder<SyntaxNodeOrToken> finder = LeastCommonAncestorFinder<SyntaxNodeOrToken>.GetInstance(root.AsNode().GetText().ToString(), rootNode);
             ITreeNode<SyntaxNodeOrToken> result = finder.FindCommonParent(x, y);
             return result.Value;
-        }
-
-        
-        /// <summary>
-        /// Convert a syntax tree to a TreeNode
-        /// </summary>
-        /// <param name="st">Syntax tree root</param>
-        /// <returns>TreeNode</returns>
-        private static TreeNode<SyntaxNodeOrToken> ConvertToTreeNode(SyntaxNodeOrToken st)
-        {
-            if (st.ChildNodesAndTokens().Count == 0)
-            {
-                return new TreeNode<SyntaxNodeOrToken>(st);
-            }
-
-            List<TreeNode<SyntaxNodeOrToken>> children = new List<TreeNode<SyntaxNodeOrToken>>();
-            foreach (SyntaxNodeOrToken sot in st.ChildNodesAndTokens())
-            {
-                //childrens.Add(sot);
-                TreeNode<SyntaxNodeOrToken> nodes = ConvertToTreeNode(sot);
-                children.Add(nodes);
-            }
-
-            TreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st, children.ToArray());
-            return tree;
         }
 
         /// <summary>
@@ -149,19 +130,68 @@ namespace LeastCommonAncestor
             private List<ITreeNode<T>> _nodes = new List<ITreeNode<T>>();  // n
             private List<int> _values = new List<int>(); // n * 2
 
+            Dictionary<object, LCAProcessing<T>>  preprocessing = new Dictionary<object, LCAProcessing<T>>();
+            private static LeastCommonAncestorFinder<T> instance;
+ 
+
             /// <summary>
             /// Initializes a new instance of the <see cref="LeastCommonAncestorFinder&lt;T&gt;"/> class.
             /// </summary>
             /// <param name="rootNode">The root node.</param>
-            public LeastCommonAncestorFinder(ITreeNode<T> rootNode)
+            private LeastCommonAncestorFinder()
+            {
+                //if (rootNode == null)
+                //{
+                //    throw new NotImplementedException("rootNode");
+                //}
+                //_rootNode = rootNode;
+                //LCAProcessing<T> value;
+                //if (!preprocessing.TryGetValue(obj, out value))
+                //{
+                //    PreProcess();
+                //    LCAProcessing<T> lcaProcessing = new LCAProcessing<T>(_indexLookup, _nodes, _values);
+                //    preprocessing.Add(obj, lcaProcessing);
+                //}
+
+                //value = preprocessing[obj];
+                //_rootNode = rootNode;
+                //_indexLookup = value._indexLookup as Dictionary<ITreeNode<T>, NodeIndex>;
+                //_nodes = value._nodes as List<ITreeNode<T>>;
+                //_values = value._values;
+            }
+
+            public static LeastCommonAncestorFinder<T> GetInstance(object obj, ITreeNode<T> rootNode)
+            {
+                if (instance == null)
+                {
+                    instance = new LeastCommonAncestorFinder<T>();
+                }
+                instance.Init(obj, rootNode);
+
+                return instance;
+            }
+            private void Init(object obj, ITreeNode<T> rootNode)
             {
                 if (rootNode == null)
                 {
                     throw new NotImplementedException("rootNode");
                 }
                 _rootNode = rootNode;
-                PreProcess();
+                LCAProcessing<T> value;
+                if (!preprocessing.TryGetValue(obj, out value))
+                {
+                    PreProcess();
+                    LCAProcessing<T> lcaProcessing = new LCAProcessing<T>(_indexLookup, _nodes, _values);
+                    preprocessing.Add(obj, lcaProcessing);
+                }
+
+                value = preprocessing[obj];
+                _rootNode = rootNode;
+                _indexLookup = value._indexLookup as Dictionary<ITreeNode<T>, NodeIndex>;
+                _nodes = value._nodes as List<ITreeNode<T>>;
+                _values = value._values;
             }
+
 
             /// <summary>
             /// Finds the common parent between two nodes.
@@ -240,6 +270,7 @@ namespace LeastCommonAncestor
                         lastNodeStack.Push(new ProcessingState(next));
                     }
                 }
+                
                 _nodes.TrimExcess();
                 _values.TrimExcess();
             }
@@ -281,7 +312,7 @@ namespace LeastCommonAncestor
                     return false;
                 }
             }
-            private struct NodeIndex
+            public struct NodeIndex
             {
                 public readonly int FirstVisit;
                 public readonly int LookupIndex;

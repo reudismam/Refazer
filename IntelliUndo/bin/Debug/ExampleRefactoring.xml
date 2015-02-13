@@ -345,6 +345,13 @@
             </summary>
             <returns>Sub nodes that match expression input s</returns>
         </member>
+        <member name="M:ExampleRefactoring.Spg.ExampleRefactoring.LCS.LCAManager._ConvertToTreeNode(Microsoft.CodeAnalysis.SyntaxNodeOrToken)">
+            <summary>
+            Convert a syntax tree to a TreeNode
+            </summary>
+            <param name="st">Syntax tree root</param>
+            <returns>TreeNode</returns>
+        </member>
         <member name="T:ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression.Regex">
             <summary>
             Regular expression
@@ -2136,13 +2143,6 @@
             <param name="n2">Second syntax node</param>
             <returns>The least common ancestor of node n1 and n2.</returns>
         </member>
-        <member name="M:LeastCommonAncestor.LCA`1.ConvertToTreeNode(Microsoft.CodeAnalysis.SyntaxNodeOrToken)">
-            <summary>
-            Convert a syntax tree to a TreeNode
-            </summary>
-            <param name="st">Syntax tree root</param>
-            <returns>TreeNode</returns>
-        </member>
         <member name="T:LeastCommonAncestor.LCA`1.TreeNode`1">
             <summary>
             TreeNode class
@@ -2199,7 +2199,7 @@
             </summary>
             <typeparam name="T">Type of object</typeparam>
         </member>
-        <member name="M:LeastCommonAncestor.LCA`1.LeastCommonAncestorFinder`1.#ctor(LeastCommonAncestor.LCA{`0}.ITreeNode{`1})">
+        <member name="M:LeastCommonAncestor.LCA`1.LeastCommonAncestorFinder`1.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:LeastCommonAncestor.LCA`1.LeastCommonAncestorFinder`1"/> class.
             </summary>
