@@ -2134,7 +2134,7 @@
             </summary>
             <typeparam name="T">Type of data</typeparam>
         </member>
-        <member name="M:LeastCommonAncestor.LCA`1.LeastCommonAncestor(Microsoft.CodeAnalysis.SyntaxNodeOrToken,Microsoft.CodeAnalysis.SyntaxNodeOrToken,Microsoft.CodeAnalysis.SyntaxNodeOrToken)">
+        <member name="M:LeastCommonAncestor.LCA`1.LeastCommonAncestor(System.String,LeastCommonAncestor.LCA{`0}.ITreeNode{`0},LeastCommonAncestor.LCA{`0}.ITreeNode{`0},LeastCommonAncestor.LCA{`0}.ITreeNode{`0})">
             <summary>
             The least common ancestor
             </summary>

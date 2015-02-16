@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
@@ -8,12 +9,16 @@ using System.Windows.Forms;
 using LocateAdornment;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Spg.LocationCodeRefactoring.Observer;
 using Spg.LocationRefactor.TextRegion;
+using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 
 namespace SPG.IntelliExtract
 {
@@ -92,6 +97,7 @@ namespace SPG.IntelliExtract
             }
         }
 
+
         public void NotifyProgramGenerated(ProgramGeneratedEvent pEvent)
         {
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
@@ -117,7 +123,53 @@ namespace SPG.IntelliExtract
 
             EditorController controler = EditorController.GetInstance();
             controler.RetrieveLocations(text);
+            var projectionBuffer = CreateProjectionBuffer(viewHost);
+            controler.ProjectionBuffer = projectionBuffer;
+
         }
+
+        public IProjectionBuffer CreateProjectionBuffer(IWpfTextViewHost host)
+        {
+            //retrieve start and end position that we saved in MyToolWindow.CreateEditor()
+            var textView = host.TextView;
+
+            List<object> sourceSpans = new List<object>();
+            foreach (var location in EditorController.GetInstance().Locations)
+            {
+
+                var startPosition = location.Region.Start;
+                var length = location.Region.Length;
+                if (startPosition != 0)
+                {
+                    startPosition -= 1;
+                    length = Math.Min(length + 2, textView.TextBuffer.CurrentSnapshot.Length);
+                }
+                else
+                {
+                    length = Math.Min(length + 1, textView.TextBuffer.CurrentSnapshot.Length);
+                }
+                
+
+
+                //Take a snapshot of the text within these indices.
+                var textSnapshot = textView.TextBuffer.CurrentSnapshot;
+                var trackingSpan = textSnapshot.CreateTrackingSpan(startPosition, length, SpanTrackingMode.EdgeExclusive);
+                sourceSpans.Add(trackingSpan);
+            }
+
+            //var ProjectionBufferFactory = (IProjectionBufferFactoryService) GetService(typeof(IProjectionBufferFactoryService));
+            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+            IProjectionBufferFactoryService ProjectionBufferFactory = componentModel.GetService<IProjectionBufferFactoryService>();
+
+            //Create the actual projection buffer
+            var projectionBuffer = ProjectionBufferFactory.CreateProjectionBuffer(
+                null
+                , sourceSpans
+                , ProjectionBufferOptions.None
+                );
+            return projectionBuffer;
+        }
+
 
         /////////////////////////////////////////////////////////////////////////////
         // Overridden Package Implementation
