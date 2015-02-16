@@ -88,6 +88,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         public string CurrentProject { get; set; }
         public IProjectionBuffer ProjectionBuffer { get; set; }
 
+        public Dictionary<string, IProjectionBuffer> ProjectionBuffers { get; set; }
+
 
         /// <summary>
         /// Singleton instance
