@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
@@ -10,6 +11,7 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio.Text.Projection;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationCodeRefactoring.Observer;
@@ -84,6 +86,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public List<Tuple<string, string>> DocumentsBeforeAndAfter { get; set; }
         public string CurrentProject { get; set; }
+        public IProjectionBuffer ProjectionBuffer { get; set; }
 
 
         /// <summary>

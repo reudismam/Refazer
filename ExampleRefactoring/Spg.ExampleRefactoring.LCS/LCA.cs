@@ -19,21 +19,21 @@ namespace LeastCommonAncestor
         /// <param name="n1">First syntax node</param>
         /// <param name="n2">Second syntax node</param>
         /// <returns>The least common ancestor of node n1 and n2.</returns>
-        public SyntaxNodeOrToken LeastCommonAncestor(SyntaxNodeOrToken root, SyntaxNodeOrToken n1, SyntaxNodeOrToken n2)
+        public T LeastCommonAncestor(string id, ITreeNode<T> rootNode, ITreeNode<T> x, ITreeNode<T> y)
         {
             //TreeNode<SyntaxNodeOrToken> rootNode = ConvertToTreeNode(root);
 
             //ITreeNode<SyntaxNodeOrToken> x = new TreeNode<SyntaxNodeOrToken>(n1);
             //ITreeNode<SyntaxNodeOrToken> y = new TreeNode<SyntaxNodeOrToken>(n2);
-            LCAManager manager = LCAManager.GetInstance();
-            TreeNode<SyntaxNodeOrToken> rootNode = manager.ConvertToTreeNode(root.AsNode()) as TreeNode<SyntaxNodeOrToken>;
-            ITreeNode<SyntaxNodeOrToken> x = manager.Find(root, n1) as ITreeNode<SyntaxNodeOrToken>;
-            ITreeNode<SyntaxNodeOrToken> y = manager.Find(root, n2) as ITreeNode<SyntaxNodeOrToken>;
+            //LCAManager manager = LCAManager.GetInstance();
+            //TreeNode<SyntaxNodeOrToken> rootNode = manager.ConvertToTreeNode(root.AsNode()) as TreeNode<SyntaxNodeOrToken>;
+            //ITreeNode<SyntaxNodeOrToken> x = manager.Find(root, n1) as ITreeNode<SyntaxNodeOrToken>;
+            //ITreeNode<SyntaxNodeOrToken> y = manager.Find(root, n2) as ITreeNode<SyntaxNodeOrToken>;
 
             if (x.Equals(y)) return x.Value;
 
-            LeastCommonAncestorFinder<SyntaxNodeOrToken> finder = LeastCommonAncestorFinder<SyntaxNodeOrToken>.GetInstance(root.AsNode().GetText().ToString(), rootNode);
-            ITreeNode<SyntaxNodeOrToken> result = finder.FindCommonParent(x, y);
+            LeastCommonAncestorFinder<T> finder = LeastCommonAncestorFinder<T>.GetInstance(id, rootNode);
+            ITreeNode<T> result = finder.FindCommonParent(x, y);
             return result.Value;
         }
 

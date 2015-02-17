@@ -80,6 +80,15 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
             return tree;
         }
 
+        public SyntaxNode LeastCommonAncestor(SyntaxNodeOrToken root, SyntaxNodeOrToken n1, SyntaxNodeOrToken n2)
+        {
+            LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> rootNode = ConvertToTreeNode(root.AsNode());
+            LCA<SyntaxNodeOrToken>.ITreeNode<SyntaxNodeOrToken> x = Find(root, n1);
+            LCA<SyntaxNodeOrToken>.ITreeNode<SyntaxNodeOrToken> y = Find(root, n2);
+            LCA<SyntaxNodeOrToken> lca = new LCA<SyntaxNodeOrToken>();
+            return lca.LeastCommonAncestor(root.ToFullString(), rootNode, x, y).AsNode();
+        }
+
         public class Node
         {
             public SyntaxNodeOrToken Snt;
