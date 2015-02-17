@@ -97,7 +97,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             ListNode sourceNodes = lnode.Item1; // can be also Item2
 
             foreach (var example in examples)
-            { 
+            {
                 sourceNodes.List.RemoveAll(
                     sn =>
                         example.Item2.List.Exists(
@@ -704,25 +704,19 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
                 if (sourceCodeAfter != null)
                 {
-                    SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
-                    List<SyntaxNode> nodes = new List<SyntaxNode>();
-                    foreach (var location in item.Value)
+                    SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter);
+                    List<SyntaxNode> aNodes = new List<SyntaxNode>();
+                    foreach (var span in controller.ProjectionBuffers[item.Key].CurrentSnapshot.GetSourceSpans())
                     {
-                        TextSpan span = location.Region.Node.Span;
-                        var dnodes = NodesWithSameStartEndAndKind(tree.GetRoot(), span.Start, span.End,
-                            location.Region.Node.CSharpKind());
-                        nodes.AddRange(dnodes);
+                        var snode = LeastCommonAncestor(treeAfter, span.Start + 1, (span.Start + 1) + (span.Length - 2));
+                        aNodes.Add(snode);
                     }
 
-                    SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter);
-
-
-                    var globalNode = LeastCommonAncestor(nodes, tree).AsNode();
-                    List<SyntaxNode> ns = ConnectedEdition(nodes, globalNode);
-
-                    //List<Tuple<SyntaxNode, SyntaxNode>> res = CalculatePositionAndSyntaxKind(tree, treeAfter, nodes,
-                    //    item.Value, globalNode);
-                    //result.AddRange(res);
+                    for (int i = 0; i < item.Value.Count; i++)
+                    {
+                        Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(item.Value[i].Region.Node, aNodes[i]);
+                        result.Add(tuple);
+                    }
                 }
             }
 
@@ -776,7 +770,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         //    return result;
         //}
 
-        private string GetDocumentAfterEdition(string documentBeforeEdition, List<Tuple<string,string>> documents)
+        private string GetDocumentAfterEdition(string documentBeforeEdition, List<Tuple<string, string>> documents)
         {
             foreach (var document in documents)
             {
@@ -800,6 +794,16 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return snode;
         }
 
+        private static SyntaxNode LeastCommonAncestor(SyntaxTree tree, int start, int end)
+        {
+            List<SyntaxNodeOrToken> nodesSelection = NodesBetweenStartAndEndPosition(tree, start, end);
+
+            SyntaxNodeOrToken lca = LeastCommonAncestor(nodesSelection, tree);
+            SyntaxNode snode = lca.AsNode();
+
+            return snode;
+        }
+
         private static List<SyntaxNodeOrToken> NodesBetweenStartAndEndPosition(SyntaxTree tree, int startPosition, int end)
         {
             List<SyntaxNodeOrToken> nodesSelection = new List<SyntaxNodeOrToken>();
@@ -808,7 +812,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                                   select node;
             nodesSelection.AddRange(descedentsBegin);
             return nodesSelection;
-        } 
+        }
         public static List<SyntaxNode> LeastCommonAncestors(string sourceCode, List<TRegion> regions)
         {
             List<SyntaxNode> slist = new List<SyntaxNode>();
@@ -817,7 +821,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 slist.Add(LeastCommonAncestor(sourceCode, region));
             }
             return slist;
-        } 
+        }
 
         public static List<TRegion> GroupRegionByStartAndEndPosition(List<TRegion> tregions)
         {

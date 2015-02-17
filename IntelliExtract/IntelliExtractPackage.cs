@@ -19,6 +19,9 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Spg.LocationCodeRefactoring.Observer;
 using Spg.LocationRefactor.TextRegion;
 using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
+using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using Microsoft.VisualStudio.Shell.Interop;
+using Spg.LocationRefactor.Location;
 
 namespace SPG.IntelliExtract
 {
@@ -125,7 +128,53 @@ namespace SPG.IntelliExtract
             controler.RetrieveLocations(text);
             var projectionBuffer = CreateProjectionBuffer(viewHost);
             controler.ProjectionBuffer = projectionBuffer;
+            controler.ProjectionBuffers = _CreateProjectionBuffers();
+        }
 
+        private Dictionary<string, IProjectionBuffer> _CreateProjectionBuffers()
+        {
+            EditorController controller = EditorController.GetInstance();
+          var groupedLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(controller.Locations);
+
+            Dictionary<string, IProjectionBuffer> projectionBuffers = new Dictionary<string, IProjectionBuffer>();
+            List<Tuple<string, string>> tuples = new List<Tuple<string, string>>();
+            foreach (var item in groupedLocation)
+            {
+                var projectionBuffer = _CreateProjectionBuffer(item.Key, item.Value);
+                projectionBuffers.Add(item.Key, projectionBuffer);
+            }
+            return projectionBuffers;
+        }
+
+        private IProjectionBuffer _CreateProjectionBuffer(string document, List<CodeLocation> locations)
+        {
+            var rdt = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
+            IEnumRunningDocuments value;
+            rdt.GetRunningDocumentsEnum(out value);
+
+            IVsHierarchy hierarchy;
+            uint pitemid;
+            IntPtr ppunkDocData;
+            uint pdwCookie;
+            rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_CantSave, document, out hierarchy, out pitemid,
+                out ppunkDocData, out pdwCookie);
+
+            string pbstrMkDocument;
+            uint pwdReadLooks, pwdEditLocks, pgrfRDTFlags;
+            var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
+                out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
+
+            IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
+
+            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+            IVsEditorAdaptersFactoryService bufferData = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+            Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
+                typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
+                as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
+            var textBuffer = bufferData.GetDataBuffer(x);
+            var projectionBuffer = _CreateProjectionBuffer(textBuffer, locations);
+            return projectionBuffer;
         }
 
         public IProjectionBuffer CreateProjectionBuffer(IWpfTextViewHost host)
@@ -148,11 +197,45 @@ namespace SPG.IntelliExtract
                 {
                     length = Math.Min(length + 1, textView.TextBuffer.CurrentSnapshot.Length);
                 }
-                
-
 
                 //Take a snapshot of the text within these indices.
                 var textSnapshot = textView.TextBuffer.CurrentSnapshot;
+                var trackingSpan = textSnapshot.CreateTrackingSpan(startPosition, length, SpanTrackingMode.EdgeExclusive);
+                sourceSpans.Add(trackingSpan);
+            }
+
+            //var ProjectionBufferFactory = (IProjectionBufferFactoryService) GetService(typeof(IProjectionBufferFactoryService));
+            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+            IProjectionBufferFactoryService ProjectionBufferFactory = componentModel.GetService<IProjectionBufferFactoryService>();
+
+            //Create the actual projection buffer
+            var projectionBuffer = ProjectionBufferFactory.CreateProjectionBuffer(
+                null
+                , sourceSpans
+                , ProjectionBufferOptions.None
+                );
+            return projectionBuffer;
+        }
+
+        private IProjectionBuffer _CreateProjectionBuffer(ITextBuffer textBuffer, List<CodeLocation> locations)
+        {
+            List<object> sourceSpans = new List<object>();
+            foreach (var location in locations)
+            {
+                var startPosition = location.Region.Start;
+                var length = location.Region.Length;
+                if (startPosition != 0)
+                {
+                    startPosition -= 1;
+                    length = Math.Min(length + 2, textBuffer.CurrentSnapshot.Length);
+                }
+                else
+                {
+                    length = Math.Min(length + 1, textBuffer.CurrentSnapshot.Length);
+                }
+
+                //Take a snapshot of the text within these indices.
+                var textSnapshot = textBuffer.CurrentSnapshot;
                 var trackingSpan = textSnapshot.CreateTrackingSpan(startPosition, length, SpanTrackingMode.EdgeExclusive);
                 sourceSpans.Add(trackingSpan);
             }
@@ -181,17 +264,17 @@ namespace SPG.IntelliExtract
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if ( null != mcs )
+            if (null != mcs)
             {
                 // Create the command for the menu item.
                 CommandID menuCommandId = new CommandID(GuidList.guidIntelliExtractCmdSet, (int)PkgCmdIDList.cmdidExtract);
-                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandId );
-                mcs.AddCommand( menuItem );
+                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandId);
+                mcs.AddCommand(menuItem);
             }
         }
         #endregion
