@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.IO.Packaging;
-using System.Runtime.InteropServices;
-using System.Windows.Automation.Peers;
-using System.Windows.Documents;
-using System.Windows.Media;
+using System.IO;
+using System.Security.Principal;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
-using Microsoft.Build.BuildEngine;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.Utilities;
 using Spg.LocationRefactor.TextRegion;
-using Span = Microsoft.VisualStudio.Text.Span;
-
 
 namespace LocateAdornment
 {
@@ -44,7 +36,7 @@ namespace LocateAdornment
                 LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
 
                 //Add some arbitrary author and comment text. 
-                string author = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                string author = WindowsIdentity.GetCurrent().Name;
                 string comment = "Four score....";
 
                 var snaphot = view.Selection.SelectedSpans[0];
@@ -68,7 +60,7 @@ namespace LocateAdornment
             LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
 
             //Add some arbitrary author and comment text. 
-            string author = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            string author = WindowsIdentity.GetCurrent().Name;
             string comment = "Four score....";
        
             provider.AddRegion(region, author, comment);
@@ -111,7 +103,7 @@ namespace LocateAdornment
         {
             foreach (var transformation in transformations)
             {
-                System.IO.StreamWriter file = new System.IO.StreamWriter(transformation.SourcePath);
+                StreamWriter file = new StreamWriter(transformation.SourcePath);
                 file.WriteLine(transformation.transformation.Item2);
 
                 file.Close();

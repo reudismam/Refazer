@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using Spg.ExampleRefactoring.Util;
 
 namespace ExampleRefactoring.Spg.ExampleRefactoring.Util

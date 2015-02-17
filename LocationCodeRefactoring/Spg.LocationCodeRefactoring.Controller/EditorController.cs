@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
@@ -90,6 +89,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public Dictionary<string, IProjectionBuffer> ProjectionBuffers { get; set; }
 
+        public Dictionary<string, List<Selection>> EditedLocations { get; set; } 
+
 
         /// <summary>
         /// Singleton instance
@@ -137,7 +138,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         {
             LocationExtractor extractor = new LocationExtractor(SolutionPath);
             //remove
-            JsonUtil<List<TRegion>>.Write(SelectedLocations, "simple_api_change_input.json");
+            JsonUtil<List<TRegion>>.Write(SelectedLocations, "input_selection.json");
             //remove
             Progs = extractor.Extract(SelectedLocations);
 
@@ -283,7 +284,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                 Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode);
                 selections.Add(selection);
             }
-            JsonUtil<List<Selection>>.Write(selections, "simple_api_change_output.json");
+            JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
             //remove
 
             NotifyHilightObservers(rs);
@@ -448,6 +449,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// </summary>
         public void Refact()
         {
+            FillEditedLocations();
             LocationExtractor extractor = new LocationExtractor(SolutionPath);
             List<Transformation> transformations = extractor.TransformProgram(CurrentViewCodeBefore, CurrentViewCodeAfter);
             this.SourceTransformations = transformations;
@@ -460,6 +462,31 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             ClearAfterRefact();
 
         }
+
+        /// <summary>
+        /// Fill edited locations. This method as created more for test purpose
+        /// </summary>
+        private void FillEditedLocations()
+        {
+            if (ProjectionBuffers == null) return;
+
+            Dictionary<string, List<Selection>> dicSelections= new Dictionary<string, List<Selection>>();
+            foreach (var item in ProjectionBuffers)
+            {
+                List<Selection> selections = new List<Selection>();
+                foreach (var span in item.Value.CurrentSnapshot.GetSourceSpans())
+                {
+                    Selection selection = new Selection(span.Start, span.Length, item.Key, null);
+                    selections.Add(selection);
+                }
+                dicSelections.Add(item.Key, selections);
+            }
+
+            EditedLocations = dicSelections;
+
+            JsonUtil<Dictionary<string, List<Selection>>>.Write(dicSelections, "edited_selections.json");
+        }
+
 
         /// <summary>
         /// Clear and start

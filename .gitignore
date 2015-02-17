@@ -32,6 +32,9 @@ LocateAdornment/obj/*
 Refactor/bin/*
 Refactor/obj/*
 
+IntelliUndo/bin/*
+IntelliUndo/obj/*
+
 IntelliMeta.sln.ide/*
 
 *.chk

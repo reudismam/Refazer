@@ -706,7 +706,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 {
                     SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter);
                     List<SyntaxNode> aNodes = new List<SyntaxNode>();
-                    foreach (var span in controller.ProjectionBuffers[item.Key].CurrentSnapshot.GetSourceSpans())
+                    foreach (var span in controller.EditedLocations[item.Key])
                     {
                         var snode = LeastCommonAncestor(treeAfter, span.Start + 1, (span.Start + 1) + (span.Length - 2));
                         aNodes.Add(snode);
