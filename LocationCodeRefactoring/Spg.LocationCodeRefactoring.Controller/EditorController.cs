@@ -291,8 +291,6 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             NotifyLocationsObservers(Locations);
         }
 
-       
-
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog, List<Tuple<string, string>> sourceFiles)
         {
             LocationExtractor extractor = new LocationExtractor(SolutionPath);
@@ -321,11 +319,18 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             LocationExtractor extractor = new LocationExtractor(SolutionPath);
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
 
+            var groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
+           
+            List<SyntaxNode> lcas = new List<SyntaxNode>();
+            foreach (var item in groups)
+            {
+                var result = RegionManager.SyntaxElementsSingleSourceClassSelection(item.Key, item.Value);
+                lcas.AddRange(result);
+            }
             foreach (Tuple<string, string> source in sourceFiles)
             {
                 List<TRegion> regions = RetrieveLocations(source.Item1, prog);
 
-                List<SyntaxNode> lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
                 regions = RegionManager.GroupRegionBySyntaxKind(regions, lcas);
 
                 foreach (TRegion region in regions)

@@ -5,11 +5,9 @@ using System.Text.RegularExpressions;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LeastCommonAncestor;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Text;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
@@ -194,7 +192,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 
         //    return list;
         //}
-        private List<SyntaxNode> ConnectedEdition(List<SyntaxNodeOrToken> nodesList, SyntaxNode leastCommonAncestor)
+        private static List<SyntaxNode> ConnectedEdition(List<SyntaxNodeOrToken> nodesList, SyntaxNode leastCommonAncestor)
         {
             LCAManager lcaCalculator = LCAManager.GetInstance();
             Dictionary<int, SyntaxNodeOrToken> dic = new Dictionary<int, SyntaxNodeOrToken>();
@@ -549,7 +547,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
             foreach (TRegion region in list)
             {
-                var descendentNodes = NodesWithTheSameStartPosition(tree, region.Start);
+                var descendentNodes = NodesBetweenStartAndEndPosition(tree, region.Start, region.Start + region.Length);
                 nodes.AddRange(descendentNodes);
             }
 
@@ -659,8 +657,21 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             if (list == null) throw new ArgumentNullException("list");
             if (!list.Any()) { throw new ArgumentException("Selection list cannot be empty"); }
 
-            SyntaxNode snode = LeastCommonAncestor(sourceCode, list);
-            return snode.DescendantNodes().ToList();
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+            List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
+            var l = new List<SyntaxNode>();
+            foreach (TRegion region in list)
+            {
+                var descendentNodes = NodesBetweenStartAndEndPosition(tree, region.Start, region.Start + region.Length);
+                //nodes.AddRange(descendentNodes);
+                SyntaxNodeOrToken lca = LeastCommonAncestor(descendentNodes, tree);
+                l.Add(lca.AsNode());
+            }
+
+            //var l = ConnectedEdition(nodes, tree.GetRoot());
+            return l;
+            //SyntaxNode snode = LeastCommonAncestor(sourceCode, list);
+            //return snode.DescendantNodes().ToList();
         }
 
         /// <summary>

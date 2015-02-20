@@ -126,8 +126,8 @@ namespace SPG.IntelliExtract
 
             EditorController controler = EditorController.GetInstance();
             controler.RetrieveLocations(text);
-            var projectionBuffer = CreateProjectionBuffer(viewHost);
-            controler.ProjectionBuffer = projectionBuffer;
+            //var projectionBuffer = CreateProjectionBuffer(viewHost);
+            //controler.ProjectionBuffer = projectionBuffer;
             controler.ProjectionBuffers = _CreateProjectionBuffers();
         }
 
@@ -141,7 +141,10 @@ namespace SPG.IntelliExtract
             foreach (var item in groupedLocation)
             {
                 var projectionBuffer = _CreateProjectionBuffer(item.Key, item.Value);
-                projectionBuffers.Add(item.Key, projectionBuffer);
+                if (projectionBuffer != null)
+                {
+                    projectionBuffers.Add(item.Key, projectionBuffer);
+                }
             }
             return projectionBuffers;
         }
@@ -164,17 +167,26 @@ namespace SPG.IntelliExtract
             var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
                 out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
 
-            IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
+            try
+            {
+                IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
 
-            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
-            IVsEditorAdaptersFactoryService bufferData = componentModel.GetService<IVsEditorAdaptersFactoryService>();
-            Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
-                typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
-                as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+                IComponentModel componentModel = Package.GetGlobalService(typeof (SComponentModel)) as IComponentModel;
+                IVsEditorAdaptersFactoryService bufferData =
+                    componentModel.GetService<IVsEditorAdaptersFactoryService>();
+                Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
+                    typeof (Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
+                    as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
-            var textBuffer = bufferData.GetDataBuffer(x);
-            var projectionBuffer = _CreateProjectionBuffer(textBuffer, locations);
-            return projectionBuffer;
+                var textBuffer = bufferData.GetDataBuffer(x);
+                var projectionBuffer = _CreateProjectionBuffer(textBuffer, locations);
+                return projectionBuffer;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Document not found on project: " + e.Message);
+            }
+            return null;
         }
 
         public IProjectionBuffer CreateProjectionBuffer(IWpfTextViewHost host)

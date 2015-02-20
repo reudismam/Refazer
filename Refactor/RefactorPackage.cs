@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using LocateAdornment;
@@ -98,10 +99,11 @@ namespace SPG.Refactor
                 }
             }
             return tuples;
-        } 
+        }
 
         private string CurrrentDocumentContent(string document)
         {
+
             var rdt = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
             IEnumRunningDocuments value;
             rdt.GetRunningDocumentsEnum(out value);
@@ -118,18 +120,27 @@ namespace SPG.Refactor
             var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
                 out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
 
-            IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
+            try
+            {
+                IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
 
-            //var bufferData = (IVsEditorAdaptersFactoryService)GetService(typeof(IVsEditorAdaptersFactoryService));
-            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
-            IVsEditorAdaptersFactoryService bufferData = componentModel.GetService<IVsEditorAdaptersFactoryService>();
-            Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
-                typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
-                as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+                //var bufferData = (IVsEditorAdaptersFactoryService)GetService(typeof(IVsEditorAdaptersFactoryService));
+                IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+                IVsEditorAdaptersFactoryService bufferData =
+                    componentModel.GetService<IVsEditorAdaptersFactoryService>();
+                Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
+                    typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
+                    as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
-            var textBuffer = bufferData.GetDataBuffer(x);
-            string text = textBuffer.CurrentSnapshot.GetText();
-            return text;
+                var textBuffer = bufferData.GetDataBuffer(x);
+                string text = textBuffer.CurrentSnapshot.GetText();
+                return text;
+            }
+            catch (Exception e)
+            {
+                string text = File.ReadAllText(document);
+                return text;
+            }
         }
 
         /////////////////////////////////////////////////////////////////////////////

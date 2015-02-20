@@ -32,7 +32,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.SIMPLE_API_CHANGE_INPUT, FilePath.SIMPLE_API_CHANGE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_SIMPLE_API_CHANGE_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_SIMPLE_API_CHANGE_AFTER_EDITING, null, @"files\change_api\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_SIMPLE_API_CHANGE_AFTER_EDITING, FilePath.SIMPLE_API_CHANGE_EDITION, @"\change_api\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }
@@ -81,7 +81,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.METHOD_TO_PROPERTY_IF_INPUT, FilePath.METHOD_TO_PROPERTY_IF_OUTPUT_SELECTION, FilePath.MAIN_CLASS_METHOD_TO_PROPERTY_IF_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_METHOD_TO_PROPERTY_IF_AFTER_EDITING, null, @"files\method_to_property_if\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_METHOD_TO_PROPERTY_IF_AFTER_EDITING, FilePath.METHOD_TO_PROPERTY_IF_EDITION, @"\method_to_property_if\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }
@@ -94,7 +94,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.CHANGE_EXCEPTION_INPUT, FilePath.CHANGE_EXCEPTION_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_EXCEPTION_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_EXCEPTION_AFTER_EDITING, null, @"files\change_exception\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_EXCEPTION_AFTER_EDITING, FilePath.CHANGE_EXCEPTION_EDITION, @"\change_exception\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }
@@ -147,7 +147,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.ADD_CONTEXR_PARAM_INPUT, FilePath.ADD_CONTEXR_PARAM_OUTPUT_SELECTION, FilePath.MAIN_CLASS_ADD_CONTEXT_PARAM_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_ADD_CONTEXT_PARAM_AFTER_EDITING, null, @"files\add_context_param\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_ADD_CONTEXT_PARAM_AFTER_EDITING, FilePath.ADD_CONTEXR_PARAM_EDITION, @"\add_context_param\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }

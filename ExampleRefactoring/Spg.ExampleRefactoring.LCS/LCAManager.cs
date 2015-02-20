@@ -62,6 +62,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
         /// <returns>TreeNode</returns>
         private LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> _ConvertToTreeNode(SyntaxNodeOrToken st)
         {
+            snodeMap.Add(new Node(st.SpanStart, st.Span.End, st), st);
+
             if (st.ChildNodesAndTokens().Count == 0)
             {
                 return new LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>(st);
@@ -73,7 +75,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
                 //childrens.Add(sot);
                 LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> node = _ConvertToTreeNode(sot);
                 children.Add(node);
-                snodeMap.Add(new Node(sot.SpanStart, sot.Span.End, sot), sot);
+                //snodeMap.Add(new Node(sot.SpanStart, sot.Span.End, sot), sot);
             }
 
             LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> tree = new LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>(st, children.ToArray());

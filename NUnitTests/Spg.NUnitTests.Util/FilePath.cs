@@ -21,6 +21,7 @@ namespace Spg.NUnitTests.Util
 
         public static string SIMPLE_API_CHANGE_INPUT = @"json\simple_api_change_input.json";
         public static string SIMPLE_API_CHANGE_OUTPUT_SELECTION = @"json\simple_api_change_output.json";
+        public static string SIMPLE_API_CHANGE_EDITION = @"json\simple_api_change_edition.json";
 
 
         public static string MAIN_CLASS_INTRODUCE_PARAM_ON_IF_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ParameterChangeIf.API\ParameterChangeOnIf.cs";
@@ -52,12 +53,15 @@ namespace Spg.NUnitTests.Util
 
         public static string METHOD_TO_PROPERTY_IF_INPUT = @"json\method_to_property_if_input.json";
         public static string METHOD_TO_PROPERTY_IF_OUTPUT_SELECTION = @"json\method_to_property_if_output.json";
+        public static string METHOD_TO_PROPERTY_IF_EDITION = @"json\method_to_property_if_edition.json";
 
         public static string MAIN_CLASS_CHANGE_EXCEPTION_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ChangeException\ChangeException.cs";
         public static string MAIN_CLASS_CHANGE_EXCEPTION_AFTER_EDITING = @"ChangeException.cs";
 
         public static string CHANGE_EXCEPTION_INPUT = @"json\change_exception_input.json";
         public static string CHANGE_EXCEPTION_OUTPUT_SELECTION = @"json\change_exception_output.json";
+        public static string CHANGE_EXCEPTION_EDITION = @"json\change_exception_edition.json";
+
 
         public static string MAIN_CLASS_CHANGE_PARAM_ON_METHOD_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ChangeParamOnMethod\ChangeParamOnMethod.cs";
         public static string MAIN_CLASS_CHANGE_PARAM_ON_METHOD_EDITING = @"ChangeParamOnMethod.cs";
@@ -82,6 +86,7 @@ namespace Spg.NUnitTests.Util
 
         public static string ADD_CONTEXR_PARAM_INPUT = @"json\add_context_param_input.json";
         public static string ADD_CONTEXR_PARAM_OUTPUT_SELECTION = @"json\add_context_param_output.json";
+        public static string ADD_CONTEXR_PARAM_EDITION = @"json\add_context_param_edition.json";
 
         public static string MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ChangeAnnotationOnClass\ChangeAnnotationOnClass.cs";
         public static string MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_AFTER_EDITING = @"ChangeAnnotationOnClass.cs";
