@@ -137,7 +137,6 @@ namespace SPG.IntelliExtract
           var groupedLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(controller.Locations);
 
             Dictionary<string, IProjectionBuffer> projectionBuffers = new Dictionary<string, IProjectionBuffer>();
-            List<Tuple<string, string>> tuples = new List<Tuple<string, string>>();
             foreach (var item in groupedLocation)
             {
                 var projectionBuffer = _CreateProjectionBuffer(item.Key, item.Value);

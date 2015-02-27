@@ -155,7 +155,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>Syntax nodes correspondents to selection on source code</returns>
         private IEnumerable<SyntaxNode> SyntaxNodesMatchingFilter(string sourceCode, List<TRegion> list)
         {
-            List<SyntaxNode> nodes = RegionManager.SyntaxElementsSingleSourceClassSelection(sourceCode, list);
+            List<SyntaxNode> nodes = RegionManager.SyntaxNodesForFiltering(sourceCode, list);
             return nodes;
         }
 

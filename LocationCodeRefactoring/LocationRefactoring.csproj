@@ -125,10 +125,10 @@
     <Compile Include="Spg.LocationRefactor.Operator\Map\StatementMap.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Merge.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Pair.cs" />
-    <Compile Include="Spg.LocationRefactor.Transformation\Spg.LocationRefactor.Predicate\Contains.cs" />
-    <Compile Include="Spg.LocationRefactor.Transformation\Spg.LocationRefactor.Predicate\EndsWith.cs" />
-    <Compile Include="Spg.LocationRefactor.Transformation\Spg.LocationRefactor.Predicate\IPredicate.cs" />
-    <Compile Include="Spg.LocationRefactor.Transformation\Spg.LocationRefactor.Predicate\PredicateFactory.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\Contains.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\EndsWith.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\IPredicate.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\PredicateFactory.cs" />
     <Compile Include="Spg.LocationRefactor.Program\Prog.cs" />
     <Compile Include="Spg.LocationRefactor.Synthesize\Synthesizer.cs" />
     <Compile Include="Spg.LocationRefactor.TextRegion\TRegion.cs" />
@@ -138,6 +138,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\ProgramGeneratedEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Transformation\CodeTransformation.cs" />
+    <Compile Include="Spg.LocationRefactor.Transformation\MapedLocationBasedTransformationManager.cs" />
     <Compile Include="Spg.LocationRefactor.Transformation\Transformation.cs" />
     <Compile Include="Spg.LocationRefactor.Transformation\TransformationManager.cs" />
   </ItemGroup>

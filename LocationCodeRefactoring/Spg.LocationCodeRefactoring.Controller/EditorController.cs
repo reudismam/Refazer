@@ -293,7 +293,6 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog, List<Tuple<string, string>> sourceFiles)
         {
-            LocationExtractor extractor = new LocationExtractor(SolutionPath);
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
 
             SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
@@ -324,7 +323,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             List<SyntaxNode> lcas = new List<SyntaxNode>();
             foreach (var item in groups)
             {
-                var result = RegionManager.SyntaxElementsSingleSourceClassSelection(item.Key, item.Value);
+                var result = RegionManager.SyntaxNodesForFiltering(item.Key, item.Value);
                 lcas.AddRange(result);
             }
             foreach (Tuple<string, string> source in sourceFiles)
@@ -456,8 +455,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         {
             FillEditedLocations();
             LocationExtractor extractor = new LocationExtractor(SolutionPath);
-            List<Transformation> transformations = extractor.TransformProgram(CurrentViewCodeBefore, CurrentViewCodeAfter);
-            this.SourceTransformations = transformations;
+            List<Transformation> transformations = extractor.TransformProgram();
+            SourceTransformations = transformations;
 
             SynthesizedProgram synthesized = extractor.TransformationProgram(SelectedLocations);
 

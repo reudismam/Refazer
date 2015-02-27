@@ -6,8 +6,6 @@ using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
 
 namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
 {
@@ -157,6 +155,77 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
                 parent = parent.Parent;
             }
             return parent.Parent;
+        }
+
+        public static List<SyntaxNodeOrToken> NodesBetweenStartAndEndPosition(SyntaxTree tree, int startPosition, int end)
+        {
+            List<SyntaxNodeOrToken> nodesSelection = new List<SyntaxNodeOrToken>();
+            var descedentsBegin = from node in tree.GetRoot().DescendantNodesAndTokens()
+                                  where startPosition <= node.SpanStart && node.Span.End <= end
+                                  select node;
+            nodesSelection.AddRange(descedentsBegin);
+            return nodesSelection;
+        }
+
+        /// <summary>
+        /// Descendant nodes with the start position, end position and syntax kind specified
+        /// </summary>
+        /// <param name="tree">Syntax tree</param>
+        /// <param name="start">Start position</param>
+        /// <param name="end">End position</param>
+        /// <param name="syntaxKind">Syntax kind</param>
+        /// <returns>Descendant node with the start position, end position and syntax kind specified</returns>
+        private static IEnumerable<SyntaxNode> NodesWithSameStartEndAndKind(SyntaxNode tree, int start, int end,
+            SyntaxKind syntaxKind)
+        {
+            var decedents = from snode in tree.DescendantNodes()
+                            where snode.Span.Start == start && snode.Span.End == end && snode.CSharpKind() == syntaxKind
+                            select snode;
+            return decedents;
+        }
+
+        /// <summary>
+        /// Descendant nodes with the syntax kind specified
+        /// </summary>
+        /// <param name="tree">Node representation of the syntax tree</param>
+        /// <param name="syntaxKind">Syntax node to be considered</param>
+        /// <returns>Descendant nodes with the syntax kind specified</returns>
+        public static IEnumerable<SyntaxNode> NodesWithTheSameSyntaxKind(SyntaxNode tree, SyntaxKind syntaxKind)
+        {
+            var treeDescendents = from snode in tree.DescendantNodes()
+                                  where snode.CSharpKind() == syntaxKind
+                                  select snode;
+            return treeDescendents;
+        }
+
+        /// <summary>
+        /// Descendant node with the start position specified
+        /// </summary>
+        /// <param name="tree">Syntax tree</param>
+        /// <param name="startPosition">Start position</param>
+        /// <returns>Descendant node with the start position specified</returns>
+        public static IEnumerable<SyntaxNodeOrToken> NodesWithTheSameStartPosition(SyntaxTree tree, int startPosition)
+        {
+            List<SyntaxNodeOrToken> nodesSelection = new List<SyntaxNodeOrToken>();
+            var descedentsBegin = from node in tree.GetRoot().DescendantNodesAndTokens()
+                                  where node.SpanStart == startPosition
+                                  select node;
+            nodesSelection.AddRange(descedentsBegin);
+            return nodesSelection;
+        }
+
+        /// <summary>
+        /// Descendant node with the end position specified
+        /// </summary>
+        /// <param name="tree">Syntax tree</param>
+        /// <param name="end">End position</param>
+        /// <returns>Descendant node with the end position specified</returns>
+        public static IEnumerable<SyntaxNodeOrToken> NodesWithTheSameEndPosition(SyntaxTree tree, int end)
+        {
+            var descedentsEnd = from node in tree.GetRoot().DescendantNodesAndTokens()
+                                where node.Span.End == end
+                                select node;
+            return descedentsEnd;
         }
     }
 }

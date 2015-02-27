@@ -45,7 +45,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.INTRODUCE_PARAM_ON_IF_INPUT, FilePath.INTRODUCE_PARAM_ON_IF_OUTPUT_SELECTION, FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_AFTER_EDITING, null, @"files\parameter_change_on_if\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_AFTER_EDITING, FilePath.INTRODUCE_PARAM_ON_IF_EDITION, @"\parameter_change_on_if\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }
@@ -58,7 +58,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.METHOD_CALL_TO_IDENTIFIER_INPUT, FilePath.METHOD_CALL_TO_IDENTIFIER_OUTPUT_SELECTION, FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH_AFTER_EDITING, null, @"files\method_call_to_identifier\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH_AFTER_EDITING, FilePath.METHOD_CALL_TO_IDENTIFIER_EDITION, @"\method_call_to_identifier\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }
@@ -71,7 +71,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.PARAMETER_TO_CONSTANT_VALUE_INPUT, FilePath.PARAMETER_TO_CONSTANT_VALUE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_AFTER_EDITING, null, @"files\parameter_to_constant_value\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_AFTER_EDITING, FilePath.PARAMETER_TO_CONSTANT_VALUE_EDITION, @"\parameter_to_constant_value\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }
@@ -117,7 +117,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.PARAMETER_CHANGE_ON_METHOD_INPUT, FilePath.PARAMETER_CHANGE_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_CHANGE_ON_METHOD_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_PARAMETER_CHANGE_ON_METHOD_AFTER_EDITING, null, @"files\parameter_change_on_method\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_PARAMETER_CHANGE_ON_METHOD_AFTER_EDITING, FilePath.PARAMETER_CHANGE_ON_METHOD_EDITION, @"\parameter_change_on_method\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }
@@ -127,7 +127,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.RETURN_TO_GET_INPUT, FilePath.RETURN_TO_GET_OUTPUT_SELECTION, FilePath.MAIN_CLASS_RETURN_TO_GET_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_RETURN_TO_GET_AFTER_EDITING, null, @"files\return_to_get\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_RETURN_TO_GET_AFTER_EDITING,  FilePath.RETURN_TO_GET_EDITION, @"\return_to_get\");
 
             Assert.IsTrue(passLocation && passTransformation);
        }
@@ -137,7 +137,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.ADD_IO_PARAM_INPUT, FilePath.ADD_IO_PARAM_OUTPUT_SELECTION, FilePath.MAIN_CLASS_ADD_IO_PARAM_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_ADD_IO_PARAM_AFTER_EDITING, null, @"files\add_io_param\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_ADD_IO_PARAM_AFTER_EDITING, FilePath.ADD_IO_PARAM_EDITION, @"\add_io_param\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }

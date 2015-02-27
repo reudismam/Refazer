@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LeastCommonAncestor;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -90,6 +91,71 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
             LCA<SyntaxNodeOrToken> lca = new LCA<SyntaxNodeOrToken>();
             return lca.LeastCommonAncestor(root.ToFullString(), rootNode, x, y).AsNode();
         }
+
+        /// <summary>
+        /// Least common ancestor of nodes in the tree
+        /// </summary>
+        /// <param name="nodes">Nodes in the tree</param>
+        /// <param name="tree">Tree</param>
+        /// <returns>Least common ancestor of nodes in the tree</returns>
+        public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNode> nodes, SyntaxTree tree)
+        {
+            if (nodes == null) throw new ArgumentNullException("nodes");
+            if (tree == null) throw new ArgumentNullException("tree");
+            if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
+
+            LCAManager lcaCalculator = LCAManager.GetInstance();
+            SyntaxNodeOrToken lca = nodes[0];
+            for (int i = 1; i < nodes.Count; i++)
+            {
+                SyntaxNodeOrToken node = nodes[i];
+                lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+            }
+            return lca;
+        }
+
+        /// <summary>
+        /// Least common ancestor of nodes in the tree
+        /// </summary>
+        /// <param name="nodes">Nodes in the tree</param>
+        /// <param name="tree">Tree</param>
+        /// <returns>Least common ancestor of nodes in the tree</returns>
+        public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNodeOrToken> nodes, SyntaxTree tree)
+        {
+            if (nodes == null) throw new ArgumentNullException("nodes");
+            if (tree == null) throw new ArgumentNullException("tree");
+            if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
+
+            LCAManager lcaCalculator = LCAManager.GetInstance();
+            SyntaxNodeOrToken lca = nodes[0];
+            for (int i = 1; i < nodes.Count; i++)
+            {
+                SyntaxNodeOrToken node = nodes[i];
+                lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+            }
+            return lca;
+        }
+
+        public List<SyntaxNode> LeastCommonAncestors(List<Tuple<ListNode, ListNode>> examples, string sourceCode)
+        {
+            List<SyntaxNode> syntaxList = new List<SyntaxNode>();
+            foreach (var example in examples)
+            {
+                List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+
+                if (example.Item2.List.Any())
+                {
+                    list.Add(example.Item2.List[0]);
+                    list.Add(example.Item2.List[example.Item2.Length() - 1]);
+                    SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+                    SyntaxNodeOrToken snode = LeastCommonAncestor(list, tree);
+                    syntaxList.Add(snode.AsNode());
+                }
+            }
+            return syntaxList;
+        }
+
+
 
         public class Node
         {
