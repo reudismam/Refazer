@@ -341,7 +341,10 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 foreach (var codeLocation in item.Value)
                 {
                     codeLocation.Region.Parent = iparent;
-                    inputRegions.Add(codeLocation.Region);
+                    if (controller.FilesOpened.ContainsKey(item.Key))
+                    {
+                        inputRegions.Add(codeLocation.Region);
+                    }
                 }
 
                 string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);

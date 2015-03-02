@@ -1,19 +1,15 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.ComponentModel.Design;
-using Microsoft.VisualStudio.Shell;
-using LocateAdornment;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Editor;
 using EnvDTE;
+using LocateAdornment;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
-using Microsoft.VisualStudio.ComponentModelHost;
-using Microsoft.VisualStudio.Shell.Interop;
-using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
+using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace SPG.IntelliLocation
 {
@@ -130,6 +126,7 @@ namespace SPG.IntelliLocation
             EditorController.GetInstance().CurrentProject = project.Name;
             EditorController.GetInstance().SolutionPath = fullName;
             EditorController.GetInstance().CurrentViewCodePath = document.FullName;
+            EditorController.GetInstance().FilesOpened[document.FullName] = true;
 
             Connector.Execute(viewHost);
         }

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
-using Microsoft.SqlServer.Server;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.NUnitTests.Location;
 using Spg.NUnitTests.Util;
@@ -192,6 +188,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
 
             var dicionarySelection = JsonUtil<Dictionary<string, List<Selection>>>.Read(editionFile);
             controller.EditedLocations = dicionarySelection;
+            controller.FilesOpened[dicionarySelection.First().Key] = true;
 
             controller.Refact();
 

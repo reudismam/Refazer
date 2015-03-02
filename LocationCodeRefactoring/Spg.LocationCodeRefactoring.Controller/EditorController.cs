@@ -89,7 +89,9 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public Dictionary<string, IProjectionBuffer> ProjectionBuffers { get; set; }
 
-        public Dictionary<string, List<Selection>> EditedLocations { get; set; } 
+        public Dictionary<string, List<Selection>> EditedLocations { get; set; }
+
+        public Dictionary<string, bool> FilesOpened { get; set; }   
 
 
         /// <summary>
@@ -116,6 +118,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             this._programsRefactoredObserver = new List<IProgramRefactoredObserver>();
             this._locationsTransformedObserver = new List<ILocationsTransformedObserver>();
             this._locationsObversers = new List<ILocationsObserver>();
+            this.FilesOpened = new Dictionary<string, bool>();
         }
 
         /// <summary>
@@ -291,7 +294,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             NotifyLocationsObservers(Locations);
         }
 
-        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog, List<Tuple<string, string>> sourceFiles)
+        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog)
         {
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
 
