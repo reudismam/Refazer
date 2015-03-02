@@ -25,9 +25,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// <summary>
         /// Transform selection regions
         /// </summary>
-        /// <param name="codeBefore">Regions before edition</param>
-        /// <param name="codeAfter">Regions after edition</param>
-        /// <returns></returns>
+        /// <returns>List of transformed locations</returns>
         public override List<Transformation> TransformProgram()
         {
             RegionManager rManager = RegionManager.GetInstance();
@@ -57,7 +55,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// <param name="program">Synthesized program</param>
         /// <param name="locations">Locations</param>
         /// <returns>Transformed program</returns>
-        public virtual string Transform(SynthesizedProgram program, List<CodeLocation> locations)
+        public override string Transform(SynthesizedProgram program, List<CodeLocation> locations)
         {
             string text = "";
             SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code

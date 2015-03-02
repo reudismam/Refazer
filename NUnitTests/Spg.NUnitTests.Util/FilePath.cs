@@ -72,6 +72,7 @@ namespace Spg.NUnitTests.Util
 
         public static string CHANGE_PARAM_ON_METHOD_INPUT = @"json\change_param_on_method_input.json";
         public static string CHANGE_PARAM_ON_METHOD_OUTPUT_SELECTION = @"json\change_param_on_method_output.json";
+        public static string CHANGE_PARAM_ON_METHOD_EDITION = @"json\change_param_on_method_edition.json";
 
         public static string MAIN_CLASS_RETURN_TO_GET_PATH = @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\ExampleProject\ExampleProject\Company.ExampleProject.ReturnToGet\ReturnToGet.cs";
         public static string MAIN_CLASS_RETURN_TO_GET_AFTER_EDITING = @"ReturnToGet.cs";

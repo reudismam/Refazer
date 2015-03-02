@@ -77,8 +77,8 @@ namespace LocateAdornment
         static public void Update(IWpfTextViewHost host, List<Transformation> transformations)
         {
             IWpfTextView view = host.TextView;
-            LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
-            ITextSnapshot current = view.TextBuffer.CurrentSnapshot;
+            //LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
+            //ITextSnapshot current = view.TextBuffer.CurrentSnapshot;
 
             EditorController controller = EditorController.GetInstance();
             string newText = "";

@@ -168,8 +168,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// <summary>
         /// Decompose location
         /// </summary>
-        /// <param name="codeBefore">Code before transformation</param>
-        /// <param name="codeAfter">Code after transformation</param>
         /// <returns>Locations</returns>
         public virtual  List<Tuple<TRegion, TRegion>> ExtractEditedRegions()
         {

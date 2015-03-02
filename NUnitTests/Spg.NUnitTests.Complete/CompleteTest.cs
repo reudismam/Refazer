@@ -107,7 +107,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         {
             bool passLocation = LocationTest.LocaleTest(FilePath.CHANGE_PARAM_ON_METHOD_INPUT, FilePath.CHANGE_PARAM_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_PARAM_ON_METHOD_PATH);
 
-            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_PARAM_ON_METHOD_EDITING, null, @"files\change_param_on_method\");
+            bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_PARAM_ON_METHOD_EDITING, FilePath.CHANGE_PARAM_ON_METHOD_EDITION, @"\change_param_on_method\");
 
             Assert.IsTrue(passLocation && passTransformation);
         }

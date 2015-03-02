@@ -174,7 +174,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             }
 
             int j = i;
-            while (re.Start + re.Length >= node.Span.Start)
+            while (re.Start + re.Length >= node.Span.End)
             {
                 if (j == list.Count)
                     break;
@@ -357,7 +357,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                             Parent = parent,
                             Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
                         };
-                        MessageBox.Show(tregion.Text);
+                        //MessageBox.Show(tregion.Text);
 
                         outputRegions.Add(tregion);
                     }
