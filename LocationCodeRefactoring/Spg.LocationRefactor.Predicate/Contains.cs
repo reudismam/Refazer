@@ -2,9 +2,15 @@
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using System;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Predicate
 {
+    /// <summary>
+    /// Predicate contains
+    /// </summary>
     public class Contains: IPredicate
     {
         /// <summary>

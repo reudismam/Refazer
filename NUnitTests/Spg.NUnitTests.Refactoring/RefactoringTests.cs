@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;

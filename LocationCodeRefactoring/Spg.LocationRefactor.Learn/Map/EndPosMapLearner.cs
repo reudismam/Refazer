@@ -1,12 +1,15 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
-using System;
-using System.Collections.Generic;
 
-namespace Spg.LocationRefactor.Learn
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
 {
     public class EndPosMapLearner: MapLearnerBase
     {
@@ -27,18 +30,18 @@ namespace Spg.LocationRefactor.Learn
         /// Map for EndPosMap
         /// </summary>
         /// <returns>Map</returns>
-        protected override MapBase GetMap()
+        protected override MapBase GetMap(List<TRegion> list)
         {
-            return new EndPosMap();
+            return new EndPosMap(list);
         }
 
         /// <summary>
         /// Returns a new EndPosFilter
         /// </summary>
         /// <returns></returns>
-        protected override FilterLearnerBase GetFilter()
+        protected override FilterLearnerBase GetFilter(List<TRegion> list)
         {
-            return new EndPosFilterLearner(); 
+            return new EndPosFilterLearner(list); 
         }
 
         /// <summary>
@@ -56,7 +59,7 @@ namespace Spg.LocationRefactor.Learn
         /// </summary>
         /// <param name="sourceCode">Source code</param>
         /// <returns>Syntax nodes</returns>
-        public override List<SyntaxNode> SyntaxNodes(string sourceCode)
+        public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
             throw new NotImplementedException();
         }

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Synthesis;
 
-namespace Spg.ExampleRefactoring.Expression
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
 {
     /// <summary>
     /// ConstruStr expression

@@ -4,10 +4,16 @@ using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
-using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Operator.Filter;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 
 namespace Spg.LocationRefactor.Operator
 {
@@ -64,6 +70,11 @@ namespace Spg.LocationRefactor.Operator
             throw new NotImplementedException();
         }
 
+        public ListNode Execute(SyntaxNode input)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Retrieve region
         /// </summary>
@@ -73,9 +84,9 @@ namespace Spg.LocationRefactor.Operator
         {
             List<TRegion> tRegions = new List<TRegion>();
 
-            FilterBase filter = (FilterBase)maps[0].sequenceExpression.ioperator;
+            FilterBase filter = (FilterBase)maps[0].SequenceExpression.Ioperator;
 
-            TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.predicate.r1, filter.predicate.r2);
+            TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.Predicate.r1, filter.Predicate.r2);
             List<Token> regex = tokens.Regex();
 
             List<TRegion> filtereds = filter.RetrieveRegion(input);
@@ -83,7 +94,7 @@ namespace Spg.LocationRefactor.Operator
             SynthesizedProgram synt = new SynthesizedProgram();
             foreach (MapBase map in maps)
             {
-                Pair pair = (Pair) map.scalarExpression.ioperator;
+                Pair pair = (Pair) map.ScalarExpression.Ioperator;
                 synt.Add(pair.expression);
             }
 
@@ -94,7 +105,7 @@ namespace Spg.LocationRefactor.Operator
                 Tuple<String, String> tu = Tuple.Create(input.Substring(r.Start, r.Length), input.Substring(r.Start, r.Length));
                 Tuple<ListNode, ListNode> tnodes = ASTProgram.Example(tu);
 
-                ListNode lnode = ASTProgram.RetrieveNodes(tnodes, synt.solutions);
+                ListNode lnode = ASTProgram.RetrieveNodes(tnodes, synt.Solutions);
 
                 List<int> matches= ASTManager.Matches(tnodes.Item1, lnode, new NodeComparer());
                 if (matches.Count == 1) {
@@ -120,6 +131,11 @@ namespace Spg.LocationRefactor.Operator
             return tRegions;
         }
 
+        public List<TRegion> RetrieveRegion(SyntaxNode input)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// String representation
         /// </summary>
@@ -134,6 +150,11 @@ namespace Spg.LocationRefactor.Operator
             s += ")";
 
             return s;
+        }
+
+        public List<TRegion> RetrieveRegion(SyntaxNode input, string sourceCode)
+        {
+            throw new NotImplementedException();
         }
     }
 }

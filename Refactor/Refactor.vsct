@@ -42,7 +42,7 @@
     <Groups>
 
       <Group guid="guidRefactorCmdSet" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
       </Group>
       
 
@@ -65,7 +65,7 @@
         <Parent guid="guidRefactorCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Refactor</ButtonText>
+          <ButtonText>IntelliRefactor</ButtonText>
         </Strings>
       </Button>
 

@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
-using Microsoft.CodeAnalysis.FindSymbols;
 
-namespace Spg.ExampleRefactoring.Workspace
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
 {
     /// <summary>
     /// Manager the workspace
     /// </summary>
     public class WorkspaceManager
     {
-
         /// <summary>
         /// Return .cs files in the solution
         /// </summary>
         /// <param name="solutionPath">Solution path</param>
         /// <returns>.cs files</returns>
-        public List<Tuple<string, string>> GetSourcesFiles(string solutionPath = "")
+        public List<Tuple<string, string>> GetSourcesFiles(string projectName, string solutionPath)
         {
             //SymbolTable(solutionPath);
             List<Tuple<string, string>> sourceFiles = new List<Tuple<string, string>>();
@@ -32,39 +30,46 @@ namespace Spg.ExampleRefactoring.Workspace
             foreach (var projectId in originalSolution.ProjectIds)
             {
                 var project = newSolution.GetProject(projectId);
-                //remove
-                var compilation = project.GetCompilationAsync().Result;
-                var globalNamespace = compilation.GlobalNamespace;
-                var diagnostics = compilation.GetDiagnostics();
-                //remove
-                foreach (var documentId in project.DocumentIds)
+                if (project.Name.Equals(projectName))
                 {
-                    var document = newSolution.GetDocument(documentId);
-                    
-                    ////remove
-                    //SyntaxTree tree;
-                    //document.TryGetSyntaxTree(out tree);
-                    //SemanticModel model2 = compilation.GetSemanticModel(tree);
-                    ////SemanticModel model;
-                    ////document.TryGetSemanticModel(out model);
-                    //foreach (ISymbol symbol in model2.LookupSymbols(241))
-                    //{
-                    //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
-                    //    {
-                    //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
-                    //        var rlts = symbol.DeclaringSyntaxReferences;
-                    //    }
-                    //}
-                    ////remove
+                    //remove
+                    var compilation = project.GetCompilationAsync().Result;
+                    var globalNamespace = compilation.GlobalNamespace;
+                    var diagnostics = compilation.GetDiagnostics();
+                    //remove
+                    foreach (var documentId in project.DocumentIds)
+                    {
+                        var document = newSolution.GetDocument(documentId);
 
-                    StreamReader sr = new
-                    StreamReader(document.FilePath);
+                        ////remove
+                        //SyntaxTree tree;
+                        //document.TryGetSyntaxTree(out tree);
+                        //SemanticModel model2 = compilation.GetSemanticModel(tree);
+                        ////SemanticModel model;
+                        ////document.TryGetSemanticModel(out model);
+                        //foreach (ISymbol symbol in model2.LookupSymbols(241))
+                        //{
+                        //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
+                        //    {
+                        //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
+                        //        var rlts = symbol.DeclaringSyntaxReferences;
+                        //    }
+                        //}
+                        ////remove
 
-                    String text = sr.ReadToEnd();
+                        try
+                        {
+                            StreamReader sr = new StreamReader(document.FilePath);
+                            string text = sr.ReadToEnd();
 
-                    //text = text.Replace("\r\n", "\n");
-                    Tuple<string, string> tuple = Tuple.Create(text, document.FilePath);
-                    sourceFiles.Add(tuple);
+                            Tuple<string, string> tuple = Tuple.Create(text, document.FilePath);
+                            sourceFiles.Add(tuple);
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Could not load document on the path: " + document.FilePath);
+                        }
+                    }
                 }
             }
 
@@ -75,6 +80,18 @@ namespace Spg.ExampleRefactoring.Workspace
         {
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(solutionPath).Result;
+        }
+
+        /// <summary>
+        /// Source files in solution on the format source code, source code path
+        /// </summary>
+        /// <param name="solutionPath">Solution path</param>
+        /// <returns>List of source file in the solution</returns>
+        public List<Tuple<string, string>> SourceFiles(string projectName, string solutionPath)
+        {
+            //WorkspaceManager manager = new WorkspaceManager();
+            List<Tuple<string, string>> sourceFiles = GetSourcesFiles(projectName, solutionPath);
+            return sourceFiles;
         }
 
         private static void ReportMethods(INamespaceSymbol namespaceSymbol)
@@ -109,51 +126,3 @@ namespace Spg.ExampleRefactoring.Workspace
         }
     }
 }
-
-//public void GetProjects(string solutionPath = "")
-//{
-//    var workspace = MSBuildWorkspace.Create();
-//    var solution = workspace.OpenSolutionAsync(solutionPath).Result;
-
-//    var originalSolution = workspace.CurrentSolution;
-
-//    // Declare a variable to store the intermediate solution snapshot at each step.
-//    Solution newSolution = originalSolution;
-
-//    foreach (var projectId in originalSolution.ProjectIds)
-//    {
-//        // Look up the snapshot for the original project in the latest forked solution.
-//        var project = newSolution.GetProject(projectId);
-//        foreach (var documentId in project.DocumentIds)
-//        {
-//            // Look up the snapshot for the original document in the latest forked solution.
-//            var document = newSolution.GetDocument(documentId);
-//            //VersionStamp stamp;
-//            //var text = document.TryGetTextVersion(out stamp);
-
-//            StreamReader sr = new
-//            StreamReader(document.FilePath);
-
-//            String text = sr.ReadToEnd();
-
-//            text = text.Replace("\r\n", "\n");
-
-//        }
-
-
-//        /*//var project = solution.Projects.Where(p => p.Name == "ExampleProject").First();
-//        var compilation = project.GetCompilationAsync().Result;
-//        //var programClass = compilation.GetTypeByMetadataName("HelloWorld.Program");
-//        DocumentId id = DocumentId.CreateNewId(project.Id, "HelloWorld.Program");
-//        var result = project.GetDocument(id);
-
-//        //var barMethod = programClass.GetMembers("using");
-//        //var fooMethod = programClass.GetMembers();
-
-//        //var barResult = SymbolFinder.FindReferencesAsync(barMethod.First(), solution).Result.ToList();
-//        //var fooResult = SymbolFinder.FindReferencesAsync(fooMethod.First(), solution).Result.ToList();
-
-//        //Debug.Assert(barResult.First().Locations.Count() == 1);
-//        //Debug.Assert(fooResult.First().Locations.Count() == 0);*/
-//    }
-//}

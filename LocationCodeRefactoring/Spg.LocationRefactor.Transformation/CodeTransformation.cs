@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Spg.LocationRefactor.Location;
 
 namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
@@ -23,7 +19,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// </summary>
         /// <returns>Before and after transformation</returns>
         public Tuple<string, string> transformation { get; set; }
-
 
         /// <summary>
         /// Constructor

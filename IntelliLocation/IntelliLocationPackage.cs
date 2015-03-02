@@ -1,20 +1,19 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
-using Microsoft.Win32;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using LocateAdornment;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Editor;
 using EnvDTE;
-using EnvDTE80;
-using Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Shell.Interop;
+using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 
 namespace SPG.IntelliLocation
 {
@@ -46,6 +45,8 @@ namespace SPG.IntelliLocation
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
+
+
         public IntelliLocationPackage()
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
@@ -112,20 +113,57 @@ namespace SPG.IntelliLocation
                 Console.WriteLine("No text view is currently open");
                 return;
             }
-            IWpfTextViewHost viewHost;
             object holder;
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
-            viewHost = (IWpfTextViewHost)holder;
+            var viewHost = (IWpfTextViewHost)holder;
 
             DTE dte; 
             dte = (DTE)GetService(typeof(DTE)); // we have access to GetService here.
             string fullName = dte.Solution.FullName;
+            var document = dte.ActiveDocument;
 
-            EditorController.GetInstance().solutionPath = fullName;
+            var proj = dte.Solution.FindProjectItem(document.FullName);
+
+            var project = proj.ContainingProject;
+
+            EditorController.GetInstance().CurrentProject = project.Name;
+            EditorController.GetInstance().SolutionPath = fullName;
+            EditorController.GetInstance().CurrentViewCodePath = document.FullName;
 
             Connector.Execute(viewHost);
         }
+
+        //public void Nothing(string document)
+        //{
+        //    var rdt = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
+        //    IEnumRunningDocuments value;
+        //    rdt.GetRunningDocumentsEnum(out value);
+
+        //    IVsHierarchy hierarchy;
+        //    uint pitemid;
+        //    IntPtr ppunkDocData;
+        //    uint pdwCookie;
+        //    rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_CantSave, document, out hierarchy, out pitemid,
+        //        out ppunkDocData, out pdwCookie);
+
+        //    string pbstrMkDocument;
+        //    uint pwdReadLooks, pwdEditLocks, pgrfRDTFlags;
+        //    var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
+        //        out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
+
+        //    IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
+
+        //    //var bufferData = (IVsEditorAdaptersFactoryService)GetService(typeof(IVsEditorAdaptersFactoryService));
+        //    IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+        //    IVsEditorAdaptersFactoryService bufferData = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+        //    Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
+        //        typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
+        //        as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
+        //    var textBuffer = bufferData.GetDataBuffer(x);
+        //    string text = textBuffer.CurrentSnapshot.GetText();
+        //}
 
     }
 }

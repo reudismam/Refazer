@@ -1,14 +1,24 @@
-﻿using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Operator;
-using Spg.LocationRefactor.Predicate;
-using Spg.LocationRefactor.Program;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Predicate;
+using Spg.LocationRefactor.TextRegion;
 
-namespace Spg.LocationRefactor.Learn
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
 {
+    /// <summary>
+    /// Merge Learner
+    /// </summary>
     public class MergeLearner: ILearn
     {
         /// <summary>
@@ -26,8 +36,10 @@ namespace Spg.LocationRefactor.Learn
 
             List<IExpression> X = new List<IExpression>();
 
-            Predicate.IPredicate pred = GetPredicate();
-            FilterLearnerBase S = GetFilter();
+            IPredicate pred = GetPredicate();
+            EditorController contoller = EditorController.GetInstance();
+            List<TRegion> list = contoller.SelectedLocations;
+            FilterLearnerBase S = GetFilter(list);
             S.predicate = pred;
 
             List<Prog> predicates = S.Learn(examples);
@@ -39,13 +51,59 @@ namespace Spg.LocationRefactor.Learn
                     Pair pair = new Pair();
                     pair.expression = (SubStr)e;
 
-                    scalar.ioperator = pair;
+                    scalar.Ioperator = pair;
 
-                    MapBase map = GetMap();
-                    map.scalarExpression = scalar;
-                    map.sequenceExpression = predicate;
+                    
+                    MapBase map = GetMap(list);
+                    map.ScalarExpression = scalar;
+                    map.SequenceExpression = predicate;
                     Prog prog = new Prog();
-                    prog.ioperator = map;
+                    prog.Ioperator = map;
+                    programs.Add(prog);
+                }
+            }
+            return programs;
+        }
+
+        /// <summary>
+        /// Learn
+        /// </summary>
+        /// <param name="positiveExamples">Positive examples</param>
+        /// <param name="negativeExamples">Negative examples</param>
+        /// <returns>Location programs</returns>
+        public List<Prog> Learn(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples)
+        {
+            List<Prog> programs = new List<Prog>();
+            List<Tuple<ListNode, ListNode>> Q = MapBase.Decompose(positiveExamples);
+
+            ASTProgram P = new ASTProgram();
+            SynthesizedProgram h = P.GenerateStringProgram(positiveExamples).Single();
+
+            List<IExpression> X = new List<IExpression>();
+
+            IPredicate pred = GetPredicate();
+            EditorController contoller = EditorController.GetInstance();
+            List<TRegion> list = contoller.SelectedLocations;
+            FilterLearnerBase S = GetFilter(list);
+            S.predicate = pred;
+
+            List<Prog> predicates = S.Learn(positiveExamples);
+            foreach (IExpression e in X)
+            {
+                foreach (Prog predicate in predicates)
+                {
+                    Prog scalar = new Prog();
+                    Pair pair = new Pair();
+                    pair.expression = (SubStr)e;
+
+                    scalar.Ioperator = pair;
+
+
+                    MapBase map = GetMap(list);
+                    map.ScalarExpression = scalar;
+                    map.SequenceExpression = predicate;
+                    Prog prog = new Prog();
+                    prog.Ioperator = map;
                     programs.Add(prog);
                 }
             }
@@ -64,16 +122,16 @@ namespace Spg.LocationRefactor.Learn
         /// Map
         /// </summary>
         /// <returns>Map</returns>
-        protected MapBase GetMap() {
-            return new MethodMap();
+        protected MapBase GetMap(List<TRegion> list) {
+            return new MethodMap(list);
         }
 
         /// <summary>
         /// Filter
         /// </summary>
         /// <returns>Filter</returns>
-        protected FilterLearnerBase GetFilter() {
-            return new MethodFilterLearner();
+        protected FilterLearnerBase GetFilter(List<TRegion> list) {
+            return new StatementFilterLearner(list);
         }
     }
 }

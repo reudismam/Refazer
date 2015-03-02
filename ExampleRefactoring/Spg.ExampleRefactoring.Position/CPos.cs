@@ -1,6 +1,7 @@
-﻿using Spg.ExampleRefactoring.Synthesis;
+﻿using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Position;
 
-namespace Spg.ExampleRefactoring.Position
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Position
 {
     /// <summary>
     /// CPos positioning element
@@ -10,14 +11,14 @@ namespace Spg.ExampleRefactoring.Position
         /// <summary>
         /// position inside the string.
         /// </summary>
-        public int position {get; set;}
+        public int Position {get; set;}
 
         /// <summary>
         /// Construct a position expression
         /// </summary>
         /// <param name="position">Position that the expression represents</param>
         public CPos(int position) {
-            this.position = position;
+            this.Position = position;
         }
 
 
@@ -32,12 +33,12 @@ namespace Spg.ExampleRefactoring.Position
                 return -1;
             }
 
-            if(position < 0){
-                int index = input.Length() + position + 1;
+            if(Position < 0){
+                int index = input.Length() + Position + 1;
                 return index;
             }
 
-            return position;
+            return Position;
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Spg.ExampleRefactoring.Position
         /// <returns>String representation of this object</returns>
         public override string ToString()
         {
-            return "CPos(" + this.position + ")";
+            return "CPos(" + this.Position + ")";
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace Spg.ExampleRefactoring.Position
             }
 
             CPos another = obj as CPos;
-            return another.position == this.position;
+            return another.Position == this.Position;
         }
 
         /// <summary>

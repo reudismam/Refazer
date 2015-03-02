@@ -1,23 +1,36 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Operator;
-using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 
 namespace Spg.LocationRefactor.Learn
 {
+    /// <summary>
+    /// Learner
+    /// </summary>
     public class Learner
     {
+        /// <summary>
+        /// Map
+        /// </summary>
+        /// <returns>map</returns>
         public MapLearnerBase map { get; set; }
 
-        public SyntaxKind syntaxKind { get; set; }
 
-        public Learner(SyntaxKind syntaxKind)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Learner()
         {
-            this.syntaxKind = syntaxKind;
-            map = new StatementMapLearner(syntaxKind);
+
+            map = new StatementMapLearner();
         }
 
         /// <summary>
@@ -35,6 +48,26 @@ namespace Spg.LocationRefactor.Learn
             foreach (ILearn learn in learns)
             {
                 programs = learn.Learn(examples);
+            }
+            return programs;
+        }
+
+        /// <summary>
+        /// Learn sequence region
+        /// </summary>
+        /// <param name="positiveExamples">Positive examples</param>
+        /// <param name="negativeExamples">Negative examples</param>
+        /// <returns>List of programs that match the example pattern</returns>
+        internal List<Prog> LearnSeqRegion(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples)
+        {
+            List<Prog> programs = new List<Prog>();
+            List<IOperator> operators = new List<IOperator>();
+            List<ILearn> learns = new List<ILearn>();
+
+            learns.Add(map);
+            foreach (ILearn learn in learns)
+            {
+                programs = learn.Learn(positiveExamples, negativeExamples);
             }
             return programs;
         }

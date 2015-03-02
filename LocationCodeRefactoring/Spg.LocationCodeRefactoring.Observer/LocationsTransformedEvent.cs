@@ -1,4 +1,3 @@
-using Spg.LocationRefactor.Program;
 using System.Collections.Generic;
 using System;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;

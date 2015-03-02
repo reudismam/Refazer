@@ -1,8 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Position;
+using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -10,36 +15,41 @@ using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Setting;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactoring.Tok;
 
-namespace Spg.ExampleRefactoring.Synthesis
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Class to generate programs
     /// </summary>
     public class ASTProgram
     {
-        private SynthesizerSetting setting { get; set; }
+        /// <summary>
+        /// Setting for AST synthesis computation
+        /// </summary>
+        /// <returns>Setting</returns>
+        private SynthesizerSetting Setting { get; set; }
 
-        private Dictionary<ListNode, List<TokenSeq>> computed = new Dictionary<ListNode, List<TokenSeq>>();
+        /// <summary>
+        /// Previous computed token sequences
+        /// </summary>
+        private readonly Dictionary<ListNode, List<TokenSeq>> _computed = new Dictionary<ListNode, List<TokenSeq>>();
 
         /// <summary>
         /// Dynamic tokens and occurrences
         /// </summary>
         /// <returns></returns>
-        public Dictionary<DymToken, int> dict { get; set; }
+        public Dictionary<DymToken, int> Dict { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ASTProgram()
         {
-            dict = new Dictionary<DymToken, int>();
-            this.setting = new SynthesizerSetting();
-            this.setting.deviation = 2;
-            this.setting.considerConstrStr = true;
+            Dict = new Dictionary<DymToken, int>();
+            this.Setting = new SynthesizerSetting {Deviation = 2, ConsiderConstrStr = true};
         }
 
         /// <summary>
@@ -47,17 +57,15 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// </summary>
         /// <param name="setting">Configuration setting</param>
         /// <param name="examples">Example list</param>
+        /// <exception cref="Exception">Argument exception</exception>
         public ASTProgram(SynthesizerSetting setting, List<Tuple<ListNode, ListNode>> examples)
         {
-            if (examples == null || examples.Count == 0)
-            {
-                throw new Exception("Examples cannot be null or empty");
-            }
+            if (examples == null || examples.Count == 0) { throw new ArgumentException("Examples cannot be null or empty"); }
 
-            this.setting = setting;
-            dict = new Dictionary<DymToken, int>();
+            this.Setting = setting;
+            Dict = new Dictionary<DymToken, int>();
 
-            if (setting.dynamicTokens)
+            if (setting.DynamicTokens)
             {
                 CreateDymTokens(examples);
             }
@@ -70,43 +78,37 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>Synthesized program list</returns>
         public List<SynthesizedProgram> GenerateStringProgram(List<Tuple<ListNode, ListNode>> examples)
         {
-            if (examples == null || examples.Count == 0)
+            if (examples == null || examples.Count == 0) { throw new ArgumentException("Examples cannot be null or empty"); }
+
+            List<Dag> dags = Dags(examples);
+
+            IntersectManager intManager = new IntersectManager();
+            Dag T = intManager.Intersect(dags);
+
+            if (T == null)
             {
-                throw new Exception("Examples cannot be null or empty");
+                dags = Dags(examples, false);
+                T = intManager.Intersect(dags);
             }
-
-            List<Dag> dags = new List<Dag>();
-            foreach (Tuple<ListNode, ListNode> example in examples)
-            {
-                List<int> boundaryPoints = SynthesisManager.CreateBoundaryPoints(example);
-
-                ListNode input = example.Item1;
-                ListNode output = example.Item2;
-                Dag D = GenerateStringBoundary(input, output, boundaryPoints);
-                dags.Add(D);
-            }
-
-            IntersectManager IntManager = new IntersectManager();
-            Dag T = IntManager.Intersect(dags);
 
             ExpressionManager expmanager = new ExpressionManager();
             expmanager.FilterExpressions(T, examples);
 
             Clear(T);
 
-            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.init.Id);
-            double dist = bfs.DistTo(T.end.Id);
+            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.Init.Id);
+            double dist = bfs.DistTo(T.End.Id);
             Console.WriteLine(dist);
 
             List<Vertex> solutions = new List<Vertex>();
 
-            foreach (String s in bfs.PathTo(T.end.Id))
+            foreach (string s in bfs.PathTo(T.End.Id))
             {
-                solutions.Add(T.vertexes[s]);
+                solutions.Add(T.Vertexes[s]);
             }
 
-            SynthesisManager manager = new SynthesisManager(setting);
-            SynthesizedProgram valid = manager.FilterASTPrograms(T.mapping, solutions, examples);
+            SynthesisManager manager = new SynthesisManager(Setting);
+            SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
             Console.WriteLine(valid);
 
             List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
@@ -114,18 +116,31 @@ namespace Spg.ExampleRefactoring.Synthesis
             return validated;
         }
 
+        private List<Dag> Dags(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
+        {
+            List<Dag> dags = new List<Dag>();
+            foreach (var example in examples)
+            {
+                List<int> boundaryPoints = null;
+
+                if (boundary) { boundaryPoints = SynthesisManager.CreateBoundaryPoints(example); }
+
+                ListNode input = example.Item1;
+                ListNode output = example.Item2;
+                dags.Add(GenerateStringBoundary(input, output, boundaryPoints));
+            }
+            return dags;
+        } 
+
         /// <summary>
         /// Create dynamic tokens
         /// </summary>
         /// <param name="examples">Examples</param>
         private void CreateDymTokens(List<Tuple<ListNode, ListNode>> examples)
         {
-            if (examples == null)
-            {
-                return;
-            }
+            if (examples == null) { throw new ArgumentNullException("examples"); }
 
-            Dictionary<DymToken, int> temp = null;
+            Dictionary<DymToken, int> temp;
             foreach (Tuple<ListNode, ListNode> t in examples)
             {
                 temp = new Dictionary<DymToken, int>();
@@ -139,7 +154,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                         if (!dym) continue;
 
                         DymToken dt = new DymToken(st);
-                        int v = 0;
+                        int v;
                         if (!temp.TryGetValue(dt, out v))
                         {
                             temp.Add(dt, 0);
@@ -149,26 +164,26 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                 foreach (DymToken dt in temp.Keys)
                 {
-                    int v = 0;
-                    if (!dict.TryGetValue(dt, out v))
+                    int v;
+                    if (!Dict.TryGetValue(dt, out v))
                     {
-                        dict.Add(dt, 0);
+                        Dict.Add(dt, 0);
                     }
 
-                    dict[dt] = v + 1;
+                    Dict[dt] = v + 1;
                 }
             }
 
             temp = new Dictionary<DymToken, int>();
-            foreach (DymToken dt in dict.Keys)
+            foreach (DymToken dt in Dict.Keys)
             {
-                if (dict[dt] == examples.Count())
+                if (Dict[dt] == examples.Count())
                 {
                     temp.Add(dt, examples.Count());
                 }
             }
 
-            dict = temp;
+            Dict = temp;
         }
 
         /// <summary>
@@ -179,19 +194,26 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>True if is a dynamic token</returns>
         private static bool IsDym(SyntaxNodeOrToken st, SyntaxNodeOrToken next)
         {
-            if (st == null || next == null)
-            {
-                throw new Exception("st cannot be null and next cannot be null.");
-            }
+            if (st == null) { throw new ArgumentNullException("st"); }
+            if(next == null) { throw  new ArgumentNullException("next");}
 
-            if (st.Parent.IsKind(SyntaxKind.IdentifierName) && st.Parent.Parent.IsKind(SyntaxKind.VariableDeclaration))
-            {
-                return true;
-            }
+            if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
 
-            if (st.Parent.Parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            SyntaxNodeOrToken parent = ASTManager.Parent(st);
+
+            if (parent.IsKind(SyntaxKind.VariableDeclaration)){ return true; }
+
+            if (parent.IsKind(SyntaxKind.ObjectCreationExpression)) { return true;  }
+
+            if (parent.IsKind(SyntaxKind.AttributeList)) { return true; }
+
+            if (parent.IsKind(SyntaxKind.InvocationExpression)) { return true; }
+
+            if (parent.IsKind(SyntaxKind.QualifiedName)) {  return true; }
+
+            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
-                String value = next.ToString();
+                string value = next.ToString();
                 if (value.Equals("("))
                     return true;
             }
@@ -202,19 +224,14 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Clear entry of the graph that does not contains expressions.
         /// </summary>
         /// <param name="dag">Dag</param>
+        /// <exception cref="ArgumentNullException">Exception if dag is null</exception>
         public static void Clear(Dag dag)
         {
-            if (dag == null)
-            {
-                throw new Exception("Dag cannot be null");
-            }
+            if (dag == null) { throw new ArgumentNullException("dag"); }
 
-            if (dag.vertexes == null || dag.dag == null || dag.mapping == null)
-            {
-                throw new Exception("Some property of Dag is null");
-            }
+            if (dag.Vertexes == null || dag.dag == null || dag.Mapping == null) { throw new ArgumentException("Some property of Dag is null"); }
 
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> dictionary = dag.mapping;
+            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> dictionary = dag.Mapping;
             List<Tuple<Vertex, Vertex>> removes = new List<Tuple<Vertex, Vertex>>();
             foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in dictionary)
             {
@@ -265,7 +282,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                     List<IExpression> subStrns = new List<IExpression>();
                     ListNode subNodes = ASTManager.SubNotes(output, i, (j - i));
-                    if (setting.considerConstrStr)
+                    if (Setting.ConsiderConstrStr)
                     {
                         IExpression expression = new ConstruStr(subNodes);
                         subStrns.Add(expression);
@@ -319,7 +336,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                     Tuple<Vertex, Vertex> tuple = Tuple.Create(vertexes[boundaryPoints[i].ToString()], vertexes[boundaryPoints[j].ToString()]);
                     List<IExpression> subStrns = new List<IExpression>();
                     ListNode subNodes = ASTManager.SubNotes(output, boundaryPoints[i], boundaryPoints[j] - boundaryPoints[i]);
-                    if (setting.considerConstrStr)
+                    if (Setting.ConsiderConstrStr)
                     {
                         IExpression expression = new ConstruStr(subNodes);
                         subStrns.Add(expression);
@@ -362,16 +379,16 @@ namespace Spg.ExampleRefactoring.Synthesis
         public List<TokenSeq> GenerateTokenSeq(ListNode subNodesLeft)
         {
             List<TokenSeq> tokensSeqs;
-            if (!computed.TryGetValue(subNodesLeft, out tokensSeqs))
+            if (!_computed.TryGetValue(subNodesLeft, out tokensSeqs))
             {
                 tokensSeqs = new List<TokenSeq>();
                 List<Token> tSeq = TokenSeq.GetTokens(subNodesLeft);
 
                 TokenSeq ts = new TokenSeq(tSeq);
 
-                if (setting.dynamicTokens)
+                if (Setting.DynamicTokens)
                 {
-                    List<Token> dTSeq = TokenSeq.DymTokens(subNodesLeft, this.dict);
+                    List<Token> dTSeq = TokenSeq.DymTokens(subNodesLeft, this.Dict);
                     TokenSeq dtSeq = new TokenSeq(dTSeq);
                     tokensSeqs.Add(dtSeq);
                 }
@@ -393,10 +410,10 @@ namespace Spg.ExampleRefactoring.Synthesis
                     tokensSeqs.Add(parentSeq);
                 }
 
-                computed.Add(subNodesLeft, tokensSeqs);
+                _computed.Add(subNodesLeft, tokensSeqs);
             }
 
-            tokensSeqs = computed[subNodesLeft];
+            tokensSeqs = _computed[subNodesLeft];
 
             /*ListNode subNodes = subNodesLeft;
             while (!(subNodes.Length() < 2))
@@ -532,7 +549,6 @@ namespace Spg.ExampleRefactoring.Synthesis
             return data;
         }
 
-
         /// <summary>
         /// String example to ListNode example
         /// </summary>
@@ -630,8 +646,8 @@ namespace Spg.ExampleRefactoring.Synthesis
             result.Add(CPos(k)); result.Add(CPos(-(input.Length() - k + 1)));
             //int deviation = 2;
 
-            int k1 = Math.Max(k - setting.deviation, 0);
-            int k2 = Math.Min(k + setting.deviation, input.Length());
+            int k1 = Math.Max(k - Setting.Deviation, 0);
+            int k2 = Math.Min(k + Setting.Deviation, input.Length());
 
             int i = Math.Max(0, k1);
             int j = Math.Max(0, (k - k1));
@@ -648,39 +664,41 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 foreach (TokenSeq r22 in r2)
                 {
-                    if (r11.Tokens.Count() > 0 || r22.Tokens.Count() > 0)
+                    if (r11.Tokens.Any() || r22.Tokens.Any())
                     {
                         TokenSeq r12 = ConcatenateRegularExpression(r11, r22);//Equivalent to TokenSeq(T1, T2,...,Tn, T{'}1, T{'}2,...,T{'}m)
-
                         TokenSeq regex = r12;
-
                         //ListNode subNodesk1k2 = ASTManager.SubNotes(input, k1, k2 - k1);
-
                         int c = IndexOfMatchOfTheNodes(input, r11, r22, k1, k2);
-
                         int cline = new RegexComparer().Matches(input, regex).Count;//ASTManager.Matches(input, regex, new RegexComparer()).Count();
+                        TokenSeq r1Line = r11; //maybe you will need the raw type to execute search on the tree.
+                        TokenSeq r2Line = r22;
 
-                        TokenSeq r1line = r11; //maybe you will need the raw type to execute search on the tree.
-                        TokenSeq r2line = r22;
-
-                        result.Add(Pos(r1line, r2line, c)); //This need to be refactored.
-                        result.Add(Pos(r1line, r2line, -(cline - c + 1)));
+                        result.Add(Pos(r1Line, r2Line, c)); //This need to be refactored.
+                        result.Add(Pos(r1Line, r2Line, -(cline - c + 1)));
                     }
                 }
             }
             return result;
         }
 
+        /// <summary>
+        /// Index of matches
+        /// </summary>
+        /// <param name="input">Input list nodes</param>
+        /// <param name="r1">Left regular expression</param>
+        /// <param name="r2">Right regular expression</param>
+        /// <param name="k1">Index of begin search</param>
+        /// <param name="k2">Index of end search</param>
+        /// <returns>Index of matches</returns>
         private static int IndexOfMatchOfTheNodes(ListNode input, TokenSeq r1, TokenSeq r2, int k1, int k2)
         {
             TokenSeq r12 = ConcatenateRegularExpression(r1, r2);//Equivalent to TokenSeq(T1, T2,...,Tn, T{'}1, T{'}2,...,T{'}m)
-
-            //ListNode regex = r12.Regex();
             TokenSeq regex = r12;
             var matches = new RegexComparer().Matches(input, regex);//ASTManager.Matches(input, regex, new RegexComparer());
             for (int i = 0; i < matches.Count; i++)
             {
-                int positionIndex = Position.Pos.GetPositionIndex(input, r1, r2, i + 1);
+                int positionIndex = global::Spg.ExampleRefactoring.Position.Pos.GetPositionIndex(input, r1, r2, i + 1);
                 if (positionIndex >= k1 && positionIndex <= k2)
                 {
                     return i + 1;
@@ -724,7 +742,6 @@ namespace Spg.ExampleRefactoring.Synthesis
             return combinations;
         }
 
-
         /// <summary>
         /// Concatenate regular expressions r1 and r2
         /// </summary>
@@ -740,7 +757,6 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             return r12;
         }
-
 
         /// <summary>
         /// Return nodes that match the solution
@@ -807,7 +823,6 @@ namespace Spg.ExampleRefactoring.Synthesis
             return position;
         }
 
-
         /// <summary>
         /// Returns a Pos expression.
         /// </summary>
@@ -820,6 +835,5 @@ namespace Spg.ExampleRefactoring.Synthesis
             IPosition position = new Pos(r1, r2, k);
             return position;
         }
-
     }
 }

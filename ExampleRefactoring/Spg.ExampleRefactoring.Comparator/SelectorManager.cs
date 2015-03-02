@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Setting;
+﻿using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
 
-namespace Spg.ExampleRefactoring.Comparator
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Comparator
 {
     /// <summary>
     /// Selection manager
@@ -17,21 +13,21 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <summary>
         /// Learned model
         /// </summary>
-        Dictionary<FeatureType, float> model = new Dictionary<FeatureType, float>();
+        readonly Dictionary<FeatureType, float> model = new Dictionary<FeatureType, float>();
 
         /// <summary>
         /// Consider empty string
         /// </summary>
         /// <returns>True is consider empty string</returns>
         //public Boolean considerEmpty { get; set; }
-        public SynthesizerSetting setting { get; set; }
+        public SynthesizerSetting Setting { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="setting">Setting</param>
         public SelectorManager(SynthesizerSetting setting) {
-            this.setting = setting;
+            this.Setting = setting;
         }
 
         /// <summary>
@@ -60,8 +56,7 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>Ordered expression</returns>
         public float Order(IExpression expression)
         {
-            List<IExpression> solution = new List<IExpression>();
-            solution.Add(expression);
+            List<IExpression> solution = new List<IExpression> {expression};
             InitModel();
             Dictionary<FeatureType, int> features = SynthesisManager.CreateInstance(solution);
 
@@ -89,7 +84,7 @@ namespace Spg.ExampleRefactoring.Comparator
             model.Add(FeatureType.SYNTAX, 0.5f);
             model.Add(FeatureType.SIZE, 0);
 
-            if (setting.considerEmpty)
+            if (Setting.ConsiderEmpty)
             {
                 model.Add(FeatureType.EMPTY, 100);
             }
@@ -97,7 +92,7 @@ namespace Spg.ExampleRefactoring.Comparator
                 model.Add(FeatureType.EMPTY, 0);
             }
 
-            if (setting.dynamicTokens)
+            if (Setting.DynamicTokens)
             {
                 model.Add(FeatureType.DYMTOKEN, 1000);
             }

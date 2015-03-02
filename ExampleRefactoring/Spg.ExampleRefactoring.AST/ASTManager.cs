@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
 
-namespace Spg.ExampleRefactoring.AST
+namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
 {
     /// <summary>
     /// Abstract syntax tree (AST) operations
@@ -27,7 +27,7 @@ namespace Spg.ExampleRefactoring.AST
                 throw new Exception("Root node and list cannot be null and list must not be empty.");
             }
 
-            if (root.ChildNodesAndTokens().Count() == 0)
+            if (!root.ChildNodesAndTokens().Any())
             {
                 nodes.Add(root);
                 return nodes;
@@ -68,35 +68,6 @@ namespace Spg.ExampleRefactoring.AST
                     EnumerateSyntaxNodes(n, nodes);
                 }
             }
-            return nodes;
-        }
-
-        /// <summary>
-        /// Elements with syntax kind in the source code
-        /// </summary>
-        /// <param name="sourceCode">Source code</param>
-        /// <param name="kind">Syntax kind</param>
-        /// <returns>Elements with syntax kind in the source code</returns>
-        public static List<SyntaxNode> SyntaxElements(string sourceCode, SyntaxKind kind)
-        {
-            if (sourceCode == null)
-            {
-                throw new Exception("source code cannot be null");
-            }
-
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
-
-            List<SyntaxNode> nodes = new List<SyntaxNode>();
-            var descendentNodes = from node in tree.GetRoot().DescendantNodes()
-                                  where node.IsKind(kind)
-                                  select node;
-
-            foreach (SyntaxNode node in descendentNodes)
-            {
-                nodes.Add(node);
-            }
-
-            //nodes = ASTManager.Nodes(tree.GetRoot(), nodes, kind);
             return nodes;
         }
 
@@ -185,8 +156,115 @@ namespace Spg.ExampleRefactoring.AST
             }
             return parent.Parent;
         }
+
+        public static List<SyntaxNodeOrToken> NodesBetweenStartAndEndPosition(SyntaxTree tree, int startPosition, int end)
+        {
+            List<SyntaxNodeOrToken> nodesSelection = new List<SyntaxNodeOrToken>();
+            var descedentsBegin = from node in tree.GetRoot().DescendantNodesAndTokens()
+                                  where startPosition <= node.SpanStart && node.Span.End <= end
+                                  select node;
+            nodesSelection.AddRange(descedentsBegin);
+            return nodesSelection;
+        }
+
+        /// <summary>
+        /// Descendant nodes with the start position, end position and syntax kind specified
+        /// </summary>
+        /// <param name="tree">Syntax tree</param>
+        /// <param name="start">Start position</param>
+        /// <param name="end">End position</param>
+        /// <param name="syntaxKind">Syntax kind</param>
+        /// <returns>Descendant node with the start position, end position and syntax kind specified</returns>
+        private static IEnumerable<SyntaxNode> NodesWithSameStartEndAndKind(SyntaxNode tree, int start, int end,
+            SyntaxKind syntaxKind)
+        {
+            var decedents = from snode in tree.DescendantNodes()
+                            where snode.Span.Start == start && snode.Span.End == end && snode.CSharpKind() == syntaxKind
+                            select snode;
+            return decedents;
+        }
+
+        /// <summary>
+        /// Descendant nodes with the syntax kind specified
+        /// </summary>
+        /// <param name="tree">Node representation of the syntax tree</param>
+        /// <param name="syntaxKind">Syntax node to be considered</param>
+        /// <returns>Descendant nodes with the syntax kind specified</returns>
+        public static IEnumerable<SyntaxNode> NodesWithTheSameSyntaxKind(SyntaxNode tree, SyntaxKind syntaxKind)
+        {
+            var treeDescendents = from snode in tree.DescendantNodes()
+                                  where snode.CSharpKind() == syntaxKind
+                                  select snode;
+            return treeDescendents;
+        }
+
+        /// <summary>
+        /// Descendant node with the start position specified
+        /// </summary>
+        /// <param name="tree">Syntax tree</param>
+        /// <param name="startPosition">Start position</param>
+        /// <returns>Descendant node with the start position specified</returns>
+        public static IEnumerable<SyntaxNodeOrToken> NodesWithTheSameStartPosition(SyntaxTree tree, int startPosition)
+        {
+            List<SyntaxNodeOrToken> nodesSelection = new List<SyntaxNodeOrToken>();
+            var descedentsBegin = from node in tree.GetRoot().DescendantNodesAndTokens()
+                                  where node.SpanStart == startPosition
+                                  select node;
+            nodesSelection.AddRange(descedentsBegin);
+            return nodesSelection;
+        }
+
+        /// <summary>
+        /// Descendant node with the end position specified
+        /// </summary>
+        /// <param name="tree">Syntax tree</param>
+        /// <param name="end">End position</param>
+        /// <returns>Descendant node with the end position specified</returns>
+        public static IEnumerable<SyntaxNodeOrToken> NodesWithTheSameEndPosition(SyntaxTree tree, int end)
+        {
+            var descedentsEnd = from node in tree.GetRoot().DescendantNodesAndTokens()
+                                where node.Span.End == end
+                                select node;
+            return descedentsEnd;
+        }
     }
 }
+
+///// <summary>
+///// Convert syntax node to a list
+///// </summary>
+///// <param name="root">Syntax node root</param>
+///// <param name="nodes">Syntax node or token list</param>
+///// <returns>Syntax node list</returns>
+//public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens2(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
+//{
+//    if (root == null || nodes == null)
+//    {
+//        throw new Exception("Root node and list cannot be null and list must not be empty.");
+//    }
+
+//    ASTSyntaxWalker walker = new ASTSyntaxWalker();
+//    walker.Visit(root.AsNode());
+//    List<SyntaxNodeOrToken> walkerNodes = walker.tokenList;
+
+//    return nodes;
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*/// <summary>
         /// Convert string to nodes
@@ -209,22 +287,22 @@ namespace Spg.ExampleRefactoring.AST
 
             return transformed;
         }*/
- /*//private static List<SyntaxNode> Nodes(SyntaxNode syntaxNode, List<SyntaxNode> nodes, SyntaxKind kind)
-        //{
-        //    /*if (nodes.Contains(syntaxNode))
-        //    {
-        //        return nodes;
-        //    }
-        //    if (syntaxNode.IsKind(kind))
-        //    {*/
+/*//private static List<SyntaxNode> Nodes(SyntaxNode syntaxNode, List<SyntaxNode> nodes, SyntaxKind kind)
+       //{
+       //    /*if (nodes.Contains(syntaxNode))
+       //    {
+       //        return nodes;
+       //    }
+       //    if (syntaxNode.IsKind(kind))
+       //    {*/
 //        nodes.Add(syntaxNode);
 //    //    return nodes;
 //    //}
 
-    //    foreach (SyntaxNode node in syntaxNode.DescendantNodes())
-    //    {
-    //        nodes = Nodes(node, nodes, kind);
-    //    }
+//    foreach (SyntaxNode node in syntaxNode.DescendantNodes())
+//    {
+//        nodes = Nodes(node, nodes, kind);
+//    }
 
-    //    return nodes;
-    //}        */
+//    return nodes;
+//}        */

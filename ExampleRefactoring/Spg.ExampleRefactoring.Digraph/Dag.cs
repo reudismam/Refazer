@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Spg.ExampleRefactoring.Expression;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 
-namespace Spg.ExampleRefactoring.Digraph
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Digraph
 {
     /// <summary>
     /// Class used to represent the set of mapping present in a given string
@@ -14,7 +14,7 @@ namespace Spg.ExampleRefactoring.Digraph
         /// Vertex mapping
         /// </summary>
         /// <returns>Vertex mapping</returns>
-        public Dictionary<string, Vertex> vertexes { get; set;}
+        public Dictionary<string, Vertex> Vertexes { get; set;}
 
         /// <summary>
         /// Directed Graph with the nodes and connection of indexes present on the string
@@ -24,19 +24,19 @@ namespace Spg.ExampleRefactoring.Digraph
         /// <summary>
         /// Set of mapping used to construct the synthesizer.
         /// </summary>
-        public Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping { get; set; }
+        public Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> Mapping { get; set; }
 
         /// <summary>
         /// First vertex
         /// </summary>
         /// <returns>First vertex</returns>
-        public Vertex init { get; set; } 
+        public Vertex Init { get; set; } 
 
         /// <summary>
         /// End node
         /// </summary>
         /// <returns>End node</returns>
-        public Vertex end { get; set; }
+        public Vertex End { get; set; }
 
         /// <summary>
         /// Constructor
@@ -49,10 +49,10 @@ namespace Spg.ExampleRefactoring.Digraph
         public Dag(DirectedGraph dag, Vertex init, Vertex end,  Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping, Dictionary<string, Vertex> vertices)
         {
             this.dag = dag;
-            this.init = init;
-            this.end = end;
-            this.mapping = mapping;
-            this.vertexes = vertices;
+            this.Init = init;
+            this.End = end;
+            this.Mapping = mapping;
+            this.Vertexes = vertices;
         }
     }
 }

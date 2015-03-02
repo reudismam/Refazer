@@ -1,11 +1,14 @@
+using System.Collections.Generic;
+using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+
 namespace Spg.LocationCodeRefactoring.Observer
 {
     public class ProgramRefactoredEvent
     {
-        public string transformation { get; set; }
+        public List<Transformation> transformations { get; set; }
 
-        public ProgramRefactoredEvent(string transformation) {
-            this.transformation = transformation;
+        public ProgramRefactoredEvent(List<Transformation> transformations) {
+            this.transformations = transformations;
         }
     }
 }

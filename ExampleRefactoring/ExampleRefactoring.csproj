@@ -57,6 +57,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
     <DocumentationFile>bin\Debug\ExampleRefactoring.XML</DocumentationFile>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -88,6 +89,7 @@
       <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
@@ -104,9 +106,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Spg.ExampleRefactoring.AST\ASTManager.cs" />
+    <Compile Include="Spg.ExampleRefactoring.AST\ASTRewriter.cs" />
+    <Compile Include="Spg.ExampleRefactoring.AST\ASTSyntaxWalker.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\ASTTransformation.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\SyntacticalDecomposer.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\UpdateASTManager.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Bean\Selection.cs" />
     <Compile Include="Spg.ExampleRefactoring.Change\ChangeManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\Automato.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\ComparerBase.cs" />
@@ -149,6 +154,9 @@
     <Compile Include="Spg.ExampleRefactoring.LCS\CollectionDiffer.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ComparisonObject.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ComparisonResult.cs" />
+    <Compile Include="Spg.ExampleRefactoring.LCS\LCA.cs" />
+    <Compile Include="Spg.ExampleRefactoring.LCS\LCAManager.cs" />
+    <Compile Include="Spg.ExampleRefactoring.LCS\LCAProcessing.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ModificationType.cs" />
     <Compile Include="Spg.ExampleRefactoring.RegularExpression\Regex.cs" />
     <Compile Include="Spg.ExampleRefactoring.Setting\SynthesizerSetting.cs" />
@@ -162,6 +170,7 @@
     <Compile Include="Spg.ExampleRefactoring.Position\IPosition.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\ListNode.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\ASTProgram.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Util\JsonUtil.cs" />
     <Compile Include="Spg.ExampleRefactoring.Workspace\WorkspaceManager.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\DymToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\Token.cs" />
@@ -173,12 +182,6 @@
   <ItemGroup>
     <None Include="Key.snk" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DirectedGraph\DirectedGraph\DirectedGraph.csproj">
-      <Project>{e4bcc550-8993-4d14-b2dc-b6d778a025fc}</Project>
-      <Name>DirectedGraph</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -197,7 +200,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DirectedGraph\DirectedGraph\DirectedGraph.csproj">
+      <Project>{e4bcc550-8993-4d14-b2dc-b6d778a025fc}</Project>
+      <Name>DirectedGraph</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

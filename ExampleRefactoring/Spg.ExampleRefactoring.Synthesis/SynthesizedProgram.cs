@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 
-namespace Spg.ExampleRefactoring.Synthesis
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Synthesized program
@@ -13,13 +13,13 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Solution expression list
         /// </summary>
         /// <returns>Get or set solution expression list</returns>
-        public List<IExpression> solutions {get; set;}
+        public List<IExpression> Solutions {get; set;}
 
         /// <summary>
         /// Default constructor
         /// </summary>
         public SynthesizedProgram(){
-            this.solutions = new List<IExpression>();
+            this.Solutions = new List<IExpression>();
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// </summary>
         /// <param name="solution"></param>
         public void Add(IExpression solution) {
-            this.solutions.Add(solution);
+            this.Solutions.Add(solution);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         public override string ToString()
         {
             String s = "";
-            foreach(IExpression str in solutions){
+            foreach(IExpression str in Solutions){
                 s += str + "\n\n";
             }
 

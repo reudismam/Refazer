@@ -16,5 +16,17 @@ namespace Spg.ExampleRefactoring.Util
             String value = File.ReadAllText(path);
             return value;
         }
+
+        /// <summary>
+        /// Write string data to a file
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <param name="sourceCode">Source code</param>
+        public static void WriteToFile(string path, string sourceCode)
+        {
+            StreamWriter file = new StreamWriter(path);
+            file.Write(sourceCode);
+            file.Close();
+        }
     }
 }

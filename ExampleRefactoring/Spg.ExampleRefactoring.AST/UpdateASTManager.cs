@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Synthesis;
@@ -29,9 +31,9 @@ namespace Spg.ExampleRefactoring.AST
 
             ListNode listNode = new ListNode(nodes);
             ListNode composition = new ListNode();
-            for (int i = 0; i < synthesizedProg.solutions.Count; i++)
+            for (int i = 0; i < synthesizedProg.Solutions.Count; i++)
             {
-                ListNode subNodes = synthesizedProg.solutions[i].RetrieveSubNodes(listNode);
+                ListNode subNodes = synthesizedProg.Solutions[i].RetrieveSubNodes(listNode);
                 composition.List.AddRange(subNodes.List);
             }
 
@@ -57,9 +59,9 @@ namespace Spg.ExampleRefactoring.AST
 
             ListNode listNode = new ListNode(nodes);
             ListNode composition = new ListNode();
-            for (int i = 0; i < synthesizedProg.solutions.Count; i++)
+            for (int i = 0; i < synthesizedProg.Solutions.Count; i++)
             {
-                ListNode subNodes = synthesizedProg.solutions[i].RetrieveSubNodes(listNode);
+                ListNode subNodes = synthesizedProg.Solutions[i].RetrieveSubNodes(listNode);
                 composition.List.AddRange(subNodes.List);
             }
             ASTTransformation combTree = GetSyntaxTree(composition);
@@ -102,7 +104,7 @@ namespace Spg.ExampleRefactoring.AST
             {
                 SyntaxNodeOrToken n = nodes.List[i];
                 String node = n.ToString();
-                if (n.HasLeadingTrivia && i != 0)
+                if (n.HasLeadingTrivia /*&& i != 0*/)
                 {
                     String leadingTrivial = "";
 
@@ -121,7 +123,7 @@ namespace Spg.ExampleRefactoring.AST
                 }
                 method += node;
 
-                if (n.HasTrailingTrivia && i != nodes.List.Count - 1)
+                if (n.HasTrailingTrivia/* && i != nodes.List.Count - 1*/)
                 {
                     String trailingTrivia = "";
 

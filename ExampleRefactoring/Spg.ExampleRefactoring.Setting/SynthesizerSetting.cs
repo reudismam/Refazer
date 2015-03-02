@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Spg.ExampleRefactoring.Setting
+﻿namespace ExampleRefactoring.Spg.ExampleRefactoring.Setting
 {
     /// <summary>
     /// Synthesizer setting
@@ -11,22 +9,25 @@ namespace Spg.ExampleRefactoring.Setting
         /// Indicate if we are using dynamic tokens or not
         /// </summary>
         /// <returns>Get of set dynamic tokens</returns>
-        public Boolean dynamicTokens { get; set; }
+        public bool DynamicTokens { get; set; }
+
         /// <summary>
         /// Indicate if we are using ConstStr expression or not
         /// </summary>
         /// <returns>Get or set consider ConstrStr</returns>
-        public Boolean considerConstrStr { get; set; }
+        public bool ConsiderConstrStr { get; set; }
+
         /// <summary>
         /// Indicate if we are using empty regular expression or not
         /// </summary>
         /// <returns>Get or set consider empty</returns>
-        public Boolean considerEmpty { get; set; }
+        public bool ConsiderEmpty { get; set; }
+
         /// <summary>
         /// Indicate the value of deviation when generating positions
         /// </summary>
         /// <returns>Get or set deviation value</returns>
-        public int deviation { get; set; }
+        public int Deviation { get; set; }
 
         /// <summary>
         /// Constructor
@@ -41,12 +42,12 @@ namespace Spg.ExampleRefactoring.Setting
         /// <param name="deviation">Deviation value</param>
         /// <param name="considerConstrStr">Indicate if we are using ConstrStr</param>
         /// <param name="considerEmpty">Indicate if we are using empty token or not</param>
-        public SynthesizerSetting(Boolean dynamicTokens, int deviation, Boolean considerConstrStr, Boolean considerEmpty)
+        public SynthesizerSetting(bool dynamicTokens, int deviation, bool considerConstrStr, bool considerEmpty)
         {
-            this.dynamicTokens = dynamicTokens;
-            this.deviation = deviation;
-            this.considerConstrStr = considerConstrStr;
-            this.considerEmpty = considerEmpty;
+            this.DynamicTokens = dynamicTokens;
+            this.Deviation = deviation;
+            this.ConsiderConstrStr = considerConstrStr;
+            this.ConsiderEmpty = considerEmpty;
         }
     }
 }

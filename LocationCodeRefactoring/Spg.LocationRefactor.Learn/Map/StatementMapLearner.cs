@@ -1,40 +1,40 @@
-﻿using LocationCodeRefactoring.Br.Spg.Location;
+﻿using System;
+using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
+using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
-using System;
-using System.Collections.Generic;
 
-namespace Spg.LocationRefactor.Learn
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
 {
+    /// <summary>
+    /// Statement map learner
+    /// </summary>
     public class StatementMapLearner : MapLearnerBase
     {
-        private SyntaxKind syntaxKind;
-
-        public StatementMapLearner(SyntaxKind syntaxKind)
-        {
-            this.syntaxKind = syntaxKind;
-        }
-
+        RegionManager strategy = RegionManager.GetInstance();
         /// <summary>
         /// Filter
         /// </summary>
         /// <returns>Filter</returns>
-        protected override FilterLearnerBase GetFilter()
+        protected override FilterLearnerBase GetFilter(List<TRegion> list)
         {
-            return new StatementFilterLearner(syntaxKind);
+            return new StatementFilterLearner(list);
         }
 
         /// <summary>
         /// Map
         /// </summary>
         /// <returns>Map</returns>
-        protected override MapBase GetMap()
+        protected override MapBase GetMap(List<TRegion> list)
         {
-            return new StatementMap(syntaxKind);
+            return new StatementMap(list);
         }
 
         /// <summary>
@@ -53,8 +53,7 @@ namespace Spg.LocationRefactor.Learn
         /// <returns>Examples</returns>
         public override List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
         {
-            Strategy strategy = StatementStrategy.GetInstance(syntaxKind);
-            return strategy.Extract(list);
+            return strategy.Decompose(list);
         }
 
         /// <summary>
@@ -62,10 +61,9 @@ namespace Spg.LocationRefactor.Learn
         /// </summary>
         /// <param name="sourceCode">Source code</param>
         /// <returns>Syntax nodes</returns>
-        public override List<SyntaxNode> SyntaxNodes(string sourceCode)
+        public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
-            Strategy strategy = StatementStrategy.GetInstance(syntaxKind);
-            return strategy.SyntaxNodes(sourceCode);
+            return strategy.SyntaxNodes(sourceCode, list);
         }
     }
 }

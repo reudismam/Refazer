@@ -2,9 +2,15 @@
 using Spg.ExampleRefactoring.Tok;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Comparator;
 
 namespace Spg.LocationRefactor.Predicate
 {
+    /// <summary>
+    /// IPredicate
+    /// </summary>
     public abstract class IPredicate
     {
         /// <summary>
@@ -33,6 +39,22 @@ namespace Spg.LocationRefactor.Predicate
         {
             TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(r1, r2);
             return tokens.Regex();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is IPredicate)) { return false; }
+
+            IPredicate other = obj as IPredicate;
+
+            if (r1 == null || r2 == null || other.r1 == null || other.r2 == null) return false;
+
+            return r1.Equals(other.r1) && r2.Equals(other.r2);
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
         }
     }
 }

@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using ExampleRefactoring.Spg.ExampleRefactoring.Position;
+using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Operator.Filter;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
-using Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Learn
@@ -30,7 +39,10 @@ namespace Spg.LocationRefactor.Learn
         /// </summary>
         public IPredicate predicate { get; set; }
 
-        public FilterLearnerBase() {
+        public List<TRegion> list { get; set; }
+
+        public FilterLearnerBase(List<TRegion> list) {
+            this.list = list;
             calculated = new Dictionary<TokenSeq, Boolean>();
         }
 
@@ -38,8 +50,9 @@ namespace Spg.LocationRefactor.Learn
         /// Create a new instance
         /// </summary>
         /// <param name="predicate">Predicate</param>
-        public FilterLearnerBase(Predicate.IPredicate predicate)
+        public FilterLearnerBase(IPredicate predicate, List<TRegion> list)
         {
+            this.list = list;
             calculated = new Dictionary<TokenSeq, Boolean>();
             this.predicate = predicate;
         }
@@ -61,24 +74,73 @@ namespace Spg.LocationRefactor.Learn
             }
             List<Prog> programs = new List<Prog>();
 
-            List<Predicate.IPredicate> predicates = BooleanLearning(QLine);
+            List<IPredicate> predicates = BooleanLearning(QLine);
             /*var items = from pair in predicates
-                        orderby Order(pair) descending, pair.Regex().Count() ascending
+                        orderby pair.Regex().Count() descending, Order(pair) descending
                         select pair;*/
-
-            foreach (Predicate.IPredicate ipredicate in predicates)
+            Dictionary<IPredicate, Prog> dic = new Dictionary<IPredicate, Prog>();
+            foreach (IPredicate ipredicate in predicates)
             {
-                Prog prog = new Prog();
-                FilterBase filter = GetFilter();
-                filter.predicate = ipredicate;
-
-                prog.ioperator = filter;
-                programs.Add(prog);
+                Prog prog;
+                if (!dic.TryGetValue(ipredicate, out prog))
+                {
+                    prog = new Prog();
+                    FilterBase filter = GetFilter(list);
+                    filter.Predicate = ipredicate;
+                    prog.Ioperator = filter;
+                    dic.Add(ipredicate, prog);
+                    programs.Add(prog);
+                }
             }
             return programs;
         }
 
-        private object Order(Predicate.IPredicate pair)
+        /// <summary>
+        /// Learn filter
+        /// </summary>
+        /// <param name="positiveExamples">Positive examples</param>
+        /// <param name="negativeExamples">Negative examples</param>
+        /// <returns>Learned filters</returns>
+        public List<Prog> Learn(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples)
+        {
+            List<Tuple<ListNode, ListNode>> S = MapBase.Decompose(positiveExamples);
+            List<Tuple<ListNode, ListNode>> SN = MapBase.Decompose(negativeExamples);
+
+            List<Tuple<Tuple<ListNode, ListNode>, Boolean>> QLine = new List<Tuple<Tuple<ListNode, ListNode>, Boolean>>();
+            foreach (Tuple<ListNode, ListNode> tuple in S)
+            {
+                Tuple<Tuple<ListNode, ListNode>, Boolean> t = Tuple.Create(tuple, true);
+                QLine.Add(t);
+            }
+
+            foreach (Tuple<ListNode, ListNode> tuple in SN)
+            {
+                Tuple<Tuple<ListNode, ListNode>, Boolean> t = Tuple.Create(tuple, false);
+                QLine.Add(t);
+            }
+
+            List<Prog> programs = new List<Prog>();
+
+            List<IPredicate> predicates = BooleanLearning(QLine);
+
+            Dictionary<IPredicate, Prog> dic = new Dictionary<IPredicate, Prog>();
+            foreach (IPredicate ipredicate in predicates)
+            {
+                Prog prog;
+                if (!dic.TryGetValue(ipredicate, out prog))
+                {
+                    prog = new Prog();
+                    FilterBase filter = GetFilter(list);
+                    filter.Predicate = ipredicate;
+                    prog.Ioperator = filter;
+                    dic.Add(ipredicate, prog);
+                    programs.Add(prog);
+                }
+            }
+            return programs;
+        }
+
+        private object Order(IPredicate pair)
         {
             int count = 0;
             foreach(Token t in pair.Regex())
@@ -96,34 +158,20 @@ namespace Spg.LocationRefactor.Learn
         /// </summary>
         /// <param name="examples">Examples</param>
         /// <returns>List of boolean operators</returns>
-        public List<Predicate.IPredicate> BooleanLearning(List<Tuple<Tuple<ListNode, ListNode>, Boolean>> examples)
+        public List<IPredicate> BooleanLearning(List<Tuple<Tuple<ListNode, ListNode>, bool>> examples)
         {
-            List<Predicate.IPredicate> predicates = new List<Predicate.IPredicate>();
-
-            /*List<Tuple<ListNode, ListNode>> lnodes = new List<Tuple<ListNode, ListNode>>();
-            foreach (Tuple<Tuple<ListNode, ListNode>, Boolean> t in examples) {
-                Tuple<ListNode, ListNode> tp = Tuple.Create(t.Item1.Item2, t.Item1.Item2);
-                lnodes.Add(tp);
-            }
-
-            SynthesizerSetting setting = new SynthesizerSetting();
-            setting.dynamicTokens = true;
-            setting.deviation = lnodes[0].Item2.Length();
-            ASTProgram program = new ASTProgram(setting, lnodes);*/
-            //program.boundary = BoundaryManager.GetInstance().boundary;
-
-            List<Tuple<ListNode, Boolean>> boolExamples = new List<Tuple<ListNode, Boolean>>();
+            List<IPredicate> predicates = new List<IPredicate>();
+            List<Tuple<ListNode, bool>> boolExamples = new List<Tuple<ListNode, bool>>();
 
             Dag T = null;
-            foreach (Tuple<Tuple<ListNode, ListNode>, Boolean> e in examples)
+            foreach (Tuple<Tuple<ListNode, ListNode>, bool> e in examples)
             {
                 boolExamples.Add(Tuple.Create(e.Item1.Item1, e.Item2));
             }
 
             T = CreateDag(examples);
 
-            //T = program.GenerateString2(examples[0].Item1.Item2, examples[0].Item1.Item2);
-            foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in T.mapping)
+            foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in T.Mapping)
             {
                 List<IExpression> expressions = entry.Value;
                 foreach (IExpression exp in expressions)
@@ -146,13 +194,13 @@ namespace Spg.LocationRefactor.Learn
                                 TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
                                 TokenSeq regex = merge;
 
-                                Boolean b = Indicator(predicate, boolExamples, regex);
+                                IPredicate clone = PredicateFactory.Create((IPredicate)predicate);
+                                clone.r1 = r1;
+                                clone.r2 = r2;
+
+                                bool b = Indicator(clone, boolExamples, regex);
                                 if (b)
                                 {
-                                    Predicate.IPredicate clone = PredicateFactory.Create((Predicate.IPredicate)predicate);
-                                    clone.r1 = r1;
-                                    clone.r2 = r2;
-
                                     predicates.Add(clone);
                                 }
                             }
@@ -168,13 +216,16 @@ namespace Spg.LocationRefactor.Learn
             List<Tuple<ListNode, ListNode>> exs = new List<Tuple<ListNode, ListNode>>();
             foreach (Tuple<Tuple<ListNode, ListNode>, Boolean> e in examples)
             {
-                exs.Add(e.Item1);
+                if (e.Item2)
+                {
+                    exs.Add(e.Item1);
+                }
             }
 
             List<Dag> dags = new List<Dag>();
             SynthesizerSetting setting = new SynthesizerSetting();
-            setting.dynamicTokens = true;
-            setting.deviation = 2;
+            setting.DynamicTokens = true;
+            setting.Deviation = 2;
             ASTProgram program = new ASTProgram(setting, exs);
             foreach (Tuple<ListNode, ListNode> e in exs)
             {
@@ -205,15 +256,16 @@ namespace Spg.LocationRefactor.Learn
         /// <param name="examples">Examples</param>
         /// <param name="regex">Regular expression</param>
         /// <returns>True if regex match the input</returns>
-        public Boolean Indicator(Predicate.IPredicate predicate, List<Tuple<ListNode, Boolean>> examples, TokenSeq regex)
+        public bool Indicator(IPredicate predicate, List<Tuple<ListNode, bool>> examples, TokenSeq regex)
         {
-            Boolean b = true;
-            Boolean entry;
+            bool b = true;
+            bool entry;
+            
             if (!calculated.TryGetValue(regex, out entry))
             {
-                foreach (Tuple<ListNode, Boolean> example in examples)
+                foreach (Tuple<ListNode, bool> example in examples)
                 {
-                    Boolean b02 = predicate.Evaluate(example.Item1, regex);
+                    bool b02 = predicate.Evaluate(example.Item1, regex);
                     if (!(b02 == example.Item2))
                     {
                         calculated[regex] = false;
@@ -239,6 +291,74 @@ namespace Spg.LocationRefactor.Learn
             return b;
         }
 
-        protected abstract FilterBase GetFilter();
+        protected abstract FilterBase GetFilter(List<TRegion> list);
     }
 }
+
+
+//public List<IPredicate> BooleanLearning(List<Tuple<Tuple<ListNode, ListNode>, Boolean>> examples)
+//{
+//    List<IPredicate> predicates = new List<Predicate.IPredicate>();
+
+//    /*List<Tuple<ListNode, ListNode>> lnodes = new List<Tuple<ListNode, ListNode>>();
+//    foreach (Tuple<Tuple<ListNode, ListNode>, Boolean> t in examples) {
+//        Tuple<ListNode, ListNode> tp = Tuple.Create(t.Item1.Item2, t.Item1.Item2);
+//        lnodes.Add(tp);
+//    }
+
+//    SynthesizerSetting setting = new SynthesizerSetting();
+//    setting.dynamicTokens = true;
+//    setting.deviation = lnodes[0].Item2.Length();
+//    ASTProgram program = new ASTProgram(setting, lnodes);*/
+//    //program.boundary = BoundaryManager.GetInstance().boundary;
+
+//    List<Tuple<ListNode, bool>> boolExamples = new List<Tuple<ListNode, bool>>();
+
+//    Dag T = null;
+//    foreach (Tuple<Tuple<ListNode, ListNode>, Boolean> e in examples)
+//    {
+//        boolExamples.Add(Tuple.Create(e.Item1.Item1, e.Item2));
+//    }
+
+//    T = CreateDag(examples);
+
+//    //T = program.GenerateString2(examples[0].Item1.Item2, examples[0].Item1.Item2);
+//    foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in T.mapping)
+//    {
+//        List<IExpression> expressions = entry.Value;
+//        foreach (IExpression exp in expressions)
+//        {
+//            if (exp is SubStr)
+//            {
+//                IPosition p1 = ((SubStr)exp).p1;
+//                IPosition p2 = ((SubStr)exp).p2;
+//                List<IPosition> positions = new List<IPosition>();
+//                positions.Add(p1);
+//                positions.Add(p2);
+//                foreach (IPosition position in positions)
+//                {
+//                    if (position is Pos)
+//                    {
+//                        Pos positioncopy = (Pos)position;
+
+//                        TokenSeq r1 = positioncopy.r1;
+//                        TokenSeq r2 = positioncopy.r2;
+//                        TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
+//                        TokenSeq regex = merge;
+
+//                        Boolean b = Indicator(predicate, boolExamples, regex);
+//                        if (b)
+//                        {
+//                            IPredicate clone = PredicateFactory.Create((IPredicate)predicate);
+//                            clone.r1 = r1;
+//                            clone.r2 = r2;
+
+//                            predicates.Add(clone);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return predicates;
+//}

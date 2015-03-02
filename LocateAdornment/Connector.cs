@@ -1,8 +1,12 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.IO;
+using System.Security.Principal;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.TextRegion;
 
 namespace LocateAdornment
@@ -32,7 +36,7 @@ namespace LocateAdornment
                 LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
 
                 //Add some arbitrary author and comment text. 
-                string author = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                string author = WindowsIdentity.GetCurrent().Name;
                 string comment = "Four score....";
 
                 var snaphot = view.Selection.SelectedSpans[0];
@@ -48,13 +52,15 @@ namespace LocateAdornment
             }
         }
 
+        
+
         static public void Select(IWpfTextViewHost host, TRegion region)
         {
             IWpfTextView view = host.TextView;
             LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
 
             //Add some arbitrary author and comment text. 
-            string author = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            string author = WindowsIdentity.GetCurrent().Name;
             string comment = "Four score....";
        
             provider.AddRegion(region, author, comment);
@@ -68,17 +74,41 @@ namespace LocateAdornment
                 return document.GetText();
         }
 
-        static public void Update(IWpfTextViewHost host, string newText)
+        static public void Update(IWpfTextViewHost host, List<Transformation> transformations)
         {
             IWpfTextView view = host.TextView;
-            LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
-            ITextSnapshot current = view.TextBuffer.CurrentSnapshot;
-            SnapshotSpan sspan = new SnapshotSpan(current, 0, view.TextSnapshot.GetText().Length);
-            provider.RemoveComments(sspan);
+            //LocateAdornmentProvider provider = view.Properties.GetProperty<LocateAdornmentProvider>(typeof(LocateAdornmentProvider));
+            //ITextSnapshot current = view.TextBuffer.CurrentSnapshot;
+
+            EditorController controller = EditorController.GetInstance();
+            string newText = "";
+            foreach (Transformation transformation in transformations)
+            {
+                if (controller.CurrentViewCodeBefore.Equals(transformation.transformation.Item1))
+                {
+                    newText = transformation.transformation.Item2;
+                    break;
+                }
+            }
 
             Span span = new Span(0, view.TextSnapshot.GetText().Length);
-            view.TextBuffer.Delete(span);
-            view.TextBuffer.Insert(0, newText);
+            view.TextBuffer.Replace(span, newText);
+
+            Transform(transformations);
+            // view.TextBuffer.Delete(span);
+            //view.TextBuffer.Insert(0, newText);
+        }
+
+        private static void Transform(List<Transformation> transformations)
+        {
+            foreach (var transformation in transformations)
+            {
+                StreamWriter file = new StreamWriter(transformation.SourcePath);
+                file.WriteLine(transformation.transformation.Item2);
+
+                file.Close();
+            }
+
         }
     }
 }

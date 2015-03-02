@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
@@ -35,7 +37,7 @@ namespace Spg.ExampleRefactoring.Tok
         {
             if (token.AsNode() == null)
             {
-                return (st.RawKind == token.RawKind);
+                return ASTManager.Parent(this.token).RawKind == ASTManager.Parent(token).RawKind && (st.RawKind == token.RawKind);
             }
 
             return token.RawKind == ASTManager.Parent(st).RawKind;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Position;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Synthesis;
@@ -33,7 +35,8 @@ namespace Spg.NUnitTests.ASTProgramTests
             Tuple<string, string> tuple = Tuple.Create(input, output);
             Tuple<ListNode, ListNode> tln = ASTProgram.Example(tuple);
 
-            List<int> indexes = SynthesisManager.CreateBoundaryPoints(input, output, tln);
+            //List<int> indexes = SynthesisManager.CreateBoundaryPoints(input, output, tln);
+            List<int> indexes = SynthesisManager.CreateBoundaryPoints(tln);
             int[] spected = { 0, 24, 25, 29 };
             Assert.AreEqual(indexes.ToArray(), spected);
         }

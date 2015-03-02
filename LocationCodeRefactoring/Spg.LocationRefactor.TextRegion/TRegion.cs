@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Drawing;
-//using FastColoredTextBoxNS;
 using Microsoft.CodeAnalysis;
 
 namespace Spg.LocationRefactor.TextRegion
 {
+    /// <summary>
+    /// Text region
+    /// </summary>
     public class TRegion
     {
         /// <summary>
@@ -36,6 +38,12 @@ namespace Spg.LocationRefactor.TextRegion
         /// Region color
         /// </summary>
         public Color Color { get; set; }
+
+        /// <summary>
+        /// Source code path
+        /// </summary>
+        /// <returns>Source code path</returns>
+        public string Path { get; set; }
 
         /// <summary>
         /// Region range

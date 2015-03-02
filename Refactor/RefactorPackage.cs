@@ -1,15 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using LocateAdornment;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationCodeRefactoring.Observer;
+using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 
 namespace SPG.Refactor
 {
@@ -32,7 +40,7 @@ namespace SPG.Refactor
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(GuidList.guidRefactorPkgString)]
-    public sealed class RefactorPackage : Package, IProgramRefactoredObserver
+    public sealed class RefactorPackage : Package, IProgramRefactoredObserver/*, ILocationsTransformedObserver*/
     {
         /// <summary>
         /// Default constructor of the package.
@@ -46,12 +54,16 @@ namespace SPG.Refactor
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
             EditorController controller = EditorController.GetInstance();
             controller.AddProgramRefactoredObserver(this);
+            //controller.AddLocationsTransformedObvserver(this);
         }
 
+        /// <summary>
+        /// Update view when a refactor occur.
+        /// </summary>
+        /// <param name="pEvent">Event</param>
         public void NotifyProgramRefactored(ProgramRefactoredEvent pEvent)
         {
-            EditorController controller = EditorController.GetInstance();
-            String transformation = pEvent.transformation;
+            List<Transformation> transformations = pEvent.transformations;
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
             int mustHaveFocus = 1;
@@ -68,11 +80,68 @@ namespace SPG.Refactor
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
             viewHost = (IWpfTextViewHost)holder;
-            Connector.Update(viewHost, transformation);
+            Connector.Update(viewHost, transformations);
         }
 
+        private List<Tuple<string, string>> DocumentsBeforeAndAfter()
+        {
+            EditorController controller = EditorController.GetInstance();
+            var groupedLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(controller.Locations);
 
+            List<Tuple<string, string>> tuples = new List<Tuple<string, string>>();
+            foreach (var item in groupedLocation)
+            {
+                string documentContent = CurrrentDocumentContent(item.Key);
+                if (!documentContent.Equals(item.Value.First().SourceCode))
+                {
+                    Tuple<string, string> tuple = Tuple.Create(item.Value.First().SourceCode, documentContent);
+                    tuples.Add(tuple);
+                }
+            }
+            return tuples;
+        }
 
+        private string CurrrentDocumentContent(string document)
+        {
+
+            var rdt = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
+            IEnumRunningDocuments value;
+            rdt.GetRunningDocumentsEnum(out value);
+
+            IVsHierarchy hierarchy;
+            uint pitemid;
+            IntPtr ppunkDocData;
+            uint pdwCookie;
+            rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_CantSave, document, out hierarchy, out pitemid,
+                out ppunkDocData, out pdwCookie);
+
+            string pbstrMkDocument;
+            uint pwdReadLooks, pwdEditLocks, pgrfRDTFlags;
+            var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
+                out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
+
+            try
+            {
+                IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
+
+                //var bufferData = (IVsEditorAdaptersFactoryService)GetService(typeof(IVsEditorAdaptersFactoryService));
+                IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+                IVsEditorAdaptersFactoryService bufferData =
+                    componentModel.GetService<IVsEditorAdaptersFactoryService>();
+                Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
+                    typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
+                    as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
+                var textBuffer = bufferData.GetDataBuffer(x);
+                string text = textBuffer.CurrentSnapshot.GetText();
+                return text;
+            }
+            catch (Exception e)
+            {
+                string text = File.ReadAllText(document);
+                return text;
+            }
+        }
 
         /////////////////////////////////////////////////////////////////////////////
         // Overridden Package Implementation
@@ -84,17 +153,17 @@ namespace SPG.Refactor
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if ( null != mcs )
+            if (null != mcs)
             {
                 // Create the command for the menu item.
                 CommandID menuCommandID = new CommandID(GuidList.guidRefactorCmdSet, (int)PkgCmdIDList.cmdidRefactor);
-                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID );
-                mcs.AddCommand( menuItem );
+                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
+                mcs.AddCommand(menuItem);
             }
         }
         #endregion
@@ -124,10 +193,24 @@ namespace SPG.Refactor
             viewHost = (IWpfTextViewHost)holder;
 
             EditorController controler = EditorController.GetInstance();
-            controler.CodeAfter = Connector.GetText(viewHost);
+            controler.CurrentViewCodeAfter = Connector.GetText(viewHost);
+
+            EditorController controller = EditorController.GetInstance();
+            controller.DocumentsBeforeAndAfter = DocumentsBeforeAndAfter();
 
             controler.Refact();
         }
 
+        //public void NotifyLocationsTransformed(LocationsTransformedEvent ltEvent)
+        //{
+        //    List<CodeTransformation> transformations = ltEvent.transformations;
+        //    foreach (var transformation in transformations)
+        //    {
+        //        System.IO.StreamWriter file = new System.IO.StreamWriter(transformation.location.SourceClass);
+        //        file.WriteLine(transformation.transformation.Item2);
+
+        //        file.Close();
+        //    }
+        //}
     }
 }

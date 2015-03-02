@@ -1,18 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using LocateAdornment;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationCodeRefactoring.Observer;
-using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
+using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
+using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using Microsoft.VisualStudio.Shell.Interop;
+using Spg.LocationRefactor.Location;
 
 namespace SPG.IntelliExtract
 {
@@ -45,7 +54,8 @@ namespace SPG.IntelliExtract
         /// initialization is the Initialize method.
         /// </summary>
 
-        private List<Prog> programs;
+        private List<Prog> _programs;
+
         public IntelliExtractPackage()
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
@@ -59,7 +69,7 @@ namespace SPG.IntelliExtract
         {
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
-            int mustHaveFocus = 1;
+            const int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 
             IVsUserData userData = vTextView as IVsUserData;
@@ -68,32 +78,33 @@ namespace SPG.IntelliExtract
                 Console.WriteLine("No text view is currently open");
                 return;
             }
-            IWpfTextViewHost viewHost;
             object holder;
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
-            viewHost = (IWpfTextViewHost)holder;
-
-            string sourceCode = Connector.GetText(viewHost);
+            var viewHost = (IWpfTextViewHost)holder;
 
             foreach (TRegion r in hEvent.regions)
             {
                 Connector.Select(viewHost, r);
             }
             EditorController controler = EditorController.GetInstance();
-            controler.CodeBefore = Connector.GetText(viewHost);
+            controler.CurrentViewCodeBefore = Connector.GetText(viewHost);
         }
 
         public void NotifyLocationsSelected(LocationEvent lEvent)
         {
-            Console.WriteLine("Locations Selected");
+            var locations = lEvent.locations;
+            foreach (var location in locations)
+            {
+                MessageBox.Show(location.Region.Node.GetText() + "\n");
+            }
         }
+
 
         public void NotifyProgramGenerated(ProgramGeneratedEvent pEvent)
         {
-
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
-            IVsTextView vTextView = null;
+            IVsTextView vTextView;
             int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 
@@ -111,15 +122,147 @@ namespace SPG.IntelliExtract
 
             string text = Connector.GetText(viewHost);
 
-            this.programs = pEvent.programs;
-
-            String selected = programs[0].ToString();
+            this._programs = pEvent.programs;
 
             EditorController controler = EditorController.GetInstance();
-            controler.RetrieveRegions(selected, text);
+            controler.RetrieveLocations(text);
+            //var projectionBuffer = CreateProjectionBuffer(viewHost);
+            //controler.ProjectionBuffer = projectionBuffer;
+            controler.ProjectionBuffers = _CreateProjectionBuffers();
         }
 
+        private Dictionary<string, IProjectionBuffer> _CreateProjectionBuffers()
+        {
+            EditorController controller = EditorController.GetInstance();
+          var groupedLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(controller.Locations);
 
+            Dictionary<string, IProjectionBuffer> projectionBuffers = new Dictionary<string, IProjectionBuffer>();
+            foreach (var item in groupedLocation)
+            {
+                var projectionBuffer = _CreateProjectionBuffer(item.Key, item.Value);
+                if (projectionBuffer != null)
+                {
+                    projectionBuffers.Add(item.Key, projectionBuffer);
+                }
+            }
+            return projectionBuffers;
+        }
+
+        private IProjectionBuffer _CreateProjectionBuffer(string document, List<CodeLocation> locations)
+        {
+            var rdt = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
+            IEnumRunningDocuments value;
+            rdt.GetRunningDocumentsEnum(out value);
+
+            IVsHierarchy hierarchy;
+            uint pitemid;
+            IntPtr ppunkDocData;
+            uint pdwCookie;
+            rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_CantSave, document, out hierarchy, out pitemid,
+                out ppunkDocData, out pdwCookie);
+
+            string pbstrMkDocument;
+            uint pwdReadLooks, pwdEditLocks, pgrfRDTFlags;
+            var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
+                out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
+
+            try
+            {
+                IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
+
+                IComponentModel componentModel = Package.GetGlobalService(typeof (SComponentModel)) as IComponentModel;
+                IVsEditorAdaptersFactoryService bufferData =
+                    componentModel.GetService<IVsEditorAdaptersFactoryService>();
+                Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
+                    typeof (Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
+                    as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
+                var textBuffer = bufferData.GetDataBuffer(x);
+                var projectionBuffer = _CreateProjectionBuffer(textBuffer, locations);
+                return projectionBuffer;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Document not found on project: " + e.Message);
+            }
+            return null;
+        }
+
+        public IProjectionBuffer CreateProjectionBuffer(IWpfTextViewHost host)
+        {
+            //retrieve start and end position that we saved in MyToolWindow.CreateEditor()
+            var textView = host.TextView;
+
+            List<object> sourceSpans = new List<object>();
+            foreach (var location in EditorController.GetInstance().Locations)
+            {
+
+                var startPosition = location.Region.Start;
+                var length = location.Region.Length;
+                if (startPosition != 0)
+                {
+                    startPosition -= 1;
+                    length = Math.Min(length + 2, textView.TextBuffer.CurrentSnapshot.Length);
+                }
+                else
+                {
+                    length = Math.Min(length + 1, textView.TextBuffer.CurrentSnapshot.Length);
+                }
+
+                //Take a snapshot of the text within these indices.
+                var textSnapshot = textView.TextBuffer.CurrentSnapshot;
+                var trackingSpan = textSnapshot.CreateTrackingSpan(startPosition, length, SpanTrackingMode.EdgeExclusive);
+                sourceSpans.Add(trackingSpan);
+            }
+
+            //var ProjectionBufferFactory = (IProjectionBufferFactoryService) GetService(typeof(IProjectionBufferFactoryService));
+            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+            IProjectionBufferFactoryService ProjectionBufferFactory = componentModel.GetService<IProjectionBufferFactoryService>();
+
+            //Create the actual projection buffer
+            var projectionBuffer = ProjectionBufferFactory.CreateProjectionBuffer(
+                null
+                , sourceSpans
+                , ProjectionBufferOptions.None
+                );
+            return projectionBuffer;
+        }
+
+        private IProjectionBuffer _CreateProjectionBuffer(ITextBuffer textBuffer, List<CodeLocation> locations)
+        {
+            List<object> sourceSpans = new List<object>();
+            foreach (var location in locations)
+            {
+                var startPosition = location.Region.Start;
+                var length = location.Region.Length;
+                if (startPosition != 0)
+                {
+                    startPosition -= 1;
+                    length = Math.Min(length + 2, textBuffer.CurrentSnapshot.Length);
+                }
+                else
+                {
+                    length = Math.Min(length + 1, textBuffer.CurrentSnapshot.Length);
+                }
+
+                //Take a snapshot of the text within these indices.
+                var textSnapshot = textBuffer.CurrentSnapshot;
+                var trackingSpan = textSnapshot.CreateTrackingSpan(startPosition, length, SpanTrackingMode.EdgeExclusive);
+                sourceSpans.Add(trackingSpan);
+            }
+
+            //var ProjectionBufferFactory = (IProjectionBufferFactoryService) GetService(typeof(IProjectionBufferFactoryService));
+            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+            IProjectionBufferFactoryService ProjectionBufferFactory = componentModel.GetService<IProjectionBufferFactoryService>();
+
+            //Create the actual projection buffer
+            var projectionBuffer = ProjectionBufferFactory.CreateProjectionBuffer(
+                null
+                , sourceSpans
+                , ProjectionBufferOptions.None
+                );
+            return projectionBuffer;
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////
@@ -132,17 +275,17 @@ namespace SPG.IntelliExtract
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if ( null != mcs )
+            if (null != mcs)
             {
                 // Create the command for the menu item.
-                CommandID menuCommandID = new CommandID(GuidList.guidIntelliExtractCmdSet, (int)PkgCmdIDList.cmdidExtract);
-                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID );
-                mcs.AddCommand( menuItem );
+                CommandID menuCommandId = new CommandID(GuidList.guidIntelliExtractCmdSet, (int)PkgCmdIDList.cmdidExtract);
+                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandId);
+                mcs.AddCommand(menuItem);
             }
         }
         #endregion
@@ -156,7 +299,7 @@ namespace SPG.IntelliExtract
         {
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
-            int mustHaveFocus = 1;
+            const int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 
             IVsUserData userData = vTextView as IVsUserData;
@@ -165,9 +308,14 @@ namespace SPG.IntelliExtract
                 Console.WriteLine("No text view is currently open");
                 return;
             }
+            object holder;
+            Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
+            userData.GetData(ref guidViewHost, out holder);
+            var viewHost = (IWpfTextViewHost)holder;
 
-            EditorController controler = EditorController.GetInstance();
-            controler.Extract();
+            EditorController controller = EditorController.GetInstance();
+            controller.CurrentViewCodeBefore = Connector.GetText(viewHost);
+            controller.Extract();
         }
 
     }

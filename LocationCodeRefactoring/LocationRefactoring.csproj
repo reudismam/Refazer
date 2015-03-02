@@ -72,6 +72,8 @@
       <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable">
       <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
@@ -106,11 +108,9 @@
     <Compile Include="Spg.LocationRefactor.Learn\Map\MapLearnerBase.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\PairLearn.cs" />
     <Compile Include="Spg.LocationRefactor.Location\CodeLocation.cs" />
-    <Compile Include="Spg.LocationRefactor.Location\Strategy.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\RegionManager.cs" />
     <Compile Include="Spg.LocationRefactor.Location\LocationExtractor.cs" />
     <Compile Include="Spg.LocationRefactor.Location\StatementExtrategy.cs" />
-    <Compile Include="Spg.LocationRefactor.Location\RangeExtrategy.cs" />
-    <Compile Include="Spg.LocationRefactor.Location\MethodExtrategy.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramRefactoredObserver.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramsGeneratedObserver.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\ProgramRefactoredEvent.cs" />
@@ -130,11 +130,6 @@
     <Compile Include="Spg.LocationRefactor.Predicate\IPredicate.cs" />
     <Compile Include="Spg.LocationRefactor.Predicate\PredicateFactory.cs" />
     <Compile Include="Spg.LocationRefactor.Program\Prog.cs" />
-    <Compile Include="Spg.LocationRefactor.Schema\Field.cs" />
-    <Compile Include="Spg.LocationRefactor.Schema\IElement.cs" />
-    <Compile Include="Spg.LocationRefactor.Schema\Sequence.cs" />
-    <Compile Include="Spg.LocationRefactor.Schema\Structure.cs" />
-    <Compile Include="Spg.LocationRefactor.State\StateDoc.cs" />
     <Compile Include="Spg.LocationRefactor.Synthesize\Synthesizer.cs" />
     <Compile Include="Spg.LocationRefactor.TextRegion\TRegion.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\HighlightEvent.cs" />
@@ -143,6 +138,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\ProgramGeneratedEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Transformation\CodeTransformation.cs" />
+    <Compile Include="Spg.LocationRefactor.Transformation\MapedLocationBasedTransformationManager.cs" />
+    <Compile Include="Spg.LocationRefactor.Transformation\Transformation.cs" />
     <Compile Include="Spg.LocationRefactor.Transformation\TransformationManager.cs" />
   </ItemGroup>
   <ItemGroup>

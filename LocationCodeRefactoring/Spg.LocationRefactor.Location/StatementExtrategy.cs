@@ -1,54 +1,57 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Spg.ExampleRefactoring.AST;
-using System.Collections.Generic;
+﻿//using System;
+//using System.Collections.Generic;
+//using Microsoft.CodeAnalysis;
+//using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Br.Spg.Location
-{
-    public class StatementStrategy : Strategy
-    {
+//namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
+//{
+//    /// <summary>
+//    /// Statement Strategy
+//    /// </summary>
+//    [Obsolete]
+//    public class StatementStrategy : RegionManager
+//    {
+//        private static StatementStrategy _instance;
 
-        private static StatementStrategy instance;
-        private SyntaxKind syntaxKind;
+//        //private readonly Dictionary<string, List<SyntaxNode>> _computed;
 
-        private Dictionary<string, List<SyntaxNode>> computed;
+//        ///// <summary>
+//        ///// Constructor
+//        ///// </summary>
+//        private StatementStrategy()
+//        {
+//            //_computed = new Dictionary<string, List<SyntaxNode>>();
+//        }
 
-        private StatementStrategy(SyntaxKind syntaxKind)
-        {
-            this.syntaxKind = syntaxKind;
-            computed = new Dictionary<string, List<SyntaxNode>>();
-        }
+//        /// <summary>
+//        /// Singleton instance
+//        /// </summary>
+//        /// <returns>Statement strategy instance</returns>
+//        public static StatementStrategy GetInstance()
+//        {
+//            if (_instance == null)
+//            {
+//                _instance = new StatementStrategy();
+//            }
 
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        /// <param name="syntaxKind">Syntax kind</param>
-        /// <returns>Statement strategy instance</returns>
-        public static StatementStrategy GetInstance(SyntaxKind syntaxKind)
-        {
-            if(instance == null)
-            {
-                instance = new StatementStrategy(syntaxKind);
-            }
+//            return _instance;
+//        }
 
-            return instance;
-        }
+//        /////// <summary>
+//        /////// Syntax nodes 
+//        /////// </summary>
+//        /////// <param name="sourceCode">Source code</param>
+//        /////// <returns>Syntax nodes</returns>
+//        ////public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
+//        ////{
+//        ////    List<SyntaxNode> nodes = null;
+//        ////    if (!_computed.TryGetValue(sourceCode, out nodes))
+//        ////    {
+//        ////        nodes = SyntaxElements(sourceCode, list);
+//        ////        _computed.Add(sourceCode, nodes);
+//        ////    }
 
-        /// <summary>
-        /// Syntax nodes 
-        /// </summary>
-        /// <param name="sourceCode">Source code</param>
-        /// <returns>Syntax nodes</returns>
-        public override List<SyntaxNode> SyntaxNodes(string sourceCode)
-        {
-            List<SyntaxNode> nodes = null;
-            if (!computed.TryGetValue(sourceCode, out nodes))
-            {
-                nodes = ASTManager.SyntaxElements(sourceCode, syntaxKind);
-                computed.Add(sourceCode, nodes);
-            }
-
-            return computed[sourceCode];
-        }
-    }
-}
+//        ////    return _computed[sourceCode];
+//        ////}
+//    }
+//}

@@ -8,18 +8,23 @@ using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.LocationRefactor.Operator.Filter;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 
 namespace Spg.LocationRefactor.Operator
 {
     public class EndPosMap : MapBase
     {
-        public EndPosMap()
+        public EndPosMap(List<TRegion> list)
         {
         }
 
         public override string ToString()
         {
-            return "EndSeqMap(" + ((Pair)scalarExpression.ioperator).expression.p1.ToString() + "\nLS=" + sequenceExpression.ToString() + ")";
+            return "EndSeqMap(" + ((Pair)ScalarExpression.Ioperator).expression.p1.ToString() + "\nLS=" + SequenceExpression.ToString() + ")";
         }
 
         /// <summary>
@@ -35,13 +40,13 @@ namespace Spg.LocationRefactor.Operator
             Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
             ListNode input = lNode.Item1;
 
-            FilterBase filter = (FilterBase) sequenceExpression.ioperator;
+            FilterBase filter = (FilterBase) SequenceExpression.Ioperator;
 
-            Pair pair = (Pair) scalarExpression.ioperator;
+            Pair pair = (Pair) ScalarExpression.Ioperator;
 
             SubStr synthesizer = pair.expression;
 
-            TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.predicate.r1, filter.predicate.r2);
+            TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.Predicate.r1, filter.Predicate.r2);
             TokenSeq regex2 = tokens;
 
             List<Tuple<int, ListNode>> matches = ASTManager.Matches(input, regex2, new RegexComparer());
