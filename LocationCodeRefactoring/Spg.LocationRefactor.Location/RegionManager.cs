@@ -97,15 +97,15 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 
                     Tuple<ListNode, ListNode> val;
                     Tuple<ListNode, ListNode> te = Example(node, re);
-                    if (!methodsDic.TryGetValue(node, out val))
-                    {
+                    //if (!methodsDic.TryGetValue(node, out val))
+                    //{
                         examples.Add(te);
-                        methodsDic.Add(node, te);
-                    }
-                    else
-                    {
-                        val.Item2.List.AddRange(te.Item2.List);
-                    }
+                    //    methodsDic.Add(node, te);
+                    //}
+                    //else
+                    //{
+                    //    val.Item2.List.AddRange(te.Item2.List);
+                    //}
                 }
             }
             return examples;

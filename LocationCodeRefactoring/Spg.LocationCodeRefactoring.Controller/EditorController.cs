@@ -273,7 +273,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             }
             else
             {
-                tuple = RetrieveLocationsSingleSourceClass(prog, sourceFiles);
+                tuple = RetrieveLocationsSingleSourceClass(prog);
             }
             var sourceLocations = tuple.Item1;
             var rs = tuple.Item2;
