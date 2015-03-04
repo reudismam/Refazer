@@ -60,18 +60,19 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         //     Assert.IsTrue(passLocation && passTransformation);
         // }
 
-        // /// <summary>
-        // /// Test Method Call To Identifier transformation
-        // /// </summary>
-        // [Test]
-        // public void ParameterToConstantValueTest()
-        // {
-        //     bool passLocation = LocationTest.LocaleTest(FilePath.PARAMETER_TO_CONSTANT_VALUE_INPUT, FilePath.PARAMETER_TO_CONSTANT_VALUE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_PATH);
+        /// <summary>
+        /// Test case for parameter to constant value
+        /// </summary>
+        [Test]
+        public void Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            List<string> list = new List<string>();
+            list.Add("SyntaxFactory.cs");
+            bool passTransformation = CompleteTestBase(list, @"c96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
 
-        //     bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_AFTER_EDITING, FilePath.PARAMETER_TO_CONSTANT_VALUE_EDITION, @"\parameter_to_constant_value\");
-
-        //     Assert.IsTrue(passLocation && passTransformation);
-        // }
+            Assert.IsTrue(passLocation && passTransformation);
+        }
 
         [Test]
         public void Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d()
@@ -115,15 +116,53 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
             Assert.IsTrue(passLocation && passTransformation);
         }
 
-        // [Test]
-        // public void ParameterChangeOnMethodTest()
-        // {
-        //     bool passLocation = LocationTest.LocaleTest(FilePath.PARAMETER_CHANGE_ON_METHOD_INPUT, FilePath.PARAMETER_CHANGE_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_CHANGE_ON_METHOD_PATH);
+        [Test]
+        public void Proj2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
 
-        //     bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_PARAMETER_CHANGE_ON_METHOD_AFTER_EDITING, FilePath.PARAMETER_CHANGE_ON_METHOD_EDITION, @"\parameter_change_on_method\");
+            List<string> list = new List<string>();
+            list.Add("SymbolDisplay.cs");
+            bool passTransformation = CompleteTestBase(list, @"2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
 
-        //     Assert.IsTrue(passLocation && passTransformation);
-        // }
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void Proj3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+
+            List<string> list = new List<string>();
+            list.Add("ObjectDisplay.cs");
+            bool passTransformation = CompleteTestBase(list, @"3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void Proj4_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("4_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+
+            List<string> list = new List<string>();
+            list.Add("ObjectDisplay.cs");
+            bool passTransformation = CompleteTestBase(list, @"4_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void Proj5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+
+            List<string> list = new List<string>();
+            list.Add("ObjectDisplay.cs");
+            bool passTransformation = CompleteTestBase(list, @"5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
 
         // [Test]
         // public void ReturnToGetTest()
@@ -158,6 +197,16 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
             Assert.IsTrue(passLocation && passTransformation);
         }
 
+        [Test]
+        public void Proj2_cfd9b464dbb07c8b183d89a403a8bc877b3e929d()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2-cfd9b464dbb07c8b183d89a403a8bc877b3e929d", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable4\Portable\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.sln", "Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+            List<string> list = new List<string>();
+            list.Add("MetadataWriter.cs");
+            bool passTransformation = CompleteTestBase(list, @"2-cfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
         // [Test]
         // public void ChangeAnnotationOnClassTest()
         // {

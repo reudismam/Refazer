@@ -158,7 +158,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <param name="me">Method</param>
         /// <param name="re">Region within the method</param>
         /// <returns>A example</returns>
-        private Tuple<ListNode, ListNode> Example(SyntaxNode me, TRegion re)
+        private Tuple<ListNode, ListNode> Example2(SyntaxNode me, TRegion re)
         {
             List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
             list = ASTManager.EnumerateSyntaxNodesAndTokens(me, list);
@@ -187,6 +187,61 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             }
 
             ListNode subNodes = ASTManager.SubNotes(listNode, Math.Max(i - 1, 0), ((j) - i));
+            subNodes.OriginalText = re.Text;
+            Tuple<ListNode, ListNode> t = Tuple.Create(listNode, subNodes);
+
+            return t;
+        }
+
+        /// <summary>
+        /// Covert the region on a method to an example ListNode
+        /// </summary>
+        /// <param name="me">Method</param>
+        /// <param name="re">Region within the method</param>
+        /// <returns>A example</returns>
+        private Tuple<ListNode, ListNode> Example(SyntaxNode me, TRegion re)
+        {
+            List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+            list = ASTManager.EnumerateSyntaxNodesAndTokens(me, list);
+            ListNode listNode = new ListNode(list);
+            listNode.OriginalText = me.GetText().ToString();
+
+            SyntaxNodeOrToken node = list[0];
+
+            int i = 0;
+            while (re.Start > node.Span.Start)
+            {
+                node = list[i++];
+            }
+
+            int j = i;
+            bool last = false;
+            while (re.Start + re.Length >= node.Span.End)
+            {
+                if (node.Equals(list.Last()))
+                {
+                    last = true; break; //j reached the last element.
+                }
+                node = list[j++];
+            }
+
+            ListNode subNodes;
+            int iIndex = Math.Max(i - 1, 0);
+            if (last)
+            {
+                subNodes = ASTManager.SubNotes(listNode, iIndex, list.Count - iIndex);
+            }
+            else
+            {
+                List<SyntaxNodeOrToken> snort = new List<SyntaxNodeOrToken>();
+                for (int k = iIndex; !list[k].Equals(node); k++)
+                {
+                    snort.Add(list[k]);
+                }
+                subNodes = new ListNode(snort);
+            }
+
+            //subNodes = ASTManager.SubNotes(listNode, Math.Max(i - 1, 0), ((j) - i));
             subNodes.OriginalText = re.Text;
             Tuple<ListNode, ListNode> t = Tuple.Create(listNode, subNodes);
 

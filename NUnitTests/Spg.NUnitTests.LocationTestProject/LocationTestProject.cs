@@ -44,15 +44,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         //    Assert.IsTrue(isValid);
         //}
 
-        ///// <summary>
-        ///// Test case for parameter to constant value
-        ///// </summary>
-        //[Test]
-        //public void ParameterToConstantValueTest()
-        //{
-        //    bool isValid = LocaleTest(FilePath.PARAMETER_TO_CONSTANT_VALUE_INPUT, FilePath.PARAMETER_TO_CONSTANT_VALUE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_PARAMETER_TO_CONSTANT_VALUE_PATH);
-        //    Assert.IsTrue(isValid);
-        //}
+        /// <summary>
+        /// Test case for parameter to constant value
+        /// </summary>
+        [Test]
+        public void Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool isValid = LocationTestProject.LocaleTest("c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            Assert.IsTrue(isValid);
+        }
 
         [Test]
         public void Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd()
@@ -78,12 +78,33 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void ChangeParamOnMethodTest()
-        //{
-        //    bool isValid = LocaleTest(FilePath.CHANGE_PARAM_ON_METHOD_INPUT, FilePath.CHANGE_PARAM_ON_METHOD_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_PARAM_ON_METHOD_PATH);
-        //    Assert.IsTrue(isValid);
-        //}
+        [Test]
+        public void Proj2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool isValid = LocationTestProject.LocaleTest("3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj4_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool isValid = LocationTestProject.LocaleTest("4_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        {
+            bool isValid = LocationTestProject.LocaleTest("5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            Assert.IsTrue(isValid);
+        }
 
         //[Test]
         //public void ReturnToGetTest()

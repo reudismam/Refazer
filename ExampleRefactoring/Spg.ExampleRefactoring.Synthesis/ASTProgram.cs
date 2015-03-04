@@ -211,6 +211,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             if (parent.IsKind(SyntaxKind.QualifiedName)) {  return true; }
 
+            if (parent.IsKind(SyntaxKind.IfStatement)) { return true; }
+
             if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
                 string value = next.ToString();
