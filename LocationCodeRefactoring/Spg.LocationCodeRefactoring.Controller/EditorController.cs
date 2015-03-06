@@ -91,7 +91,9 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public Dictionary<string, List<Selection>> EditedLocations { get; set; }
 
-        public Dictionary<string, bool> FilesOpened { get; set; }   
+        public Dictionary<string, bool> FilesOpened { get; set; }
+
+        public Tuple<List<CodeLocation>, List<TRegion>> localionsComputerSoFar;
 
 
         /// <summary>
@@ -121,6 +123,11 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             this.FilesOpened = new Dictionary<string, bool>();
         }
 
+        public static void ReInit()
+        {
+            _instance = new EditorController();
+        }
+
         /// <summary>
         /// Get singleton EditorController instance
         /// </summary>
@@ -144,6 +151,16 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             JsonUtil<List<TRegion>>.Write(SelectedLocations, "input_selection.json");
             //remove
             Progs = extractor.Extract(SelectedLocations);
+
+            Progs = RecomputeWithNegativeLocations();
+
+            NotifyLocationProgramGeneratedObservers(Progs);
+        }
+
+        public void Extract(List<TRegion> positives, List<TRegion> negatives)
+        {
+            LocationExtractor extractor = new LocationExtractor(SolutionPath);
+            Progs = extractor.Extract(positives, negatives);
 
             Progs = RecomputeWithNegativeLocations();
 
@@ -290,8 +307,14 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
             //remove
 
-            NotifyHilightObservers(rs);
+            localionsComputerSoFar = tuple;
+            //NotifyHilightObservers(rs);
             NotifyLocationsObservers(Locations);
+        }
+
+        public void Done()
+        {
+            NotifyHilightObservers(localionsComputerSoFar.Item2);
         }
 
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog)
@@ -394,37 +417,77 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// <summary>
         /// Selected only non duplicate locations
         /// </summary>
+        /// <param name = "locations" > All locations </ param >
+        /// < returns > Non duplicate locations</returns>
+        //private List<CodeLocation> NonDuplicateLocations(List<CodeLocation> locations)
+        //{
+        //    List<CodeLocation> clocations = new List<CodeLocation>();
+        //    var groupedLocations = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
+        //    foreach (var item in groupedLocations)
+        //    {
+        //        Dictionary<Tuple<int, int>, CodeLocation> dic = new Dictionary<Tuple<int, int>, CodeLocation>();
+        //        foreach (CodeLocation location in item.Value)
+        //        {
+        //            Tuple<int, int> tuple = Tuple.Create(location.Region.Start, location.Region.Length);
+        //            CodeLocation value;
+        //            if (!dic.TryGetValue(tuple, out value))
+        //            {
+        //                dic.Add(tuple, location);
+        //            }
+        //            else
+        //            {
+        //                if (value.Region.Node.GetText().ToString().Length < location.Region.Node.GetText().Length)
+        //                {
+        //                    dic[tuple] = location;
+        //                }
+        //            }
+        //        }
+        //        var nonDuplicateLocations = dic.Values.ToList();
+        //        clocations.AddRange(nonDuplicateLocations);
+        //    }
+        //    return clocations;
+        //}
+
+        /// <summary>
+        /// Selected only non duplicate locations
+        /// </summary>
         /// <param name="locations">All locations</param>
         /// <returns>Non duplicate locations</returns>
         private List<CodeLocation> NonDuplicateLocations(List<CodeLocation> locations)
         {
             List<CodeLocation> clocations = new List<CodeLocation>();
             var groupedLocations = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
+
+            bool [] analized = Enumerable.Repeat(false, locations.Count).ToArray();
+
             foreach (var item in groupedLocations)
             {
-                Dictionary<Tuple<int, int>, CodeLocation> dic = new Dictionary<Tuple<int, int>, CodeLocation>();
-                foreach (CodeLocation location in item.Value)
+                for (int i = 0; i < item.Value.Count; i++)
                 {
-                    Tuple<int, int> tuple = Tuple.Create(location.Region.Start, location.Region.Length);
-                    CodeLocation value;
-                    if (!dic.TryGetValue(tuple, out value))
+                    CodeLocation location = item.Value[i];
+                    CodeLocation choosed = location;
+                    if (!analized[i])
                     {
-                        dic.Add(tuple, location);
-                    }
-                    else
-                    {
-                        if (value.Region.Node.GetText().ToString().Length < location.Region.Node.GetText().Length)
+                        for (int j = i + 1; j < item.Value.Count; j++)
                         {
-                            dic[tuple] = location;
+                            var otherLocation = item.Value[j];
+                            bool intersect = location.Region.IntersectWith(otherLocation.Region);
+                            if (intersect)
+                            {
+                                analized[j] = true;
+                                if (otherLocation.Region.Start > location.Region.Start)
+                                {
+                                    choosed = otherLocation;
+                                }
+                                //break;
+                            }
                         }
+                        clocations.Add(choosed);
                     }
                 }
-                var nonDuplicateLocations = dic.Values.ToList();
-                clocations.AddRange(nonDuplicateLocations);
             }
             return clocations;
         }
-
         /// <summary>
         /// Selected only non duplicate locations
         /// </summary>

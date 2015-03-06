@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
@@ -34,15 +35,52 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         //    Assert.IsTrue(isValid);
         //}
 
-        ///// <summary>
-        ///// Test Method Call To Identifier transformation
-        ///// </summary>
-        //[Test]
-        //public void MethodCallToIdentifierTest()
-        //{
-        //    bool isValid = LocaleTest(FilePath.METHOD_CALL_TO_IDENTIFIER_INPUT, FilePath.METHOD_CALL_TO_IDENTIFIER_OUTPUT_SELECTION, FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH);
-        //    Assert.IsTrue(isValid);
-        //}
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805()
+        {
+            bool isValid = LocationTestProject.LocaleTest("00552fc2287f820ae9d42fd259aa6c07c2c5a805", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable6\Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805.sln", "Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_4b402939708adf35a7a5e12ffc99dc14cc1f4766", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CSharp2\Proj2_4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", "Proj2_4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+            Assert.IsTrue(isValid);
+        }
+
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj8ecd05880b478e4ca997a4789b976ef73b070546()
+        {
+            bool isValid = LocationTestProject.LocaleTest("8ecd05880b478e4ca997a4789b976ef73b070546", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable7\Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", "Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+            Assert.IsTrue(isValid);
+        }
+        
+
+
+        [Test]
+        public void Proj04d060498bc0c30403bb05872e396052d826d082()
+        {
+            bool isValid = LocationTestProject.LocaleTest("04d060498bc0c30403bb05872e396052d826d082", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Diagnostics2\Proj04d060498bc0c30403bb05872e396052d826d082.sln", "Proj04d060498bc0c30403bb05872e396052d826d082");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj318b2b0e476a122ebc033b13d41449ef1c814c1d()
+        {
+            bool isValid = LocationTestProject.LocaleTest("318b2b0e476a122ebc033b13d41449ef1c814c1d", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Core2\Proj318b2b0e476a122ebc033b13d41449ef1c814c1d.sln", "Proj318b2b0e476a122ebc033b13d41449ef1c814c1d");
+            Assert.IsTrue(isValid);
+        }
 
         /// <summary>
         /// Test case for parameter to constant value
@@ -134,12 +172,19 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void ChangeAnnotationOnClassTest()
-        //{
-        //    bool isValid = LocaleTest(FilePath.CHANGE_ANNOTATION_ON_CLASS_INPUT, FilePath.CHANGE_ANNOTATION_ON_CLASS_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_PATH);
-        //    Assert.IsTrue(isValid);
-        //}
+        [Test]
+        public void Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99()
+        {
+            bool isValid = LocationTestProject.LocaleTest("7c885ca20209ca95cfec1ed5bfaf1d43db06be99", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Diagnostics\Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99.sln", "Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj2_7c885ca20209ca95cfec1ed5bfaf1d43db06be99()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_7c885ca20209ca95cfec1ed5bfaf1d43db06be99", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Diagnostics\Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99.sln", "Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
+            Assert.IsTrue(isValid);
+        }
 
         ///// <summary>
         ///// ASTManager to parent test case
@@ -162,12 +207,11 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Locale test base method
         /// </summary>
         /// <param name="commit">commit id</param>
-        /// <param name="mainClass">Main class</param>
         /// <returns>True if locale passed</returns>
         public static bool LocaleTest(string commit, string solution, string project)
         {
+            EditorController.ReInit();
             EditorController controller = EditorController.GetInstance();
-            controller.Init();
             List<TRegion> selections = JsonUtil<List<TRegion>>.Read(@"commits\"+ commit + @"\input_selection.json");
             controller.SelectedLocations = selections;
             controller.CurrentViewCodeBefore = FileUtil.ReadFile(selections.First().Path);
@@ -177,6 +221,22 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
 
             controller.Extract();
             controller.SolutionPath = solution;
+            controller.RetrieveLocations(controller.CurrentViewCodeBefore);
+
+            if (File.Exists(@"commits\" + commit + @"\negatives.json"))
+            {
+                List<int> negatives = JsonUtil<List<int>>.Read(@"commits\" + commit + @"\negatives.json");
+                List<TRegion> negativesRegions = new List<TRegion>();
+                foreach (var negative in negatives)
+                {
+                    TRegion parent = new TRegion();
+                    parent.Text = controller.Locations[negative].SourceCode;
+                    controller.Locations[negative].Region.Parent = parent;
+                    negativesRegions.Add(controller.Locations[negative].Region);
+                }
+
+                controller.Extract(controller.SelectedLocations, negativesRegions);
+            }
             controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
             List<Selection> locations = JsonUtil<List<Selection>>.Read(@"commits\" + commit + @"\found_locations.json");

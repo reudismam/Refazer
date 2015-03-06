@@ -149,7 +149,15 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     SyntaxNodeOrToken st = t.Item1.List[i];
                     if (st.IsKind(SyntaxKind.IdentifierToken))
                     {
-                        Boolean dym = IsDym(st, t.Item1.List[i + 1]);
+                        bool dym;
+                        if (i + 1 < t.Item1.Length())
+                        {
+                            dym = IsDym(st, t.Item1.List[i + 1]);
+                        }
+                        else
+                        {
+                            dym = IsDym(st, null);
+                        }
 
                         if (!dym) continue;
 
@@ -195,7 +203,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         private static bool IsDym(SyntaxNodeOrToken st, SyntaxNodeOrToken next)
         {
             if (st == null) { throw new ArgumentNullException("st"); }
-            if(next == null) { throw  new ArgumentNullException("next");}
 
             if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
 
@@ -213,10 +220,14 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             if (parent.IsKind(SyntaxKind.IfStatement)) { return true; }
 
+            if (parent.IsKind(SyntaxKind.MethodDeclaration)) { return true; }
+
+            //if (next == null) { return false;}
+
             if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
-                string value = next.ToString();
-                if (value.Equals("("))
+                //string value = next.ToString();
+                if (next.IsKind(SyntaxKind.OpenParenToken) || next.IsKind(SyntaxKind.DotToken)  || next.IsKind(SyntaxKind.None) || next == null)
                     return true;
             }
             return false;

@@ -47,18 +47,57 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         //     Assert.IsTrue(passLocation && passTransformation);
         // }
 
-        // /// <summary>
-        // /// Test Method Call To Identifier transformation
-        // /// </summary>
-        // [Test]
-        // public void MethodCallToIdentifierTest()
-        // {
-        //     bool passLocation = LocationTest.LocaleTest(FilePath.METHOD_CALL_TO_IDENTIFIER_INPUT, FilePath.METHOD_CALL_TO_IDENTIFIER_OUTPUT_SELECTION, FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH);
+        [Test]
+        public void Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("00552fc2287f820ae9d42fd259aa6c07c2c5a805", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable6\Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805.sln", "Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805");
 
-        //     bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_METHOD_CALL_TO_IDENTIFIER_PATH_AFTER_EDITING, FilePath.METHOD_CALL_TO_IDENTIFIER_EDITION, @"\method_call_to_identifier\");
+            List<string> list = new List<string>();
+            list.Add("LanguageParser.cs");
+            bool passTransformation = CompleteTestBase(list, @"00552fc2287f820ae9d42fd259aa6c07c2c5a805");
 
-        //     Assert.IsTrue(passLocation && passTransformation);
-        // }
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj8ecd05880b478e4ca997a4789b976ef73b070546()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("8ecd05880b478e4ca997a4789b976ef73b070546", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable7\Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", "Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+
+            List<string> list = new List<string>();
+            list.Add("EmitExpression.cs");
+            bool passTransformation = CompleteTestBase(list, @"8ecd05880b478e4ca997a4789b976ef73b070546");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void Proj04d060498bc0c30403bb05872e396052d826d082()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("04d060498bc0c30403bb05872e396052d826d082", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Diagnostics2\Proj04d060498bc0c30403bb05872e396052d826d082.sln", "Proj04d060498bc0c30403bb05872e396052d826d082");
+
+            List<string> list = new List<string>();
+            list.Add("ApplyDiagnosticAnalyzerAttributeFix.cs"); list.Add("CA1052CSharpCodeFixProvider.cs");
+            bool passTransformation = CompleteTestBase(list, @"04d060498bc0c30403bb05872e396052d826d082");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void Proj318b2b0e476a122ebc033b13d41449ef1c814c1d()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("318b2b0e476a122ebc033b13d41449ef1c814c1d", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Core2\Proj318b2b0e476a122ebc033b13d41449ef1c814c1d.sln", "Proj318b2b0e476a122ebc033b13d41449ef1c814c1d");
+
+            List<string> list = new List<string>();
+            list.Add("DeclarePublicAPIFix.cs");
+            bool passTransformation = CompleteTestBase(list, @"318b2b0e476a122ebc033b13d41449ef1c814c1d");
+
+            Assert.IsTrue(passLocation && passTransformation);
+
+        }
 
         /// <summary>
         /// Test case for parameter to constant value
@@ -67,6 +106,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         public void Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
         {
             bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+
             List<string> list = new List<string>();
             list.Add("SyntaxFactory.cs");
             bool passTransformation = CompleteTestBase(list, @"c96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
@@ -164,6 +204,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
             Assert.IsTrue(passLocation && passTransformation);
         }
 
+
         // [Test]
         // public void ReturnToGetTest()
         // {
@@ -201,22 +242,37 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         public void Proj2_cfd9b464dbb07c8b183d89a403a8bc877b3e929d()
         {
             bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2-cfd9b464dbb07c8b183d89a403a8bc877b3e929d", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable4\Portable\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.sln", "Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+
             List<string> list = new List<string>();
             list.Add("MetadataWriter.cs");
             bool passTransformation = CompleteTestBase(list, @"2-cfd9b464dbb07c8b183d89a403a8bc877b3e929d");
 
             Assert.IsTrue(passLocation && passTransformation);
         }
-        // [Test]
-        // public void ChangeAnnotationOnClassTest()
-        // {
 
-        //     bool passLocation = LocationTest.LocaleTest(FilePath.CHANGE_ANNOTATION_ON_CLASS_INPUT, FilePath.CHANGE_ANNOTATION_ON_CLASS_OUTPUT_SELECTION, FilePath.MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_PATH);
+        [Test]
+        public void Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("7c885ca20209ca95cfec1ed5bfaf1d43db06be99", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Diagnostics\Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99.sln", "Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
 
-        //     bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_CHANGE_ANNOTATION_ON_CLASS_AFTER_EDITING, FilePath.CHANGE_ANNOTATION_ON_CLASS_EDITED, @"\change_annotation_on_class\");
+            List<string> list = new List<string>();
+            list.Add("InternalImplementationOnlyAnalyzer.cs"); list.Add("DiagnosticAnalyzerAttributeAnalyzer.cs");
+            bool passTransformation = CompleteTestBase(list, @"7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
 
-        //     Assert.IsTrue(passLocation && passTransformation);
-        // }
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void Proj2_7c885ca20209ca95cfec1ed5bfaf1d43db06be99()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_7c885ca20209ca95cfec1ed5bfaf1d43db06be99", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Diagnostics\Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99.sln", "Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
+
+            List<string> list = new List<string>();
+            list.Add("CA1001CSharpCodeFixProvider.cs"); list.Add("CA1008CSharpCodeFixProvider.cs");
+            bool passTransformation = CompleteTestBase(list, @"2_7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
 
         // [Test]
         // public void ASTManagerToParentTest()
@@ -287,7 +343,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
                 //className = "files" + complement + className;
                 //string source = FileUtil.ReadFile(classPath);
-                //FileUtil.WriteToFile(@"commits\" + commit + @"\" + className, transformation.transformation.Item2);
+                //FileUtil.WriteToFile(@"commits\" + commit + @"\tool\" + className, transformation.transformation.Item2);
 
                 Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(@"commits\" + commit + @"\tool\" + className), transformation.transformation.Item2);
                 Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);

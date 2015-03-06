@@ -4,8 +4,11 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using LocateAdornment;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
@@ -94,10 +97,32 @@ namespace SPG.IntelliExtract
         public void NotifyLocationsSelected(LocationEvent lEvent)
         {
             var locations = lEvent.locations;
-            foreach (var location in locations)
+            List<TRegion> negatives = new List<TRegion>();
+            List<int> indexNegatives = new List<int>();
+            for (int index = 0; index < locations.Count; index++)
             {
-                MessageBox.Show(location.Region.Node.GetText() + "\n");
+                var location = locations[index];
+//MessageBox.Show(location.Region.Node.GetText() + "\n");
+
+                DialogResult dialogResult = MessageBox.Show(location.Region.Node.GetText() + "\n",
+                    "Is it a correct location?", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.No)
+                {
+                    TRegion parent = new TRegion();
+                    parent.Text = location.SourceCode;
+                    location.Region.Parent = parent;
+                    negatives.Add(location.Region);
+                    indexNegatives.Add(index);
+                }
             }
+            EditorController controller = EditorController.GetInstance();
+            if (negatives.Any())
+            {
+                controller.Extract(controller.SelectedLocations, negatives);
+                JsonUtil<List<int>>.Write(indexNegatives, "negatives.json");
+            }
+
+            controller.Done();
         }
 
 

@@ -9,7 +9,6 @@ using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
@@ -58,7 +57,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     bool contains = Regex.IsMatch(statmentText, pattern);
                     if (contains)
                     {
-                        if (statment.SpanStart <= region.Start && region.Start <= statment.SpanStart + statment.Span.Length)
+                        if (statment.SpanStart <= region.Start && region.Start <= statment.Span.End)
                         {
                             if (!dicRegions.ContainsKey(region))
                             {
@@ -69,7 +68,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                                 dicRegions[region] = statment;
                             }
                         }
-                    }
+                  }
                 }
             }
             return dicRegions;
@@ -95,7 +94,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     TRegion re = pair.Key;
                     SyntaxNode node = pair.Value;
 
-                    Tuple<ListNode, ListNode> val;
+                    //Tuple<ListNode, ListNode> val;
                     Tuple<ListNode, ListNode> te = Example(node, re);
                     //if (!methodsDic.TryGetValue(node, out val))
                     //{

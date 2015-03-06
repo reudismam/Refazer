@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Forms.VisualStyles;
 using Microsoft.CodeAnalysis;
 
 namespace Spg.LocationRefactor.TextRegion
@@ -61,6 +62,13 @@ namespace Spg.LocationRefactor.TextRegion
             Boolean contains = System.Text.RegularExpressions.Regex.IsMatch(region.Text, text);
             Boolean parent = contains && region.Color != this.Color;
             return parent;
+        }
+
+        public bool IntersectWith(TRegion other)
+        {
+            bool thisWithOther =  this.Start <= other.Start && other.Start <= this.Start + this.Length;
+            bool otherWithThis = other.Start <= this.Start  && this.Start <= other.Start + other.Length;
+            return (thisWithOther || otherWithThis);
         }
 
        /* public override string ToString()

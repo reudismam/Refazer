@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DiGraph;
 using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
 using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
@@ -75,9 +76,9 @@ namespace Spg.LocationRefactor.Learn
             List<Prog> programs = new List<Prog>();
 
             List<IPredicate> predicates = BooleanLearning(QLine);
-            /*var items = from pair in predicates
+            var items = from pair in predicates
                         orderby pair.Regex().Count() descending, Order(pair) descending
-                        select pair;*/
+                        select pair;
             Dictionary<IPredicate, Prog> dic = new Dictionary<IPredicate, Prog>();
             foreach (IPredicate ipredicate in predicates)
             {
@@ -122,6 +123,9 @@ namespace Spg.LocationRefactor.Learn
             List<Prog> programs = new List<Prog>();
 
             List<IPredicate> predicates = BooleanLearning(QLine);
+            var items = from pair in predicates
+                        orderby pair.Regex().Count() descending, Order(pair) descending
+                        select pair;
 
             Dictionary<IPredicate, Prog> dic = new Dictionary<IPredicate, Prog>();
             foreach (IPredicate ipredicate in predicates)
