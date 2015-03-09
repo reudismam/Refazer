@@ -175,10 +175,10 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <param name="end">End position</param>
         /// <param name="syntaxKind">Syntax kind</param>
         /// <returns>Descendant node with the start position, end position and syntax kind specified</returns>
-        private static IEnumerable<SyntaxNode> NodesWithSameStartEndAndKind(SyntaxNode tree, int start, int end,
+        public static IEnumerable<SyntaxNode> NodesWithSameStartEndAndKind(SyntaxTree tree, int start, int end,
             SyntaxKind syntaxKind)
         {
-            var decedents = from snode in tree.DescendantNodes()
+            var decedents = from snode in tree.GetRoot().DescendantNodes()
                             where snode.Span.Start == start && snode.Span.End == end && snode.CSharpKind() == syntaxKind
                             select snode;
             return decedents;

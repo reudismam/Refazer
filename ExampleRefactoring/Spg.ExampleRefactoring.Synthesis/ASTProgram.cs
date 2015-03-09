@@ -405,10 +405,10 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     TokenSeq dtSeq = new TokenSeq(dTSeq);
                     tokensSeqs.Add(dtSeq);
                 }
-                else
-                {
+                //else
+                //{
                     tokensSeqs.Add(ts);
-                }
+                //}
                 if (subNodesLeft.List.Count > 0)
                 {
                     List<Token> emptySeq = TokenSeq.GetTokens(new ListNode());

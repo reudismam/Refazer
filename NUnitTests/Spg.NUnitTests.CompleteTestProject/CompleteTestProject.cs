@@ -63,6 +63,66 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
+        public void Proj2_cd68d0323eb97f18c10281847c831f8e361506b9()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_cd68d0323eb97f18c10281847c831f8e361506b9", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable8\Projcd68d0323eb97f18c10281847c831f8e361506b9.sln", "Projcd68d0323eb97f18c10281847c831f8e361506b9");
+
+            List<string> list = new List<string>();
+            list.Add("Project.cs");
+            bool passTransformation = CompleteTestBase(list, @"2_cd68d0323eb97f18c10281847c831f8e361506b9");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj3_cd68d0323eb97f18c10281847c831f8e361506b9()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_cd68d0323eb97f18c10281847c831f8e361506b9", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable8\Projcd68d0323eb97f18c10281847c831f8e361506b9.sln", "Projcd68d0323eb97f18c10281847c831f8e361506b9");
+
+            List<string> list = new List<string>();
+            list.Add("Project.cs");
+            bool passTransformation = CompleteTestBase(list, @"3_cd68d0323eb97f18c10281847c831f8e361506b9");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Projf66696e70c90ce7fa1476d53cc84cc18e438d19b()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("f66696e70c90ce7fa1476d53cc84cc18e438d19b", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\VBCSCompilerTests\Proje4d141a3c5f51ce4021d105e2b330564e02069fc.sln", "Proje4d141a3c5f51ce4021d105e2b330564e02069fc");
+
+            List<string> list = new List<string>();
+            list.Add("CompilerServerApiTest.cs");
+            bool passTransformation = CompleteTestBase(list, @"f66696e70c90ce7fa1476d53cc84cc18e438d19b");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_4b402939708adf35a7a5e12ffc99dc14cc1f4766", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CSharp2\Proj2_4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", "Proj2_4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+
+            List<string> list = new List<string>();
+            list.Add("AssemblySymbol.cs"); list.Add("InternalsVisibleToAndStrongNameTests.cs");
+            bool passTransformation = CompleteTestBase(list, @"2_4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
         public void Proj8ecd05880b478e4ca997a4789b976ef73b070546()
         {
             bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("8ecd05880b478e4ca997a4789b976ef73b070546", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable7\Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", "Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766");
