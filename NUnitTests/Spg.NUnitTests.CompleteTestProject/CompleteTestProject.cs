@@ -63,6 +63,96 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
+        public void Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable11\Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+
+            List<string> list = new List<string>();
+            list.Add("DiagnosticFormatter.cs");
+            bool passTransformation = CompleteTestBase(list, @"673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+
+            List<string> list = new List<string>();
+            list.Add("CommonCommandLineParserTests.cs");
+            bool passTransformation = CompleteTestBase(list, @"2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+
+            List<string> list = new List<string>();
+            list.Add("CommonCommandLineParserTests.cs");
+            bool passTransformation = CompleteTestBase(list, @"3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CommandLine\Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+
+            List<string> list = new List<string>();
+            list.Add("CommandLineTests.cs");
+            bool passTransformation = CompleteTestBase(list, @"4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable10\Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8.sln", "Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8");
+
+            List<string> list = new List<string>();
+            list.Add("UserDefinedImplicitConversions.cs");
+            bool passTransformation = CompleteTestBase(list, @"83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proje817dab72dd5199cb5c7f661bc6b289f63ae706b()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("e817dab72dd5199cb5c7f661bc6b289f63ae706b", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable9\Proje817dab72dd5199cb5c7f661bc6b289f63ae706b.sln", "Proje817dab72dd5199cb5c7f661bc6b289f63ae706b");
+
+            List<string> list = new List<string>();
+            list.Add("TokenBasedFormattingRule.cs");
+            bool passTransformation = CompleteTestBase(list, @"e817dab72dd5199cb5c7f661bc6b289f63ae706b");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
         public void Proj2_cd68d0323eb97f18c10281847c831f8e361506b9()
         {
             bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_cd68d0323eb97f18c10281847c831f8e361506b9", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable8\Projcd68d0323eb97f18c10281847c831f8e361506b9.sln", "Projcd68d0323eb97f18c10281847c831f8e361506b9");
@@ -369,6 +459,21 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
             controller.CurrentViewCodeAfter = FileUtil.ReadFile(@"commits\" + commit + @"\" + editeds.First());
 
             var dicionarySelection = JsonUtil<Dictionary<string, List<Selection>>>.Read(@"commits\" + commit + @"\edited_selections.json");
+
+            //controller.RetrieveLocations(controller.CurrentViewCodeAfter);
+            //var locationsToEdit = controller.Locations;
+
+            //List<Selection> selections = new List<Selection>();
+            //foreach (var location in locationsToEdit)
+            //{
+            //    Selection selection = new Selection(location.Region.Start - 1, location.Region.Length + 2,
+            //        dicionarySelection.Keys.First(), null);
+            //    selections.Add(selection);
+
+            //}
+            //Dictionary<string, List<Selection>> d = new Dictionary<string, List<Selection>>();
+            //d.Add(dicionarySelection.Keys.First(), selections);
+            //JsonUtil<Dictionary<string, List<Selection>>>.Write(d, "selections.json");
 
             //Tuple<string, string> beforeAfter = Tuple.Create(controller.CurrentViewCodeBefore, controller.CurrentViewCodeAfter);
             List<Tuple<string, string>> documents = new List<Tuple<string, string>>();

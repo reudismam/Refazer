@@ -95,6 +95,9 @@
     <Compile Include="Spg.LocationCodeRefactoring.Observer\LocationEvent.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\ILocationsTransformedObserver.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\LocationsTransformedEvent.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\BooleanLearner\BooleanLearnerBase.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\BooleanLearner\NegativeBooleanLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\BooleanLearner\PositiveBooleanLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\EndPosFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\MethodFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\StatementFilterLearner.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="Spg.LocationRefactor.Operator\Map\StatementMap.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Merge.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Pair.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\NotContains.cs" />
     <Compile Include="Spg.LocationRefactor.Predicate\Contains.cs" />
     <Compile Include="Spg.LocationRefactor.Predicate\EndsWith.cs" />
     <Compile Include="Spg.LocationRefactor.Predicate\IPredicate.cs" />

@@ -80,6 +80,18 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         {
             if (examples == null || examples.Count == 0) { throw new ArgumentException("Examples cannot be null or empty"); }
 
+            List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
+            if (OutputIsEmpty(examples))
+            {
+                IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
+                List<IExpression> expressions = new List<IExpression> {expression};
+                SynthesizedProgram program = new SynthesizedProgram();
+                validated.Add(program);
+                program.Solutions = expressions;
+                
+                return validated;
+            }
+           
             List<Dag> dags = Dags(examples);
 
             IntersectManager intManager = new IntersectManager();
@@ -111,9 +123,22 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
             Console.WriteLine(valid);
 
-            List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
             validated.Add(valid);
             return validated;
+        }
+
+        private bool OutputIsEmpty(List<Tuple<ListNode, ListNode>> examples)
+        {
+            bool isEmpty = true;
+            foreach (var example in examples)
+            {
+                if (example.Item2.List.Any())
+                {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            return isEmpty;
         }
 
         private List<Dag> Dags(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
@@ -282,8 +307,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 dag.AddVertex(v);
             }
 
-            List<int> n_sorces = new List<int>();
-            n_sorces.Add(0);
+            //List<int> n_sorces = new List<int>();
+            //n_sorces.Add(0);
 
             Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> W = new Dictionary<Tuple<Vertex, Vertex>, List<IExpression>>();
             Dictionary<int, List<IPosition>> kpositions = new Dictionary<int, List<IPosition>>();
@@ -337,8 +362,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 dag.AddVertex(v);
             }
 
-            List<int> n_sorces = new List<int>();
-            n_sorces.Add(0);
+            //List<int> n_sorces = new List<int>();
+            //n_sorces.Add(0);
 
             Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> W = new Dictionary<Tuple<Vertex, Vertex>, List<IExpression>>();
             Dictionary<int, List<IPosition>> kpositions = new Dictionary<int, List<IPosition>>();
@@ -363,6 +388,13 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     }
                 }
             }
+            /*Tuple<Vertex, Vertex> zero = Tuple.Create(vertexes["0"], vertexes["0"]);
+            if (!W.ContainsKey(zero))
+            {
+                IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
+                List<IExpression> expressions = new List<IExpression> {expression};
+                W.Add(zero, expressions);
+            }*/
 
             Dag digraph = new Dag(dag, vertexes["0"], vertexes[output.Length().ToString()], W, vertexes);
             return digraph;
@@ -399,6 +431,9 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
                 TokenSeq ts = new TokenSeq(tSeq);
 
+                List<TokenSeq> parentNodes = CreateTokenSeq(ts);
+                tokensSeqs.AddRange(parentNodes);
+
                 if (Setting.DynamicTokens)
                 {
                     List<Token> dTSeq = TokenSeq.DymTokens(subNodesLeft, this.Dict);
@@ -415,61 +450,79 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     TokenSeq emptyTokenSeq = new TokenSeq(emptySeq);
                     tokensSeqs.Add(emptyTokenSeq);
                 }
-                List<ListNode> parentNodes = new List<ListNode>();//CreateTokenSeq(subNodesLeft);//
-                foreach (ListNode lnodes in parentNodes)
-                {
-                    List<Token> ptokens = TokenSeq.GetTokens(lnodes);
-                    TokenSeq parentSeq = new TokenSeq(ptokens);
-                    tokensSeqs.Add(parentSeq);
-                }
 
                 _computed.Add(subNodesLeft, tokensSeqs);
             }
 
             tokensSeqs = _computed[subNodesLeft];
-
-            /*ListNode subNodes = subNodesLeft;
-            while (!(subNodes.Length() < 2))
-            {
-                subNodes = ASTManager.SubNotes(subNodesLeft,  1, subNodesLeft.Length() - 1);
-                tokensSeqs.AddRange(GenerateTokenSeq(subNodes));
-            }*/
             
             return tokensSeqs;
         }
+
+        ///// <summary>
+        ///// Create token sequence
+        ///// </summary>
+        ///// <param name="subNodes">Sub nodes</param>
+        ///// <returns>Token sequence</returns>
+        //public static List<ListNode> CreateTokenSeq(ListNode subNodes)
+        //{
+        //    Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> nodes = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
+        //    foreach (SyntaxNodeOrToken st in subNodes.List)
+        //    {
+        //        List<SyntaxNodeOrToken> value;
+        //        SyntaxNodeOrToken parent = ASTManager.Parent(st);
+        //        if (!nodes.TryGetValue(parent, out value))
+        //        {
+        //            nodes.Add(parent, new List<SyntaxNodeOrToken>());
+        //        }
+
+        //        nodes[parent].Add(st);
+        //    }
+
+        //    List<SyntaxNodeOrToken> selected = new List<SyntaxNodeOrToken>(nodes.Keys);
+
+        //    List<ListNode> list = new List<ListNode>();
+        //    list.Add(subNodes);
+        //    foreach (SyntaxNodeOrToken st in selected)
+        //    {
+        //        list = Substitute(list, st, nodes);
+        //    }
+
+        //    list.Remove(subNodes);
+
+        //    return list;
+        //}
 
         /// <summary>
         /// Create token sequence
         /// </summary>
         /// <param name="subNodes">Sub nodes</param>
         /// <returns>Token sequence</returns>
-        public static List<ListNode> CreateTokenSeq(ListNode subNodes)
+        public static List<TokenSeq> CreateTokenSeq(TokenSeq seq)
         {
-            Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> nodes = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
-            foreach (SyntaxNodeOrToken st in subNodes.List)
+            List<Token> tokens = new List<Token>();
+            bool add = false;
+            foreach (Token st in seq.Tokens)
             {
-                List<SyntaxNodeOrToken> value;
-                SyntaxNodeOrToken parent = ASTManager.Parent(st);
-                if (!nodes.TryGetValue(parent, out value))
+                Token ai = new ArrayInitializerElementToken(st.token);
+                if (ai.Match(st.token))
                 {
-                    nodes.Add(parent, new List<SyntaxNodeOrToken>());
+                    tokens.Add(ai);
+                    add = true;
                 }
-
-                nodes[parent].Add(st);
+                else
+                {
+                    tokens.Add(st);
+                }
             }
 
-            List<SyntaxNodeOrToken> selected = new List<SyntaxNodeOrToken>(nodes.Keys);
-
-            List<ListNode> list = new List<ListNode>();
-            list.Add(subNodes);
-            foreach (SyntaxNodeOrToken st in selected)
+            List<TokenSeq> sequences = new List<TokenSeq>();
+            if (add)
             {
-                list = Substitute(list, st, nodes);
+                TokenSeq sequence = new TokenSeq(tokens); 
+                sequences.Add(sequence);
             }
-
-            list.Remove(subNodes);
-
-            return list;
+            return sequences;
         }
 
         /// <summary>
@@ -653,7 +706,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             return result;
         }
 
-        private List<IPosition> GeneratePosition(ListNode input, int k)
+        public List<IPosition> GeneratePosition(ListNode input, int k)
         {
             List<IPosition> result = new List<IPosition>();
             result.Add(CPos(k)); result.Add(CPos(-(input.Length() - k + 1)));

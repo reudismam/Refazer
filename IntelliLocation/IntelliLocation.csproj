@@ -198,6 +198,8 @@
     <ProjectReference Include="..\LocationCodeRefactoring\LocationRefactoring.csproj">
       <Project>{638186db-e7e4-4e76-b51e-1c35efae6280}</Project>
       <Name>LocationRefactoring</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

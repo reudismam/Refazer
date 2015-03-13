@@ -104,7 +104,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>String representation of this expression</returns>
         public override string ToString()
         {
-            return "SubStr(vi, "+ p1.ToString() +", "+ p2.ToString() +")";
+            return "SubStr(vi, "+ p1 +", "+ p2 +")";
         }
 
         /// <summary>

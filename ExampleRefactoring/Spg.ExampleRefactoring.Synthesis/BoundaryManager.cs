@@ -28,6 +28,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             this.boundary = boundary;
         }
 
+        public static void Init()
+        {
+            instance = null;
+        }
+
         /// <summary>
         /// Get Instance
         /// </summary>

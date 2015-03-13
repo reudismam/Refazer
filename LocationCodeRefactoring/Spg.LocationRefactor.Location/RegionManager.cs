@@ -28,6 +28,11 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             _computed = new Dictionary<string, List<SyntaxNode>>();
         }
 
+        public static void Init()
+        {
+            _instance = null;
+        }
+
         public static RegionManager GetInstance()
         {
             if (_instance == null)
@@ -42,30 +47,37 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// </summary>
         /// <param name="statements">Statement list</param>
         /// <param name="regions">Region</param>
-        /// <returns></returns>
+        /// <returns>Pair of region with the respectively syntax node</returns>
         private Dictionary<TRegion, SyntaxNode> ChoosePairs(List<SyntaxNode> statements, List<TRegion> regions)
         {
             Dictionary<TRegion, SyntaxNode> dicRegions = new Dictionary<TRegion, SyntaxNode>();
 
-            foreach (SyntaxNode statment in statements)
+
+            foreach (SyntaxNode statement in statements)
             {
                 foreach (TRegion region in regions)
                 {
+                    if (region.Length == 0)
+                    {
+                        dicRegions[region] = null;
+                        continue;
+                    }
+
                     string text = region.Text;
                     string pattern = Regex.Escape(text);
-                    string statmentText = statment.GetText().ToString();
+                    string statmentText = statement.GetText().ToString();
                     bool contains = Regex.IsMatch(statmentText, pattern);
                     if (contains)
                     {
-                        if (statment.SpanStart <= region.Start && region.Start <= statment.Span.End)
+                        if (statement.SpanStart <= region.Start && region.Start <= statement.Span.End)
                         {
                             if (!dicRegions.ContainsKey(region))
                             {
-                                dicRegions.Add(region, statment);
+                                dicRegions.Add(region, statement);
                             }
-                            else if (statment.GetText().Length < dicRegions[region].GetText().Length)
+                            else if (statement.GetText().Length < dicRegions[region].GetText().Length)
                             {
-                                dicRegions[region] = statment;
+                                dicRegions[region] = statement;
                             }
                         }
                   }
@@ -87,7 +99,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             foreach (var entry in dicRegion)
             {
                 List<SyntaxNode> statements = SyntaxNodes(entry.Key, entry.Value);
-                var methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
+                //var methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
                 Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, entry.Value);
                 foreach (KeyValuePair<TRegion, SyntaxNode> pair in pairs)
                 {
@@ -95,10 +107,66 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     SyntaxNode node = pair.Value;
 
                     //Tuple<ListNode, ListNode> val;
-                    Tuple<ListNode, ListNode> te = Example(node, re);
+                    Tuple<ListNode, ListNode> te;
+                    if (node != null)
+                    {
+                        te = Example(node, re);
+                    }
+                    else
+                    {
+                        ListNode emptyNode = new ListNode(new List<SyntaxNodeOrToken>());
+                        te = Tuple.Create(emptyNode, emptyNode);
+                    }
                     //if (!methodsDic.TryGetValue(node, out val))
                     //{
                         examples.Add(te);
+                    //    methodsDic.Add(node, te);
+                    //}
+                    //else
+                    //{
+                    //    val.Item2.List.AddRange(te.Item2.List);
+                    //}
+                }
+            }
+            return examples;
+        }
+
+        /// <summary>
+        /// Decompose set of selected region to list of examples
+        /// </summary>
+        /// <param name="list">List of selected regions</param>
+        /// <returns>Decomposed examples</returns>
+        public List<Tuple<ListNode, ListNode>> DecomposeToOutput(List<TRegion> list)
+        {
+            List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
+
+            Dictionary<string, List<TRegion>> dicRegion = GroupRegionBySourceFile(list);
+            foreach (var entry in dicRegion)
+            {
+                //List<SyntaxNode> statements = SyntaxNodes(entry.Key, entry.Value);
+                //var methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
+                //Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, entry.Value);
+                SyntaxTree tree = CSharpSyntaxTree.ParseText(entry.Key);
+                foreach (TRegion re in entry.Value)
+                {
+                    //TRegion re = pair.Key;
+                    //SyntaxNode node = pair.Value;
+                    SyntaxNode node = tree.GetRoot();
+
+                    //Tuple<ListNode, ListNode> val;
+                    Tuple<ListNode, ListNode> te;
+                    if (re.Length != 0)
+                    {
+                        te = Example(node, re);
+                    }
+                    else
+                    {
+                        ListNode emptyNode = new ListNode(new List<SyntaxNodeOrToken>());
+                        te = Tuple.Create(emptyNode, emptyNode);
+                    }
+                    //if (!methodsDic.TryGetValue(node, out val))
+                    //{
+                    examples.Add(te);
                     //    methodsDic.Add(node, te);
                     //}
                     //else
@@ -290,9 +358,13 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             var l = new List<SyntaxNode>();
             foreach (TRegion region in list)
             {
-                var descendentNodes = ASTManager.NodesBetweenStartAndEndPosition(tree, region.Start, region.Start + region.Length);
-                SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(descendentNodes, tree);
-                l.Add(lca.AsNode());
+                if (region.Length != 0)
+                {
+                    var descendentNodes = ASTManager.NodesBetweenStartAndEndPosition(tree, region.Start,
+                        region.Start + region.Length);
+                    SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(descendentNodes, tree);
+                    l.Add(lca.AsNode());
+                }
             }
             Dictionary<SyntaxKind, IEnumerable<SyntaxNode>> dicSyntaxNodes = new Dictionary<SyntaxKind, IEnumerable<SyntaxNode>>();
             foreach (var sn in l)
@@ -311,6 +383,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return retr;
         }
 
+
         /// <summary>
         /// Syntax nodes 
         /// </summary>
@@ -319,7 +392,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <returns>Syntax nodes</returns>
         public List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
-            List<SyntaxNode> nodes = null;
+            List<SyntaxNode> nodes;
             if (!_computed.TryGetValue(sourceCode, out nodes))
             {
                 nodes = SyntaxNodesForFiltering(sourceCode, list);
@@ -414,15 +487,15 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                             Parent = parent,
                             Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
                         };
-                        //MessageBox.Show(tregion.Text);
+                        //MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
 
                         outputRegions.Add(tregion);
                     }
                 }
             }
 
-            List<Tuple<ListNode, ListNode>> inputSelection = Decompose(inputRegions);
-            List<Tuple<ListNode, ListNode>> ouputSelection = Decompose(outputRegions);
+            List<Tuple<ListNode, ListNode>> inputSelection = DecomposeToOutput(inputRegions);
+            List<Tuple<ListNode, ListNode>> ouputSelection = DecomposeToOutput(outputRegions);
 
             List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
             for (int index = 0; index < inputSelection.Count; index++)
@@ -431,7 +504,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 ListNode output = ouputSelection[index].Item2;
                 Tuple<ListNode, ListNode> tuple = Tuple.Create(input, output);
                 examples.Add(tuple);
-
             }
 
             return examples;

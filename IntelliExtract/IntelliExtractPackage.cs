@@ -49,6 +49,8 @@ namespace SPG.IntelliExtract
     [Guid(GuidList.guidIntelliExtractPkgString)]
     public sealed class IntelliExtractPackage : Package, IProgramsGeneratedObserver, ILocationsObserver, IHilightObserver
     {
+        private List<Prog> _programs;
+
         /// <summary>
         /// Default constructor of the package.
         /// Inside this method you can place any initialization code that does not require 
@@ -56,8 +58,6 @@ namespace SPG.IntelliExtract
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
-
-        private List<Prog> _programs;
 
         public IntelliExtractPackage()
         {
@@ -99,26 +99,33 @@ namespace SPG.IntelliExtract
             var locations = lEvent.locations;
             List<TRegion> negatives = new List<TRegion>();
             List<int> indexNegatives = new List<int>();
+            List<TRegion> positives = new List<TRegion>();
             for (int index = 0; index < locations.Count; index++)
             {
                 var location = locations[index];
-//MessageBox.Show(location.Region.Node.GetText() + "\n");
 
                 DialogResult dialogResult = MessageBox.Show(location.Region.Node.GetText() + "\n",
                     "Is it a correct location?", MessageBoxButtons.YesNo);
+                TRegion parent = new TRegion();
+                parent.Text = location.SourceCode;
+                location.Region.Parent = parent;
+
                 if (dialogResult == DialogResult.No)
                 {
-                    TRegion parent = new TRegion();
-                    parent.Text = location.SourceCode;
-                    location.Region.Parent = parent;
                     negatives.Add(location.Region);
                     indexNegatives.Add(index);
                 }
+                else
+                {
+                    positives.Add(location.Region);
+                }
             }
             EditorController controller = EditorController.GetInstance();
+            MessageBox.Show("Done!");
             if (negatives.Any())
             {
-                controller.Extract(controller.SelectedLocations, negatives);
+                //controller.Extract(controller.SelectedLocations, negatives);
+                controller.Extract(positives, negatives);
                 JsonUtil<List<int>>.Write(indexNegatives, "negatives.json");
             }
 
@@ -130,15 +137,11 @@ namespace SPG.IntelliExtract
         {
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
             IVsTextView vTextView;
-            int mustHaveFocus = 1;
+            const int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 
-            IVsUserData userData = vTextView as IVsUserData;
-            if (userData == null)
-            {
-                Console.WriteLine("No text view is currently open");
-                return;
-            }
+            IVsUserData userData = (IVsUserData) vTextView;
+            
             IWpfTextViewHost viewHost;
             object holder;
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
@@ -150,9 +153,8 @@ namespace SPG.IntelliExtract
             this._programs = pEvent.programs;
 
             EditorController controler = EditorController.GetInstance();
+
             controler.RetrieveLocations(text);
-            //var projectionBuffer = CreateProjectionBuffer(viewHost);
-            //controler.ProjectionBuffer = projectionBuffer;
             controler.ProjectionBuffers = _CreateProjectionBuffers();
         }
 
@@ -162,6 +164,7 @@ namespace SPG.IntelliExtract
           var groupedLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(controller.Locations);
 
             Dictionary<string, IProjectionBuffer> projectionBuffers = new Dictionary<string, IProjectionBuffer>();
+
             foreach (var item in groupedLocation)
             {
                 var projectionBuffer = _CreateProjectionBuffer(item.Key, item.Value);

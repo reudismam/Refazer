@@ -20,5 +20,14 @@
             }
             return null;
         }
+
+        public static IPredicate CreateInv(IPredicate predicate)
+        {
+            if (predicate is Contains)
+            {
+                return new NotContains();
+            }
+            return null;
+        }
     }
 }

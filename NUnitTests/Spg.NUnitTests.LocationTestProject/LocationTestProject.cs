@@ -5,6 +5,7 @@ using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using NUnit.Framework;
+using Spg.ExampleRefactoring.Data.Dig;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.TextRegion;
 using Spg.NUnitTests.Location;
@@ -42,6 +43,66 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         public void Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805()
         {
             bool isValid = LocationTestProject.LocaleTest("00552fc2287f820ae9d42fd259aa6c07c2c5a805", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable6\Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805.sln", "Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj8c146441b4ecedbf7648e890d33f946f9b206e01()
+        {
+            bool isValid = LocationTestProject.LocaleTest("8c146441b4ecedbf7648e890d33f946f9b206e01", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable12\Proj8c146441b4ecedbf7648e890d33f946f9b206e01.sln", "Proj8c146441b4ecedbf7648e890d33f946f9b206e01");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable11\Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CommandLine\Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable10\Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8.sln", "Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8");
             Assert.IsTrue(isValid);
         }
 
@@ -269,16 +330,28 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             {
                 List<int> negatives = JsonUtil<List<int>>.Read(@"commits\" + commit + @"\negatives.json");
                 List<TRegion> negativesRegions = new List<TRegion>();
-                foreach (var negative in negatives)
+                List<TRegion> positivesRegions = new List<TRegion>();
+                //foreach (var negative in negatives)
+                //{
+                for (int i = 0; i < controller.Locations.Count; i++)
                 {
                     TRegion parent = new TRegion();
-                    parent.Text = controller.Locations[negative].SourceCode;
-                    controller.Locations[negative].Region.Parent = parent;
-                    negativesRegions.Add(controller.Locations[negative].Region);
+                    parent.Text = controller.Locations[i].SourceCode;
+                    controller.Locations[i].Region.Parent = parent;
+                    if (negatives.Contains(i))
+                    {
+                        negativesRegions.Add(controller.Locations[i].Region);
+                    }
+                    else
+                    {
+                        positivesRegions.Add(controller.Locations[i].Region);
+                    }
                 }
+                //}
 
-                controller.Extract(controller.SelectedLocations, negativesRegions);
-            }
+                //controller.Extract(controller.SelectedLocations, negativesRegions);
+                controller.Extract(positivesRegions, negativesRegions);
+        }
             controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
             List<Selection> locations = JsonUtil<List<Selection>>.Read(@"commits\" + commit + @"\found_locations.json");

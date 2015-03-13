@@ -44,7 +44,7 @@ namespace Spg.LocationRefactoring.Tok
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            return "DymTok(" + token.ToString() + ")";
+            return "DymTok(" + token + ")";
         }
 
         /// <summary>

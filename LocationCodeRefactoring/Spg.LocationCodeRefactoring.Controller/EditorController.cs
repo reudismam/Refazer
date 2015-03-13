@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
+using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Text.Projection;
 using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationCodeRefactoring.Observer;
 using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.TextRegion;
 
 namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
@@ -95,6 +99,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public Tuple<List<CodeLocation>, List<TRegion>> localionsComputerSoFar;
 
+        public List<Prog> programsWithNegatives { get; set; }
 
         /// <summary>
         /// Singleton instance
@@ -121,11 +126,17 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             this._locationsTransformedObserver = new List<ILocationsTransformedObserver>();
             this._locationsObversers = new List<ILocationsObserver>();
             this.FilesOpened = new Dictionary<string, bool>();
+            //this.CurrentProject = null;
+            //this.Progs = null;
+            //this.SolutionPath = null;
+            //LCAManager.Init();
+            //RegionManager.Init();
+            //BoundaryManager.Init();
         }
 
         public static void ReInit()
         {
-            _instance = new EditorController();
+            _instance = null;
         }
 
         /// <summary>
@@ -160,11 +171,11 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         public void Extract(List<TRegion> positives, List<TRegion> negatives)
         {
             LocationExtractor extractor = new LocationExtractor(SolutionPath);
-            Progs = extractor.Extract(positives, negatives);
+            programsWithNegatives = extractor.Extract(positives, negatives);
 
-            Progs = RecomputeWithNegativeLocations();
+            //Progs = RecomputeWithNegativeLocations();
 
-            NotifyLocationProgramGeneratedObservers(Progs);
+            NotifyLocationProgramGeneratedObservers(programsWithNegatives);
         }
 
         /// <summary>
@@ -280,6 +291,12 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// <param name="program">Selected program</param>
         public void RetrieveLocations(string program)
         {
+            if (programsWithNegatives != null)
+            {
+                RetrieveLocationsPosNegatives(program);
+                return;
+            }
+
             Prog prog = Progs.First();
             List<Tuple<string, string>> sourceFiles = SourceFiles();
 
@@ -293,7 +310,6 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                 tuple = RetrieveLocationsSingleSourceClass(prog);
             }
             var sourceLocations = tuple.Item1;
-            var rs = tuple.Item2;
 
             this.Locations = NonDuplicateLocations(sourceLocations);
 
@@ -308,7 +324,38 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             //remove
 
             localionsComputerSoFar = tuple;
-            //NotifyHilightObservers(rs);
+            NotifyLocationsObservers(Locations);
+        }
+
+        public void RetrieveLocationsPosNegatives(string program)
+        {
+            Prog prog = programsWithNegatives.First();
+            List<Tuple<string, string>> sourceFiles = SourceFiles();
+
+            Tuple<List<CodeLocation>, List<TRegion>> tuple;
+            if (sourceFiles.Count() > 1)
+            {
+                tuple = RetrieveLocationsMultiplesSourceClasses(prog, sourceFiles, program);
+            }
+            else
+            {
+                tuple = RetrieveLocationsSingleSourceClassPosNegative(prog);
+            }
+            var sourceLocations = tuple.Item1;
+
+            this.Locations = NonDuplicateLocations(sourceLocations);
+
+            //remove
+            List<Selection> selections = new List<Selection>();
+            foreach (CodeLocation location in Locations)
+            {
+                Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode);
+                selections.Add(selection);
+            }
+            JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
+            //remove
+
+            localionsComputerSoFar = tuple;
             NotifyLocationsObservers(Locations);
         }
 
@@ -335,6 +382,33 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             }
             
             Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, regions);
+
+            return tuple;
+        }
+
+        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClassPosNegative(Prog prog)
+        {
+            List<TRegion> regions = new List<TRegion>();
+            List<CodeLocation> locations = new List<CodeLocation>();
+            foreach (var location in Locations)
+            {
+                MapBase m = (MapBase) prog.Ioperator;
+                FilterBase filter = (FilterBase) m.SequenceExpression.Ioperator;
+                bool isTruePositive = filter.IsMatch(location.Region.Node);
+                if (isTruePositive)
+                {
+                    regions.Add(location.Region);
+                    CodeLocation filtered = new CodeLocation
+                    {
+                        Region = location.Region,
+                        SourceCode = CurrentViewCodeBefore,
+                        SourceClass = CurrentViewCodePath
+                    };
+                    locations.Add(filtered);
+                }
+            }
+
+            Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(locations, regions);
 
             return tuple;
         }

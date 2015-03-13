@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExampleRefactoring.Spg.ExampleRefactoring.Data;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.AST;
@@ -89,6 +90,14 @@ namespace Spg.NUnitTests.Refactoring
         public void AddAnnotation()
         {
             ExampleCommand command = new AddAnnotation();
+            Boolean isEqual = Core(command);
+            Assert.IsTrue(isEqual);
+        }
+
+        [Test]
+        public void AddLangParam()
+        {
+            ExampleCommand command = new AddLangParam();
             Boolean isEqual = Core(command);
             Assert.IsTrue(isEqual);
         }

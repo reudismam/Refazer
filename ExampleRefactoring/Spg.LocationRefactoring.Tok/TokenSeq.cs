@@ -96,14 +96,13 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
             String str = "";
             if (Length() > 1)
             {
-                int i = 0;
-
+                int i;
                 str += "TokenSeq(";
                 for (i = 0; i < Tokens.Count - 1; i++)
                 {
-                    str += Tokens[i].ToString() + ", ";
+                    str += Tokens[i] + ", ";
                 }
-                str += Tokens[i].ToString() + ")";
+                str += Tokens[i] + ")";
             }
             else
             {

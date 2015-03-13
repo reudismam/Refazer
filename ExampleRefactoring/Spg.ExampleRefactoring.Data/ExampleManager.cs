@@ -1,4 +1,5 @@
 ﻿using System;
+using ExampleRefactoring.Spg.ExampleRefactoring.Data;
 using Spg.ExampleRefactoring.Data.Dig;
 
 namespace Spg.ExampleRefactoring.Data
@@ -84,6 +85,9 @@ namespace Spg.ExampleRefactoring.Data
                     break;
                 case "22":
                     command = new ChangeClassVisibility();
+                    break;
+                case "23":
+                    command = new AddLangParam();
                     break;
             }
             return command;

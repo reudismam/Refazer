@@ -115,10 +115,13 @@
     <Compile Include="Spg.ExampleRefactoring.Change\ChangeManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\Automato.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\ComparerBase.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Comparator\ArrayInitializerElementTokenComparer.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Comparator\SubStrNodeComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\NodeComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\RegexEndComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\RegexComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\SelectorManager.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Data\AddLangParam.cs" />
     <Compile Include="Spg.ExampleRefactoring.Data\ChangeClassVisibility.cs" />
     <Compile Include="Spg.ExampleRefactoring.Data\AddAnnotation.cs" />
     <Compile Include="Spg.ExampleRefactoring.Data\ChangeStringValueToConstant.cs" />
@@ -172,6 +175,8 @@
     <Compile Include="Spg.ExampleRefactoring.Synthesis\ASTProgram.cs" />
     <Compile Include="Spg.ExampleRefactoring.Util\JsonUtil.cs" />
     <Compile Include="Spg.ExampleRefactoring.Workspace\WorkspaceManager.cs" />
+    <Compile Include="Spg.LocationRefactoring.Tok\ArrayInitializerElementToken.cs" />
+    <Compile Include="Spg.LocationRefactoring.Tok\SubStrToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\DymToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\Token.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\TokenSeq.cs" />

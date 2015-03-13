@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
@@ -113,7 +112,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return regions;
         }
 
-        internal List<TRegion> RetrieveString(Prog program, string sourceCode, SyntaxNode input)
+        public List<TRegion> RetrieveString(Prog program, string sourceCode, SyntaxNode input)
         {
             List<TRegion> regions = program.RetrieveString(input, sourceCode);
             return regions;
@@ -122,9 +121,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <summary>
         /// Transform selection regions
         /// </summary>
-        /// <param name="codeBefore">Regions before edition</param>
-        /// <param name="codeAfter">Regions after edition</param>
-        /// <returns></returns>
+        /// <returns>Transformation</returns>
         public List<Transformation.Transformation> TransformProgram()
         {
             var manager = new MapedLocationBasedTransformationManager();

@@ -29,7 +29,13 @@ namespace Spg.LocationRefactor.Predicate
         /// <param name="input">Source code</param>
         /// <param name="regex">Regex</param>
         /// <returns>Evaluation</returns>
-        public abstract Boolean Evaluate(ListNode input, TokenSeq regex);
+        public abstract bool Evaluate(ListNode input, TokenSeq regex);
+
+        public bool Evaluate(ListNode input)
+        {
+            TokenSeq regex = ASTProgram.ConcatenateRegularExpression(r1, r2);
+            return Evaluate(input, regex);
+        }
 
         /// <summary>
         /// Regex

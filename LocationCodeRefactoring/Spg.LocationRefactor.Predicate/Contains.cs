@@ -1,7 +1,4 @@
-﻿using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
-using System;
+﻿using System;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
@@ -19,7 +16,7 @@ namespace Spg.LocationRefactor.Predicate
         /// <param name="input">Input</param>
         /// <param name="regex">Regex</param>
         /// <returns>True if input contains the regex</returns>
-        public override Boolean Evaluate(ListNode input, TokenSeq regex)
+        public override bool Evaluate(ListNode input, TokenSeq regex)
         {
             Boolean isMatch = ASTManager.IsMatch(input, regex);
             return isMatch;

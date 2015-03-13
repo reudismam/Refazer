@@ -20,9 +20,9 @@ namespace Spg.ExampleRefactoring.Comparator
             {
                 throw new Exception("Syntax nodes or token cannot be null");
             }
-            String firstStr = first.ToString();
-            String secondStr = second.ToString();
-            Boolean isEqual = firstStr.Equals(secondStr);
+            string firstStr = first.ToString();
+            string secondStr = second.ToString();
+            bool isEqual = firstStr.Equals(secondStr);
 
             return isEqual;
         }

@@ -160,6 +160,11 @@ namespace LeastCommonAncestor
                 //_values = value._values;
             }
 
+            public static void Init()
+            {
+                instance = null;
+            }
+
             public static LeastCommonAncestorFinder<T> GetInstance(object obj, ITreeNode<T> rootNode)
             {
                 if (instance == null)

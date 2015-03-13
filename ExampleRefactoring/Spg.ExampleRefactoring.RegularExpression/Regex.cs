@@ -5,9 +5,6 @@ using ExampleRefactoring.Spg.ExampleRefactoring.Comparator;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
-using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
 
 namespace ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression
 {
@@ -48,6 +45,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression
                         length = i - begin;
                         Tuple<int, ListNode> tuple = Tuple.Create(begin, ASTManager.SubNotes(input, begin, length));
                         matches.Add(tuple);
+                        i --;
                         break;
                 }
             }

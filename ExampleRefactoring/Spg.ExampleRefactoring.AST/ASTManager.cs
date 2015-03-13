@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
@@ -100,8 +101,9 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
                 throw new Exception("Input or regular expression cannot be null");
             }
 
-            RegexComparer comparer = new RegexComparer();
-            return (comparer.Matches(input, regex).Count > 0);
+            //RegexComparer comparer = new RegexComparer();
+         
+            return (Regex.Matches(input, regex).Count > 0);
         }
 
         /// <summary>
