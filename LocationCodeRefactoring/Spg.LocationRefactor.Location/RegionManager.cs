@@ -157,7 +157,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     Tuple<ListNode, ListNode> te;
                     if (re.Length != 0)
                     {
-                        te = Example(node, re);
+                        te = Example(node, re, true);
                     }
                     else
                     {
@@ -266,10 +266,17 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <param name="me">Method</param>
         /// <param name="re">Region within the method</param>
         /// <returns>A example</returns>
-        private Tuple<ListNode, ListNode> Example(SyntaxNode me, TRegion re)
+        private Tuple<ListNode, ListNode> Example(SyntaxNode me, TRegion re, bool compact = false)
         {
             List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-            list = ASTManager.EnumerateSyntaxNodesAndTokens(me, list);
+            if (compact)
+            {
+                list = ASTManager.EnumerateSyntaxNodesAndTokens2(me, list);
+            }
+            else
+            {
+                list = ASTManager.EnumerateSyntaxNodesAndTokens(me, list);
+            }
             ListNode listNode = new ListNode(list);
             listNode.OriginalText = me.GetText().ToString();
 

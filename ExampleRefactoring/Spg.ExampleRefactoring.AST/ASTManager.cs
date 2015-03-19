@@ -48,29 +48,64 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// Convert syntax node to a list
         /// </summary>
         /// <param name="root">Syntax node root</param>
-        /// <param name="nodes">Nodes</param>
+        /// <param name="nodes">Syntax node or token list</param>
         /// <returns>Syntax node list</returns>
-        public static List<SyntaxNodeOrToken> EnumerateSyntaxNodes(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
+        public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens2(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
         {
-            if (root == null ||  nodes == null)
+            if (root == null || nodes == null)
             {
-                throw new Exception("Root node cannot be null and list cannot be null.");
+                throw new Exception("Root node and list cannot be null and list must not be empty.");
             }
 
-            if (root.AsNode() != null)
+            if (root.IsKind(SyntaxKind.InvocationExpression) && (root.Parent.IsKind(SyntaxKind.Argument) || root.Parent.IsKind(SyntaxKind.ParenthesizedLambdaExpression) || root.Parent.IsKind(SyntaxKind.ArrayInitializerExpression)))
             {
                 nodes.Add(root);
+                return nodes;
+            }
+
+            if (!root.ChildNodesAndTokens().Any())
+            {
+                nodes.Add(root);
+                return nodes;
             }
 
             foreach (SyntaxNodeOrToken n in root.ChildNodesAndTokens())
             {
                 if (!n.IsKind(SyntaxKind.EndOfFileToken))
                 {
-                    EnumerateSyntaxNodes(n, nodes);
+                    EnumerateSyntaxNodesAndTokens2(n, nodes);
                 }
             }
             return nodes;
         }
+
+        ///// <summary>
+        ///// Convert syntax node to a list
+        ///// </summary>
+        ///// <param name="root">Syntax node root</param>
+        ///// <param name="nodes">Nodes</param>
+        ///// <returns>Syntax node list</returns>
+        //public static List<SyntaxNodeOrToken> EnumerateSyntaxNodes(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
+        //{
+        //    if (root == null ||  nodes == null)
+        //    {
+        //        throw new Exception("Root node cannot be null and list cannot be null.");
+        //    }
+
+        //    if (root.AsNode() != null)
+        //    {
+        //        nodes.Add(root);
+        //    }
+
+        //    foreach (SyntaxNodeOrToken n in root.ChildNodesAndTokens())
+        //    {
+        //        if (!n.IsKind(SyntaxKind.EndOfFileToken))
+        //        {
+        //            EnumerateSyntaxNodes(n, nodes);
+        //        }
+        //    }
+        //    return nodes;
+        //}
 
         /// <summary>
         /// Syntax or tokens nodes between i and length j

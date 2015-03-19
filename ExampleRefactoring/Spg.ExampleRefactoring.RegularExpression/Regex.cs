@@ -28,7 +28,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression
             }
 
             int begin = -1;
-            int length = 0;
+            int length;
 
             Automato aut = new Automato(regex);
             int signal = -1;

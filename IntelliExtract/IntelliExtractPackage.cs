@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using LocateAdornment;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Spg.LocationCodeRefactoring.Observer;
+using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
-using Microsoft.VisualStudio.Shell.Interop;
-using Spg.LocationRefactor.Location;
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace SPG.IntelliExtract
 {
@@ -121,13 +120,14 @@ namespace SPG.IntelliExtract
                 }
             }
             EditorController controller = EditorController.GetInstance();
-            MessageBox.Show("Done!");
+            
             if (negatives.Any())
             {
                 //controller.Extract(controller.SelectedLocations, negatives);
                 controller.Extract(positives, negatives);
                 JsonUtil<List<int>>.Write(indexNegatives, "negatives.json");
             }
+            MessageBox.Show("Done!");
 
             controller.Done();
         }
@@ -198,12 +198,12 @@ namespace SPG.IntelliExtract
             {
                 IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
 
-                IComponentModel componentModel = Package.GetGlobalService(typeof (SComponentModel)) as IComponentModel;
+                IComponentModel componentModel = GetGlobalService(typeof (SComponentModel)) as IComponentModel;
                 IVsEditorAdaptersFactoryService bufferData =
                     componentModel.GetService<IVsEditorAdaptersFactoryService>();
-                Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp = Package.GetGlobalService(
-                    typeof (Microsoft.VisualStudio.OLE.Interop.IServiceProvider))
-                    as Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+                IServiceProvider sp = GetGlobalService(
+                    typeof (IServiceProvider))
+                    as IServiceProvider;
 
                 var textBuffer = bufferData.GetDataBuffer(x);
                 var projectionBuffer = _CreateProjectionBuffer(textBuffer, locations);
@@ -244,7 +244,7 @@ namespace SPG.IntelliExtract
             }
 
             //var ProjectionBufferFactory = (IProjectionBufferFactoryService) GetService(typeof(IProjectionBufferFactoryService));
-            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+            IComponentModel componentModel = GetGlobalService(typeof(SComponentModel)) as IComponentModel;
             IProjectionBufferFactoryService ProjectionBufferFactory = componentModel.GetService<IProjectionBufferFactoryService>();
 
             //Create the actual projection buffer
@@ -280,7 +280,7 @@ namespace SPG.IntelliExtract
             }
 
             //var ProjectionBufferFactory = (IProjectionBufferFactoryService) GetService(typeof(IProjectionBufferFactoryService));
-            IComponentModel componentModel = Package.GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+            IComponentModel componentModel = GetGlobalService(typeof(SComponentModel)) as IComponentModel;
             IProjectionBufferFactoryService ProjectionBufferFactory = componentModel.GetService<IProjectionBufferFactoryService>();
 
             //Create the actual projection buffer

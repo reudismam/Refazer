@@ -455,6 +455,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         /// <returns></returns>
         public static bool CompleteTestBase(List<string> editeds, string commit)
         {
+            long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             EditorController controller = EditorController.GetInstance();
             controller.CurrentViewCodeAfter = FileUtil.ReadFile(@"commits\" + commit + @"\" + editeds.First());
 
@@ -522,6 +523,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
                 }
             }
             controller.Undo();
+            long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTime = (millAfer - millBefore);
+            FileUtil.WriteToFile(@"commits\" + commit + @"\edit.t", totalTime.ToString());
             return passTransformation;
         }
 

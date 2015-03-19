@@ -73,7 +73,7 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
 
             foreach (SyntaxNodeOrToken st in nodes.List)
             {
-                DymToken dtoken = new DymToken(st);
+                DymToken dtoken = new DymToken(st, true);
                 if (dict.ContainsKey(dtoken))
                 {
                     tokens.Add(dtoken);

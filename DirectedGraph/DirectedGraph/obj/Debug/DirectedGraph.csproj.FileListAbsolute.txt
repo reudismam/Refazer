@@ -12,3 +12,4 @@ C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\DirectedGraph\Dir
 C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\DirectedGraph\DirectedGraph\bin\Debug\DirectedGraph.pdb
 C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\DirectedGraph\DirectedGraph\obj\Debug\DirectedGraph.dll
 C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\DirectedGraph\DirectedGraph\obj\Debug\DirectedGraph.pdb
+C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\DirectedGraph\DirectedGraph\obj\Debug\DirectedGraph.csprojResolveAssemblyReference.cache

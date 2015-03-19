@@ -123,8 +123,8 @@ namespace SPG.IntelliLocation
 
             var project = proj.ContainingProject;
 
-            EditorController.GetInstance().CurrentProject = project.Name;
-            EditorController.GetInstance().SolutionPath = fullName;
+            EditorController.GetInstance().ProjectInformation.ProjectPath = project.Name;
+            EditorController.GetInstance().ProjectInformation.SolutionPath = fullName;
             EditorController.GetInstance().CurrentViewCodePath = document.FullName;
             EditorController.GetInstance().FilesOpened[document.FullName] = true;
 

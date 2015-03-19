@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -42,7 +36,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             var transformations = new List<Transformation>();
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
             {
-                string text = Transform(validated, item.Value);
+                string text = Transform(validated, item.Value, true);
                 Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
                 Transformation transformation = new Transformation(beforeAfter, item.Key);
                 transformations.Add(transformation);
@@ -56,7 +50,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// <param name="program">Synthesized program</param>
         /// <param name="locations">Locations</param>
         /// <returns>Transformed program</returns>
-        public override string Transform(SynthesizedProgram program, List<CodeLocation> locations)
+        public override string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact)
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
             List<Tuple<SyntaxNode, CodeLocation>> update = new List<Tuple<SyntaxNode, CodeLocation>>();
@@ -77,7 +71,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             }
 
             var text = FileUtil.ReadFile(locations[0].SourceClass);
-            text = TransformEachLocation(text, update, program);
+            text = TransformEachLocation(text, update, program, compact);
             /*foreach (var item in update)
             {
                 try
@@ -100,7 +94,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             return text;
         }
 
-        private string TransformEachLocation(string text, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program)
+        private string TransformEachLocation(string text, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program, bool compact)
         {
             //foreach (var item in update)
             //{
@@ -127,7 +121,18 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             {
                 try
                 {
-                    ASTTransformation treeNode = ASTProgram.TransformString(item.Item1, program);
+                    List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+                    if (compact)
+                    {
+                        list = ASTManager.EnumerateSyntaxNodesAndTokens2(item.Item1, list);
+                    }
+                    else
+                    {
+                        list = ASTManager.EnumerateSyntaxNodesAndTokens(item.Item1, list);
+                    }
+                    ListNode lnode = new ListNode(list);
+
+                    ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
                     string transformation = treeNode.transformation;
 
                     int start = nextStart + item.Item2.Region.Start;

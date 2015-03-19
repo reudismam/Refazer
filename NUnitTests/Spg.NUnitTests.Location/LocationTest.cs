@@ -137,8 +137,9 @@ namespace Spg.NUnitTests.Location
             controller.CurrentViewCodeBefore = FileUtil.ReadFile(mainClass);
             controller.CurrentViewCodePath = mainClass;
 
+            controller.SetSolution(FilePath.SOLUTION_PATH);
             controller.Extract();
-            controller.SolutionPath = FilePath.SOLUTION_PATH;
+            
             controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
             List<Selection> locations = JsonUtil<List<Selection>>.Read(output);

@@ -46,8 +46,8 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
             List<IPosition> positions = GetPositions(examples);
             foreach (IPosition position in positions)
             {
-                if (position is Pos)
-                {
+                //if (position is Pos)
+                //{
                     Pos positioncopy = (Pos)position;
 
                     TokenSeq r1 = GetTokenSeq(positioncopy.r1);
@@ -72,7 +72,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
                 //        }
                 //    }
                 //}
-            }
+            //}
             return predicates;
         }
 
@@ -89,7 +89,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
                 ListNode input = example.Item1; //input and output are equal.
                 for (int k = 0; k < input.List.Count; k++)
                 {
-                    positions.AddRange(program.GeneratePosition(input, k));
+                    positions.AddRange(program.GeneratePos(input, k));
                 }
             }
             return positions;

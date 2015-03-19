@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
@@ -58,7 +60,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             var transformations = new List<Transformation>();
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
             {
-                string text = Transform(validated, item.Value);
+                string text = Transform(validated, item.Value, true);
                 Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
                 Transformation transformation = new Transformation(beforeAfter, item.Key);
                 transformations.Add(transformation);
@@ -72,7 +74,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// <param name="program">Synthesized program</param>
         /// <param name="locations">Locations</param>
         /// <returns>Transformed program</returns>
-        public virtual string Transform(SynthesizedProgram program, List<CodeLocation> locations)
+        public virtual string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact)
         {
             string text = "";
             SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
@@ -93,7 +95,19 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             {
                 try
                 {
-                    ASTTransformation treeNode = ASTProgram.TransformString(node, program);
+                    List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+                    if (compact)
+                    {
+                        list = ASTManager.EnumerateSyntaxNodesAndTokens2(node, list);
+                    }
+                    else
+                    {
+                        list = ASTManager.EnumerateSyntaxNodesAndTokens(node, list);
+                    }
+                    
+                    ListNode lnode = new ListNode(list);
+
+                    ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
                     String transformation = treeNode.transformation;
                     string nodeText = node.GetText().ToString();
                     String escaped = Regex.Escape(nodeText);
@@ -139,8 +153,14 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// <returns>Synthesizer program</returns>
         protected SynthesizedProgram LearnSynthesizerProgram(List<Tuple<ListNode, ListNode>> examples)
         {
-            SynthesizerSetting setting = new SynthesizerSetting(); //configure setting
-            setting.DynamicTokens = true; setting.Deviation = 2; setting.ConsiderEmpty = true; setting.ConsiderConstrStr = true;
+            SynthesizerSetting setting = new SynthesizerSetting
+            {
+                DynamicTokens = true,
+                Deviation = 2,
+                ConsiderEmpty = true,
+                ConsiderConstrStr = true,
+                CreateTokenSeq = true
+            }; //configure setting
 
             ASTProgram program = new ASTProgram(setting, examples); //create a new AST program and learn synthesizer
             List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);

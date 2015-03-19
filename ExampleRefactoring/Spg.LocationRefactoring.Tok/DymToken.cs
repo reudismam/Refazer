@@ -1,6 +1,7 @@
 ﻿using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
+using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using Microsoft.CodeAnalysis;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Tok;
 
@@ -11,11 +12,14 @@ namespace Spg.LocationRefactoring.Tok
     /// </summary>
     public class DymToken: Token
     {
+        private bool _getFullyQualifiedName;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="token">Dynamic token</param>
-        public DymToken(SyntaxNodeOrToken token) : base(token) {
+        public DymToken(SyntaxNodeOrToken token, bool getFullyQualifiedName) : base(token)
+        {
+            this._getFullyQualifiedName = getFullyQualifiedName;
         }
 
         /// <summary>
@@ -25,7 +29,7 @@ namespace Spg.LocationRefactoring.Tok
         /// <returns>True if a match exists</returns>
         public override bool Match(SyntaxNodeOrToken st)
         {
-            DymToken dymToken = new DymToken(st);
+            DymToken dymToken = new DymToken(st, true);
             return Equals(dymToken);
         }
 
@@ -67,6 +71,21 @@ namespace Spg.LocationRefactoring.Tok
             {
                 return false;
             }
+            //var x = token.SyntaxTree.GetRoot().FindNode();
+            ////var x = model.GetDeclaredSymbol(token.Parent);
+            //var property = token.Parent as IdentifierNameSyntax;
+
+            //if (property != null)
+            //    Console.WriteLine("Property: " + property.Identifier);
+            //property.Identifier.
+            //ProjectInformation information = ProjectInformation.GetInstance();
+
+            //if (_getFullyQualifiedName)
+            //{
+            //    string fullName = WorkspaceManager.GetInstance()
+            //        .GetSemanticModel(information.ProjectPath, information.SolutionPath,
+            //            this.token.Parent, this.token.ToString());
+            //}
 
             DymToken st = (DymToken)obj;
             ComparerBase comparator = new NodeComparer();

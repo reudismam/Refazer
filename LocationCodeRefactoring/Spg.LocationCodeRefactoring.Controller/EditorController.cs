@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
@@ -13,7 +14,6 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Text.Projection;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationCodeRefactoring.Observer;
@@ -64,10 +64,13 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         //public Dictionary<String, Prog> Progs { get; set; }
         public List<Prog> Progs { get; set; }
 
-        /// <summary>
-        /// Solution path
-        /// </summary>
-        public string SolutionPath { get; set; }
+        ///// <summary>
+        ///// Solution path
+        ///// </summary>
+        //
+        //public string SolutionPath { get; set; }
+
+        public ProjectInformation ProjectInformation { get; set; }
 
         /// <summary>
         /// Code before transformation
@@ -88,7 +91,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         public string CurrentViewCodePath { get; set; }
 
         public List<Tuple<string, string>> DocumentsBeforeAndAfter { get; set; }
-        public string CurrentProject { get; set; }
+        //public string CurrentProject { get; set; }
         public IProjectionBuffer ProjectionBuffer { get; set; }
 
         public Dictionary<string, IProjectionBuffer> ProjectionBuffers { get; set; }
@@ -116,6 +119,16 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             Init();
         }
 
+        public void SetSolution(string solution)
+        {
+            this.ProjectInformation.SolutionPath = solution;
+        }
+
+        public void SetProject(string project)
+        {
+            this.ProjectInformation.ProjectPath = project;
+        }
+
         //Start controller
         public void Init()
         {
@@ -129,9 +142,10 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             //this.CurrentProject = null;
             //this.Progs = null;
             //this.SolutionPath = null;
-            //LCAManager.Init();
-            //RegionManager.Init();
-            //BoundaryManager.Init();
+            this.ProjectInformation = ProjectInformation.GetInstance();
+            LCAManager.Init();
+            RegionManager.Init();
+            BoundaryManager.Init();
         }
 
         public static void ReInit()
@@ -157,20 +171,20 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// </summary>
         public void Extract()
         {
-            LocationExtractor extractor = new LocationExtractor(SolutionPath);
+            LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
             //remove
             JsonUtil<List<TRegion>>.Write(SelectedLocations, "input_selection.json");
             //remove
             Progs = extractor.Extract(SelectedLocations);
 
-            Progs = RecomputeWithNegativeLocations();
+            //Progs = RecomputeWithNegativeLocations();
 
             NotifyLocationProgramGeneratedObservers(Progs);
         }
 
         public void Extract(List<TRegion> positives, List<TRegion> negatives)
         {
-            LocationExtractor extractor = new LocationExtractor(SolutionPath);
+            LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
             programsWithNegatives = extractor.Extract(positives, negatives);
 
             //Progs = RecomputeWithNegativeLocations();
@@ -227,7 +241,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             {
                 return Progs;
             }
-            LocationExtractor extrator = new LocationExtractor(SolutionPath);
+            LocationExtractor extrator = new LocationExtractor(this.ProjectInformation.SolutionPath);
 
             var withNegatives = extrator.Extract(SelectedLocations, negativesExamples);
 
@@ -373,6 +387,29 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
             List<SyntaxNode> lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
 
+            //remove
+ //           var sm = WorkspaceManager.GetSemanticModel(CurrentProject, SolutionPath, CurrentViewCodePath, lcas.First());
+ //           SyntaxTree tree = sm.SyntaxTree;
+ //           SyntaxNode n = ASTManager.NodesWithSameStartEndAndKind(tree, lcas.First().Span.Start, lcas.First().Span.End,
+ //               lcas.First().CSharpKind()).First();
+ ////           var x = sm.GetDeclaredSymbol(n);
+ //           var si = sm.GetSymbolInfo(n);
+            
+ //           var type = x.ContainingType;
+ //           var s = type.ToDisplayString();
+ //           var name = GetFullMetadataName(type);
+
+            //foreach (ISymbol symbol in sm.LookupSymbols(241))
+            //{
+            //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
+            //    {
+            //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
+            //        var rlts = symbol.DeclaringSyntaxReferences;
+            //    }
+            //}
+            //////remove
+            //remove
+
             regions = RegionManager.GroupRegionBySyntaxKind(regions, lcas);
 
             foreach (TRegion region in regions)
@@ -386,7 +423,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             return tuple;
         }
 
-        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClassPosNegative(Prog prog)
+       private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClassPosNegative(Prog prog)
         {
             List<TRegion> regions = new List<TRegion>();
             List<CodeLocation> locations = new List<CodeLocation>();
@@ -415,8 +452,10 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog, List<Tuple<string, string>> sourceFiles, string program)
         {
-            LocationExtractor extractor = new LocationExtractor(SolutionPath);
+            LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
+            
+            Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
 
             var groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
            
@@ -431,6 +470,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                 List<TRegion> regions = RetrieveLocations(source.Item1, prog);
 
                 regions = RegionManager.GroupRegionBySyntaxKind(regions, lcas);
+                dicRegions.Add(source.Item2, regions);
 
                 foreach (TRegion region in regions)
                 {
@@ -443,7 +483,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                     sourceLocations.Add(location);
                 }
             }
-            var rs = extractor.RetrieveString(prog, program);
+            var rs = dicRegions[CurrentViewCodePath];//extractor.RetrieveString(prog, program);
             Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
             return tuple;
         }
@@ -461,12 +501,13 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                 var slocation = SelectedLocations[index];
                 if (!slocation.Path.Equals(sourceCodePath))
                 {
-                    return new WorkspaceManager().SourceFiles(CurrentProject, SolutionPath);
+                    return WorkspaceManager.GetInstance().SourceFiles(this.ProjectInformation.ProjectPath, this.ProjectInformation.SolutionPath);
                 }
             }
             Tuple<string, string> sourceFile = Tuple.Create<string, string>(SelectedLocations.First().Parent.Text, sourceCodePath);
             sourceFiles.Add(sourceFile);
             return sourceFiles;
+            
         }
 
         /// <summary>
@@ -476,14 +517,14 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// <param name="prog">Location program</param>
         public List<TRegion> RetrieveLocations(string sourceCode, Prog prog)
         {
-            LocationExtractor extractor = new LocationExtractor(SolutionPath);
+            LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
             List<TRegion> regions = extractor.RetrieveString(prog, sourceCode);
             return regions;
         }
 
         private List<TRegion> RetrieveLocations(SyntaxNode lca, string sourceCode, Prog prog)
         {
-            LocationExtractor extractor = new LocationExtractor(SolutionPath);
+            LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
             List<TRegion> regions = extractor.RetrieveString(prog, sourceCode, lca);
             return regions;
         }
@@ -593,15 +634,19 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// </summary>
         public void Refact()
         {
+            long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             FillEditedLocations();
-            LocationExtractor extractor = new LocationExtractor(SolutionPath);
+            LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
             List<Transformation> transformations = extractor.TransformProgram();
             SourceTransformations = transformations;
 
-            SynthesizedProgram synthesized = extractor.TransformationProgram(SelectedLocations);
+            //SynthesizedProgram synthesized = extractor.TransformationProgram(SelectedLocations);
+            long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTime = (millAfer - millBefore);
+            FileUtil.WriteToFile(@"edit.t", totalTime.ToString());
 
             NotifyProgramRefactoredObservers(transformations);
-            NotifyLocationsTransformedObservers(synthesized, Locations);
+            //NotifyLocationsTransformedObservers(synthesized, Locations);
 
             ClearAfterRefact();
 
@@ -722,54 +767,54 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             this._locationsTransformedObserver.Add(observer);
         }
 
-        /// <summary>
-        /// Notify locations transformation observers
-        /// </summary>
-        /// <param name="program">Synthesized program</param>
-        /// <param name="locations">Code locations</param>
-        private void NotifyLocationsTransformedObservers(SynthesizedProgram program, IEnumerable<CodeLocation> locations)
-        {
-            List<CodeTransformation> transformations = new List<CodeTransformation>();
-            foreach (CodeLocation location in locations)
-            {
-                Tuple<string, string> transformedLocation = Transformation(location, program);
+        ///// <summary>
+        ///// Notify locations transformation observers
+        ///// </summary>
+        ///// <param name="program">Synthesized program</param>
+        ///// <param name="locations">Code locations</param>
+        //private void NotifyLocationsTransformedObservers(SynthesizedProgram program, IEnumerable<CodeLocation> locations)
+        //{
+        //    List<CodeTransformation> transformations = new List<CodeTransformation>();
+        //    foreach (CodeLocation location in locations)
+        //    {
+        //        Tuple<string, string> transformedLocation = Transformation(location, program);
 
-                if (transformedLocation == null) continue;
+        //        if (transformedLocation == null) continue;
 
-                CodeTransformation transformation = new CodeTransformation(location, transformedLocation);
-                transformations.Add(transformation);
-            }
+        //        CodeTransformation transformation = new CodeTransformation(location, transformedLocation);
+        //        transformations.Add(transformation);
+        //    }
 
-            this.CodeTransformations = transformations;
+        //    this.CodeTransformations = transformations;
 
-            LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(transformations);
+        //    LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(transformations);
 
-            foreach (ILocationsTransformedObserver observer in _locationsTransformedObserver)
-            {
-                observer.NotifyLocationsTransformed(ltEvent);
-            }
-        }
+        //    foreach (ILocationsTransformedObserver observer in _locationsTransformedObserver)
+        //    {
+        //        observer.NotifyLocationsTransformed(ltEvent);
+        //    }
+        //}
 
-        /// <summary>
-        /// Look for a place to put this. Refactor
-        /// </summary>
-        /// <returns></returns>
-        public Tuple<string, string> Transformation(CodeLocation location, SynthesizedProgram program)
-        {
-            TRegion region = location.Region;
-            try
-            {
-                ASTTransformation tree = ASTProgram.TransformString(region.Node, program);
-                string transformation = tree.transformation;
+        ///// <summary>
+        ///// Look for a place to put this. Refactor
+        ///// </summary>
+        ///// <returns></returns>
+        //public Tuple<string, string> Transformation(CodeLocation location, SynthesizedProgram program)
+        //{
+        //    TRegion region = location.Region;
+        //    try
+        //    {
+        //        ASTTransformation tree = ASTProgram.TransformString(region.Node, program);
+        //        string transformation = tree.transformation;
 
-                Tuple<string, string> transformedLocation = Tuple.Create(region.Node.GetText().ToString(), transformation);
-                return transformedLocation;
-            }
-            catch (ArgumentOutOfRangeException e)
-            { Console.WriteLine(e.Message); }
+        //        Tuple<string, string> transformedLocation = Tuple.Create(region.Node.GetText().ToString(), transformation);
+        //        return transformedLocation;
+        //    }
+        //    catch (ArgumentOutOfRangeException e)
+        //    { Console.WriteLine(e.Message); }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         /// <summary>
         /// Add locations transformed observer

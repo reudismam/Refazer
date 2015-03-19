@@ -455,30 +455,30 @@ namespace Spg.ExampleRefactoring.Synthesis
             return indexes;
         }
 
-        public static List<SyntaxNodeOrToken> DiffSN(ListNode input, ListNode output)
-        {
-            List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
-            List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);//new List<ComparisonObject>();
-            var listInput = Differ2(tinput, touput, ModificationType.Inserted); //node of output will appear as inserted
-            return listInput;
-        }
+        //public static List<SyntaxNodeOrToken> DiffSN(ListNode input, ListNode output)
+        //{
+        //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
+        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);//new List<ComparisonObject>();
+        //    var listInput = Differ2(tinput, touput, ModificationType.Inserted); //node of output will appear as inserted
+        //    return listInput;
+        //}
              
-        public static List<SyntaxNodeOrToken> Differ2(List<ComparisonObject> input, List<ComparisonObject> output, ModificationType type)
-        {
-            List<SyntaxNodeOrToken> lcomp = new List<SyntaxNodeOrToken>();
+        //public static List<SyntaxNodeOrToken> Differ2(List<ComparisonObject> input, List<ComparisonObject> output, ModificationType type)
+        //{
+        //    List<SyntaxNodeOrToken> lcomp = new List<SyntaxNodeOrToken>();
 
-            ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
-            List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(input, output);
-            for (int i = 0; i < result.Count; i++)
-            {
-                ComparisonResult<ComparisonObject> r = result[i];
-                if (r.ModificationType.Equals(type))
-                {
-                      lcomp.Add(r.DataCompared.Token.token);
-                }
-            }
-            return lcomp;
-        } 
+        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
+        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(input, output);
+        //    for (int i = 0; i < result.Count; i++)
+        //    {
+        //        ComparisonResult<ComparisonObject> r = result[i];
+        //        if (r.ModificationType.Equals(type))
+        //        {
+        //              lcomp.Add(r.DataCompared.Token.token);
+        //        }
+        //    }
+        //    return lcomp;
+        //} 
 
         ///// <summary>
         ///// Calculate the difference point between input and output
@@ -575,7 +575,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             for (int i = 0; i < listNode.List.Count; i++)
             {
                 SyntaxNodeOrToken st = listNode.List[i];
-                DymToken token = new DymToken(st);
+                DymToken token = new DymToken(st, false);
                 ComparisonObject obj = new ComparisonObject(token, i, indicator);
                 comparisonObjects.Add(obj);
             }

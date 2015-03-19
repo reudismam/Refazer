@@ -58,7 +58,12 @@ namespace Spg.LocationRefactor.Operator
 
             hypothesis.Solutions = expressions;
 
-            SyntaxTree result = ASTProgram.TransformString(input, hypothesis).tree;
+            List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+            
+            list = ASTManager.EnumerateSyntaxNodesAndTokens(input, list);
+            ListNode lnode = new ListNode(list);
+
+            SyntaxTree result = ASTProgram.TransformString(lnode, hypothesis).tree;
 
             List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
             nodes = ASTManager.EnumerateSyntaxNodesAndTokens(result.GetRoot(), nodes);

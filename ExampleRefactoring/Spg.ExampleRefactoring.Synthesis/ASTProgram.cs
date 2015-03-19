@@ -37,6 +37,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// </summary>
         private readonly Dictionary<ListNode, List<TokenSeq>> _computed = new Dictionary<ListNode, List<TokenSeq>>();
 
+
         /// <summary>
         /// Dynamic tokens and occurrences
         /// </summary>
@@ -95,6 +96,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             List<Dag> dags = Dags(examples);
 
             IntersectManager intManager = new IntersectManager();
+
             Dag T = intManager.Intersect(dags);
 
             if (T == null)
@@ -103,6 +105,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 T = intManager.Intersect(dags);
             }
 
+            var list = T.Mapping.ToList();
             ExpressionManager expmanager = new ExpressionManager();
             expmanager.FilterExpressions(T, examples);
 
@@ -186,7 +189,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
                         if (!dym) continue;
 
-                        DymToken dt = new DymToken(st);
+                        DymToken dt = new DymToken(st, true);
                         int v;
                         if (!temp.TryGetValue(dt, out v))
                         {
@@ -431,8 +434,11 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
                 TokenSeq ts = new TokenSeq(tSeq);
 
-                List<TokenSeq> parentNodes = CreateTokenSeq(ts);
-                tokensSeqs.AddRange(parentNodes);
+                if (Setting.CreateTokenSeq)
+                {
+                    List<TokenSeq> parentNodes = CreateTokenSeq(ts);
+                    tokensSeqs.AddRange(parentNodes);
+                }
 
                 if (Setting.DynamicTokens)
                 {
@@ -522,6 +528,42 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 TokenSeq sequence = new TokenSeq(tokens); 
                 sequences.Add(sequence);
             }
+
+            sequences.AddRange(AddArgument(seq));
+
+            return sequences;
+        }
+
+        private static IEnumerable<TokenSeq> AddArgument(TokenSeq seq)
+        {
+            List<Token> argumentTokens = new List<Token>();
+            bool addArgument = false;
+            bool previousIsArgument = false;
+            foreach (Token st in seq.Tokens)
+            {
+                Token at = new ArgumentToken(st.token);
+                if (at.Match(st.token))
+                {
+                    if (!previousIsArgument)
+                    {
+                        argumentTokens.Add(at);
+                    }
+                    previousIsArgument = true;
+                    addArgument = true;
+                }
+                else
+                {
+                    argumentTokens.Add(st);
+                    previousIsArgument = false;
+                }
+            }
+            List<TokenSeq> sequences = new List<TokenSeq>();
+            if (addArgument)
+            {
+                TokenSeq sequence = new TokenSeq(argumentTokens);
+                sequences.Add(sequence);
+            }
+
             return sequences;
         }
 
@@ -748,6 +790,48 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             return result;
         }
 
+        public List<IPosition> GeneratePos(ListNode input, int k)
+        {
+            List<IPosition> result = new List<IPosition>();
+            //result.Add(CPos(k)); result.Add(CPos(-(input.Length() - k + 1)));
+            //int deviation = 2;
+
+            int k1 = Math.Max(k - Setting.Deviation, 0);
+            int k2 = Math.Min(k + Setting.Deviation, input.Length());
+
+            int i = Math.Max(0, k1);
+            int j = Math.Max(0, (k - k1));
+
+            ListNode subNodesLeft = ASTManager.SubNotes(input, i, j);
+            // Match string s[k1, k - 1] for some constant k1
+            List<TokenSeq> r1 = GenerateTokenSeq(subNodesLeft);
+
+            ListNode subNodesRight = ASTManager.SubNotes(input, Math.Max(0, k), Math.Min(k2 - k, input.Length()));
+
+            //Match string s[k, k2] for some constant k2
+            List<TokenSeq> r2 = GenerateTokenSeq(subNodesRight);
+            foreach (TokenSeq r11 in r1)
+            {
+                foreach (TokenSeq r22 in r2)
+                {
+                    if (r11.Tokens.Any() || r22.Tokens.Any())
+                    {
+                        //TokenSeq r12 = ConcatenateRegularExpression(r11, r22);//Equivalent to TokenSeq(T1, T2,...,Tn, T{'}1, T{'}2,...,T{'}m)
+                        //TokenSeq regex = r12;
+                        //ListNode subNodesk1k2 = ASTManager.SubNotes(input, k1, k2 - k1);
+                        //int c = IndexOfMatchOfTheNodes(input, r11, r22, k1, k2);
+                        //int cline = new RegexComparer().Matches(input, regex).Count;//ASTManager.Matches(input, regex, new RegexComparer()).Count();
+                        TokenSeq r1Line = r11; //maybe you will need the raw type to execute search on the tree.
+                        TokenSeq r2Line = r22;
+
+                        result.Add(Pos(r1Line, r2Line, 0)); //This need to be refactored.
+                        //result.Add(Pos(r1Line, r2Line, -(cline - c + 1)));
+                    }
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// Index of matches
         /// </summary>
@@ -873,10 +957,21 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <param name="input">Input syntax node</param>
         /// <param name="synthesizedProgram">Synthesized program</param>
         /// <returns></returns>
-        public static ASTTransformation TransformString(SyntaxNode input, SynthesizedProgram synthesizedProgram)
+        public static ASTTransformation TransformString(ListNode input, SynthesizedProgram synthesizedProgram)
         {
             return UpdateASTManager.UpdateASTTree(input, synthesizedProgram);
         }
+
+        ///// <summary>
+        ///// Retrieve the string corresponding to the hypothesis passed as parameter.
+        ///// </summary>
+        ///// <param name="input">Input syntax node</param>
+        ///// <param name="synthesizedProgram">Synthesized program</param>
+        ///// <returns></returns>
+        //public static ASTTransformation TransformString(SyntaxNode input, SynthesizedProgram synthesizedProgram)
+        //{
+        //    return UpdateASTManager.UpdateASTTree(input, synthesizedProgram);
+        //}
 
         /// <summary>
         /// Return CPos a expression

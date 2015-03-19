@@ -42,22 +42,48 @@ namespace Spg.ExampleRefactoring.AST
             return combTree;
         }
 
+        ///// <summary>
+        ///// Transform the AST
+        ///// </summary>
+        ///// <param name="oldNode">Old syntax tree</param>
+        ///// <param name="synthesizedProg">Synthesized program</param>
+        ///// <returns>Syntax tree transformation</returns>
+        //public static ASTTransformation UpdateASTTree(SyntaxNode oldNode, SynthesizedProgram synthesizedProg)
+        //{
+        //    if (oldNode == null || synthesizedProg == null)
+        //    {
+        //        throw new Exception("Old node or synthesized program cannot be null");
+        //    }
+        //    List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
+        //    nodes = ASTManager.EnumerateSyntaxNodesAndTokens(oldNode, nodes);
+
+        //    ListNode listNode = new ListNode(nodes);
+        //    ListNode composition = new ListNode();
+        //    for (int i = 0; i < synthesizedProg.Solutions.Count; i++)
+        //    {
+        //        ListNode subNodes = synthesizedProg.Solutions[i].RetrieveSubNodes(listNode);
+        //        composition.List.AddRange(subNodes.List);
+        //    }
+        //    ASTTransformation combTree = GetSyntaxTree(composition);
+        //    return combTree;
+        //}
+
         /// <summary>
         /// Transform the AST
         /// </summary>
-        /// <param name="oldNode">Old syntax tree</param>
+        /// <param name="listNode">ListNodes</param>
         /// <param name="synthesizedProg">Synthesized program</param>
         /// <returns>Syntax tree transformation</returns>
-        public static ASTTransformation UpdateASTTree(SyntaxNode oldNode, SynthesizedProgram synthesizedProg)
+        public static ASTTransformation UpdateASTTree(ListNode listNode, SynthesizedProgram synthesizedProg)
         {
-            if (oldNode == null || synthesizedProg == null)
+            if (listNode == null || synthesizedProg == null)
             {
                 throw new Exception("Old node or synthesized program cannot be null");
             }
-            List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
-            nodes = ASTManager.EnumerateSyntaxNodesAndTokens(oldNode, nodes);
+            //List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
+            //nodes = ASTManager.EnumerateSyntaxNodesAndTokens(oldNode, nodes);
 
-            ListNode listNode = new ListNode(nodes);
+            //ListNode listNode = new ListNode(nodes);
             ListNode composition = new ListNode();
             for (int i = 0; i < synthesizedProg.Solutions.Count; i++)
             {
@@ -67,7 +93,6 @@ namespace Spg.ExampleRefactoring.AST
             ASTTransformation combTree = GetSyntaxTree(composition);
             return combTree;
         }
-
         /// <summary>
         /// Create a tree
         /// </summary>

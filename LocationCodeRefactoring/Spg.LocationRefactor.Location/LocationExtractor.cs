@@ -128,16 +128,16 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return manager.TransformProgram();
         }
 
-        /// <summary>
-        /// Return program able to transform locations.
-        /// </summary>
-        /// <param name="regionsBeforeEdit">Regions before edit list</param>
-        /// <returns></returns>
-        public SynthesizedProgram TransformationProgram(List<TRegion> regionsBeforeEdit)
-        {
-            TransformationManager manager = new MapedLocationBasedTransformationManager();
-            return manager.TransformationProgram(regionsBeforeEdit);
-        }
+        ///// <summary>
+        ///// Return program able to transform locations.
+        ///// </summary>
+        ///// <param name="regionsBeforeEdit">Regions before edit list</param>
+        ///// <returns></returns>
+        //public SynthesizedProgram TransformationProgram(List<TRegion> regionsBeforeEdit)
+        //{
+        //    TransformationManager manager = new MapedLocationBasedTransformationManager();
+        //    return manager.TransformationProgram(regionsBeforeEdit);
+        //}
 
         /// <summary>
         /// Decompose location

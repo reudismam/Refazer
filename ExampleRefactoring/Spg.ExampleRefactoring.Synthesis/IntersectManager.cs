@@ -28,13 +28,11 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <param name="dags">Dag list</param>
         /// <returns>Intersection among dags</returns>
         public Dag Intersect(List<Dag> dags) {
-            Dag composition;
-
             if (dags.Count == 0)
             {
                 throw new Exception("Dag list cannot be empty");
             }
-            composition = dags[0];
+            var composition = dags[0];
             for (int i = 1; i < dags.Count; i++)
             {
                 Dag dag = dags[i];
@@ -42,7 +40,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 {
                     composition = Intersect(composition, dag);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return null;
                 }
@@ -92,7 +90,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                         graph.AddEdge(vertex1.Id, vertex2.Id);
                         W[vertex] = intersection;
                     }
-
                }
             }
 
@@ -100,7 +97,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             {
                 composition = new Dag(graph, vertexes[(dag1.Init.Id + " : " + dag2.Init.Id)], vertexes[(dag1.End.Id + " : " + dag2.End.Id).ToString()], W, vertexes);
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 return null;
             }

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CodeAnalysis.MSBuild;
 
 namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
@@ -11,6 +15,25 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
     /// </summary>
     public class WorkspaceManager
     {
+
+        private static WorkspaceManager instance;
+        private Dictionary<Tuple<LCAManager.Node, string>, string> dictionary;
+
+        private WorkspaceManager()
+        {
+            dictionary = new Dictionary<Tuple<LCAManager.Node, string>, string>();
+        }
+
+        public static WorkspaceManager GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new WorkspaceManager();
+            }
+            return instance;
+        }
+
+
         /// <summary>
         /// Return .cs files in the solution
         /// </summary>
@@ -26,6 +49,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             var originalSolution = workspace.CurrentSolution;
 
             Solution newSolution = originalSolution;
+            //GetSemanticModel(projectName, solutionPath);
 
             foreach (var projectId in originalSolution.ProjectIds)
             {
@@ -75,6 +99,135 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
 
             return sourceFiles;
         }
+
+        public string GetSemanticModel(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
+        {
+            Tuple<LCAManager.Node, string> tuple = Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
+                node.SyntaxTree.GetText().ToString());
+            if (dictionary.ContainsKey(tuple))
+            {
+                return dictionary[tuple];
+            }
+            var workspace = MSBuildWorkspace.Create();
+            var solution = workspace.OpenSolutionAsync(solutionPath).Result;
+
+            var originalSolution = workspace.CurrentSolution;
+
+            Solution newSolution = originalSolution;
+
+            foreach (var projectId in originalSolution.ProjectIds)
+            {
+                var project = newSolution.GetProject(projectId);
+                if (project.Name.Equals(projectName))
+                {
+                    var compilation = project.GetCompilationAsync().Result;
+                
+                    foreach (var documentId in project.DocumentIds)
+                    {
+                        var document = solution.GetDocument(documentId);
+
+                        SyntaxTree tree;
+                        document.TryGetSyntaxTree(out tree);
+                        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+                        {
+                            document.TryGetSyntaxTree(out tree);
+                            SemanticModel model2 = compilation.GetSemanticModel(tree);
+
+                            foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
+                            {
+                                if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
+                                {
+                                    var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
+                                    //                           var rlts = symbol.DeclaringSyntaxReferences;
+                                    dictionary.Add(tuple, symbol.ToDisplayString());
+                                    return symbol.ToDisplayString();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            dictionary.Add(tuple, null);
+            return null;
+        }
+
+        //public string GetSemanticModel(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
+        //{
+        //    Tuple<LCAManager.Node, string> tuple = Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
+        //        node.SyntaxTree.GetText().ToString());
+
+        //    if (dictionary.ContainsKey(tuple))
+        //    {
+        //        return dictionary[tuple];
+        //    }
+
+        //    var workspace = MSBuildWorkspace.Create();
+        //    var solution = workspace.OpenSolutionAsync(solutionPath).Result;
+
+        //    var originalSolution = workspace.CurrentSolution;
+
+        //    Solution newSolution = originalSolution;
+
+        //    foreach (var projectId in originalSolution.ProjectIds)
+        //    {
+        //        var project = newSolution.GetProject(projectId);
+        //        if (project.Name.Equals(projectName))
+        //        {
+        //            //remove
+        //            var compilation = project.GetCompilationAsync().Result;
+        //            //Document document = null;
+        //            //SyntaxTree tree;
+        //            //foreach (var documentId in project.DocumentIds)
+        //            //{
+        //            //    if (!documents.TryGetValue(node.SyntaxTree.ToString(), out document))
+        //            //    {
+        //            //        document = solution.GetDocument(documentId);
+        //            //        document.TryGetSyntaxTree(out tree);
+        //            //        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+        //            //        {
+        //            //            documents.Add(tree.GetText().ToString(), document);
+        //            //            break;
+        //            //        }
+        //            //        documents.Add(tree.GetText().ToString(), document);
+        //            //    }
+        //            //}
+
+        //            foreach (var documentId in project.DocumentIds)
+        //            {
+        //                var document = solution.GetDocument(documentId);
+
+
+        //                //foreach (var document in files)
+        //                //    {
+        //                //var document = solution.GetDocument(documentId);
+
+        //                SyntaxTree tree;
+        //                document.TryGetSyntaxTree(out tree);
+        //                if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+        //                {
+        //                    document.TryGetSyntaxTree(out tree);
+        //                SemanticModel model2;
+        //                document.TryGetSemanticModel(out model2);
+
+        //                foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
+        //                {
+        //                    if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
+        //                    {
+        //                        var rlt =
+        //                            SymbolFinder.FindSourceDeclarationsAsync(solution, symbol.Name, false).Result;
+        //                        //                           var rlts = symbol.DeclaringSyntaxReferences;
+        //                        dictionary.Add(tuple, symbol.ToDisplayString());
+        //                        return symbol.ToDisplayString();
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        }
+        //            //}
+        //        //}
+        //    }
+        //    return null;
+        //}
 
         private void SymbolTable(string solutionPath)
         {

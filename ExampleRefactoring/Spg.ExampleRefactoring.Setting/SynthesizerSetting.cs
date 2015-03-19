@@ -6,6 +6,12 @@
     public class SynthesizerSetting
     {
         /// <summary>
+        /// Indicates if create token sequence is to be created
+        /// </summary>
+        /// <returns>True if create token sequence is to be created.</returns>
+        public bool CreateTokenSeq { get; set; }
+
+        /// <summary>
         /// Indicate if we are using dynamic tokens or not
         /// </summary>
         /// <returns>Get of set dynamic tokens</returns>
@@ -42,12 +48,13 @@
         /// <param name="deviation">Deviation value</param>
         /// <param name="considerConstrStr">Indicate if we are using ConstrStr</param>
         /// <param name="considerEmpty">Indicate if we are using empty token or not</param>
-        public SynthesizerSetting(bool dynamicTokens, int deviation, bool considerConstrStr, bool considerEmpty)
+        public SynthesizerSetting(bool dynamicTokens, int deviation, bool considerConstrStr, bool considerEmpty, bool createTokenSeq = false)
         {
             this.DynamicTokens = dynamicTokens;
             this.Deviation = deviation;
             this.ConsiderConstrStr = considerConstrStr;
             this.ConsiderEmpty = considerEmpty;
+            this.CreateTokenSeq = createTokenSeq;
         }
     }
 }

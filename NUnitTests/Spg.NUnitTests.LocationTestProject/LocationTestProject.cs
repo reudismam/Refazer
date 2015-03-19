@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Microsoft.SqlServer.Server;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Data.Dig;
 using Spg.ExampleRefactoring.Util;
@@ -313,17 +315,20 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// <returns>True if locale passed</returns>
         public static bool LocaleTest(string commit, string solution, string project)
         {
+            long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
             EditorController.ReInit();
             EditorController controller = EditorController.GetInstance();
             List<TRegion> selections = JsonUtil<List<TRegion>>.Read(@"commits\"+ commit + @"\input_selection.json");
             controller.SelectedLocations = selections;
             controller.CurrentViewCodeBefore = FileUtil.ReadFile(selections.First().Path);
             controller.CurrentViewCodePath = selections.First().Path;
-            controller.CurrentProject = project;
+            controller.SetProject(project);
+            controller.SetSolution(solution);
             controller.SelectedLocations = selections;
 
             controller.Extract();
-            controller.SolutionPath = solution;
+            
             controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
             if (File.Exists(@"commits\" + commit + @"\negatives.json"))
@@ -368,6 +373,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
                     break;
                 }
             }
+            long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTime = (millAfer - millBefore);
+            FileUtil.WriteToFile(@"commits\" + commit + @"\time.t", totalTime.ToString());
             return passed;
         }
     }
