@@ -23,7 +23,7 @@ namespace Spg.LocationRefactor.Learn
         /// <summary>
         /// Store the filters calculated
         /// </summary>
-        private Dictionary<TokenSeq, bool> calculated;
+        private readonly Dictionary<TokenSeq, bool> _calculated;
 
         /// <summary>
         /// Predicate of the filter
@@ -35,7 +35,7 @@ namespace Spg.LocationRefactor.Learn
         public FilterLearnerBase(List<TRegion> list)
         {
             this.list = list;
-            calculated = new Dictionary<TokenSeq, Boolean>();
+            _calculated = new Dictionary<TokenSeq, Boolean>();
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Spg.LocationRefactor.Learn
         public FilterLearnerBase(IPredicate predicate, List<TRegion> list)
         {
             this.list = list;
-            calculated = new Dictionary<TokenSeq, Boolean>();
+            _calculated = new Dictionary<TokenSeq, Boolean>();
             this.predicate = predicate;
         }
 
@@ -173,7 +173,7 @@ namespace Spg.LocationRefactor.Learn
                 }
             }
 
-            BooleanLearnerBase bbase = new PositiveBooleanLearner(calculated);
+            BooleanLearnerBase bbase = new PositiveBooleanLearner(_calculated);
             var predicates = bbase.BooleanLearning(boolExamples, positivesExamples);
 
 

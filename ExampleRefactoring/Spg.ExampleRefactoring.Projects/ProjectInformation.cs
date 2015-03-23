@@ -20,23 +20,27 @@
         /// <summary>
         /// Singleton instance
         /// </summary>
-        private static ProjectInformation instance;
+        private static ProjectInformation _instance;
 
         private ProjectInformation() { }
 
+        /// <summary>
+        /// Get a new instance of ProjectInformation
+        /// </summary>
+        /// <returns></returns>
         public static ProjectInformation GetInstance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new ProjectInformation();
+                _instance = new ProjectInformation();
             }
-            return instance;
+            return _instance;
         }
 
-        public static void SetInfo(string solutionPath, string projectPath)
-        {
-            GetInstance().SolutionPath = solutionPath;
-            GetInstance().ProjectPath = projectPath;
-        }
+        //public static void SetInfo(string solutionPath, string projectPath)
+        //{
+        //    GetInstance().SolutionPath = solutionPath;
+        //    GetInstance().ProjectPath = projectPath;
+        //}
     }
 }

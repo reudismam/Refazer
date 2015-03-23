@@ -33,6 +33,9 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
             //_dic = new Dictionary<string, Tuple<Dictionary<Node, SyntaxNodeOrToken>, LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>>>();
         }
 
+        /// <summary>
+        /// Initiate a new instance
+        /// </summary>
         public static void Init()
         {
             _instance = null;
@@ -113,6 +116,13 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
             return tree;
         }
 
+        /// <summary>
+        /// Least common ancestor
+        /// </summary>
+        /// <param name="root">Root node</param>
+        /// <param name="n1">First node to be analyzed</param>
+        /// <param name="n2">Second node to be analyzed</param>
+        /// <returns>Least common ancestor of n1 and n2</returns>
         public SyntaxNode LeastCommonAncestor(SyntaxNodeOrToken root, SyntaxNodeOrToken n1, SyntaxNodeOrToken n2)
         {
             LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> rootNode = ConvertToTreeNode(root.AsNode());
@@ -122,27 +132,27 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
             return lca.LeastCommonAncestor(root.ToFullString(), rootNode, x, y).AsNode();
         }
 
-        /// <summary>
-        /// Least common ancestor of nodes in the tree
-        /// </summary>
-        /// <param name="nodes">Nodes in the tree</param>
-        /// <param name="tree">Tree</param>
-        /// <returns>Least common ancestor of nodes in the tree</returns>
-        public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNode> nodes, SyntaxTree tree)
-        {
-            if (nodes == null) throw new ArgumentNullException("nodes");
-            if (tree == null) throw new ArgumentNullException("tree");
-            if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
+        ///// <summary>
+        ///// Least common ancestor of nodes in the tree
+        ///// </summary>
+        ///// <param name="nodes">Nodes in the tree</param>
+        ///// <param name="tree">Tree</param>
+        ///// <returns>Least common ancestor of nodes in the tree</returns>
+        //public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNode> nodes, SyntaxTree tree)
+        //{
+        //    if (nodes == null) throw new ArgumentNullException("nodes");
+        //    if (tree == null) throw new ArgumentNullException("tree");
+        //    if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
 
-            LCAManager lcaCalculator = LCAManager.GetInstance();
-            SyntaxNodeOrToken lca = nodes[0];
-            for (int i = 1; i < nodes.Count; i++)
-            {
-                SyntaxNodeOrToken node = nodes[i];
-                lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
-            }
-            return lca;
-        }
+        //    LCAManager lcaCalculator = LCAManager.GetInstance();
+        //    SyntaxNodeOrToken lca = nodes[0];
+        //    for (int i = 1; i < nodes.Count; i++)
+        //    {
+        //        SyntaxNodeOrToken node = nodes[i];
+        //        lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
+        //    }
+        //    return lca;
+        //}
 
         /// <summary>
         /// Least common ancestor of nodes in the tree
@@ -166,24 +176,30 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
             return lca;
         }
 
-        public List<SyntaxNode> LeastCommonAncestors(List<Tuple<ListNode, ListNode>> examples, string sourceCode)
-        {
-            List<SyntaxNode> syntaxList = new List<SyntaxNode>();
-            foreach (var example in examples)
-            {
-                List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+        ///// <summary>
+        ///// Least common ancestors 
+        ///// </summary>
+        ///// <param name="examples">List of examples</param>
+        ///// <param name="sourceCode">Source code</param>
+        ///// <returns>Least common ancestors</returns>
+        //public List<SyntaxNode> LeastCommonAncestors(List<Tuple<ListNode, ListNode>> examples, string sourceCode)
+        //{
+        //    List<SyntaxNode> syntaxList = new List<SyntaxNode>();
+        //    foreach (var example in examples)
+        //    {
+        //        List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
 
-                if (example.Item2.List.Any())
-                {
-                    list.Add(example.Item2.List[0]);
-                    list.Add(example.Item2.List[example.Item2.Length() - 1]);
-                    SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
-                    SyntaxNodeOrToken snode = LeastCommonAncestor(list, tree);
-                    syntaxList.Add(snode.AsNode());
-                }
-            }
-            return syntaxList;
-        }
+        //        if (example.Item2.List.Any())
+        //        {
+        //            list.Add(example.Item2.List[0]);
+        //            list.Add(example.Item2.List[example.Item2.Length() - 1]);
+        //            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+        //            SyntaxNodeOrToken snode = LeastCommonAncestor(list, tree);
+        //            syntaxList.Add(snode.AsNode());
+        //        }
+        //    }
+        //    return syntaxList;
+        //}
 
 
         /// <summary>

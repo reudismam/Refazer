@@ -21,7 +21,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// Transform selection regions
         /// </summary>
         /// <returns>List of transformed locations</returns>
-        public override List<Transformation> TransformProgram()
+        public override List<Transformation> TransformProgram(bool compact)
         {
             RegionManager rManager = RegionManager.GetInstance();
             List<CodeLocation> locations = Controller.Locations; //previous locations
@@ -36,7 +36,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             var transformations = new List<Transformation>();
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
             {
-                string text = Transform(validated, item.Value, true);
+                string text = Transform(validated, item.Value, compact);
                 Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
                 Transformation transformation = new Transformation(beforeAfter, item.Key);
                 transformations.Add(transformation);

@@ -160,11 +160,20 @@ namespace LeastCommonAncestor
                 //_values = value._values;
             }
 
+            /// <summary>
+            /// Initiate a new instance
+            /// </summary>
             public static void Init()
             {
                 instance = null;
             }
 
+            /// <summary>
+            /// Singleton instance of LCA
+            /// </summary>
+            /// <param name="obj">Object to be compared</param>
+            /// <param name="rootNode">Node tree</param>
+            /// <returns>A singleton instance of LeastCommonAncestorFinder</returns>
             public static LeastCommonAncestorFinder<T> GetInstance(object obj, ITreeNode<T> rootNode)
             {
                 if (instance == null)
@@ -208,17 +217,16 @@ namespace LeastCommonAncestor
             {
                 // Find the first time the nodes were visited during preprocessing.
                 NodeIndex nodeIndex;
-                int indexX, indexY;
                 if (!_indexLookup.TryGetValue(x, out nodeIndex))
                 {
                     throw new ArgumentException("The x node was not found in the graph.");
                 }
-                indexX = nodeIndex.FirstVisit;
+                var indexX = nodeIndex.FirstVisit;
                 if (!_indexLookup.TryGetValue(y, out nodeIndex))
                 {
                     throw new ArgumentException("The y node was not found in the graph.");
                 }
-                indexY = nodeIndex.FirstVisit;
+                var indexY = nodeIndex.FirstVisit;
 
                 // Adjust so X is less than Y
                 int temp;

@@ -16,27 +16,32 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
     public class WorkspaceManager
     {
 
-        private static WorkspaceManager instance;
-        private Dictionary<Tuple<LCAManager.Node, string>, string> dictionary;
+        private static WorkspaceManager _instance;
+        private readonly Dictionary<Tuple<LCAManager.Node, string>, string> _dictionary;
 
         private WorkspaceManager()
         {
-            dictionary = new Dictionary<Tuple<LCAManager.Node, string>, string>();
+            _dictionary = new Dictionary<Tuple<LCAManager.Node, string>, string>();
         }
 
+        /// <summary>
+        /// Get a singleton instance of WorkspaceManager
+        /// </summary>
+        /// <returns>Singleton instance</returns>
         public static WorkspaceManager GetInstance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new WorkspaceManager();
+                _instance = new WorkspaceManager();
             }
-            return instance;
+            return _instance;
         }
 
 
         /// <summary>
         /// Return .cs files in the solution
         /// </summary>
+        /// <param name="projectName">Project name</param>
         /// <param name="solutionPath">Solution path</param>
         /// <returns>.cs files</returns>
         public List<Tuple<string, string>> GetSourcesFiles(string projectName, string solutionPath)
@@ -96,17 +101,24 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                     }
                 }
             }
-
             return sourceFiles;
         }
 
-        public string GetSemanticModel(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
+        /// <summary>
+        /// Get fully qualified name of a node
+        /// </summary>
+        /// <param name="projectName">Project name</param>
+        /// <param name="solutionPath">Solution path</param>
+        /// <param name="node">Node to be analyzed</param>
+        /// <param name="name">Name of the identifier</param>
+        /// <returns>Fully qualified name of the node</returns>
+        public string GetFullyQualifiedName(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
         {
             Tuple<LCAManager.Node, string> tuple = Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
                 node.SyntaxTree.GetText().ToString());
-            if (dictionary.ContainsKey(tuple))
+            if (_dictionary.ContainsKey(tuple))
             {
-                return dictionary[tuple];
+                return _dictionary[tuple];
             }
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(solutionPath).Result;
@@ -139,7 +151,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                                 {
                                     var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
                                     //                           var rlts = symbol.DeclaringSyntaxReferences;
-                                    dictionary.Add(tuple, symbol.ToDisplayString());
+                                    _dictionary.Add(tuple, symbol.ToDisplayString());
                                     return symbol.ToDisplayString();
                                 }
                             }
@@ -147,7 +159,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                     }
                 }
             }
-            dictionary.Add(tuple, null);
+            _dictionary.Add(tuple, null);
             return null;
         }
 
@@ -229,15 +241,16 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         //    return null;
         //}
 
-        private void SymbolTable(string solutionPath)
-        {
-            var workspace = MSBuildWorkspace.Create();
-            var solution = workspace.OpenSolutionAsync(solutionPath).Result;
-        }
+        //private void SymbolTable(string solutionPath)
+        //{
+        //    var workspace = MSBuildWorkspace.Create();
+        //    var solution = workspace.OpenSolutionAsync(solutionPath).Result;
+        //}
 
         /// <summary>
         /// Source files in solution on the format source code, source code path
         /// </summary>
+        /// <param name="projectName">Name of the project</param>
         /// <param name="solutionPath">Solution path</param>
         /// <returns>List of source file in the solution</returns>
         public List<Tuple<string, string>> SourceFiles(string projectName, string solutionPath)

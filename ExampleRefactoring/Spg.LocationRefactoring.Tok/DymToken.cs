@@ -13,10 +13,12 @@ namespace Spg.LocationRefactoring.Tok
     public class DymToken: Token
     {
         private bool _getFullyQualifiedName;
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="token">Dynamic token</param>
+        /// <param name="getFullyQualifiedName">Indicate if fully qualified name have to be used</param>
         public DymToken(SyntaxNodeOrToken token, bool getFullyQualifiedName) : base(token)
         {
             this._getFullyQualifiedName = getFullyQualifiedName;

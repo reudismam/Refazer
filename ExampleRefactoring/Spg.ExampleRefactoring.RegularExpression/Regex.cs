@@ -13,6 +13,38 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression
     /// </summary>
     public class Regex
     {
+
+        /// <summary>
+        /// All matches
+        /// </summary>
+        /// <returns>Matches</returns>
+        public static bool IsMatch(ListNode input, TokenSeq regex)
+        {
+            List<Tuple<int, ListNode>> matches = new List<Tuple<int, ListNode>>();
+            if (regex.Length() == 0) //equivalent to empty that matches everything
+            {
+                return true;
+            }
+
+            Automato aut = new Automato(regex);
+            int signal = -1;
+            for (int i = 0; i < input.Length(); i++)
+            {
+                SyntaxNodeOrToken node = input.List[i];
+                signal = aut.Transition(node);
+
+                if (signal == Automato.Final)
+                {
+                    return true;
+                }
+            }
+
+            if ((signal == Automato.Start || signal == Automato.Continue) && aut.Next == null)
+            {
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// All matches
         /// </summary>

@@ -99,6 +99,7 @@ namespace SPG.IntelliExtract
             List<TRegion> negatives = new List<TRegion>();
             List<int> indexNegatives = new List<int>();
             List<TRegion> positives = new List<TRegion>();
+            EditorController controller = EditorController.GetInstance();
             for (int index = 0; index < locations.Count; index++)
             {
                 var location = locations[index];
@@ -113,13 +114,14 @@ namespace SPG.IntelliExtract
                 {
                     negatives.Add(location.Region);
                     indexNegatives.Add(index);
+                   // break;
                 }
                 else
                 {
                     positives.Add(location.Region);
                 }
             }
-            EditorController controller = EditorController.GetInstance();
+            
             
             if (negatives.Any())
             {

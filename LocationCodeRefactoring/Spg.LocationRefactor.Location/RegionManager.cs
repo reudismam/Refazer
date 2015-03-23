@@ -157,7 +157,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     Tuple<ListNode, ListNode> te;
                     if (re.Length != 0)
                     {
-                        te = Example(node, re, true);
+                        te = Example(node, re);
                     }
                     else
                     {

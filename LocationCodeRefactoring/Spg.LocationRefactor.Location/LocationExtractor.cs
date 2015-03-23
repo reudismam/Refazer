@@ -122,10 +122,10 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// Transform selection regions
         /// </summary>
         /// <returns>Transformation</returns>
-        public List<Transformation.Transformation> TransformProgram()
+        public List<Transformation.Transformation> TransformProgram(bool compact)
         {
             var manager = new MapedLocationBasedTransformationManager();
-            return manager.TransformProgram();
+            return manager.TransformProgram(compact);
         }
 
         ///// <summary>

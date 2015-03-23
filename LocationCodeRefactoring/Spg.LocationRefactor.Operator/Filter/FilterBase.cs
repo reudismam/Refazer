@@ -4,6 +4,7 @@ using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
 using Microsoft.CodeAnalysis;
@@ -109,25 +110,43 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns></returns>
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
-            //IEnumerable<SyntaxNode> nodesForFiltering = SyntaxNodes(syntaxNode.Parent, sourceCode);
-            IEnumerable<SyntaxNode> regions = syntaxNode.DescendantNodesAndSelf();
-            return RetrieveRegionsBase(regions);
-            //return RetrieveRegionsBase(nodesForFiltering);
-
+            IEnumerable<SyntaxNode> nodesForFiltering = SyntaxNodes(syntaxNode.Parent, sourceCode);
+            //IEnumerable<SyntaxNode> regions = syntaxNode.DescendantNodesAndSelf();
+            //var list = regions.ToList();
+            //return RetrieveRegionsBase(regions);
+            var list = nodesForFiltering.ToList();
+            return RetrieveRegionsBase(nodesForFiltering);
         }
 
-        //private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode syntaxNode, string sourceCode)
-        //{
-        //    List<SyntaxNode> lcas = RegionManager.LeastCommonAncestors(sourceCode, List);
+        private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree, string sourceCode)
+        {
+            var nodes = from node in tree.DescendantNodesAndSelf()
+                                  where WithinLcas(node)
+                                  select node;
+            return nodes;
+            //List<SyntaxNode> lcas = RegionManager.LeastCommonAncestors(sourceCode, List);
 
-        //    List<SyntaxNode> nodes = new List<SyntaxNode>();
-        //    foreach (var lca in lcas)
-        //    {
-        //        nodes.AddRange(ASTManager.NodesWithTheSameSyntaxKind(syntaxNode, lca.CSharpKind()));
-        //    }
+            //List<SyntaxNode> nodes = new List<SyntaxNode>();
+            //foreach (var lca in lcas)
+            //{
+            //    nodes.AddRange(ASTManager.NodesWithTheSameSyntaxKind(syntaxNode, lca.CSharpKind()));
+            //}
 
-        //    return nodes;
-        //}
+            //return nodes;
+        }
+
+        private bool WithinLcas(SyntaxNode node)
+        {
+            foreach (var lca in EditorController.GetInstance().Lcas)
+            {
+                if (node.IsKind(lca.CSharpKind()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
 
         /// <summary>
@@ -146,8 +165,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                 tokens = ASTManager.EnumerateSyntaxNodesAndTokens(node, tokens);
                 ListNode lNode = new ListNode(tokens);
 
-                TokenSeq regexs = ASTProgram.ConcatenateRegularExpression(Predicate.r1, Predicate.r2);
-                TokenSeq regex = regexs;
+                TokenSeq regex = ASTProgram.ConcatenateRegularExpression(Predicate.r1, Predicate.r2);
 
                 if (ASTManager.IsMatch(lNode, regex))
                 {

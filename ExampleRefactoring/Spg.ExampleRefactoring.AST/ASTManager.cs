@@ -136,9 +136,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
                 throw new Exception("Input or regular expression cannot be null");
             }
 
-            //RegexComparer comparer = new RegexComparer();
-         
-            return (Regex.Matches(input, regex).Count > 0);
+            return Regex.IsMatch(input, regex); 
         }
 
         /// <summary>
@@ -194,6 +192,13 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
             return parent.Parent;
         }
 
+        /// <summary>
+        /// Nodes between start and end positions
+        /// </summary>
+        /// <param name="tree">Syntax tree to be analyzed</param>
+        /// <param name="startPosition">Start position</param>
+        /// <param name="end">End position</param>
+        /// <returns>Nodes between start and end positions</returns>
         public static List<SyntaxNodeOrToken> NodesBetweenStartAndEndPosition(SyntaxTree tree, int startPosition, int end)
         {
             List<SyntaxNodeOrToken> nodesSelection = new List<SyntaxNodeOrToken>();

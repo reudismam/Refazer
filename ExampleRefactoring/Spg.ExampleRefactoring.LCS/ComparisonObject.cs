@@ -26,7 +26,14 @@ namespace LCS2
 
         public int Indicator { get; set; }
 
+        /// <summary>
+        /// Indicate if token is contained on input
+        /// </summary>
         public static int INPUT = 0;
+
+        /// <summary>
+        /// Indicates if token is contained on output
+        /// </summary>
         public static int OUTPUT = 1;
 
         /// <summary>

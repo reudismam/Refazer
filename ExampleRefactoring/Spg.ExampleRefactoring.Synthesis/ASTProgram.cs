@@ -105,7 +105,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 T = intManager.Intersect(dags);
             }
 
-            var list = T.Mapping.ToList();
+            //var list = T.Mapping.ToList();
             ExpressionManager expmanager = new ExpressionManager();
             expmanager.FilterExpressions(T, examples);
 
@@ -130,6 +130,11 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             return validated;
         }
 
+        /// <summary>
+        /// Verify is output is empty
+        /// </summary>
+        /// <param name="examples">Example set</param>
+        /// <returns>True is output is empty</returns>
         private bool OutputIsEmpty(List<Tuple<ListNode, ListNode>> examples)
         {
             bool isEmpty = true;
@@ -175,7 +180,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 for (int i = 0; i < t.Item1.List.Count; i++)
                 {
                     SyntaxNodeOrToken st = t.Item1.List[i];
-                    if (st.IsKind(SyntaxKind.IdentifierToken))
+                    if (st.IsKind(SyntaxKind.IdentifierToken) || st.IsKind(SyntaxKind.StringLiteralToken))
                     {
                         bool dym;
                         if (i + 1 < t.Item1.Length())
@@ -231,6 +236,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         private static bool IsDym(SyntaxNodeOrToken st, SyntaxNodeOrToken next)
         {
             if (st == null) { throw new ArgumentNullException("st"); }
+
+            if (st.IsKind(SyntaxKind.StringLiteralToken)) { return true; }
 
             if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
 
@@ -502,7 +509,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <summary>
         /// Create token sequence
         /// </summary>
-        /// <param name="subNodes">Sub nodes</param>
+        /// <param name="seq">Sub nodes</param>
         /// <returns>Token sequence</returns>
         public static List<TokenSeq> CreateTokenSeq(TokenSeq seq)
         {
@@ -790,11 +797,15 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             return result;
         }
 
+        /// <summary>
+        /// Generate a set of Pos position expressions
+        /// </summary>
+        /// <param name="input">Input nodes</param>
+        /// <param name="k">Position k on the input to be analyzed</param>
+        /// <returns>Set of Pos expressions</returns>
         public List<IPosition> GeneratePos(ListNode input, int k)
         {
             List<IPosition> result = new List<IPosition>();
-            //result.Add(CPos(k)); result.Add(CPos(-(input.Length() - k + 1)));
-            //int deviation = 2;
 
             int k1 = Math.Max(k - Setting.Deviation, 0);
             int k2 = Math.Min(k + Setting.Deviation, input.Length());
@@ -816,16 +827,10 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 {
                     if (r11.Tokens.Any() || r22.Tokens.Any())
                     {
-                        //TokenSeq r12 = ConcatenateRegularExpression(r11, r22);//Equivalent to TokenSeq(T1, T2,...,Tn, T{'}1, T{'}2,...,T{'}m)
-                        //TokenSeq regex = r12;
-                        //ListNode subNodesk1k2 = ASTManager.SubNotes(input, k1, k2 - k1);
-                        //int c = IndexOfMatchOfTheNodes(input, r11, r22, k1, k2);
-                        //int cline = new RegexComparer().Matches(input, regex).Count;//ASTManager.Matches(input, regex, new RegexComparer()).Count();
                         TokenSeq r1Line = r11; //maybe you will need the raw type to execute search on the tree.
                         TokenSeq r2Line = r22;
 
                         result.Add(Pos(r1Line, r2Line, 0)); //This need to be refactored.
-                        //result.Add(Pos(r1Line, r2Line, -(cline - c + 1)));
                     }
                 }
             }

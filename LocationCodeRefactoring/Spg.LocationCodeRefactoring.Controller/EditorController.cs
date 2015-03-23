@@ -102,7 +102,16 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public Tuple<List<CodeLocation>, List<TRegion>> localionsComputerSoFar;
 
-        public List<Prog> programsWithNegatives { get; set; }
+        /// <summary>
+        /// Program computed for negative filtering
+        /// </summary>
+        /// <returns>Program learned for negative filtering</returns>
+        public List<Prog> ProgramsWithNegatives { get; set; }
+
+        /// <summary>
+        /// Least Common ancestor of selected nodes
+        /// </summary>
+        public List<SyntaxNode> Lcas { get; set; }
 
         /// <summary>
         /// Singleton instance
@@ -177,7 +186,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             //remove
             Progs = extractor.Extract(SelectedLocations);
 
-            //Progs = RecomputeWithNegativeLocations();
+            Progs = RecomputeWithNegativeLocations();
 
             NotifyLocationProgramGeneratedObservers(Progs);
         }
@@ -185,11 +194,11 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         public void Extract(List<TRegion> positives, List<TRegion> negatives)
         {
             LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
-            programsWithNegatives = extractor.Extract(positives, negatives);
+            ProgramsWithNegatives = extractor.Extract(positives, negatives);
 
             //Progs = RecomputeWithNegativeLocations();
 
-            NotifyLocationProgramGeneratedObservers(programsWithNegatives);
+            NotifyLocationProgramGeneratedObservers(ProgramsWithNegatives);
         }
 
         /// <summary>
@@ -305,7 +314,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// <param name="program">Selected program</param>
         public void RetrieveLocations(string program)
         {
-            if (programsWithNegatives != null)
+            if (ProgramsWithNegatives != null)
             {
                 RetrieveLocationsPosNegatives(program);
                 return;
@@ -343,7 +352,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public void RetrieveLocationsPosNegatives(string program)
         {
-            Prog prog = programsWithNegatives.First();
+            Prog prog = ProgramsWithNegatives.First();
             List<Tuple<string, string>> sourceFiles = SourceFiles();
 
             Tuple<List<CodeLocation>, List<TRegion>> tuple;
@@ -383,9 +392,10 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
 
             SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
+            Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
 
             List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
-            List<SyntaxNode> lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
+            
 
             //remove
  //           var sm = WorkspaceManager.GetSemanticModel(CurrentProject, SolutionPath, CurrentViewCodePath, lcas.First());
@@ -410,7 +420,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             //////remove
             //remove
 
-            regions = RegionManager.GroupRegionBySyntaxKind(regions, lcas);
+            regions = RegionManager.GroupRegionBySyntaxKind(regions, Lcas);
 
             foreach (TRegion region in regions)
             {
@@ -637,7 +647,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             FillEditedLocations();
             LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
-            List<Transformation> transformations = extractor.TransformProgram();
+            List<Transformation> transformations = extractor.TransformProgram(false);
             SourceTransformations = transformations;
 
             //SynthesizedProgram synthesized = extractor.TransformationProgram(SelectedLocations);
@@ -840,6 +850,52 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         }
     }
 }
+
+//private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog)
+//{
+//    List<CodeLocation> sourceLocations = new List<CodeLocation>();
+
+//    SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
+//    Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
+
+//    List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
+
+
+//    //remove
+//    //           var sm = WorkspaceManager.GetSemanticModel(CurrentProject, SolutionPath, CurrentViewCodePath, lcas.First());
+//    //           SyntaxTree tree = sm.SyntaxTree;
+//    //           SyntaxNode n = ASTManager.NodesWithSameStartEndAndKind(tree, lcas.First().Span.Start, lcas.First().Span.End,
+//    //               lcas.First().CSharpKind()).First();
+//    ////           var x = sm.GetDeclaredSymbol(n);
+//    //           var si = sm.GetSymbolInfo(n);
+
+//    //           var type = x.ContainingType;
+//    //           var s = type.ToDisplayString();
+//    //           var name = GetFullMetadataName(type);
+
+//    //foreach (ISymbol symbol in sm.LookupSymbols(241))
+//    //{
+//    //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
+//    //    {
+//    //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
+//    //        var rlts = symbol.DeclaringSyntaxReferences;
+//    //    }
+//    //}
+//    //////remove
+//    //remove
+
+//    regions = RegionManager.GroupRegionBySyntaxKind(regions, Lcas);
+
+//    foreach (TRegion region in regions)
+//    {
+//        CodeLocation location = new CodeLocation { Region = region, SourceCode = CurrentViewCodeBefore, SourceClass = CurrentViewCodePath };
+//        sourceLocations.Add(location);
+//    }
+
+//    Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, regions);
+
+//    return tuple;
+//}
 
 ///// <summary>
 ///// Decompose locations

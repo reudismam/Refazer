@@ -44,7 +44,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// Transform selection regions
         /// </summary>
         /// <returns></returns>
-        public virtual List<Transformation> TransformProgram()
+        public virtual List<Transformation> TransformProgram(bool compact)
         {
             List<Tuple<TRegion, TRegion>> exampleRegions = ExtractEditedRegions();
 
@@ -60,7 +60,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             var transformations = new List<Transformation>();
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
             {
-                string text = Transform(validated, item.Value, true);
+                string text = Transform(validated, item.Value, compact);
                 Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
                 Transformation transformation = new Transformation(beforeAfter, item.Key);
                 transformations.Add(transformation);
@@ -159,7 +159,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
                 Deviation = 2,
                 ConsiderEmpty = true,
                 ConsiderConstrStr = true,
-                CreateTokenSeq = true
+                CreateTokenSeq = false
             }; //configure setting
 
             ASTProgram program = new ASTProgram(setting, examples); //create a new AST program and learn synthesizer

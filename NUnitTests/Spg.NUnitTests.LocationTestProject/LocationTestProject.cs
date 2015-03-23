@@ -52,6 +52,16 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
+        public void Proj008682140dfded0956241e81214a860a978b2395()
+        {
+            bool isValid = LocationTestProject.LocaleTest("00552fc2287f820ae9d42fd259aa6c07c2c5a805", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable13\Proj008682140dfded0956241e81214a860a978b2395.sln", "Proj008682140dfded0956241e81214a860a978b2395");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
         public void Proj8c146441b4ecedbf7648e890d33f946f9b206e01()
         {
             bool isValid = LocationTestProject.LocaleTest("8c146441b4ecedbf7648e890d33f946f9b206e01", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable12\Proj8c146441b4ecedbf7648e890d33f946f9b206e01.sln", "Proj8c146441b4ecedbf7648e890d33f946f9b206e01");
@@ -95,6 +105,46 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         public void Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
         {
             bool isValid = LocationTestProject.LocaleTest("4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\CommandLine\Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Syntax\Proj5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Symbol\Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj8_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("8_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Symbol\Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            Assert.IsTrue(isValid);
+        }
+
+        // <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj9_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        {
+            bool isValid = LocationTestProject.LocaleTest("9_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Emit\Proj9_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj9_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
             Assert.IsTrue(isValid);
         }
 
@@ -248,6 +298,8 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             bool isValid = LocationTestProject.LocaleTest("5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
             Assert.IsTrue(isValid);
         }
+
+
 
         //[Test]
         //public void ReturnToGetTest()
