@@ -420,7 +420,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             //////remove
             //remove
 
-            regions = RegionManager.GroupRegionBySyntaxKind(regions, Lcas);
+           regions = RegionManager.GroupRegionBySyntaxKind(regions, Lcas);
 
             foreach (TRegion region in regions)
             {

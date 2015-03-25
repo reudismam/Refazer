@@ -1,0 +1,18 @@
+{
+  "..\\..\\TestProjects\\Projects\\Diagnostics\\FxCop\\CSharp\\Design\\CodeFixes\\CA1001CSharpCodeFixProvider.cs": [
+    {
+      "Start": 692,
+      "Length": 95,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Diagnostics\\FxCop\\CSharp\\Design\\CodeFixes\\CA1001CSharpCodeFixProvider.cs",
+      "SourceCode": null
+    }
+  ],
+  "..\\..\\TestProjects\\Projects\\Diagnostics\\FxCop\\CSharp\\Design\\CodeFixes\\CA1008CSharpCodeFixProvider.cs": [
+    {
+      "Start": 516,
+      "Length": 72,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Diagnostics\\FxCop\\CSharp\\Design\\CodeFixes\\CA1008CSharpCodeFixProvider.cs",
+      "SourceCode": null
+    }
+  ]
+}

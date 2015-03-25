@@ -1,0 +1,36 @@
+[
+  {
+    "Text": "using Microsoft.CodeAnalysis.CodeGeneration;",
+    "Start": 221,
+    "Length": 44,
+    "Parent": {
+      "Text": "// Copyright (c) Microsoft Open Technologies, Inc.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.\n\nusing System.Collections.Immutable;\nusing Microsoft.CodeAnalysis.CodeGeneration;\nusing Microsoft.CodeAnalysis.Formatting;\nusing Microsoft.CodeAnalysis.FxCopAnalyzers.Utilities;\nusing Roslyn.Utilities;\n\nnamespace Microsoft.CodeAnalysis.FxCopAnalyzers.Globalization\n{\n    public abstract class CA1309CodeFixProviderBase : CodeFixProviderBase\n    {\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds()\n        {\n            return ImmutableArray.Create(CA1309DiagnosticAnalyzer.RuleId);\n        }\n\n        protected sealed override string GetCodeFixDescription(Diagnostic diagnostic)\n        {\n            return FxCopFixersResources.StringComparisonShouldBeOrdinalOrOrdinalIgnoreCase;\n        }\n\n        internal SyntaxNode CreateEqualsExpression(SyntaxGenerator syntaxFactoryService, SemanticModel model, SyntaxNode operand1, SyntaxNode operand2, bool isEquals)\n        {\n            var stringType = model.Compilation.GetSpecialType(SpecialType.System_String);\n            var memberAccess = syntaxFactoryService.MemberAccessExpression(\n                        syntaxFactoryService.TypeExpression(stringType),\n                        syntaxFactoryService.IdentifierName(CA1309DiagnosticAnalyzer.EqualsMethodName));\n            var ordinal = CreateOrdinalMemberAccess(syntaxFactoryService, model);\n            var invocation = syntaxFactoryService.InvocationExpression(\n                memberAccess,\n                operand1,\n                operand2.WithoutTrailingTrivia(),\n                ordinal)\n                .WithAdditionalAnnotations(Formatter.Annotation);\n            if (!isEquals)\n            {\n                invocation = syntaxFactoryService.LogicalNotExpression(invocation);\n            }\n\n            invocation = invocation.WithTrailingTrivia(operand2.GetTrailingTrivia());\n\n            return invocation;\n        }\n\n        internal SyntaxNode CreateOrdinalMemberAccess(SyntaxGenerator syntaxFactoryService, SemanticModel model)\n        {\n            var stringComparisonType = WellKnownTypes.StringComparison(model.Compilation);\n            return syntaxFactoryService.MemberAccessExpression(\n                syntaxFactoryService.TypeExpression(stringComparisonType),\n                syntaxFactoryService.IdentifierName(CA1309DiagnosticAnalyzer.OrdinalText));\n        }\n\n        protected bool CanAddStringComparison(IMethodSymbol methodSymbol)\n        {\n            var parameters = methodSymbol.Parameters;\n            switch (methodSymbol.Name)\n            {\n                case CA1309DiagnosticAnalyzer.EqualsMethodName:\n                    // can fix .Equals() with (string), (string, string)\n                    switch (parameters.Length)\n                    {\n                        case 1:\n                            return parameters[0].Type.SpecialType == SpecialType.System_String;\n                        case 2:\n                            return parameters[0].Type.SpecialType == SpecialType.System_String &&\n                                parameters[1].Type.SpecialType == SpecialType.System_String;\n                    }\n\n                    break;\n                case CA1309DiagnosticAnalyzer.CompareMethodName:\n                    // can fix .Compare() with (string, string), (string, int, string, int, int)\n                    switch (parameters.Length)\n                    {\n                        case 2:\n                            return parameters[0].Type.SpecialType == SpecialType.System_String &&\n                                parameters[1].Type.SpecialType == SpecialType.System_String;\n                        case 5:\n                            return parameters[0].Type.SpecialType == SpecialType.System_String &&\n                                parameters[1].Type.SpecialType == SpecialType.System_Int32 &&\n                                parameters[2].Type.SpecialType == SpecialType.System_String &&\n                                parameters[3].Type.SpecialType == SpecialType.System_Int32 &&\n                                parameters[4].Type.SpecialType == SpecialType.System_Int32;\n                    }\n\n                    break;\n            }\n\n            return false;\n        }\n    }\n}\n",
+      "Start": 0,
+      "Length": 4369,
+      "Parent": null,
+      "Node": null,
+      "Color": "White",
+      "Path": "..\\..\\TestProjects\\Projects\\Core\\Globalization\\CodeFixes\\CA1309CodeFixProviderBase.cs"
+    },
+    "Node": null,
+    "Color": "LightGreen",
+    "Path": "..\\..\\TestProjects\\Projects\\Core\\Globalization\\CodeFixes\\CA1309CodeFixProviderBase.cs"
+  },
+  {
+    "Text": "using Microsoft.CodeAnalysis.CodeGeneration;",
+    "Start": 221,
+    "Length": 44,
+    "Parent": {
+      "Text": "// Copyright (c) Microsoft Open Technologies, Inc.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.\n\nusing System.Collections.Immutable;\nusing Microsoft.CodeAnalysis.CodeGeneration;\nusing Roslyn.Utilities;\n\nnamespace Microsoft.CodeAnalysis.FxCopAnalyzers.Globalization\n{\n    public abstract class CA2101CodeFixProviderBase : CodeFixProviderBase\n    {\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds()\n        {\n            return ImmutableArray.Create(Interoperability.PInvokeDiagnosticAnalyzer.CA2101);\n        }\n\n        protected sealed override string GetCodeFixDescription(Diagnostic diagnostic)\n        {\n            return FxCopFixersResources.SpecifyMarshalingForPInvokeStringArguments;\n        }\n\n        protected const string CharSetText = \"CharSet\";\n        protected const string LPWStrText = \"LPWStr\";\n        protected const string UnicodeText = \"Unicode\";\n\n        internal SyntaxNode CreateMarshalAsArgument(SyntaxGenerator syntaxFactoryService, INamedTypeSymbol unmanagedType)\n        {\n            return syntaxFactoryService.MemberAccessExpression(\n                syntaxFactoryService.TypeExpression(unmanagedType), syntaxFactoryService.IdentifierName(LPWStrText));\n        }\n\n        internal SyntaxNode CreateCharSetArgument(SyntaxGenerator syntaxFactoryService, INamedTypeSymbol charSetType)\n        {\n            return syntaxFactoryService.MemberAccessExpression(\n                syntaxFactoryService.TypeExpression(charSetType), syntaxFactoryService.IdentifierName(UnicodeText));\n        }\n    }\n}\n",
+      "Start": 0,
+      "Length": 1639,
+      "Parent": null,
+      "Node": null,
+      "Color": "White",
+      "Path": "..\\..\\TestProjects\\Projects\\Core\\Globalization\\CodeFixes\\CA2101CodeFixProviderBase.cs"
+    },
+    "Node": null,
+    "Color": "LightGreen",
+    "Path": "..\\..\\TestProjects\\Projects\\Core\\Globalization\\CodeFixes\\CA2101CodeFixProviderBase.cs"
+  }
+]

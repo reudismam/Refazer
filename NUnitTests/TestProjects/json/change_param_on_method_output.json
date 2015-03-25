@@ -1,0 +1,14 @@
+[
+  {
+    "Start": 423,
+    "Length": 35,
+    "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ChangeParamOnMethod\\ChangeParamOnMethod.cs",
+    "SourceCode": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading;\r\nusing System.Threading.Tasks;\r\n\r\n//e7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd\r\nnamespace ExampleProject.Company.ChangeParamOnMethod\r\n{\r\n    class ChangeParamOnMethod\r\n    {\r\n        private NextTask nextTask;\r\n        private Task t;\r\n        public void Method()\r\n        {\r\n            nextTask.ContinueWith(t => FatalError.Report(t.Exception),\r\n            CancellationToken.None,\r\n            TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,\r\n            TaskScheduler.Default);\r\n\r\n            nextTask.ContinueWith(t => FatalError.Report(t.Exception),\r\n            CancellationToken.None,\r\n            TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,\r\n            TaskScheduler.Default);\r\n        }\r\n\r\n        private TResult ReportFatalError(Task arg1, object arg2)\r\n        {\r\n            throw new NotImplementedException();\r\n        }\r\n\r\n        public object continuationFunction { get; set; }\r\n    }\r\n}\r\n"
+  },
+  {
+    "Start": 670,
+    "Length": 35,
+    "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ChangeParamOnMethod\\ChangeParamOnMethod.cs",
+    "SourceCode": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading;\r\nusing System.Threading.Tasks;\r\n\r\n//e7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd\r\nnamespace ExampleProject.Company.ChangeParamOnMethod\r\n{\r\n    class ChangeParamOnMethod\r\n    {\r\n        private NextTask nextTask;\r\n        private Task t;\r\n        public void Method()\r\n        {\r\n            nextTask.ContinueWith(t => FatalError.Report(t.Exception),\r\n            CancellationToken.None,\r\n            TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,\r\n            TaskScheduler.Default);\r\n\r\n            nextTask.ContinueWith(t => FatalError.Report(t.Exception),\r\n            CancellationToken.None,\r\n            TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,\r\n            TaskScheduler.Default);\r\n        }\r\n\r\n        private TResult ReportFatalError(Task arg1, object arg2)\r\n        {\r\n            throw new NotImplementedException();\r\n        }\r\n\r\n        public object continuationFunction { get; set; }\r\n    }\r\n}\r\n"
+  }
+]

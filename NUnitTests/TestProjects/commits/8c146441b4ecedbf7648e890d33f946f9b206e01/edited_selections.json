@@ -1,0 +1,24 @@
+{
+  "..\\..\\TestProjects\\Projects\\Portable12\\Portable\\Binder\\BinderFactory.BinderFactoryVisitor.cs": [
+    {
+      "Start": 17496,
+      "Length": 6,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Portable12\\Portable\\Binder\\BinderFactory.BinderFactoryVisitor.cs",
+      "SourceCode": null
+    }
+  ],
+  "..\\..\\TestProjects\\Projects\\Portable12\\Portable\\Binder\\Binder_AnonymousTypes.cs": [
+    {
+      "Start": 2615,
+      "Length": 6,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Portable12\\Portable\\Binder\\Binder_AnonymousTypes.cs",
+      "SourceCode": null
+    },
+    {
+      "Start": 3694,
+      "Length": 12,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Portable12\\Portable\\Binder\\Binder_AnonymousTypes.cs",
+      "SourceCode": null
+    }
+  ]
+}

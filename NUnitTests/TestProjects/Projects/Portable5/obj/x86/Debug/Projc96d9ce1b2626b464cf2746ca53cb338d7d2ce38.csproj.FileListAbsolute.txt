@@ -1,0 +1,3 @@
+C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\obj\x86\Debug\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.csprojResolveAssemblyReference.cache
+C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\obj\x86\Debug\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.Portable.CSharpResources.resources
+C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Portable5\obj\x86\Debug\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.csproj.GenerateResource.Cache

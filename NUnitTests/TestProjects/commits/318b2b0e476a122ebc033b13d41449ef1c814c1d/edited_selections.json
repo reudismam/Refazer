@@ -1,0 +1,28 @@
+{
+  "..\\..\\TestProjects\\Projects\\Core2\\Core\\ApiDesign\\DeclarePublicAPIFix.cs": [
+    {
+      "Start": 10031,
+      "Length": 90,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Core2\\Core\\ApiDesign\\DeclarePublicAPIFix.cs",
+      "SourceCode": null
+    },
+    {
+      "Start": 10608,
+      "Length": 90,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Core2\\Core\\ApiDesign\\DeclarePublicAPIFix.cs",
+      "SourceCode": null
+    },
+    {
+      "Start": 11234,
+      "Length": 79,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Core2\\Core\\ApiDesign\\DeclarePublicAPIFix.cs",
+      "SourceCode": null
+    },
+    {
+      "Start": 12239,
+      "Length": 68,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Core2\\Core\\ApiDesign\\DeclarePublicAPIFix.cs",
+      "SourceCode": null
+    }
+  ]
+}

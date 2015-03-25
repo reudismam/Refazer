@@ -1,0 +1,14 @@
+[
+  {
+    "Start": 396,
+    "Length": 44,
+    "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ChangeException\\ChangeException.cs",
+    "SourceCode": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Diagnostics;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\n//cc3d32746f60ed5a9f3775ef0ec44424b03d65cf\r\n\r\nnamespace ExampleProject.Company.ChangeException\r\n{\r\n    class ChangeException\r\n    {\r\n        [DebuggerHidden]\r\n        public static void Fail(string message = \"Unexpected\")\r\n        {\r\n            throw new ContractFailureException(message);\r\n\r\n        }\r\n\r\n        [DebuggerHidden]\r\n        public static T FailWithReturn<T>(string message = \"Unexpected\")\r\n        {\r\n            throw new ContractFailureException(message);\r\n        }\r\n    }\r\n}\r\n"
+  },
+  {
+    "Start": 580,
+    "Length": 44,
+    "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ChangeException\\ChangeException.cs",
+    "SourceCode": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Diagnostics;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\n//cc3d32746f60ed5a9f3775ef0ec44424b03d65cf\r\n\r\nnamespace ExampleProject.Company.ChangeException\r\n{\r\n    class ChangeException\r\n    {\r\n        [DebuggerHidden]\r\n        public static void Fail(string message = \"Unexpected\")\r\n        {\r\n            throw new ContractFailureException(message);\r\n\r\n        }\r\n\r\n        [DebuggerHidden]\r\n        public static T FailWithReturn<T>(string message = \"Unexpected\")\r\n        {\r\n            throw new ContractFailureException(message);\r\n        }\r\n    }\r\n}\r\n"
+  }
+]

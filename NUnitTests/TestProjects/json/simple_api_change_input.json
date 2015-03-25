@@ -1,0 +1,36 @@
+[
+  {
+    "Text": "A a = new A();\r\n            a.aMethod();",
+    "Start": 186,
+    "Length": 40,
+    "Parent": {
+      "Text": "using System;\r\nusing ExampleProject.Company.ExampleProject.API;\r\n\r\nnamespace HelloWorld\r\n{\r\n    class ChangeAPI\r\n    {\r\n        public void Method1(string data1)\r\n        {\r\n            A a = new A();\r\n            a.aMethod();\r\n        }\r\n\r\n        public void Method2(string data2)\r\n        {\r\n            A a = new A();\r\n            a.aMethod();\r\n            int p = 0;\r\n            Console.WriteLine(data2);\r\n        }\r\n\r\n        static void Method3(string data3)\r\n        {\r\n            C c = new C();\r\n            c.cMethod();\r\n            int p = 0;\r\n            int j = 2;\r\n            Console.WriteLine(data3);\r\n        }\r\n\r\n        static void Method4(string data4)\r\n        {\r\n            A a = new A();\r\n            a.aMethod();\r\n            int p = 0;\r\n            int j = 2;\r\n            Console.WriteLine(data4);\r\n        }\r\n\r\n        static void Method5(string data5)\r\n        {\r\n            D d = new D();\r\n            d.dMethod();\r\n            int p = 0;\r\n            int j = 2;\r\n            Console.WriteLine(data5);\r\n        }\r\n\r\n        static void Method6(string data6)\r\n        {\r\n            int j = 2;\r\n            Console.WriteLine(\"Hello, World!\");\r\n            int i = 0;\r\n        }\r\n\r\n        static void Method7(string data7)\r\n        {\r\n            int j = 2;\r\n            Console.WriteLine(data7);\r\n            int i = 0;\r\n        }\r\n\r\n    }\r\n}",
+      "Start": 0,
+      "Length": 1375,
+      "Parent": null,
+      "Node": null,
+      "Color": "White",
+      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
+    },
+    "Node": null,
+    "Color": "LightGreen",
+    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
+  },
+  {
+    "Text": "A a = new A();\r\n            a.aMethod();",
+    "Start": 307,
+    "Length": 40,
+    "Parent": {
+      "Text": "using System;\r\nusing ExampleProject.Company.ExampleProject.API;\r\n\r\nnamespace HelloWorld\r\n{\r\n    class ChangeAPI\r\n    {\r\n        public void Method1(string data1)\r\n        {\r\n            A a = new A();\r\n            a.aMethod();\r\n        }\r\n\r\n        public void Method2(string data2)\r\n        {\r\n            A a = new A();\r\n            a.aMethod();\r\n            int p = 0;\r\n            Console.WriteLine(data2);\r\n        }\r\n\r\n        static void Method3(string data3)\r\n        {\r\n            C c = new C();\r\n            c.cMethod();\r\n            int p = 0;\r\n            int j = 2;\r\n            Console.WriteLine(data3);\r\n        }\r\n\r\n        static void Method4(string data4)\r\n        {\r\n            A a = new A();\r\n            a.aMethod();\r\n            int p = 0;\r\n            int j = 2;\r\n            Console.WriteLine(data4);\r\n        }\r\n\r\n        static void Method5(string data5)\r\n        {\r\n            D d = new D();\r\n            d.dMethod();\r\n            int p = 0;\r\n            int j = 2;\r\n            Console.WriteLine(data5);\r\n        }\r\n\r\n        static void Method6(string data6)\r\n        {\r\n            int j = 2;\r\n            Console.WriteLine(\"Hello, World!\");\r\n            int i = 0;\r\n        }\r\n\r\n        static void Method7(string data7)\r\n        {\r\n            int j = 2;\r\n            Console.WriteLine(data7);\r\n            int i = 0;\r\n        }\r\n\r\n    }\r\n}",
+      "Start": 0,
+      "Length": 1375,
+      "Parent": null,
+      "Node": null,
+      "Color": "White",
+      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
+    },
+    "Node": null,
+    "Color": "LightGreen",
+    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
+  }
+]

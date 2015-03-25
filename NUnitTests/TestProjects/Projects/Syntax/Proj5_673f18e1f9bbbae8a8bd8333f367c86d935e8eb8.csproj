@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{98F359FE-A772-404B-8F9A-2DDBCF11A07B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ConsoleApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Proj5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Syntax\CSharpCompilerSyntaxTest.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Syntax\packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Syntax\Diagnostics\DiagnosticTest.cs" />
+    <Compile Include="Syntax\Diagnostics\DiagnosticTest.MockSyntaxTree.cs" />
+    <Compile Include="Syntax\Diagnostics\LocationsTests.cs" />
+    <Compile Include="Syntax\IncrementalParsing\BinaryExpression.cs" />
+    <Compile Include="Syntax\IncrementalParsing\ChangingAsync.cs" />
+    <Compile Include="Syntax\IncrementalParsing\ChangingIdentifiers.cs" />
+    <Compile Include="Syntax\IncrementalParsing\CompoundAssignment.cs" />
+    <Compile Include="Syntax\IncrementalParsing\GrammarAmbiguities.cs" />
+    <Compile Include="Syntax\IncrementalParsing\IncrementalParsingTests.cs" />
+    <Compile Include="Syntax\IncrementalParsing\NodeValidators.cs" />
+    <Compile Include="Syntax\IncrementalParsing\SyntaxDifferences.cs" />
+    <Compile Include="Syntax\IncrementalParsing\TypeChanges.cs" />
+    <Compile Include="Syntax\IncrementalParsing\UnaryExpression.cs" />
+    <Compile Include="Syntax\LexicalAndXml\CrefLexerTests.cs" />
+    <Compile Include="Syntax\LexicalAndXml\DisabledRegionTests.cs" />
+    <Compile Include="Syntax\LexicalAndXml\DocumentationCommentLexerTestBase.cs" />
+    <Compile Include="Syntax\LexicalAndXml\LexicalErrorTests.cs" />
+    <Compile Include="Syntax\LexicalAndXml\LexicalTests.cs" />
+    <Compile Include="Syntax\LexicalAndXml\NameAttributeValueLexerTests.cs" />
+    <Compile Include="Syntax\LexicalAndXml\PreprocessorTests.cs" />
+    <Compile Include="Syntax\LexicalAndXml\XmlDocCommentTests.cs" />
+    <Compile Include="Syntax\ParentChecker.cs" />
+    <Compile Include="Syntax\Parsing\AsyncParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\AwaitParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\CrefParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\CSharpParseOptionsTests.cs" />
+    <Compile Include="Syntax\Parsing\DeclarationParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\ExpressionParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\FuzzTesting.cs" />
+    <Compile Include="Syntax\Parsing\InteractiveParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\LambdaParameterParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\NameAttributeValueParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\NameParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\ParserErrorMessageTests.cs" />
+    <Compile Include="Syntax\Parsing\ParsingErrorRecoveryTests.cs" />
+    <Compile Include="Syntax\Parsing\ParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\RoundTrippingTests.cs" />
+    <Compile Include="Syntax\Parsing\SeparatedSyntaxListParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\StatementParsingTests.cs" />
+    <Compile Include="Syntax\Parsing\SyntaxExtensions.cs" />
+    <Compile Include="Syntax\Parsing\VerbatimCrefParsingTests.cs" />
+    <Compile Include="Syntax\Resources.Designer.cs" />
+    <Compile Include="Syntax\Syntax\ChildSyntaxListTests.cs" />
+    <Compile Include="Syntax\Syntax\GreenNodeTests.cs" />
+    <Compile Include="Syntax\Syntax\RedNodeTests.cs" />
+    <Compile Include="Syntax\Syntax\SeparatedSyntaxListTests.cs" />
+    <Compile Include="Syntax\Syntax\SerializationTests.cs" />
+    <Compile Include="Syntax\Syntax\StructuredTriviaTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxAnnotationTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxDiffingTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxEquivalenceTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxFactoryTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxFormatterTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxListTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxNodeOrTokenListTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxNodeTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxRewriterTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxTokenListTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxTreeTests.cs" />
+    <Compile Include="Syntax\Syntax\SyntaxTriviaListTests.cs" />
+    <Compile Include="Syntax\Syntax\TrackNodeTests.cs" />
+    <Compile Include="Syntax\TextExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Syntax\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Syntax\obj\Debug\TempPE\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>

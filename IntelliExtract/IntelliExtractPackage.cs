@@ -114,7 +114,7 @@ namespace SPG.IntelliExtract
                 {
                     negatives.Add(location.Region);
                     indexNegatives.Add(index);
-                   // break;
+                    //break;
                 }
                 else
                 {

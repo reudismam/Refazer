@@ -1,0 +1,18 @@
+{
+  "..\\..\\TestProjects\\Projects\\Diagnostics2\\Diagnostics\\CodeAnalysis\\Core\\MetaAnalyzers\\Fixers\\ApplyDiagnosticAnalyzerAttributeFix.cs": [
+    {
+      "Start": 508,
+      "Length": 196,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Diagnostics2\\Diagnostics\\CodeAnalysis\\Core\\MetaAnalyzers\\Fixers\\ApplyDiagnosticAnalyzerAttributeFix.cs",
+      "SourceCode": null
+    }
+  ],
+  "..\\..\\TestProjects\\Projects\\Diagnostics2\\Diagnostics\\FxCop\\CSharp\\Design\\CodeFixes\\CA1052CSharpCodeFixProvider.cs": [
+    {
+      "Start": 834,
+      "Length": 188,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Diagnostics2\\Diagnostics\\FxCop\\CSharp\\Design\\CodeFixes\\CA1052CSharpCodeFixProvider.cs",
+      "SourceCode": null
+    }
+  ]
+}

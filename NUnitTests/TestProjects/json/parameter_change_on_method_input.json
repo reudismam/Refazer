@@ -1,0 +1,36 @@
+[
+  {
+    "Text": "return ObjectDisplay.FormatLiteral(value, quote);",
+    "Start": 463,
+    "Length": 49,
+    "Parent": {
+      "Text": "using ExampleProject.Company.ExampleProject.Boolean_ParameterToConstantValue;\r\nusing ExampleProject.Company.ParameterChangeIf.API;\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\nnamespace ExampleProject.Company.ExampleProject.ParameterChangeOnMethod\r\n{\r\n    public class SymbolDisplay\r\n    {\r\n        public static string FormatLiteral(string value, bool quote)\r\n        {\r\n            return ObjectDisplay.FormatLiteral(value, quote);\r\n        }\r\n\r\n        public static string FormatLiteral(char c, bool quote)\r\n        {\r\n            return ObjectDisplay.FormatLiteral(c, quote);\r\n        }\r\n    }\r\n}\r\n",
+      "Start": 0,
+      "Length": 682,
+      "Parent": null,
+      "Node": null,
+      "Color": "White",
+      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs"
+    },
+    "Node": null,
+    "Color": "LightGreen",
+    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs"
+  },
+  {
+    "Text": "return ObjectDisplay.FormatLiteral(c, quote);",
+    "Start": 614,
+    "Length": 45,
+    "Parent": {
+      "Text": "using ExampleProject.Company.ExampleProject.Boolean_ParameterToConstantValue;\r\nusing ExampleProject.Company.ParameterChangeIf.API;\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\nnamespace ExampleProject.Company.ExampleProject.ParameterChangeOnMethod\r\n{\r\n    public class SymbolDisplay\r\n    {\r\n        public static string FormatLiteral(string value, bool quote)\r\n        {\r\n            return ObjectDisplay.FormatLiteral(value, quote);\r\n        }\r\n\r\n        public static string FormatLiteral(char c, bool quote)\r\n        {\r\n            return ObjectDisplay.FormatLiteral(c, quote);\r\n        }\r\n    }\r\n}\r\n",
+      "Start": 0,
+      "Length": 682,
+      "Parent": null,
+      "Node": null,
+      "Color": "White",
+      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs"
+    },
+    "Node": null,
+    "Color": "LightGreen",
+    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs"
+  }
+]

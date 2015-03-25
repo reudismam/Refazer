@@ -1,0 +1,34 @@
+{
+  "..\\..\\TestProjects\\Projects\\Emit\\Emit\\Attributes\\InternalsVisibleToAndStrongNameTests.cs": [
+    {
+      "Start": 2524,
+      "Length": 36,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Emit\\Emit\\Attributes\\InternalsVisibleToAndStrongNameTests.cs",
+      "SourceCode": null
+    },
+    {
+      "Start": 8656,
+      "Length": 36,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Emit\\Emit\\Attributes\\InternalsVisibleToAndStrongNameTests.cs",
+      "SourceCode": null
+    },
+    {
+      "Start": 10632,
+      "Length": 19,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Emit\\Emit\\Attributes\\InternalsVisibleToAndStrongNameTests.cs",
+      "SourceCode": null
+    },
+    {
+      "Start": 11842,
+      "Length": 19,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Emit\\Emit\\Attributes\\InternalsVisibleToAndStrongNameTests.cs",
+      "SourceCode": null
+    },
+    {
+      "Start": 35934,
+      "Length": 19,
+      "SourcePath": "..\\..\\TestProjects\\Projects\\Emit\\Emit\\Attributes\\InternalsVisibleToAndStrongNameTests.cs",
+      "SourceCode": null
+    }
+  ]
+}

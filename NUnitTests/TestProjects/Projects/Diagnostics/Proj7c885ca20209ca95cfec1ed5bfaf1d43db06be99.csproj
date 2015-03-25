@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{CEF6BCE2-9526-41F1-AFDF-886FA1188615}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ConsoleApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CodeAnalysis\Core\CodeAnalysisDiagnosticAnalyzers.csproj" />
+    <Content Include="CodeAnalysis\CSharp\CSharpCodeAnalysisDiagnosticAnalyzers.csproj" />
+    <Content Include="CodeAnalysis\Setup\CodeAnalysisDiagnosticsSetup.csproj" />
+    <Content Include="CodeAnalysis\Setup\source.extension.vsixmanifest" />
+    <Content Include="CodeAnalysis\Test\CodeAnalysisDiagnosticAnalyzersTest.csproj" />
+    <Content Include="CodeAnalysis\VisualBasic\BasicCodeAnalysisDiagnosticAnalyzers.vbproj" />
+    <Content Include="CodeAnalysis\VisualBasic\MetaAnalyzers\BasicDiagnosticAnalyzerFieldsAnalyzer.vb" />
+    <Content Include="CodeAnalysis\VisualBasic\MetaAnalyzers\BasicDiagnosticDescriptorCreationAnalyzer.vb" />
+    <Content Include="CodeAnalysis\VisualBasic\MetaAnalyzers\BasicRegisterActionAnalyzer.vb" />
+    <Content Include="CodeAnalysis\VisualBasic\MetaAnalyzers\BasicReportDiagnosticAnalyzer.vb" />
+    <Content Include="CodeAnalysis\VisualBasic\MetaAnalyzers\Fixers\BasicApplyDiagnosticAnalyzerAttributeFix.vb" />
+    <Content Include="FxCop\bin\Debug\ConsoleApplication.vshost.exe" />
+    <Content Include="FxCop\Core\FxCopRulesDiagnosticAnalyzers.csproj" />
+    <Content Include="FxCop\Core\FxCopRulesDiagnosticAnalyzers.csproj.vspscc" />
+    <Content Include="FxCop\CSharp\CSharpFxCopRulesDiagnosticAnalyzers.csproj" />
+    <Content Include="FxCop\CSharp\CSharpFxCopRulesDiagnosticAnalyzers.csproj.vspscc" />
+    <Content Include="FxCop\Setup\FxCopRulesSetup.csproj" />
+    <Content Include="FxCop\Setup\FxCopRulesSetup.csproj.vspscc" />
+    <Content Include="FxCop\Setup\source.extension.vsixmanifest" />
+    <Content Include="FxCop\Test\FxCopRulesDiagnosticAnalyzersTest.csproj" />
+    <Content Include="FxCop\Test\FxCopRulesDiagnosticAnalyzersTest.csproj.vspscc" />
+    <Content Include="FxCop\VisualBasic\BasicFxCopRulesDiagnosticAnalyzers.vbproj" />
+    <Content Include="FxCop\VisualBasic\BasicFxCopRulesDiagnosticAnalyzers.vbproj.vspscc" />
+    <Content Include="FxCop\VisualBasic\Design\BasicCA1003DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Design\BasicCA1019DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Design\BasicCA1024DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Design\BasicEnumWithFlagsDiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Design\CodeFixes\CA1001BasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Design\CodeFixes\CA1008BasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Design\CodeFixes\CA1052BasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Design\CodeFixes\EnumWithFlagsBasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Globalization\BasicCA1309DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Globalization\CodeFixes\CA1309BasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Globalization\CodeFixes\CA2101BasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Performance\BasicCA1821DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Performance\CodeFixes\CA1813BasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Reliability\BasicCA2002DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Shared\DescendIntoHelper.vb" />
+    <Content Include="FxCop\VisualBasic\Usage\BasicCA2200DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Usage\BasicCA2213DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Usage\BasicCA2214DiagnosticAnalyzer.vb" />
+    <Content Include="FxCop\VisualBasic\Usage\CodeFixes\CA2213BasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Usage\CodeFixes\CA2231BasicCodeFixProvider.vb" />
+    <Content Include="FxCop\VisualBasic\Usage\CodeFixes\CA2235BasicCodeFixProvider.vb" />
+    <Content Include="Roslyn\Core\RoslynDiagnosticAnalyzers.csproj" />
+    <Content Include="Roslyn\Core\RoslynDiagnosticAnalyzers.csproj.vspscc" />
+    <Content Include="Roslyn\CSharp\CSharpRoslynDiagnosticAnalyzers.csproj" />
+    <Content Include="Roslyn\CSharp\CSharpRoslynDiagnosticAnalyzers.csproj.vspscc" />
+    <Content Include="Roslyn\Setup\RoslynDiagnosticsSetup.csproj" />
+    <Content Include="Roslyn\Setup\RoslynDiagnosticsSetup.csproj.vspscc" />
+    <Content Include="Roslyn\Setup\source.extension.vsixmanifest" />
+    <Content Include="Roslyn\Test\RoslynDiagnosticAnalyzersTest.csproj" />
+    <Content Include="Roslyn\Test\RoslynDiagnosticAnalyzersTest.csproj.vspscc" />
+    <Content Include="Roslyn\VisualBasic\BasicRoslynDiagnosticAnalyzers.vbproj" />
+    <Content Include="Roslyn\VisualBasic\BasicRoslynDiagnosticAnalyzers.vbproj.vspscc" />
+    <Content Include="Roslyn\VisualBasic\Documentation\BasicDoNotUseVerbatimCrefsAnalyzer.vb" />
+    <Content Include="Roslyn\VisualBasic\Performance\BasicCodeActionCreateAnalyzer.vb" />
+    <Content Include="Roslyn\VisualBasic\Performance\BasicDiagnosticDescriptorAccessAnalyzer.vb" />
+    <Content Include="Roslyn\VisualBasic\Performance\BasicEmptyArrayCodeFixProvider.vb" />
+    <Content Include="Roslyn\VisualBasic\Performance\BasicEmptyArrayDiagnosticAnalyzer.vb" />
+    <Content Include="Roslyn\VisualBasic\Performance\BasicSpecializedEnumerableCreationAnalyzer.vb" />
+    <Content Include="Roslyn\VisualBasic\Reliability\BasicConsumePreserveSigAnalyzer.vb" />
+    <Content Include="Roslyn\VisualBasic\Reliability\BasicDirectlyAwaitingTaskAnalyzer.vb" />
+    <Content Include="Roslyn\VisualBasic\Reliability\BasicDirectlyAwaitingTaskFix.vb" />
+    <Content Include="Roslyn\VisualBasic\Usage\BasicUseSiteDiagnosticsCheckEnforcerAnalyzer.vb" />
+    <Content Include="Test\Utilities\DiagnosticsTestUtilities.csproj" />
+    <Content Include="Test\Utilities\DiagnosticsTestUtilities.csproj.vspscc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodeAnalysis\Core\CodeAnalysisDiagnosticsResources.Designer.cs" />
+    <Compile Include="CodeAnalysis\Core\DiagnosticCategory.cs" />
+    <Compile Include="CodeAnalysis\Core\DiagnosticIds.cs" />
+    <Compile Include="CodeAnalysis\Core\Helpers\AttributeHelpers.cs" />
+    <Compile Include="CodeAnalysis\Core\Helpers\DocumentChangedAction.cs" />
+    <Compile Include="CodeAnalysis\Core\Helpers\ITypeSymbolExtensions.cs" />
+    <Compile Include="CodeAnalysis\Core\InternalImplementationOnlyAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\DiagnosticAnalyzerAttributeAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\DiagnosticAnalyzerCorrectnessAnalyzer.CompilationAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\DiagnosticAnalyzerCorrectnessAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\DiagnosticAnalyzerCorrectnessAnalyzer.SyntaxNodeWithinAnalyzerTypeCompilationAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\DiagnosticAnalyzerFieldsAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\DiagnosticDescriptorCreationAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\Fixers\ApplyDiagnosticAnalyzerAttributeFix.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\RegisterActionAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\Core\MetaAnalyzers\ReportDiagnosticAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\CSharp\MetaAnalyzers\CSharpDiagnosticAnalyzerFieldsAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\CSharp\MetaAnalyzers\CSharpDiagnosticDescriptorCreationAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\CSharp\MetaAnalyzers\CSharpRegisterActionAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\CSharp\MetaAnalyzers\CSharpReportDiagnosticAnalyzer.cs" />
+    <Compile Include="CodeAnalysis\CSharp\MetaAnalyzers\Fixers\CSharpApplyDiagnosticAnalyzerAttributeFix.cs" />
+    <Compile Include="CodeAnalysis\Test\InternalImplementationOnlyTests.cs" />
+    <Compile Include="CodeAnalysis\Test\MetaAnalyzers\AddLanguageSupportToAnalyzerRuleTests.cs" />
+    <Compile Include="CodeAnalysis\Test\MetaAnalyzers\DoNotStorePerCompilationDataOntoFieldsRuleTests.cs" />
+    <Compile Include="CodeAnalysis\Test\MetaAnalyzers\InvalidReportDiagnosticRuleTests.cs" />
+    <Compile Include="CodeAnalysis\Test\MetaAnalyzers\InvalidSyntaxKindTypeArgumentRuleTests.cs" />
+    <Compile Include="CodeAnalysis\Test\MetaAnalyzers\MissingDiagnosticAnalyzerAttributeRuleTests.cs" />
+    <Compile Include="CodeAnalysis\Test\MetaAnalyzers\MissingKindArgumentToRegisterActionRuleTests.cs" />
+    <Compile Include="CodeAnalysis\Test\MetaAnalyzers\UnsupportedSymbolKindArgumentRuleTests.cs" />
+    <Compile Include="CodeAnalysis\Test\MetaAnalyzers\UseLocalizableStringsInDescriptorTests.cs" />
+    <Compile Include="FxCop\Core\AbstractNamedTypeAnalyzer.cs" />
+    <Compile Include="FxCop\Core\CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Design\AssemblyAttributesDiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1001DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1003DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1008DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1012DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1017DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1018DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1019DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1024DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1036DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CA1052DiagnosticProviderBase.cs" />
+    <Compile Include="FxCop\Core\Design\CA1060DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\CodeFixes\CA1001CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Design\CodeFixes\CA1008CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Design\CodeFixes\CA1012CodeFixProvider.cs" />
+    <Compile Include="FxCop\Core\Design\CodeFixes\EnumWithFlagsCodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Design\EnumWithFlagsDiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Design\StaticTypeRulesDiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\DiagnosticCustomTags.cs" />
+    <Compile Include="FxCop\Core\DiagnosticKind.cs" />
+    <Compile Include="FxCop\Core\DiagnosticProviderBase.cs" />
+    <Compile Include="FxCop\Core\FxCopDiagnosticCategory.cs" />
+    <Compile Include="FxCop\Core\FxCopFixersResources.Designer.cs" />
+    <Compile Include="FxCop\Core\FxCopRulesResources.Designer.cs" />
+    <Compile Include="FxCop\Core\Globalization\CA1309DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Globalization\CodeFixes\CA1309CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Globalization\CodeFixes\CA2101CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Interoperability\PInvokeDiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\MultipleCodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Naming\CA1708DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Naming\CA1715DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Performance\CA1813DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Performance\CA1821DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Performance\CA1821DiagnosticAnalyzerRule.cs" />
+    <Compile Include="FxCop\Core\Performance\CodeFixes\CA1813CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Performance\CodeFixes\CA1821CodeFixProvider.cs" />
+    <Compile Include="FxCop\Core\ProjectDiagnosticProviderBase.cs" />
+    <Compile Include="FxCop\Core\Properties\AssemblyInfo.cs" />
+    <Compile Include="FxCop\Core\Reliability\CA2002DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\ScopedDiagnosticProviderBase.cs" />
+    <Compile Include="FxCop\Core\Shared\CommonAccessibilityUtilities.cs" />
+    <Compile Include="FxCop\Core\Shared\DiagnosticHelpers.cs" />
+    <Compile Include="FxCop\Core\Shared\Extensions\DiagnosticExtensions.cs" />
+    <Compile Include="FxCop\Core\Shared\Extensions\INamedTypeSymbolExtensions.cs" />
+    <Compile Include="FxCop\Core\Shared\Extensions\ISymbolExtensions.cs" />
+    <Compile Include="FxCop\Core\Shared\Extensions\ITypeSymbolExtensions.cs" />
+    <Compile Include="FxCop\Core\Shared\Extensions\ObjectExtensions.cs" />
+    <Compile Include="FxCop\Core\Shared\WellKnownTypes.cs" />
+    <Compile Include="FxCop\Core\Shared\WordParser.cs" />
+    <Compile Include="FxCop\Core\Shared\WordParserOptions.cs" />
+    <Compile Include="FxCop\Core\Usage\CA2200DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Usage\CA2213DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Usage\CA2214DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Usage\CA2231DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Core\Usage\CodeFixes\CA2213CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Usage\CodeFixes\CA2229CodeFixProvider.cs" />
+    <Compile Include="FxCop\Core\Usage\CodeFixes\CA2231CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Usage\CodeFixes\CA2235CodeFixProviderBase.cs" />
+    <Compile Include="FxCop\Core\Usage\CodeFixes\CA2237CodeFixProvider.cs" />
+    <Compile Include="FxCop\Core\Usage\SerializationRulesDiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Design\CA1052CSharpDiagnosticProvider.cs" />
+    <Compile Include="FxCop\CSharp\Design\CodeFixes\CA1001CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Design\CodeFixes\CA1008CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Design\CodeFixes\CA1052CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Design\CodeFixes\EnumWithFlagsCSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Design\CSharpCA1003DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Design\CSharpCA1019DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Design\CSharpCA1024DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Design\CSharpEnumWithFlagsDiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Globalization\CodeFixes\CA1309CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Globalization\CodeFixes\CA2101CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Globalization\CSharpCA1309DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Performance\CodeFixes\CA1813CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Performance\CSharpCA1821DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Reliability\CSharpCA2002DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Shared\DescendIntoHelper.cs" />
+    <Compile Include="FxCop\CSharp\Usage\CodeFixes\CA2213CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Usage\CodeFixes\CA2231CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Usage\CodeFixes\CA2235CSharpCodeFixProvider.cs" />
+    <Compile Include="FxCop\CSharp\Usage\CSharpCA2200DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Usage\CSharpCA2213DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\CSharp\Usage\CSharpCA2214DiagnosticAnalyzer.cs" />
+    <Compile Include="FxCop\Setup\Properties\AssemblyInfo.cs" />
+    <Compile Include="FxCop\Test\AssemblyAttributes.cs" />
+    <Compile Include="FxCop\Test\Design\CA1001Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1003Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1008Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1012Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1014Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1016Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1017Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1018Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1019Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1024Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1036Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1052Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1053Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CA1060Tests.cs" />
+    <Compile Include="FxCop\Test\Design\CodeFixes\CA1001FixerTests.cs" />
+    <Compile Include="FxCop\Test\Design\CodeFixes\CA1008FixerTests.cs" />
+    <Compile Include="FxCop\Test\Design\CodeFixes\CA1012FixerTests.cs" />
+    <Compile Include="FxCop\Test\Design\CodeFixes\EnumWithFlagsAttributesRulesFixerTests.cs" />
+    <Compile Include="FxCop\Test\Design\EnumWithFlagsAttributeRulesTests.cs" />
+    <Compile Include="FxCop\Test\Globalization\CA1309Tests.cs" />
+    <Compile Include="FxCop\Test\Globalization\CodeFixes\CA1309FixerTests.cs" />
+    <Compile Include="FxCop\Test\Globalization\CodeFixes\CA2101FixerTests.cs" />
+    <Compile Include="FxCop\Test\HardeningAnalyzer\HardeningAnalyzerTests.cs" />
+    <Compile Include="FxCop\Test\Interoperability\PInvokeDiagnosticAnalyzerTests.cs" />
+    <Compile Include="FxCop\Test\Naming\CA1708Tests.cs" />
+    <Compile Include="FxCop\Test\Naming\CA1715Tests.cs" />
+    <Compile Include="FxCop\Test\Performance\CA1813Tests.cs" />
+    <Compile Include="FxCop\Test\Performance\CA1821Tests.cs" />
+    <Compile Include="FxCop\Test\Performance\CodeFixes\CA1813FixerTests.cs" />
+    <Compile Include="FxCop\Test\Performance\CodeFixes\CA1821FixerTests.cs" />
+    <Compile Include="FxCop\Test\Reliability\CA2002Tests.cs" />
+    <Compile Include="FxCop\Test\Usage\CA2200Tests.cs" />
+    <Compile Include="FxCop\Test\Usage\CA2213Tests.cs" />
+    <Compile Include="FxCop\Test\Usage\CA2214Tests.cs" />
+    <Compile Include="FxCop\Test\Usage\CA2229Tests.cs" />
+    <Compile Include="FxCop\Test\Usage\CA2231Tests.cs" />
+    <Compile Include="FxCop\Test\Usage\CA2235Tests.cs" />
+    <Compile Include="FxCop\Test\Usage\CA2237Tests.cs" />
+    <Compile Include="FxCop\Test\Usage\CodeFixes\CA2213FixerTests.cs" />
+    <Compile Include="FxCop\Test\Usage\CodeFixes\CA2229FixerTests.cs" />
+    <Compile Include="FxCop\Test\Usage\CodeFixes\CA2231FixerTests.cs" />
+    <Compile Include="FxCop\Test\Usage\CodeFixes\CA2235FixerTests.cs" />
+    <Compile Include="FxCop\Test\Usage\CodeFixes\CA2237FixerTests.cs" />
+    <Compile Include="Roslyn\Core\AbstractSyntaxNodeAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\ApiDesign\CancellationTokenMustBeLastAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\ApiDesign\DeclarePublicAPIAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\ApiDesign\DeclarePublicAPIFix.cs" />
+    <Compile Include="Roslyn\Core\CodeFixProviderBase.cs" />
+    <Compile Include="Roslyn\Core\Documentation\DoNotUseVerbatimCrefsAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\DocumentChangedAction.cs" />
+    <Compile Include="Roslyn\Core\Performance\CodeActionCreateAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\Performance\DiagnosticDescriptorAccessAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\Performance\EmptyArrayDiagnosticAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\Performance\EquatableAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\Performance\SpecializedEnumerableCreationAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\Properties\AssemblyInfo.cs" />
+    <Compile Include="Roslyn\Core\Reliability\AttributeHelpers.cs" />
+    <Compile Include="Roslyn\Core\Reliability\ConsumePreserveSigAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\Reliability\DirectlyAwaitingTaskAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\Reliability\DirectlyAwaitingTaskAnalyzerRule.cs" />
+    <Compile Include="Roslyn\Core\Reliability\DirectlyAwaitingTaskFix.cs" />
+    <Compile Include="Roslyn\Core\Reliability\MissingSharedAttributeAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\Reliability\MixedVersionsOfMefAttributesAnalyzer.cs" />
+    <Compile Include="Roslyn\Core\RoslynDiagnosticIds.cs" />
+    <Compile Include="Roslyn\Core\RoslynDiagnosticsResources.Designer.cs" />
+    <Compile Include="Roslyn\CSharp\ApiDesign\CancellationTokenMustBeLastCodeFixProvider.cs" />
+    <Compile Include="Roslyn\CSharp\Documentation\CSharpDoNotUseVerbatimCrefsAnalyzer.cs" />
+    <Compile Include="Roslyn\CSharp\Performance\CSharpCodeActionCreateAnalyzer.cs" />
+    <Compile Include="Roslyn\CSharp\Performance\CSharpDiagnosticDescriptorAccessAnalyzer.cs" />
+    <Compile Include="Roslyn\CSharp\Performance\CSharpEmptyArrayCodeFixProvider.cs" />
+    <Compile Include="Roslyn\CSharp\Performance\CSharpEmptyArrayDiagnosticAnalyzer.cs" />
+    <Compile Include="Roslyn\CSharp\Performance\CSharpSpecializedEnumerableCreationAnalyzer.cs" />
+    <Compile Include="Roslyn\CSharp\Performance\LinqAnalyzer.cs" />
+    <Compile Include="Roslyn\CSharp\Reliability\CSharpConsumePreserveSigAnalyzer.cs" />
+    <Compile Include="Roslyn\CSharp\Reliability\CSharpDirectlyAwaitingTaskAnalyzer.cs" />
+    <Compile Include="Roslyn\CSharp\Reliability\CSharpDirectlyAwaitingTaskFix.cs" />
+    <Compile Include="Roslyn\CSharp\Reliability\ImmutableCollectionAnalyzer.cs" />
+    <Compile Include="Roslyn\Setup\Properties\AssemblyInfo.cs" />
+    <Compile Include="Roslyn\Test\ApiDesign\CancellationTokenMustBeLastTests.cs" />
+    <Compile Include="Roslyn\Test\Performance\EmptyArrayDiagnosticAnalyzerTests.cs" />
+    <Compile Include="Roslyn\Test\Performance\LinqAnalyzerTests.cs" />
+    <Compile Include="Roslyn\Test\Performance\SpecializedEnumerableCreationAnalyzerTests.cs" />
+    <Compile Include="Roslyn\Test\Reliability\ImmutableCollectionAnalyzerTests.cs" />
+    <Compile Include="Test\Utilities\CodeFixTestBase.cs" />
+    <Compile Include="Test\Utilities\CodeFixTests.Extensions.cs" />
+    <Compile Include="Test\Utilities\DiagnosticAnalyzerTestBase.cs" />
+    <Compile Include="Test\Utilities\DiagnosticAnalyzerTests.Extensions.cs" />
+    <Compile Include="Test\Utilities\DiagnosticResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CodeAnalysis\Core\CodeAnalysisDiagnosticsResources.resx" />
+    <EmbeddedResource Include="FxCop\Core\FxCopFixersResources.resx" />
+    <EmbeddedResource Include="FxCop\Core\FxCopRulesResources.resx" />
+    <EmbeddedResource Include="Roslyn\Core\RoslynDiagnosticsResources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CodeAnalysis\Core\packages.config" />
+    <None Include="CodeAnalysis\CSharp\packages.config" />
+    <None Include="CodeAnalysis\Test\packages.config" />
+    <None Include="CodeAnalysis\VisualBasic\packages.config" />
+    <None Include="FxCop\bin\Debug\ConsoleApplication.vshost.exe.manifest" />
+    <None Include="FxCop\Core\Microsoft.CodeAnalysis.FxCopAnalyzers.Common.props" />
+    <None Include="FxCop\Core\packages.config" />
+    <None Include="FxCop\CSharp\Microsoft.CodeAnalysis.CSharp.FxCopAnalyzers.props" />
+    <None Include="FxCop\CSharp\packages.config" />
+    <None Include="FxCop\obj\x86\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="FxCop\Setup\packages.config" />
+    <None Include="FxCop\Test\packages.config" />
+    <None Include="FxCop\VisualBasic\Microsoft.CodeAnalysis.VisualBasic.FxCopAnalyzers.props" />
+    <None Include="FxCop\VisualBasic\packages.config" />
+    <None Include="Roslyn\Core\packages.config" />
+    <None Include="Roslyn\CSharp\packages.config" />
+    <None Include="Roslyn\Setup\packages.config" />
+    <None Include="Roslyn\Test\packages.config" />
+    <None Include="Roslyn\VisualBasic\packages.config" />
+    <None Include="Test\Utilities\packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FxCop\Core\obj\Debug\TempPE\" />
+    <Folder Include="FxCop\CSharp\obj\Debug\TempPE\" />
+    <Folder Include="FxCop\obj\x86\Debug\TempPE\" />
+    <Folder Include="FxCop\Setup\obj\Debug\TempPE\" />
+    <Folder Include="FxCop\Test\obj\Debug\TempPE\" />
+    <Folder Include="FxCop\VisualBasic\My Project\" />
+    <Folder Include="FxCop\VisualBasic\obj\Debug\TempPE\" />
+    <Folder Include="Roslyn\CSharp\obj\Debug\TempPE\" />
+    <Folder Include="Roslyn\Test\obj\Debug\TempPE\" />
+    <Folder Include="Roslyn\VisualBasic\My Project\" />
+    <Folder Include="Roslyn\VisualBasic\obj\Debug\TempPE\" />
+    <Folder Include="Test\Utilities\obj\Debug\TempPE\" />
+    <Folder Include="Test\Utilities\Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>

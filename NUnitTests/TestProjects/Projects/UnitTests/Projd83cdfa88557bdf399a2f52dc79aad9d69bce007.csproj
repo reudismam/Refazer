@@ -1,0 +1,769 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{E65E13F9-578D-44B4-861A-00552A59A691}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ConsoleApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Projd83cdfa88557bdf399a2f52dc79aad9d69bce007</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UnitTests\App.config" />
+    <None Include="UnitTests\Core\Metadata\Edm\MetadataCacheTests.csdl" />
+    <None Include="UnitTests\Core\Metadata\Edm\MetadataCacheTests.msl" />
+    <None Include="UnitTests\Core\Metadata\Edm\MetadataCacheTests.ssdl" />
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\Microsoft.Data.Entity.Design.Edmx_1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\Microsoft.Data.Entity.Design.Edmx_2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\Microsoft.Data.Entity.Design.Edmx_3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.AnnotationSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.CodeGenerationSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.CSDLSchema_1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.CSDLSchema_2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.CSDLSchema_3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.CSMSL_1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.CSMSL_2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.CSMSL_3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.EntityStoreSchemaGenerator.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.SSDLSchema_1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.SSDLSchema_2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\ModelConfiguration\Edm\Serialization\Xsd\System.Data.Resources.SSDLSchema_3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UnitTests\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="UnitTests\obj\Debug\UnitTests.csprojResolveAssemblyReference.cache" />
+    <None Include="UnitTests\packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UnitTests\AssemblyTests.cs" />
+    <Compile Include="UnitTests\CommandLine\CommandLineArgumentInvalidExceptionTests.cs" />
+    <Compile Include="UnitTests\CommandLine\CommandLineArgumentsAttributeTest.cs" />
+    <Compile Include="UnitTests\CommandLine\CommandLineExceptionTests.cs" />
+    <Compile Include="UnitTests\CommandLine\CommandLineParameterAttributeTests.cs" />
+    <Compile Include="UnitTests\CommandLine\CommandLineRequiredArgumentMissingExceptionTests.cs" />
+    <Compile Include="UnitTests\CommandLine\CommandLineTest.cs" />
+    <Compile Include="UnitTests\CommandLine\CommandLineWriteLineColorTests.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\BadPositionArgMissingTwo.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\BadPositionArgNoOne.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\InferredTestArgs.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\PropWithNoCommandName.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\TestArgs.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\TestCommandEnvironment.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\ThreeRequiredPositionArgs.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\TwoPropsWithSameSwitch.cs" />
+    <Compile Include="UnitTests\CommandLine\TestHelpers\XCopyCommandArgs.cs" />
+    <Compile Include="UnitTests\ConnectionFactoryConfig\ConnectionFactoryConfigTests.cs" />
+    <Compile Include="UnitTests\ConnectionFactoryConfig\ReferenceRemoverTests.cs" />
+    <Compile Include="UnitTests\Core\Common\CommandTrees\BasicExpressionVisitorTests.cs" />
+    <Compile Include="UnitTests\Core\Common\CommandTrees\DbCommandTreeTests.cs" />
+    <Compile Include="UnitTests\Core\Common\CommandTrees\DbExpressionBuilderTests.cs" />
+    <Compile Include="UnitTests\Core\Common\CommandTrees\DbExpressionRebinderTests.cs" />
+    <Compile Include="UnitTests\Core\Common\CommandTrees\DbExpressionVisitorTests.cs" />
+    <Compile Include="UnitTests\Core\Common\CommandTrees\DefaultExpressionVisitorTests.cs" />
+    <Compile Include="UnitTests\Core\Common\CommandTrees\Internal\ExpressionKeyGenTests.cs" />
+    <Compile Include="UnitTests\Core\Common\CommandTrees\SpatialEdmFunctionsTests.cs" />
+    <Compile Include="UnitTests\Core\Common\DbProviderServicesTests.cs" />
+    <Compile Include="UnitTests\Core\Common\Internal\Materialization\CodeGenEmitterTests.cs" />
+    <Compile Include="UnitTests\Core\Common\Internal\Materialization\ShaperTests.cs" />
+    <Compile Include="UnitTests\Core\Common\Internal\Materialization\TestHelpers\MockHelper.cs" />
+    <Compile Include="UnitTests\Core\Common\Internal\Materialization\TranslatorTests.cs" />
+    <Compile Include="UnitTests\Core\Common\Utils\CommandHelperTests.cs" />
+    <Compile Include="UnitTests\Core\EntityClient\EntityCommandDefinitionTests.cs" />
+    <Compile Include="UnitTests\Core\EntityClient\EntityCommandTests.cs" />
+    <Compile Include="UnitTests\Core\EntityClient\EntityConnectionStringBuilderTests.cs" />
+    <Compile Include="UnitTests\Core\EntityClient\EntityConnectionTests.cs" />
+    <Compile Include="UnitTests\Core\EntityClient\EntityDataReaderTests.cs" />
+    <Compile Include="UnitTests\Core\EntityClient\EntityTransactionTests.cs" />
+    <Compile Include="UnitTests\Core\EntityClient\Internal\DbConnectionOptionsTests.cs" />
+    <Compile Include="UnitTests\Core\EntityClient\TestHelpers\MockHelper.cs" />
+    <Compile Include="UnitTests\Core\EntityCommandCompilationExceptionTests.cs" />
+    <Compile Include="UnitTests\Core\EntityCommandExecutionExceptionTests.cs" />
+    <Compile Include="UnitTests\Core\EntityExceptionTests.cs" />
+    <Compile Include="UnitTests\Core\EntityKeyTests.cs" />
+    <Compile Include="UnitTests\Core\EntitySqlExceptionTests.cs" />
+    <Compile Include="UnitTests\Core\FieldNameLookupTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\AssociationSetMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\AssociationSetModificationFunctionMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\AssociationTypeMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ColumnMappingBuilderTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ComplexPropertyMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ComplexTypeMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ConditionPropertyMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\EndPropertyMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\EntityContainerMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\EntitySetMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\EntityTypeMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\EntityTypeModificationFunctionMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\FunctionImportEntityTypeMappingConditionValueTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\FunctionImportEntityTypeMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\FunctionImportMappingComposableTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\FunctionImportMappingNonComposableTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\FunctionImportMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\FunctionImportResultMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\IsNullConditionMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\MappingFragmentTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\MappingItemTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\MetadataMappingHasherVisitorTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\MidificationFunctionMemberPathTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ModificationFunctionMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ModificationFunctionParameterBindingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ModificationFunctionResultBindingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\PropertyMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ScalarPropertyMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\SetMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\StorageMappingItemCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\TypeMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\Update\Internal\DynamicUpdateCommandTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\Update\Internal\EntityAdapterTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\Update\Internal\FunctionUpdateCommandTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\Update\Internal\PropagatorTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\Update\Internal\UpdateTranslatorTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ValueConditionMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ViewGeneration\Utils\ExternalCallsTests.cs" />
+    <Compile Include="UnitTests\Core\Mapping\ViewGeneration\ViewgenContextTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\AspProxyTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\AssociationEndMemberTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\AssociationSetTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\AssociationTypeTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\CodeFirstOSpaceLoaderTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\CodeFirstOSpaceTypeFactoryTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\ComplexTypeTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\CsdlSerializerTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\DataModelValidatorTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\DbDatabaseMappingTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\DocumentationTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmFunctionTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmItemCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmMemberTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmModelSemanticValidationRulesTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmModelSyntacticValidationRulesTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmModelTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmModelValidationContextTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmPropertyTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmSchemaErrorTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmSerializationVisitorTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EdmXmlSchemaWriterTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EntityContainerTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EntitySetBaseTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EntitySetTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EntityTypeBaseTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EntityTypeTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EnumMemberTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\EnumTypeTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\FacetValuesTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\ForeignKeyBuilderTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\FunctionParameterTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\ItemCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\MemberCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\MetadataCacheTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\MetadataCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\MetadataItemTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\MetadataOptimizationTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\MetadataPropertyTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\MetadataWorkspaceTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\MslXmlSchemaWriterTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\NavigationPropertyTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\ObjectItemCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\ObjectItemConventionAssemblyLoaderTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\ReferentialConstraintTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\RelationshipEndMemberTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\RowTypeTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\SsdlSerializerTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\StoreItemCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\StucturalTypeTests.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\TestHelpers\FacetDescriptionHelpers.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\TestHelpers\FacetValuesHelpers.cs" />
+    <Compile Include="UnitTests\Core\Metadata\Edm\TypeUsageTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\DataClasses\EdmFunctionAttributeTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\DataClasses\EntityCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\DataClasses\EntityReferenceTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\DataClasses\RelatedEndTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\DataClasses\RelationshipManagerTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\DataClasses\TestHelpers\MockHelper.cs" />
+    <Compile Include="UnitTests\Core\Objects\DelegateFactoryTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ELinq\ELinqQueryStateTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ELinq\ExpressionConverterTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ELinq\InitializerMetadataTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ELinq\LinqExpressionNormalizerTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ELinq\ObjectQueryProviderTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ELinq\ReflectionUtilTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ELinq\TypeSystemTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\EntityEntryTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\EntityFunctionsTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ExecutionOptionsTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\FieldDescriptorTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\BaseProxyImplementorTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\BufferedDataReaderTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\DataContractImplementorTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\EntityProxyFactoryTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\EntityProxyTypeInfoTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\EntityWrapperFactoryTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\IPocoImplementorTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\ObjectQueryExecutionPlanFactoryTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\ObjectQueryExecutionPlanTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\ObjectQueryStateTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\PocoPropertyAccessorStrategyTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\SerializableImplementorTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\ShapedBufferedDataRecordTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\Internal\TestHelpers\MockHelper.cs" />
+    <Compile Include="UnitTests\Core\Objects\ObjectContextTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ObjectParameterCollectionTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ObjectQueryTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ObjectResultTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ObjectViewTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\ProxyDataContractResolverTests.cs" />
+    <Compile Include="UnitTests\Core\Objects\TestHelpers\MockHelper.cs" />
+    <Compile Include="UnitTests\Core\PropertyConstraintExceptionTests.cs" />
+    <Compile Include="UnitTests\Core\Query\InternalTrees\VarVecTests.cs" />
+    <Compile Include="UnitTests\Core\Query\PlanCompiler\ColumnMapTranslatorTests.cs" />
+    <Compile Include="UnitTests\Core\Query\ResultAssembly\BridgeDataReaderFactoryTests.cs" />
+    <Compile Include="UnitTests\Core\Query\ResultAssembly\BridgeDataReaderTests.cs" />
+    <Compile Include="UnitTests\Core\Query\ResultAssembly\BridgeDataRecordTests.cs" />
+    <Compile Include="UnitTests\Core\SchemaObjectModel\SchemaElementTests.cs" />
+    <Compile Include="UnitTests\DataAnnotations\MaxLengthAttributeTests.cs" />
+    <Compile Include="UnitTests\DataAnnotations\MinLengthAttributeTests.cs" />
+    <Compile Include="UnitTests\DataAnnotations\Schema\ColumnAttributeTests.cs" />
+    <Compile Include="UnitTests\DataAnnotations\Schema\DatabaseGeneratedAttributeTests.cs" />
+    <Compile Include="UnitTests\DataAnnotations\Schema\ForeignKeyAttributeTests.cs" />
+    <Compile Include="UnitTests\DataAnnotations\Schema\IndexAttributeTests.cs" />
+    <Compile Include="UnitTests\DataAnnotations\Schema\InversePropertyAttributeTests.cs" />
+    <Compile Include="UnitTests\DataAnnotations\Schema\TableAttributeTests.cs" />
+    <Compile Include="UnitTests\DatabaseInitializerTests.cs" />
+    <Compile Include="UnitTests\DatabaseTests.cs" />
+    <Compile Include="UnitTests\DatabindingTests.cs" />
+    <Compile Include="UnitTests\DbConfigurationTests.cs" />
+    <Compile Include="UnitTests\DbConfigurationTypeAttributeTests.cs" />
+    <Compile Include="UnitTests\DbContextTests.cs" />
+    <Compile Include="UnitTests\DbContextTransactionTests.cs" />
+    <Compile Include="UnitTests\DbFunctionAttributeTests.cs" />
+    <Compile Include="UnitTests\DbFunctionsTests.cs" />
+    <Compile Include="UnitTests\DbSetTests.cs" />
+    <Compile Include="UnitTests\Edm\EdmModelVisitorTests.cs" />
+    <Compile Include="UnitTests\IDbAsyncEnumerableExtensionsTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Annotations\AnnotationCodeGeneratorTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Annotations\CompatibilityResultTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Annotations\IndexAnnotationSerializerTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Annotations\IndexAnnotationTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\ConsolidatedIndexTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbCollectionEntryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbCompiledModelTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbComplexPropertyEntryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbConnectionFactoryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbConnectionInfoTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbContextInfoTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbEntityEntryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbExecutionStrategyTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbLocalViewTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbModelTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbPropertyEntryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbPropertyValuesTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbProviderInfoTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbQueryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbRawSqlQueryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbReferenceEntryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbSqlQueryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbUpdateConcurrencyExceptionTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DbUpdateExceptionTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DefaultDbProviderFactoryServiceTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DefaultExecutionStrategyTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DefaultManifestTokenResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\AppConfigDependencyResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\CachingDependencyResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\ClrTypeAnnotationSerializerTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\CompositeResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DatabaseInitializerResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DbConfigurationEventArgsTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DbConfigurationFinderTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DbConfigurationLoaderTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DbConfigurationManagerTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DbDependencyResolverExtensionsTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DefaultExecutionStrategyResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DefaultInvariantNameResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DefaultProviderFactoryResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\DefaultProviderServicesResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\ExecutionStrategyResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\InternalConfigurationTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\InvariantNameResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\ProviderServicesFactoryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\ResolverChainTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\RootDependencyResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\SingletonDependencyResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\TransactionContextInitializerResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\TransactionHandlerResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\DependencyResolution\WrappingDependencyResolverTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Design\AppConfigReaderTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Design\ExecutorTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Design\ForwardingProxyTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Design\HandlerBaseTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Design\WrappedHandlerTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\ExecutionStrategyKeyTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\BeginTransactionInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\CancelableDbCommandDispatcherTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DatabaseLogFormatterTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DatabaseLoggerTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbCommandDispatcherTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbCommandInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbCommandTreeDispatcherTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbCommandTreeInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbConfigurationDispatcherTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbConfigurationInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbConnectionDispatcherTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbConnectionInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbConnectionPropertyInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbTransactionDispatcherTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DbTransactionInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\DispatchersTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\EnlistTransactionInterceptionContextTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\EntityConnectionDispatcherTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\InterceptionContextMutableDataTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\InterceptionTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Interception\InternalDispatcherTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\MappingViews\DbMappingViewCacheTypeAttributeTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\MappingViews\DbMappingViewTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\MappingViews\DefaultDbMappingViewCacheFactoryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\ModelNamespaceConventionTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Net40DefaultDbProviderFactoryServiceTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Pluralization\CustomPluralizationEntryTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Pluralization\EnglishPluralizationServiceTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\ProviderInvariantNameTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\TestHelpers\DbMemberEntryVerifier.cs" />
+    <Compile Include="UnitTests\Infrastructure\Transactions\CommitFailedExceptionTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Transactions\CommitFailureHandlerTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Transactions\DefaultTransactionHandlerTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Transactions\TransactionContextInitializerTests.cs" />
+    <Compile Include="UnitTests\Infrastructure\Transactions\TransactionRowTests.cs" />
+    <Compile Include="UnitTests\Internal\AppConfigTests.cs" />
+    <Compile Include="UnitTests\Internal\ClonedObjectContextTests.cs" />
+    <Compile Include="UnitTests\Internal\CommandTracerTests.cs" />
+    <Compile Include="UnitTests\Internal\ConfigFile\EntityFrameworkSectionTests.cs" />
+    <Compile Include="UnitTests\Internal\ConfigFile\InterceptorElementTests.cs" />
+    <Compile Include="UnitTests\Internal\ConfigFile\InterceptorsCollectionTests.cs" />
+    <Compile Include="UnitTests\Internal\ConfigFile\ParameterCollectionTests.cs" />
+    <Compile Include="UnitTests\Internal\ConfigFile\ParameterElementTests.cs" />
+    <Compile Include="UnitTests\Internal\ConfigFile\ProviderCollectionTests.cs" />
+    <Compile Include="UnitTests\Internal\ConfigFile\ProviderElementTests.cs" />
+    <Compile Include="UnitTests\Internal\ContextConfigTests.cs" />
+    <Compile Include="UnitTests\Internal\DatabaseCreatorTests.cs" />
+    <Compile Include="UnitTests\Internal\DatabaseTableCheckerTests.cs" />
+    <Compile Include="UnitTests\Internal\DbHelpersTests.cs" />
+    <Compile Include="UnitTests\Internal\DbSetDiscoveryServiceTests.cs" />
+    <Compile Include="UnitTests\Internal\DefaultModelCacheKeyFactoryTests.cs" />
+    <Compile Include="UnitTests\Internal\DefaultModelCacheKeyTests.cs" />
+    <Compile Include="UnitTests\Internal\EagerInternalContextTests.cs" />
+    <Compile Include="UnitTests\Internal\EdmMetadataRepositoryTests.cs" />
+    <Compile Include="UnitTests\Internal\InitializerConfigTests.cs" />
+    <Compile Include="UnitTests\Internal\InterceptableDbCommandTests.cs" />
+    <Compile Include="UnitTests\Internal\InternalCollectionEntryTests.cs" />
+    <Compile Include="UnitTests\Internal\InternalConnectionTests.cs" />
+    <Compile Include="UnitTests\Internal\InternalContextTests.cs" />
+    <Compile Include="UnitTests\Internal\InternalEntityEntryTests.cs" />
+    <Compile Include="UnitTests\Internal\InternalEntityPropertyEntryTests.cs" />
+    <Compile Include="UnitTests\Internal\InternalReferenceEntryTests.cs" />
+    <Compile Include="UnitTests\Internal\InternalSqlNonSetQueryTests.cs" />
+    <Compile Include="UnitTests\Internal\InternalSqlSetQueryTests.cs" />
+    <Compile Include="UnitTests\Internal\LazyAsyncEnumeratorTests.cs" />
+    <Compile Include="UnitTests\Internal\LazyEnumeratorTests.cs" />
+    <Compile Include="UnitTests\Internal\LazyInternalContextTests.cs" />
+    <Compile Include="UnitTests\Internal\Linq\DbQueryProviderTests.cs" />
+    <Compile Include="UnitTests\Internal\Linq\InternalDbQueryTests.cs" />
+    <Compile Include="UnitTests\Internal\Linq\InternalDbSetTests.cs" />
+    <Compile Include="UnitTests\Internal\Linq\InternalSetTests.cs" />
+    <Compile Include="UnitTests\Internal\Linq\TestHelpers\InternalSetForMock`.cs" />
+    <Compile Include="UnitTests\Internal\ModelCompatibilityCheckerTests.cs" />
+    <Compile Include="UnitTests\Internal\ModelHashCalculatorTests.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\InternalCollectionEntryForMock.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\InternalContextForMock.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\InternalContextForMockWithRealContext`.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\InternalContextForMock`.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\InternalEntityEntryForMock.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\InternalReferenceEntryForMock.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\MockHelper.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\NavigationEntryMetadataForMock.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\PropertyEntryMetadataForMock.cs" />
+    <Compile Include="UnitTests\Internal\TestHelpers\TestInternalPropertyValues`.cs" />
+    <Compile Include="UnitTests\Internal\ThrowingMonitorTests.cs" />
+    <Compile Include="UnitTests\Migrations\AddMigrationCommandTests.cs" />
+    <Compile Include="UnitTests\Migrations\AnnotationValuesTests.cs" />
+    <Compile Include="UnitTests\Migrations\Builders\ColumnBuilderTests.cs" />
+    <Compile Include="UnitTests\Migrations\Builders\ParameterBuilderTests.cs" />
+    <Compile Include="UnitTests\Migrations\Builders\TableBuilderTests.cs" />
+    <Compile Include="UnitTests\Migrations\DbMigrationsConfigurationTests.cs" />
+    <Compile Include="UnitTests\Migrations\DbMigrationsConfiguration`Tests.cs" />
+    <Compile Include="UnitTests\Migrations\DbMigrationTests.cs" />
+    <Compile Include="UnitTests\Migrations\DbMigratorTests.cs" />
+    <Compile Include="UnitTests\Migrations\DbSetMigrationsExtensionsTests.cs" />
+    <Compile Include="UnitTests\Migrations\Design\CSharpMigrationCodeGeneratorTests.cs" />
+    <Compile Include="UnitTests\Migrations\Design\MigrationCodeGeneratorTests.cs" />
+    <Compile Include="UnitTests\Migrations\Design\VisualBasicMigrationCodeGeneratorTests.cs" />
+    <Compile Include="UnitTests\Migrations\Edm\ModelCompressorTests.cs" />
+    <Compile Include="UnitTests\Migrations\History\HistoryRepositoryTests.cs" />
+    <Compile Include="UnitTests\Migrations\Infrastructure\DynamicToFunctionModificationCommandConverterTests.cs" />
+    <Compile Include="UnitTests\Migrations\Infrastructure\EdmModelDifferTests.cs" />
+    <Compile Include="UnitTests\Migrations\Infrastructure\FunctionsModel.cs" />
+    <Compile Include="UnitTests\Migrations\Infrastructure\MigrationAssemblyTests.cs" />
+    <Compile Include="UnitTests\Migrations\Infrastructure\MigratorLoggingDecoratorTests.cs" />
+    <Compile Include="UnitTests\Migrations\Infrastructure\MigratorScriptingDecoratorTests.cs" />
+    <Compile Include="UnitTests\Migrations\Infrastructure\ModificationCommandTreeGeneratorTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\AddColumnOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\AddForeignKeyOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\AddPrimaryKeyOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\AlterColumnOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\AlterProcedureOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\AlterTableOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\ColumnModelTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\CreateIndexOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\CreateProcedureOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\CreateTableOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\DropColumnOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\DropForeignKeyOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\DropIndexOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\DropPrimaryKeyOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\DropProcedureOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\DropTableOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\HistoryOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\MoveProcedureOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\MoveTableOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\ParameterModelTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\RenameColumnOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\RenameIndexOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\RenameProcedureOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\RenameTableOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\SqlOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Model\UpdateDatabaseOperationTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\ConfigurationFileUpdaterTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\DatabaseCreatorTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\EmptyContextTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\IndentedTextWriterTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\MigrationsConfigurationFinderTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\MigrationWriterTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\PartialTrustMigrationsConfigurationFinderTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\TemplateProcessorTests.cs" />
+    <Compile Include="UnitTests\Migrations\Utilities\UtcNowGeneratorTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\ComplexTypeConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ConfigurationRegistrarTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ConfigurationTypeActivatorTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ConfigurationTypeFilterTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ConfigurationTypesFinderTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ConventionsConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ConventionsTypeActivatorTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ConventionsTypeFilterTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ConventionsTypesFinderTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Conventions\PropertyConventionConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Conventions\PropertyConventionWithHavingConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Conventions\TypeConventionConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Conventions\TypeConventionOfTypeConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Conventions\TypeConventionOfTypeWithHavingConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Conventions\TypeConventionWithHavingConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\AssociationModificationFunctionConfiguration`Tests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ConventionDeleteModificationFunctionConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ConventionInsertModificationFunctionConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ConventionModificationFunctionsConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ConventionUpdateModificationFunctionConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\DeleteModificationFunctionConfiguration`Tests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\InsertModificationFunctionConfiguration`Tests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ManyToManyModificationFunctionConfiguration``Tests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ManyToManyModificationFunctionsConfiguration``Tests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ModificationFunctionConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ModificationFunctionConfiguration`Tests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ModificationFunctionsConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\ModificationFunctionsConfiguration`Tests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Functions\UpdateModificationFunctionConfiguration`Tests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Mapping\Codeplex2465.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Mapping\EntityMappingConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\ModelConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\ConventionNavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\ForeignKeyConstraintConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\HasX\ManyNavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\HasX\OptionalNavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\HasX\RequiredNavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\NavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\WithX\CascadableNavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\WithX\DependentNavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\WithX\ForeignKeyAssociationMappingConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\WithX\ForeignKeyNavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\WithX\ManyToManyAssociationMappingConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Navigation\WithX\ManyToManyNavigationPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Primitive\BinaryPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Primitive\ConventionPrimitivePropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Primitive\DateTimePropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Primitive\DecimalPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Primitive\LengthPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Primitive\PrimitivePropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Primitive\PropertyMappingConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Properties\Primitive\StringPropertyConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\TphColumnFixerTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Types\ComplexTypeConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Types\ConventionTypeConfigurationOfTypeTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Types\ConventionTypeConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Configuration\Types\EntityTypeConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Lightweight\PropertyConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Lightweight\PropertyConventionWithHavingTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Lightweight\TypeConventionOfTypeTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Lightweight\TypeConventionOfTypeWithHavingTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Lightweight\TypeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Lightweight\TypeConventionWithHavingTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\ColumnAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\ConcurrencyCheckAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\DatabaseGeneratedAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\ForeignKeyAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\InversePropertyAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\KeyAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\MaxLengthAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\NotMappedAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\RequiredNavigationPropertyAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\RequiredPrimitivePropertyAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\StringLengthAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Property\TimestampAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Type\ComplexTypeAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Type\NotMappedTypeAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Configuration\Type\TableAttributeConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\AssociationInverseDiscoveryConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\ComplexTypeDiscoveryConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\Db\ColumnOrderingConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\Db\ForeignKeyIndexConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\Db\Mapping\ManyToManyCascadeDeleteConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\Db\PluralizingTableNameConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\DecimalPropertyConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\DeclaredPropertyOrderingConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\ForeignKeyAnnotationConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\ForeignKeyAssociationMultiplicityConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\ForeignKeyDiscoveryConventionBaseTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\IdKeyDiscoveryConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\NavigationPropertyNameForeignKeyDiscoveryConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\OneToManyCascadeDeleteConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\OneToOneConstraintIntroductionConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\PluralizingEntitySetNameConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\PrimaryKeyNameForeignKeyDiscoveryConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\PropertyMaxLengthConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\SqlCePropertyMaxLengthConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\StoreGeneratedIdentityKeyConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Conventions\Edm\TypeNameForeignKeyDiscoveryConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\ConventionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\DbModelBuilderTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\AssociationTypeExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Common\DataModelAnnotationExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Common\INamedDataModelItemExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\ComplexTypeExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Db\EdmModelExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Db\EntityTypeExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Db\Mapping\DbDatabaseMappingExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Db\Mapping\StorageAssociationSetMappingExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Db\Mapping\StorageEntityTypeMappingExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\EdmModelExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\EdmPropertyExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\EdmTypeExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\EntitySetExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\EntityTypeExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\EnumTypeExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\FunctionParameterExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\NavigationPropertyExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\RelationshipEndMemberExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\RelationshipMultiplicityExtensionsTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Serialization\EdmxSerializerTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Services\DatabaseMappingGeneratorTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Services\FunctionParameterMappingGeneratorTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Services\ModificationFunctionMappingGeneratorTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Services\StructuralTypeMappingGeneratorTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Edm\Services\TableMappingGeneratorTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\EntityTypeConfigurationTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Mappers\AttributeMapperTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Mappers\NavigationPropertyMapperTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Mappers\PropertyFilterTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Mappers\PropertyMapperTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Mappers\TypeMapperTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\ModelValidationExceptionTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Utilities\AttributeProviderTests.cs" />
+    <Compile Include="UnitTests\ModelConfiguration\Utilities\PropertyPathTests.cs" />
+    <Compile Include="UnitTests\MultiThreadingTests.cs" />
+    <Compile Include="UnitTests\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="UnitTests\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="UnitTests\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="UnitTests\Properties\InternalsVisibleTo.cs" />
+    <Compile Include="UnitTests\Properties\UnitTestResources.Designer.cs" />
+    <Compile Include="UnitTests\QueryableExtensionsTests.cs" />
+    <Compile Include="UnitTests\Spatial\DbGeographyTests.cs" />
+    <Compile Include="UnitTests\Spatial\DbGeometryTests.cs" />
+    <Compile Include="UnitTests\Spatial\DbSpatialDataReaderTests.cs" />
+    <Compile Include="UnitTests\Spatial\DbSpatialServicesTests.cs" />
+    <Compile Include="UnitTests\Spatial\DefaultServicesTests.cs" />
+    <Compile Include="UnitTests\Spatial\SpatialHelpersTests.cs" />
+    <Compile Include="UnitTests\Spatial\SpatialServicesLoaderTests.cs" />
+    <Compile Include="UnitTests\SqlServerCompact\SqlCeMigrationSqlGeneratorTests.cs" />
+    <Compile Include="UnitTests\SqlServerCompact\SqlCeProviderServicesTests.cs" />
+    <Compile Include="UnitTests\SqlServerCompact\SqlGen\DmlSqlGeneratorTests.cs" />
+    <Compile Include="UnitTests\SqlServerCompact\SqlGen\SqlGeneratorTests.cs" />
+    <Compile Include="UnitTests\SqlServerCompact\SqlGen\SqlStringBuilderTests.cs" />
+    <Compile Include="UnitTests\SqlServer\DefaultSqlExecutionStrategyTests.cs" />
+    <Compile Include="UnitTests\SqlServer\IDbSpatialValueTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlAzureExecutionStrategyTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlAzureRetriableExceptionDetectorTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlGen\DmlFunctionSqlGeneratorTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlGen\DmlSqlGeneratorTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlGen\SqlFunctionCallHandlerTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlGen\SqlGeneratorTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlGen\SqlStringBuilderTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlProviderManifestTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlProviderServicesTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlServerMigrationSqlGeneratorTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlSpatialDataReaderTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlSpatialServicesTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlTypesAssemblyLoaderTests.cs" />
+    <Compile Include="UnitTests\SqlServer\SqlVersionUtilsTests.cs" />
+    <Compile Include="UnitTests\SqlServer\Utilities\DbExpressionExtensionsTests.cs" />
+    <Compile Include="UnitTests\SqlServer\Utilities\EdmFunctionExtensionsTests.cs" />
+    <Compile Include="UnitTests\SqlServer\Utilities\FuncExtensionsTests.cs" />
+    <Compile Include="UnitTests\SqlServer\Utilities\IDictionaryExtensionsTests.cs" />
+    <Compile Include="UnitTests\SqlServer\Utilities\MetadataItemExtensionsTests.cs" />
+    <Compile Include="UnitTests\SqlServer\Utilities\PrimitiveTypeExtensionsTests.cs" />
+    <Compile Include="UnitTests\SqlServer\Utilities\TypeUsageExtensionsTests.cs" />
+    <Compile Include="UnitTests\TestHelpers\AppConfigTestBase.cs" />
+    <Compile Include="UnitTests\TestHelpers\ConfigurationExtensions.cs" />
+    <Compile Include="UnitTests\TestHelpers\DatabaseInitializerTracker.cs" />
+    <Compile Include="UnitTests\TestHelpers\DbContextMockHelper.cs" />
+    <Compile Include="UnitTests\TestHelpers\DbEnumeratorShim.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\DerivedFakeWithProps.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeDerivedDbContext.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeDerivedEntity.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeDerivedObjectContext.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeEntity.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeSqlConnection.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeSqlGenerator.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeSqlProviderFactory.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeSqlProviderServices.cs" />
+    <Compile Include="UnitTests\TestHelpers\Fake\FakeWithProps.cs" />
+    <Compile Include="UnitTests\TestHelpers\Mock\DbContextUsingMockInternalContext.cs" />
+    <Compile Include="UnitTests\TestHelpers\Mock\MockAssembly.cs" />
+    <Compile Include="UnitTests\TestHelpers\Mock\MockPropertyInfo.cs" />
+    <Compile Include="UnitTests\TestHelpers\Mock\MockType.cs" />
+    <Compile Include="UnitTests\TestHelpers\TestModelBuilder.cs" />
+    <Compile Include="UnitTests\Utilities\AssemblyExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\ByteExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\DatabaseNameTests.cs" />
+    <Compile Include="UnitTests\Utilities\DbConnectionExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\DbContextExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\DbModelExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\DbProviderFactoryExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\DbProviderInfoExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\DbProviderManifestExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\DbProviderServicesExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\DynamicEqualityComparerLinqIntegrationTests.cs" />
+    <Compile Include="UnitTests\Utilities\DynamicEqualityComparerTests.cs" />
+    <Compile Include="UnitTests\Utilities\ExpressionExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\IEnumerableExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\MemberInfoExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\PartialTrustAssemblyExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\PropertyInfoExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\ProviderRowFinderTests.cs" />
+    <Compile Include="UnitTests\Utilities\SqlDataReaderWrapperTests.cs" />
+    <Compile Include="UnitTests\Utilities\StringExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\TaskExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\TaskHelperTests.cs" />
+    <Compile Include="UnitTests\Utilities\TypeExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\TypeFinderTests.cs" />
+    <Compile Include="UnitTests\Utilities\XContainerExtensionsTests.cs" />
+    <Compile Include="UnitTests\Utilities\XDocumentExtensionsTests.cs" />
+    <Compile Include="UnitTests\Validation\ComplexPropertyValidatorTests.cs" />
+    <Compile Include="UnitTests\Validation\ComplexTypeValidatorTests.cs" />
+    <Compile Include="UnitTests\Validation\DbEntityValidationExceptionTests.cs" />
+    <Compile Include="UnitTests\Validation\DbEntityValidationResultTests.cs" />
+    <Compile Include="UnitTests\Validation\DbUnexpectedValidationExceptionTests.cs" />
+    <Compile Include="UnitTests\Validation\EntityValidatorBuilderTests.cs" />
+    <Compile Include="UnitTests\Validation\EntityValidatorTests.cs" />
+    <Compile Include="UnitTests\Validation\PropertyValidatorTests.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\EntityValidatorBuilderForMock.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\MockHelper.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\Model\AircraftInfo.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\Model\AirportDetails.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\Model\DepartureArrivalInfoWithNestedComplexType.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\Model\EntityWithOptionalNestedComplexType.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\Model\FlightSegmentWithNestedComplexTypes.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\Model\FlightSegmentWithNestedComplexTypesWithTypeLevelValidation.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\Model\MostDerivedFlightSegmentWithNestedComplexTypes.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\ValidationErrorHelper.cs" />
+    <Compile Include="UnitTests\Validation\TestHelpers\ValidationProviderForMock.cs" />
+    <Compile Include="UnitTests\Validation\ValidatableObjectValidatorTests.cs" />
+    <Compile Include="UnitTests\Validation\ValidationAttributeValidatorTests.cs" />
+    <Compile Include="UnitTests\Validation\ValidationContextTests.cs" />
+    <Compile Include="UnitTests\Validation\ValidationProviderTests.cs" />
+    <Compile Include="UnitTests\WriteEdmxTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UnitTests\TestDataFiles\SqlOperation_Basic.sql" />
+    <Content Include="UnitTests\TestDataFiles\SqlOperation_Batch.sql" />
+    <Content Include="UnitTests\UnitTests.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UnitTests\Properties\UnitTestResources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UnitTests\bin\Debug\" />
+    <Folder Include="UnitTests\obj\Debug\TempPE\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>

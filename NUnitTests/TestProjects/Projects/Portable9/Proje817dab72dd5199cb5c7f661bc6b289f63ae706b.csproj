@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{839390DE-0351-4F55-B538-775DECB305E6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ConsoleApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Proje817dab72dd5199cb5c7f661bc6b289f63ae706b</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Portable\CSharpWorkspace.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Portable\CaseCorrection\CSharpCaseCorrectionService.cs" />
+    <Compile Include="Portable\Classification\ClassificationHelpers.cs" />
+    <Compile Include="Portable\Classification\Classifiers\AbstractSyntaxClassifier.cs" />
+    <Compile Include="Portable\Classification\Classifiers\NameSyntaxClassifier.cs" />
+    <Compile Include="Portable\Classification\Classifiers\SyntaxTokenClassifier.cs" />
+    <Compile Include="Portable\Classification\Classifiers\UsingDirectiveSyntaxClassifier.cs" />
+    <Compile Include="Portable\Classification\CSharpClassificationService.cs" />
+    <Compile Include="Portable\Classification\SyntaxClassifier.cs" />
+    <Compile Include="Portable\Classification\Worker.cs" />
+    <Compile Include="Portable\Classification\Worker_DocumentationComments.cs" />
+    <Compile Include="Portable\Classification\Worker_Preprocesser.cs" />
+    <Compile Include="Portable\CodeCleanup\CSharpCodeCleanerService.cs" />
+    <Compile Include="Portable\CodeCleanup\CSharpCodeCleanerServiceFactory.cs" />
+    <Compile Include="Portable\CodeGeneration\ArgumentGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\AttributeGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\ConstructorGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\ConversionGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\CSharpCodeGenerationHelpers.cs" />
+    <Compile Include="Portable\CodeGeneration\CSharpCodeGenerationService.cs" />
+    <Compile Include="Portable\CodeGeneration\CSharpCodeGenerationServiceFactory.cs" />
+    <Compile Include="Portable\CodeGeneration\CSharpDeclarationComparer.cs" />
+    <Compile Include="Portable\CodeGeneration\CSharpFlagsEnumGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\CSharpSyntaxGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\DestructorGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\EnumMemberGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\EventGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\ExpressionGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\FieldGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\MethodGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\NamedTypeGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\NamespaceGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\OperatorGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\ParameterGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\PropertyGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\StatementGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\TypeParameterGenerator.cs" />
+    <Compile Include="Portable\CodeGeneration\UsingDirectivesAdder.cs" />
+    <Compile Include="Portable\CodeGeneration\UsingDirectivesAdder.Rewriter.cs" />
+    <Compile Include="Portable\Composition\CSharpWorkspaceFeatures.cs" />
+    <Compile Include="Portable\CSharpWorkspaceResources.Designer.cs" />
+    <Compile Include="Portable\Extensions\ArgumentSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\BaseArgumentListSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\BaseParameterListSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\BreakpointSpans.cs" />
+    <Compile Include="Portable\Extensions\CastExpressionSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\CompilationUnitSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\ContextQuery\CSharpSyntaxContext.cs" />
+    <Compile Include="Portable\Extensions\ContextQuery\SyntaxNodeExtensions.cs" />
+    <Compile Include="Portable\Extensions\ContextQuery\SyntaxTokenExtensions.cs" />
+    <Compile Include="Portable\Extensions\ContextQuery\SyntaxTreeExtensions.cs" />
+    <Compile Include="Portable\Extensions\ConversionExtensions.cs" />
+    <Compile Include="Portable\Extensions\CrefSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\DirectiveSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\DirectiveSyntaxExtensions.DirectiveInfo.cs" />
+    <Compile Include="Portable\Extensions\DirectiveSyntaxExtensions.DirectiveSyntaxEqualityComparer.cs" />
+    <Compile Include="Portable\Extensions\DirectiveSyntaxExtensions.DirectiveWalker.cs" />
+    <Compile Include="Portable\Extensions\DocumentationCommentExtensions.cs" />
+    <Compile Include="Portable\Extensions\ExpressionSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\ForEachStatementSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\IDocumentExtensions.cs" />
+    <Compile Include="Portable\Extensions\ISemanticModelExtensions.cs" />
+    <Compile Include="Portable\Extensions\ITypeParameterSymbolExtensions.cs" />
+    <Compile Include="Portable\Extensions\ITypeSymbolExtensions.cs" />
+    <Compile Include="Portable\Extensions\ITypeSymbolExtensions.ExpressionSyntaxGeneratorVisitor.cs" />
+    <Compile Include="Portable\Extensions\ITypeSymbolExtensions.TypeSyntaxGeneratorVisitor.cs" />
+    <Compile Include="Portable\Extensions\MemberDeclarationSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\MemberDeclarationSyntaxExtensions.DeclarationFinder.cs" />
+    <Compile Include="Portable\Extensions\MemberDeclarationSyntaxExtensions.LocalDeclarationMap.cs" />
+    <Compile Include="Portable\Extensions\NamespaceDeclarationSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\NameSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\OperatorPrecedence.cs" />
+    <Compile Include="Portable\Extensions\ParenthesizedExpressionSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\QueryExpressionSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\SeparatedSyntaxListExtensions.cs" />
+    <Compile Include="Portable\Extensions\SimpleNameSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\StatementSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\StringExtensions.cs" />
+    <Compile Include="Portable\Extensions\SymbolDisplayPartExtensions.cs" />
+    <Compile Include="Portable\Extensions\SyntaxKindExtensions.cs" />
+    <Compile Include="Portable\Extensions\SyntaxListExtensions.cs" />
+    <Compile Include="Portable\Extensions\SyntaxNodeExtensions.cs" />
+    <Compile Include="Portable\Extensions\SyntaxNodeExtensions.SingleLineRewriter.cs" />
+    <Compile Include="Portable\Extensions\SyntaxTokenExtensions.cs" />
+    <Compile Include="Portable\Extensions\SyntaxTokenListExtensions.cs" />
+    <Compile Include="Portable\Extensions\SyntaxTreeExtensions.cs" />
+    <Compile Include="Portable\Extensions\SyntaxTriviaExtensions.cs" />
+    <Compile Include="Portable\Extensions\SyntaxTriviaListExtensions.cs" />
+    <Compile Include="Portable\Extensions\TypeDeclarationSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\TypeSyntaxExtensions.cs" />
+    <Compile Include="Portable\Extensions\VariableDeclaratorExtensions.cs" />
+    <Compile Include="Portable\Formatting\CSharpFormattingOptions.cs" />
+    <Compile Include="Portable\Formatting\CSharpFormattingOptionsProvider.cs" />
+    <Compile Include="Portable\Formatting\CSharpSyntaxFormattingService.cs" />
+    <Compile Include="Portable\Formatting\DefaultOperationProvider.cs" />
+    <Compile Include="Portable\Formatting\Engine\AggregatedFormattingResult.cs" />
+    <Compile Include="Portable\Formatting\Engine\CSharpFormatEngine.cs" />
+    <Compile Include="Portable\Formatting\Engine\CSharpStructuredTriviaFormatEngine.cs" />
+    <Compile Include="Portable\Formatting\Engine\FormattingResult.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\CSharpTriviaFormatter.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\CSharpTriviaFormatter.DocumentationCommentExteriorCommentRewriter.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\TriviaDataFactory.Analyzer.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\TriviaDataFactory.CodeShapeAnalyzer.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\TriviaDataFactory.ComplexTrivia.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\TriviaDataFactory.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\TriviaDataFactory.FormattedComplexTrivia.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\TriviaDataFactory.ModifiedComplexTrivia.cs" />
+    <Compile Include="Portable\Formatting\Engine\Trivia\TriviaRewriter.cs" />
+    <Compile Include="Portable\Formatting\FormattingHelpers.cs" />
+    <Compile Include="Portable\Formatting\Rules\AnchorIndentationFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\BaseFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\ElasticTriviaFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\EndOfFileTokenFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\IndentBlockFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\IndentUserSettingsFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\NewLineUserSettingFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\QueryExpressionFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\SpacingFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\StructuredTriviaFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\SuppressFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\TokenBasedFormattingRule.cs" />
+    <Compile Include="Portable\Formatting\Rules\WrappingFormattingRule.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpCompilationFactoryService.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpSemanticFactsService.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpSymbolDeclarationService.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpSyntaxFactsService.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpSyntaxTreeFactory.PathSyntaxReference.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpSyntaxTreeFactoryService.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpSyntaxTreeFactoryService.NullSyntaxReference.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpSyntaxTreeFactoryService.PositionalSyntaxReference.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpSyntaxTreeFactoryService.RecoverableSyntaxTree.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpTypeInferenceService.cs" />
+    <Compile Include="Portable\LanguageServices\CSharpTypeInferenceService.TypeInferrer.cs" />
+    <Compile Include="Portable\LinkedFiles\CSharpLinkedFileMergeConflictCommentAdditionService.cs" />
+    <Compile Include="Portable\Recommendations\CSharpRecommendationService.cs" />
+    <Compile Include="Portable\Rename\CSharpRenameRewriterLanguageService.cs" />
+    <Compile Include="Portable\Rename\LabelConflictVisitor.cs" />
+    <Compile Include="Portable\Rename\LocalConflictVisitor.cs" />
+    <Compile Include="Portable\Simplification\AbstractCSharpReducer.AbstractExpressionRewriter.cs" />
+    <Compile Include="Portable\Simplification\AbstractCSharpReducer.cs" />
+    <Compile Include="Portable\Simplification\CSharpCastReducer.cs" />
+    <Compile Include="Portable\Simplification\CSharpCastReducer.Rewriter.cs" />
+    <Compile Include="Portable\Simplification\CSharpEscapingReducer.cs" />
+    <Compile Include="Portable\Simplification\CSharpEscapingReducer.Rewriter.cs" />
+    <Compile Include="Portable\Simplification\CSharpExtensionMethodReducer.cs" />
+    <Compile Include="Portable\Simplification\CSharpExtensionMethodReducer.Rewriter.cs" />
+    <Compile Include="Portable\Simplification\CSharpMiscellaneousReducer.cs" />
+    <Compile Include="Portable\Simplification\CSharpMiscellaneousReducer.Rewriter.cs" />
+    <Compile Include="Portable\Simplification\CSharpNameReducer.cs" />
+    <Compile Include="Portable\Simplification\CSharpNameReducer.Rewriter.cs" />
+    <Compile Include="Portable\Simplification\CSharpParenthesesReducer.cs" />
+    <Compile Include="Portable\Simplification\CSharpParenthesesReducer.Rewriter.cs" />
+    <Compile Include="Portable\Simplification\CSharpSimplificationService.cs" />
+    <Compile Include="Portable\Simplification\CSharpSimplificationService.Expander.cs" />
+    <Compile Include="Portable\Simplification\CSharpSimplificationService.NodesAndTokensToReduceComputer.cs" />
+    <Compile Include="Portable\Utilities\CompilationOptionsConversion.cs" />
+    <Compile Include="Portable\Utilities\FormattingRangeHelper.cs" />
+    <Compile Include="Portable\Utilities\NameSyntaxComparer.cs" />
+    <Compile Include="Portable\Utilities\NameSyntaxIterator.cs" />
+    <Compile Include="Portable\Utilities\SpeculationAnalyzer.cs" />
+    <Compile Include="Portable\Utilities\SyntaxKindSet.cs" />
+    <Compile Include="Portable\Utilities\TokenComparer.cs" />
+    <Compile Include="Portable\Utilities\TypeSyntaxComparer.cs" />
+    <Compile Include="Portable\Utilities\UsingsAndExternAliasesDirectiveComparer.cs" />
+    <Compile Include="Portable\Utilities\UsingsAndExternAliasesOrganizer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Portable\CSharpWorkspaceResources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Portable\packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Portable\CodeCleanup\Providers\" />
+    <Folder Include="Portable\obj\Debug\TempPE\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>
