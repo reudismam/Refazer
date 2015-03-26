@@ -114,7 +114,7 @@ namespace SPG.IntelliExtract
                 {
                     negatives.Add(location.Region);
                     indexNegatives.Add(index);
-                    //break;
+                    break;
                 }
                 else
                 {
@@ -125,8 +125,8 @@ namespace SPG.IntelliExtract
             
             if (negatives.Any())
             {
-                //controller.Extract(controller.SelectedLocations, negatives);
-                controller.Extract(positives, negatives);
+                controller.Extract(controller.SelectedLocations, negatives);
+                //controller.Extract(positives, negatives);
                 JsonUtil<List<int>>.Write(indexNegatives, "negatives.json");
             }
             MessageBox.Show("Done!");
