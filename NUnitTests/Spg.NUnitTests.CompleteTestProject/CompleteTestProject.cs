@@ -483,6 +483,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
 
             dicionarySelection = dicionarySelectionFullpath;
 
+
             //controller.RetrieveLocations(controller.CurrentViewCodeAfter);
             //var locationsToEdit = controller.Locations;
 
