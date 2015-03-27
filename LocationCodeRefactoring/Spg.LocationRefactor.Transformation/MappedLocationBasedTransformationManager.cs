@@ -124,28 +124,69 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             return text;
         }
 
+        //private string TransformEachLocation(string text, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program, bool compact)
+        //{
+        //    //foreach (var item in update)
+        //    //{
+        //    //    try
+        //    //    {
+        //    //        ASTTransformation treeNode = ASTProgram.TransformString(item.Item1, program);
+        //    //        string transformation = treeNode.transformation;
+
+
+        //    //        string nodeText = item.Item2.Region.Text;
+        //    //        string escaped = Regex.Escape(nodeText);
+        //    //        string replacement = Regex.Replace(text, escaped, transformation);
+        //    //        text = replacement;
+        //    //    }
+        //    //    catch (ArgumentOutOfRangeException e)
+        //    //    {
+        //    //        Console.WriteLine(e.Message);
+        //    //    }
+        //    //}
+        //    //return text;
+        //    //string replaced = text;
+        //    int nextStart = 0;
+        //    foreach (var item in update)
+        //    {
+        //        try
+        //        {
+        //            List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+        //            if (compact)
+        //            {
+        //                list = ASTManager.EnumerateSyntaxNodesAndTokens2(item.Item1, list);
+        //            }
+        //            else
+        //            {
+        //                list = ASTManager.EnumerateSyntaxNodesAndTokens(item.Item1, list);
+        //            }
+        //            ListNode lnode = new ListNode(list);
+
+        //            ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
+        //            string transformation = treeNode.transformation;
+
+        //            int start = nextStart + item.Item2.Region.Start;
+        //            int end = start + item.Item2.Region.Length;
+        //            text = text.Substring(0, start) + transformation +
+        //            text.Substring(end);
+
+        //            nextStart += transformation.Length - item.Item2.Region.Length;
+
+        //            //string nodeText = item.Item2.Region.Text;
+        //            //string escaped = Regex.Escape(nodeText);
+        //            //string replacement = Regex.Replace(text, escaped, transformation);
+        //            //text = replacement;
+        //        }
+        //        catch (ArgumentOutOfRangeException e)
+        //        {
+        //            Console.WriteLine(e.Message);
+        //        }
+        //    }
+        //    return text;
+        //}
+
         private string TransformEachLocation(string text, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program, bool compact)
         {
-            //foreach (var item in update)
-            //{
-            //    try
-            //    {
-            //        ASTTransformation treeNode = ASTProgram.TransformString(item.Item1, program);
-            //        string transformation = treeNode.transformation;
-
-
-            //        string nodeText = item.Item2.Region.Text;
-            //        string escaped = Regex.Escape(nodeText);
-            //        string replacement = Regex.Replace(text, escaped, transformation);
-            //        text = replacement;
-            //    }
-            //    catch (ArgumentOutOfRangeException e)
-            //    {
-            //        Console.WriteLine(e.Message);
-            //    }
-            //}
-            //return text;
-            //string replaced = text;
             int nextStart = 0;
             foreach (var item in update)
             {
@@ -171,11 +212,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
                     text.Substring(end);
 
                     nextStart += transformation.Length - item.Item2.Region.Length;
-
-                    //string nodeText = item.Item2.Region.Text;
-                    //string escaped = Regex.Escape(nodeText);
-                    //string replacement = Regex.Replace(text, escaped, transformation);
-                    //text = replacement;
                 }
                 catch (ArgumentOutOfRangeException e)
                 {
@@ -184,7 +220,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             }
             return text;
         }
-
         public override SynthesizedProgram TransformationProgram(List<TRegion> regionsToApplyTransformation)
         {
             RegionManager rManager = RegionManager.GetInstance();

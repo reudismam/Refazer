@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
@@ -100,7 +99,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public Dictionary<string, bool> FilesOpened { get; set; }
 
-        public Tuple<List<CodeLocation>, List<TRegion>> localionsComputerSoFar;
+        public Tuple<List<CodeLocation>, List<TRegion>> LocalionsComputerSoFar;
 
         /// <summary>
         /// Program computed for negative filtering
@@ -117,8 +116,6 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// Singleton instance
         /// </summary>
         private static EditorController _instance;
-
-
 
         /// <summary>
         /// Constructor
@@ -346,7 +343,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
             //remove
 
-            localionsComputerSoFar = tuple;
+            LocalionsComputerSoFar = tuple;
             NotifyLocationsObservers(Locations);
         }
 
@@ -378,13 +375,13 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
             //remove
 
-            localionsComputerSoFar = tuple;
+            LocalionsComputerSoFar = tuple;
             NotifyLocationsObservers(Locations);
         }
 
         public void Done()
         {
-            NotifyHilightObservers(localionsComputerSoFar.Item2);
+            NotifyHilightObservers(LocalionsComputerSoFar.Item2);
         }
 
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog)
@@ -395,43 +392,64 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
 
             List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
-            
 
-            //remove
- //           var sm = WorkspaceManager.GetSemanticModel(CurrentProject, SolutionPath, CurrentViewCodePath, lcas.First());
- //           SyntaxTree tree = sm.SyntaxTree;
- //           SyntaxNode n = ASTManager.NodesWithSameStartEndAndKind(tree, lcas.First().Span.Start, lcas.First().Span.End,
- //               lcas.First().CSharpKind()).First();
- ////           var x = sm.GetDeclaredSymbol(n);
- //           var si = sm.GetSymbolInfo(n);
-            
- //           var type = x.ContainingType;
- //           var s = type.ToDisplayString();
- //           var name = GetFullMetadataName(type);
-
-            //foreach (ISymbol symbol in sm.LookupSymbols(241))
-            //{
-            //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
-            //    {
-            //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
-            //        var rlts = symbol.DeclaringSyntaxReferences;
-            //    }
-            //}
-            //////remove
-            //remove
-
-           regions = RegionManager.GroupRegionBySyntaxKind(regions, Lcas);
-
+            regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, Lcas);
             foreach (TRegion region in regions)
             {
                 CodeLocation location = new CodeLocation { Region = region, SourceCode = CurrentViewCodeBefore, SourceClass = CurrentViewCodePath };
                 sourceLocations.Add(location);
             }
-            
+
             Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, regions);
 
             return tuple;
         }
+
+ //       private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog)
+ //       {
+ //           List<CodeLocation> sourceLocations = new List<CodeLocation>();
+
+ //           SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
+ //           Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
+
+ //           List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
+            
+
+ //           //remove
+ ////           var sm = WorkspaceManager.GetSemanticModel(CurrentProject, SolutionPath, CurrentViewCodePath, lcas.First());
+ ////           SyntaxTree tree = sm.SyntaxTree;
+ ////           SyntaxNode n = ASTManager.NodesWithSameStartEndAndKind(tree, lcas.First().Span.Start, lcas.First().Span.End,
+ ////               lcas.First().CSharpKind()).First();
+ //////           var x = sm.GetDeclaredSymbol(n);
+ ////           var si = sm.GetSymbolInfo(n);
+            
+ ////           var type = x.ContainingType;
+ ////           var s = type.ToDisplayString();
+ ////           var name = GetFullMetadataName(type);
+
+ //           //foreach (ISymbol symbol in sm.LookupSymbols(241))
+ //           //{
+ //           //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
+ //           //    {
+ //           //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
+ //           //        var rlts = symbol.DeclaringSyntaxReferences;
+ //           //    }
+ //           //}
+ //           //////remove
+ //           //remove
+
+ //          regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, Lcas);
+
+ //           foreach (TRegion region in regions)
+ //           {
+ //               CodeLocation location = new CodeLocation { Region = region, SourceCode = CurrentViewCodeBefore, SourceClass = CurrentViewCodePath };
+ //               sourceLocations.Add(location);
+ //           }
+            
+ //           Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, regions);
+
+ //           return tuple;
+ //       }
 
        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClassPosNegative(Prog prog)
         {
@@ -462,7 +480,6 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog, List<Tuple<string, string>> sourceFiles, string program)
         {
-            LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
             
             Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
@@ -479,7 +496,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             {
                 List<TRegion> regions = RetrieveLocations(source.Item1, prog);
 
-                regions = RegionManager.GroupRegionBySyntaxKind(regions, lcas);
+                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
                 dicRegions.Add(source.Item2, regions);
 
                 foreach (TRegion region in regions)
@@ -539,11 +556,11 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             return regions;
         }
 
-        /// <summary>
-        /// Selected only non duplicate locations
-        /// </summary>
-        /// <param name = "locations" > All locations </ param >
-        /// < returns > Non duplicate locations</returns>
+        ///// <summary>
+        ///// Selected only non duplicate locations
+        ///// </summary>
+        ///// <param name = "locations" > All locations </ param >
+        ///// < returns > Non duplicate locations</returns>
         //private List<CodeLocation> NonDuplicateLocations(List<CodeLocation> locations)
         //{
         //    List<CodeLocation> clocations = new List<CodeLocation>();
@@ -884,7 +901,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 //    //////remove
 //    //remove
 
-//    regions = RegionManager.GroupRegionBySyntaxKind(regions, Lcas);
+//    regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, Lcas);
 
 //    foreach (TRegion region in regions)
 //    {

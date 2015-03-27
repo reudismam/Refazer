@@ -577,12 +577,18 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return dic.Values.ToList();
         }
 
-        internal static List<TRegion> GroupRegionBySyntaxKind(List<TRegion> regions, List<SyntaxNode> lcas)
+        /// <summary>
+        /// Return regions that have at least one of the syntax kind listed on syntaxKinds
+        /// </summary>
+        /// <param name="regions">Collection of regions</param>
+        /// <param name="syntaxKinds">Syntax kinds</param>
+        /// <returns>Regions that have at least one of the syntax kind listed on syntaxKinds</returns>
+        internal static List<TRegion> RegionsThatHaveOneOfTheSyntaxKind(List<TRegion> regions, List<SyntaxNode> syntaxKinds)
         {
             List<TRegion> list = new List<TRegion>();
             foreach (var region in regions)
             {
-                foreach (var node in lcas)
+                foreach (var node in syntaxKinds)
                 {
                     if (region.Node.IsKind(node.CSharpKind()))
                     {
@@ -591,8 +597,42 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     }
                 }
             }
+            list = NonDuplicateRegions(list);
             return list;
-        }
+       }
+
+        private static List<TRegion> NonDuplicateRegions(List<TRegion> regions)
+        {
+            List<TRegion> nonDuplicationRegions = new List<TRegion>();
+            bool[] analized = Enumerable.Repeat(false, regions.Count).ToArray();
+            for (int i = 0; i < regions.Count; i++)
+            {
+                if (!analized[i])
+                {
+                    for (int j = i + 1; j < regions.Count; j++)
+                    {
+                        if (regions[i].IntersectWith(regions[j]))
+                        {
+                            if (regions[i].Length > regions[j].Length)
+                            {
+                                nonDuplicationRegions.Add(regions[i]);
+                                analized[i] = true;
+                            }
+                            else
+                            {
+                                nonDuplicationRegions.Add(regions[j]);
+                                analized[j] = true;
+                            }
+                        }
+                    }
+                }
+                if (analized[i] == false)
+                {
+                    nonDuplicationRegions.Add(regions[i]);
+                }
+            }
+            return nonDuplicationRegions;
+        } 
     }
 }
 
@@ -1029,12 +1069,12 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 //}
 
 
-/// <summary>
-/// Calculate pair transformation
-/// </summary>
-/// <param name="tree">Syntax tree root</param>
-/// <param name="nodes">Index of nodes with respective positions</param>
-/// <returns>Transformation pair</returns>
+///// <summary>
+///// Calculate pair transformation
+///// </summary>
+///// <param name="tree">Syntax tree root</param>
+///// <param name="nodes">Index of nodes with respective positions</param>
+///// <returns>Transformation pair</returns>
 //private List<Tuple<SyntaxNode, SyntaxNode>> CalculatePair(SyntaxNode tree, List<Tuple<int, SyntaxNode>> nodes)
 //{
 //    List<Tuple<SyntaxNode, SyntaxNode>> kinds = new List<Tuple<SyntaxNode, SyntaxNode>>();

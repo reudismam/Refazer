@@ -64,8 +64,7 @@ namespace ProductivityApiTests
 
         #region Scenarios for SQL Server LocalDb using LocalDbConnectionFactory
 
-        [Fact]
-        [UseDefaultExecutionStrategy]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void SqlServer_Database_can_be_created_with_columns_that_explicitly_total_more_that_8060_bytes_and_data_longer_than_8060_can_be_inserted()
         {
             EnsureDatabaseInitialized(() => new ModelWithWideProperties());
@@ -94,8 +93,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
-        [UseDefaultExecutionStrategy]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void SqlServer_Database_can_be_created_with_columns_that_implicitly_total_more_that_8060_bytes_and_data_longer_than_8060_can_be_inserted()
         {
             EnsureDatabaseInitialized(() => new ModelWithWideProperties());
@@ -124,7 +122,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Find()
         {
             using (var context = new SimpleLocalDbModelContext())
@@ -147,7 +145,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Insert()
         {
             EnsureDatabaseInitialized(() => new SimpleLocalDbModelContext());
@@ -155,9 +153,9 @@ namespace ProductivityApiTests
             using (var context = new SimpleLocalDbModelContext())
             {
                 var product = new Product
-                    {
-                        Name = "Vegemite"
-                    };
+                {
+                    Name = "Vegemite"
+                };
                 context.Products.Add(product);
                 context.SaveChanges();
 
@@ -169,7 +167,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Update()
         {
             EnsureDatabaseInitialized(() => new SimpleLocalDbModelContext());
@@ -188,7 +186,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Query()
         {
             using (var context = new SimpleLocalDbModelContext())
@@ -203,7 +201,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Relate_using_query()
         {
             EnsureDatabaseInitialized(() => new SimpleLocalDbModelContext());
@@ -212,10 +210,10 @@ namespace ProductivityApiTests
             {
                 var category = context.Categories.Find("Foods");
                 var product = new Product
-                    {
-                        Name = "Bovril",
-                        Category = category
-                    };
+                {
+                    Name = "Bovril",
+                    Category = category
+                };
                 context.Products.Add(product);
                 context.SaveChanges();
 
@@ -234,7 +232,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Relate_using_FK()
         {
             EnsureDatabaseInitialized(() => new SimpleLocalDbModelContext());
@@ -242,10 +240,10 @@ namespace ProductivityApiTests
             using (var context = new SimpleLocalDbModelContext())
             {
                 var product = new Product
-                    {
-                        Name = "Bovril",
-                        CategoryId = "Foods"
-                    };
+                {
+                    Name = "Bovril",
+                    CategoryId = "Foods"
+                };
                 context.Products.Add(product);
                 context.SaveChanges();
 
@@ -258,7 +256,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_CodeFirst_with_ModelBuilder()
         {
             Database.Delete("Scenario_CodeFirstWithModelBuilder");
@@ -304,21 +302,21 @@ namespace ProductivityApiTests
         {
             context.Categories.Add(
                 new Category
-                    {
-                        Id = "Large Hadron Collider"
-                    });
+                {
+                    Id = "Large Hadron Collider"
+                });
             context.Products.Add(
                 new Product
-                    {
-                        Name = "Higgs Boson",
-                        CategoryId = "Large Hadron Collider"
-                    });
+                {
+                    Name = "Higgs Boson",
+                    CategoryId = "Large Hadron Collider"
+                });
             context.SaveChanges();
 
             Assert.Equal(@"(localdb)\v11.0", context.Database.Connection.DataSource);
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Using_two_databases()
         {
             EnsureDatabaseInitialized(() => new LocalDbLoginsContext());
@@ -327,10 +325,10 @@ namespace ProductivityApiTests
             using (var context = new LocalDbLoginsContext())
             {
                 var login = new Login
-                    {
-                        Id = Guid.NewGuid(),
-                        Username = "elmo"
-                    };
+                {
+                    Id = Guid.NewGuid(),
+                    Username = "elmo"
+                };
                 context.Logins.Add(login);
                 context.SaveChanges();
 
@@ -344,14 +342,14 @@ namespace ProductivityApiTests
             using (var context = new SimpleLocalDbModelContext())
             {
                 var category = new Category
-                    {
-                        Id = "Books"
-                    };
+                {
+                    Id = "Books"
+                };
                 var product = new Product
-                    {
-                        Name = "The Unbearable Lightness of Being",
-                        Category = category
-                    };
+                {
+                    Name = "The Unbearable Lightness of Being",
+                    Category = category
+                };
                 context.Products.Add(product);
                 context.SaveChanges();
 
@@ -366,7 +364,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Use_AppConfig_connection_string()
         {
             Database.Delete("Scenario_Use_AppConfig_LocalDb_connection_string");
@@ -383,7 +381,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_Include()
         {
             using (var context = new SimpleLocalDbModelContext())
@@ -401,7 +399,7 @@ namespace ProductivityApiTests
             }
         }
 
-        [Fact]
+        [ExtendedFact(SkipForSqlAzure = true)]
         public void Scenario_IncludeWithLambda()
         {
             using (var context = new SimpleLocalDbModelContext())
@@ -424,3 +422,4 @@ namespace ProductivityApiTests
 }
 
 #endif
+

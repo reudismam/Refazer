@@ -420,6 +420,13 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             Assert.IsTrue(isValid);
         }
 
+        [Test]
+        public void Proj2_1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            Assert.IsTrue(isValid);
+        }
+
         /// <summary>
         /// Locale test base method
         /// </summary>
