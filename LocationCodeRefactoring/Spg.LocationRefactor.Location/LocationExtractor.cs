@@ -124,7 +124,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <returns>Transformation</returns>
         public List<Transformation.Transformation> TransformProgram(bool compact)
         {
-            var manager = new MapedLocationBasedTransformationManager();
+            var manager = new MappedLocationBasedTransformationManager();
             return manager.TransformProgram(compact);
         }
 

@@ -15,7 +15,7 @@ using Spg.LocationRefactor.TextRegion;
 
 namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
 {
-    public class MapedLocationBasedTransformationManager : TransformationManager
+    public class MappedLocationBasedTransformationManager : TransformationManager
     {
 
         /// <summary>
@@ -113,6 +113,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
                 Tuple<SyntaxNode, CodeLocation> tuple = Tuple.Create(node, location);
                 syntaxNodeCodeLocationPairs.Add(tuple);
             }
+
 
             var text = FileUtil.ReadFile(locations[0].SourceClass);
             text = TransformEachLocation(text, syntaxNodeCodeLocationPairs, program, compact);
