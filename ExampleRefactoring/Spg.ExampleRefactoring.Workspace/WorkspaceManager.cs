@@ -144,6 +144,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                         {
                             document.TryGetSyntaxTree(out tree);
                             SemanticModel model2 = compilation.GetSemanticModel(tree);
+                            //SymbolFinder.
 
                             foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
                             {

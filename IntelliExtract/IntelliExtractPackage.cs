@@ -48,7 +48,7 @@ namespace SPG.IntelliExtract
     [Guid(GuidList.guidIntelliExtractPkgString)]
     public sealed class IntelliExtractPackage : Package, IProgramsGeneratedObserver, ILocationsObserver, IHilightObserver
     {
-        private List<Prog> _programs;
+        //private List<Prog> _programs;
 
         /// <summary>
         /// Default constructor of the package.
@@ -60,7 +60,7 @@ namespace SPG.IntelliExtract
 
         public IntelliExtractPackage()
         {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this));
             EditorController controler = EditorController.GetInstance();
             controler.AddProgramGeneratedObserver(this);
             controler.AddLocationsObserver(this);
@@ -152,7 +152,7 @@ namespace SPG.IntelliExtract
 
             string text = Connector.GetText(viewHost);
 
-            this._programs = pEvent.programs;
+            //this._programs = pEvent.programs;
 
             EditorController controler = EditorController.GetInstance();
 
@@ -203,6 +203,8 @@ namespace SPG.IntelliExtract
                 IComponentModel componentModel = GetGlobalService(typeof (SComponentModel)) as IComponentModel;
                 IVsEditorAdaptersFactoryService bufferData =
                     componentModel.GetService<IVsEditorAdaptersFactoryService>();
+
+
                 IServiceProvider sp = GetGlobalService(
                     typeof (IServiceProvider))
                     as IServiceProvider;
@@ -305,7 +307,7 @@ namespace SPG.IntelliExtract
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this));
             base.Initialize();
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
