@@ -179,7 +179,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         public static bool CompleteTestBase(string mainClassAfterEditing, string editionFile,  string complement)
         {
             EditorController controller = EditorController.GetInstance();
-            controller.CurrentViewCodeAfter = FileUtil.ReadFile("edited"+complement + mainClassAfterEditing);
+            controller.CurrentViewCodeAfter = FileUtil.ReadFile(@"..\..\TestProjects\edited"+complement + mainClassAfterEditing);
 
             Tuple<string, string> beforeAfter = Tuple.Create(controller.CurrentViewCodeBefore, controller.CurrentViewCodeAfter);
             List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
@@ -197,7 +197,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
             {
                 string classPath = transformation.SourcePath;
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
-                className = "files" + complement + className;
+                className = @"..\..\TestProjects\files" + complement + className;
 
                 Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(className), transformation.transformation.Item2);
                 Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);

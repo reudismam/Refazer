@@ -41,6 +41,8 @@ IntelliMeta.sln.ide/*
 *.log
 *.ide
 *.htm
+*.t
+*.cache
 
 
 

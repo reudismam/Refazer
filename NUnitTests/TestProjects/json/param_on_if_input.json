@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ParameterChangeIf.API\\ParameterChangeOnIf.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ParameterChangeIf.API\\ParameterChangeOnIf.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ParameterChangeIf.API\\ParameterChangeOnIf.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ParameterChangeIf.API\\ParameterChangeOnIf.cs"
   },
   {
     "Text": "return FormatLiteral((char)obj, quoteStrings);",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ParameterChangeIf.API\\ParameterChangeOnIf.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ParameterChangeIf.API\\ParameterChangeOnIf.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ParameterChangeIf.API\\ParameterChangeOnIf.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ParameterChangeIf.API\\ParameterChangeOnIf.cs"
   }
 ]

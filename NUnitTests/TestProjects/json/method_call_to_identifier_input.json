@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
   },
   {
     "Text": "modifiers.ToTokenList()",
@@ -27,11 +27,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
   },
   {
     "Text": "modifiers.ToTokenList()",
@@ -44,10 +44,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs"
   }
 ]

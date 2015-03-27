@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.AddContextParam\\AddContextParam.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.AddContextParam\\AddContextParam.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.AddContextParam\\AddContextParam.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.AddContextParam\\AddContextParam.cs"
   },
   {
     "Text": "this.AppendAssemblyQualifierIfNecessary(sb, genInst.GenericType, out isAssemQualified);",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.AddContextParam\\AddContextParam.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.AddContextParam\\AddContextParam.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.AddContextParam\\AddContextParam.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.AddContextParam\\AddContextParam.cs"
   }
 ]

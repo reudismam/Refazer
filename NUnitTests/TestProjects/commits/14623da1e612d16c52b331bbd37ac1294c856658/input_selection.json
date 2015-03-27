@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\UnitTests2\\UnitTests\\Migrations\\History\\HistoryRepositoryTests.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\UnitTests2\\UnitTests\\Migrations\\History\\HistoryRepositoryTests.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\UnitTests2\\UnitTests\\Migrations\\History\\HistoryRepositoryTests.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\UnitTests2\\UnitTests\\Migrations\\History\\HistoryRepositoryTests.cs"
   },
   {
     "Text": "context.GetModel()",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\UnitTests2\\UnitTests\\Migrations\\History\\HistoryRepositoryTests.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\UnitTests2\\UnitTests\\Migrations\\History\\HistoryRepositoryTests.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\UnitTests2\\UnitTests\\Migrations\\History\\HistoryRepositoryTests.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\UnitTests2\\UnitTests\\Migrations\\History\\HistoryRepositoryTests.cs"
   }
 ]

@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\IntelliMeta.ASTManagerChange\\ASTManagerChange.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\IntelliMeta.ASTManagerChange\\ASTManagerChange.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\IntelliMeta.ASTManagerChange\\ASTManagerChange.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\IntelliMeta.ASTManagerChange\\ASTManagerChange.cs"
   },
   {
     "Text": "ASTManager.Parent(st).IsKind(SyntaxKind.ObjectCreationExpression)",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\IntelliMeta.ASTManagerChange\\ASTManagerChange.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\IntelliMeta.ASTManagerChange\\ASTManagerChange.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\IntelliMeta.ASTManagerChange\\ASTManagerChange.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\IntelliMeta.ASTManagerChange\\ASTManagerChange.cs"
   }
 ]

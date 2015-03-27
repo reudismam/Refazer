@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
   },
   {
     "Text": "A a = new A();\r\n            a.aMethod();",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.API\\ChangeAPI.cs"
   }
 ]

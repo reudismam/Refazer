@@ -461,6 +461,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
             Assert.IsTrue(passLocation && passTransformation);
         }
 
+        [Test]
+        public void Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
+        {
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+
+            List<string> list = new List<string>();
+            list.Add("DbSqlQueryTests.cs");
+            bool passTransformation = CompleteTestBase(list, @"1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
         /// <summary>
         /// Complete test
         /// </summary>

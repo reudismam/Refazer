@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
@@ -44,50 +45,78 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             return transformations;
         }
 
+        ///// <summary>
+        ///// Transform a program
+        ///// </summary>
+        ///// <param name="program">Synthesized program</param>
+        ///// <param name="locations">Locations</param>
+        ///// <returns>Transformed program</returns>
+        //public override string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact)
+        //{
+        //    SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
+        //    List<Tuple<SyntaxNode, CodeLocation>> update = new List<Tuple<SyntaxNode, CodeLocation>>();
+        //    foreach (CodeLocation location in locations)
+        //    {
+        //        SyntaxNode selection = location.Region.Node;
+
+        //        var decedents = ASTManager.NodesWithSameStartEndAndKind(tree, selection.Span.Start, selection.Span.End,
+        //            selection.CSharpKind());
+        //        //var decedents = new List<SyntaxNode>();
+        //        //decedents.Add(tree.GetRoot().FindNode(selection.Span));
+        //        foreach (var item in decedents)
+        //        {
+        //            Tuple<SyntaxNode, CodeLocation> tuple = Tuple.Create(item, location);
+        //            update.Add(tuple);
+        //        }
+        //    }
+
+        //    var text = FileUtil.ReadFile(locations[0].SourceClass);
+        //    text = TransformEachLocation(text, update, program, compact);
+        //    /*foreach (var item in update)
+        //    {
+        //        try
+        //        {
+        //            ASTTransformation treeNode = ASTProgram.TransformString(item.Item1, program);
+        //            String transformation = treeNode.transformation;
+        //            string nodeText = item.Item2.Region.Text;
+        //            String escaped = Regex.Escape(nodeText);
+        //            String replacement = Regex.Replace(text, escaped, transformation);
+        //            text = replacement;
+        //        }
+        //        catch (ArgumentOutOfRangeException e)
+        //        {
+        //            Console.WriteLine(e.Message);
+        //        }
+        //    }*/
+        //    SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(text);
+        //    SyntaxNode nodeFormat = treeFormat.GetRoot();//.NormalizeWhitespace();
+        //    text = nodeFormat.GetText().ToString();
+        //    return text;
+        //}
+
         /// <summary>
         /// Transform a program
         /// </summary>
         /// <param name="program">Synthesized program</param>
         /// <param name="locations">Locations</param>
+        /// <param name="compact">Define if input must to be compacted or not</param>
         /// <returns>Transformed program</returns>
         public override string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact)
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
-            List<Tuple<SyntaxNode, CodeLocation>> update = new List<Tuple<SyntaxNode, CodeLocation>>();
+            List<Tuple<SyntaxNode, CodeLocation>> syntaxNodeCodeLocationPairs = new List<Tuple<SyntaxNode, CodeLocation>>();
             foreach (CodeLocation location in locations)
             {
                 SyntaxNode selection = location.Region.Node;
-
-                /*var decedents = from snode in tree.GetRoot().DescendantNodes()
-                                where snode.Span.Start == selection.Span.Start && snode.Span.Length == selection.Span.Length
-                                select snode;*/
-                var decedents = ASTManager.NodesWithSameStartEndAndKind(tree, selection.Span.Start, selection.Span.End,
-                    selection.CSharpKind());
-                foreach (var item in decedents)
-                {
-                    Tuple<SyntaxNode, CodeLocation> tuple = Tuple.Create(item, location);
-                    update.Add(tuple);
-                }
+                SyntaxNode node = tree.GetRoot().FindNode(selection.Span);
+              
+                Tuple<SyntaxNode, CodeLocation> tuple = Tuple.Create(node, location);
+                syntaxNodeCodeLocationPairs.Add(tuple);
             }
 
             var text = FileUtil.ReadFile(locations[0].SourceClass);
-            text = TransformEachLocation(text, update, program, compact);
-            /*foreach (var item in update)
-            {
-                try
-                {
-                    ASTTransformation treeNode = ASTProgram.TransformString(item.Item1, program);
-                    String transformation = treeNode.transformation;
-                    string nodeText = item.Item2.Region.Text;
-                    String escaped = Regex.Escape(nodeText);
-                    String replacement = Regex.Replace(text, escaped, transformation);
-                    text = replacement;
-                }
-                catch (ArgumentOutOfRangeException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }*/
+            text = TransformEachLocation(text, syntaxNodeCodeLocationPairs, program, compact);
+            
             SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(text);
             SyntaxNode nodeFormat = treeFormat.GetRoot();//.NormalizeWhitespace();
             text = nodeFormat.GetText().ToString();

@@ -226,6 +226,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
             return decedents;
         }
 
+
         /// <summary>
         /// Descendant nodes with the syntax kind specified
         /// </summary>
@@ -239,6 +240,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
                                   select snode;
             return treeDescendents;
         }
+
 
         /// <summary>
         /// Descendant node with the start position specified
