@@ -167,7 +167,8 @@ namespace Spg.LocationRefactor.Operator.Filter
 
                 TokenSeq regex = ASTProgram.ConcatenateRegularExpression(Predicate.r1, Predicate.r2);
 
-                if (ASTManager.IsMatch(lNode, regex))
+                //if (ASTManager.IsMatch(lNode, regex))
+                if(Predicate.Evaluate(lNode))
                 {
                     TRegion tRegion = new TRegion();
 

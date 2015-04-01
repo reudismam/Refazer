@@ -427,6 +427,49 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             Assert.IsTrue(isValid);
         }
 
+        [Test]
+        public void Proj4_1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
+        {
+            bool isValid = LocationTestProject.LocaleTest("4_1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj5_1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
+        {
+            bool isValid = LocationTestProject.LocaleTest("5_1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Projce1e33311465a6694c16f2289ab2a6d86e29bf18Test()
+        {
+            bool isValid = LocationTestProject.LocaleTest("ce1e33311465a6694c16f2289ab2a6d86e29bf18", @"..\..\TestProjects\Projects\EntityFramework5\Projce1e33311465a6694c16f2289ab2a6d86e29bf18.sln", "Projce1e33311465a6694c16f2289ab2a6d86e29bf18");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj8b9180bea7178d8348de47e28237c05ddb8a8244Test()
+        {
+            bool isValid = LocationTestProject.LocaleTest("8b9180bea7178d8348de47e28237c05ddb8a8244", @"..\..\TestProjects\Projects\EntityFramework6\Proj8b9180bea7178d8348de47e28237c05ddb8a8244.sln", "Proj8b9180bea7178d8348de47e28237c05ddb8a8244");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj2_8b9180bea7178d8348de47e28237c05ddb8a8244Test()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_8b9180bea7178d8348de47e28237c05ddb8a8244", @"..\..\TestProjects\Projects\EntityFramework6\Proj8b9180bea7178d8348de47e28237c05ddb8a8244.sln", "Proj8b9180bea7178d8348de47e28237c05ddb8a8244");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj829dec5d15c3d930815d72ce2d6909c51a97b1efTest()
+        {
+            bool isValid = LocationTestProject.LocaleTest("829dec5d15c3d930815d72ce2d6909c51a97b1ef", @"..\..\TestProjects\Projects\EntityFramework7\Proj829dec5d15c3d930815d72ce2d6909c51a97b1ef.sln", "Proj829dec5d15c3d930815d72ce2d6909c51a97b1ef");
+            Assert.IsTrue(isValid);
+        }
+
+        
         /// <summary>
         /// Locale test base method
         /// </summary>

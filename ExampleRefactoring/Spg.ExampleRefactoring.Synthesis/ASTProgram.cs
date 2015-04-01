@@ -257,13 +257,16 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             if (parent.IsKind(SyntaxKind.MethodDeclaration)) { return true; }
 
+            //if (parent.IsKind(SyntaxKind.Argument)) { return true;}
+
             //if (next == null) { return false;}
 
             if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
-                //string value = next.ToString();
-                if (next.IsKind(SyntaxKind.OpenParenToken) || next.IsKind(SyntaxKind.DotToken)  || next.IsKind(SyntaxKind.None) || next == null)
-                    return true;
+                return true;
+                ////string value = next.ToString();
+                //if (next.IsKind(SyntaxKind.OpenParenToken) || next.IsKind(SyntaxKind.DotToken)  || next.IsKind(SyntaxKind.None) || next == null)
+                //    return true;
             }
             return false;
         }
