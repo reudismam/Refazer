@@ -185,8 +185,10 @@
       <Name>DirectedGraph</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExampleRefactoring\ExampleRefactoring.csproj">
-      <Project>{6060b3c1-8b16-47ae-a7a5-b34eb1c170ad}</Project>
+      <Project>{6060B3C1-8B16-47AE-A7A5-B34EB1C170AD}</Project>
       <Name>ExampleRefactoring</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
     <ProjectReference Include="..\LocateAdornment\LocateAdornment.csproj">
       <Project>{6C48821E-FFA3-42D4-9201-078ED13D554F}</Project>
@@ -198,7 +200,7 @@
     <ProjectReference Include="..\LocationCodeRefactoring\LocationRefactoring.csproj">
       <Project>{638186db-e7e4-4e76-b51e-1c35efae6280}</Project>
       <Name>LocationRefactoring</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bTemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
   </ItemGroup>
