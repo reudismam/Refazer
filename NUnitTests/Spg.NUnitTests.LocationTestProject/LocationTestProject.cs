@@ -476,6 +476,34 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             Assert.IsTrue(isValid);
         }
 
+        [Test]
+        public void Proj3_a8836009a81d24b05d5d1ad7c480eeec6cbde31bTest()
+        {
+            bool isValid = LocationTestProject.LocaleTest("3_a8836009a81d24b05d5d1ad7c480eeec6cbde31b", @"..\..\TestProjects\Projects\Core3\Proj3_a8836009a81d24b05d5d1ad7c480eeec6cbde31b.sln", "Proj3_a8836009a81d24b05d5d1ad7c480eeec6cbde31b");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50dTest()
+        {
+            bool isValid = LocationTestProject.LocaleTest("8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d", @"..\..\TestProjects\Projects\Core.Test2\Proj8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d.sln", "Proj8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj2_8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50dTest()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d", @"..\..\TestProjects\Projects\Core.Test2\Proj8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d.sln", "Proj8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj3_8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50dTest()
+        {
+            bool isValid = LocationTestProject.LocaleTest("3_8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d", @"..\..\TestProjects\Projects\Test.Utility\Proj3_8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d.sln", "Proj3_8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d");
+            Assert.IsTrue(isValid);
+        }
+
 
         /// <summary>
         /// Locale test base method

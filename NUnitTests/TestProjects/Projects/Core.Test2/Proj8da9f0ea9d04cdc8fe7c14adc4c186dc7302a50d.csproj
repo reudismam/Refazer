@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{DF3E591F-D5E6-4CF7-B04F-ABF8AAF9DD81}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ConsoleApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Proj8da9f0ea9d04cdc8fe7c14adc4c186dc7302a50d</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core.Test\AggregateQueryTest.cs" />
+    <Compile Include="Core.Test\AggregateRepositoryTest.cs" />
+    <Compile Include="Core.Test\Analysis\InitScriptNotUnderToolsRuleTest.cs" />
+    <Compile Include="Core.Test\Analysis\InvalidFrameworkFolderRuleTest.cs" />
+    <Compile Include="Core.Test\Analysis\MisplacedAssemblyRuleTest.cs" />
+    <Compile Include="Core.Test\Analysis\MisplacedScriptFileRuleTest.cs" />
+    <Compile Include="Core.Test\Analysis\MisplacedTransformFileRuleTest.cs" />
+    <Compile Include="Core.Test\Analysis\MissingSummaryRuleTest.cs" />
+    <Compile Include="Core.Test\Analysis\PackageIssueTestHelper.cs" />
+    <Compile Include="Core.Test\Analysis\WinRTNameObsoleteRuleTest.cs" />
+    <Compile Include="Core.Test\AssemblyBindingTest.cs" />
+    <Compile Include="Core.Test\BindingRedirectManagerTest.cs" />
+    <Compile Include="Core.Test\BindingRedirectResolverTest.cs" />
+    <Compile Include="Core.Test\BufferedEnumerableTest.cs" />
+    <Compile Include="Core.Test\ConfigurationDefaultsTest.cs" />
+    <Compile Include="Core.Test\CryptoHashProviderTest.cs" />
+    <Compile Include="Core.Test\DataServicePackageRepositoryTest.cs" />
+    <Compile Include="Core.Test\DataServicePackageTest.cs" />
+    <Compile Include="Core.Test\DataServiceQueryWrapperTest.cs" />
+    <Compile Include="Core.Test\DefaultPackagePathResolverTest.cs" />
+    <Compile Include="Core.Test\EnumerableExtensionsTest.cs" />
+    <Compile Include="Core.Test\Extensions\VersionExtensionsTest.cs" />
+    <Compile Include="Core.Test\FileSystemExtensionsTest.cs" />
+    <Compile Include="Core.Test\LocalPackageRepositoryTest.cs" />
+    <Compile Include="Core.Test\LocalPackageTest.cs" />
+    <Compile Include="Core.Test\MachineCacheTest.cs" />
+    <Compile Include="Core.Test\ManifestFileTest.cs" />
+    <Compile Include="Core.Test\ManifestSchemaUtilityTest.cs" />
+    <Compile Include="Core.Test\ManifestTest.cs" />
+    <Compile Include="Core.Test\ManifestVersionUtilityTest.cs" />
+    <Compile Include="Core.Test\Mocks\MockAssembly.cs" />
+    <Compile Include="Core.Test\NetPortableProfileTableTest.cs" />
+    <Compile Include="Core.Test\NetPortableProfileTest.cs" />
+    <Compile Include="Core.Test\NullFileSystemTest.cs" />
+    <Compile Include="Core.Test\NullSettingsTest.cs" />
+    <Compile Include="Core.Test\OptimizedZipPackageTest.cs" />
+    <Compile Include="Core.Test\PackageBuilderTest.cs" />
+    <Compile Include="Core.Test\PackageDependencyTest.cs" />
+    <Compile Include="Core.Test\PackageExtensionsTest.cs" />
+    <Compile Include="Core.Test\PackageHelperTest.cs" />
+    <Compile Include="Core.Test\PackageIdValidatorTest.cs" />
+    <Compile Include="Core.Test\PackageManagerTest.cs" />
+    <Compile Include="Core.Test\PackageOperationExtensionsTest.cs" />
+    <Compile Include="Core.Test\PackageReferenceFileTest.cs" />
+    <Compile Include="Core.Test\PackageReferenceRepositoryTest.cs" />
+    <Compile Include="Core.Test\PackageRepositoryExtensionsTest.cs" />
+    <Compile Include="Core.Test\PackageRepositoryFactoryTest.cs" />
+    <Compile Include="Core.Test\PackageRepositoryTest.cs" />
+    <Compile Include="Core.Test\PackageRestoreConsentTest.cs" />
+    <Compile Include="Core.Test\PackageServerTest.cs" />
+    <Compile Include="Core.Test\PackageSorterTest.cs" />
+    <Compile Include="Core.Test\PackageSourceProviderTest.cs" />
+    <Compile Include="Core.Test\PackageUtilityTest.cs" />
+    <Compile Include="Core.Test\PackageWalkerTest.cs" />
+    <Compile Include="Core.Test\PathResolverTest.cs" />
+    <Compile Include="Core.Test\PathUtilityTest.cs" />
+    <Compile Include="Core.Test\PathValidatorTest.cs" />
+    <Compile Include="Core.Test\PhysicalFileSystemTest.cs" />
+    <Compile Include="Core.Test\PreprocessorTest.cs" />
+    <Compile Include="Core.Test\ProjectManagerTest.cs" />
+    <Compile Include="Core.Test\ProjectSystemExtensionsTest.cs" />
+    <Compile Include="Core.Test\Properties\AssemblyInfo.cs" />
+    <Compile Include="Core.Test\ProxyCacheTest.cs" />
+    <Compile Include="Core.Test\RedirectedHttpClientTest.cs" />
+    <Compile Include="Core.Test\SemanticVersionTest.cs" />
+    <Compile Include="Core.Test\SettingsCredentialProviderTest.cs" />
+    <Compile Include="Core.Test\SettingsTests.cs" />
+    <Compile Include="Core.Test\SharedPackageRepositoryTest.cs" />
+    <Compile Include="Core.Test\SmartDataServiceQueryTest.cs" />
+    <Compile Include="Core.Test\StreamExtensionsTest.cs" />
+    <Compile Include="Core.Test\TokenizerTest.cs" />
+    <Compile Include="Core.Test\UnzippedPackageRepositoryTest.cs" />
+    <Compile Include="Core.Test\UnzippedPackageTest.cs" />
+    <Compile Include="Core.Test\UriHelperTest.cs" />
+    <Compile Include="Core.Test\UriUtilityTest.cs" />
+    <Compile Include="Core.Test\VersionSpecTest.cs" />
+    <Compile Include="Core.Test\VersionUtilityTest.cs" />
+    <Compile Include="Core.Test\XdtTransformTest.cs" />
+    <Compile Include="Core.Test\XmlExtensionsTest.cs" />
+    <Compile Include="Core.Test\ZipPackageTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Core.Test\Core.Test.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Core.Test\packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>
