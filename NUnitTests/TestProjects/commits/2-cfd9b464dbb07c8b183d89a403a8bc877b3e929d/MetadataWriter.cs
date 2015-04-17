@@ -4845,7 +4845,7 @@ namespace Microsoft.Cci
             {
                 typeReference = arrType.GetElementType(Context);
                 bool isAssemQual = false;
-                this.AppendSerializedTypeName(sb, typeReference, ref isAssemQual, context);
+                AppendSerializedTypeName(sb, typeReference, ref isAssemQual, context);
                 if (arrType.IsVector)
                 {
                     sb.Append("[]");
@@ -4874,7 +4874,7 @@ namespace Microsoft.Cci
             {
                 typeReference = pointer.GetTargetType(Context);
                 bool isAssemQual = false;
-                this.AppendSerializedTypeName(sb, typeReference, ref isAssemQual, context);
+                AppendSerializedTypeName(sb, typeReference, ref isAssemQual, context);
                 sb.Append('*');
                 goto done;
             }

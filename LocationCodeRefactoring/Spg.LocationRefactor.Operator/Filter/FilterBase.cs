@@ -86,14 +86,16 @@ namespace Spg.LocationRefactor.Operator.Filter
         public List<TRegion> RetrieveRegion(string sourceClass)
         {
             Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
-            if (result.Count == 1)
-            {
-                IEnumerable<SyntaxNode> regions = SyntaxNodesForFiltering(sourceClass, List);
-                return RetrieveRegionsBase(regions);
-            }
-
+            if(result.Count == 1) throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
+            //if (result.Count == 1)
+            //{
+            //    throw new Exception("The code could not go here.");
+            //    IEnumerable<SyntaxNode> regions = SyntaxNodesForFiltering(sourceClass, List);
+            //    return RetrieveRegionsBase(regions);
+            //}
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
-            IEnumerable<SyntaxNode> descedants = tree.GetRoot().DescendantNodesAndSelf();
+            //IEnumerable<SyntaxNode> descedants = tree.GetRoot().DescendantNodesAndSelf();
+            IEnumerable<SyntaxNode> descedants = SyntaxNodes(tree.GetRoot());
             List<TRegion> tregions = RetrieveRegionsBase(descedants);
             return tregions;
         }
@@ -130,8 +132,6 @@ namespace Spg.LocationRefactor.Operator.Filter
             return false;
         }
 
-
-
         /// <summary>
         /// Base processing for RetrieveRegion
         /// </summary>
@@ -164,17 +164,17 @@ namespace Spg.LocationRefactor.Operator.Filter
             return tRegions;
         }
 
-        /// <summary>
-        /// Syntax nodes correspondents to selection
-        /// </summary>
-        /// <param name="sourceCode">Source code.</param>
-        /// <param name="list">Selection location on source code.</param>
-        /// <returns>Syntax nodes correspondents to selection on source code</returns>
-        private IEnumerable<SyntaxNode> SyntaxNodesForFiltering(string sourceCode, List<TRegion> list)
-        {
-            List<SyntaxNode> nodes = RegionManager.SyntaxNodesForFiltering(sourceCode, list);
-            return nodes;
-        }
+        ///// <summary>
+        ///// Syntax nodes correspondents to selection
+        ///// </summary>
+        ///// <param name="sourceCode">Source code.</param>
+        ///// <param name="list">Selection location on source code.</param>
+        ///// <returns>Syntax nodes correspondents to selection on source code</returns>
+        //private IEnumerable<SyntaxNode> SyntaxNodesForFiltering(string sourceCode, List<TRegion> list)
+        //{
+        //    List<SyntaxNode> nodes = RegionManager.SyntaxNodesForFiltering(sourceCode, list);
+        //    return nodes;
+        //}
 
         /// <summary>
         /// Syntax nodes

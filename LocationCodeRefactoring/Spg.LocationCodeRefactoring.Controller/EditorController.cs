@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
@@ -92,7 +91,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public List<Tuple<string, string>> DocumentsBeforeAndAfter { get; set; }
         //public string CurrentProject { get; set; }
-        public IProjectionBuffer ProjectionBuffer { get; set; }
+        //public IProjectionBuffer ProjectionBuffer { get; set; }
 
         public Dictionary<string, IProjectionBuffer> ProjectionBuffers { get; set; }
 
@@ -178,6 +177,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// </summary>
         public void Extract()
         {
+            Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
             //LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
             LocationExtractor extractor = new LocationExtractor();
             //remove
@@ -208,7 +208,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         {
             if (SelectedLocations == null || !SelectedLocations.Any()) { throw new Exception("Selected regions cannot be null or empty."); }
 
-            List<TRegion> regions = RetrieveLocations(CurrentViewCodeBefore, Progs.First());
+            SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
+            List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, Progs.First());
             regions = NonDuplicateLocations(regions);
 
             TRegion deepestRegion = SelectedLocations.First();
@@ -318,6 +319,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                 RetrieveLocationsPosNegatives(program);
                 return;
             }
+              
+            //Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
 
             Prog prog = Progs.First();
             List<Tuple<string, string>> sourceFiles = SourceFiles();
@@ -391,11 +394,11 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
 
             SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
-            Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
+            //Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
 
             List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
 
-            regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, Lcas);
+            //regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, Lcas);
             foreach (TRegion region in regions)
             {
                 CodeLocation location = new CodeLocation { Region = region, SourceCode = CurrentViewCodeBefore, SourceClass = CurrentViewCodePath };
@@ -496,8 +499,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             foreach (Tuple<string, string> source in sourceFiles)
             {
                 List<TRegion> regions = RetrieveLocations(source.Item1, prog);
-
-                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
+//                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
                 dicRegions.Add(source.Item2, regions);
 
                 foreach (TRegion region in regions)

@@ -86,8 +86,8 @@ namespace Spg.LocationRefactor.Operator
 
             FilterBase filter = (FilterBase)maps[0].SequenceExpression.Ioperator;
 
-            TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.Predicate.r1, filter.Predicate.r2);
-            List<Token> regex = tokens.Regex();
+            //TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.Predicate.r1, filter.Predicate.r2);
+            //List<Token> regex = tokens.Regex();
 
             List<TRegion> filtereds = filter.RetrieveRegion(input);
 
@@ -98,11 +98,11 @@ namespace Spg.LocationRefactor.Operator
                 synt.Add(pair.expression);
             }
 
-            ASTProgram program = new ASTProgram();
+            //ASTProgram program = new ASTProgram();
             foreach (TRegion r in filtereds)
             {
                 TRegion region = new TRegion();
-                Tuple<String, String> tu = Tuple.Create(input.Substring(r.Start, r.Length), input.Substring(r.Start, r.Length));
+                Tuple<string, string> tu = Tuple.Create(input.Substring(r.Start, r.Length), input.Substring(r.Start, r.Length));
                 Tuple<ListNode, ListNode> tnodes = ASTProgram.Example(tu);
 
                 ListNode lnode = ASTProgram.RetrieveNodes(tnodes, synt.Solutions);
@@ -131,10 +131,10 @@ namespace Spg.LocationRefactor.Operator
             return tRegions;
         }
 
-        public List<TRegion> RetrieveRegion(SyntaxNode input)
-        {
-            throw new NotImplementedException();
-        }
+        //public List<TRegion> RetrieveRegion(SyntaxNode input)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         /// <summary>
         /// String representation

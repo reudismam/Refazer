@@ -395,7 +395,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return retr;
         }
 
-
         /// <summary>
         /// Syntax nodes 
         /// </summary>
@@ -439,7 +438,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     List<SyntaxNode> aNodes = new List<SyntaxNode>();
                     foreach (var span in controller.EditedLocations[item.Key])
                     {
-                        //MessageBox.Show(sourceCodeAfter.Substring(span.Start + 1, span.Length - 2));
+                        MessageBox.Show(sourceCodeAfter.Substring(span.Start + 1, span.Length - 2));
                         //var snode = LeastCommonAncestor(treeAfter, span.Start + 1, (span.Start + 1) + (span.Length - 2));
                         SyntaxNode snode = LCAManager.LeastCommonAncestor(treeAfter, span.Start + 1, (span.Start + 1) + (span.Length - 2));
                         aNodes.Add(snode);
@@ -452,7 +451,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     }
                 }
             }
-
             return result;
         }
 
@@ -522,6 +520,12 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return examples;
         }
 
+        /// <summary>
+        /// Get document after edition
+        /// </summary>
+        /// <param name="documentBeforeEdition">Document before edition</param>
+        /// <param name="documents">All documents</param>
+        /// <returns>Document after edition</returns>
         private string GetDocumentAfterEdition(string documentBeforeEdition, List<Tuple<string, string>> documents)
         {
             foreach (var document in documents)
@@ -541,16 +545,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 
             return snode;
         }
-
-        //private static SyntaxNode LeastCommonAncestor(SyntaxTree tree, int start, int end)
-        //{
-        //    List<SyntaxNodeOrToken> nodesSelection = ASTManager.NodesBetweenStartAndEndPosition(tree, start, end);
-
-        //    SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(nodesSelection, tree);
-        //    SyntaxNode snode = lca.AsNode();
-
-        //    return snode;
-        //}
 
         public static List<SyntaxNode> LeastCommonAncestors(string sourceCode, List<TRegion> regions)
         {
