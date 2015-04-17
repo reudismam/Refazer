@@ -504,6 +504,34 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             Assert.IsTrue(isValid);
         }
 
+        [Test]
+        public void Projd9f64ea1704f8d99087ffdb646aa39003fc7c50aTest()
+        {
+            bool isValid = LocationTestProject.LocaleTest("d9f64ea1704f8d99087ffdb646aa39003fc7c50a", @"..\..\TestProjects\Projects\Core4\Projd9f64ea1704f8d99087ffdb646aa39003fc7c50a.sln", "Projd9f64ea1704f8d99087ffdb646aa39003fc7c50a");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proja569c556805ce4f788b9644c1cc9a578719df3abTest()
+        {
+            bool isValid = LocationTestProject.LocaleTest("a569c556805ce4f788b9644c1cc9a578719df3ab", @"..\..\TestProjects\Projects\NuGet.Client\Proja569c556805ce4f788b9644c1cc9a578719df3ab.sln", "Proja569c556805ce4f788b9644c1cc9a578719df3ab");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj2_a569c556805ce4f788b9644c1cc9a578719df3abTest()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_a569c556805ce4f788b9644c1cc9a578719df3ab", @"..\..\TestProjects\Projects\NuGet.Client\Proja569c556805ce4f788b9644c1cc9a578719df3ab.sln", "Proja569c556805ce4f788b9644c1cc9a578719df3ab");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51Test()
+        {
+            bool isValid = LocationTestProject.LocaleTest("2_a569c556805ce4f788b9644c1cc9a578719df3ab", @"..\..\TestProjects\Projects\NuGet.Client2\Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51.sln", "Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51");
+            Assert.IsTrue(isValid);
+        }
+
 
         /// <summary>
         /// Locale test base method

@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{4B5386C2-F065-4069-8A24-4732F84157DC}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ConsoleApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Projd9f64ea1704f8d99087ffdb646aa39003fc7c50a</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Core\Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Analysis\DefaultPackageRuleSet.cs" />
+    <Compile Include="Core\Analysis\IPackageRule.cs" />
+    <Compile Include="Core\Analysis\PackageIssue.cs" />
+    <Compile Include="Core\Analysis\PackageIssueLevel.cs" />
+    <Compile Include="Core\Analysis\Rules\InitScriptNotUnderToolsRule.cs" />
+    <Compile Include="Core\Analysis\Rules\InvalidFrameworkFolderRule.cs" />
+    <Compile Include="Core\Analysis\Rules\MisplacedAssemblyRule.cs" />
+    <Compile Include="Core\Analysis\Rules\MisplacedScriptFileRule.cs" />
+    <Compile Include="Core\Analysis\Rules\MisplacedTransformFileRule.cs" />
+    <Compile Include="Core\Analysis\Rules\MissingSummaryRule.cs" />
+    <Compile Include="Core\Analysis\Rules\WinRTNameIsObsoleteRule.cs" />
+    <Compile Include="Core\Authoring\AssemblyMetadata.cs" />
+    <Compile Include="Core\Authoring\AssemblyMetadataExtractor.cs" />
+    <Compile Include="Core\Authoring\EmptyFrameworkFolderFile.cs" />
+    <Compile Include="Core\Authoring\IPackageBuilder.cs" />
+    <Compile Include="Core\Authoring\IPropertyProvider.cs" />
+    <Compile Include="Core\Authoring\Manifest.cs" />
+    <Compile Include="Core\Authoring\ManifestDependency.cs" />
+    <Compile Include="Core\Authoring\ManifestDependencySet.cs" />
+    <Compile Include="Core\Authoring\ManifestFile.cs" />
+    <Compile Include="Core\Authoring\ManifestFrameworkAssembly.cs" />
+    <Compile Include="Core\Authoring\ManifestMetadata.cs" />
+    <Compile Include="Core\Authoring\ManifestReader.cs" />
+    <Compile Include="Core\Authoring\ManifestReference.cs" />
+    <Compile Include="Core\Authoring\ManifestReferenceSet.cs" />
+    <Compile Include="Core\Authoring\ManifestSchemaUtility.cs" />
+    <Compile Include="Core\Authoring\ManifestVersionAttribute.cs" />
+    <Compile Include="Core\Authoring\ManifestVersionUtility.cs" />
+    <Compile Include="Core\Authoring\NullPropertyProvider.cs" />
+    <Compile Include="Core\Authoring\PackageBuilder.cs" />
+    <Compile Include="Core\Authoring\PackageDependencySet.cs" />
+    <Compile Include="Core\Authoring\PackageReferenceSet.cs" />
+    <Compile Include="Core\Authoring\PathResolver.cs" />
+    <Compile Include="Core\Authoring\PhysicalPackageAssemblyReference.cs" />
+    <Compile Include="Core\Authoring\PhysicalPackageFile.cs" />
+    <Compile Include="Core\Configuration\ConfigurationDefaults.cs" />
+    <Compile Include="Core\Configuration\ISettings.cs" />
+    <Compile Include="Core\Configuration\NullSettings.cs" />
+    <Compile Include="Core\Configuration\Settings.cs" />
+    <Compile Include="Core\Configuration\SettingsCredentialProvider.cs" />
+    <Compile Include="Core\Configuration\SettingValue.cs" />
+    <Compile Include="Core\Configuration\UserSettings.cs" />
+    <Compile Include="Core\ConstraintProviders\AggregateConstraintProvider.cs" />
+    <Compile Include="Core\ConstraintProviders\DefaultConstraintProvider.cs" />
+    <Compile Include="Core\ConstraintProviders\IPackageConstraintProvider.cs" />
+    <Compile Include="Core\EnvironmentVariableWrapper.cs" />
+    <Compile Include="Core\Extensions\AppDomainExtensions.cs" />
+    <Compile Include="Core\Extensions\AssemblyExtensions.cs" />
+    <Compile Include="Core\Extensions\AssemblyNameExtensions.cs" />
+    <Compile Include="Core\Extensions\CollectionExtensions.cs" />
+    <Compile Include="Core\Extensions\CredentialProviderExtensions.cs" />
+    <Compile Include="Core\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Core\Extensions\FileSystemExtensions.cs" />
+    <Compile Include="Core\Extensions\ObjectExtensions.cs" />
+    <Compile Include="Core\Extensions\PackageExtensions.cs" />
+    <Compile Include="Core\Extensions\PackageOperationExtensions.cs" />
+    <Compile Include="Core\Extensions\ProjectSystemExtensions.cs" />
+    <Compile Include="Core\Extensions\QueryableExtensions.cs" />
+    <Compile Include="Core\Extensions\SettingsExtensions.cs" />
+    <Compile Include="Core\Extensions\StreamExtensions.cs" />
+    <Compile Include="Core\Extensions\StringExtensions.cs" />
+    <Compile Include="Core\Extensions\TaskExtensions.cs" />
+    <Compile Include="Core\Extensions\VersionExtensions.cs" />
+    <Compile Include="Core\Extensions\XElementExtensions.cs" />
+    <Compile Include="Core\FileModifiers\FileTransformExtensions.cs" />
+    <Compile Include="Core\FileModifiers\IPackageFileTransformer.cs" />
+    <Compile Include="Core\FileModifiers\Preprocessor.cs" />
+    <Compile Include="Core\FileModifiers\XdtTransformer.cs" />
+    <Compile Include="Core\FileModifiers\XmlTransfomer.cs" />
+    <Compile Include="Core\GlobalSuppressions.cs" />
+    <Compile Include="Core\Http\CredentialStore.cs" />
+    <Compile Include="Core\Http\CredentialType.cs" />
+    <Compile Include="Core\Http\HttpClient.cs" />
+    <Compile Include="Core\Http\HttpUtility.cs" />
+    <Compile Include="Core\Http\ICredentialCache.cs" />
+    <Compile Include="Core\Http\ICredentialProvider.cs" />
+    <Compile Include="Core\Http\IHttpClient.cs" />
+    <Compile Include="Core\Http\IHttpClientEvents.cs" />
+    <Compile Include="Core\Http\IHttpWebResponse.cs" />
+    <Compile Include="Core\Http\IProxyCache.cs" />
+    <Compile Include="Core\Http\MultipartWebRequest.cs" />
+    <Compile Include="Core\Http\NullCredentialProvider.cs" />
+    <Compile Include="Core\Http\ProxyCache.cs" />
+    <Compile Include="Core\Http\RedirectedHttpClient.cs" />
+    <Compile Include="Core\Http\RepositoryOperationNames.cs" />
+    <Compile Include="Core\Http\RequestHelper.cs" />
+    <Compile Include="Core\Http\SendingRequestEventManager.cs" />
+    <Compile Include="Core\Http\Shim\HttpShim.cs" />
+    <Compile Include="Core\Http\Shim\IShimController.cs" />
+    <Compile Include="Core\Http\Shim\IShimControllerProvider.cs" />
+    <Compile Include="Core\Http\Shim\IShimWebRequest.cs" />
+    <Compile Include="Core\Http\Shim\ShimDataRequestMessage.cs" />
+    <Compile Include="Core\Http\Shim\ShimWebHelpers.cs" />
+    <Compile Include="Core\Http\STSAuthHelper.cs" />
+    <Compile Include="Core\Http\WIFTypeProvider.cs" />
+    <Compile Include="Core\IEnvironmentVariableReader.cs" />
+    <Compile Include="Core\IMachineWideSettings.cs" />
+    <Compile Include="Core\IPackageManager.cs" />
+    <Compile Include="Core\IProjectManager.cs" />
+    <Compile Include="Core\Logging\FileConflictResolution.cs" />
+    <Compile Include="Core\Logging\IFileConflictResolver.cs" />
+    <Compile Include="Core\Logging\ILogger.cs" />
+    <Compile Include="Core\Logging\MessageLevel.cs" />
+    <Compile Include="Core\Logging\NullLogger.cs" />
+    <Compile Include="Core\NETPortable\NetPortableProfile.cs" />
+    <Compile Include="Core\NETPortable\NetPortableProfileCollection.cs" />
+    <Compile Include="Core\NETPortable\NetPortableProfileTable.cs" />
+    <Compile Include="Core\NETPortable\NetPortableProfileTableSerializer.cs" />
+    <Compile Include="Core\NuGetPackageMoniker.cs" />
+    <Compile Include="Core\OperationResolution\ActionExecutor.cs" />
+    <Compile Include="Core\OperationResolution\ActionResolver.cs" />
+    <Compile Include="Core\OperationResolution\IPackageOperationEventListener.cs" />
+    <Compile Include="Core\OperationResolution\NullProjectManager.cs" />
+    <Compile Include="Core\OperationResolution\PackageAction.cs" />
+    <Compile Include="Core\OperationResolution\PackageNotInstalledException.cs" />
+    <Compile Include="Core\OperationResolution\RealPackageOperation.cs" />
+    <Compile Include="Core\OperationResolution\UpdateUtility.cs" />
+    <Compile Include="Core\OperationResolution\VirtualProjectManager.cs" />
+    <Compile Include="Core\PackageManager.cs" />
+    <Compile Include="Core\PackageOperationEventArgs.cs" />
+    <Compile Include="Core\PackageRestoreConsent.cs" />
+    <Compile Include="Core\PackageSource\IPackageSourceProvider.cs" />
+    <Compile Include="Core\PackageSource\PackageSource.cs" />
+    <Compile Include="Core\PackageSource\PackageSourceProvider.cs" />
+    <Compile Include="Core\PackageSource\PackageSourceProviderExtensions.cs" />
+    <Compile Include="Core\Packages\Constants.cs" />
+    <Compile Include="Core\Packages\DataServicePackage.cs" />
+    <Compile Include="Core\Packages\DefaultPackagePathResolver.cs" />
+    <Compile Include="Core\Packages\FrameworkAssemblyReference.cs" />
+    <Compile Include="Core\Packages\IFrameworkTargetable.cs" />
+    <Compile Include="Core\Packages\IPackage.cs" />
+    <Compile Include="Core\Packages\IPackageAssemblyReference.cs" />
+    <Compile Include="Core\Packages\IPackageFile.cs" />
+    <Compile Include="Core\Packages\IPackageMetadata.cs" />
+    <Compile Include="Core\Packages\IPackagePathResolver.cs" />
+    <Compile Include="Core\Packages\IServerPackageMetadata.cs" />
+    <Compile Include="Core\Packages\LocalPackage.cs" />
+    <Compile Include="Core\Packages\OptimizedZipPackage.cs" />
+    <Compile Include="Core\Packages\PackageDependency.cs" />
+    <Compile Include="Core\Packages\UnzippedPackage.cs" />
+    <Compile Include="Core\Packages\ZipPackage.cs" />
+    <Compile Include="Core\Packages\ZipPackageAssemblyReference.cs" />
+    <Compile Include="Core\Packages\ZipPackageFile.cs" />
+    <Compile Include="Core\PackageWalker\ConflictResult.cs" />
+    <Compile Include="Core\PackageWalker\DependencyVersion.cs" />
+    <Compile Include="Core\PackageWalker\DependentsWalker.cs" />
+    <Compile Include="Core\PackageWalker\IDependentsResolver.cs" />
+    <Compile Include="Core\PackageWalker\InstallWalker.cs" />
+    <Compile Include="Core\PackageWalker\IPackageOperationResolver.cs" />
+    <Compile Include="Core\PackageWalker\NuGetVersionNotSatisfiedException.cs" />
+    <Compile Include="Core\PackageWalker\PackageAction.cs" />
+    <Compile Include="Core\PackageWalker\PackageMarker.cs" />
+    <Compile Include="Core\PackageWalker\PackageOperation.cs" />
+    <Compile Include="Core\PackageWalker\PackageSorter.cs" />
+    <Compile Include="Core\PackageWalker\PackageTargets.cs" />
+    <Compile Include="Core\PackageWalker\PackageWalker.cs" />
+    <Compile Include="Core\PackageWalker\PackageWalkInfo.cs" />
+    <Compile Include="Core\PackageWalker\UninstallWalker.cs" />
+    <Compile Include="Core\PackageWalker\UpdateWalker.cs" />
+    <Compile Include="Core\ProjectManager.cs" />
+    <Compile Include="Core\ProjectSystem\IBatchProcessor.cs" />
+    <Compile Include="Core\ProjectSystem\IFileSystem.cs" />
+    <Compile Include="Core\ProjectSystem\IProjectSystem.cs" />
+    <Compile Include="Core\ProjectSystem\NullFileSystem.cs" />
+    <Compile Include="Core\ProjectSystem\PhysicalFileSystem.cs" />
+    <Compile Include="Core\ProjectSystem\ProjectImportLocation.cs" />
+    <Compile Include="Core\Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Repositories\AggregateQuery.cs" />
+    <Compile Include="Core\Repositories\AggregateRepository.cs" />
+    <Compile Include="Core\Repositories\BufferedEnumerable.cs" />
+    <Compile Include="Core\Repositories\DataServiceContextWrapper.cs" />
+    <Compile Include="Core\Repositories\DataServicePackageRepository.cs" />
+    <Compile Include="Core\Repositories\DataServiceQueryWrapper.cs" />
+    <Compile Include="Core\Repositories\ExpressionRewriter.cs" />
+    <Compile Include="Core\Repositories\ICloneableRepository.cs" />
+    <Compile Include="Core\Repositories\ICultureAwareRepository.cs" />
+    <Compile Include="Core\Repositories\IDataServiceContext.cs" />
+    <Compile Include="Core\Repositories\IDataServiceQuery.cs" />
+    <Compile Include="Core\Repositories\IDependencyResolver.cs" />
+    <Compile Include="Core\Repositories\IFindPackagesRepository.cs" />
+    <Compile Include="Core\Repositories\ILatestPackageLookup.cs" />
+    <Compile Include="Core\Repositories\IOperationAwareRepository.cs" />
+    <Compile Include="Core\Repositories\IPackageCacheRepository.cs" />
+    <Compile Include="Core\Repositories\IPackageLookup.cs" />
+    <Compile Include="Core\Repositories\IPackageName.cs" />
+    <Compile Include="Core\Repositories\IPackageReferenceRepository.cs" />
+    <Compile Include="Core\Repositories\IPackageRepository.cs" />
+    <Compile Include="Core\Repositories\IPackageRepositoryFactory.cs" />
+    <Compile Include="Core\Repositories\IServiceBasedRepository.cs" />
+    <Compile Include="Core\Repositories\ISharedPackageRepository.cs" />
+    <Compile Include="Core\Repositories\LazyQueue.cs" />
+    <Compile Include="Core\Repositories\LocalPackageRepository.cs" />
+    <Compile Include="Core\Repositories\MachineCache.cs" />
+    <Compile Include="Core\Repositories\NullConstraintProvider.cs" />
+    <Compile Include="Core\Repositories\OrderingComparer.cs" />
+    <Compile Include="Core\Repositories\PackageName.cs" />
+    <Compile Include="Core\Repositories\PackageReference.cs" />
+    <Compile Include="Core\Repositories\PackageReferenceFile.cs" />
+    <Compile Include="Core\Repositories\PackageReferenceRepository.cs" />
+    <Compile Include="Core\Repositories\PackageRepositoryBase.cs" />
+    <Compile Include="Core\Repositories\PackageRepositoryExtensions.cs" />
+    <Compile Include="Core\Repositories\PackageRepositoryFactory.cs" />
+    <Compile Include="Core\Repositories\PriorityPackageRepository.cs" />
+    <Compile Include="Core\Repositories\ProgressEventArgs.cs" />
+    <Compile Include="Core\Repositories\SharedPackageRepository.cs" />
+    <Compile Include="Core\Repositories\SmartDataServiceQuery.cs" />
+    <Compile Include="Core\Repositories\UnzippedPackageRepository.cs" />
+    <Compile Include="Core\Resources\AnalysisResources.Designer.cs" />
+    <Compile Include="Core\Resources\NuGetResources.Designer.cs" />
+    <Compile Include="Core\Runtime\AssemblyBinding.cs" />
+    <Compile Include="Core\Runtime\BindingRedirectManager.cs" />
+    <Compile Include="Core\Runtime\BindingRedirectResolver.cs" />
+    <Compile Include="Core\Runtime\IAssembly.cs" />
+    <Compile Include="Core\Runtime\RemoteAssembly.cs" />
+    <Compile Include="Core\SemanticVersion.cs" />
+    <Compile Include="Core\SemanticVersionTypeConverter.cs" />
+    <Compile Include="Core\Server\PackageServer.cs" />
+    <Compile Include="Core\Utility\CredentialResult.cs" />
+    <Compile Include="Core\Utility\CredentialState.cs" />
+    <Compile Include="Core\Utility\CryptoHashProvider.cs" />
+    <Compile Include="Core\Utility\CustomAttributeProviderExtensions.cs" />
+    <Compile Include="Core\Utility\DisposableAction.cs" />
+    <Compile Include="Core\Utility\EncryptionUtility.cs" />
+    <Compile Include="Core\Utility\EnvironmentUtility.cs" />
+    <Compile Include="Core\Utility\ExceptionUtility.cs" />
+    <Compile Include="Core\Utility\FrameworkNameEqualityComparer.cs" />
+    <Compile Include="Core\Utility\HashCodeCombiner.cs" />
+    <Compile Include="Core\Utility\IHashProvider.cs" />
+    <Compile Include="Core\Utility\IProgressProvider.cs" />
+    <Compile Include="Core\Utility\IVersionSpec.cs" />
+    <Compile Include="Core\Utility\MemoryCache.cs" />
+    <Compile Include="Core\Utility\PackageComparer.cs" />
+    <Compile Include="Core\Utility\PackageDownloader.cs" />
+    <Compile Include="Core\Utility\PackageEqualityComparer.cs" />
+    <Compile Include="Core\Utility\PackageHelper.cs" />
+    <Compile Include="Core\Utility\PackageIdValidator.cs" />
+    <Compile Include="Core\Utility\PackageRepositoryHelper.cs" />
+    <Compile Include="Core\Utility\PathUtility.cs" />
+    <Compile Include="Core\Utility\PathValidator.cs" />
+    <Compile Include="Core\Utility\ProjectManagerExtensions.cs" />
+    <Compile Include="Core\Utility\QueryableUtility.cs" />
+    <Compile Include="Core\Utility\ReadOnlyHashSet.cs" />
+    <Compile Include="Core\Utility\Token.cs" />
+    <Compile Include="Core\Utility\TokenCategory.cs" />
+    <Compile Include="Core\Utility\Tokenizer.cs" />
+    <Compile Include="Core\Utility\UriUtility.cs" />
+    <Compile Include="Core\Utility\VersionSpec.cs" />
+    <Compile Include="Core\Utility\VersionUtility.cs" />
+    <Compile Include="Core\Utility\WebRequestEventArgs.cs" />
+    <Compile Include="Core\Utility\XmlUtility.cs" />
+    <Compile Include="Core\V3Interop\IV3InteropRepository.cs" />
+    <Compile Include="Core\V3Interop\IV3PackageMetadata.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Core\Authoring\nuspec.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Core\packages.config" />
+    <None Include="Core\Properties\NuGet.Core.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Core\Resources\AnalysisResources.resx" />
+    <EmbeddedResource Include="Core\Resources\NuGetResources.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>

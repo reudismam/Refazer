@@ -362,7 +362,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             if (!list.Any()) { throw new ArgumentException("Selection list cannot be empty"); }
 
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
-            var l = new List<SyntaxNode>();
+            var syntaxNodeList = new List<SyntaxNode>();
             foreach (TRegion region in list)
             {
                 if (region.Length != 0)
@@ -370,11 +370,11 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     var descendentNodes = ASTManager.NodesBetweenStartAndEndPosition(tree, region.Start,
                         region.Start + region.Length);
                     SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(descendentNodes, tree);
-                    l.Add(lca.AsNode());
+                    syntaxNodeList.Add(lca.AsNode());
                 }
             }
             Dictionary<SyntaxKind, IEnumerable<SyntaxNode>> dicSyntaxNodes = new Dictionary<SyntaxKind, IEnumerable<SyntaxNode>>();
-            foreach (var sn in l)
+            foreach (var sn in syntaxNodeList)
             {
                 IEnumerable<SyntaxNode> value;
                 if (!dicSyntaxNodes.TryGetValue(sn.CSharpKind(), out value))

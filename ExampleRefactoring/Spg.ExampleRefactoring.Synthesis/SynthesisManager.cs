@@ -44,40 +44,40 @@ namespace Spg.ExampleRefactoring.Synthesis
             this.setting = setting;
         }
 
-        /// <summary>
-        /// Create new synthesized program combining current synthesized programs with expressions
-        /// </summary>
-        /// <param name="synthesizedProgramList">Synthesized programs list</param>
-        /// <param name="expressionList">Expression list</param>
-        /// <returns>Synthesized programs list</returns>
-        private static List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList)
-        {
-            List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
-            if (synthesizedProgramList.Count > 0)
-            {
-                foreach (SynthesizedProgram sd1 in synthesizedProgramList)
-                {
-                    foreach (IExpression e2 in expressionList)
-                    {
-                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
-                        SynthesizedProgram sp = new SynthesizedProgram();
-                        sp.Solutions = solutions;
-                        sp.Add(e2);
+        ///// <summary>
+        ///// Create new synthesized program combining current synthesized programs with expressions
+        ///// </summary>
+        ///// <param name="synthesizedProgramList">Synthesized programs list</param>
+        ///// <param name="expressionList">Expression list</param>
+        ///// <returns>Synthesized programs list</returns>
+        //private static List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList)
+        //{
+        //    List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
+        //    if (synthesizedProgramList.Count > 0)
+        //    {
+        //        foreach (SynthesizedProgram sd1 in synthesizedProgramList)
+        //        {
+        //            foreach (IExpression e2 in expressionList)
+        //            {
+        //                List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
+        //                SynthesizedProgram sp = new SynthesizedProgram();
+        //                sp.Solutions = solutions;
+        //                sp.Add(e2);
 
-                        synthesizedProgList.Add(sp);
-                    }
-                }
-                return synthesizedProgList;
-            }
+        //                synthesizedProgList.Add(sp);
+        //            }
+        //        }
+        //        return synthesizedProgList;
+        //    }
 
-            foreach (IExpression expression in expressionList)
-            {
-                SynthesizedProgram sp = new SynthesizedProgram();
-                sp.Add(expression);
-                synthesizedProgList.Add(sp);
-            }
-            return synthesizedProgList;
-        }
+        //    foreach (IExpression expression in expressionList)
+        //    {
+        //        SynthesizedProgram sp = new SynthesizedProgram();
+        //        sp.Add(expression);
+        //        synthesizedProgList.Add(sp);
+        //    }
+        //    return synthesizedProgList;
+        //}
 
         /// <summary>
         /// Create new synthesized program combining current synthesized programs with expressions

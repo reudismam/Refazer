@@ -85,20 +85,16 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>Retrieved regions</returns>
         public List<TRegion> RetrieveRegion(string sourceClass)
         {
-            var result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
+            Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
             if (result.Count == 1)
             {
-                IEnumerable<SyntaxNode> regions = SyntaxNodesMatchingFilter(sourceClass, List);
+                IEnumerable<SyntaxNode> regions = SyntaxNodesForFiltering(sourceClass, List);
                 return RetrieveRegionsBase(regions);
             }
 
-            //var x = Execute(sourceClass);
-            //return null;
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
             IEnumerable<SyntaxNode> descedants = tree.GetRoot().DescendantNodesAndSelf();
             List<TRegion> tregions = RetrieveRegionsBase(descedants);
-
-            //tregions = RegionManager.GroupRegionByStartAndEndPosition(tregions);
             return tregions;
         }
 
@@ -110,15 +106,11 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns></returns>
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
-            IEnumerable<SyntaxNode> nodesForFiltering = SyntaxNodes(syntaxNode.Parent, sourceCode);
-            //IEnumerable<SyntaxNode> regions = syntaxNode.DescendantNodesAndSelf();
-            //var list = regions.ToList();
-            //return RetrieveRegionsBase(regions);
-            var list = nodesForFiltering.ToList();
+            IEnumerable<SyntaxNode> nodesForFiltering = SyntaxNodes(syntaxNode.Parent);
             return RetrieveRegionsBase(nodesForFiltering);
         }
 
-        private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree, string sourceCode)
+        private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree)
         {
             var nodes = from node in tree.DescendantNodesAndSelf()
                                   where WithinLcas(node)
@@ -165,9 +157,6 @@ namespace Spg.LocationRefactor.Operator.Filter
                 tokens = ASTManager.EnumerateSyntaxNodesAndTokens(node, tokens);
                 ListNode lNode = new ListNode(tokens);
 
-                TokenSeq regex = ASTProgram.ConcatenateRegularExpression(Predicate.r1, Predicate.r2);
-
-                //if (ASTManager.IsMatch(lNode, regex))
                 if(Predicate.Evaluate(lNode))
                 {
                     TRegion tRegion = new TRegion();
@@ -184,24 +173,13 @@ namespace Spg.LocationRefactor.Operator.Filter
             return tRegions;
         }
 
-        ///// <summary>
-        ///// Syntax nodes correspondents to selection
-        ///// </summary>
-        ///// <param name="input">Source code.</param>
-        ///// <param name="list">Selection location on source code.</param>
-        ///// <returns>Syntax nodes correspondents to selection on source code</returns>
-        //private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode input, List<TRegion> list)
-        //{
-        //    return input.DescendantNodes(); //simply return descendants nodes
-        //}
-
         /// <summary>
         /// Syntax nodes correspondents to selection
         /// </summary>
         /// <param name="sourceCode">Source code.</param>
         /// <param name="list">Selection location on source code.</param>
         /// <returns>Syntax nodes correspondents to selection on source code</returns>
-        private IEnumerable<SyntaxNode> SyntaxNodesMatchingFilter(string sourceCode, List<TRegion> list)
+        private IEnumerable<SyntaxNode> SyntaxNodesForFiltering(string sourceCode, List<TRegion> list)
         {
             List<SyntaxNode> nodes = RegionManager.SyntaxNodesForFiltering(sourceCode, list);
             return nodes;
@@ -210,14 +188,14 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <summary>
         /// Syntax nodes
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">Source code</param>
+        /// <returns>Syntax nodes</returns>
         protected abstract IEnumerable<SyntaxNode> SyntaxNodes(string input);
 
         /// <summary>
         /// Filter learner
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Filter learn base</returns>
         protected abstract FilterLearnerBase GetFilterLearner(List<TRegion> list);
 
     }

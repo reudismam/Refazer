@@ -549,6 +549,13 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             return regions;
         }
 
+        /// <summary>
+        /// Retrieve location
+        /// </summary>
+        /// <param name="lca">Least common ancestor</param>
+        /// <param name="sourceCode">Source code</param>
+        /// <param name="prog">Program</param>
+        /// <returns>Locations</returns>
         private List<TRegion> RetrieveLocations(SyntaxNode lca, string sourceCode, Prog prog)
         {
             LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
