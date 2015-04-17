@@ -103,7 +103,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// </summary>
         /// <param name="syntaxNode">Syntax node</param>
         /// <param name="sourceCode">Source code</param>
-        /// <returns></returns>
+        /// <returns>List of regions</returns>
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
             IEnumerable<SyntaxNode> nodesForFiltering = SyntaxNodes(syntaxNode.Parent);
@@ -116,15 +116,6 @@ namespace Spg.LocationRefactor.Operator.Filter
                                   where WithinLcas(node)
                                   select node;
             return nodes;
-            //List<SyntaxNode> lcas = RegionManager.LeastCommonAncestors(sourceCode, List);
-
-            //List<SyntaxNode> nodes = new List<SyntaxNode>();
-            //foreach (var lca in lcas)
-            //{
-            //    nodes.AddRange(ASTManager.NodesWithTheSameSyntaxKind(syntaxNode, lca.CSharpKind()));
-            //}
-
-            //return nodes;
         }
 
         private bool WithinLcas(SyntaxNode node)

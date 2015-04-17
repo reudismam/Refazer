@@ -152,8 +152,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
             {
                 throw new Exception("Input or SubNodes or Comparer cannot be null");
             }
-            List<int> matches = new List<int>();
-            matches = comparer.Matches(input, subNodes);
+            List<int> matches = comparer.Matches(input, subNodes);
 
             return matches;
         }
@@ -167,9 +166,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Matches start index</returns>
         public static List<Tuple<int, ListNode>> Matches(ListNode input, TokenSeq regex, RegexComparer comparer)
         {
-            List<Tuple<int, ListNode>> matches = new List<Tuple<int, ListNode>>();
-            matches = comparer.Matches(input, regex);
-
+            List<Tuple<int, ListNode>> matches = comparer.Matches(input, regex);
             return matches;
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
@@ -177,7 +178,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// </summary>
         public void Extract()
         {
-            LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
+            //LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
+            LocationExtractor extractor = new LocationExtractor();
             //remove
             JsonUtil<List<TRegion>>.Write(SelectedLocations, "input_selection.json");
             //remove
@@ -190,7 +192,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
 
         public void Extract(List<TRegion> positives, List<TRegion> negatives)
         {
-            LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
+            LocationExtractor extractor = new LocationExtractor();
             ProgramsWithNegatives = extractor.Extract(positives, negatives);
 
             //Progs = RecomputeWithNegativeLocations();
@@ -199,7 +201,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         }
 
         /// <summary>
-        /// Analise locations
+        /// Analize locations
         /// </summary>
         /// <returns>Location programs</returns>
         private List<Prog> RecomputeWithNegativeLocations()
@@ -247,7 +249,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             {
                 return Progs;
             }
-            LocationExtractor extrator = new LocationExtractor(this.ProjectInformation.SolutionPath);
+            LocationExtractor extrator = new LocationExtractor();
 
             var withNegatives = extrator.Extract(SelectedLocations, negativesExamples);
 
@@ -481,17 +483,17 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog, List<Tuple<string, string>> sourceFiles, string program)
         {
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
-            
             Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
-
-            var groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
+            Dictionary<string, List<TRegion>> groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
            
             List<SyntaxNode> lcas = new List<SyntaxNode>();
-            foreach (var item in groups)
+            foreach (KeyValuePair<string, List<TRegion>> item in groups)
             {
                 var result = RegionManager.SyntaxNodesForFiltering(item.Key, item.Value);
                 lcas.AddRange(result);
+                //var result = ASTManager.
             }
+
             foreach (Tuple<string, string> source in sourceFiles)
             {
                 List<TRegion> regions = RetrieveLocations(source.Item1, prog);
@@ -544,7 +546,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// <param name="prog">Location program</param>
         public List<TRegion> RetrieveLocations(string sourceCode, Prog prog)
         {
-            LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
+            LocationExtractor extractor = new LocationExtractor();
             List<TRegion> regions = extractor.RetrieveString(prog, sourceCode);
             return regions;
         }
@@ -558,7 +560,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// <returns>Locations</returns>
         private List<TRegion> RetrieveLocations(SyntaxNode lca, string sourceCode, Prog prog)
         {
-            LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
+            LocationExtractor extractor = new LocationExtractor();
             List<TRegion> regions = extractor.RetrieveString(prog, sourceCode, lca);
             return regions;
         }
@@ -670,7 +672,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         {
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             FillEditedLocations();
-            LocationExtractor extractor = new LocationExtractor(this.ProjectInformation.SolutionPath);
+            LocationExtractor extractor = new LocationExtractor();
             List<Transformation> transformations = extractor.TransformProgram(false);
             SourceTransformations = transformations;
 
