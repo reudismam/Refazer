@@ -489,9 +489,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             List<SyntaxNode> lcas = new List<SyntaxNode>();
             foreach (KeyValuePair<string, List<TRegion>> item in groups)
             {
-                var result = RegionManager.SyntaxNodesForFiltering(item.Key, item.Value);
+                var result = RegionManager.LeastCommonAncestors(item.Key, item.Value);
                 lcas.AddRange(result);
-                //var result = ASTManager.
             }
 
             foreach (Tuple<string, string> source in sourceFiles)

@@ -177,22 +177,22 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
             return lca;
         }
 
-        ///// <summary>
-        ///// Least common ancestor of elements between start and end.
-        ///// </summary>
-        ///// <param name="tree">Syntax tree</param>
-        ///// <param name="start">Start</param>
-        ///// <param name="end">End</param>
-        ///// <returns>Least common ancestor of elements between start and end.</returns>
-        //public static SyntaxNode LeastCommonAncestor(SyntaxTree tree, int start, int end)
-        //{
-        //    List<SyntaxNodeOrToken> nodesSelection = ASTManager.NodesBetweenStartAndEndPosition(tree, start, end);
+        /// <summary>
+        /// Least common ancestor of elements between start and end.
+        /// </summary>
+        /// <param name="tree">Syntax tree</param>
+        /// <param name="start">Start</param>
+        /// <param name="end">End</param>
+        /// <returns>Least common ancestor of elements between start and end.</returns>
+        public static SyntaxNode LeastCommonAncestor(SyntaxTree tree, int start, int end)
+        {
+            List<SyntaxNodeOrToken> nodesSelection = ASTManager.NodesBetweenStartAndEndPosition(tree, start, end);
 
-        //    SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(nodesSelection, tree);
-        //    SyntaxNode snode = lca.AsNode();
+            SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(nodesSelection, tree);
+            SyntaxNode snode = lca.AsNode();
 
-        //    return snode;
-        //}
+            return snode;
+        }
 
         ///// <summary>
         ///// Least common ancestors 
