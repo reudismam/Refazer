@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -133,7 +133,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                 if (project.Name.Equals(projectName))
                 {
                     var compilation = project.GetCompilationAsync().Result;
-                
+
                     foreach (var documentId in project.DocumentIds)
                     {
                         var document = solution.GetDocument(documentId);
@@ -164,6 +164,77 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             return null;
         }
 
+
+        /// <summary>
+        /// Get fully qualified name of a node
+        /// </summary>
+        /// <param name="projectName">Project name</param>
+        /// <param name="solutionPath">Solution path</param>
+        /// <param name="node">Node to be analyzed</param>
+        /// <param name="name">Name of the identifier</param>
+        /// <returns>Fully qualified name of the node</returns>
+        public string GetDeclaredReferences(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
+        {
+            //Tuple<LCAManager.Node, string> tuple = Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
+            //    node.SyntaxTree.GetText().ToString());
+            //if (_dictionary.ContainsKey(tuple))
+            //{
+            //    return _dictionary[tuple];
+            //}
+            var workspace = MSBuildWorkspace.Create();
+            var solution = workspace.OpenSolutionAsync(solutionPath).Result;
+
+            var originalSolution = workspace.CurrentSolution;
+
+            Solution newSolution = originalSolution;
+            var r = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
+
+            MessageBox.Show(r.Count() + "");
+            foreach (var projectId in originalSolution.ProjectIds)
+            {
+                var project = newSolution.GetProject(projectId);
+                if (project.Name.Equals(projectName))
+                {
+                    var result = SymbolFinder.FindDeclarationsAsync(project, name, false);
+                    var list = result.Result.ToList();
+                    //MessageBox.Show(list.Count + "");
+                    foreach (var item in list)
+                    {
+                        var metadata = item.MetadataName;
+                        Console.WriteLine(metadata);
+                    }
+                    Console.Write("");
+                    var compilation = project.GetCompilationAsync().Result;
+
+                    foreach (var documentId in project.DocumentIds)
+                    {
+                        var document = solution.GetDocument(documentId);
+
+                        SyntaxTree tree;
+                        document.TryGetSyntaxTree(out tree);
+                        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+                        {
+                            document.TryGetSyntaxTree(out tree);
+                            SemanticModel model2 = compilation.GetSemanticModel(tree);
+                            //SymbolFinder.
+
+                            foreach (ISymbol symbol in model2.LookupSymbols(0))
+                            {
+                                if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
+                                {
+                                    var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
+                                    //                           var rlts = symbol.DeclaringSyntaxReferences;
+                                    //_dictionary.Add(tuple, symbol.ToDisplayString());
+                                    return symbol.ToDisplayString();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //_dictionary.Add(tuple, null);
+            return null;
+        }
         //public string GetSemanticModel(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
         //{
         //    Tuple<LCAManager.Node, string> tuple = Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),

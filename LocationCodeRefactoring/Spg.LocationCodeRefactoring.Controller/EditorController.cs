@@ -177,17 +177,38 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         /// </summary>
         public void Extract()
         {
+            var list = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
+            
+            if (list.Count == 1)
+            {
+                Progs = ExtractSingleFile();
+            }
+            else
+            {
+                LocationExtractor extractor = new LocationExtractor();
+                Progs = extractor.Extract(SelectedLocations);
+            }
             Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
             //LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
-            LocationExtractor extractor = new LocationExtractor();
+            //LocationExtractor extractor = new LocationExtractor();
             //remove
             JsonUtil<List<TRegion>>.Write(SelectedLocations, "input_selection.json");
             //remove
-            Progs = extractor.Extract(SelectedLocations);
+            //Progs = extractor.Extract(SelectedLocations);
 
-            Progs = RecomputeWithNegativeLocations();
+            //Progs = RecomputeWithNegativeLocations();
 
             NotifyLocationProgramGeneratedObservers(Progs);
+        }
+
+        private List<Prog> ExtractSingleFile()
+        {
+            Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
+            //LocationExtractor extractor = new LocationExtractor(ProjectInformation.SolutionPath);
+            LocationExtractor extractor = new LocationExtractor();
+            Progs = extractor.Extract(SelectedLocations);
+            Progs = RecomputeWithNegativeLocations();
+            return Progs;
         }
 
         public void Extract(List<TRegion> positives, List<TRegion> negatives)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
@@ -13,6 +14,7 @@ using Microsoft.CodeAnalysis.Text;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
+using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Operator.Filter
 {
@@ -86,15 +88,9 @@ namespace Spg.LocationRefactor.Operator.Filter
         public List<TRegion> RetrieveRegion(string sourceClass)
         {
             Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
-            if(result.Count == 1) throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
-            //if (result.Count == 1)
-            //{
-            //    throw new Exception("The code could not go here.");
-            //    IEnumerable<SyntaxNode> regions = SyntaxNodesForFiltering(sourceClass, List);
-            //    return RetrieveRegionsBase(regions);
-            //}
+            if (result.Count == 1) throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
+
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
-            //IEnumerable<SyntaxNode> descedants = tree.GetRoot().DescendantNodesAndSelf();
             IEnumerable<SyntaxNode> descedants = SyntaxNodes(tree.GetRoot());
             List<TRegion> tregions = RetrieveRegionsBase(descedants);
             return tregions;
@@ -112,12 +108,59 @@ namespace Spg.LocationRefactor.Operator.Filter
             return RetrieveRegionsBase(nodesForFiltering);
         }
 
+        ///// <summary>
+        ///// Syntax nodes to be used on filtering
+        ///// </summary>
+        ///// <param name="tree">Source code tree</param>
+        ///// <returns>Syntax nodes to be used on filtering</returns>
+        //private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree)
+        //{
+        //    var nodes = from node in tree.DescendantNodesAndSelf()
+        //                          where WithinLcas(node)
+        //                          select node;
+        //    return nodes;
+        //}
+
+        /// <summary>
+        /// Syntax nodes to be used on filtering
+        /// </summary>
+        /// <param name="tree">Source code tree</param>
+        /// <returns>Syntax nodes to be used on filtering</returns>
         private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree)
         {
             var nodes = from node in tree.DescendantNodesAndSelf()
-                                  where WithinLcas(node)
-                                  select node;
+                        where WithinLcas(node)
+                        select node;
             return nodes;
+            //string name = null;
+            //foreach (var token in Predicate.r1.Regex())
+            //{
+            //    if (token is DymToken)
+            //    {
+            //        name = token.token.ToString();
+            //        break;
+            //    }
+            //}
+
+            //if (name == null)
+            //{
+            //    foreach (var token in Predicate.r2.Regex())
+            //    {
+            //        if (token is DymToken)
+            //        {
+            //            name = token.token.ToString();
+            //            break;
+            //        }
+            //    }
+            //}
+
+            //EditorController controller = EditorController.GetInstance();
+            //WorkspaceManager.GetInstance()
+            //    .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
+            //        controller.ProjectInformation.SolutionPath, tree, name);
+
+
+            //return null;
         }
 
         private bool WithinLcas(SyntaxNode node)
