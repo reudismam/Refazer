@@ -580,6 +580,26 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return slist;
         }
 
+        /// <summary>
+        /// Least common ancestors
+        /// </summary>
+        /// <param name="sourceCode">Source code</param>
+        /// <param name="regions">Region list</param>
+        /// <returns>Least common ancestor of each region</returns>
+        public static List<SyntaxNode> LeastCommonAncestors(List<TRegion> regions)
+        {
+            var sourceFiles = RegionManager.GetInstance().GroupRegionBySourceFile(regions);
+            List<SyntaxNode> slist = new List<SyntaxNode>();
+            foreach (var sourceCode in sourceFiles)
+            {
+                foreach (var region in sourceCode.Value)
+                {
+                    slist.Add(LeastCommonAncestor(sourceCode.Key, region));
+                }
+            }
+            return slist;
+        }
+
         //public static List<TRegion> GroupRegionByStartAndEndPosition(List<TRegion> tregions)
         //{
         //    Dictionary<Tuple<int, int>, TRegion> dic = new Dictionary<Tuple<int, int>, TRegion>();
@@ -600,29 +620,29 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         //    return dic.Values.ToList();
         //}
 
-       // /// <summary>
-       // /// Return regions that have at least one of the syntax kind listed on syntaxKinds
-       // /// </summary>
-       // /// <param name="regions">Collection of regions</param>
-       // /// <param name="syntaxKinds">Syntax kinds</param>
-       // /// <returns>Regions that have at least one of the syntax kind listed on syntaxKinds</returns>
-       // internal static List<TRegion> RegionsThatHaveOneOfTheSyntaxKind(List<TRegion> regions, List<SyntaxNode> syntaxKinds)
-       // {
-       //     List<TRegion> list = new List<TRegion>();
-       //     foreach (var region in regions)
-       //     {
-       //         foreach (var node in syntaxKinds)
-       //         {
-       //             if (region.Node.IsKind(node.CSharpKind()))
-       //             {
-       //                 list.Add(region);
-       //                 break;
-       //             }
-       //         }
-       //     }
-       //     list = NonDuplicateRegions(list);
-       //     return list;
-       //}
+        // /// <summary>
+        // /// Return regions that have at least one of the syntax kind listed on syntaxKinds
+        // /// </summary>
+        // /// <param name="regions">Collection of regions</param>
+        // /// <param name="syntaxKinds">Syntax kinds</param>
+        // /// <returns>Regions that have at least one of the syntax kind listed on syntaxKinds</returns>
+        // internal static List<TRegion> RegionsThatHaveOneOfTheSyntaxKind(List<TRegion> regions, List<SyntaxNode> syntaxKinds)
+        // {
+        //     List<TRegion> list = new List<TRegion>();
+        //     foreach (var region in regions)
+        //     {
+        //         foreach (var node in syntaxKinds)
+        //         {
+        //             if (region.Node.IsKind(node.CSharpKind()))
+        //             {
+        //                 list.Add(region);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     list = NonDuplicateRegions(list);
+        //     return list;
+        //}
 
         //private static List<TRegion> NonDuplicateRegions(List<TRegion> regions)
         //{

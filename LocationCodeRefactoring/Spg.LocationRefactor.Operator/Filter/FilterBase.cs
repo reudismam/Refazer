@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
@@ -14,7 +13,6 @@ using Microsoft.CodeAnalysis.Text;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
-using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Operator.Filter
 {
