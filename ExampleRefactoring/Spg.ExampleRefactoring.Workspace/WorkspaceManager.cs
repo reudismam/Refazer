@@ -7,6 +7,7 @@ using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.CodeAnalysis.Text;
 
 namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
 {
@@ -170,71 +171,39 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         /// </summary>
         /// <param name="projectName">Project name</param>
         /// <param name="solutionPath">Solution path</param>
-        /// <param name="node">Node to be analyzed</param>
         /// <param name="name">Name of the identifier</param>
         /// <returns>Fully qualified name of the node</returns>
-        public string GetDeclaredReferences(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
+        public Dictionary<string, Dictionary<string, List<TextSpan>>> GetDeclaredReferences(string projectName, string solutionPath, string name)
         {
-            //Tuple<LCAManager.Node, string> tuple = Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
-            //    node.SyntaxTree.GetText().ToString());
-            //if (_dictionary.ContainsKey(tuple))
-            //{
-            //    return _dictionary[tuple];
-            //}
+            var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
-            var originalSolution = workspace.CurrentSolution;
-
-            Solution newSolution = originalSolution;
-            var r = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
-
-            MessageBox.Show(r.Count() + "");
-            foreach (var projectId in originalSolution.ProjectIds)
+            var sourceDeclarations = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
+            foreach (var sourceDeclaration in sourceDeclarations)
             {
-                var project = newSolution.GetProject(projectId);
-                if (project.Name.Equals(projectName))
+                var references = SymbolFinder.FindCallersAsync(sourceDeclaration, solution).Result;
+                var spansDictionary = new Dictionary<string, List<TextSpan>>();
+                foreach (var reference in references)
                 {
-                    var result = SymbolFinder.FindDeclarationsAsync(project, name, false);
-                    var list = result.Result.ToList();
-                    //MessageBox.Show(list.Count + "");
-                    foreach (var item in list)
+                    SyntaxTree tree = reference.Locations.First().SourceTree;
+                    List<TextSpan> value;
+                    if (!spansDictionary.TryGetValue(tree.FilePath, out value))
                     {
-                        var metadata = item.MetadataName;
-                        Console.WriteLine(metadata);
+                        value = new List<TextSpan>();
+                        spansDictionary.Add(tree.FilePath, value);
                     }
-                    Console.Write("");
-                    var compilation = project.GetCompilationAsync().Result;
-
-                    foreach (var documentId in project.DocumentIds)
+                    foreach (var location in reference.Locations)
                     {
-                        var document = solution.GetDocument(documentId);
-
-                        SyntaxTree tree;
-                        document.TryGetSyntaxTree(out tree);
-                        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
-                        {
-                            document.TryGetSyntaxTree(out tree);
-                            SemanticModel model2 = compilation.GetSemanticModel(tree);
-                            //SymbolFinder.
-
-                            foreach (ISymbol symbol in model2.LookupSymbols(0))
-                            {
-                                if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
-                                {
-                                    var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
-                                    //                           var rlts = symbol.DeclaringSyntaxReferences;
-                                    //_dictionary.Add(tuple, symbol.ToDisplayString());
-                                    return symbol.ToDisplayString();
-                                }
-                            }
-                        }
+                        value.Add(location.SourceSpan);
                     }
+                    
                 }
+                referenceDictionary.Add(sourceDeclaration.ToDisplayString(), spansDictionary);
             }
-            //_dictionary.Add(tuple, null);
-            return null;
+            return referenceDictionary;
         }
+
         //public string GetSemanticModel(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
         //{
         //    Tuple<LCAManager.Node, string> tuple = Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
@@ -332,35 +301,35 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             return sourceFiles;
         }
 
-        private static void ReportMethods(INamespaceSymbol namespaceSymbol)
-        {
-            foreach (var type in namespaceSymbol.GetTypeMembers())
-            {
-                ReportMethods(type);
-            }
+        //private static void ReportMethods(INamespaceSymbol namespaceSymbol)
+        //{
+        //    foreach (var type in namespaceSymbol.GetTypeMembers())
+        //    {
+        //        ReportMethods(type);
+        //    }
 
-            foreach (var childNs in namespaceSymbol.GetNamespaceMembers())
-            {
-                ReportMethods(childNs);
-            }
-        }
+        //    foreach (var childNs in namespaceSymbol.GetNamespaceMembers())
+        //    {
+        //        ReportMethods(childNs);
+        //    }
+        //}
 
-        private static void ReportMethods(INamedTypeSymbol type)
-        {
-            foreach (var member in type.GetMembers())
-            {
-                Console.WriteLine("Found {0}", member.ToDisplayString());
-                if (member.CanBeReferencedByName &&
-                    member.Name.Contains("a"))
-                {
-                    Console.WriteLine("Found {0}", member.ToDisplayString());
-                }
-            }
+        //private static void ReportMethods(INamedTypeSymbol type)
+        //{
+        //    foreach (var member in type.GetMembers())
+        //    {
+        //        Console.WriteLine("Found {0}", member.ToDisplayString());
+        //        if (member.CanBeReferencedByName &&
+        //            member.Name.Contains("a"))
+        //        {
+        //            Console.WriteLine("Found {0}", member.ToDisplayString());
+        //        }
+        //    }
 
-            foreach (var nested in type.GetTypeMembers())
-            {
-                ReportMethods(nested);
-            }
-        }
+        //    foreach (var nested in type.GetTypeMembers())
+        //    {
+        //        ReportMethods(nested);
+        //    }
+        //}
     }
 }

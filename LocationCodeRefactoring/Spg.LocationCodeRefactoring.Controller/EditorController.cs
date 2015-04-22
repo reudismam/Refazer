@@ -186,7 +186,11 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             //remove
             Progs = extractor.Extract(SelectedLocations);
 
-            Progs = RecomputeWithNegativeLocations();
+            var result = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
+            if (result.Count == 1)
+            {
+                Progs = RecomputeWithNegativeLocations();
+            }
 
             NotifyLocationProgramGeneratedObservers(Progs);
         }

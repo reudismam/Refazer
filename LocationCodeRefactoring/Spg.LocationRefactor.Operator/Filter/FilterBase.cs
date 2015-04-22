@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
@@ -13,6 +16,7 @@ using Microsoft.CodeAnalysis.Text;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
+using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Operator.Filter
 {
@@ -126,39 +130,114 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>Syntax nodes to be used on filtering</returns>
         private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree)
         {
-            var nodes = from node in tree.DescendantNodesAndSelf()
-                        where WithinLcas(node)
-                        select node;
-            return nodes;
-            //string name = null;
-            //foreach (var token in Predicate.r1.Regex())
+            //var nodes = from node in tree.DescendantNodesAndSelf()
+            //            where WithinLcas(node)
+            //            select node;
+            //return nodes;
+            string name = GetIdentifierName();
+
+            EditorController controller = EditorController.GetInstance();
+            Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
+                .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
+                    controller.ProjectInformation.SolutionPath, name);
+            var referencedSymbols = GroupReferenceBySelection(result, controller.SelectedLocations);
+
+            List<SyntaxNode> nodesList = new List<SyntaxNode>();
+            if (referencedSymbols.Count == 1)
+            {
+                Dictionary<string, List<TextSpan>> dictionary = referencedSymbols.First().Value;
+                //for each file
+                foreach (var fileSpans in dictionary)
+                {
+                    SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
+                    var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
+                                where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
+                                select node;
+                    nodesList.AddRange(nodes);
+                }
+            }
+
+            return nodesList;
+
+        }
+
+        private bool WithinSpans(SyntaxNode node, List<TextSpan> value)
+        {
+            foreach (var entry in value)
+            {
+                if (node.Span.IntersectsWith(entry)) {return true;}
+            }
+            return false;
+        }
+
+        private Dictionary<string, Dictionary<string, List<TextSpan>>> GroupReferenceBySelection(Dictionary<string, Dictionary<string, List<TextSpan>>> dictionary, List<TRegion> selection)
+        {
+            Dictionary<string, Dictionary<string, List<TextSpan>>> result = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
+            //foreach (var region in selection)
             //{
-            //    if (token is DymToken)
-            //    {
-            //        name = token.token.ToString();
-            //        break;
-            //    }
+                foreach (var dictReferences in dictionary)
+                {
+                    foreach (var region in selection)
+                    {
+                        if (dictReferences.Value.ContainsKey(Path.GetFullPath(region.Path)))
+                        {
+                            foreach (TextSpan span in dictReferences.Value[Path.GetFullPath(region.Path)])
+                            {
+                                TRegion spanRegion = new TRegion();
+                                spanRegion.Start = span.Start;
+                                spanRegion.Length = span.Length;
+
+                                if (region.IntersectWith(spanRegion))
+                                {
+                                    result.Add(dictReferences.Key, dictReferences.Value);
+                                }
+                            }
+                        }
+                    }
+                    //if (dictReferences.Value.ContainsKey(region.Path))
+                    //{
+                    //    foreach (var dicSpan in dictReferences.Value)
+                    //    {
+                    //        foreach (var entry in dicSpan.Value)
+                    //        {
+                    //            if (region.Node.Span.IntersectsWith(entry))
+                    //            {
+                    //                result.Add(dictReferences.Key, dicSpan.Value);
+                    //            }
+                    //        }
+                            
+                    //    }
+                    //}
+                }
             //}
 
-            //if (name == null)
-            //{
-            //    foreach (var token in Predicate.r2.Regex())
-            //    {
-            //        if (token is DymToken)
-            //        {
-            //            name = token.token.ToString();
-            //            break;
-            //        }
-            //    }
-            //}
+            return result;
+        }
 
-            //EditorController controller = EditorController.GetInstance();
-            //WorkspaceManager.GetInstance()
-            //    .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
-            //        controller.ProjectInformation.SolutionPath, tree, name);
+        private string GetIdentifierName()
+        {
+            string name = null;
+            foreach (var token in Predicate.r1.Regex())
+            {
+                if (token is DymToken)
+                {
+                    name = token.token.ToString();
+                    break;
+                }
+            }
 
-
-            //return null;
+            if (name == null)
+            {
+                foreach (var token in Predicate.r2.Regex())
+                {
+                    if (token is DymToken)
+                    {
+                        name = token.token.ToString();
+                        break;
+                    }
+                }
+            }
+            return name;
         }
 
         private bool WithinLcas(SyntaxNode node)
@@ -189,7 +268,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                 tokens = ASTManager.EnumerateSyntaxNodesAndTokens(node, tokens);
                 ListNode lNode = new ListNode(tokens);
 
-                if(Predicate.Evaluate(lNode))
+                if (Predicate.Evaluate(lNode))
                 {
                     TRegion tRegion = new TRegion();
 
