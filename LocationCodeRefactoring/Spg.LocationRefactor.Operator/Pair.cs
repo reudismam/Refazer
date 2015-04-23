@@ -105,6 +105,11 @@ namespace Spg.LocationRefactor.Operator
             return tRegions;
         }
 
+        public List<TRegion> RetrieveRegion()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
             List<TRegion> tRegions = new List<TRegion>();

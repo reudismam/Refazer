@@ -118,6 +118,18 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
 
         /// <summary>
+        /// Retrieve the list of region in input
+        /// </summary>
+        /// <param name="program">Program</param>
+        /// <param name="input">Input</param>
+        /// <returns>Regions list</returns>
+        public List<TRegion> RetrieveString(Prog program)
+        {
+            List<TRegion> regions = program.RetrieveString();
+            return regions;
+        }
+
+        /// <summary>
         /// Retrieve the list of regions on input node
         /// </summary>
         /// <param name="program">Synthesis program</param>

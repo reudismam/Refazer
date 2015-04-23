@@ -39,6 +39,16 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Program
             return Ioperator.RetrieveRegion(input);
         }
 
+        /// <summary>
+        /// Retrieve region
+        /// </summary>
+        /// <param name="input">Source code</param>
+        /// <returns>Region result</returns>
+        public List<TRegion> RetrieveString()
+        {
+            return Ioperator.RetrieveRegion();
+        }
+
         internal List<TRegion> RetrieveString(SyntaxNode input, string sourceCode)
         {
             return Ioperator.RetrieveRegion(input, sourceCode);

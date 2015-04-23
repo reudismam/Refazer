@@ -1,18 +1,15 @@
-﻿using Microsoft.CodeAnalysis.Text;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
-using Spg.LocationRefactor.TextRegion;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
-using Spg.LocationRefactor.Operator.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using Microsoft.CodeAnalysis.Text;
+using Spg.ExampleRefactoring.Comparator;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Position;
+using Spg.LocationRefactor.Operator.Filter;
+using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator
 {
@@ -36,7 +33,7 @@ namespace Spg.LocationRefactor.Operator
         {
             List<TRegion> tRegions = new List<TRegion>();
 
-            Tuple<String, String> t = Tuple.Create(sourceCode, sourceCode);
+            Tuple<string, string> t = Tuple.Create(sourceCode, sourceCode);
             Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
             ListNode input = lNode.Item1;
 

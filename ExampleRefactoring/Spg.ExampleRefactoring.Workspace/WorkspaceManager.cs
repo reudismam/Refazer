@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -179,25 +180,49 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
-            var sourceDeclarations = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
-            foreach (var sourceDeclaration in sourceDeclarations)
+            Project project = null;
+            foreach (var projectId in solution.ProjectIds)
             {
-                var references = SymbolFinder.FindCallersAsync(sourceDeclaration, solution).Result;
-                var spansDictionary = new Dictionary<string, List<TextSpan>>();
-                foreach (var reference in references)
+                project = solution.GetProject(projectId);
+            }
+
+            var sourceDeclarations = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
+
+            foreach (ISymbol sourceDeclaration in sourceDeclarations)
+            {
+                //IEnumerable<SymbolCallerInfo> references = SymbolFinder.FindCallersAsync(sourceDeclaration, solution).Result;
+
+                IEnumerable<ReferencedSymbol> references = SymbolFinder.FindReferencesAsync(sourceDeclaration, solution).Result;
+
+                List<ReferencedSymbol> referencedList = references.ToList();
+
+                /*foreach (var item2 in references2)
                 {
-                    SyntaxTree tree = reference.Locations.First().SourceTree;
-                    List<TextSpan> value;
-                    if (!spansDictionary.TryGetValue(tree.FilePath, out value))
+                    //MessageBox.Show(item2.Locations.First().Document.GetTextAsync().Result.ToString());
+                    foreach (var location2 in item2.Locations)
                     {
-                        value = new List<TextSpan>();
-                        spansDictionary.Add(tree.FilePath, value);
+                        MessageBox.Show(location2.Document.GetTextAsync().Result.GetSubText(location2.Location.SourceSpan).ToString());
                     }
-                    foreach (var location in reference.Locations)
+                }*/
+
+                MessageBox.Show(references.Count() + "");
+
+                var spansDictionary = new Dictionary<string, List<TextSpan>>();
+                foreach (ReferencedSymbol reference in references)
+                {
+                    foreach (ReferenceLocation location in reference.Locations)
                     {
-                        value.Add(location.SourceSpan);
+                        SyntaxTree tree = location.Document.GetSyntaxTreeAsync().Result;
+                        List<TextSpan> value;
+                        if (!spansDictionary.TryGetValue(tree.FilePath, out value))
+                        {
+                            value = new List<TextSpan>();
+                            spansDictionary.Add(tree.FilePath, value);
+                        }
+
+                        value.Add(location.Location.SourceSpan);
                     }
-                    
+
                 }
                 referenceDictionary.Add(sourceDeclaration.ToDisplayString(), spansDictionary);
             }

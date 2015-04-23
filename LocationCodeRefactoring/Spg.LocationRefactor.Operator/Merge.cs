@@ -39,7 +39,8 @@ namespace Spg.LocationRefactor.Operator
         public List<MapBase> maps { get; set; }
 
 
-        public Merge(List<MapBase> maps) {
+        public Merge(List<MapBase> maps)
+        {
             this.maps = maps;
         }
 
@@ -94,7 +95,7 @@ namespace Spg.LocationRefactor.Operator
             SynthesizedProgram synt = new SynthesizedProgram();
             foreach (MapBase map in maps)
             {
-                Pair pair = (Pair) map.ScalarExpression.Ioperator;
+                Pair pair = (Pair)map.ScalarExpression.Ioperator;
                 synt.Add(pair.expression);
             }
 
@@ -107,8 +108,9 @@ namespace Spg.LocationRefactor.Operator
 
                 ListNode lnode = ASTProgram.RetrieveNodes(tnodes, synt.Solutions);
 
-                List<int> matches= ASTManager.Matches(tnodes.Item1, lnode, new NodeComparer());
-                if (matches.Count == 1) {
+                List<int> matches = ASTManager.Matches(tnodes.Item1, lnode, new NodeComparer());
+                if (matches.Count == 1)
+                {
                     lnode = ASTManager.SubNotes(tnodes.Item1, matches[0], lnode.Length());
                 }
 
@@ -153,6 +155,11 @@ namespace Spg.LocationRefactor.Operator
         }
 
         public List<TRegion> RetrieveRegion(SyntaxNode input, string sourceCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TRegion> RetrieveRegion()
         {
             throw new NotImplementedException();
         }

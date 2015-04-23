@@ -32,14 +32,14 @@ namespace Spg.LocationRefactor.Operator
             return new StatementFilterLearner(list);
         }
 
-        /// <summary>
-        /// Syntax nodes
-        /// </summary>
-        /// <param name="sourceCode">Source code</param>
-        /// <returns>Syntax nodes</returns>
-        protected override IEnumerable<SyntaxNode> SyntaxNodes(string sourceCode)
-        {
-            return RegionManager.SyntaxNodesForFiltering(sourceCode, List);
-        }
+        ///// <summary>
+        ///// Syntax nodes
+        ///// </summary>
+        ///// <param name="sourceCode">Source code</param>
+        ///// <returns>Syntax nodes</returns>
+        //protected override IEnumerable<SyntaxNode> SyntaxNodes(string sourceCode)
+        //{
+        //    return RegionManager.SyntaxNodesForFiltering(sourceCode, List);
+        //}
     }
 }

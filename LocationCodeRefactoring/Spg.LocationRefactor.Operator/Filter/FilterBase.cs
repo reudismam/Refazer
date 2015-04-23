@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
@@ -25,18 +23,24 @@ namespace Spg.LocationRefactor.Operator.Filter
     /// </summary>
     public abstract class FilterBase : IOperator
     {
+        /// <summary>
+        /// Predicate
+        /// </summary>
+        /// <returns>Predicate</returns>
         public IPredicate Predicate { get; set; }
 
+        /// <summary>
+        /// Region list
+        /// </summary>
         public List<TRegion> List;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="list"></param>
         protected FilterBase(List<TRegion> list)
         {
             this.List = list;
-        }
-
-        public override string ToString()
-        {
-            return Predicate.ToString();
         }
 
         /// <summary>
@@ -99,6 +103,21 @@ namespace Spg.LocationRefactor.Operator.Filter
         }
 
         /// <summary>
+        /// Retrieve regions
+        /// </summary>
+        /// <returns>Retrieved regions</returns>
+        public List<TRegion> RetrieveRegion()
+        {
+            Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
+            if (result.Count == 1) throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
+
+            //SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
+            IEnumerable<SyntaxNode> descedants = SyntaxNodes();
+            List<TRegion> tregions = RetrieveRegionsBase(descedants);
+            return tregions;
+        }
+
+        /// <summary>
         /// Retrieve region given a syntax node
         /// </summary>
         /// <param name="syntaxNode">Syntax node</param>
@@ -129,18 +148,16 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <param name="tree">Source code tree</param>
         /// <returns>Syntax nodes to be used on filtering</returns>
         private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree)
-        {
-            //var nodes = from node in tree.DescendantNodesAndSelf()
-            //            where WithinLcas(node)
-            //            select node;
-            //return nodes;
+        { 
             string name = GetIdentifierName();
+
+            if (name == null) return SyntaxNodesWithoutSemanticModel(tree);
 
             EditorController controller = EditorController.GetInstance();
             Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
                 .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
                     controller.ProjectInformation.SolutionPath, name);
-            var referencedSymbols = GroupReferenceBySelection(result, controller.SelectedLocations);
+            var referencedSymbols = RegionManager.GroupReferenceBySelection(result, controller.SelectedLocations);
 
             List<SyntaxNode> nodesList = new List<SyntaxNode>();
             if (referencedSymbols.Count == 1)
@@ -157,8 +174,52 @@ namespace Spg.LocationRefactor.Operator.Filter
                 }
             }
 
+            if(!result.Any()) return SyntaxNodesWithoutSemanticModel(tree);
             return nodesList;
 
+        }
+
+        /// <summary>
+        /// Syntax nodes to be used on filtering
+        /// </summary>
+        /// <returns>Syntax nodes to be used on filtering</returns>
+        private IEnumerable<SyntaxNode> SyntaxNodes()
+        {
+            string name = GetIdentifierName();
+
+            //if (name == null) return SyntaxNodesWithoutSemanticModel(tree);
+
+            EditorController controller = EditorController.GetInstance();
+            Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
+                .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
+                    controller.ProjectInformation.SolutionPath, name);
+            var referencedSymbols = RegionManager.GroupReferenceBySelection(result, controller.SelectedLocations);
+
+            List<SyntaxNode> nodesList = new List<SyntaxNode>();
+            if (referencedSymbols.Count == 1)
+            {
+                Dictionary<string, List<TextSpan>> dictionary = referencedSymbols.First().Value;
+                //for each file with the list of text span reference to the source declaration.
+                foreach (KeyValuePair<string, List<TextSpan>> fileSpans in dictionary)
+                {
+                    SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
+                    var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
+                                where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
+                                select node;
+                    nodesList.AddRange(nodes);
+                }
+            }
+
+            //if (!result.Any()) return SyntaxNodesWithoutSemanticModel(tree);
+            return nodesList;
+        }
+
+        private IEnumerable<SyntaxNode> SyntaxNodesWithoutSemanticModel(SyntaxNode tree)
+        {
+            var nodes = from node in tree.DescendantNodesAndSelf()
+                        where WithinLcas(node)
+                        select node;
+            return nodes;
         }
 
         private bool WithinSpans(SyntaxNode node, List<TextSpan> value)
@@ -170,56 +231,12 @@ namespace Spg.LocationRefactor.Operator.Filter
             return false;
         }
 
-        private Dictionary<string, Dictionary<string, List<TextSpan>>> GroupReferenceBySelection(Dictionary<string, Dictionary<string, List<TextSpan>>> dictionary, List<TRegion> selection)
-        {
-            Dictionary<string, Dictionary<string, List<TextSpan>>> result = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
-            //foreach (var region in selection)
-            //{
-                foreach (var dictReferences in dictionary)
-                {
-                    foreach (var region in selection)
-                    {
-                        if (dictReferences.Value.ContainsKey(Path.GetFullPath(region.Path)))
-                        {
-                            foreach (TextSpan span in dictReferences.Value[Path.GetFullPath(region.Path)])
-                            {
-                                TRegion spanRegion = new TRegion();
-                                spanRegion.Start = span.Start;
-                                spanRegion.Length = span.Length;
-
-                                if (region.IntersectWith(spanRegion))
-                                {
-                                    result.Add(dictReferences.Key, dictReferences.Value);
-                                }
-                            }
-                        }
-                    }
-                    //if (dictReferences.Value.ContainsKey(region.Path))
-                    //{
-                    //    foreach (var dicSpan in dictReferences.Value)
-                    //    {
-                    //        foreach (var entry in dicSpan.Value)
-                    //        {
-                    //            if (region.Node.Span.IntersectsWith(entry))
-                    //            {
-                    //                result.Add(dictReferences.Key, dicSpan.Value);
-                    //            }
-                    //        }
-                            
-                    //    }
-                    //}
-                }
-            //}
-
-            return result;
-        }
-
         private string GetIdentifierName()
         {
             string name = null;
             foreach (var token in Predicate.r1.Regex())
             {
-                if (token is DymToken)
+                if (token is DymToken || token.token.IsKind(SyntaxKind.IdentifierToken))
                 {
                     name = token.token.ToString();
                     break;
@@ -230,7 +247,7 @@ namespace Spg.LocationRefactor.Operator.Filter
             {
                 foreach (var token in Predicate.r2.Regex())
                 {
-                    if (token is DymToken)
+                    if (token is DymToken || token.token.IsKind(SyntaxKind.IdentifierToken))
                     {
                         name = token.token.ToString();
                         break;
@@ -270,6 +287,8 @@ namespace Spg.LocationRefactor.Operator.Filter
 
                 if (Predicate.Evaluate(lNode))
                 {
+                    TRegion parent = new TRegion();
+                    parent.Text = node.SyntaxTree.GetText().ToString();
                     TRegion tRegion = new TRegion();
 
                     TextSpan span = node.Span;
@@ -277,6 +296,8 @@ namespace Spg.LocationRefactor.Operator.Filter
                     tRegion.Start = span.Start;
                     tRegion.Length = span.Length;
                     tRegion.Node = node;
+                    tRegion.Path = node.SyntaxTree.FilePath;
+                    tRegion.Parent = parent;
 
                     tRegions.Add(tRegion);
                 }
@@ -296,18 +317,27 @@ namespace Spg.LocationRefactor.Operator.Filter
         //    return nodes;
         //}
 
-        /// <summary>
-        /// Syntax nodes
-        /// </summary>
-        /// <param name="input">Source code</param>
-        /// <returns>Syntax nodes</returns>
-        protected abstract IEnumerable<SyntaxNode> SyntaxNodes(string input);
+        ///// <summary>
+        ///// Syntax nodes
+        ///// </summary>
+        ///// <param name="input">Source code</param>
+        ///// <returns>Syntax nodes</returns>
+        //protected abstract IEnumerable<SyntaxNode> SyntaxNodes(string input);
 
         /// <summary>
         /// Filter learner
         /// </summary>
         /// <returns>Filter learn base</returns>
         protected abstract FilterLearnerBase GetFilterLearner(List<TRegion> list);
+
+        /// <summary>
+        /// String representation
+        /// </summary>
+        /// <returns>String representation for this object.</returns>
+        public override string ToString()
+        {
+            return Predicate.ToString();
+        }
 
     }
 }

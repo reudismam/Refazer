@@ -100,6 +100,55 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
             }
             return tRegions;
         }
+
+        /// <summary>
+        /// Retrieve region from input
+        /// </summary>
+        /// <param name="filtereds">Filtered regions</param>
+        /// <returns>Region list</returns>
+        private List<TRegion> RetrieveRegionBase(List<TRegion> filtereds)
+        {
+            List<TRegion> tRegions = new List<TRegion>();
+            Pair pair = (Pair)ScalarExpression.Ioperator;
+
+            foreach (TRegion r in filtereds)
+            {
+                TRegion region = new TRegion();
+                Tuple<SyntaxNode, SyntaxNode> tuplesn = Tuple.Create(r.Node, r.Node);
+                var tnodes = ASTProgram.Example(tuplesn);
+
+                ListNode lnode = new ListNode();
+                try
+                {
+                    lnode = pair.expression.RetrieveSubNodes(tnodes.Item1);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Map cannot operate on this input." + e.Message);
+                }
+
+                if (lnode.Length() > 0)
+                {
+                    SyntaxNodeOrToken first = lnode.List[0];
+                    SyntaxNodeOrToken last = lnode.List[lnode.Length() - 1];
+
+                    TextSpan span = first.Span;
+                    int start = span.Start;
+                    int length = last.Span.Start + last.Span.Length - span.Start;
+
+                    region.Start = start;
+                    region.Length = length;
+                    region.Node = r.Node;
+                    region.Text = r.Parent.Text.Substring(start, length);
+                    region.Parent = r.Parent;
+                    region.Path = r.Path;
+
+                    tRegions.Add(region);
+                }
+            }
+            return tRegions;
+        }
+
         /// <summary>
         /// Retrieve region from input
         /// </summary>
@@ -111,6 +160,20 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
 
             List<TRegion> filtereds = filter.RetrieveRegion(input);
             var tRegions = RetrieveRegionBase(filtereds, input);
+
+            return tRegions;
+        }
+
+        /// <summary>
+        /// Retrieve region from input
+        /// </summary>
+        /// <returns>Region list</returns>
+        public virtual List<TRegion> RetrieveRegion()
+        {
+            FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
+
+            List<TRegion> filtereds = filter.RetrieveRegion();
+            var tRegions = RetrieveRegionBase(filtereds);
 
             return tRegions;
         }

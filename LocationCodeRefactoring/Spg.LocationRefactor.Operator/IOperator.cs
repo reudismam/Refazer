@@ -30,11 +30,19 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
         List<TRegion> RetrieveRegion(String input);
 
         /// <summary>
+        /// Retrieve region on all files on program
+        /// </summary>
+        /// <returns>Regions</returns>
+        List<TRegion> RetrieveRegion();
+
+        /// <summary>
         /// Retrieve region of the source code
         /// </summary>
         /// <param name="input">Syntax node to be considered</param>
         /// <param name="sourceCode">Source code in witch the source code was</param>
         /// <returns></returns>
         List<TRegion> RetrieveRegion(SyntaxNode input, string sourceCode);
+
+
     }
 }

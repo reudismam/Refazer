@@ -23,14 +23,14 @@ namespace Spg.LocationRefactor.Operator
             return new EndPosFilterLearner(list);
         }
 
-        /// <summary>
-        /// Syntax nodes
-        /// </summary>
-        /// <param name="input">Source code</param>
-        /// <returns>Syntax nodes</returns>
-        protected override IEnumerable<SyntaxNode> SyntaxNodes(string input)
-        {
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// Syntax nodes
+        ///// </summary>
+        ///// <param name="input">Source code</param>
+        ///// <returns>Syntax nodes</returns>
+        //protected override IEnumerable<SyntaxNode> SyntaxNodes(string input)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

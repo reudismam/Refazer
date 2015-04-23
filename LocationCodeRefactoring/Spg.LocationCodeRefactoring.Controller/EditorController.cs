@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -510,10 +511,53 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                 lcas.AddRange(result);
             }
 
+            //foreach (Tuple<string, string> source in sourceFiles)
+            //{
+                List<TRegion> regions = RetrieveLocations(prog);
+//                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
+                //dicRegions.Add(source.Item2, regions);
+
+                foreach (TRegion region in regions)
+                {
+                    List<TRegion> value;
+                    if (!dicRegions.TryGetValue(region.Path, out value))
+                    {
+                        value = new List<TRegion>();
+                        dicRegions[region.Path] = value;
+                    }
+
+                    dicRegions[region.Path].Add(region);
+                    CodeLocation location = new CodeLocation
+                    {
+                        Region = region,
+                        SourceCode = region.Parent.Text,
+                        SourceClass = region.Path
+                    };
+                    sourceLocations.Add(location);
+                }
+            //}
+            var rs = dicRegions[CurrentViewCodePath];//extractor.RetrieveString(prog, program);
+            Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
+            return tuple;
+        }
+
+        /*private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog, List<Tuple<string, string>> sourceFiles, string program)
+        {
+            List<CodeLocation> sourceLocations = new List<CodeLocation>();
+            Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
+            Dictionary<string, List<TRegion>> groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
+
+            List<SyntaxNode> lcas = new List<SyntaxNode>();
+            foreach (KeyValuePair<string, List<TRegion>> item in groups)
+            {
+                var result = RegionManager.LeastCommonAncestors(item.Key, item.Value);
+                lcas.AddRange(result);
+            }
+
             foreach (Tuple<string, string> source in sourceFiles)
             {
                 List<TRegion> regions = RetrieveLocations(source.Item1, prog);
-//                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
+                //                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
                 dicRegions.Add(source.Item2, regions);
 
                 foreach (TRegion region in regions)
@@ -530,7 +574,8 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             var rs = dicRegions[CurrentViewCodePath];//extractor.RetrieveString(prog, program);
             Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
             return tuple;
-        }
+        }*/
+
 
         /// <summary>
         /// Selected source files on the format source code, source code path
@@ -562,7 +607,19 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         public List<TRegion> RetrieveLocations(string sourceCode, Prog prog)
         {
             LocationExtractor extractor = new LocationExtractor();
-            List<TRegion> regions = extractor.RetrieveString(prog, sourceCode);
+            List<TRegion> regions = extractor.RetrieveString(prog);
+            return regions;
+        }
+
+        /// <summary>
+        /// Retrieve locations
+        /// </summary>
+        /// <param name="sourceCode">Selected program</param>
+        /// <param name="prog">Location program</param>
+        public List<TRegion> RetrieveLocations(Prog prog)
+        {
+            LocationExtractor extractor = new LocationExtractor();
+            List<TRegion> regions = extractor.RetrieveString(prog);
             return regions;
         }
 
