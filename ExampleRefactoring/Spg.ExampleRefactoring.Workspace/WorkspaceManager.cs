@@ -180,11 +180,11 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
-            Project project = null;
-            foreach (var projectId in solution.ProjectIds)
-            {
-                project = solution.GetProject(projectId);
-            }
+            //Project project = null;
+            //foreach (var projectId in solution.ProjectIds)
+            //{
+            //    project = solution.GetProject(projectId);
+            //}
 
             var sourceDeclarations = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
 
@@ -214,15 +214,14 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                     {
                         SyntaxTree tree = location.Document.GetSyntaxTreeAsync().Result;
                         List<TextSpan> value;
-                        if (!spansDictionary.TryGetValue(tree.FilePath, out value))
+                        if (!spansDictionary.TryGetValue(tree.FilePath.ToUpperInvariant(), out value))
                         {
                             value = new List<TextSpan>();
-                            spansDictionary.Add(tree.FilePath, value);
+                            spansDictionary.Add(tree.FilePath.ToUpperInvariant(), value);
                         }
 
                         value.Add(location.Location.SourceSpan);
                     }
-
                 }
                 referenceDictionary.Add(sourceDeclaration.ToDisplayString(), spansDictionary);
             }

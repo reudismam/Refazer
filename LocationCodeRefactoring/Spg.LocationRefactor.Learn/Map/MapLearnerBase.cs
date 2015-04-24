@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis;

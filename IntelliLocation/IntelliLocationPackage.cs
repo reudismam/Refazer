@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using LocateAdornment;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;

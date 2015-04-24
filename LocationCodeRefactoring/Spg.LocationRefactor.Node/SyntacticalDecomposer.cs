@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Spg.LocationRefactor.Node
+namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
 {
     /// <summary>
     /// Syntatical decomposer
@@ -19,6 +19,7 @@ namespace Spg.LocationRefactor.Node
         /// Syntax nodes to be used on filtering
         /// </summary>
         /// <param name="tree">Source code tree</param>
+        /// <param name="name">Identifier name</param>
         /// <returns>Syntax nodes to be used on filtering</returns>
         internal static IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree, string name)
         {
@@ -30,7 +31,7 @@ namespace Spg.LocationRefactor.Node
             Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
                 .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
                     controller.ProjectInformation.SolutionPath, name);
-            var referencedSymbols = RegionManager.GroupReferenceBySelection(result, controller.SelectedLocations);
+            var referencedSymbols = ReferenceManager.GroupReferenceBySelection(result, controller.SelectedLocations);
 
             List<SyntaxNode> nodesList = new List<SyntaxNode>();
             if (referencedSymbols.Count == 1)
@@ -51,7 +52,6 @@ namespace Spg.LocationRefactor.Node
             return nodesList;
         }
 
-
         /// <summary>
         /// Syntax nodes to be used on filtering
         /// </summary>
@@ -66,7 +66,7 @@ namespace Spg.LocationRefactor.Node
             Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
                 .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
                     controller.ProjectInformation.SolutionPath, name);
-            var referencedSymbols = RegionManager.GroupReferenceBySelection(result, controller.SelectedLocations);
+            var referencedSymbols = ReferenceManager.GroupReferenceBySelection(result, controller.SelectedLocations);
 
             List<SyntaxNode> nodesList = new List<SyntaxNode>();
             if (referencedSymbols.Count == 1)

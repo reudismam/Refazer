@@ -5,7 +5,7 @@ using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Comparator;

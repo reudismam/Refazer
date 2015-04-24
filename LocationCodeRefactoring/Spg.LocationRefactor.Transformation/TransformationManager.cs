@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using Microsoft.SqlServer.Server;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Data.Dig;

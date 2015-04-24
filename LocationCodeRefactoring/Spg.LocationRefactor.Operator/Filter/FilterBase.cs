@@ -5,14 +5,14 @@ using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using LocationCodeRefactoring.Spg.LocationRefactor.Node;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using Spg.LocationRefactor.Learn;
-using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
@@ -129,7 +129,9 @@ namespace Spg.LocationRefactor.Operator.Filter
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
             string name = GetIdentifierName();
-            IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodes(syntaxNode.Parent, name);
+            //IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodes(syntaxNode.Parent, name);
+            IEnumerable<SyntaxNode> nodesForFiltering =
+                SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(syntaxNode.Parent);
             return RetrieveRegionsBase(nodesForFiltering);
         }
 

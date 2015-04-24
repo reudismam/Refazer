@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using LocateAdornment;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.VisualStudio.ComponentModelHost;

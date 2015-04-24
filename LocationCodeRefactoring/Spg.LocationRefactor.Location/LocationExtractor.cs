@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;

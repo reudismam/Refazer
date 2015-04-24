@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -95,7 +96,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                                 dicRegions[region] = statement;
                             }
                         }
-                  }
+                    }
                 }
             }
             return dicRegions;
@@ -134,7 +135,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                     }
                     //if (!methodsDic.TryGetValue(node, out val))
                     //{
-                        examples.Add(te);
+                    examples.Add(te);
                     //    methodsDic.Add(node, te);
                     //}
                     //else
@@ -238,6 +239,29 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 
             return dic;
         }
+
+        ///// <summary>
+        ///// Group location by source path
+        ///// </summary>
+        ///// <param name="list">Location list</param>
+        ///// <returns>Locations by source path</returns>
+        //public Dictionary<string, List<CodeLocation>> GroupLocationsBySourcePath(List<CodeLocation> list)
+        //{
+        //    Dictionary<string, List<CodeLocation>> dic = new Dictionary<string, List<CodeLocation>>();
+        //    foreach (var item in list)
+        //    {
+        //        List<CodeLocation> value;
+        //        if (!dic.TryGetValue(item.SourceClass, out value))
+        //        {
+        //            value = new List<CodeLocation>();
+        //            dic[item.SourceClass] = value;
+        //        }
+
+        //        dic[item.SourceClass].Add(item);
+        //    }
+
+        //    return dic;
+        //}
 
         ///// <summary>
         ///// Covert the region on a method to an example ListNode
@@ -427,6 +451,47 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return _computed[sourceCode];
         }
 
+        ///// <summary>
+        ///// Pair of syntax node before and after transformation
+        ///// </summary>
+        ///// <param name="locations">Selected locations</param>
+        ///// <returns>Pair of syntax node before and after transformation</returns>
+        //internal List<Tuple<SyntaxNode, SyntaxNode>> SyntaxNodesRegionBeforeAndAfterEditing(List<CodeLocation> locations)
+        //{
+        //    if (locations == null) throw new ArgumentNullException("locations");
+        //    if (!locations.Any()) throw new Exception("Locations cannot be empty.");
+
+        //    Dictionary<string, List<CodeLocation>> groupLocations = GroupLocationsBySourceFile(locations);
+
+        //    EditorController controller = EditorController.GetInstance();
+        //    var result = new List<Tuple<SyntaxNode, SyntaxNode>>();
+
+        //    foreach (var item in groupLocations)
+        //    {
+        //        string sourceCode = item.Value.First().SourceCode;
+        //        string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
+        //        if (sourceCodeAfter != null)
+        //        {
+        //            SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter);
+        //            List<SyntaxNode> aNodes = new List<SyntaxNode>();
+        //            foreach (var span in controller.EditedLocations[item.Key])
+        //            {
+        //                MessageBox.Show(sourceCodeAfter.Substring(span.Start + 1, span.Length - 2));
+        //                //var snode = LeastCommonAncestor(treeAfter, span.Start + 1, (span.Start + 1) + (span.Length - 2));
+        //                SyntaxNode snode = LCAManager.LeastCommonAncestor(treeAfter, span.Start + 1, (span.Start + 1) + (span.Length - 2));
+        //                aNodes.Add(snode);
+        //            }
+
+        //            for (int i = 0; i < item.Value.Count; i++)
+        //            {
+        //                Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(item.Value[i].Region.Node, aNodes[i]);
+        //                result.Add(tuple);
+        //            }
+        //        }
+        //    }
+        //    return result;
+        //}
+
         /// <summary>
         /// Pair of syntax node before and after transformation
         /// </summary>
@@ -435,132 +500,166 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         internal List<Tuple<SyntaxNode, SyntaxNode>> SyntaxNodesRegionBeforeAndAfterEditing(List<CodeLocation> locations)
         {
             if (locations == null) throw new ArgumentNullException("locations");
-            if (!locations.Any()) throw new Exception("Locations cannot be null.");
+            if (!locations.Any()) throw new Exception("Locations cannot be empty.");
 
             Dictionary<string, List<CodeLocation>> groupLocations = GroupLocationsBySourceFile(locations);
 
             EditorController controller = EditorController.GetInstance();
+            IEnumerable<string> files = controller.OpenFiles();
             var result = new List<Tuple<SyntaxNode, SyntaxNode>>();
 
-            foreach (var item in groupLocations)
+            foreach (string file in files)
             {
-                string sourceCode = item.Value.First().SourceCode;
+                List<CodeLocation> clocations = groupLocations[file];
+                string sourceCode = clocations.First().SourceCode;
                 string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
-                if (sourceCodeAfter != null)
+                //if (sourceCodeAfter != null)
+                //{
+                SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter);
+                List<SyntaxNode> aNodes = new List<SyntaxNode>();
+                foreach (Selection span in controller.EditedLocations[file])
                 {
-                    SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter);
-                    List<SyntaxNode> aNodes = new List<SyntaxNode>();
-                    foreach (var span in controller.EditedLocations[item.Key])
-                    {
-                        MessageBox.Show(sourceCodeAfter.Substring(span.Start + 1, span.Length - 2));
-                        //var snode = LeastCommonAncestor(treeAfter, span.Start + 1, (span.Start + 1) + (span.Length - 2));
-                        SyntaxNode snode = LCAManager.LeastCommonAncestor(treeAfter, span.Start + 1, (span.Start + 1) + (span.Length - 2));
-                        aNodes.Add(snode);
-                    }
-
-                    for (int i = 0; i < item.Value.Count; i++)
-                    {
-                        Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(item.Value[i].Region.Node, aNodes[i]);
-                        result.Add(tuple);
-                    }
+                    MessageBox.Show(sourceCodeAfter.Substring(span.Start + 1, span.Length - 2));
+              
+                    SyntaxNode snode = LCAManager.LeastCommonAncestor(treeAfter, span.Start + 1,
+                        (span.Start + 1) + (span.Length - 2));
+                    aNodes.Add(snode);
                 }
+
+                for (int i = 0; i < clocations.Count; i++)
+                {
+                    Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(clocations[i].Region.Node, aNodes[i]);
+                    result.Add(tuple);
+                }
+                // }
             }
             return result;
         }
 
-        /// <summary>
-        /// Identify on the dictionary what entry corresponds to the element selection by the user.
-        /// </summary>
-        /// <param name="dictionary">Dictionary</param>
-        /// <param name="selection">Selection</param>
-        /// <returns>Regions grouped by selection</returns>
-        internal static Dictionary<string, Dictionary<string, List<TextSpan>>> GroupReferenceBySelection(Dictionary<string, Dictionary<string, List<TextSpan>>> dictionary, List<TRegion> selection)
-        {
-            Dictionary<string, Dictionary<string, List<TextSpan>>> result = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
-            //foreach (var region in selection)
-            //{
-            foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> dictReferences in dictionary)
-            {
-                Dictionary<string, List<TextSpan>> fileLocationDictionary = dictReferences.Value;
-                foreach (var region in selection)
-                {
-                    if (fileLocationDictionary.ContainsKey(Path.GetFullPath(region.Path)))
-                    {
-                        List<TextSpan> listSpans = fileLocationDictionary[Path.GetFullPath(region.Path)];
-                        foreach (TextSpan span in listSpans)
-                        {
-                            TRegion spanRegion = new TRegion();
-                            spanRegion.Start = span.Start;
-                            spanRegion.Length = span.Length;
+        ///// <summary>
+        ///// Pair of syntax node before and after transformation
+        ///// </summary>
+        ///// <param name="locations">Selected locations</param>
+        ///// <returns>Pair of syntax node before and after transformation</returns>
+        //internal List<Tuple<ListNode, ListNode>> ElementsSelectionBeforeAndAfterEditing(List<CodeLocation> locations )
+        //{
+        //    if (locations == null) throw new ArgumentNullException("locations");
+        //    if (!locations.Any()) throw new Exception("Locations cannot be null.");
 
-                            if (region.IntersectWith(spanRegion))
-                            {
-                                if (!result.ContainsKey(dictReferences.Key))
-                                {
-                                    result.Add(dictReferences.Key, fileLocationDictionary);
-                                }
-                                else
-                                {
-                                    Console.Write("Key already exist on the dictionary.");
-                                }
-                            }
-                        }
-                    }
-                }
-                
-            }
-            return result;
-        }
+        //    Dictionary<string, List<CodeLocation>> groupLocations = GroupLocationsBySourceFile(locations);
+
+        //    EditorController controller = EditorController.GetInstance();
+
+        //    List<TRegion> inputRegions = new List<TRegion>();
+        //    List<TRegion> outputRegions = new List<TRegion>();
+
+        //    foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocations)
+        //    {
+        //        string sourceCode = item.Value.First().SourceCode;
+
+        //        TRegion iparent = new TRegion { Text = sourceCode };
+        //        foreach (CodeLocation codeLocation in item.Value)
+        //        {
+        //            codeLocation.Region.Parent = iparent;
+        //            if (controller.FilesOpened.ContainsKey(item.Key))
+        //            {
+        //                inputRegions.Add(codeLocation.Region);
+        //            }
+        //        }
+
+        //        string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
+        //        if (sourceCodeAfter != null)
+        //        {
+        //            TRegion parent = new TRegion { Text = sourceCodeAfter };
+        //            foreach (var span in controller.EditedLocations[item.Key])
+        //            {
+        //                TRegion tregion = new TRegion
+        //                {
+        //                    Start = span.Start + 1,
+        //                    Length = span.Length - 2,
+        //                    Parent = parent,
+        //                    Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
+        //                };
+        //                //MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
+
+        //                outputRegions.Add(tregion);
+        //            }
+        //        }
+        //    }
+
+        //    List<Tuple<ListNode, ListNode>> inputSelection = DecomposeToOutput(inputRegions);
+        //    List<Tuple<ListNode, ListNode>> ouputSelection = DecomposeToOutput(outputRegions);
+
+        //    List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
+        //    for (int index = 0; index < inputSelection.Count; index++)
+        //    {
+        //        ListNode input = inputSelection[index].Item2;
+        //        ListNode output = ouputSelection[index].Item2;
+        //        Tuple<ListNode, ListNode> tuple = Tuple.Create(input, output);
+        //        examples.Add(tuple);
+        //    }
+
+        //    return examples;
+        //}
+
 
         /// <summary>
         /// Pair of syntax node before and after transformation
         /// </summary>
         /// <param name="locations">Selected locations</param>
         /// <returns>Pair of syntax node before and after transformation</returns>
-        internal List<Tuple<ListNode, ListNode>> ElementsSelectionBeforeAndAfterEditing(List<CodeLocation> locations )
+        internal List<Tuple<ListNode, ListNode>> ElementsSelectionBeforeAndAfterEditing(List<CodeLocation> locations)
         {
             if (locations == null) throw new ArgumentNullException("locations");
-            if (!locations.Any()) throw new Exception("Locations cannot be null.");
+            if (!locations.Any()) throw new Exception("Locations cannot be empty.");
 
             Dictionary<string, List<CodeLocation>> groupLocations = GroupLocationsBySourceFile(locations);
 
             EditorController controller = EditorController.GetInstance();
-           
+            IEnumerable<string> files = controller.OpenFiles();
+
             List<TRegion> inputRegions = new List<TRegion>();
             List<TRegion> outputRegions = new List<TRegion>();
-            
-            foreach (var item in groupLocations)
+            //string line = "";
+            //foreach (var file in groupLocations)
+            //{
+            //    line += file.Key + "\n";
+            //}
+            //MessageBox.Show(line);
+            //Console.WriteLine(line);
+
+            foreach (string file in files)
             {
-                string sourceCode = item.Value.First().SourceCode;
+                string fileUpper = file.ToLowerInvariant();
+                string sourceCode = groupLocations[fileUpper].First().SourceCode;
+                List<CodeLocation> cLocations = groupLocations[fileUpper];
 
                 TRegion iparent = new TRegion { Text = sourceCode };
-                foreach (var codeLocation in item.Value)
+                foreach (CodeLocation codeLocation in cLocations)
                 {
                     codeLocation.Region.Parent = iparent;
-                    if (controller.FilesOpened.ContainsKey(item.Key))
-                    {
-                        inputRegions.Add(codeLocation.Region);
-                    }
+                    inputRegions.Add(codeLocation.Region);
                 }
 
                 string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
-                if (sourceCodeAfter != null)
-                {
-                    TRegion parent = new TRegion { Text = sourceCodeAfter };
-                    foreach (var span in controller.EditedLocations[item.Key])
-                    {
-                        TRegion tregion = new TRegion
-                        {
-                            Start = span.Start + 1,
-                            Length = span.Length - 2,
-                            Parent = parent,
-                            Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
-                        };
-                        //MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
 
-                        outputRegions.Add(tregion);
-                    }
+                //if (sourceCodeAfter != null)
+                //{
+                TRegion parent = new TRegion { Text = sourceCodeAfter };
+                foreach (var span in controller.EditedLocations[fileUpper])
+                {
+                    TRegion tregion = new TRegion
+                    {
+                        Start = span.Start + 1,
+                        Length = span.Length - 2,
+                        Parent = parent,
+                        Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
+                    };
+                    //MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
+
+                    outputRegions.Add(tregion);
                 }
+                // }
             }
 
             List<Tuple<ListNode, ListNode>> inputSelection = DecomposeToOutput(inputRegions);
@@ -629,7 +728,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <summary>
         /// Least common ancestors
         /// </summary>
-        /// <param name="sourceCode">Source code</param>
         /// <param name="regions">Region list</param>
         /// <returns>Least common ancestor of each region</returns>
         public static List<SyntaxNode> LeastCommonAncestors(List<TRegion> regions)

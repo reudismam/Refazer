@@ -110,8 +110,8 @@
     <Compile Include="Spg.LocationRefactor.Learn\Learner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\MapLearnerBase.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\PairLearn.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\SyntacticalDecomposer.cs" />
     <Compile Include="Spg.LocationRefactor.Location\CodeLocation.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\ReferenceManager.cs" />
     <Compile Include="Spg.LocationRefactor.Location\RegionManager.cs" />
     <Compile Include="Spg.LocationRefactor.Location\LocationExtractor.cs" />
     <Compile Include="Spg.LocationRefactor.Location\StatementExtrategy.cs" />

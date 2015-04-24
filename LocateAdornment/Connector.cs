@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Security.Principal;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;

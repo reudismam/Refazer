@@ -21,7 +21,7 @@ using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
+namespace Spg.LocationCodeRefactoring.Controller
 {
     /// <summary>
     /// Controller for editor graphical interface
@@ -324,6 +324,23 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
         }
 
         /// <summary>
+        /// Open files
+        /// </summary>
+        /// <returns>Open files</returns>
+        public IEnumerable<string> OpenFiles()
+        {
+            List<string> files = new List<string>();
+            foreach (KeyValuePair<string, bool> file in FilesOpened)
+            {
+                if (file.Value)
+                {
+                    files.Add(file.Key);
+                }
+            }
+            return files;
+        }
+
+        /// <summary>
         /// Retrieve locations
         /// </summary>
         /// <param name="program">Selected program</param>
@@ -535,7 +552,7 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
                     sourceLocations.Add(location);
                 }
             //}
-            var rs = dicRegions[CurrentViewCodePath];//extractor.RetrieveString(prog, program);
+            var rs = dicRegions[CurrentViewCodePath.ToUpperInvariant()];//extractor.RetrieveString(prog, program);
             Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
             return tuple;
         }
