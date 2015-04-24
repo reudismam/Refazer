@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
@@ -97,7 +98,8 @@ namespace Spg.LocationRefactor.Operator.Filter
             if (result.Count == 1) throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
 
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
-            IEnumerable<SyntaxNode> descedants = SyntaxNodes(tree.GetRoot());
+            string name = GetIdentifierName();
+            IEnumerable<SyntaxNode> descedants = SyntacticalDecomposer.SyntaxNodes(tree.GetRoot(), name);
             List<TRegion> tregions = RetrieveRegionsBase(descedants);
             return tregions;
         }
@@ -111,8 +113,9 @@ namespace Spg.LocationRefactor.Operator.Filter
             Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
             if (result.Count == 1) throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
 
+            string name = GetIdentifierName();
             //SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
-            IEnumerable<SyntaxNode> descedants = SyntaxNodes();
+            IEnumerable<SyntaxNode> descedants = SyntacticalDecomposer.SyntaxNodes(name);
             List<TRegion> tregions = RetrieveRegionsBase(descedants);
             return tregions;
         }
@@ -125,7 +128,8 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>List of regions</returns>
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
-            IEnumerable<SyntaxNode> nodesForFiltering = SyntaxNodes(syntaxNode.Parent);
+            string name = GetIdentifierName();
+            IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodes(syntaxNode.Parent, name);
             return RetrieveRegionsBase(nodesForFiltering);
         }
 
@@ -141,133 +145,6 @@ namespace Spg.LocationRefactor.Operator.Filter
         //                          select node;
         //    return nodes;
         //}
-
-        /// <summary>
-        /// Syntax nodes to be used on filtering
-        /// </summary>
-        /// <param name="tree">Source code tree</param>
-        /// <returns>Syntax nodes to be used on filtering</returns>
-        private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree)
-        { 
-            string name = GetIdentifierName();
-
-            if (name == null) return SyntaxNodesWithoutSemanticModel(tree);
-
-            EditorController controller = EditorController.GetInstance();
-            Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
-                .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
-                    controller.ProjectInformation.SolutionPath, name);
-            var referencedSymbols = RegionManager.GroupReferenceBySelection(result, controller.SelectedLocations);
-
-            List<SyntaxNode> nodesList = new List<SyntaxNode>();
-            if (referencedSymbols.Count == 1)
-            {
-                Dictionary<string, List<TextSpan>> dictionary = referencedSymbols.First().Value;
-                //for each file
-                foreach (var fileSpans in dictionary)
-                {
-                    SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
-                    var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-                                where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
-                                select node;
-                    nodesList.AddRange(nodes);
-                }
-            }
-
-            if(!result.Any()) return SyntaxNodesWithoutSemanticModel(tree);
-            return nodesList;
-
-        }
-
-        /// <summary>
-        /// Syntax nodes to be used on filtering
-        /// </summary>
-        /// <returns>Syntax nodes to be used on filtering</returns>
-        private IEnumerable<SyntaxNode> SyntaxNodes()
-        {
-            string name = GetIdentifierName();
-
-            //if (name == null) return SyntaxNodesWithoutSemanticModel(tree);
-
-            EditorController controller = EditorController.GetInstance();
-            Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
-                .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
-                    controller.ProjectInformation.SolutionPath, name);
-            var referencedSymbols = RegionManager.GroupReferenceBySelection(result, controller.SelectedLocations);
-
-            List<SyntaxNode> nodesList = new List<SyntaxNode>();
-            if (referencedSymbols.Count == 1)
-            {
-                Dictionary<string, List<TextSpan>> dictionary = referencedSymbols.First().Value;
-                //for each file with the list of text span reference to the source declaration.
-                foreach (KeyValuePair<string, List<TextSpan>> fileSpans in dictionary)
-                {
-                    SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
-                    var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-                                where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
-                                select node;
-                    nodesList.AddRange(nodes);
-                }
-            }
-
-            //if (!result.Any()) return SyntaxNodesWithoutSemanticModel(tree);
-            return nodesList;
-        }
-
-        private IEnumerable<SyntaxNode> SyntaxNodesWithoutSemanticModel(SyntaxNode tree)
-        {
-            var nodes = from node in tree.DescendantNodesAndSelf()
-                        where WithinLcas(node)
-                        select node;
-            return nodes;
-        }
-
-        private bool WithinSpans(SyntaxNode node, List<TextSpan> value)
-        {
-            foreach (var entry in value)
-            {
-                if (node.Span.IntersectsWith(entry)) {return true;}
-            }
-            return false;
-        }
-
-        private string GetIdentifierName()
-        {
-            string name = null;
-            foreach (var token in Predicate.r1.Regex())
-            {
-                if (token is DymToken || token.token.IsKind(SyntaxKind.IdentifierToken))
-                {
-                    name = token.token.ToString();
-                    break;
-                }
-            }
-
-            if (name == null)
-            {
-                foreach (var token in Predicate.r2.Regex())
-                {
-                    if (token is DymToken || token.token.IsKind(SyntaxKind.IdentifierToken))
-                    {
-                        name = token.token.ToString();
-                        break;
-                    }
-                }
-            }
-            return name;
-        }
-
-        private bool WithinLcas(SyntaxNode node)
-        {
-            foreach (var lca in EditorController.GetInstance().Lcas)
-            {
-                if (node.IsKind(lca.CSharpKind()))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         /// <summary>
         /// Base processing for RetrieveRegion
@@ -303,6 +180,32 @@ namespace Spg.LocationRefactor.Operator.Filter
                 }
             }
             return tRegions;
+        }
+
+        private string GetIdentifierName()
+        {
+            string name = null;
+            foreach (var token in Predicate.r1.Regex())
+            {
+                if (token is DymToken || token.token.IsKind(SyntaxKind.IdentifierToken))
+                {
+                    name = token.token.ToString();
+                    break;
+                }
+            }
+
+            if (name == null)
+            {
+                foreach (var token in Predicate.r2.Regex())
+                {
+                    if (token is DymToken || token.token.IsKind(SyntaxKind.IdentifierToken))
+                    {
+                        name = token.token.ToString();
+                        break;
+                    }
+                }
+            }
+            return name;
         }
 
         ///// <summary>

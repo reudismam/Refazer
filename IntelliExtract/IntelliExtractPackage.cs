@@ -100,17 +100,29 @@ namespace SPG.IntelliExtract
             List<int> indexNegatives = new List<int>();
             List<TRegion> positives = new List<TRegion>();
             EditorController controller = EditorController.GetInstance();
+
+            DialogResult inforNeg = MessageBox.Show("Do you want to inform negative locations?", "Do you want to inform negative locations?", MessageBoxButtons.YesNo);
+
             for (int index = 0; index < locations.Count; index++)
             {
                 var location = locations[index];
+                bool isCorrectLocation = true;
+                if (inforNeg == DialogResult.Yes)
+                {
+                    DialogResult dialogResult = MessageBox.Show(location.Region.Node.GetText() + "\n",
+                        "Is it a correct location?", MessageBoxButtons.YesNo);
 
-                DialogResult dialogResult = MessageBox.Show(location.Region.Node.GetText() + "\n",
-                    "Is it a correct location?", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        isCorrectLocation = false;
+                    }
+                }
+
                 TRegion parent = new TRegion();
                 parent.Text = location.SourceCode;
                 location.Region.Parent = parent;
 
-                if (dialogResult == DialogResult.No)
+                if (!isCorrectLocation)
                 {
                     negatives.Add(location.Region);
                     indexNegatives.Add(index);
@@ -120,9 +132,10 @@ namespace SPG.IntelliExtract
                 {
                     positives.Add(location.Region);
                 }
+                //}
             }
-            
-            
+
+
             if (negatives.Any())
             {
                 //controller.Extract(controller.SelectedLocations, negatives);
@@ -142,8 +155,8 @@ namespace SPG.IntelliExtract
             const int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 
-            IVsUserData userData = (IVsUserData) vTextView;
-            
+            IVsUserData userData = (IVsUserData)vTextView;
+
             IWpfTextViewHost viewHost;
             object holder;
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
@@ -163,7 +176,7 @@ namespace SPG.IntelliExtract
         private Dictionary<string, IProjectionBuffer> _CreateProjectionBuffers()
         {
             EditorController controller = EditorController.GetInstance();
-          var groupedLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(controller.Locations);
+            var groupedLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(controller.Locations);
 
             Dictionary<string, IProjectionBuffer> projectionBuffers = new Dictionary<string, IProjectionBuffer>();
 
@@ -200,13 +213,13 @@ namespace SPG.IntelliExtract
             {
                 IVsTextBuffer x = Marshal.GetObjectForIUnknown(ppunkDocData) as IVsTextBuffer;
 
-                IComponentModel componentModel = GetGlobalService(typeof (SComponentModel)) as IComponentModel;
+                IComponentModel componentModel = GetGlobalService(typeof(SComponentModel)) as IComponentModel;
                 IVsEditorAdaptersFactoryService bufferData =
                     componentModel.GetService<IVsEditorAdaptersFactoryService>();
 
 
                 IServiceProvider sp = GetGlobalService(
-                    typeof (IServiceProvider))
+                    typeof(IServiceProvider))
                     as IServiceProvider;
 
                 var textBuffer = bufferData.GetDataBuffer(x);

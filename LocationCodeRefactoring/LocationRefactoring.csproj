@@ -110,6 +110,7 @@
     <Compile Include="Spg.LocationRefactor.Learn\Learner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\MapLearnerBase.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\PairLearn.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\SyntacticalDecomposer.cs" />
     <Compile Include="Spg.LocationRefactor.Location\CodeLocation.cs" />
     <Compile Include="Spg.LocationRefactor.Location\RegionManager.cs" />
     <Compile Include="Spg.LocationRefactor.Location\LocationExtractor.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramRefactoredObserver.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramsGeneratedObserver.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\ProgramRefactoredEvent.cs" />
+    <Compile Include="Spg.LocationRefactor.Node\SyntacticalDecomposer.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\EndPosFilter.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\MethodFilter.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\StatementFilter.cs" />
@@ -160,6 +162,7 @@
       <Name>ExampleRefactoring</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

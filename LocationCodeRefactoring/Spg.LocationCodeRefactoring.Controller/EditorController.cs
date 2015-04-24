@@ -336,7 +336,6 @@ namespace LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller
             }
               
             //Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
-
             Prog prog = Progs.First();
             List<Tuple<string, string>> sourceFiles = SourceFiles();
 
