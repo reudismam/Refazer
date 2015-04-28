@@ -189,7 +189,7 @@ namespace Spg.LocationRefactor.Operator.Filter
             string name = null;
             foreach (var token in Predicate.r1.Regex())
             {
-                if (token is DymToken || token.token.IsKind(SyntaxKind.IdentifierToken))
+                if (token is DymToken /*|| token.token.IsKind(SyntaxKind.IdentifierToken)*/)
                 {
                     name = token.token.ToString();
                     break;
@@ -200,7 +200,7 @@ namespace Spg.LocationRefactor.Operator.Filter
             {
                 foreach (var token in Predicate.r2.Regex())
                 {
-                    if (token is DymToken || token.token.IsKind(SyntaxKind.IdentifierToken))
+                    if (token is DymToken /*|| token.token.IsKind(SyntaxKind.IdentifierToken)*/)
                     {
                         name = token.token.ToString();
                         break;

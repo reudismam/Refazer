@@ -42,8 +42,8 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                                 }
                                 else
                                 {
-                                    //Console.Write("Key already exist on the dictionary.");
-                                    throw new Exception("Key already exist on the dictionary.");
+                                    Console.Write("Key already exist on the dictionary.");
+                                    //throw new Exception("Key already exist on the dictionary.");
                                 }
                             }
                         }

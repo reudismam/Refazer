@@ -71,7 +71,7 @@ namespace Spg.LocationRefactor.Learn
                         orderby pair.Regex().Count() descending, Order(pair) descending
                         select pair;
             Dictionary<IPredicate, Prog> dic = new Dictionary<IPredicate, Prog>();
-            foreach (IPredicate ipredicate in predicates)
+            foreach (IPredicate ipredicate in items)
             {
                 Prog prog;
                 if (!dic.TryGetValue(ipredicate, out prog))
@@ -119,7 +119,7 @@ namespace Spg.LocationRefactor.Learn
                         select pair;
 
             Dictionary<IPredicate, Prog> dic = new Dictionary<IPredicate, Prog>();
-            foreach (IPredicate ipredicate in predicates)
+            foreach (IPredicate ipredicate in items)
             {
                 Prog prog;
                 if (!dic.TryGetValue(ipredicate, out prog))

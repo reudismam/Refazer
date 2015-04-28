@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
@@ -185,7 +186,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             //{
             //    project = solution.GetProject(projectId);
             //}
-
             var sourceDeclarations = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
 
             foreach (ISymbol sourceDeclaration in sourceDeclarations)
@@ -194,7 +194,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
 
                 IEnumerable<ReferencedSymbol> references = SymbolFinder.FindReferencesAsync(sourceDeclaration, solution).Result;
 
-                List<ReferencedSymbol> referencedList = references.ToList();
+                //List<ReferencedSymbol> referencedList = references.ToList();
 
                 /*foreach (var item2 in references2)
                 {

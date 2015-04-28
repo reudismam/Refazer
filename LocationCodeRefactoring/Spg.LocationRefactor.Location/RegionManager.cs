@@ -630,7 +630,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 
             foreach (string file in files)
             {
-                string fileUpper = file.ToLowerInvariant();
+                string fileUpper = file.ToUpperInvariant();
                 string sourceCode = groupLocations[fileUpper].First().SourceCode;
                 List<CodeLocation> cLocations = groupLocations[fileUpper];
 

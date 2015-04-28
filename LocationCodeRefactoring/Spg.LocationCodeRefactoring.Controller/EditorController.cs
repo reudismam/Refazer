@@ -13,6 +13,7 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Text.Projection;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
@@ -354,12 +355,13 @@ namespace Spg.LocationCodeRefactoring.Controller
               
             //Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
             Prog prog = Progs.First();
-            List<Tuple<string, string>> sourceFiles = SourceFiles();
+            //List<Tuple<string, string>> sourceFiles = SourceFiles();
+            Dictionary<string, List<TRegion>> list = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
 
             Tuple<List<CodeLocation>, List<TRegion>> tuple;
-            if (sourceFiles.Count() > 1)
+            if (list.Count() > 1)
             {
-                tuple = RetrieveLocationsMultiplesSourceClasses(prog, sourceFiles, program); 
+                tuple = RetrieveLocationsMultiplesSourceClasses(prog); 
             }
             else
             {
@@ -383,15 +385,93 @@ namespace Spg.LocationCodeRefactoring.Controller
             NotifyLocationsObservers(Locations);
         }
 
+        ///// <summary>
+        ///// Retrieve locations
+        ///// </summary>
+        ///// <param name="program">Selected program</param>
+        //public void RetrieveLocations(string program)
+        //{
+        //    if (ProgramsWithNegatives != null)
+        //    {
+        //        RetrieveLocationsPosNegatives(program);
+        //        return;
+        //    }
+
+        //    //Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
+        //    Prog prog = Progs.First();
+        //    List<Tuple<string, string>> sourceFiles = SourceFiles();
+
+
+        //    Tuple<List<CodeLocation>, List<TRegion>> tuple;
+        //    if (sourceFiles.Count() > 1)
+        //    {
+        //        tuple = RetrieveLocationsMultiplesSourceClasses(prog, sourceFiles, program);
+        //    }
+        //    else
+        //    {
+        //        tuple = RetrieveLocationsSingleSourceClass(prog);
+        //    }
+        //    var sourceLocations = tuple.Item1;
+
+        //    this.Locations = NonDuplicateLocations(sourceLocations);
+
+        //    //remove
+        //    List<Selection> selections = new List<Selection>();
+        //    foreach (CodeLocation location in Locations)
+        //    {
+        //        Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode);
+        //        selections.Add(selection);
+        //    }
+        //    JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
+        //    //remove
+
+        //    LocalionsComputerSoFar = tuple;
+        //    NotifyLocationsObservers(Locations);
+        //}
+
+        //public void RetrieveLocationsPosNegatives(string program)
+        //{
+        //    Prog prog = ProgramsWithNegatives.First();
+        //    List<Tuple<string, string>> sourceFiles = SourceFiles();
+
+        //    Tuple<List<CodeLocation>, List<TRegion>> tuple;
+        //    if (sourceFiles.Count() > 1)
+        //    {
+        //        tuple = RetrieveLocationsMultiplesSourceClasses(prog, sourceFiles, program);
+        //    }
+        //    else
+        //    {
+        //        tuple = RetrieveLocationsSingleSourceClassPosNegative(prog);
+        //    }
+        //    var sourceLocations = tuple.Item1;
+
+        //    this.Locations = NonDuplicateLocations(sourceLocations);
+
+        //    //remove
+        //    List<Selection> selections = new List<Selection>();
+        //    foreach (CodeLocation location in Locations)
+        //    {
+        //        Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode);
+        //        selections.Add(selection);
+        //    }
+        //    JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
+        //    //remove
+
+        //    LocalionsComputerSoFar = tuple;
+        //    NotifyLocationsObservers(Locations);
+        //}
+
         public void RetrieveLocationsPosNegatives(string program)
         {
             Prog prog = ProgramsWithNegatives.First();
-            List<Tuple<string, string>> sourceFiles = SourceFiles();
+            //List<Tuple<string, string>> sourceFiles = SourceFiles();
+            Dictionary<string, List<TRegion>> list =
+                RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
 
             Tuple<List<CodeLocation>, List<TRegion>> tuple;
-            if (sourceFiles.Count() > 1)
+            if (list.Count() > 1)
             {
-                tuple = RetrieveLocationsMultiplesSourceClasses(prog, sourceFiles, program);
+                tuple = RetrieveLocationsMultiplesSourceClasses(prog);
             }
             else
             {
@@ -514,12 +594,12 @@ namespace Spg.LocationCodeRefactoring.Controller
             return tuple;
         }
 
-        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog, List<Tuple<string, string>> sourceFiles, string program)
+        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog)
         {
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
             Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
             Dictionary<string, List<TRegion>> groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
-           
+
             List<SyntaxNode> lcas = new List<SyntaxNode>();
             foreach (KeyValuePair<string, List<TRegion>> item in groups)
             {
@@ -529,33 +609,76 @@ namespace Spg.LocationCodeRefactoring.Controller
 
             //foreach (Tuple<string, string> source in sourceFiles)
             //{
-                List<TRegion> regions = RetrieveLocations(prog);
-//                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
-                //dicRegions.Add(source.Item2, regions);
+            List<TRegion> regions = RetrieveLocations(prog);
+            //                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
+            //dicRegions.Add(source.Item2, regions);
 
-                foreach (TRegion region in regions)
+            foreach (TRegion region in regions)
+            {
+                List<TRegion> value;
+                if (!dicRegions.TryGetValue(region.Path, out value))
                 {
-                    List<TRegion> value;
-                    if (!dicRegions.TryGetValue(region.Path, out value))
-                    {
-                        value = new List<TRegion>();
-                        dicRegions[region.Path] = value;
-                    }
-
-                    dicRegions[region.Path].Add(region);
-                    CodeLocation location = new CodeLocation
-                    {
-                        Region = region,
-                        SourceCode = region.Parent.Text,
-                        SourceClass = region.Path
-                    };
-                    sourceLocations.Add(location);
+                    value = new List<TRegion>();
+                    dicRegions[region.Path] = value;
                 }
+
+                dicRegions[region.Path].Add(region);
+                CodeLocation location = new CodeLocation
+                {
+                    Region = region,
+                    SourceCode = region.Parent.Text,
+                    SourceClass = region.Path
+                };
+                sourceLocations.Add(location);
+            }
             //}
             var rs = dicRegions[CurrentViewCodePath.ToUpperInvariant()];//extractor.RetrieveString(prog, program);
             Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
             return tuple;
         }
+
+//        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog, List<Tuple<string, string>> sourceFiles, string program)
+//        {
+//            List<CodeLocation> sourceLocations = new List<CodeLocation>();
+//            Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
+//            Dictionary<string, List<TRegion>> groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
+           
+//            List<SyntaxNode> lcas = new List<SyntaxNode>();
+//            foreach (KeyValuePair<string, List<TRegion>> item in groups)
+//            {
+//                var result = RegionManager.LeastCommonAncestors(item.Key, item.Value);
+//                lcas.AddRange(result);
+//            }
+
+//            //foreach (Tuple<string, string> source in sourceFiles)
+//            //{
+//                List<TRegion> regions = RetrieveLocations(prog);
+////                regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, lcas);
+//                //dicRegions.Add(source.Item2, regions);
+
+//                foreach (TRegion region in regions)
+//                {
+//                    List<TRegion> value;
+//                    if (!dicRegions.TryGetValue(region.Path, out value))
+//                    {
+//                        value = new List<TRegion>();
+//                        dicRegions[region.Path] = value;
+//                    }
+
+//                    dicRegions[region.Path].Add(region);
+//                    CodeLocation location = new CodeLocation
+//                    {
+//                        Region = region,
+//                        SourceCode = region.Parent.Text,
+//                        SourceClass = region.Path
+//                    };
+//                    sourceLocations.Add(location);
+//                }
+//            //}
+//            var rs = dicRegions[CurrentViewCodePath.ToUpperInvariant()];//extractor.RetrieveString(prog, program);
+//            Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
+//            return tuple;
+//        }
 
         /*private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog, List<Tuple<string, string>> sourceFiles, string program)
         {
@@ -603,7 +726,7 @@ namespace Spg.LocationCodeRefactoring.Controller
             string sourceCodePath = SelectedLocations.First().Path;
             for (int index = 1; index < SelectedLocations.Count; index++)
             {
-                var slocation = SelectedLocations[index];
+                TRegion slocation = SelectedLocations[index];
                 if (!slocation.Path.Equals(sourceCodePath))
                 {
                     return WorkspaceManager.GetInstance().SourceFiles(this.ProjectInformation.ProjectPath, this.ProjectInformation.SolutionPath);

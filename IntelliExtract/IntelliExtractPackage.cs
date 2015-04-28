@@ -135,7 +135,6 @@ namespace SPG.IntelliExtract
                 //}
             }
 
-
             if (negatives.Any())
             {
                 //controller.Extract(controller.SelectedLocations, negatives);
