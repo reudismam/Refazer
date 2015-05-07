@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
@@ -34,19 +35,40 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
             var referencedSymbols = ReferenceManager.GroupReferenceBySelection(result, controller.SelectedLocations);
 
             List<SyntaxNode> nodesList = new List<SyntaxNode>();
+            Dictionary<string, List<TextSpan>> dictionary;
             if (referencedSymbols.Count == 1)
             {
-                Dictionary<string, List<TextSpan>> dictionary = referencedSymbols.First().Value;
-                //for each file
+                dictionary = referencedSymbols.First().Value;
+            }
+            else
+            {
+                dictionary = new Dictionary<string, List<TextSpan>>();
+                foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> symbol in referencedSymbols)
+                {
+                    foreach (KeyValuePair<string, List<TextSpan>> dic in symbol.Value)
+                    {
+                        if (!dictionary.ContainsKey(dic.Key))
+                        {
+                            dictionary.Add(dic.Key, dic.Value);
+                        }
+                        dictionary[dic.Key].AddRange(dic.Value);
+                    }
+                }
+            }
+            //for each file
                 foreach (var fileSpans in dictionary)
                 {
                     SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
                     var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-                                where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
-                                select node;
+                        where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
+                        select node;
                     nodesList.AddRange(nodes);
                 }
-            }
+            //}
+            //else
+            //{
+                //MessageBox.Show("More than one syntax reference");
+            //}
 
             if (!result.Any()) return SyntaxNodesWithoutSemanticModel(tree);
             return nodesList;

@@ -35,7 +35,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
             EditorController contoller = EditorController.GetInstance();
             List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
-            S.predicate = pred;
+            S.Predicate = pred;
 
             List<Prog> predicates = S.Learn(examples);
             if (hypo.Count == 1)
@@ -111,7 +111,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
             EditorController contoller = EditorController.GetInstance();
             List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
-            S.predicate = pred;
+            S.Predicate = pred;
 
             List<Prog> predicates = S.Learn(positiveExamples, negativeExamples);
             if (hypo.Count == 1)

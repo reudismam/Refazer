@@ -28,13 +28,13 @@ namespace Spg.LocationRefactor.Learn
         /// <summary>
         /// Predicate of the filter
         /// </summary>
-        public IPredicate predicate { get; set; }
+        public IPredicate Predicate { get; set; }
 
-        public List<TRegion> list { get; set; }
+        public List<TRegion> List { get; set; }
 
         public FilterLearnerBase(List<TRegion> list)
         {
-            this.list = list;
+            this.List = list;
             _calculated = new Dictionary<TokenSeq, Boolean>();
         }
 
@@ -44,9 +44,9 @@ namespace Spg.LocationRefactor.Learn
         /// <param name="predicate">Predicate</param>
         public FilterLearnerBase(IPredicate predicate, List<TRegion> list)
         {
-            this.list = list;
+            this.List = list;
             _calculated = new Dictionary<TokenSeq, Boolean>();
-            this.predicate = predicate;
+            this.Predicate = predicate;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Spg.LocationRefactor.Learn
                 if (!dic.TryGetValue(ipredicate, out prog))
                 {
                     prog = new Prog();
-                    FilterBase filter = GetFilter(list);
+                    FilterBase filter = GetFilter(List);
                     filter.Predicate = ipredicate;
                     prog.Ioperator = filter;
                     dic.Add(ipredicate, prog);
@@ -125,7 +125,7 @@ namespace Spg.LocationRefactor.Learn
                 if (!dic.TryGetValue(ipredicate, out prog))
                 {
                     prog = new Prog();
-                    FilterBase filter = GetFilter(list);
+                    FilterBase filter = GetFilter(List);
                     filter.Predicate = ipredicate;
                     prog.Ioperator = filter;
                     dic.Add(ipredicate, prog);

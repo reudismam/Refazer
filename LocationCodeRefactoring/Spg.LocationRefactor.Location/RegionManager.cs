@@ -228,13 +228,13 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             foreach (var item in list)
             {
                 List<CodeLocation> value;
-                if (!dic.TryGetValue(item.SourceClass, out value))
+                if (!dic.TryGetValue(item.SourceClass.ToUpperInvariant(), out value))
                 {
                     value = new List<CodeLocation>();
-                    dic[item.SourceClass] = value;
+                    dic[item.SourceClass.ToUpperInvariant()] = value;
                 }
 
-                dic[item.SourceClass].Add(item);
+                dic[item.SourceClass.ToUpperInvariant()].Add(item);
             }
 
             return dic;

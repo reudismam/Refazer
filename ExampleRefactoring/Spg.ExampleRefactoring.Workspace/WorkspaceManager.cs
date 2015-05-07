@@ -181,29 +181,11 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
-            //Project project = null;
-            //foreach (var projectId in solution.ProjectIds)
-            //{
-            //    project = solution.GetProject(projectId);
-            //}
             var sourceDeclarations = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
 
             foreach (ISymbol sourceDeclaration in sourceDeclarations)
-            {
-                //IEnumerable<SymbolCallerInfo> references = SymbolFinder.FindCallersAsync(sourceDeclaration, solution).Result;
-
+            { 
                 IEnumerable<ReferencedSymbol> references = SymbolFinder.FindReferencesAsync(sourceDeclaration, solution).Result;
-
-                //List<ReferencedSymbol> referencedList = references.ToList();
-
-                /*foreach (var item2 in references2)
-                {
-                    //MessageBox.Show(item2.Locations.First().Document.GetTextAsync().Result.ToString());
-                    foreach (var location2 in item2.Locations)
-                    {
-                        MessageBox.Show(location2.Document.GetTextAsync().Result.GetSubText(location2.Location.SourceSpan).ToString());
-                    }
-                }*/
 
                 MessageBox.Show(references.Count() + "");
 
@@ -223,9 +205,30 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                         value.Add(location.Location.SourceSpan);
                     }
                 }
-                referenceDictionary.Add(sourceDeclaration.ToDisplayString(), spansDictionary);
+
+                if (!referenceDictionary.ContainsKey(sourceDeclaration.ToDisplayString()))
+                {
+                    referenceDictionary.Add(sourceDeclaration.ToDisplayString(), spansDictionary);
+                }
+                else
+                {
+                    Console.WriteLine("The key alheady exist on dictionary.");
+                }
             }
             return referenceDictionary;
+        }
+
+        /// <summary>
+        /// Source files in solution on the format source code, source code path
+        /// </summary>
+        /// <param name="projectName">Name of the project</param>
+        /// <param name="solutionPath">Solution path</param>
+        /// <returns>List of source file in the solution</returns>
+        public List<Tuple<string, string>> SourceFiles(string projectName, string solutionPath)
+        {
+            //WorkspaceManager manager = new WorkspaceManager();
+            List<Tuple<string, string>> sourceFiles = GetSourcesFiles(projectName, solutionPath);
+            return sourceFiles;
         }
 
         //public string GetSemanticModel(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
@@ -312,18 +315,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         //    var solution = workspace.OpenSolutionAsync(solutionPath).Result;
         //}
 
-        /// <summary>
-        /// Source files in solution on the format source code, source code path
-        /// </summary>
-        /// <param name="projectName">Name of the project</param>
-        /// <param name="solutionPath">Solution path</param>
-        /// <returns>List of source file in the solution</returns>
-        public List<Tuple<string, string>> SourceFiles(string projectName, string solutionPath)
-        {
-            //WorkspaceManager manager = new WorkspaceManager();
-            List<Tuple<string, string>> sourceFiles = GetSourcesFiles(projectName, solutionPath);
-            return sourceFiles;
-        }
 
         //private static void ReportMethods(INamespaceSymbol namespaceSymbol)
         //{

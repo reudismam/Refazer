@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Spg.ExampleRefactoring.Util;
 
@@ -17,10 +18,17 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Util
         public static void Write(T t, string path)
         {
             System.IO.StreamWriter file = new System.IO.StreamWriter(path);
-            string json = JsonConvert.SerializeObject(t, Formatting.Indented,
-                                 new JsonSerializerSettings() {ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
-            file.Write(json);
-            file.Close();
+            string json = "";
+            try
+            {
+                json = JsonConvert.SerializeObject(t, Formatting.Indented,
+                    new JsonSerializerSettings() {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+            }
+            catch (OutOfMemoryException)
+            {
+                file.Write(json);
+                file.Close();
+            }
         }
 
         /// <summary>

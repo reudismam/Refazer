@@ -47,72 +47,72 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (type == typeof(int))
             {
-                return FormatLiteral((int)obj, useHexadecimalNumbers);
+                return FormatLiteral((int)obj, options);
             }
 
             if (type == typeof(string))
             {
-                return FormatLiteral((string)obj, quoteStrings);
+                return FormatLiteral((string)obj, options);
             }
 
             if (type == typeof(bool))
             {
-                return FormatLiteral((bool)obj);
+                return FormatLiteral((bool)obj, options);
             }
 
             if (type == typeof(char))
             {
-                return FormatLiteral((char)obj, quoteStrings);
+                return FormatLiteral((char)obj, options);
             }
 
             if (type == typeof(byte))
             {
-                return FormatLiteral((byte)obj, useHexadecimalNumbers);
+                return FormatLiteral((byte)obj, options);
             }
 
             if (type == typeof(short))
             {
-                return FormatLiteral((short)obj, useHexadecimalNumbers);
+                return FormatLiteral((short)obj, options);
             }
 
             if (type == typeof(long))
             {
-                return FormatLiteral((long)obj, useHexadecimalNumbers);
+                return FormatLiteral((long)obj, options);
             }
 
             if (type == typeof(double))
             {
-                return FormatLiteral((double)obj);
+                return FormatLiteral((double)obj, options);
             }
 
             if (type == typeof(ulong))
             {
-                return FormatLiteral((ulong)obj, useHexadecimalNumbers);
+                return FormatLiteral((ulong)obj, options);
             }
 
             if (type == typeof(uint))
             {
-                return FormatLiteral((uint)obj, useHexadecimalNumbers);
+                return FormatLiteral((uint)obj, options);
             }
 
             if (type == typeof(ushort))
             {
-                return FormatLiteral((ushort)obj, useHexadecimalNumbers);
+                return FormatLiteral((ushort)obj, options);
             }
 
             if (type == typeof(sbyte))
             {
-                return FormatLiteral((sbyte)obj, useHexadecimalNumbers);
+                return FormatLiteral((sbyte)obj, options);
             }
 
             if (type == typeof(float))
             {
-                return FormatLiteral((float)obj);
+                return FormatLiteral((float)obj, options);
             }
 
             if (type == typeof(decimal))
             {
-                return FormatLiteral((decimal)obj);
+                return FormatLiteral((decimal)obj, options);
             }
 
             return null;
