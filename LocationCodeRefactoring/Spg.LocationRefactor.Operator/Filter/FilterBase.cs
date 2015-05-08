@@ -255,33 +255,6 @@ namespace Spg.LocationRefactor.Operator.Filter
                         {
                             isCommonName = false;
                         }
-                        //InvocationExpressionSyntax syntax = (InvocationExpressionSyntax)lca;
-                        //ExpressionSyntax expression = syntax.Expression;
-                        //if (expression is IdentifierNameSyntax)
-                        //{
-                        //    IdentifierNameSyntax nameSyntax = (IdentifierNameSyntax) expression;
-                        //    if (name == null)
-                        //    {
-                        //        name = nameSyntax.ToFullString();
-                        //    }
-                        //    else if(!name.Equals(nameSyntax.ToFullString()))
-                        //    {
-                        //        isCommonName = false;
-                        //    }
-                        //}else if (expression is MemberAccessExpressionSyntax)
-                        //{
-                        //    MemberAccessExpressionSyntax member = (MemberAccessExpressionSyntax) expression;
-                        //    if (name == null)
-                        //    {
-                        //        name = member.Name.ToFullString();
-                        //    }
-                        //    else if (!name.Equals(member.Name.ToFullString()))
-                        //    {
-                        //        isCommonName = false;
-                        //    }
-
-                        //}
-
                         break;
                     case SyntaxKind.ObjectCreationExpression:
                         ObjectCreationExpressionSyntax objectCreation = (ObjectCreationExpressionSyntax) lca;
@@ -320,6 +293,47 @@ namespace Spg.LocationRefactor.Operator.Filter
                             {
                                 isCommonName = false;
                             }
+                        }else if(expressionSyntax is ObjectCreationExpressionSyntax)
+                        {
+                            ObjectCreationExpressionSyntax objectArgument = (ObjectCreationExpressionSyntax) expressionSyntax;
+                            SyntaxToken identifierArgument = objectArgument.NewKeyword.GetNextToken();
+
+                            string nameArgument = identifierArgument.ToFullString();
+
+                            if (name == null)
+                            {
+                                name = nameArgument;
+                            }
+                            else if (!name.Equals(nameArgument))
+                            {
+                                isCommonName = false;
+                            }
+                        }
+                        break;
+                    case SyntaxKind.ExpressionStatement:
+                        ExpressionStatementSyntax expressionStatement = (ExpressionStatementSyntax) lca;
+                        ExpressionSyntax expressionStatementSyntax = expressionStatement.Expression;
+                        MessageBox.Show(expressionStatementSyntax.CSharpKind() + "");
+                        if (expressionStatementSyntax is MemberAccessExpressionSyntax)
+                        {
+                            MemberAccessExpressionSyntax memberAccess = (MemberAccessExpressionSyntax)lca;
+
+                            if (name == null)
+                            {
+                                name = memberAccess.Name.ToFullString();
+                            }
+                            else if (!name.Equals(memberAccess.Name.ToFullString()))
+                            {
+                                isCommonName = false;
+                            }
+                        }
+                        else if (expressionStatementSyntax is InvocationExpressionSyntax)
+                        {
+                            name = GetName(expressionStatementSyntax as InvocationExpressionSyntax, name);
+                            if (name == null)
+                            {
+                                isCommonName = false;
+                            }
                         }
                         break;
                     default:
@@ -336,10 +350,10 @@ namespace Spg.LocationRefactor.Operator.Filter
                                 isCommonName = false;
                             }
                         }
-                        else
-                        {
-                            return GetIdentifierName2();
-                        }
+                        //else
+                        //{
+                        //    return GetIdentifierName2();
+                        //}
                         break;
                 }
             }
@@ -348,7 +362,8 @@ namespace Spg.LocationRefactor.Operator.Filter
                 return name;
             }
 
-            return GetIdentifierName2();
+            //return GetIdentifierName2();
+            return null;
         }
 
         private static string GetName(InvocationExpressionSyntax lca, string name)
