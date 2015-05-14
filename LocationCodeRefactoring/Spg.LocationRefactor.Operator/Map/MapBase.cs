@@ -50,7 +50,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
             return filtered;
         }
 
-
         /// <summary>
         /// Retrieve region from input
         /// </summary>
@@ -70,7 +69,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
                 TRegion region = new TRegion();
                 Tuple<SyntaxNode, SyntaxNode> tuplesn = Tuple.Create(r.Node, r.Node);
                 var tnodes = ASTProgram.Example(tuplesn);
-                
+
                 ListNode lnode = new ListNode();
                 try
                 {

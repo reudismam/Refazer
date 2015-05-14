@@ -34,7 +34,7 @@
 //        /// </summary>
 //        /// <param name="sourceCode">Source code</param>
 //        /// <returns>Syntax nodes</returns>
-//        protected override IEnumerable<SyntaxNode> SyntaxNodes(string sourceCode)
+//        protected override IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string sourceCode)
 //        {
 //            //return Strategy.SyntaxElements(sourceCode, SyntaxKind.MethodDeclaration);
 //            return Strategy.SyntaxElements(sourceCode, list);

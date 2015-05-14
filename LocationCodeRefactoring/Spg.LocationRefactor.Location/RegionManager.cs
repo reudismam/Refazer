@@ -159,7 +159,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             Dictionary<string, List<TRegion>> dicRegion = GroupRegionBySourceFile(list);
             foreach (var entry in dicRegion)
             {
-                //List<SyntaxNode> statements = SyntaxNodes(entry.Key, entry.Value);
+                //List<SyntaxNode> statements = SyntaxNodesWithSemanticModel(entry.Key, entry.Value);
                 //var methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
                 //Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, entry.Value);
                 SyntaxTree tree = CSharpSyntaxTree.ParseText(entry.Key);

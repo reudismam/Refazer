@@ -101,8 +101,15 @@ namespace Spg.LocationRefactor.Operator.Filter
 
             SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
             string name = GetIdentifierName();
-            IEnumerable<SyntaxNode> descedants = SyntacticalDecomposer.SyntaxNodes(tree.GetRoot(), name);
-            List<TRegion> tregions = RetrieveRegionsBase(descedants);
+            IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(tree.GetRoot(), name);
+
+            if (nodesForFiltering == null)
+            {
+                nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(tree.GetRoot());
+                return RetrieveRegionsBase(nodesForFiltering);
+            }
+
+            List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
             return tregions;
         }
 
@@ -117,8 +124,17 @@ namespace Spg.LocationRefactor.Operator.Filter
 
             string name = GetIdentifierName();
             //SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
-            IEnumerable<SyntaxNode> descedants = SyntacticalDecomposer.SyntaxNodes(name);
-            List<TRegion> tregions = RetrieveRegionsBase(descedants);
+            IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
+
+            if (nodesForFiltering == null)
+            {
+                EditorController controller = EditorController.GetInstance();
+                List<Tuple<string, string>> files = WorkspaceManager.GetInstance().GetSourcesFiles(controller.ProjectInformation.ProjectPath, controller.ProjectInformation.SolutionPath);
+                nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(files);
+                return RetrieveRegionsBase(nodesForFiltering);
+            }
+
+            List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
             return tregions;
         }
 
@@ -131,7 +147,13 @@ namespace Spg.LocationRefactor.Operator.Filter
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
             string name = GetIdentifierName();
-            IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodes(syntaxNode.Parent, name);
+            IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(syntaxNode.Parent, name);
+
+            if (nodesForFiltering == null)
+            {
+                nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(syntaxNode);
+                return RetrieveRegionsBase(nodesForFiltering);
+            }
             //IEnumerable<SyntaxNode> nodesForFiltering =
             //    SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(syntaxNode.Parent);
             nodesForFiltering = NodesForSingleFile(nodesForFiltering, syntaxNode);
@@ -143,12 +165,19 @@ namespace Spg.LocationRefactor.Operator.Filter
             List<SyntaxNode> resultList = new List<SyntaxNode>();
             foreach (SyntaxNode node in nodes)
             {
-                if (node.SyntaxTree.FilePath.Equals(EditorController.GetInstance().CurrentViewCodePath.ToUpperInvariant()))
+                if (node.SyntaxTree.FilePath.ToUpperInvariant().Equals(EditorController.GetInstance().CurrentViewCodePath.ToUpperInvariant()))
                 {
-                    SyntaxNode childNode = root.FindNode(node.Span);
-                    if (childNode != null)
+                    try
                     {
-                        resultList.Add(childNode);
+                        SyntaxNode childNode = root.FindNode(node.Span);
+                        if (childNode != null)
+                        {
+                            resultList.Add(childNode);
+                        }
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        MessageBox.Show("This location is not present on root node.");
                     }
                 }
                 //MessageBox.Show("Node: " + childNode.CSharpKind());
@@ -161,7 +190,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         ///// </summary>
         ///// <param name="tree">Source code tree</param>
         ///// <returns>Syntax nodes to be used on filtering</returns>
-        //private IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree)
+        //private IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(SyntaxNode tree)
         //{
         //    var nodes = from node in tree.DescendantNodesAndSelf()
         //                          where WithinLcas(node)
@@ -177,7 +206,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         private List<TRegion> RetrieveRegionsBase(IEnumerable<SyntaxNode> regions)
         {
             List<TRegion> tRegions = new List<TRegion>();
-            //IEnumerable<SyntaxNode> regions = SyntaxNodes(syntaxNode, List);
+            //IEnumerable<SyntaxNode> regions = SyntaxNodesWithSemanticModel(syntaxNode, List);
 
             foreach (SyntaxNode node in regions)
             {
@@ -196,7 +225,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                     tRegion.Start = span.Start;
                     tRegion.Length = span.Length;
                     tRegion.Node = node;
-                    tRegion.Path = node.SyntaxTree.FilePath;
+                    tRegion.Path = node.SyntaxTree.FilePath.ToUpperInvariant();
                     tRegion.Parent = parent;
 
                     tRegions.Add(tRegion);
@@ -336,6 +365,11 @@ namespace Spg.LocationRefactor.Operator.Filter
                             }
                         }
                         break;
+                    case SyntaxKind.LocalDeclarationStatement:
+                        //LocalDeclarationStatementSyntax localDeclaration = (LocalDeclarationStatementSyntax) lca;
+                        //VariableDeclarationSyntax variableDeclaration = localDeclaration.Declaration;
+                        //variableDeclaration.
+                        break;
                     default:
                         if (lca is MemberAccessExpressionSyntax)
                         {
@@ -368,16 +402,16 @@ namespace Spg.LocationRefactor.Operator.Filter
 
         private static string GetName(InvocationExpressionSyntax lca, string name)
         {
-            InvocationExpressionSyntax syntax = (InvocationExpressionSyntax)lca;
+            InvocationExpressionSyntax syntax = lca;
             ExpressionSyntax expression = syntax.Expression;
             if (expression is IdentifierNameSyntax)
             {
                 IdentifierNameSyntax nameSyntax = (IdentifierNameSyntax)expression;
                 if (name == null)
                 {
-                    name = nameSyntax.ToFullString();
+                    name = nameSyntax.Identifier.ToString();
                 }
-                else if (!name.Equals(nameSyntax.ToFullString()))
+                else if (!name.Equals(nameSyntax.Identifier.ToString()))
                 {
                     return null;
                 }
@@ -387,9 +421,9 @@ namespace Spg.LocationRefactor.Operator.Filter
                 MemberAccessExpressionSyntax member = (MemberAccessExpressionSyntax)expression;
                 if (name == null)
                 {
-                    name = member.Name.ToFullString();
+                    name = member.Name.ToString();
                 }
-                else if (!name.Equals(member.Name.ToFullString()))
+                else if (!name.Equals(member.Name.ToString()))
                 {
                     return null;
                 }
@@ -425,7 +459,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         ///// </summary>
         ///// <param name="input">Source code</param>
         ///// <returns>Syntax nodes</returns>
-        //protected abstract IEnumerable<SyntaxNode> SyntaxNodes(string input);
+        //protected abstract IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string input);
 
         /// <summary>
         /// Filter learner
@@ -452,10 +486,10 @@ namespace Spg.LocationRefactor.Operator.Filter
 ///// <returns>Retrieved regions</returns>
 //public List<TRegion> RetrieveRegion(string input)
 //{
-//    IEnumerable<SyntaxNode> regions = SyntaxNodes(input, List);
+//    IEnumerable<SyntaxNode> regions = SyntaxNodesWithSemanticModel(input, List);
 //    return RetrieveRegionsBase(regions);
 //    //List<TRegion> tRegions = new List<TRegion>();
-//    //IEnumerable<SyntaxNode> regions = SyntaxNodes(input, List);
+//    //IEnumerable<SyntaxNode> regions = SyntaxNodesWithSemanticModel(input, List);
 
 //    //foreach (SyntaxNode node in regions)
 //    //{

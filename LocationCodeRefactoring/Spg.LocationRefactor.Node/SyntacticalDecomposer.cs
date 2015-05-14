@@ -22,16 +22,25 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
         /// <param name="tree">Source code tree</param>
         /// <param name="name">Identifier name</param>
         /// <returns>Syntax nodes to be used on filtering</returns>
-        internal static IEnumerable<SyntaxNode> SyntaxNodes(SyntaxNode tree, string name)
+        internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(SyntaxNode tree, string name)
         {
             //string name = GetIdentifierName();
 
-            if (name == null) return SyntaxNodesWithoutSemanticModel(tree);
+            if (name == null) return null;//SyntaxNodesWithoutSemanticModel(tree);
 
             EditorController controller = EditorController.GetInstance();
-            Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
-                .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
-                    controller.ProjectInformation.SolutionPath, name);
+            Dictionary<string, Dictionary<string, List<TextSpan>>> result = null;
+            try
+            {
+                result = WorkspaceManager.GetInstance()
+                    .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
+                        controller.ProjectInformation.SolutionPath, name);
+            }
+            catch (AggregateException)
+            {
+                MessageBox.Show("Could not find references for: " + name);
+            }
+
             var referencedSymbols = ReferenceManager.GroupReferenceBySelection(result, controller.SelectedLocations);
 
             List<SyntaxNode> nodesList = new List<SyntaxNode>();
@@ -70,7 +79,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
                 //MessageBox.Show("More than one syntax reference");
             //}
 
-            if (!result.Any()) return SyntaxNodesWithoutSemanticModel(tree);
+            if (!result.Any()) return null;//return SyntaxNodesWithoutSemanticModel(tree);
             return nodesList;
         }
 
@@ -78,11 +87,11 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
         /// Syntax nodes to be used on filtering
         /// </summary>
         /// <returns>Syntax nodes to be used on filtering</returns>
-        internal static IEnumerable<SyntaxNode> SyntaxNodes(string name)
+        internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string name)
         {
             //string name = GetIdentifierName();
 
-            //if (name == null) return SyntaxNodesWithoutSemanticModel(tree);
+            if (name == null) return null;
 
             EditorController controller = EditorController.GetInstance();
             Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
@@ -105,7 +114,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
                 }
             }
 
-            //if (!result.Any()) return SyntaxNodesWithoutSemanticModel(tree);
+            if (!result.Any()) return null;//return SyntaxNodesWithoutSemanticModel(tree);
             return nodesList;
         }
 
@@ -122,6 +131,29 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
                         where WithinLcas(node)
                         select node;
             return nodes;
+        }
+
+        /// <summary>
+        /// Syntax nodes without semantical model
+        /// </summary>
+        /// <param name="files">List of source files on the format (sourceCode, sourcePath)</param>
+        /// <returns>Syntax nodes without semantical model</returns>
+        internal static IEnumerable<SyntaxNode> SyntaxNodesWithoutSemanticModel(List<Tuple<string, string>> files)
+        {
+            if (files == null) throw new ArgumentNullException("files");
+            if(!files.Any()) throw new ArgumentException("Source files cannot be empty.", "files");
+
+            List<SyntaxNode> listNodes = new List<SyntaxNode>();
+            foreach (Tuple<string, string> fileTuple in files)
+            {
+                SyntaxTree tree = CSharpSyntaxTree.ParseFile(fileTuple.Item2);
+
+                var nodes = from node in tree.GetRoot().DescendantNodesAndSelf()
+                            where WithinLcas(node)
+                            select node;
+                listNodes.AddRange(nodes);
+            }  
+            return listNodes;
         }
 
         /// <summary>

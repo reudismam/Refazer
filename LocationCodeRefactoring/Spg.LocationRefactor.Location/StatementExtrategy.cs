@@ -42,7 +42,7 @@
 //        /////// </summary>
 //        /////// <param name="sourceCode">Source code</param>
 //        /////// <returns>Syntax nodes</returns>
-//        ////public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
+//        ////public override List<SyntaxNode> SyntaxNodesWithSemanticModel(string sourceCode, List<TRegion> list)
 //        ////{
 //        ////    List<SyntaxNode> nodes = null;
 //        ////    if (!_computed.TryGetValue(sourceCode, out nodes))

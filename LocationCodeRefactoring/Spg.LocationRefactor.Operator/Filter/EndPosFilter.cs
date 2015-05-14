@@ -28,7 +28,7 @@ namespace Spg.LocationRefactor.Operator
         ///// </summary>
         ///// <param name="input">Source code</param>
         ///// <returns>Syntax nodes</returns>
-        //protected override IEnumerable<SyntaxNode> SyntaxNodes(string input)
+        //protected override IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string input)
         //{
         //    throw new NotImplementedException();
         //}

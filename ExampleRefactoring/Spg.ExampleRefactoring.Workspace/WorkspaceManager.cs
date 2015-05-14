@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -39,7 +38,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             }
             return _instance;
         }
-
 
         /// <summary>
         /// Return .cs files in the solution
@@ -201,7 +199,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                             value = new List<TextSpan>();
                             spansDictionary.Add(tree.FilePath.ToUpperInvariant(), value);
                         }
-
                         value.Add(location.Location.SourceSpan);
                     }
                 }

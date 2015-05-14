@@ -44,6 +44,8 @@ IntelliMeta.sln.ide/*
 *.t
 *.cache
 *.suo
+Backup[0-9]*/*
+Backup/*
 
 
 
