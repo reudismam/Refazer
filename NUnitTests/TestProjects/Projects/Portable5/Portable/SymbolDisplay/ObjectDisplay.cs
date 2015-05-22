@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Open Technologies, Inc.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+﻿// Copyright (c) Microsoft Open Technologies, Inc.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
 using System.Globalization;
@@ -47,72 +47,72 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (type == typeof(int))
             {
-                return FormatLiteral((int)obj, options);
+                return FormatLiteral((int)obj, useHexadecimalNumbers);
             }
 
             if (type == typeof(string))
             {
-                return FormatLiteral((string)obj, options);
+                return FormatLiteral((string)obj, quoteStrings);
             }
 
             if (type == typeof(bool))
             {
-                return FormatLiteral((bool)obj, options);
+                return FormatLiteral((bool)obj);
             }
 
             if (type == typeof(char))
             {
-                return FormatLiteral((char)obj, options);
+                return FormatLiteral((char)obj, quoteStrings);
             }
 
             if (type == typeof(byte))
             {
-                return FormatLiteral((byte)obj, options);
+                return FormatLiteral((byte)obj, useHexadecimalNumbers);
             }
 
             if (type == typeof(short))
             {
-                return FormatLiteral((short)obj, options);
+                return FormatLiteral((short)obj, useHexadecimalNumbers);
             }
 
             if (type == typeof(long))
             {
-                return FormatLiteral((long)obj, options);
+                return FormatLiteral((long)obj, useHexadecimalNumbers);
             }
 
             if (type == typeof(double))
             {
-                return FormatLiteral((double)obj, options);
+                return FormatLiteral((double)obj);
             }
 
             if (type == typeof(ulong))
             {
-                return FormatLiteral((ulong)obj, options);
+                return FormatLiteral((ulong)obj, useHexadecimalNumbers);
             }
 
             if (type == typeof(uint))
             {
-                return FormatLiteral((uint)obj, options);
+                return FormatLiteral((uint)obj, useHexadecimalNumbers);
             }
 
             if (type == typeof(ushort))
             {
-                return FormatLiteral((ushort)obj, options);
+                return FormatLiteral((ushort)obj, useHexadecimalNumbers);
             }
 
             if (type == typeof(sbyte))
             {
-                return FormatLiteral((sbyte)obj, options);
+                return FormatLiteral((sbyte)obj, useHexadecimalNumbers);
             }
 
             if (type == typeof(float))
             {
-                return FormatLiteral((float)obj, options);
+                return FormatLiteral((float)obj);
             }
 
             if (type == typeof(decimal))
             {
-                return FormatLiteral((decimal)obj, options);
+                return FormatLiteral((decimal)obj);
             }
 
             return null;

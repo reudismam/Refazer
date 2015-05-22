@@ -563,8 +563,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
                 List<int> negatives = JsonUtil<List<int>>.Read(@"..\..\TestProjects\commits\" + commit + @"\negatives.json");
                 List<TRegion> negativesRegions = new List<TRegion>();
                 List<TRegion> positivesRegions = new List<TRegion>();
-                //foreach (var negative in negatives)
-                //{
+                //foreach (var negative in negatives)         
                 for (int i = 0; i < controller.Locations.Count; i++)
                 {
                     TRegion parent = new TRegion();
@@ -587,12 +586,12 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
             List<Selection> locations = JsonUtil<List<Selection>>.Read(@"..\..\TestProjects\commits\" + commit + @"\found_locations.json");
+            if (locations.Count != controller.Locations.Count) return false;
+
             bool passed = true;
             for (int i = 0; i < locations.Count; i++)
             {
-                if (locations.Count != controller.Locations.Count) { passed = false; break; }
-
-                if (!Path.GetFullPath(locations[i].SourcePath).Equals(controller.Locations[i].SourceClass)) { passed = false; break; }
+                if (!Path.GetFullPath(locations[i].SourcePath).ToUpperInvariant().Equals(controller.Locations[i].SourceClass.ToUpperInvariant())) { passed = false; break; }
 
                 if (locations[i].Start != controller.Locations[i].Region.Start || locations[i].Length != controller.Locations[i].Region.Length)
                 {

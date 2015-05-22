@@ -6,7 +6,7 @@ using Spg.LocationRefactor.TextRegion;
 
 namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
 {
-    class ReferenceManager
+    internal class ReferenceManager
     {
         /// <summary>
         /// Identify on the dictionary what entry corresponds to the element selection by the user.
@@ -14,15 +14,13 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <param name="dictionary">Dictionary</param>
         /// <param name="selection">Selection</param>
         /// <returns>Regions grouped by selection</returns>
-        internal static Dictionary<string, Dictionary<string, List<TextSpan>>> GroupReferenceBySelection(Dictionary<string, Dictionary<string, List<TextSpan>>> dictionary, List<TRegion> selection)
+        internal static Dictionary<string, Dictionary<string, List<TextSpan>>> GroupReferencesBySelection(Dictionary<string, Dictionary<string, List<TextSpan>>> dictionary, List<TRegion> selection)
         {
             Dictionary<string, Dictionary<string, List<TextSpan>>> result = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
-            //foreach (var region in selection)
-            //{
             foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> dictReferences in dictionary)
             {
                 Dictionary<string, List<TextSpan>> fileLocationDictionary = dictReferences.Value;
-                foreach (var region in selection)
+                foreach (TRegion region in selection)
                 {
                     string path = Path.GetFullPath(region.Path).ToUpperInvariant();
                     if (fileLocationDictionary.ContainsKey(path))
@@ -43,13 +41,11 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                                 else
                                 {
                                     Console.Write("Key already exist on the dictionary.");
-                                    //throw new Exception("Key already exist on the dictionary.");
                                 }
                             }
                         }
                     }
                 }
-
             }
             return result;
         }

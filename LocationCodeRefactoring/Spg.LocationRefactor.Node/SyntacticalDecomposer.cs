@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
 using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
@@ -16,35 +17,22 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
     /// </summary>
     public class SyntacticalDecomposer
     {
-        /// <summary>
+        private readonly static EditorController _ctl = EditorController.GetInstance();
         /// Syntax nodes to be used on filtering
         /// </summary>
         /// <param name="tree">Source code tree</param>
         /// <param name="name">Identifier name</param>
         /// <returns>Syntax nodes to be used on filtering</returns>
-        internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(SyntaxNode tree, string name)
+        internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string name)
         {
-            //string name = GetIdentifierName();
+            if (name == null) return null;
 
-            if (name == null) return null;//SyntaxNodesWithoutSemanticModel(tree);
+            Dictionary<string, Dictionary<string, List<TextSpan>>> result = GetReferences(name);
 
-            EditorController controller = EditorController.GetInstance();
-            Dictionary<string, Dictionary<string, List<TextSpan>>> result = null;
-            try
-            {
-                result = WorkspaceManager.GetInstance()
-                    .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
-                        controller.ProjectInformation.SolutionPath, name);
-            }
-            catch (AggregateException)
-            {
-                MessageBox.Show("Could not find references for: " + name);
-            }
-
-            var referencedSymbols = ReferenceManager.GroupReferenceBySelection(result, controller.SelectedLocations);
-
+            Dictionary<string, Dictionary<string, List<TextSpan>>> referencedSymbols = ReferenceManager.GroupReferencesBySelection(result, _ctl.SelectedLocations);
             List<SyntaxNode> nodesList = new List<SyntaxNode>();
             Dictionary<string, List<TextSpan>> dictionary;
+
             if (referencedSymbols.Count == 1)
             {
                 dictionary = referencedSymbols.First().Value;
@@ -65,58 +53,84 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
                 }
             }
             //for each file
-                foreach (var fileSpans in dictionary)
-                {
-                    SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
-                    var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-                        where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
-                        select node;
-                    nodesList.AddRange(nodes);
-                }
+            foreach (var fileSpans in dictionary)
+            {
+                SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
+                var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
+                            where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
+                            select node;
+                nodesList.AddRange(nodes);
+            }
             //}
             //else
             //{
-                //MessageBox.Show("More than one syntax reference");
+            //MessageBox.Show("More than one syntax reference");
             //}
 
-            if (!result.Any()) return null;//return SyntaxNodesWithoutSemanticModel(tree);
+            if (!result.Any() || !nodesList.Any()) return null;//return SyntaxNodesWithoutSemanticModel(tree);
             return nodesList;
         }
 
         /// <summary>
-        /// Syntax nodes to be used on filtering
+        /// Generates references on the format: key referenced type, and values dictionary of referencee file and list of referecees.
         /// </summary>
-        /// <returns>Syntax nodes to be used on filtering</returns>
-        internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string name)
+        /// <param name="name">Name to perform look up</param>
+        /// <returns>Generates references on the format: key referenced type, and values dictionary of referencee file and list of referecees.</returns>
+        internal static Dictionary<string, Dictionary<string, List<TextSpan>>> GetReferences(string name)
         {
-            //string name = GetIdentifierName();
-
-            if (name == null) return null;
-
-            EditorController controller = EditorController.GetInstance();
-            Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
-                .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
-                    controller.ProjectInformation.SolutionPath, name);
-            var referencedSymbols = ReferenceManager.GroupReferenceBySelection(result, controller.SelectedLocations);
-
-            List<SyntaxNode> nodesList = new List<SyntaxNode>();
-            if (referencedSymbols.Count == 1)
+            Dictionary<string, Dictionary<string, List<TextSpan>>> result = null;
+            try
             {
-                Dictionary<string, List<TextSpan>> dictionary = referencedSymbols.First().Value;
-                //for each file with the list of text span reference to the source declaration.
-                foreach (KeyValuePair<string, List<TextSpan>> fileSpans in dictionary)
-                {
-                    SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
-                    var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-                                where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
-                                select node;
-                    nodesList.AddRange(nodes);
-                }
+                WorkspaceManager wsManager = WorkspaceManager.GetInstance();
+                ProjectInformation pjInfo = _ctl.ProjectInformation;
+                result = wsManager.GetDeclaredReferences(pjInfo.ProjectPath, pjInfo.SolutionPath, name);
             }
-
-            if (!result.Any()) return null;//return SyntaxNodesWithoutSemanticModel(tree);
-            return nodesList;
+            catch (AggregateException)
+            {
+                Console.WriteLine("Could not find references for: " + name);
+            }
+            return result;
         }
+
+        //internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(SyntaxNode tree, string name)
+        //{
+        //    return SyntaxNodesWithSemanticModel(name);
+        //}
+
+        /*        /// <summary>
+                /// Syntax nodes to be used on filtering
+                /// </summary>
+                /// <returns>Syntax nodes to be used on filtering</returns>
+                internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string name)
+                {
+                    //string name = GetIdentifierName();
+
+                    if (name == null) return null;
+
+                    EditorController controller = EditorController.GetInstance();
+                    Dictionary<string, Dictionary<string, List<TextSpan>>> result = WorkspaceManager.GetInstance()
+                        .GetDeclaredReferences(controller.ProjectInformation.ProjectPath,
+                            controller.ProjectInformation.SolutionPath, name);
+                    var referencedSymbols = ReferenceManager.GroupReferenceBySelection(result, controller.SelectedLocations);
+
+                    List<SyntaxNode> nodesList = new List<SyntaxNode>();
+                    if (referencedSymbols.Count == 1)
+                    {
+                        Dictionary<string, List<TextSpan>> dictionary = referencedSymbols.First().Value;
+                        //for each file with the list of text span reference to the source declaration.
+                        foreach (KeyValuePair<string, List<TextSpan>> fileSpans in dictionary)
+                        {
+                            SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
+                            var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
+                                        where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
+                                        select node;
+                            nodesList.AddRange(nodes);
+                        }
+                    }
+
+                    if (!result.Any() || !nodesList.Any()) return null;//return SyntaxNodesWithoutSemanticModel(tree);
+                    return nodesList;
+                }*/
 
         /// <summary>
         /// Syntax nodes without semantical model
@@ -141,7 +155,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
         internal static IEnumerable<SyntaxNode> SyntaxNodesWithoutSemanticModel(List<Tuple<string, string>> files)
         {
             if (files == null) throw new ArgumentNullException("files");
-            if(!files.Any()) throw new ArgumentException("Source files cannot be empty.", "files");
+            if (!files.Any()) throw new ArgumentException("Source files cannot be empty.", "files");
 
             List<SyntaxNode> listNodes = new List<SyntaxNode>();
             foreach (Tuple<string, string> fileTuple in files)
@@ -152,7 +166,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
                             where WithinLcas(node)
                             select node;
                 listNodes.AddRange(nodes);
-            }  
+            }
             return listNodes;
         }
 

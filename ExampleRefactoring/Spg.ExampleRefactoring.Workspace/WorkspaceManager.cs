@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
@@ -63,9 +64,9 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                 if (project.Name.Equals(projectName))
                 {
                     //remove
-                    var compilation = project.GetCompilationAsync().Result;
-                    var globalNamespace = compilation.GlobalNamespace;
-                    var diagnostics = compilation.GetDiagnostics();
+                    //var compilation = project.GetCompilationAsync().Result;
+                    //var globalNamespace = compilation.GlobalNamespace;
+                    //var diagnostics = compilation.GetDiagnostics();
                     //remove
                     foreach (var documentId in project.DocumentIds)
                     {
@@ -179,13 +180,21 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
-            var sourceDeclarations = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
+            IEnumerable<ISymbol> sourceDeclarations = new List<ISymbol>();
+            try
+            {
+                sourceDeclarations = SymbolFinder.FindSourceDeclarationsAsync(solution, name, false).Result;
+            }
+            catch (AggregateException e)
+            {
+                MessageBox.Show("Error: " + e.GetBaseException().Message);
+            }
 
             foreach (ISymbol sourceDeclaration in sourceDeclarations)
             { 
                 IEnumerable<ReferencedSymbol> references = SymbolFinder.FindReferencesAsync(sourceDeclaration, solution).Result;
 
-                MessageBox.Show(references.Count() + "");
+                //MessageBox.Show(references.Count() + "");
 
                 var spansDictionary = new Dictionary<string, List<TextSpan>>();
                 foreach (ReferencedSymbol reference in references)

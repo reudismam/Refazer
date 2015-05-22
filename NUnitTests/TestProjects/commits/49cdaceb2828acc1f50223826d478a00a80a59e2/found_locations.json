@@ -1,13 +1,13 @@
 [
   {
     "Start": 536,
-    "Length": 416,
+    "Length": 117,
     "SourcePath": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\CSharp\\MockCSharpCompiler.cs",
     "SourceCode": "// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.\n\nusing System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing System.Text;\nusing System.Threading.Tasks;\nusing Microsoft.VisualStudio.Shell.Interop;\n\nnamespace Microsoft.CodeAnalysis.CSharp.Test.Utilities\n{\n    class MockCSharpCompiler : CSharpCompiler\n    {\n        public MockCSharpCompiler(string responseFile, string baseDirectory, string[] args)\n            : base(CSharpCommandLineParser.Default, responseFile, args, baseDirectory, Environment.GetEnvironmentVariable(\"LIB\"))\n        {\n\n        }\n\n        protected override void CompilerSpecificSqm(IVsSqmMulti sqm, uint sqmSession)\n        {\n            throw new NotImplementedException();\n        }\n\n        protected override uint GetSqmAppID()\n        {\n            throw new NotImplementedException();\n        }\n    }\n}\n"
   },
   {
     "Start": 524,
-    "Length": 383,
+    "Length": 84,
     "SourcePath": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\CSharp\\MockCsi.cs",
     "SourceCode": "// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.\n\nusing System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing System.Text;\nusing System.Threading.Tasks;\nusing Microsoft.VisualStudio.Shell.Interop;\n\nnamespace Microsoft.CodeAnalysis.CSharp.Test.Utilities\n{\n    internal class MockCsi : CSharpCompiler\n    {\n\n        public MockCsi(string responseFIle, string baseDirectory, string[] args)\n            : base(CSharpCommandLineParser.Interactive, responseFIle, args, baseDirectory, null)\n        {\n\n        }\n\n        protected override void CompilerSpecificSqm(IVsSqmMulti sqm, uint sqmSession)\n        {\n            throw new NotImplementedException();\n        }\n\n        protected override uint GetSqmAppID()\n        {\n            throw new NotImplementedException();\n        }\n    }\n}\n"
   }
