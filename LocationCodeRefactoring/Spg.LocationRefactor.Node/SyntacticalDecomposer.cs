@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
 using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
-using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
+using Spg.LocationCodeRefactoring.Controller;
 
 namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
 {
@@ -18,7 +17,9 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
     public class SyntacticalDecomposer
     {
         private readonly static EditorController _ctl = EditorController.GetInstance();
-        /// Syntax nodes to be used on filtering
+
+        /// <summary>
+        ///   Syntax nodes to be used on filtering
         /// </summary>
         /// <param name="tree">Source code tree</param>
         /// <param name="name">Identifier name</param>

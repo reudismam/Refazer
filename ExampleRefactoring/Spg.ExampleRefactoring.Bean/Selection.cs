@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,6 +50,25 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Bean
             this.Length = Length;
             this.SourcePath = SourcePath;
             this.SourceCode = SourceCode;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(!(obj is Selection)) return false;
+
+            Selection another = (Selection) obj;
+
+            return Start == another.Start && Length == another.Length && SourcePath.ToUpperInvariant().Equals(another.SourcePath.ToUpperInvariant());
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return "Start: " + Start + "\n" + "Length: " + Length + "\n" + "Source Path: " + SourcePath + "\n";
         }
     }
 }

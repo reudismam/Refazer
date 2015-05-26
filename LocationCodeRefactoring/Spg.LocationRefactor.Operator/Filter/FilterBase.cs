@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using ExampleRefactoring.Spg.LocationRefactoring.Tok;
-using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Node;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
@@ -15,6 +15,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
@@ -77,6 +78,11 @@ namespace Spg.LocationRefactor.Operator.Filter
             return null;
         }
 
+        /// <summary>
+        /// Evalute if node match predicate
+        /// </summary>
+        /// <param name="syntaxNode">Syntax node</param>
+        /// <returns>True, if node match predicate, false otherwise</returns>
         public bool IsMatch(SyntaxNode syntaxNode)
         {
             FilterLearnerBase learn = GetFilterLearner(List);
@@ -99,8 +105,10 @@ namespace Spg.LocationRefactor.Operator.Filter
         {
             Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
             if (result.Count == 1)
+            {
                 throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
-            
+            }
+
             string name = GetIdentifierName();
             IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
 
@@ -123,8 +131,9 @@ namespace Spg.LocationRefactor.Operator.Filter
         {
             Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
             if (result.Count == 1)
-                throw new Exception(
-                    "RetrieveRegion with only source code parameter does not accept single file transformation.");
+            {
+                throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
+            }
 
             //string name = GetIdentifierName();
             IEnumerable<SyntaxNode> nodesForFiltering = null;
@@ -201,19 +210,65 @@ namespace Spg.LocationRefactor.Operator.Filter
 
                 if (referenceDictionary.Any())
                 {
-                    MessageBox.Show("Make merge.");
+                    List<SyntaxNode> nodes = GetIntersection(referenceDictionary);
+                    return nodes;
                 }
             }
-
             return null;
         }
 
+        private List<SyntaxNode> GetIntersection(Dictionary<string, IEnumerable<SyntaxNode>> referenceDictionary)
+        {
+            Dictionary<string, IEnumerable<Selection>> dictionary = new Dictionary<string, IEnumerable<Selection>>();
+
+            foreach (KeyValuePair<string, IEnumerable<SyntaxNode>> keypPair in referenceDictionary)
+            {
+                List<Selection> selections = new List<Selection>();
+                foreach (SyntaxNode syntaxNode in keypPair.Value)
+                {
+                    Selection selection = new Selection(syntaxNode.Span.Start, syntaxNode.Span.Length, syntaxNode.SyntaxTree.FilePath, syntaxNode.SyntaxTree.GetText().ToString());
+                    selections.Add(selection);
+                }
+                dictionary.Add(keypPair.Key, selections);
+            }
+
+            IEnumerable<Selection> insersected = null;
+            bool first = true;
+            foreach (IEnumerable<Selection> enumerable in dictionary.Values)
+            {
+                if (first)
+                {
+                    insersected = enumerable;
+                    first = false;
+                }
+                else
+                {
+                    insersected = insersected.Intersect(enumerable);
+                }
+            }
+
+            List<SyntaxNode> nodes = new List<SyntaxNode>();
+            foreach (Selection selection in insersected)
+            {
+                SyntaxTree root = CSharpSyntaxTree.ParseFile(selection.SourcePath);
+                nodes.Add(root.GetRoot().FindNode(new TextSpan(selection.Start, selection.Length)));
+            }
+            return nodes;
+        }
+
+        /// <summary>
+        /// Select nodes for a single document
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="root">Node container of the selection</param>
+        /// <returns>Nodes for single document</returns>
         private IEnumerable<SyntaxNode> NodesForSingleFile(IEnumerable<SyntaxNode> nodes, SyntaxNode root)
         {
             List<SyntaxNode> resultList = new List<SyntaxNode>();
+            EditorController controller = EditorController.GetInstance();
             foreach (SyntaxNode node in nodes)
             {
-                if (node.SyntaxTree.FilePath.ToUpperInvariant().Equals(EditorController.GetInstance().CurrentViewCodePath.ToUpperInvariant()))
+                if (node.SyntaxTree.FilePath.ToUpperInvariant().Equals(Path.GetFullPath(controller.CurrentViewCodePath).ToUpperInvariant()))
                 {
                     try
                     {
