@@ -148,20 +148,20 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
             return tRegions;
         }
 
-        /// <summary>
-        /// Retrieve region from input
-        /// </summary>
-        /// <param name="input">Syntax tree</param>
-        /// <returns>Region list</returns>
-        public virtual List<TRegion> RetrieveRegion(string input)
-        {
-            FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
+        ///// <summary>
+        ///// Retrieve region from input
+        ///// </summary>
+        ///// <param name="input">Syntax tree</param>
+        ///// <returns>Region list</returns>
+        //public virtual List<TRegion> RetrieveRegion(string input)
+        //{
+        //    FilterBase filter = (FilterBase)SequenceExpression.Ioperator;
 
-            List<TRegion> filtereds = filter.RetrieveRegion(input);
-            var tRegions = RetrieveRegionBase(filtereds, input);
+        //    List<TRegion> filtereds = filter.RetrieveRegion(input);
+        //    var tRegions = RetrieveRegionBase(filtereds, input);
 
-            return tRegions;
-        }
+        //    return tRegions;
+        //}
 
         /// <summary>
         /// Retrieve region from input

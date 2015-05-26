@@ -22,12 +22,12 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
         /// <returns>ListNode</returns>
         ListNode Execute(SyntaxNode input);
 
-        /// <summary>
-        /// Retrieve region
-        /// </summary>
-        /// <param name="input">Source code</param>
-        /// <returns>Regions</returns>
-        List<TRegion> RetrieveRegion(String input);
+        ///// <summary>
+        ///// Retrieve region
+        ///// </summary>
+        ///// <param name = "input" > Source code </ param >
+        ///// < returns > Regions </ returns >
+        //List < TRegion > RetrieveRegion(String input);
 
         /// <summary>
         /// Retrieve region on all files on program

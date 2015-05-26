@@ -105,17 +105,17 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             return programs;
         }
 
-        /// <summary>
-        /// Retrieve the list of region in input
-        /// </summary>
-        /// <param name="program">Program</param>
-        /// <param name="input">Input</param>
-        /// <returns>Regions list</returns>
-        public List<TRegion> RetrieveString(Prog program, String input)
-        {
-            List<TRegion> regions = program.RetrieveString(input);
-            return regions;
-        }
+        ///// <summary>
+        ///// Retrieve the list of region in input
+        ///// </summary>
+        ///// <param name="program">Program</param>
+        ///// <param name="input">Input</param>
+        ///// <returns>Regions list</returns>
+        //public List<TRegion> RetrieveString(Prog program, String input)
+        //{
+        //    List<TRegion> regions = program.RetrieveString(input);
+        //    return regions;
+        //}
 
         /// <summary>
         /// Retrieve the list of region in input

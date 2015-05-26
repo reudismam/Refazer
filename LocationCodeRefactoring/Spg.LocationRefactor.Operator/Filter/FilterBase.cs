@@ -96,32 +96,32 @@ namespace Spg.LocationRefactor.Operator.Filter
             return indicator;
         }
 
-        /// <summary>
-        /// Retrieve regions
-        /// </summary>
-        /// <param name="sourceClass">Source code</param>
-        /// <returns>Retrieved regions</returns>
-        public List<TRegion> RetrieveRegion(string sourceClass)
-        {
-            Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
-            if (result.Count == 1)
-            {
-                throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
-            }
+        ///// <summary>
+        ///// Retrieve regions
+        ///// </summary>
+        ///// <param name="sourceClass">Source code</param>
+        ///// <returns>Retrieved regions</returns>
+        //public List<TRegion> RetrieveRegion(string sourceClass)
+        //{
+        //    Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
+        //    //if (result.Count == 1)
+        //    //{
+        //        throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
+        //    //}
 
-            string name = GetIdentifierName();
-            IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
+        //    string name = GetIdentifierName();
+        //    IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
 
-            if (nodesForFiltering == null)
-            {
-                SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
-                nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(tree.GetRoot());
-                return RetrieveRegionsBase(nodesForFiltering);
-            }
+        //    if (nodesForFiltering == null)
+        //    {
+        //        SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
+        //        nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(tree.GetRoot());
+        //        return RetrieveRegionsBase(nodesForFiltering);
+        //    }
 
-            List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
-            return tregions;
-        }
+        //    List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
+        //    return tregions;
+        //}
 
         /// <summary>
         /// Retrieve regions
@@ -170,14 +170,11 @@ namespace Spg.LocationRefactor.Operator.Filter
 
             if (nodesForFiltering == null)
             {
+                nodesForFiltering = SyntaxNodesDymTokens();
                 if (nodesForFiltering == null)
                 {
-                    nodesForFiltering = SyntaxNodesDymTokens();
-                    if (nodesForFiltering == null)
-                    {
-                        nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(syntaxNode);
-                        return RetrieveRegionsBase(nodesForFiltering);
-                    }
+                    nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(syntaxNode);
+                    return RetrieveRegionsBase(nodesForFiltering);
                 }
             }
             //IEnumerable<SyntaxNode> nodesForFiltering =
@@ -432,7 +429,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                         //MessageBox.Show(expressionStatementSyntax.CSharpKind() + "");
                         if (expressionStatementSyntax is MemberAccessExpressionSyntax)
                         {
-                            MemberAccessExpressionSyntax memberAccess = (MemberAccessExpressionSyntax) lca;
+                            MemberAccessExpressionSyntax memberAccess = (MemberAccessExpressionSyntax)lca;
 
                             if (name == null)
                             {
