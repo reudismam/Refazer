@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LeastCommonAncestor;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -73,7 +72,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
                 value = Tuple.Create(_snodeMap, tree);
                 _dic.Add(str, value);
             }
-            
+
             LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>  itree = _dic[sn.ToFullString()].Item2;
             return itree;
         }
@@ -100,7 +99,12 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
         /// <returns>TreeNode</returns>
         private LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> _ConvertToTreeNode(SyntaxNodeOrToken st)
         {
-            _snodeMap.Add(new Node(st.SpanStart, st.Span.End, st), st);
+            Node key = new Node(st.SpanStart, st.Span.End, st);
+
+            if (!_snodeMap.ContainsKey(key))
+            {
+                _snodeMap.Add(key, st);
+            }
             if (st.ChildNodesAndTokens().Count == 0)
             {
                 return new LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>(st);
@@ -167,7 +171,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
             if (tree == null) throw new ArgumentNullException("tree");
             if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
 
-            LCAManager lcaCalculator = LCAManager.GetInstance();
+            LCAManager lcaCalculator = GetInstance();
             SyntaxNodeOrToken lca = nodes[0];
             for (int i = 1; i < nodes.Count; i++)
             {
@@ -188,7 +192,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
         {
             List<SyntaxNodeOrToken> nodesSelection = ASTManager.NodesBetweenStartAndEndPosition(tree, start, end);
 
-            SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(nodesSelection, tree);
+            SyntaxNodeOrToken lca = GetInstance().LeastCommonAncestor(nodesSelection, tree);
             SyntaxNode snode = lca.AsNode();
 
             return snode;

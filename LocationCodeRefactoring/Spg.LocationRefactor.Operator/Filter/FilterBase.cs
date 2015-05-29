@@ -13,7 +13,6 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Node;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.Learn;
@@ -42,7 +41,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">List of selected regions</param>
         protected FilterBase(List<TRegion> list)
         {
             this.List = list;
@@ -94,34 +93,7 @@ namespace Spg.LocationRefactor.Operator.Filter
             bool indicator = learn.Indicator(Predicate, listNode, regex);
 
             return indicator;
-        }
-
-        ///// <summary>
-        ///// Retrieve regions
-        ///// </summary>
-        ///// <param name="sourceClass">Source code</param>
-        ///// <returns>Retrieved regions</returns>
-        //public List<TRegion> RetrieveRegion(string sourceClass)
-        //{
-        //    Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
-        //    //if (result.Count == 1)
-        //    //{
-        //        throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
-        //    //}
-
-        //    string name = GetIdentifierName();
-        //    IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
-
-        //    if (nodesForFiltering == null)
-        //    {
-        //        SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
-        //        nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(tree.GetRoot());
-        //        return RetrieveRegionsBase(nodesForFiltering);
-        //    }
-
-        //    List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
-        //    return tregions;
-        //}
+        }     
 
         /// <summary>
         /// Retrieve regions
@@ -136,23 +108,22 @@ namespace Spg.LocationRefactor.Operator.Filter
             }
 
             //string name = GetIdentifierName();
-            IEnumerable<SyntaxNode> nodesForFiltering = null;
-            //SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
+            IEnumerable<SyntaxNode> //nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
 
+                // if (nodesForFiltering == null)
+                // {
+                nodesForFiltering = SyntaxNodesDymTokens();
             if (nodesForFiltering == null)
             {
-                nodesForFiltering = SyntaxNodesDymTokens();
-                if (nodesForFiltering == null)
-                {
-                    EditorController controller = EditorController.GetInstance();
-                    List<Tuple<string, string>> files =
-                        WorkspaceManager.GetInstance()
-                            .GetSourcesFiles(controller.ProjectInformation.ProjectPath,
-                                controller.ProjectInformation.SolutionPath);
-                    nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(files);
-                    return RetrieveRegionsBase(nodesForFiltering);
-                }
+                EditorController controller = EditorController.GetInstance();
+                List<Tuple<string, string>> files =
+                    WorkspaceManager.GetInstance()
+                        .GetSourcesFiles(controller.ProjectInformation.ProjectPath,
+                            controller.ProjectInformation.SolutionPath);
+                nodesForFiltering = Decomposer.SyntaxNodesWithoutSemanticModel(files);
+                return RetrieveRegionsBase(nodesForFiltering);
             }
+            // }
             List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
             return tregions;
         }
@@ -166,34 +137,36 @@ namespace Spg.LocationRefactor.Operator.Filter
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
             //string name = GetIdentifierName();
-            IEnumerable<SyntaxNode> nodesForFiltering = null;// SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
+            IEnumerable<SyntaxNode> //nodesForFiltering = null;// SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
 
+            //if (nodesForFiltering == null)
+            //{
+                nodesForFiltering = SyntaxNodesDymTokens();
             if (nodesForFiltering == null)
             {
-                nodesForFiltering = SyntaxNodesDymTokens();
-                if (nodesForFiltering == null)
-                {
-                    nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(syntaxNode);
-                    return RetrieveRegionsBase(nodesForFiltering);
-                }
+                nodesForFiltering = Decomposer.SyntaxNodesWithoutSemanticModel(syntaxNode);
+                return RetrieveRegionsBase(nodesForFiltering);
             }
+            //}
             //IEnumerable<SyntaxNode> nodesForFiltering =
             //    SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(syntaxNode.Parent);
             nodesForFiltering = NodesForSingleFile(nodesForFiltering, syntaxNode);
             return RetrieveRegionsBase(nodesForFiltering);
         }
 
-
+        /// <summary>
+        /// Calculate syntax node for filtering using dynamic tokens
+        /// </summary>
+        /// <returns>Syntax node used on filtering process</returns>
         internal IEnumerable<SyntaxNode> SyntaxNodesDymTokens()
         {
             IEnumerable<string> nameList = GetIdentifierNames().ToList();
             if (nameList.Any())
             {
-                Dictionary<string, IEnumerable<SyntaxNode>> referenceDictionary =
-                    new Dictionary<string, IEnumerable<SyntaxNode>>();
+                var referenceDictionary = new Dictionary<string, IEnumerable<SyntaxNode>>();
                 foreach (string nameDyn in nameList)
                 {
-                    IEnumerable<SyntaxNode> nodes = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(nameDyn);
+                    IEnumerable<SyntaxNode> nodes = Decomposer.SyntaxNodesWithSemanticModel(nameDyn);
                     if (nodes != null)
                     {
                         referenceDictionary.Add(nameDyn, nodes);
@@ -214,10 +187,14 @@ namespace Spg.LocationRefactor.Operator.Filter
             return null;
         }
 
+        /// <summary>
+        /// Calculate the intersection of references and return it.
+        /// </summary>
+        /// <param name="referenceDictionary">Dictinary of references</param>
+        /// <returns>Intersection of referenced elements on dictionary</returns>
         private List<SyntaxNode> GetIntersection(Dictionary<string, IEnumerable<SyntaxNode>> referenceDictionary)
         {
-            Dictionary<string, IEnumerable<Selection>> dictionary = new Dictionary<string, IEnumerable<Selection>>();
-
+            Dictionary<string, IEnumerable<Selection>> dicSelections = new Dictionary<string, IEnumerable<Selection>>();
             foreach (KeyValuePair<string, IEnumerable<SyntaxNode>> keypPair in referenceDictionary)
             {
                 List<Selection> selections = new List<Selection>();
@@ -226,22 +203,13 @@ namespace Spg.LocationRefactor.Operator.Filter
                     Selection selection = new Selection(syntaxNode.Span.Start, syntaxNode.Span.Length, syntaxNode.SyntaxTree.FilePath, syntaxNode.SyntaxTree.GetText().ToString());
                     selections.Add(selection);
                 }
-                dictionary.Add(keypPair.Key, selections);
+                dicSelections.Add(keypPair.Key, selections);
             }
 
-            IEnumerable<Selection> insersected = null;
-            bool first = true;
-            foreach (IEnumerable<Selection> enumerable in dictionary.Values)
+            IEnumerable<Selection> insersected = dicSelections.Values.First();
+            for(int i = 1; i < dicSelections.Values.Count; i++)
             {
-                if (first)
-                {
-                    insersected = enumerable;
-                    first = false;
-                }
-                else
-                {
-                    insersected = insersected.Intersect(enumerable);
-                }
+                 insersected = insersected.Intersect(dicSelections.Values.ElementAt(i));
             }
 
             List<SyntaxNode> nodes = new List<SyntaxNode>();
@@ -348,196 +316,6 @@ namespace Spg.LocationRefactor.Operator.Filter
             return nameList;
         }
 
-        /// <summary>
-        /// Get the name used to search for references
-        /// </summary>
-        /// <returns>Name used to search for references</returns>
-        private string GetIdentifierName()
-        {
-            string name = null;
-            EditorController controller = EditorController.GetInstance();
-            bool isCommonName = true;
-            foreach (SyntaxNode lca in controller.Lcas)
-            {
-                switch (lca.CSharpKind())
-                {
-                    case SyntaxKind.InvocationExpression:
-                        name = GetName(lca as InvocationExpressionSyntax, name);
-                        if (name == null)
-                        {
-                            isCommonName = false;
-                        }
-                        break;
-                    case SyntaxKind.ObjectCreationExpression:
-                        ObjectCreationExpressionSyntax objectCreation = (ObjectCreationExpressionSyntax)lca;
-                        SyntaxToken identifierToken = objectCreation.NewKeyword.GetNextToken();
-
-                        string nameToken = identifierToken.ToFullString();
-
-                        if (name == null)
-                        {
-                            name = nameToken;
-                        }
-                        else if (!name.Equals(nameToken))
-                        {
-                            isCommonName = false;
-                        }
-                        //objectCreation.
-                        break;
-                    case SyntaxKind.QualifiedName:
-                        QualifiedNameSyntax qualifiedName = (QualifiedNameSyntax)lca;
-                        if (name == null)
-                        {
-                            name = qualifiedName.Right.ToFullString();
-                        }
-                        else if (!name.Equals(qualifiedName.Right.ToFullString()))
-                        {
-                            isCommonName = false;
-                        }
-                        break;
-                    case SyntaxKind.Argument:
-                        ArgumentSyntax argumentSyntax = (ArgumentSyntax)lca;
-                        ExpressionSyntax expressionSyntax = argumentSyntax.Expression;
-                        if (expressionSyntax is InvocationExpressionSyntax)
-                        {
-                            name = GetName(expressionSyntax as InvocationExpressionSyntax, name);
-                            if (name == null)
-                            {
-                                isCommonName = false;
-                            }
-                        }
-                        else if (expressionSyntax is ObjectCreationExpressionSyntax)
-                        {
-                            ObjectCreationExpressionSyntax objectArgument = (ObjectCreationExpressionSyntax)expressionSyntax;
-                            SyntaxToken identifierArgument = objectArgument.NewKeyword.GetNextToken();
-
-                            string nameArgument = identifierArgument.ToFullString();
-
-                            if (name == null)
-                            {
-                                name = nameArgument;
-                            }
-                            else if (!name.Equals(nameArgument))
-                            {
-                                isCommonName = false;
-                            }
-                        }
-                        break;
-                    case SyntaxKind.ExpressionStatement:
-                        ExpressionStatementSyntax expressionStatement = (ExpressionStatementSyntax)lca;
-                        ExpressionSyntax expressionStatementSyntax = expressionStatement.Expression;
-                        //MessageBox.Show(expressionStatementSyntax.CSharpKind() + "");
-                        if (expressionStatementSyntax is MemberAccessExpressionSyntax)
-                        {
-                            MemberAccessExpressionSyntax memberAccess = (MemberAccessExpressionSyntax)lca;
-
-                            if (name == null)
-                            {
-                                name = memberAccess.Name.ToFullString();
-                            }
-                            else if (!name.Equals(memberAccess.Name.ToFullString()))
-                            {
-                                isCommonName = false;
-                            }
-                        }
-                        else if (expressionStatementSyntax is InvocationExpressionSyntax)
-                        {
-                            name = GetName(expressionStatementSyntax as InvocationExpressionSyntax, name);
-                            if (name == null)
-                            {
-                                isCommonName = false;
-                            }
-                        }
-                        break;
-                    case SyntaxKind.LocalDeclarationStatement:
-                        //LocalDeclarationStatementSyntax localDeclaration = (LocalDeclarationStatementSyntax) lca;
-                        //VariableDeclarationSyntax variableDeclaration = localDeclaration.Declaration;
-                        //variableDeclaration.
-                        break;
-                    default:
-                        if (lca is MemberAccessExpressionSyntax)
-                        {
-                            MemberAccessExpressionSyntax memberAccess = (MemberAccessExpressionSyntax)lca;
-
-                            if (name == null)
-                            {
-                                name = memberAccess.Name.ToFullString();
-                            }
-                            else if (!name.Equals(memberAccess.Name.ToFullString()))
-                            {
-                                isCommonName = false;
-                            }
-                        }
-                        //else
-                        //{
-                        //    //return GetIdentifierName2();
-                        //}
-                        break;
-                }
-            }
-            if (name != null && isCommonName)
-            {
-                return name;
-            }
-
-            //return GetIdentifierName2();
-            return null;
-        }
-
-        private static string GetName(InvocationExpressionSyntax lca, string name)
-        {
-            InvocationExpressionSyntax syntax = lca;
-            ExpressionSyntax expression = syntax.Expression;
-            if (expression is IdentifierNameSyntax)
-            {
-                IdentifierNameSyntax nameSyntax = (IdentifierNameSyntax)expression;
-                if (name == null)
-                {
-                    name = nameSyntax.Identifier.ToString();
-                }
-                else if (!name.Equals(nameSyntax.Identifier.ToString()))
-                {
-                    return null;
-                }
-            }
-            else if (expression is MemberAccessExpressionSyntax)
-            {
-                MemberAccessExpressionSyntax member = (MemberAccessExpressionSyntax)expression;
-                if (name == null)
-                {
-                    name = member.Name.ToString();
-                }
-                else if (!name.Equals(member.Name.ToString()))
-                {
-                    return null;
-                }
-
-            }
-            return name;
-        }
-        //private string GetIdentifierName()
-        //{
-        //    string name = null;
-
-        //    EditorController controller = EditorController.GetInstance();
-        //    foreach (SyntaxNode node in controller.Lcas)
-        //    {
-        //        node.
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Syntax nodes correspondents to selection
-        ///// </summary>
-        ///// <param name="sourceCode">Source code.</param>
-        ///// <param name="list">Selection location on source code.</param>
-        ///// <returns>Syntax nodes correspondents to selection on source code</returns>
-        //private IEnumerable<SyntaxNode> SyntaxNodesForFiltering(string sourceCode, List<TRegion> list)
-        //{
-        //    List<SyntaxNode> nodes = RegionManager.SyntaxNodesForFiltering(sourceCode, list);
-        //    return nodes;
-        //}
-
         ///// <summary>
         ///// Syntax nodes
         ///// </summary>
@@ -562,6 +340,225 @@ namespace Spg.LocationRefactor.Operator.Filter
 
     }
 }
+
+///// <summary>
+///// Retrieve regions
+///// </summary>
+///// <param name="sourceClass">Source code</param>
+///// <returns>Retrieved regions</returns>
+//public List<TRegion> RetrieveRegion(string sourceClass)
+//{
+//    Dictionary<string, List<TRegion>> result = RegionManager.GetInstance().GroupRegionBySourceFile(List);
+//    //if (result.Count == 1)
+//    //{
+//        throw new Exception("RetrieveRegion with only source code parameter does not accept single file transformation.");
+//    //}
+
+//    string name = GetIdentifierName();
+//    IEnumerable<SyntaxNode> nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithSemanticModel(name);
+
+//    if (nodesForFiltering == null)
+//    {
+//        SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceClass);
+//        nodesForFiltering = SyntacticalDecomposer.SyntaxNodesWithoutSemanticModel(tree.GetRoot());
+//        return RetrieveRegionsBase(nodesForFiltering);
+//    }
+
+//    List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
+//    return tregions;
+//}
+
+
+///// <summary>
+///// Get the name used to search for references
+///// </summary>
+///// <returns>Name used to search for references</returns>
+//private string GetIdentifierName()
+//{
+//    string name = null;
+//    EditorController controller = EditorController.GetInstance();
+//    bool isCommonName = true;
+//    foreach (SyntaxNode lca in controller.Lcas)
+//    {
+//        switch (lca.CSharpKind())
+//        {
+//            case SyntaxKind.InvocationExpression:
+//                name = GetName(lca as InvocationExpressionSyntax, name);
+//                if (name == null)
+//                {
+//                    isCommonName = false;
+//                }
+//                break;
+//            case SyntaxKind.ObjectCreationExpression:
+//                ObjectCreationExpressionSyntax objectCreation = (ObjectCreationExpressionSyntax)lca;
+//                SyntaxToken identifierToken = objectCreation.NewKeyword.GetNextToken();
+
+//                string nameToken = identifierToken.ToFullString();
+
+//                if (name == null)
+//                {
+//                    name = nameToken;
+//                }
+//                else if (!name.Equals(nameToken))
+//                {
+//                    isCommonName = false;
+//                }
+//                //objectCreation.
+//                break;
+//            case SyntaxKind.QualifiedName:
+//                QualifiedNameSyntax qualifiedName = (QualifiedNameSyntax)lca;
+//                if (name == null)
+//                {
+//                    name = qualifiedName.Right.ToFullString();
+//                }
+//                else if (!name.Equals(qualifiedName.Right.ToFullString()))
+//                {
+//                    isCommonName = false;
+//                }
+//                break;
+//            case SyntaxKind.Argument:
+//                ArgumentSyntax argumentSyntax = (ArgumentSyntax)lca;
+//                ExpressionSyntax expressionSyntax = argumentSyntax.Expression;
+//                if (expressionSyntax is InvocationExpressionSyntax)
+//                {
+//                    name = GetName(expressionSyntax as InvocationExpressionSyntax, name);
+//                    if (name == null)
+//                    {
+//                        isCommonName = false;
+//                    }
+//                }
+//                else if (expressionSyntax is ObjectCreationExpressionSyntax)
+//                {
+//                    ObjectCreationExpressionSyntax objectArgument = (ObjectCreationExpressionSyntax)expressionSyntax;
+//                    SyntaxToken identifierArgument = objectArgument.NewKeyword.GetNextToken();
+
+//                    string nameArgument = identifierArgument.ToFullString();
+
+//                    if (name == null)
+//                    {
+//                        name = nameArgument;
+//                    }
+//                    else if (!name.Equals(nameArgument))
+//                    {
+//                        isCommonName = false;
+//                    }
+//                }
+//                break;
+//            case SyntaxKind.ExpressionStatement:
+//                ExpressionStatementSyntax expressionStatement = (ExpressionStatementSyntax)lca;
+//                ExpressionSyntax expressionStatementSyntax = expressionStatement.Expression;
+//                //MessageBox.Show(expressionStatementSyntax.CSharpKind() + "");
+//                if (expressionStatementSyntax is MemberAccessExpressionSyntax)
+//                {
+//                    MemberAccessExpressionSyntax memberAccess = (MemberAccessExpressionSyntax)lca;
+
+//                    if (name == null)
+//                    {
+//                        name = memberAccess.Name.ToFullString();
+//                    }
+//                    else if (!name.Equals(memberAccess.Name.ToFullString()))
+//                    {
+//                        isCommonName = false;
+//                    }
+//                }
+//                else if (expressionStatementSyntax is InvocationExpressionSyntax)
+//                {
+//                    name = GetName(expressionStatementSyntax as InvocationExpressionSyntax, name);
+//                    if (name == null)
+//                    {
+//                        isCommonName = false;
+//                    }
+//                }
+//                break;
+//            case SyntaxKind.LocalDeclarationStatement:
+//                //LocalDeclarationStatementSyntax localDeclaration = (LocalDeclarationStatementSyntax) lca;
+//                //VariableDeclarationSyntax variableDeclaration = localDeclaration.Declaration;
+//                //variableDeclaration.
+//                break;
+//            default:
+//                if (lca is MemberAccessExpressionSyntax)
+//                {
+//                    MemberAccessExpressionSyntax memberAccess = (MemberAccessExpressionSyntax)lca;
+
+//                    if (name == null)
+//                    {
+//                        name = memberAccess.Name.ToFullString();
+//                    }
+//                    else if (!name.Equals(memberAccess.Name.ToFullString()))
+//                    {
+//                        isCommonName = false;
+//                    }
+//                }
+//                //else
+//                //{
+//                //    //return GetIdentifierName2();
+//                //}
+//                break;
+//        }
+//    }
+//    if (name != null && isCommonName)
+//    {
+//        return name;
+//    }
+
+//    //return GetIdentifierName2();
+//    return null;
+//}
+
+//private static string GetName(InvocationExpressionSyntax lca, string name)
+//{
+//    InvocationExpressionSyntax syntax = lca;
+//    ExpressionSyntax expression = syntax.Expression;
+//    if (expression is IdentifierNameSyntax)
+//    {
+//        IdentifierNameSyntax nameSyntax = (IdentifierNameSyntax)expression;
+//        if (name == null)
+//        {
+//            name = nameSyntax.Identifier.ToString();
+//        }
+//        else if (!name.Equals(nameSyntax.Identifier.ToString()))
+//        {
+//            return null;
+//        }
+//    }
+//    else if (expression is MemberAccessExpressionSyntax)
+//    {
+//        MemberAccessExpressionSyntax member = (MemberAccessExpressionSyntax)expression;
+//        if (name == null)
+//        {
+//            name = member.Name.ToString();
+//        }
+//        else if (!name.Equals(member.Name.ToString()))
+//        {
+//            return null;
+//        }
+
+//    }
+//    return name;
+//}
+
+//private string GetIdentifierName()
+//{
+//    string name = null;
+
+//    EditorController controller = EditorController.GetInstance();
+//    foreach (SyntaxNode node in controller.Lcas)
+//    {
+//        node.
+//    }
+//}
+
+///// <summary>
+///// Syntax nodes correspondents to selection
+///// </summary>
+///// <param name="sourceCode">Source code.</param>
+///// <param name="list">Selection location on source code.</param>
+///// <returns>Syntax nodes correspondents to selection on source code</returns>
+//private IEnumerable<SyntaxNode> SyntaxNodesForFiltering(string sourceCode, List<TRegion> list)
+//{
+//    List<SyntaxNode> nodes = RegionManager.SyntaxNodesForFiltering(sourceCode, list);
+//    return nodes;
+//}
 
 ///// <summary>
 ///// Retrieve regions

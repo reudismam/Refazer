@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
-using Microsoft.CodeAnalysis;
 
 namespace LeastCommonAncestor
 {
@@ -15,21 +12,12 @@ namespace LeastCommonAncestor
         /// <summary>
         /// The least common ancestor
         /// </summary>
-        /// <param name="root">Root node</param>
-        /// <param name="n1">First syntax node</param>
-        /// <param name="n2">Second syntax node</param>
+        /// <param name="rootNode">Root node</param>
+        /// <param name="x">First syntax node</param>
+        /// <param name="y">Second syntax node</param>
         /// <returns>The least common ancestor of node n1 and n2.</returns>
         public T LeastCommonAncestor(string id, ITreeNode<T> rootNode, ITreeNode<T> x, ITreeNode<T> y)
         {
-            //TreeNode<SyntaxNodeOrToken> rootNode = ConvertToTreeNode(root);
-
-            //ITreeNode<SyntaxNodeOrToken> x = new TreeNode<SyntaxNodeOrToken>(n1);
-            //ITreeNode<SyntaxNodeOrToken> y = new TreeNode<SyntaxNodeOrToken>(n2);
-            //LCAManager manager = LCAManager.GetInstance();
-            //TreeNode<SyntaxNodeOrToken> rootNode = manager.ConvertToTreeNode(root.AsNode()) as TreeNode<SyntaxNodeOrToken>;
-            //ITreeNode<SyntaxNodeOrToken> x = manager.Find(root, n1) as ITreeNode<SyntaxNodeOrToken>;
-            //ITreeNode<SyntaxNodeOrToken> y = manager.Find(root, n2) as ITreeNode<SyntaxNodeOrToken>;
-
             if (x.Equals(y)) return x.Value;
 
             LeastCommonAncestorFinder<T> finder = LeastCommonAncestorFinder<T>.GetInstance(id, rootNode);
@@ -73,6 +61,7 @@ namespace LeastCommonAncestor
                     return _children;
                 }
             }
+
             /// <summary>
             /// Gets the children.
             /// </summary>
@@ -119,6 +108,7 @@ namespace LeastCommonAncestor
             }
 
         }
+
         /// <summary>
         /// Helps find the least common ancestor in a graph 
         /// </summary>
@@ -130,14 +120,13 @@ namespace LeastCommonAncestor
             private List<ITreeNode<T>> _nodes = new List<ITreeNode<T>>();  // n
             private List<int> _values = new List<int>(); // n * 2
 
-            Dictionary<object, LCAProcessing<T>>  preprocessing = new Dictionary<object, LCAProcessing<T>>();
-            private static LeastCommonAncestorFinder<T> instance;
+            readonly Dictionary<object, LCAProcessing<T>>  _preprocessing = new Dictionary<object, LCAProcessing<T>>();
+            private static LeastCommonAncestorFinder<T> _instance;
  
 
             /// <summary>
             /// Initializes a new instance of the <see cref="LeastCommonAncestorFinder&lt;T&gt;"/> class.
             /// </summary>
-            /// <param name="rootNode">The root node.</param>
             private LeastCommonAncestorFinder()
             {
                 //if (rootNode == null)
@@ -165,7 +154,7 @@ namespace LeastCommonAncestor
             /// </summary>
             public static void Init()
             {
-                instance = null;
+                _instance = null;
             }
 
             /// <summary>
@@ -176,30 +165,29 @@ namespace LeastCommonAncestor
             /// <returns>A singleton instance of LeastCommonAncestorFinder</returns>
             public static LeastCommonAncestorFinder<T> GetInstance(object obj, ITreeNode<T> rootNode)
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new LeastCommonAncestorFinder<T>();
+                    _instance = new LeastCommonAncestorFinder<T>();
                 }
-                instance.Init(obj, rootNode);
+                _instance.Init(obj, rootNode);
 
-                return instance;
+                return _instance;
             }
             private void Init(object obj, ITreeNode<T> rootNode)
             {
-                if (rootNode == null)
-                {
-                    throw new NotImplementedException("rootNode");
-                }
+                if (obj == null) throw new ArgumentNullException("obj");
+                if (rootNode == null) throw new ArgumentNullException("rootNode");
+
                 _rootNode = rootNode;
                 LCAProcessing<T> value;
-                if (!preprocessing.TryGetValue(obj, out value))
+                if (!_preprocessing.TryGetValue(obj, out value))
                 {
                     PreProcess();
                     LCAProcessing<T> lcaProcessing = new LCAProcessing<T>(_indexLookup, _nodes, _values);
-                    preprocessing.Add(obj, lcaProcessing);
+                    _preprocessing.Add(obj, lcaProcessing);
                 }
 
-                value = preprocessing[obj];
+                value = _preprocessing[obj];
                 _rootNode = rootNode;
                 _indexLookup = value._indexLookup as Dictionary<ITreeNode<T>, NodeIndex>;
                 _nodes = value._nodes as List<ITreeNode<T>>;
@@ -215,6 +203,9 @@ namespace LeastCommonAncestor
             /// <returns></returns>
             public ITreeNode<T> FindCommonParent(ITreeNode<T> x, ITreeNode<T> y)
             {
+                if (x == null) throw new ArgumentNullException("x");
+                if (y == null) throw new ArgumentNullException("y");
+
                 // Find the first time the nodes were visited during preprocessing.
                 NodeIndex nodeIndex;
                 if (!_indexLookup.TryGetValue(x, out nodeIndex))
@@ -255,14 +246,13 @@ namespace LeastCommonAncestor
                 // Eulerian path visit of graph 
                 Stack<ProcessingState> lastNodeStack = new Stack<ProcessingState>();
                 ProcessingState current = new ProcessingState(_rootNode);
-                ITreeNode<T> next;
                 lastNodeStack.Push(current);
 
-                NodeIndex nodeIndex;
-                int valueIndex;
                 while (lastNodeStack.Count != 0)
                 {
                     current = lastNodeStack.Pop();
+                    NodeIndex nodeIndex;
+                    int valueIndex;
                     if (!_indexLookup.TryGetValue(current.Value, out nodeIndex))
                     {
                         valueIndex = _nodes.Count;
@@ -277,20 +267,20 @@ namespace LeastCommonAncestor
 
                     // If there is a next then push the current value on to the stack along with 
                     // the current value.
+                    ITreeNode<T> next;
                     if (current.Next(out next))
                     {
                         lastNodeStack.Push(current);
                         lastNodeStack.Push(new ProcessingState(next));
                     }
                 }
-                
+             
                 _nodes.TrimExcess();
                 _values.TrimExcess();
             }
 
             private class ProcessingState
             {
-
                 private IEnumerator<ITreeNode<T>> _enumerator;
 
                 /// <summary>
@@ -325,6 +315,7 @@ namespace LeastCommonAncestor
                     return false;
                 }
             }
+
             public struct NodeIndex
             {
                 public readonly int FirstVisit;

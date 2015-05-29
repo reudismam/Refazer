@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,7 +12,6 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Text.Projection;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
@@ -154,6 +152,7 @@ namespace Spg.LocationCodeRefactoring.Controller
             LCAManager.Init();
             RegionManager.Init();
             BoundaryManager.Init();
+            //Decomposer.Init();
         }
 
         public static void ReInit()

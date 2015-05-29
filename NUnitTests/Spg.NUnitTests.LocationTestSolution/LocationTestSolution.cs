@@ -4,19 +4,15 @@ using System.IO;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
-using Microsoft.SqlServer.Server;
 using NUnit.Framework;
-using Spg.ExampleRefactoring.Data.Dig;
 using Spg.ExampleRefactoring.Util;
+using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.TextRegion;
-using Spg.NUnitTests.Location;
-using Spg.NUnitTests.Util;
 
 namespace NUnitTests.Spg.NUnitTests.LocationTestProject
 {
     [TestFixture]
-    public class LocationTestProject
+    public class LocationTestSolution
     {
         ///// <summary>
         ///// Simple API Test for locations
@@ -42,9 +38,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805()
+        public void Proj00552fc()
         {
-            bool isValid = LocationTestProject.LocaleTest("00552fc2287f820ae9d42fd259aa6c07c2c5a805", @"..\..\TestProjects\Projects\Portable6\Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805.sln", "Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805");
+            bool isValid = LocaleTestSolution(@"Roslyn\1113fd3", @"Roslyn\roslyn11\src\Roslyn.sln", "CodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
@@ -62,9 +58,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj008682140dfded0956241e81214a860a978b2395()
+        public void Proj0086821()
         {
-            bool isValid = LocationTestProject.LocaleTest("00552fc2287f820ae9d42fd259aa6c07c2c5a805", @"..\..\TestProjects\Projects\Portable13\Proj008682140dfded0956241e81214a860a978b2395.sln", "Proj008682140dfded0956241e81214a860a978b2395");
+            bool isValid = LocationTestSolution.LocaleTestSolution(@"Roslyn\0086821", @"Roslyn\roslyn12\src\Roslyn.sln", "CodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
@@ -82,9 +78,19 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        public void Proj2_8c14644()
         {
-            bool isValid = LocationTestProject.LocaleTest("673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\Portable11\Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool isValid = LocaleTestSolution(@"Roslyn\2_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", "CSharpCodeAnalysis");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj673f18e()
+        {
+            bool isValid = LocationTestSolution.LocaleTestSolution(@"Roslyn\673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", "CodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
@@ -102,9 +108,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        public void Proj3_673f18e()
         {
-            bool isValid = LocationTestProject.LocaleTest("3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool isValid = LocationTestSolution.LocaleTestSolution(@"Roslyn\3_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", "CodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
@@ -122,9 +128,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        public void Proj5_673f18e()
         {
-            bool isValid = LocationTestProject.LocaleTest("5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\Syntax\Proj5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj5_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool isValid = LocaleTestSolution(@"Roslyn\5_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", "CSharpCompilerSyntaxTest");
             Assert.IsTrue(isValid);
         }
 
@@ -132,9 +138,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        public void Proj6_673f18e()
         {
-            bool isValid = LocationTestProject.LocaleTest("6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\Symbol\Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool isValid = LocaleTestSolution(@"Roslyn\6_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", "CSharpCompilerSymbolTest");
             Assert.IsTrue(isValid);
         }
 
@@ -142,9 +148,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj8_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        public void Proj8_673f18e()
         {
-            bool isValid = LocationTestProject.LocaleTest("8_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\Symbol\Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj6_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool isValid = LocaleTestSolution(@"Roslyn\8_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", "CSharpCompilerSymbolTest");
             Assert.IsTrue(isValid);
         }
 
@@ -152,9 +158,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj9_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
+        public void Proj9_673f18e()
         {
-            bool isValid = LocationTestProject.LocaleTest("9_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\Emit\Proj9_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj9_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool isValid = LocaleTestSolution(@"Roslyn\9_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", "CSharpCompilerEmitTest");
             Assert.IsTrue(isValid);
         }
 
@@ -184,9 +190,29 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj2_cd68d0323eb97f18c10281847c831f8e361506b9()
+        public void Projcd68d03()
         {
-            bool isValid = LocationTestProject.LocaleTest("2_cd68d0323eb97f18c10281847c831f8e361506b9", @"..\..\TestProjects\Projects\Portable8\Projcd68d0323eb97f18c10281847c831f8e361506b9.sln", "Projcd68d0323eb97f18c10281847c831f8e361506b9");
+            bool isValid = LocaleTestSolution(@"Roslyn\cd68d03", @"Roslyn\roslyn7\src\Roslyn.sln", "Workspaces");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj2_cd68d03()
+        {
+            bool isValid = LocaleTestSolution(@"Roslyn\2_cd68d03", @"Roslyn\roslyn7\src\Roslyn.sln", "Workspaces");
+            Assert.IsTrue(isValid);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
+        public void Proj3_cd68d03()
+        {
+            bool isValid = LocaleTestSolution(@"Roslyn\3_cd68d03", @"Roslyn\roslyn7\src\Roslyn.sln", "Workspaces");
             Assert.IsTrue(isValid);
         }
 
@@ -204,9 +230,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Projf66696e70c90ce7fa1476d53cc84cc18e438d19b()
+        public void Projf66696e()
         {
-            bool isValid = LocationTestProject.LocaleTest("f66696e70c90ce7fa1476d53cc84cc18e438d19b", @"..\..\TestProjects\Projects\VBCSCompilerTests\Proje4d141a3c5f51ce4021d105e2b330564e02069fc.sln", "Proje4d141a3c5f51ce4021d105e2b330564e02069fc");
+            bool isValid = LocaleTestSolution(@"Roslyn\f66696e", @"Roslyn\roslyn8\src\Roslyn.sln", "VBCSCompilerTests");
             Assert.IsTrue(isValid);
         }
 
@@ -225,9 +251,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
-        public void Proj8ecd05880b478e4ca997a4789b976ef73b070546()
+        public void Proj8ecd058()
         {
-            bool isValid = LocationTestProject.LocaleTest("8ecd05880b478e4ca997a4789b976ef73b070546", @"..\..\TestProjects\Projects\Portable7\Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", "Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+            bool isValid = LocaleTestSolution(@"Roslyn\cfd9b46", @"Roslyn\roslyn7\src\Roslyn.sln", "CSharpCodeAnalysis");
             Assert.IsTrue(isValid);
         }
         
@@ -251,9 +277,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Test case for parameter to constant value
         /// </summary>
         [Test]
-        public void Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        public void Projc96d9ce()
         {
-            bool isValid = LocationTestProject.LocaleTest("c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            bool isValid = LocaleTestSolution(@"Roslyn\c96d9ce", @"Roslyn\roslyn4\src\Roslyn.sln", "CSharpCodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
@@ -265,9 +291,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         }
 
         [Test]
-        public void Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d()
+        public void Proj1113fd3()
         {
-            bool isValid = LocationTestProject.LocaleTest("1113fd3db14fd23fc081e90f27f4ddafad7b244d", @"..\..\TestProjects\Projects\Portable\Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d.sln", "Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d");
+            bool isValid = LocaleTestSolution(@"Roslyn\1113fd3", @"Roslyn\roslyn2\src\Roslyn.sln", "CodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
@@ -289,9 +315,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         }
 
         [Test]
-        public void Proj3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        public void Proj3_c96d9ce()
         {
-            bool isValid = LocationTestProject.LocaleTest("3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            bool isValid = LocaleTestSolution(@"Roslyn\3_c96d9ce", @"Roslyn\roslyn4\src\Roslyn.sln", "CSharpCodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
@@ -326,16 +352,16 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         }
 
         [Test]
-        public void Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d()
+        public void Projcfd9b46()
         {
-            bool isValid = LocationTestProject.LocaleTest("cfd9b464dbb07c8b183d89a403a8bc877b3e929d", @"..\..\TestProjects\Projects\Portable4\Portable\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.sln", "Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+            bool isValid = LocaleTestSolution(@"Roslyn\cfd9b46", @"Roslyn\roslyn6\src\Roslyn.sln", "CodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Proj2_cfd9b464dbb07c8b183d89a403a8bc877b3e929d()
+        public void Proj2_cfd9b46()
         {
-            bool isValid = LocationTestProject.LocaleTest("2-cfd9b464dbb07c8b183d89a403a8bc877b3e929d", @"..\..\TestProjects\Projects\Portable4\Portable\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.sln", "Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+            bool isValid = LocaleTestSolution(@"Roslyn\2_cfd9b46", @"Roslyn\roslyn6\src\Roslyn.sln", "CodeAnalysis");
             Assert.IsTrue(isValid);
         }
 
@@ -414,65 +440,86 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         }
 
         [Test]
-        public void Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
+        public void Proj1571862()
         {
-            bool isValid = LocationTestProject.LocaleTest("1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\1571862", @"EntityFramework\entityframework4\EntityFramework.sln", "FunctionalTests");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Proj2_1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
+        public void Proj2_1571862()
         {
-            bool isValid = LocationTestProject.LocaleTest("2_1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\2_1571862", @"EntityFramework\entityframework4\EntityFramework.sln", "FunctionalTests");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Proj4_1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
+        public void Proj4_1571862()
         {
-            bool isValid = LocationTestProject.LocaleTest("4_1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\4_1571862", @"EntityFramework\entityframework4\EntityFramework.sln", "FunctionalTests");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Proj5_1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
+        public void Proj5_1571862()
         {
-            bool isValid = LocationTestProject.LocaleTest("5_1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\5_1571862", @"EntityFramework\entityframework4\EntityFramework.sln", "FunctionalTests");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Projce1e33311465a6694c16f2289ab2a6d86e29bf18Test()
+        public void Proj6_1571862()
         {
-            bool isValid = LocationTestProject.LocaleTest("ce1e33311465a6694c16f2289ab2a6d86e29bf18", @"..\..\TestProjects\Projects\EntityFramework5\Projce1e33311465a6694c16f2289ab2a6d86e29bf18.sln", "Projce1e33311465a6694c16f2289ab2a6d86e29bf18");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\6_1571862", @"EntityFramework\entityframework4\EntityFramework.sln", "FunctionalTests.Transitional");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Proj8b9180bea7178d8348de47e28237c05ddb8a8244Test()
+        public void Projce1e333()
         {
-            bool isValid = LocationTestProject.LocaleTest("8b9180bea7178d8348de47e28237c05ddb8a8244", @"..\..\TestProjects\Projects\EntityFramework6\Proj8b9180bea7178d8348de47e28237c05ddb8a8244.sln", "Proj8b9180bea7178d8348de47e28237c05ddb8a8244");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\ce1e333", @"EntityFramework\entityframework5\EntityFramework.sln", "EntityFramework");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Proj2_8b9180bea7178d8348de47e28237c05ddb8a8244Test()
+        public void Proj8b9180b()
         {
-            bool isValid = LocationTestProject.LocaleTest("2_8b9180bea7178d8348de47e28237c05ddb8a8244", @"..\..\TestProjects\Projects\EntityFramework6\Proj8b9180bea7178d8348de47e28237c05ddb8a8244.sln", "Proj8b9180bea7178d8348de47e28237c05ddb8a8244");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\8b9180b", @"EntityFramework\entityframework6\EntityFramework.sln", "FunctionalTests");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Proj829dec5d15c3d930815d72ce2d6909c51a97b1efTest()
+        public void Proj2_8b9180b()
         {
-            bool isValid = LocationTestProject.LocaleTest("829dec5d15c3d930815d72ce2d6909c51a97b1ef", @"..\..\TestProjects\Projects\EntityFramework7\Proj829dec5d15c3d930815d72ce2d6909c51a97b1ef.sln", "Proj829dec5d15c3d930815d72ce2d6909c51a97b1ef");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\2_8b9180b", @"EntityFramework\entityframework6\EntityFramework.sln", "FunctionalTests");
             Assert.IsTrue(isValid);
         }
 
         [Test]
-        public void Proj326d525b1d7d8e1c95f7227be63238ec783a9e92Test()
+        public void Proj829dec5()
         {
-            bool isValid = LocationTestProject.LocaleTest("326d525b1d7d8e1c95f7227be63238ec783a9e92", @"..\..\TestProjects\Projects\EntityFramework9\Proj326d525b1d7d8e1c95f7227be63238ec783a9e92.sln", "Proj326d525b1d7d8e1c95f7227be63238ec783a9e92");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\829dec5", @"EntityFramework\entityframework7\EntityFramework.sln", "EntityFramework");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj326d525()
+        {
+            bool isValid = LocaleTestSolution(@"EntityFramewok\326d525", @"EntityFramework\entityframework9\EntityFramework.sln", "FunctionalTests.Transitional");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proja883600()
+        {
+            bool isValid = LocaleTestSolution(@"NuGet\a883600", @"NuGet\nuget4\NuGet.sln", "Core.Test");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj2_a883600()
+        {
+            bool isValid = LocaleTestSolution(@"NuGet\2_a883600", @"NuGet\nuget4\NuGet.sln", "CommandLine");
             Assert.IsTrue(isValid);
         }
 
@@ -532,35 +579,40 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             Assert.IsTrue(isValid);
         }
 
-
         /// <summary>
         /// Locale test base method
         /// </summary>
         /// <param name="commit">commit id</param>
+        /// <param name="solution">Solution</param>
+        /// <param name="project">Project</param>
         /// <returns>True if locale passed</returns>
-        public static bool LocaleTest(string commit, string solution, string project)
+        public static bool LocaleTestSolution(string commit, string solution, string project)
         {
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
             EditorController.ReInit();
             EditorController controller = EditorController.GetInstance();
-            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(@"..\..\TestProjects\commits\" + commit + @"\input_selection.json");
+
+            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+
+            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\input_selection.json");
+
             controller.SelectedLocations = selections;
             controller.CurrentViewCodeBefore = FileUtil.ReadFile(selections.First().Path);
             string exactPath = Path.GetFullPath(selections.First().Path);
 
             controller.CurrentViewCodePath = exactPath;
             controller.SetProject(project);
-            controller.SetSolution(solution);
+            controller.SetSolution(expHome + solution);
             controller.SelectedLocations = selections;
 
             controller.Extract();
 
             controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
-            if (File.Exists(@"..\..\TestProjects\commits\" + commit + @"\negatives.json"))
+            if (File.Exists(expHome + @"commit\" + commit + @"\negatives.json"))
             {
-                List<int> negatives = JsonUtil<List<int>>.Read(@"..\..\TestProjects\commits\" + commit + @"\negatives.json");
+                List<int> negatives = JsonUtil<List<int>>.Read(expHome + @"commit\" + commit + @"\negatives.json");
                 List<TRegion> negativesRegions = new List<TRegion>();
                 List<TRegion> positivesRegions = new List<TRegion>();
                 //foreach (var negative in negatives)         
@@ -585,7 +637,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             }
             controller.RetrieveLocations(controller.CurrentViewCodeBefore);
 
-            List<Selection> locations = JsonUtil<List<Selection>>.Read(@"..\..\TestProjects\commits\" + commit + @"\found_locations.json");
+            List<Selection> locations = JsonUtil<List<Selection>>.Read(expHome + @"commit\" + commit + @"\found_locations.json");
             if (locations.Count != controller.Locations.Count) return false;
 
             bool passed = true;
@@ -601,7 +653,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
             }
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
-            FileUtil.WriteToFile(@"..\..\TestProjects\commits\" + commit + @"\time.t", totalTime.ToString());
+            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\time.t", totalTime.ToString());
             return passed;
         }
     }

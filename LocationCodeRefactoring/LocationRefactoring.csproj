@@ -118,7 +118,7 @@
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramRefactoredObserver.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\IProgramsGeneratedObserver.cs" />
     <Compile Include="Spg.LocationCodeRefactoring.Observer\ProgramRefactoredEvent.cs" />
-    <Compile Include="Spg.LocationRefactor.Node\SyntacticalDecomposer.cs" />
+    <Compile Include="Spg.LocationRefactor.Node\Decomposer.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\EndPosFilter.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\MethodFilter.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\StatementFilter.cs" />
