@@ -59,73 +59,140 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
         {
             _instance = null;
         }
+        ///// <summary>
+        /////   Syntax nodes to be used on filtering
+        ///// </summary>
+        ///// <param name="name">Identifier name</param>
+        ///// <returns>Syntax nodes to be used on filtering</returns>
+        //internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string name)
+        //{
+        //    if (name == null) return null;
+
+        //    //IEnumerable<SyntaxNode> output;
+        //    //if (!_dicReferences.TryGetValue(name, out output))
+        //    //{
+        //        Dictionary<string, Dictionary<string, List<TextSpan>>> result = GetReferences(name);
+
+        //        Dictionary<string, Dictionary<string, List<TextSpan>>> referencedSymbols =
+        //            ReferenceManager.GroupReferencesBySelection(result, Ctl.SelectedLocations);
+        //        List<SyntaxNode> nodesList = new List<SyntaxNode>();
+        //        Dictionary<string, List<TextSpan>> dictionary;
+
+        //        if (referencedSymbols.Count == 1)
+        //        {
+        //            dictionary = referencedSymbols.First().Value;
+        //        }
+        //        else
+        //        {
+        //            dictionary = new Dictionary<string, List<TextSpan>>();
+        //            foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> symbol in referencedSymbols)
+        //            {
+        //                foreach (KeyValuePair<string, List<TextSpan>> dic in symbol.Value)
+        //                {
+        //                    if (!dictionary.ContainsKey(dic.Key))
+        //                    {
+        //                        dictionary.Add(dic.Key, dic.Value);
+        //                    }
+        //                    dictionary[dic.Key].AddRange(dic.Value);
+        //                }
+        //            }
+        //        }
+        //        //for each file
+        //        foreach (var fileSpans in dictionary)
+        //        {
+        //            SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
+        //            var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
+        //                        where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
+        //                        select node;
+        //            nodesList.AddRange(nodes);
+        //        }
+        //        //}
+        //        //else
+        //        //{
+        //        //MessageBox.Show("More than one syntax reference");
+        //        //}
+
+        //        if (!result.Any() || !nodesList.Any())
+        //        {
+        //            return null; //return SyntaxNodesWithoutSemanticModel(tree);
+        //            //_dicReferences.Add(name, null);
+        //        }
+        //        return nodesList;
+        //        //else
+        //        //{
+        //        //    //_dicReferences.Add(name, nodesList);
+        //        //}
+        //    //}
+        //    //return _dicReferences[name];
+        //}
+
+
         /// <summary>
         ///   Syntax nodes to be used on filtering
         /// </summary>
         /// <param name="name">Identifier name</param>
         /// <returns>Syntax nodes to be used on filtering</returns>
-        internal static IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string name)
+        internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string name)
         {
             if (name == null) return null;
 
-            //IEnumerable<SyntaxNode> output;
-            //if (!_dicReferences.TryGetValue(name, out output))
-            //{
-                Dictionary<string, Dictionary<string, List<TextSpan>>> result = GetReferences(name);
+            IEnumerable<SyntaxNode> output;
+            if (!_dicReferences.TryGetValue(name, out output))
+            {
+            Dictionary<string, Dictionary<string, List<TextSpan>>> result = GetReferences(name);
 
-                Dictionary<string, Dictionary<string, List<TextSpan>>> referencedSymbols =
-                    ReferenceManager.GroupReferencesBySelection(result, Ctl.SelectedLocations);
-                List<SyntaxNode> nodesList = new List<SyntaxNode>();
-                Dictionary<string, List<TextSpan>> dictionary;
+            Dictionary<string, Dictionary<string, List<TextSpan>>> referencedSymbols =
+                ReferenceManager.GroupReferencesBySelection(result, Ctl.SelectedLocations);
+            List<SyntaxNode> nodesList = new List<SyntaxNode>();
+            Dictionary<string, List<TextSpan>> dictionary;
 
-                if (referencedSymbols.Count == 1)
+            if (referencedSymbols.Count == 1)
+            {
+                dictionary = referencedSymbols.First().Value;
+            }
+            else
+            {
+                dictionary = new Dictionary<string, List<TextSpan>>();
+                foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> symbol in referencedSymbols)
                 {
-                    dictionary = referencedSymbols.First().Value;
-                }
-                else
-                {
-                    dictionary = new Dictionary<string, List<TextSpan>>();
-                    foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> symbol in referencedSymbols)
+                    foreach (KeyValuePair<string, List<TextSpan>> dic in symbol.Value)
                     {
-                        foreach (KeyValuePair<string, List<TextSpan>> dic in symbol.Value)
+                        if (!dictionary.ContainsKey(dic.Key))
                         {
-                            if (!dictionary.ContainsKey(dic.Key))
-                            {
-                                dictionary.Add(dic.Key, dic.Value);
-                            }
-                            dictionary[dic.Key].AddRange(dic.Value);
+                            dictionary.Add(dic.Key, dic.Value);
                         }
+                        dictionary[dic.Key].AddRange(dic.Value);
                     }
                 }
-                //for each file
-                foreach (var fileSpans in dictionary)
-                {
-                    SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
-                    var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-                                where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
-                                select node;
-                    nodesList.AddRange(nodes);
-                }
-                //}
-                //else
-                //{
-                //MessageBox.Show("More than one syntax reference");
-                //}
-
-                if (!result.Any() || !nodesList.Any())
-                {
-                    return null; //return SyntaxNodesWithoutSemanticModel(tree);
-                    //_dicReferences.Add(name, null);
-                }
-                return nodesList;
-                //else
-                //{
-                //    //_dicReferences.Add(name, nodesList);
-                //}
+            }
+            //for each file
+            foreach (var fileSpans in dictionary)
+            {
+                SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
+                var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
+                            where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
+                            select node;
+                nodesList.AddRange(nodes);
+            }
             //}
-            //return _dicReferences[name];
-        }
+            //else
+            //{
+            //MessageBox.Show("More than one syntax reference");
+            //}
 
+            if (!result.Any() || !nodesList.Any())
+            {
+                //return null; //return SyntaxNodesWithoutSemanticModel(tree);
+                    _dicReferences.Add(name, null);
+            }
+            //return nodesList;
+            else
+            {
+                _dicReferences.Add(name, nodesList);
+            }
+            }
+            return _dicReferences[name];
+        }
         /// <summary>
         /// Generates references on the format: key referenced type, and values dictionary of referencee file and list of referecees.
         /// </summary>

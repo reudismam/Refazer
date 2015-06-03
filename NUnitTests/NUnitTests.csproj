@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Spg.NUnitTests.ASTProgram\ASTProgramTests.cs" />
     <Compile Include="Spg.NUnitTests.CompleteTestProject\CompleteTestProject.cs" />
+    <Compile Include="Spg.NUnitTests.CompleteTestSolution\CompleteTestSolution.cs" />
     <Compile Include="Spg.NUnitTests.Complete\CompleteTest.cs" />
     <Compile Include="Spg.NUnitTests.LocationTestProject\LocationTestProject.cs" />
     <Compile Include="Spg.NUnitTests.LocationTestSolution\LocationTestSolution.cs" />

@@ -166,7 +166,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                 var referenceDictionary = new Dictionary<string, IEnumerable<SyntaxNode>>();
                 foreach (string nameDyn in nameList)
                 {
-                    IEnumerable<SyntaxNode> nodes = Decomposer.SyntaxNodesWithSemanticModel(nameDyn);
+                    IEnumerable<SyntaxNode> nodes = Decomposer.GetInstance().SyntaxNodesWithSemanticModel(nameDyn);
                     if (nodes != null)
                     {
                         referenceDictionary.Add(nameDyn, nodes);
@@ -245,7 +245,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                     }
                     catch (ArgumentOutOfRangeException)
                     {
-                        MessageBox.Show("This location is not present on root node.");
+                        //MessageBox.Show("This location is not present on root node.");
                     }
                 }
                 //MessageBox.Show("Node: " + childNode.CSharpKind());

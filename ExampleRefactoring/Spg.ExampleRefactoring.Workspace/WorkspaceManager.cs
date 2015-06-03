@@ -246,7 +246,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             }
             catch (AggregateException e)
             {
-                MessageBox.Show("Error: " + e.GetBaseException().Message);
+                //MessageBox.Show("Error: " + e.GetBaseException().Message);
             }
 
             foreach (ISymbol sourceDeclaration in sourceDeclarations)
