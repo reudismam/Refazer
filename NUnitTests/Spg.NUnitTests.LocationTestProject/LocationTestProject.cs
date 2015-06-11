@@ -538,7 +538,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// </summary>
         /// <param name="commit">commit id</param>
         /// <returns>True if locale passed</returns>
-        public static bool LocaleTest(string commit, string solution, string project)
+        public static bool LocaleTest(string commit, string solution, List<string> project)
         {
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 

@@ -531,6 +531,20 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
 
         [Test]
+        public void Proja569c55()
+        {
+            bool isValid = LocaleTestSolution(@"NuGet\a569c55", @"NuGet\nuget5\NuGet.sln", "NuGet.Client");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj2_a569c55()
+        {
+            bool isValid = LocaleTestSolution(@"NuGet\2_a569c55", @"NuGet\nuget5\NuGet.sln", "NuGet.Client");
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
         public void Proj4_a883600()
         {
             bool isValid = LocaleTestSolution(@"NuGet\4_a883600", @"NuGet\nuget4\NuGet.sln", "NuGet.Client.VisualStudio.PowerShell");
@@ -594,20 +608,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
 
         [Test]
-        public void Proja569c556805ce4f788b9644c1cc9a578719df3abTest()
-        {
-            bool isValid = LocaleTestSolution("a569c556805ce4f788b9644c1cc9a578719df3ab", @"..\..\TestProjects\Projects\NuGet.Client\Proja569c556805ce4f788b9644c1cc9a578719df3ab.sln", "Proja569c556805ce4f788b9644c1cc9a578719df3ab");
-            Assert.IsTrue(isValid);
-        }
-
-        [Test]
-        public void Proj2_a569c556805ce4f788b9644c1cc9a578719df3abTest()
-        {
-            bool isValid = LocaleTestSolution("2_a569c556805ce4f788b9644c1cc9a578719df3ab", @"..\..\TestProjects\Projects\NuGet.Client\Proja569c556805ce4f788b9644c1cc9a578719df3ab.sln", "Proja569c556805ce4f788b9644c1cc9a578719df3ab");
-            Assert.IsTrue(isValid);
-        }
-
-        [Test]
         public void Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51Test()
         {
             bool isValid = LocaleTestSolution("2_a569c556805ce4f788b9644c1cc9a578719df3ab", @"..\..\TestProjects\Projects\NuGet.Client2\Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51.sln", "Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51");
@@ -621,7 +621,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         /// <param name="solution">Solution</param>
         /// <param name="project">Project</param>
         /// <returns>True if locale passed</returns>
-        public static bool LocaleTestSolution(string commit, string solution, string project)
+        public static bool LocaleTestSolution(string commit, string solution, List<string> project)
         {
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 

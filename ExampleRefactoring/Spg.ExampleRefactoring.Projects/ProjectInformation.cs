@@ -1,4 +1,6 @@
-﻿namespace ExampleRefactoring.Spg.ExampleRefactoring.Projects
+﻿using System.Collections.Generic;
+
+namespace ExampleRefactoring.Spg.ExampleRefactoring.Projects
 {
     /// <summary>
     /// Information related to the project
@@ -15,7 +17,7 @@
         /// Project path
         /// </summary>
         /// <returns></returns>
-        public string ProjectPath { get; set; }
+        public List<string> ProjectPath { get; set; }
 
         /// <summary>
         /// Singleton instance

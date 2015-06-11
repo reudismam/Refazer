@@ -59,6 +59,7 @@ namespace Spg.LocationRefactoring.Tok
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
+            //return this.ToString().GetHashCode();
             return base.GetHashCode();
         }
 

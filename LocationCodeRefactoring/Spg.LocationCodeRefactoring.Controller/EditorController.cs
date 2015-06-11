@@ -130,7 +130,7 @@ namespace Spg.LocationCodeRefactoring.Controller
             this.ProjectInformation.SolutionPath = solution;
         }
 
-        public void SetProject(string project)
+        public void SetProject(List<string> project)
         {
             this.ProjectInformation.ProjectPath = project;
         }
@@ -918,7 +918,6 @@ namespace Spg.LocationCodeRefactoring.Controller
             }
 
             EditedLocations = dicSelections;
-
             JsonUtil<Dictionary<string, List<Selection>>>.Write(dicSelections, "edited_selections.json");
         }
 
@@ -995,7 +994,7 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// </summary>
         /// <param name="transformations"></param>
         private void NotifyProgramRefactoredObservers(List<Transformation> transformations)
-        {
+        { 
             ProgramRefactoredEvent rEvent = new ProgramRefactoredEvent(transformations);
 
             foreach (IProgramRefactoredObserver observer in _programsRefactoredObserver)

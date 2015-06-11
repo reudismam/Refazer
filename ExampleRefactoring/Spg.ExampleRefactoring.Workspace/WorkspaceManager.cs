@@ -43,7 +43,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         /// <param name="projectName">Project name</param>
         /// <param name="solutionPath">Solution path</param>
         /// <returns>.cs files</returns>
-        public List<Tuple<string, string>> GetSourcesFiles(string projectName, string solutionPath)
+        public List<Tuple<string, string>> GetSourcesFiles(List<string> projectName, string solutionPath)
         {
             //SymbolTable(solutionPath);
             List<Tuple<string, string>> sourceFiles = new List<Tuple<string, string>>();
@@ -58,7 +58,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             foreach (var projectId in originalSolution.ProjectIds)
             {
                 var project = newSolution.GetProject(projectId);
-                if (project.Name.Equals(projectName))
+                if (/*project.Name.Equals(projectName)*/projectName.Contains(project.Name))
                 {
                     //remove
                     //var compilation = project.GetCompilationAsync().Result;
@@ -233,7 +233,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         /// <param name="solutionPath">Solution path</param>
         /// <param name="name">Name of the identifier</param>
         /// <returns>Fully qualified name of the node</returns>
-        public Dictionary<string, Dictionary<string, List<TextSpan>>> GetDeclaredReferences(string projectName, string solutionPath, string name)
+        public Dictionary<string, Dictionary<string, List<TextSpan>>> GetDeclaredReferences(List<string> projectName, string solutionPath, string name)
         {
             var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
             var workspace = MSBuildWorkspace.Create();
@@ -289,7 +289,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         /// <param name="projectName">Name of the project</param>
         /// <param name="solutionPath">Solution path</param>
         /// <returns>List of source file in the solution</returns>
-        public List<Tuple<string, string>> SourceFiles(string projectName, string solutionPath)
+        public List<Tuple<string, string>> SourceFiles(List<string> projectName, string solutionPath)
         {
             //WorkspaceManager manager = new WorkspaceManager();
             List<Tuple<string, string>> sourceFiles = GetSourcesFiles(projectName, solutionPath);

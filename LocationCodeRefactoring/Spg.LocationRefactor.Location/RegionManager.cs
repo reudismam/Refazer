@@ -519,7 +519,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                 List<SyntaxNode> aNodes = new List<SyntaxNode>();
                 foreach (Selection span in controller.EditedLocations[file])
                 {
-                    MessageBox.Show(sourceCodeAfter.Substring(span.Start + 1, span.Length - 2));
+                    //MessageBox.Show(sourceCodeAfter.Substring(span.Start + 1, span.Length - 2));
               
                     SyntaxNode snode = LCAManager.LeastCommonAncestor(treeAfter, span.Start + 1,
                         (span.Start + 1) + (span.Length - 2));
@@ -655,7 +655,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
                         Parent = parent,
                         Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
                     };
-                    MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
+                    //MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
 
                     outputRegions.Add(tregion);
                 }

@@ -257,6 +257,10 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             if (parent.IsKind(SyntaxKind.MethodDeclaration)) { return true; }
 
+            if (parent.IsKind(SyntaxKind.Parameter)) { return true;}
+
+            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) return true;
+
             //if (parent.IsKind(SyntaxKind.Argument)) { return true;}
 
             //if (next == null) { return false;}
