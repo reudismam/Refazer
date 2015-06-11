@@ -145,6 +145,7 @@ namespace Spg.LocationCodeRefactoring.Controller
             this._locationsTransformedObserver = new List<ILocationsTransformedObserver>();
             this._locationsObversers = new List<ILocationsObserver>();
             this.FilesOpened = new Dictionary<string, bool>();
+            //this.ProjectInformation.ProjectPath = new List<string>();
             //this.CurrentProject = null;
             //this.Progs = null;
             //this.SolutionPath = null;

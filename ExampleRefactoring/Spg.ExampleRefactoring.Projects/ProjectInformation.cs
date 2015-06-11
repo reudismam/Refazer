@@ -24,7 +24,10 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Projects
         /// </summary>
         private static ProjectInformation _instance;
 
-        private ProjectInformation() { }
+        private ProjectInformation()
+        {
+            this.ProjectPath = new List<string>();
+        }
 
         /// <summary>
         /// Get a new instance of ProjectInformation
