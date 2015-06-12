@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
@@ -51,7 +51,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("00552fc2287f820ae9d42fd259aa6c07c2c5a805", @"..\..\TestProjects\Projects\Portable6\Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805.sln", "Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805");
+            List<string> projects = new List<string>();
+            projects.Add("Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("00552fc2287f820ae9d42fd259aa6c07c2c5a805", @"..\..\TestProjects\Projects\Portable6\Proj00552fc2287f820ae9d42fd259aa6c07c2c5a805.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("LanguageParser.cs");
@@ -66,7 +68,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\Portable11\Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            List<string> projects = new List<string>();
+            projects.Add("Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\Portable11\Proj673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("DiagnosticFormatter.cs");
@@ -81,7 +85,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            List<string> projects = new List<string>();
+            projects.Add("Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("CommonCommandLineParserTests.cs");
@@ -96,7 +102,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            List<string> projects = new List<string>();
+            projects.Add("Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\CodeAnalysisTest\Proj2_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("CommonCommandLineParserTests.cs");
@@ -111,7 +119,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\CommandLine\Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", "Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            List<string> projects = new List<string>();
+            projects.Add("Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8", @"..\..\TestProjects\Projects\CommandLine\Proj4_673f18e1f9bbbae8a8bd8333f367c86d935e8eb8.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("CommandLineTests.cs");
@@ -126,7 +136,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8", @"..\..\TestProjects\Projects\Portable10\Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8.sln", "Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8");
+            List<string> projects = new List<string>();
+            projects.Add("Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8", @"..\..\TestProjects\Projects\Portable10\Proj83e4349133d27a8f4dd5a85b69eb4ba00d41e6f8.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("UserDefinedImplicitConversions.cs");
@@ -141,7 +153,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proje817dab72dd5199cb5c7f661bc6b289f63ae706b()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("e817dab72dd5199cb5c7f661bc6b289f63ae706b", @"..\..\TestProjects\Projects\Portable9\Proje817dab72dd5199cb5c7f661bc6b289f63ae706b.sln", "Proje817dab72dd5199cb5c7f661bc6b289f63ae706b");
+            List<string> projects = new List<string>();
+            projects.Add("Proje817dab72dd5199cb5c7f661bc6b289f63ae706b");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("e817dab72dd5199cb5c7f661bc6b289f63ae706b", @"..\..\TestProjects\Projects\Portable9\Proje817dab72dd5199cb5c7f661bc6b289f63ae706b.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("TokenBasedFormattingRule.cs");
@@ -156,7 +170,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj2_cd68d0323eb97f18c10281847c831f8e361506b9()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_cd68d0323eb97f18c10281847c831f8e361506b9", @"..\..\TestProjects\Projects\Portable8\Projcd68d0323eb97f18c10281847c831f8e361506b9.sln", "Projcd68d0323eb97f18c10281847c831f8e361506b9");
+            List<string> projects = new List<string>();
+            projects.Add("Projcd68d0323eb97f18c10281847c831f8e361506b9");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_cd68d0323eb97f18c10281847c831f8e361506b9", @"..\..\TestProjects\Projects\Portable8\Projcd68d0323eb97f18c10281847c831f8e361506b9.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("Project.cs");
@@ -171,7 +187,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj3_cd68d0323eb97f18c10281847c831f8e361506b9()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_cd68d0323eb97f18c10281847c831f8e361506b9", @"..\..\TestProjects\Projects\Portable8\Projcd68d0323eb97f18c10281847c831f8e361506b9.sln", "Projcd68d0323eb97f18c10281847c831f8e361506b9");
+            List<string> projects = new List<string>();
+            projects.Add("Projcd68d0323eb97f18c10281847c831f8e361506b9");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_cd68d0323eb97f18c10281847c831f8e361506b9", @"..\..\TestProjects\Projects\Portable8\Projcd68d0323eb97f18c10281847c831f8e361506b9.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("Project.cs");
@@ -186,7 +204,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Projf66696e70c90ce7fa1476d53cc84cc18e438d19b()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("f66696e70c90ce7fa1476d53cc84cc18e438d19b", @"..\..\TestProjects\Projects\VBCSCompilerTests\Proje4d141a3c5f51ce4021d105e2b330564e02069fc.sln", "Proje4d141a3c5f51ce4021d105e2b330564e02069fc");
+            List<string> projects = new List<string>();
+            projects.Add("Proje4d141a3c5f51ce4021d105e2b330564e02069fc");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("f66696e70c90ce7fa1476d53cc84cc18e438d19b", @"..\..\TestProjects\Projects\VBCSCompilerTests\Proje4d141a3c5f51ce4021d105e2b330564e02069fc.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("CompilerServerApiTest.cs");
@@ -201,7 +221,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_4b402939708adf35a7a5e12ffc99dc14cc1f4766", @"..\..\TestProjects\Projects\CSharp2\Proj2_4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", "Proj2_4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+            List<string> projects = new List<string>();
+            projects.Add("Proj2_4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_4b402939708adf35a7a5e12ffc99dc14cc1f4766", @"..\..\TestProjects\Projects\CSharp2\Proj2_4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("AssemblySymbol.cs"); list.Add("InternalsVisibleToAndStrongNameTests.cs");
@@ -216,7 +238,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj8ecd05880b478e4ca997a4789b976ef73b070546()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("8ecd05880b478e4ca997a4789b976ef73b070546", @"..\..\TestProjects\Projects\Portable7\Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", "Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+            List<string> projects = new List<string>();
+            projects.Add("Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("8ecd05880b478e4ca997a4789b976ef73b070546", @"..\..\TestProjects\Projects\Portable7\Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("EmitExpression.cs");
@@ -228,7 +252,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj04d060498bc0c30403bb05872e396052d826d082()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("04d060498bc0c30403bb05872e396052d826d082", @"..\..\TestProjects\Projects\Diagnostics2\Proj04d060498bc0c30403bb05872e396052d826d082.sln", "Proj04d060498bc0c30403bb05872e396052d826d082");
+            List<string> projects = new List<string>();
+            projects.Add("Proj04d060498bc0c30403bb05872e396052d826d082");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("04d060498bc0c30403bb05872e396052d826d082", @"..\..\TestProjects\Projects\Diagnostics2\Proj04d060498bc0c30403bb05872e396052d826d082.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("ApplyDiagnosticAnalyzerAttributeFix.cs"); list.Add("CA1052CSharpCodeFixProvider.cs");
@@ -240,7 +266,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj318b2b0e476a122ebc033b13d41449ef1c814c1d()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("318b2b0e476a122ebc033b13d41449ef1c814c1d", @"..\..\TestProjects\Projects\Core2\Proj318b2b0e476a122ebc033b13d41449ef1c814c1d.sln", "Proj318b2b0e476a122ebc033b13d41449ef1c814c1d");
+            List<string> projects = new List<string>();
+            projects.Add("Proj318b2b0e476a122ebc033b13d41449ef1c814c1d");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("318b2b0e476a122ebc033b13d41449ef1c814c1d", @"..\..\TestProjects\Projects\Core2\Proj318b2b0e476a122ebc033b13d41449ef1c814c1d.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("DeclarePublicAPIFix.cs");
@@ -256,7 +284,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            List<string> projects = new List<string>();
+            projects.Add("Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("SyntaxFactory.cs");
@@ -268,7 +298,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("1113fd3db14fd23fc081e90f27f4ddafad7b244d", @"..\..\TestProjects\Projects\Portable\Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d.sln", "Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d");
+            List<string> projects = new List<string>();
+            projects.Add("Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("1113fd3db14fd23fc081e90f27f4ddafad7b244d", @"..\..\TestProjects\Projects\Portable\Proj1113fd3db14fd23fc081e90f27f4ddafad7b244d.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("MetadataWriter.cs");
@@ -283,7 +315,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("cc3d32746f60ed5a9f3775ef0ec44424b03d65cf", @"..\..\TestProjects\Projects\Portable2\Portable\Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf.sln", "Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf");
+            List<string> projects = new List<string>();
+            projects.Add("Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("cc3d32746f60ed5a9f3775ef0ec44424b03d65cf", @"..\..\TestProjects\Projects\Portable2\Portable\Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("Contract.cs");
@@ -298,7 +332,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("e7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd", @"..\..\TestProjects\Projects\Portable3\Portable\Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd.sln", "Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd");
+            List<string> projects = new List<string>();
+            projects.Add("Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("e7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd", @"..\..\TestProjects\Projects\Portable3\Portable\Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("TaskExtensions.cs");
@@ -310,7 +346,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            List<string> projects = new List<string>();
+            projects.Add("Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("SymbolDisplay.cs");
@@ -322,7 +360,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            List<string> projects = new List<string>();
+            projects.Add("Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("3_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("ObjectDisplay.cs");
@@ -334,7 +374,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj4_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("4_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            List<string> projects = new List<string>();
+            projects.Add("Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("4_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("ObjectDisplay.cs");
@@ -346,7 +388,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", "Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            List<string> projects = new List<string>();
+            projects.Add("Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("5_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("ObjectDisplay.cs");
@@ -369,7 +413,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj49cdaceb2828acc1f50223826d478a00a80a59e2()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("49cdaceb2828acc1f50223826d478a00a80a59e2", @"..\..\TestProjects\Projects\CSharp\Proj49cdaceb2828acc1f50223826d478a00a80a59e2.sln", "Proj49cdaceb2828acc1f50223826d478a00a80a59e2");
+            List<string> projects = new List<string>();
+            projects.Add("Proj49cdaceb2828acc1f50223826d478a00a80a59e2");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("49cdaceb2828acc1f50223826d478a00a80a59e2", @"..\..\TestProjects\Projects\CSharp\Proj49cdaceb2828acc1f50223826d478a00a80a59e2.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("MockCSharpCompiler.cs"); list.Add("MockCsi.cs");
@@ -380,7 +426,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("cfd9b464dbb07c8b183d89a403a8bc877b3e929d", @"..\..\TestProjects\Projects\Portable4\Portable\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.sln", "Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+            List<string> projects = new List<string>();
+            projects.Add("Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("cfd9b464dbb07c8b183d89a403a8bc877b3e929d", @"..\..\TestProjects\Projects\Portable4\Portable\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("MetadataWriter.cs"); 
@@ -392,7 +440,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj2_cfd9b464dbb07c8b183d89a403a8bc877b3e929d()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2-cfd9b464dbb07c8b183d89a403a8bc877b3e929d", @"..\..\TestProjects\Projects\Portable4\Portable\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.sln", "Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+            List<string> projects = new List<string>();
+            projects.Add("Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2-cfd9b464dbb07c8b183d89a403a8bc877b3e929d", @"..\..\TestProjects\Projects\Portable4\Portable\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("MetadataWriter.cs");
@@ -404,7 +454,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("7c885ca20209ca95cfec1ed5bfaf1d43db06be99", @"..\..\TestProjects\Projects\Diagnostics\Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99.sln", "Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
+            List<string> projects = new List<string>();
+            projects.Add("Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("7c885ca20209ca95cfec1ed5bfaf1d43db06be99", @"..\..\TestProjects\Projects\Diagnostics\Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("InternalImplementationOnlyAnalyzer.cs"); list.Add("DiagnosticAnalyzerAttributeAnalyzer.cs");
@@ -416,7 +468,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj2_7c885ca20209ca95cfec1ed5bfaf1d43db06be99()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_7c885ca20209ca95cfec1ed5bfaf1d43db06be99", @"..\..\TestProjects\Projects\Diagnostics\Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99.sln", "Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
+            List<string> projects = new List<string>();
+            projects.Add("Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("2_7c885ca20209ca95cfec1ed5bfaf1d43db06be99", @"..\..\TestProjects\Projects\Diagnostics\Proj7c885ca20209ca95cfec1ed5bfaf1d43db06be99.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("CA1001CSharpCodeFixProvider.cs"); list.Add("CA1008CSharpCodeFixProvider.cs");
@@ -439,7 +493,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proje28c81243206f1bb26b861ca0162678ce11b538cTest()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("e28c81243206f1bb26b861ca0162678ce11b538c", @"..\..\TestProjects\Projects\Core\Proje28c81243206f1bb26b861ca0162678ce11b538c.sln", "Proje28c81243206f1bb26b861ca0162678ce11b538c");
+            List<string> projects = new List<string>();
+            projects.Add("Proje28c81243206f1bb26b861ca0162678ce11b538c");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("e28c81243206f1bb26b861ca0162678ce11b538c", @"..\..\TestProjects\Projects\Core\Proje28c81243206f1bb26b861ca0162678ce11b538c.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("CA1309CodeFixProviderBase.cs"); list.Add("CA2101CodeFixProviderBase.cs");
@@ -452,7 +508,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Projd83cdfa88557bdf399a2f52dc79aad9d69bce007Test()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("d83cdfa88557bdf399a2f52dc79aad9d69bce007", @"..\..\TestProjects\Projects\UnitTests\Projd83cdfa88557bdf399a2f52dc79aad9d69bce007.sln", "Projd83cdfa88557bdf399a2f52dc79aad9d69bce007");
+            List<string> projects = new List<string>();
+            projects.Add("Projd83cdfa88557bdf399a2f52dc79aad9d69bce007");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("d83cdfa88557bdf399a2f52dc79aad9d69bce007", @"..\..\TestProjects\Projects\UnitTests\Projd83cdfa88557bdf399a2f52dc79aad9d69bce007.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("CommitFailureHandlerTests.cs");
@@ -464,7 +522,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         [Test]
         public void Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7Test()
         {
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", "Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            List<string> projects = new List<string>();
+            projects.Add("Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7");
+            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("1571862b0479b8f1e1976abceac0bca9f3cdd2d7", @"..\..\TestProjects\Projects\FunctionalTests2\FunctionalTests\Proj1571862b0479b8f1e1976abceac0bca9f3cdd2d7.sln", projects);
 
             List<string> list = new List<string>();
             list.Add("DbSqlQueryTests.cs");
@@ -570,4 +630,5 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestProject
         }
     }
 }
+
 

@@ -169,7 +169,10 @@ namespace Spg.LocationRefactor.Operator.Filter
                     IEnumerable<SyntaxNode> nodes = Decomposer.GetInstance().SyntaxNodesWithSemanticModel(nameDyn);
                     if (nodes != null)
                     {
-                        referenceDictionary.Add(nameDyn, nodes);
+                        if (!referenceDictionary.ContainsKey(nameDyn))
+                        {
+                            referenceDictionary.Add(nameDyn, nodes);
+                        }
                     }
                 }
 
