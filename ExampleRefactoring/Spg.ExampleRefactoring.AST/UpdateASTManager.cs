@@ -125,6 +125,7 @@ namespace Spg.ExampleRefactoring.AST
                 throw new Exception("Nodes cannot be null");
             }
             String method = "";
+            string saveTrailingTrivia = null;
             for (int i = 0; i < nodes.List.Count; i++)
             {
                 SyntaxNodeOrToken n = nodes.List[i];
@@ -157,7 +158,18 @@ namespace Spg.ExampleRefactoring.AST
                         trailingTrivia += trivia.ToFullString();
                     }
 
-                    method += trailingTrivia;
+                    if (i < nodes.List.Count - 1 && nodes.List[i + 1].IsKind(SyntaxKind.CloseParenToken))
+                    {
+                        saveTrailingTrivia = trailingTrivia;
+                    }
+                    else if(n.IsKind(SyntaxKind.CloseParenToken))
+                    {
+                        method += saveTrailingTrivia;
+                    }
+                    else
+                    {
+                        method += trailingTrivia;
+                    }
                 }
             }
             return method;

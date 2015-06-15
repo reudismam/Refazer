@@ -58,7 +58,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             foreach (var projectId in originalSolution.ProjectIds)
             {
                 var project = newSolution.GetProject(projectId);
-                if (/*project.Name.Equals(projectName)*/projectName.Contains(project.Name))
+                if (/*project.Name.Equals(projectName)projectName.Contains(project.Name)*/true)
                 {
                     //remove
                     //var compilation = project.GetCompilationAsync().Result;

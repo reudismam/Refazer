@@ -78,8 +78,15 @@ namespace LocateAdornment
             ITextSnapshot current = buffer.CurrentSnapshot;
             SnapshotSpan span = new SnapshotSpan(current, region.Start, region.Length);
 
-            RemoveComments(span);
-            
+            try
+            {
+                //RemoveComments(span);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                
+            }
+
             if (span.Length == 0)
                 throw new ArgumentOutOfRangeException("span");
             if (author == null)

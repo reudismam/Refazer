@@ -162,6 +162,8 @@ namespace Spg.ExampleRefactoring.Comparator
         {
             Boolean equals = true;
 
+            if (seq1 == null || seq2 == null) return false;
+
             //List size are different
             if (seq1.Length() != seq2.Length())
             {
