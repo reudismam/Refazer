@@ -753,7 +753,7 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// <summary>
         /// Retrieve locations
         /// </summary>
-        /// <param name="sourceCode">Selected program</param>
+        ///// <param name="sourceCode">Selected program</param>
         /// <param name="prog">Location program</param>
         public List<TRegion> RetrieveLocations(Prog prog)
         {

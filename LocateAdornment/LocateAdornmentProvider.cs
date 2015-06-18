@@ -80,9 +80,9 @@ namespace LocateAdornment
 
             try
             {
-                //RemoveComments(span);
+                RemoveComments(span);
             }
-            catch (ArgumentOutOfRangeException)
+            catch (Exception)
             {
                 
             }

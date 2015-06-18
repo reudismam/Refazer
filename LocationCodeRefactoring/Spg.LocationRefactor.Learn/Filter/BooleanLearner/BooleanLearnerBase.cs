@@ -122,7 +122,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
             List<IPosition> positions = new List<IPosition>();
             foreach (var example in examples)
             {
-                ListNode input = example.Item1; //input and output are equal.
+                ListNode input = example.Item2; //input and output are equal.
                 for (int k = 0; k < input.List.Count; k++)
                 {
                     positions.AddRange(program.GeneratePos(input, k));

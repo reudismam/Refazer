@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
@@ -178,7 +177,11 @@ namespace Spg.LocationRefactor.Operator.Filter
 
                 if (referenceDictionary.Count() == 1)
                 {
-                    return referenceDictionary.First().Value;
+                    if (MatchesSelectedLocations(referenceDictionary.First().Value, EditorController.GetInstance().SelectedLocations))
+                    {
+                        return referenceDictionary.First().Value;
+                    }
+                    return null;
                 }
 
                 if (referenceDictionary.Any())
@@ -209,19 +212,80 @@ namespace Spg.LocationRefactor.Operator.Filter
                 dicSelections.Add(keypPair.Key, selections);
             }
 
-            IEnumerable<Selection> insersected = dicSelections.Values.First();
+            IEnumerable<Selection> intersection = dicSelections.Values.First();
             for(int i = 1; i < dicSelections.Values.Count; i++)
             {
-                 insersected = insersected.Intersect(dicSelections.Values.ElementAt(i));
+                 intersection = intersection.Intersect(dicSelections.Values.ElementAt(i));
             }
 
+            bool isIntersection = MatchesSelectedLocations(intersection, EditorController.GetInstance().SelectedLocations);
             List<SyntaxNode> nodes = new List<SyntaxNode>();
-            foreach (Selection selection in insersected)
+            if (isIntersection)
             {
-                SyntaxTree root = CSharpSyntaxTree.ParseFile(selection.SourcePath);
-                nodes.Add(root.GetRoot().FindNode(new TextSpan(selection.Start, selection.Length)));
+                foreach (Selection selection in intersection)
+                {
+                    SyntaxTree root = CSharpSyntaxTree.ParseFile(selection.SourcePath);
+                    nodes.Add(root.GetRoot().FindNode(new TextSpan(selection.Start, selection.Length)));
+                } 
+            }
+            else
+            {
+                foreach (KeyValuePair<string, IEnumerable<SyntaxNode>>  item in referenceDictionary)
+                {
+                    nodes.AddRange(item.Value);
+                }
             }
             return nodes;
+        }
+
+        private bool MatchesSelectedLocations(IEnumerable<Selection> insersected, List<TRegion> selectedLocations)
+        {
+            foreach (TRegion region in selectedLocations)
+            {
+                bool isIntersectoin = false;
+                foreach (Selection selection in insersected)
+                {
+                    TRegion rSel = new TRegion();
+                    rSel.Start = selection.Start;
+                    rSel.Length = selection.Length;
+                    if (rSel.IntersectWith(region))
+                    {
+                        isIntersectoin = true;
+                        break;
+                    }
+                }
+
+                if (!isIntersectoin)
+                {
+                    return isIntersectoin;
+                }
+            }
+            return true;
+        }
+
+        private bool MatchesSelectedLocations(IEnumerable<SyntaxNode> insersected, List<TRegion> selectedLocations)
+        {
+            foreach (TRegion region in selectedLocations)
+            {
+                bool isIntersectoin = false;
+                foreach (SyntaxNode selection in insersected)
+                {
+                    TRegion rSel = new TRegion();
+                    rSel.Start = selection.Span.Start;
+                    rSel.Length = selection.Span.Length;
+                    if (rSel.IntersectWith(region))
+                    {
+                        isIntersectoin = true;
+                        break;
+                    }
+                }
+
+                if (!isIntersectoin)
+                {
+                    return isIntersectoin;
+                }
+            }
+            return true;
         }
 
         /// <summary>

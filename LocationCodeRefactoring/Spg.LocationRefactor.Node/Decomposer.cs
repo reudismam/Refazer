@@ -153,7 +153,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
             else
             {
                 dictionary = new Dictionary<string, List<TextSpan>>();
-                foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> symbol in referencedSymbols)
+                foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> symbol in result)
                 {
                     foreach (KeyValuePair<string, List<TextSpan>> dic in symbol.Value)
                     {
