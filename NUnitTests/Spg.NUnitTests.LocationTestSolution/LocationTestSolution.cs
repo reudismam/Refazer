@@ -289,9 +289,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
 
 
-        /// <summary>
-        /// Test Method Call To Identifier transformation
-        /// </summary>
         [Test]
         public void Proj8ecd058()
         {
@@ -302,13 +299,13 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
         
 
-
         [Test]
-        public void Proj04d060498bc0c30403bb05872e396052d826d082()
+        public void Proj04d0604()
         {
             List<string> projects = new List<string>();
-            projects.Add("Proj04d060498bc0c30403bb05872e396052d826d082");
-            bool isValid = LocaleTestSolution("04d060498bc0c30403bb05872e396052d826d082", @"..\..\TestProjects\Projects\Diagnostics2\Proj04d060498bc0c30403bb05872e396052d826d082.sln", projects);
+            projects.Add("CSharpFxCopRulesDiagnosticAnalyzers");
+            projects.Add("FxCopRulesDiagnosticAnalyzers");
+            bool isValid = LocaleTestSolution(@"Roslyn\04d0604", @"Roslyn\roslyn18\Src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
         }
 
