@@ -21,32 +21,6 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
     [TestFixture]
     public class CompleteTestSolution
     {
-        // /// <summary>
-        // /// Simple API Test for locations
-        // /// </summary>
-        // [Test]
-        // public void SimpleAPIChangeTest()
-        // {
-        //     bool passLocation = LocationTest.LocaleTest(FilePath.SIMPLE_API_CHANGE_INPUT, FilePath.SIMPLE_API_CHANGE_OUTPUT_SELECTION, FilePath.MAIN_CLASS_SIMPLE_API_CHANGE_PATH);
-
-        //     bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_SIMPLE_API_CHANGE_AFTER_EDITING, FilePath.SIMPLE_API_CHANGE_EDITION, @"\change_api\");
-
-        //     Assert.IsTrue(passLocation && passTransformation);
-        // }
-
-        // /// <summary>
-        // /// Parameter test on if
-        // /// </summary>
-        // [Test]
-        // public void IntroduceParamOnIf()
-        // {
-        //     bool passLocation = LocationTest.LocaleTest(FilePath.INTRODUCE_PARAM_ON_IF_INPUT, FilePath.INTRODUCE_PARAM_ON_IF_OUTPUT_SELECTION, FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_PATH);
-
-        //     bool passTransformation = CompleteTestBase(FilePath.MAIN_CLASS_INTRODUCE_PARAM_ON_IF_AFTER_EDITING, FilePath.INTRODUCE_PARAM_ON_IF_EDITION, @"\parameter_change_on_if\");
-
-        //     Assert.IsTrue(passLocation && passTransformation);
-        // }
-
         /// <summary>
         /// Test Method Call To Identifier transformation
         /// </summary>
