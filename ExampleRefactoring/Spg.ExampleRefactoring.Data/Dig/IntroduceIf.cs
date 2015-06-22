@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data.Dig
@@ -16,7 +16,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
         {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"double computeDistance(Point p1, Point p2)
 {
     return -1;
@@ -24,7 +24,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output01 =
+            string output01 =
 @"double computeDistance(Point p1, Point p2)
 {
     if (p1.equals(p2)) return 0;
@@ -36,7 +36,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"float computeDirection(Point o, Point p)
   {
     int p = 0;
@@ -46,7 +46,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output02 =
+            string output02 =
 @"float computeDirection(Point o, Point p)
   {
     if (o.equals(p)) return 0;
@@ -68,7 +68,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test()
         {
-            String input01 =
+            string input01 =
 @"float computeDirection2(Point z, Point p)
   {
     int p = 0;
@@ -78,7 +78,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
  }
 ";
 
-            String output01 =
+            string output01 =
 @"float computeDirection2(Point z, Point p)
   {
     if (z.equals(p)) return 0;
@@ -93,3 +93,4 @@ namespace Spg.ExampleRefactoring.Data.Dig
         }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,7 +51,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// </summary>
         /// <param name="input">Source code</param>
         /// <returns>Statements that follows the predicate</returns>
-        public ListNode Execute(String input)
+        public ListNode Execute(string input)
         {
             SyntaxTree tree1 = CSharpSyntaxTree.ParseText(input);
             return Execute(tree1.GetRoot());

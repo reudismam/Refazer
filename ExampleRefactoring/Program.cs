@@ -19,7 +19,7 @@ namespace ExampleRefactoring
 
             Console.WriteLine("CHOOSE A NUMBER BETWEEM 1 AND 10\n");
 
-            String inputexamples = Console.ReadLine();
+            string inputexamples = Console.ReadLine();
             System.IO.StreamWriter file = new System.IO.StreamWriter("hypothesis.txt");
             ExampleCommand command = null;
             while (!inputexamples.Equals("&"))
@@ -42,7 +42,7 @@ namespace ExampleRefactoring
 
                 while (!test.Equals("#"))
                 {
-                    String result = ASTProgram.TransformString(test.Item1, hypothesis[0]).transformation;
+                    string result = ASTProgram.TransformString(test.Item1, hypothesis[0]).transformation;
                     Console.WriteLine(result);
                     test = command.Test();
                     Console.ReadLine();
@@ -56,3 +56,4 @@ namespace ExampleRefactoring
         }
     }
 }
+

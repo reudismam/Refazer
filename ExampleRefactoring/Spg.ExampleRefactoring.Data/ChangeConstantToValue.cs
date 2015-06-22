@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data
@@ -15,14 +15,14 @@ namespace Spg.ExampleRefactoring.Data
         public override List<Tuple<String, String>> Train() {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-                String input01 =
+                string input01 =
 @"public object[] Method(object type)
         {
             g.setLineWidth(LW);
         }
 ";
 
-                String output01 =
+                string output01 =
 @"public object[] Method(object type)
         {
             g.setLineWidth(0);
@@ -32,7 +32,7 @@ namespace Spg.ExampleRefactoring.Data
                 Console.WriteLine(input01);
                 Console.WriteLine(output01);
 
-            String input02 =
+            string input02 =
 @"public object[] Method2(object type)
         {
                 string z = ""4"";
@@ -40,7 +40,7 @@ namespace Spg.ExampleRefactoring.Data
         }
 ";
 
-            String output02 =
+            string output02 =
 @"public object[] Method2(object type)
         {
                 string z = ""4"";
@@ -61,14 +61,14 @@ namespace Spg.ExampleRefactoring.Data
         /// </summary>
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test() {
-            String input01 =
+            string input01 =
 @"public object[] Method3(object type)
         {
                 g.setLineWidth(LW);
         }
 ";
 
-            String output01 =
+            string output01 =
 @"public object[] Method3(object type)
         {
                 g.setLineWidth(0);
@@ -79,3 +79,4 @@ namespace Spg.ExampleRefactoring.Data
         }
     }
 }
+

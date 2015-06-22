@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
@@ -20,7 +20,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Program
         /// </summary>
         /// <param name="input">Source code</param>
         /// <returns>Transformation</returns>
-        public ListNode Execute(String input)
+        public ListNode Execute(string input)
         {
             return Ioperator.Execute(input);
         }
@@ -61,3 +61,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Program
         }
     }
 }
+

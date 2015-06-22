@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
@@ -32,7 +32,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
         /// </summary>
         /// <param name="input">Input</param>
         /// <returns>Matched statements</returns>
-        public ListNode Execute(String input) {
+        public ListNode Execute(string input) {
             ListNode filtered = null;
             if(SequenceExpression.Execute(input) != null){
                 filtered = ScalarExpression.Execute(input);

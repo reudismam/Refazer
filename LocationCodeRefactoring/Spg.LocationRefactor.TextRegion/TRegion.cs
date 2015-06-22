@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.CodeAnalysis;
@@ -58,7 +58,7 @@ namespace Spg.LocationRefactor.TextRegion
         /// <param name="region">Region</param>
         /// <returns>Evaluation</returns>
         public Boolean IsParent(TRegion region) {
-            String text = System.Text.RegularExpressions.Regex.Escape(this.Text);
+            string text = System.Text.RegularExpressions.Regex.Escape(this.Text);
             Boolean contains = System.Text.RegularExpressions.Regex.IsMatch(region.Text, text);
             Boolean parent = contains && region.Color != this.Color;
             return parent;
@@ -82,3 +82,4 @@ namespace Spg.LocationRefactor.TextRegion
         }*/
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
@@ -13,7 +13,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
         /// Execute the operator
         /// </summary>
         /// <returns>Execution result</returns>
-        ListNode Execute(String input);
+        ListNode Execute(string input);
 
         /// <summary>
         /// Execute the operator
@@ -46,3 +46,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
 
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
@@ -93,7 +93,7 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            String str = "";
+            string str = "";
             if (Length() > 1)
             {
                 int i;
@@ -157,3 +157,4 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
         }
     }
 }
+

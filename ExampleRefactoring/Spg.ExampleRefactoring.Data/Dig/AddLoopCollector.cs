@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data.Dig
@@ -16,7 +16,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
         {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"void Start(){
     foreach(Task t in tasks){
         t.Execute();
@@ -25,7 +25,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output01 =
+            string output01 =
 @"void Start(){
     Set<TaskResult> results = new HashSet<>();
     foreach(Task t in tasks){
@@ -39,7 +39,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"void Start2(){
     foreach(Command c in commands){
         c.Execute();
@@ -48,7 +48,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output02 =
+            string output02 =
 @"void Start2(){
     Set<TaskResult> results = new HashSet<>();
     foreach(Command c in commands){
@@ -70,7 +70,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test()
         {
-            String input01 =
+            string input01 =
 @"void Start(){
     foreach(TaskResult p in tasks){
         p.Execute();
@@ -78,7 +78,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 }
 ";
             
-            String output01 =
+            string output01 =
 @"void Start(){
     Set<TaskResult> results = new HashSet<>();
     foreach(TaskResult p in tasks){
@@ -92,3 +92,4 @@ namespace Spg.ExampleRefactoring.Data.Dig
         }
     }
 }
+

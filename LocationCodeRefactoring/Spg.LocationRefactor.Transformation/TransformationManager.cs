@@ -1,18 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Util;
+using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
@@ -76,7 +75,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// <returns>Transformed program</returns>
         public virtual string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact)
         {
-            string text = "";
             SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
             List<SyntaxNode> update = new List<SyntaxNode>();
             foreach (CodeLocation location in locations)
@@ -90,7 +88,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
                 update.AddRange(decedents);
             }
 
-            text = FileUtil.ReadFile(locations[0].SourceClass);
+            var text = FileUtil.ReadFile(locations[0].SourceClass);
             foreach (SyntaxNode node in update)
             {
                 try
@@ -108,10 +106,10 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
                     ListNode lnode = new ListNode(list);
 
                     ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
-                    String transformation = treeNode.transformation;
+                    string transformation = treeNode.transformation;
                     string nodeText = node.GetText().ToString();
-                    String escaped = Regex.Escape(nodeText);
-                    String replacement = Regex.Replace(text, escaped, transformation);
+                    string escaped = Regex.Escape(nodeText);
+                    string replacement = Regex.Replace(text, escaped, transformation);
                     text = replacement;
                 }
                 catch (ArgumentOutOfRangeException e)
@@ -246,3 +244,5 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         }
     }
 }
+
+

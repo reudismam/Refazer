@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ExampleRefactoring.Spg.ExampleRefactoring.Data;
 using Spg.ExampleRefactoring.Data.Dig;
 
@@ -15,7 +15,7 @@ namespace Spg.ExampleRefactoring.Data
         /// </summary>
         /// <param name="option">Option</param>
         /// <returns>Command</returns>
-        public static ExampleCommand GetCommand(String option) {
+        public static ExampleCommand GetCommand(string option) {
             ExampleCommand command = null;
 
             switch (option)
@@ -95,3 +95,4 @@ namespace Spg.ExampleRefactoring.Data
 
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data.Dig
@@ -16,14 +16,14 @@ namespace Spg.ExampleRefactoring.Data.Dig
         {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"void start(Car car){
     car.start();
 }
 ";
 
 
-            String output01 =
+            string output01 =
 @"void start(List<Car> list){
     for(Car car in list)
         car.start();
@@ -33,14 +33,14 @@ namespace Spg.ExampleRefactoring.Data.Dig
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"void start(Book book){
     book.start();
 }
 ";
 
 
-            String output02 =
+            string output02 =
 @"void start(List<Book> list){
     for(Book book in list)
         book.start();
@@ -58,13 +58,13 @@ namespace Spg.ExampleRefactoring.Data.Dig
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test()
         {
-            String input01 =
+            string input01 =
 @"void start(Bus bus){
     bus.start();
 }
 ";
 
-            String output01 =
+            string output01 =
 @"void start(List<Bus> list){
     for(Bus bus in list)
         bus.start();
@@ -74,3 +74,4 @@ namespace Spg.ExampleRefactoring.Data.Dig
         }
     }
 }
+

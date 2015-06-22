@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data
@@ -16,7 +16,7 @@ namespace Spg.ExampleRefactoring.Data
         {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"static void Method1(string[] args)
   {
     if (type == typeof(int))
@@ -27,7 +27,7 @@ namespace Spg.ExampleRefactoring.Data
 ";
 
 
-            String output01 =
+            string output01 =
 @"static void Method1(string[] args)
   {
     if (type == typeof(int))
@@ -41,7 +41,7 @@ namespace Spg.ExampleRefactoring.Data
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"static void Method2(string[] args)
   {
     if (type == typeof(string))
@@ -52,7 +52,7 @@ namespace Spg.ExampleRefactoring.Data
 ";
 
 
-            String output02 =
+            string output02 =
 @"static void Method2(string[] args)
   {
     if (type == typeof(string))
@@ -74,7 +74,7 @@ namespace Spg.ExampleRefactoring.Data
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test()
         {
-            String input01 =
+            string input01 =
 @"static void Method3(string[] args)
   {
     if (type == typeof(char))
@@ -84,7 +84,7 @@ namespace Spg.ExampleRefactoring.Data
   }
 ";
 
-            String output01 =
+            string output01 =
 @"static void Method3(string[] args)
   {
     if (type == typeof(char))
@@ -98,3 +98,4 @@ namespace Spg.ExampleRefactoring.Data
         }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data
@@ -16,7 +16,7 @@ namespace Spg.ExampleRefactoring.Data
         {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"public static string FormatLiteral(string value, bool quote)
         {
             return ObjectDisplay.FormatLiteral(value, quote);
@@ -24,7 +24,7 @@ namespace Spg.ExampleRefactoring.Data
 ";
 
 
-            String output01 =
+            string output01 =
 @"public static string FormatLiteral(string value, bool quote)
         {
             return ObjectDisplay.FormatLiteral(value, quote ? ObjectDisplayOptions.UseQuotes : ObjectDisplayOptions.None);
@@ -35,7 +35,7 @@ namespace Spg.ExampleRefactoring.Data
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"public static string FormatLiteral(char c, bool quote)
         {
             return ObjectDisplay.FormatLiteral(c, quote);
@@ -43,7 +43,7 @@ namespace Spg.ExampleRefactoring.Data
 ";
 
 
-            String output02 =
+            string output02 =
 @"public static string FormatLiteral(char c, bool quote)
         {
             return ObjectDisplay.FormatLiteral(c, quote ? ObjectDisplayOptions.UseQuotes : ObjectDisplayOptions.None);
@@ -62,14 +62,14 @@ namespace Spg.ExampleRefactoring.Data
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test()
         {
-            String input01 =
+            string input01 =
 @"public static string FormatLiteral(double c, bool quote)
         {
             return ObjectDisplay.FormatLiteral(c, quote);
         }
 ";
 
-            String output01 =
+            string output01 =
 @"public static string FormatLiteral(double c, bool quote)
         {
             return ObjectDisplay.FormatLiteral(c, quote ? ObjectDisplayOptions.UseQuotes : ObjectDisplayOptions.None);
@@ -80,3 +80,4 @@ namespace Spg.ExampleRefactoring.Data
         }
     }
 }
+

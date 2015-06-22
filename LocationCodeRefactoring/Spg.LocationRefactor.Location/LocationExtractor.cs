@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
@@ -145,7 +145,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <param name="codeBefore">Code before transformation</param>
         /// <param name="codeAfter">Code after transformation</param>
         /// <returns>Locations</returns>
-        public List<Tuple<TRegion, TRegion>> ExtractEditedRegions(String codeBefore, String codeAfter)
+        public List<Tuple<TRegion, TRegion>> ExtractEditedRegions(string codeBefore, string codeAfter)
         {
             RegionManager strategy = RegionManager.GetInstance();
             List<Tuple<SyntaxNode, SyntaxNode>> pairs = strategy.SyntaxNodesRegionBeforeAndAfterEditing(Controller.Locations);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Spg.ExampleRefactoring.Util
@@ -12,8 +12,8 @@ namespace Spg.ExampleRefactoring.Util
         /// Read a file and return a string as its content.
         /// </summary>
         /// <returns>String representing the content of the file</returns>
-        public static String ReadFile(String path) {
-            String value = File.ReadAllText(path);
+        public static String ReadFile(string path) {
+            string value = File.ReadAllText(path);
             return value;
         }
 
@@ -30,3 +30,5 @@ namespace Spg.ExampleRefactoring.Util
         }
     }
 }
+
+

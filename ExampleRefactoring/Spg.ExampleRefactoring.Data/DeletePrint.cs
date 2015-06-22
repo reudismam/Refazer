@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data
@@ -15,7 +15,7 @@ namespace Spg.ExampleRefactoring.Data
         public override List<Tuple<String, String>> Train() {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-                String input01 =
+                string input01 =
 @"static void Main1(string[] args)
   {
      int j = 2;
@@ -25,7 +25,7 @@ namespace Spg.ExampleRefactoring.Data
 ";
 
 
-                String output01 =
+                string output01 =
 @"static void Main1(string[] args)
   {
      int j = 2;
@@ -37,7 +37,7 @@ namespace Spg.ExampleRefactoring.Data
                 Console.WriteLine(output01);
                 tuples.Add(tuple01);
 
-                String input02 =
+                string input02 =
 @"static void Main1(string[] args)
 {
     int j = 2;
@@ -47,7 +47,7 @@ namespace Spg.ExampleRefactoring.Data
 }";
             
 
-                String output02 =
+                string output02 =
 @"static void Main1(string[] args)
 {
     int j = 2;
@@ -67,7 +67,7 @@ namespace Spg.ExampleRefactoring.Data
         /// </summary>
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test() {
-            String input01 =
+            string input01 =
 @"static void Main1(string[] args)
 {
     int j = 2;
@@ -77,7 +77,7 @@ namespace Spg.ExampleRefactoring.Data
     Console.WriteLine(""Hello, World (For the second time.)"");
 }";
 
-            String output01 =
+            string output01 =
 @"static void Main1(string[] args)
 {
     int j = 2;
@@ -90,3 +90,4 @@ namespace Spg.ExampleRefactoring.Data
         }
     }
 }
+

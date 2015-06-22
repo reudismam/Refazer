@@ -956,7 +956,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <param name="example"></param>
         /// <param name="synthesizedProgram"></param>
         /// <returns>ASTTransformation extracted</returns>
-        public static ASTTransformation TransformString(String example, SynthesizedProgram synthesizedProgram)
+        public static ASTTransformation TransformString(string example, SynthesizedProgram synthesizedProgram)
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(example);
 
@@ -1010,3 +1010,4 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+

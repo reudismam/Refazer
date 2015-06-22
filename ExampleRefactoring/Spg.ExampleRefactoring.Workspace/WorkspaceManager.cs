@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
@@ -196,6 +196,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         }
     }
 }
+
 
 
 

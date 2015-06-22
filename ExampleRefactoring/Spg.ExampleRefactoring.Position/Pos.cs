@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Position;
 using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
@@ -180,8 +180,8 @@ namespace Spg.ExampleRefactoring.Position
                 return null;
             }
 
-            String r1String = this.r1.ToString();
-            String r2String = this.r2.ToString();
+            string r1String = this.r1.ToString();
+            string r2String = this.r2.ToString();
 
             if (r1.Tokens.Count() == 0)
             {
@@ -221,3 +221,4 @@ namespace Spg.ExampleRefactoring.Position
         }
     }
 }
+

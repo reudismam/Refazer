@@ -314,8 +314,9 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// </summary>
         /// <param name="start">Start position</param>
         /// <param name="length">Region length</param>
+        /// <param name="span">Text selected by the span</param>
         /// <param name="sourceCode">Source code</param>
-        public void Edit(int start, int length, String span, String sourceCode)
+        public void Edit(int start, int length, string span, string sourceCode)
         {
             TRegion tregion = new TRegion();
             Color color = Color.LightGreen;
@@ -825,3 +826,4 @@ namespace Spg.LocationCodeRefactoring.Controller
         }
     }
 }
+

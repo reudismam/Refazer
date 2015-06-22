@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data.Dig
@@ -16,7 +16,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
         {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"class FolderNode implements SelectionListener{
     public void selected() {
     }
@@ -24,7 +24,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output01 =
+            string output01 =
 @"class FolderNode {
     class SelectionBehaviour
         implements SelectionListener{
@@ -38,7 +38,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"class FolderToken implements SelectionListener{
     public void selected() {
         string z = ""4"";
@@ -47,7 +47,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output02 =
+            string output02 =
 @"class FolderToken {
     class SelectionBehaviour
         implements SelectionListener{
@@ -70,7 +70,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test()
         {
-            String input01 =
+            string input01 =
 @"class FolderSyntax implements SelectionListener{
     public void selected() {
         string z = ""4"";
@@ -79,7 +79,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 }
 ";
             
-            String output01 =
+            string output01 =
 @"class FolderSyntax {
     class SelectionBehaviour
         implements SelectionListener{
@@ -95,3 +95,4 @@ namespace Spg.ExampleRefactoring.Data.Dig
         }
     }
 }
+

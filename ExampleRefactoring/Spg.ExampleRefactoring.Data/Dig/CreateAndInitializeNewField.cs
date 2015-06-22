@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data.Dig
@@ -16,7 +16,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
         {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"class Car {
     private List<Valve> valves;
     
@@ -30,7 +30,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output01 =
+            string output01 =
 @"class Car {
     private List<Valve> valves;
     private List<Wheel> wheels;
@@ -49,7 +49,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"class Bus {
     private List<Valve> valves;
 
@@ -64,7 +64,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output02 =
+            string output02 =
 @"class Bus {
     private List<Valve> valves;
     private List<Wheel> wheels;
@@ -92,7 +92,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test()
         {
-            String input01 =
+            string input01 =
 @"class Truck {
     private List<Valve> valves;
 
@@ -106,7 +106,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 ";
 
 
-            String output01 =
+            string output01 =
 @"class Truck {
     private List<Valve> valves;
     private List<Wheel> wheels;
@@ -125,3 +125,4 @@ namespace Spg.ExampleRefactoring.Data.Dig
         }
     }
 }
+

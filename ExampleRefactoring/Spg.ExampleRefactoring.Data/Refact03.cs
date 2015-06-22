@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data
@@ -15,7 +15,7 @@ namespace Spg.ExampleRefactoring.Data
         public override List<Tuple<String, String>> Train() {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-                String input01 =
+                string input01 =
 @"public IActionBars getActionBars()
         {
             if (fContainer == null)
@@ -26,7 +26,7 @@ namespace Spg.ExampleRefactoring.Data
         }
 ";
 
-                String output01 =
+                string output01 =
 @"public IActionBars getActionBars()
         {
             IActionBars actionBars = fContainer.getActionBars();
@@ -74,7 +74,7 @@ namespace Spg.ExampleRefactoring.Data
         /// </summary>
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test() {
-            String input01 =
+            string input01 =
 @"public IActionBars getActionBars()
         {
             if (fContainer == null)
@@ -85,7 +85,7 @@ namespace Spg.ExampleRefactoring.Data
         }
 ";
 
-            String output01 =
+            string output01 =
 @"public IActionBars getActionBars()
         {
             if (fContainer == null)
@@ -100,3 +100,4 @@ namespace Spg.ExampleRefactoring.Data
         }
     }
 }
+

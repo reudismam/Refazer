@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
@@ -104,7 +104,7 @@ namespace Spg.ExampleRefactoring.AST
             {
                 throw new Exception("Nodes cannot be true");
             }
-            String astText = Parse(nodes);
+            string astText = Parse(nodes);
             SyntaxTree tree = CSharpSyntaxTree.ParseText(astText);
             SyntaxNode root = tree.GetRoot();
             tree = tree.WithChangedText(root.GetText());
@@ -124,15 +124,15 @@ namespace Spg.ExampleRefactoring.AST
             {
                 throw new Exception("Nodes cannot be null");
             }
-            String method = "";
+            string method = "";
             string saveTrailingTrivia = null;
             for (int i = 0; i < nodes.List.Count; i++)
             {
                 SyntaxNodeOrToken n = nodes.List[i];
-                String node = n.ToString();
+                string node = n.ToString();
                 if (n.HasLeadingTrivia && i != 0)
                 {
-                    String leadingTrivial = "";
+                    string leadingTrivial = "";
 
                     foreach (SyntaxTrivia trivia in n.GetLeadingTrivia())
                     {
@@ -151,7 +151,7 @@ namespace Spg.ExampleRefactoring.AST
 
                 if (n.HasTrailingTrivia && i != nodes.List.Count - 1)
                 {
-                    String trailingTrivia = "";
+                    string trailingTrivia = "";
 
                     foreach (SyntaxTrivia trivia in n.GetTrailingTrivia())
                     {
@@ -176,3 +176,4 @@ namespace Spg.ExampleRefactoring.AST
         }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data
@@ -16,14 +16,14 @@ namespace Spg.ExampleRefactoring.Data
         {
             List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"static void PrintData(String data)
   {
   }
 ";
 
 
-            String output01 =
+            string output01 =
 @"static void PrintData(String data, int i)
   {
   }
@@ -33,7 +33,7 @@ namespace Spg.ExampleRefactoring.Data
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"static void PrintData2(String data)
   {
     int p = 0;
@@ -42,7 +42,7 @@ namespace Spg.ExampleRefactoring.Data
 ";
 
 
-            String output02 =
+            string output02 =
 @"static void PrintData2(String data, int i)
   {
     int p = 0;
@@ -62,7 +62,7 @@ namespace Spg.ExampleRefactoring.Data
         /// <returns>Return a string to be tested.</returns>
         public override Tuple<String, String> Test()
         {
-            String input01 =
+            string input01 =
 @"static void PrintData3(String data)
   {
     int p = 0;
@@ -71,7 +71,7 @@ namespace Spg.ExampleRefactoring.Data
  }
 ";
 
-            String output01 =
+            string output01 =
 @"static void PrintData3(String data, int i)
   {
     int p = 0;
@@ -84,3 +84,4 @@ namespace Spg.ExampleRefactoring.Data
         }
     }
 }
+

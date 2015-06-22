@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Expression;
@@ -31,7 +31,7 @@ namespace Spg.LocationRefactor.Operator
         /// </summary>
         /// <param name="input">Source code</param>
         /// <returns>Execution result</returns>
-        public ListNode Execute(String input)
+        public ListNode Execute(string input)
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(input);
             return Execute(tree.GetRoot());
@@ -78,7 +78,7 @@ namespace Spg.LocationRefactor.Operator
         /// </summary>
         /// <param name="input">Source code</param>
         /// <returns>Execution result</returns>
-        public List<TRegion> RetrieveRegion(String sourceCode) {
+        public List<TRegion> RetrieveRegion(string sourceCode) {
             List<TRegion> tRegions = new List<TRegion>();
 
             Tuple<String, String> t = Tuple.Create(sourceCode, sourceCode);
@@ -146,3 +146,4 @@ namespace Spg.LocationRefactor.Operator
         }
     }
 }
+

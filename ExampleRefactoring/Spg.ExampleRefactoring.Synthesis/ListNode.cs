@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
@@ -76,7 +76,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            String s = "[";
+            string s = "[";
             for (int i = 0; i < List.Count - 1; i++)
             {
                 SyntaxNodeOrToken st = List[i];
@@ -99,3 +99,4 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+

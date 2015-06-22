@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
@@ -136,7 +136,7 @@ namespace Spg.LocationRefactor.Operator
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            String s = "Merge(";
+            string s = "Merge(";
             foreach (MapBase hypothesis in maps)
             {
                 s += hypothesis + ", ";
@@ -157,3 +157,4 @@ namespace Spg.LocationRefactor.Operator
         }
     }
 }
+
