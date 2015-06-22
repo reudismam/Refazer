@@ -13,7 +13,6 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Text.Projection;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationCodeRefactoring.Observer;
@@ -64,12 +63,9 @@ namespace Spg.LocationCodeRefactoring.Controller
         //public Dictionary<String, Prog> Progs { get; set; }
         public List<Prog> Progs { get; set; }
 
-        ///// <summary>
-        ///// Solution path
-        ///// </summary>
-        //
-        //public string SolutionPath { get; set; }
-
+        /// <summary>
+        /// Informatios about the project
+        /// </summary>
         public ProjectInformation ProjectInformation { get; set; }
 
         /// <summary>
@@ -128,6 +124,11 @@ namespace Spg.LocationCodeRefactoring.Controller
         public List<SyntaxNode> Lcas { get; set; }
 
         /// <summary>
+        /// Synthesized program
+        /// </summary>
+        public SynthesizedProgram Program { get; set; }
+
+        /// <summary>
         /// Singleton instance
         /// </summary>
         private static EditorController _instance;
@@ -149,12 +150,19 @@ namespace Spg.LocationCodeRefactoring.Controller
             ProjectInformation.SolutionPath = solution;
         }
 
+        /// <summary>
+        /// Set project list
+        /// </summary>
+        /// <param name="project">Projects</param>
         public void SetProject(List<string> project)
         {
             ProjectInformation.ProjectPath = project;
         }
 
-        //Start controller
+        /// <summary>
+        /// Start controller
+        /// </summary>
+
         public void Init()
         {
             SelectedLocations = new List<TRegion>();
@@ -165,11 +173,15 @@ namespace Spg.LocationCodeRefactoring.Controller
             _locationsObversers = new List<ILocationsObserver>();
             FilesOpened = new Dictionary<string, bool>();
             ProjectInformation = ProjectInformation.GetInstance();
+            Program = null;
             LCAManager.Init();
             RegionManager.Init();
             BoundaryManager.Init();
         }
 
+        /// <summary>
+        /// Reinit Editor controller
+        /// </summary>
         public static void ReInit()
         {
             _instance = null;
@@ -636,7 +648,7 @@ namespace Spg.LocationCodeRefactoring.Controller
             FileUtil.WriteToFile(@"edit.t", totalTime.ToString());
 
             NotifyProgramRefactoredObservers(transformations);
-            //NotifyLocationsTransformedObservers(Progs.First(), Locations);
+            NotifyLocationsTransformedObservers(Program, Locations);
 
             ClearAfterRefact();
 
@@ -764,14 +776,16 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// <param name="locations">Code locations</param>
         private void NotifyLocationsTransformedObservers(SynthesizedProgram program, IEnumerable<CodeLocation> locations)
         {
+            MappedLocationBasedTransformationManager manager = new MappedLocationBasedTransformationManager();
             List<CodeTransformation> transformations = new List<CodeTransformation>();
             foreach (CodeLocation location in locations)
             {
-                Tuple<string, string> transformedLocation = Transformation(location, program);
+                Tuple<string, string> transformedLocation = manager.Transformation(location, program);
 
                 if (transformedLocation == null) continue;
 
                 CodeTransformation transformation = new CodeTransformation(location, transformedLocation);
+                transformation.location.Region.Node = null; //needed for not get out of memory exception
                 transformations.Add(transformation);
             }
 
@@ -779,33 +793,12 @@ namespace Spg.LocationCodeRefactoring.Controller
 
             LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(transformations);
 
+            JsonUtil<List<CodeTransformation>>.Write(CodeTransformations, "transformed_locations.json");
+
             foreach (ILocationsTransformedObserver observer in _locationsTransformedObserver)
             {
                 observer.NotifyLocationsTransformed(ltEvent);
             }
-        }
-
-        /// <summary>
-        /// Look for a place to put this. Refactor
-        /// </summary>
-        /// <returns></returns>
-        public Tuple<string, string> Transformation(CodeLocation location, SynthesizedProgram program)
-        {
-            TRegion region = location.Region;
-            Tuple<SyntaxNode, SyntaxNode> node = Tuple.Create(region.Node, region.Node);
-            try
-            {
-                ListNode lnode = ASTProgram.Example(node).Item1;
-                ASTTransformation tree = ASTProgram.TransformString(lnode, program);
-                string transformation = tree.transformation;
-
-                Tuple<string, string> transformedLocation = Tuple.Create(region.Node.GetText().ToString(), transformation);
-                return transformedLocation;
-            }
-            catch (ArgumentOutOfRangeException e)
-            { Console.WriteLine(e.Message); }
-
-            return null;
         }
 
         /// <summary>
@@ -832,259 +825,3 @@ namespace Spg.LocationCodeRefactoring.Controller
         }
     }
 }
-
-//private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog)
-//{
-//    List<CodeLocation> sourceLocations = new List<CodeLocation>();
-
-//    SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
-//    Lcas = RegionManager.LeastCommonAncestors(CurrentViewCodeBefore, SelectedLocations);
-
-//    List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
-
-
-//    //remove
-//    //           var sm = WorkspaceManager.GetSemanticModel(CurrentProject, SolutionPath, CurrentViewCodePath, lcas.First());
-//    //           SyntaxTree tree = sm.SyntaxTree;
-//    //           SyntaxNode n = ASTManager.NodesWithSameStartEndAndKind(tree, lcas.First().Span.Start, lcas.First().Span.End,
-//    //               lcas.First().CSharpKind()).First();
-//    ////           var x = sm.GetDeclaredSymbol(n);
-//    //           var si = sm.GetSymbolInfo(n);
-
-//    //           var type = x.ContainingType;
-//    //           var s = type.ToDisplayString();
-//    //           var name = GetFullMetadataName(type);
-
-//    //foreach (ISymbol symbol in sm.LookupSymbols(241))
-//    //{
-//    //    if (symbol.CanBeReferencedByName && symbol.Name.Equals("a"))
-//    //    {
-//    //        var rlt = SymbolFinder.FindSourceDeclarationsAsync(project, symbol.Name, false).Result;
-//    //        var rlts = symbol.DeclaringSyntaxReferences;
-//    //    }
-//    //}
-//    //////remove
-//    //remove
-
-//    regions = RegionManager.RegionsThatHaveOneOfTheSyntaxKind(regions, Lcas);
-
-//    foreach (TRegion region in regions)
-//    {
-//        CodeLocation location = new CodeLocation { Region = region, SourceCode = CurrentViewCodeBefore, SourceClass = CurrentViewCodePath };
-//        sourceLocations.Add(location);
-//    }
-
-//    Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, regions);
-
-//    return tuple;
-//}
-
-///// <summary>
-///// Decompose locations
-///// </summary>
-//public void Decompose()
-//{
-//    LocationExtractor extractor = new LocationExtractor(solutionPath);
-//    //remove
-//    JsonUtil<List<TRegion>>.Write(RegionsBeforeEdition, "simple_api_change_input.json");
-//    //remove
-//    //List<Prog> programs = extractor.Decompose(RegionsBeforeEdition);
-//    Progs = extractor.Decompose(RegionsBeforeEdition);
-
-//    //List<Prog> filtereds = new List<Prog>();
-//    //foreach (Prog program in programs)
-//    //{
-//    //    Prog val;
-//    //    if (!Progs.TryGetValue(program.ToString(), out val))
-//    //    {
-//    //        Progs.Add(program.ToString(), program);
-//    //        filtereds.Add(program);
-//    //    }
-//    //}
-//    //NotifyProgramGeneratedObservers(filtereds);
-//}
-
-///// <summary>
-///// Regions after the transformation
-///// </summary>
-///// <returns></returns>
-//public Dictionary<Color, List<TRegion>> RegionsAfterEdit { get; set; }
-/*/// <summary>
-       /// Decompose locations
-       /// </summary>
-       /// <param name="color"></param>
-       public void Decompose(Color color)
-       {
-           LocationRefactor.Location.LocationExtractor extractor = new LocationRefactor.Location.LocationExtractor(syntaxKind, solutionPath);
-           List<Prog> programs = extractor.Decompose(RegionsBeforeEdit, (Color)color);
-
-           List<Prog> filtereds = new List<Prog>();
-           foreach (Prog program in programs)
-           {
-               Prog val;
-               if (!Progs.TryGetValue(program.ToString(), out val))
-               {
-                   Progs.Add(program.ToString(), program);
-                   filtereds.Add(program);
-               }
-           }
-
-           NotifyProgramGeneratedObservers(filtereds);
-       }*/
-
-/* private void NotifyLocationsTransformedObservers(List<Tuple<string, string>> transformedLocations)
-         {
-             LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(transformedLocations);
-
-             foreach (ILocationsTransformedObserver observer in locationsTransformedObserver) {
-                 observer.NotifyLocationsTransformed(ltEvent);
-             }
-         }*/
-
-
-/* /// <summary>
-         /// Edit locations
-         /// </summary>
-         /// <param name="start">Start position</param>
-         /// <param name="length">Region length</param>
-         /// <param name="sourceCode">Source code</param>
-         /// <param name="color">Color region</param>
-         /// <param name="range">Region range</param>
-         public void Edit(int start, int length, String sourceCode, Color color, Range range)
-         {
-             TRegion tregion = new TRegion();
-
-             tregion.Start = start;
-             tregion.Length = length;
-             tregion.Text = sourceCode;
-             tregion.Color = color;
-             tregion.Range = range;
-
-             List<TRegion> values;
-
-             if (!RegionsBeforeEdit.TryGetValue(color, out values))
-             {
-                 values = new List<TRegion>();
-                 RegionsBeforeEdit.Add(color, values);
-             }
-
-             values.Add(tregion);
-
-             foreach (KeyValuePair<Color, List<TRegion>> dic in RegionsBeforeEdit)
-             {
-                 foreach (TRegion tr in dic.Value)
-                 {
-                     if (tregion.IsParent(tr))
-                     {
-                         tregion.Parent = tr;
-                     }
-                 }
-             }
-
-             if (tregion.Parent == null)
-             {
-                 tregion.Parent = RegionsBeforeEdit[Color.White][0];
-             }
-         }*/
-
-///// <summary>
-///// Load from file
-///// </summary>
-///// <param name="fileName">File name</param>
-///// <returns>file content</returns>
-//public string Load(String fileName)
-//{
-//    System.IO.StreamReader sr = new
-//    System.IO.StreamReader(fileName);
-
-//    String text = sr.ReadToEnd();
-
-//    text = text.Replace("\r\n", "\n");
-//    TRegion tRegion = new TRegion();
-//    tRegion.Text = text;
-//    tRegion.Color = Color.White;
-
-//    List<TRegion> tRegions = new List<TRegion>();
-//    tRegions.Add(tRegion);
-
-//    RegionsBeforeEdit.Add(Color.White, tRegions);
-//    sr.Close();
-
-//    return text;
-//}
-
-///// <summary>
-///// Refact a region
-///// </summary>
-///// <param name="program">Source code</param>
-///// <param name="color">Selected color</param>
-//public void Refact(String program, Color color)
-//{
-//    Prog prog = Progs[program];
-
-//    LocationRefactor.Location.LocationExtractor extractor = new LocationRefactor.Location.LocationExtractor(syntaxKind, solutionPath);
-//    String transformation = extractor.TransformProgram(RegionsBeforeEdit, RegionsAfterEdit, color, prog);
-
-//    //List<Tuple<string, string>> transformedLocations = extractor.TransformLocations(RegionsBeforeEdit, RegionsAfterEdit, color, prog);
-//    SynthesizedProgram synthesized = extractor.TransformationProgram(RegionsBeforeEdit, RegionsAfterEdit, color);
-
-//    NotifyProgramRefactoredObservers(transformation);
-//    NotifyLocationsTransformedObservers(synthesized, locations);
-//}
-
-
-///// <summary>
-///// Edit done
-///// </summary>
-///// <param name="code">Source code</param>
-///// <param name="start">Start position</param>
-///// <param name="length">Region length</param>
-//public void EditDone(String code, int start, int length)
-//{
-//    code = code.Replace("\r\n", "\n");
-//    TRegion tRegion = new TRegion();
-//    tRegion.Text = code;
-//    tRegion.Color = Color.White;
-
-//    List<TRegion> tRegions = new List<TRegion>();
-//    tRegions.Add(tRegion);
-
-//    RegionsAfterEdit[Color.White] = tRegions;
-
-//    String text = code.Substring(start, length);
-//    TRegion tregion = new TRegion();
-
-//    Color color = Color.LightGreen;
-
-//    tregion.Start = start;
-//    tregion.Length = length;
-//    tregion.Text = text;
-//    tregion.Color = color;
-
-//    List<TRegion> values;
-
-//    if (!RegionsAfterEdit.TryGetValue(color, out values))
-//    {
-//        values = new List<TRegion>();
-//        RegionsAfterEdit.Add(color, values);
-//    }
-
-//    values.Add(tregion);
-
-//    foreach (KeyValuePair<Color, List<TRegion>> dic in RegionsAfterEdit)
-//    {
-//        foreach (TRegion tr in dic.Value)
-//        {
-//            if (tregion.IsParent(tr))
-//            {
-//                tregion.Parent = tr;
-//            }
-//        }
-//    }
-
-//    if (tregion.Parent == null)
-//    {
-//        tregion.Parent = RegionsAfterEdit[Color.White][0];
-//    }
-//}
-

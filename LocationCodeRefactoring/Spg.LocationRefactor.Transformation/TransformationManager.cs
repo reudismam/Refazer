@@ -221,5 +221,28 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             }
             return examples;
         }
+
+        /// <summary>
+        /// Look for a place to put this. Refactor
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<string, string> Transformation(CodeLocation location, SynthesizedProgram program)
+        {
+            TRegion region = location.Region;
+            Tuple<SyntaxNode, SyntaxNode> node = Tuple.Create(region.Node, region.Node);
+            try
+            {
+                ListNode lnode = ASTProgram.Example(node).Item1;
+                ASTTransformation tree = ASTProgram.TransformString(lnode, program);
+                string transformation = tree.transformation;
+
+                Tuple<string, string> transformedLocation = Tuple.Create(region.Text, transformation);
+                return transformedLocation;
+            }
+            catch (ArgumentOutOfRangeException e)
+            { Console.WriteLine(e.Message); }
+
+            return null;
+        }
     }
 }
