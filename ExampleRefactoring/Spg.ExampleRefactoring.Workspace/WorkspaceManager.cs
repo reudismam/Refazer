@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -47,13 +49,13 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             List<Tuple<string, string>> sourceFiles = new List<Tuple<string, string>>();
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
-          
+
             foreach (ProjectId projectId in solution.ProjectIds)
             {
                 Project project = solution.GetProject(projectId);
                 if (/*project.Name.Equals(projectName)projectName.Contains(project.Name)*/true)
                 {
-                    foreach (DocumentId documentId  in project.DocumentIds)
+                    foreach (DocumentId documentId in project.DocumentIds)
                     {
                         var document = solution.GetDocument(documentId);
                         try
@@ -100,7 +102,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
                 if (/*project.Name.Equals(projectName)*/ true)
                 {
                     Compilation compilation = project.GetCompilationAsync().Result;
-                    foreach (DocumentId documentId  in project.DocumentIds)
+                    foreach (DocumentId documentId in project.DocumentIds)
                     {
                         var document = solution.GetDocument(documentId);
 
@@ -131,6 +133,71 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         /// </summary>
         /// <param name="projectName">Project name</param>
         /// <param name="solutionPath">Solution path</param>
+        /// <param name="node">Node to be analyzed</param>
+        /// <param name="name">Name of the identifier</param>
+        /// <returns>Fully qualified name of the node</returns>
+        public Dictionary<string, Dictionary<string, List<TextSpan>>> GetLocalReferences(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
+        {
+            var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
+            MSBuildWorkspace workspace = MSBuildWorkspace.Create();
+            Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
+
+            foreach (ProjectId projectId in solution.ProjectIds)
+            {
+                Project project = solution.GetProject(projectId);
+                Compilation compilation = project.GetCompilationAsync().Result;
+                foreach (DocumentId documentId in project.DocumentIds)
+                {
+                    var document = solution.GetDocument(documentId);
+                    SyntaxTree tree;
+                    document.TryGetSyntaxTree(out tree);
+                    if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+                    {
+                        document.TryGetSyntaxTree(out tree);
+                        SemanticModel model2 = compilation.GetSemanticModel(tree);
+                        foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
+                        {
+                            if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
+                            {
+                                IEnumerable<ReferencedSymbol> references = SymbolFinder.FindReferencesAsync(symbol, solution).Result;
+                                var spansDictionary = new Dictionary<string, List<TextSpan>>();
+
+                                foreach (ReferencedSymbol reference in references)
+                                {
+                                    foreach (ReferenceLocation location in reference.Locations)
+                                    {
+                                        SyntaxTree treeSymbol = location.Document.GetSyntaxTreeAsync().Result;
+                                        List<TextSpan> value;
+                                        if (!spansDictionary.TryGetValue(treeSymbol.FilePath.ToUpperInvariant(), out value))
+                                        {
+                                            value = new List<TextSpan>();
+                                            spansDictionary.Add(tree.FilePath.ToUpperInvariant(), value);
+                                        }
+                                        value.Add(location.Location.SourceSpan);
+                                    }
+                                }
+
+                                if (!referenceDictionary.ContainsKey(symbol.ToDisplayString()))
+                                {
+                                    referenceDictionary.Add(symbol.ToDisplayString(), spansDictionary);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("The key alheady exist on dictionary.");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return referenceDictionary;
+        }
+
+        /// <summary>
+        /// Get fully qualified name of a node
+        /// </summary>
+        /// <param name="projectName">Project name</param>
+        /// <param name="solutionPath">Solution path</param>
         /// <param name="name">Name of the identifier</param>
         /// <returns>Fully qualified name of the node</returns>
         public Dictionary<string, Dictionary<string, List<TextSpan>>> GetDeclaredReferences(List<string> projectName, string solutionPath, string name)
@@ -150,7 +217,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             }
 
             foreach (ISymbol sourceDeclaration in sourceDeclarations)
-            { 
+            {
                 IEnumerable<ReferencedSymbol> references = SymbolFinder.FindReferencesAsync(sourceDeclaration, solution).Result;
 
                 //MessageBox.Show(references.Count() + "");

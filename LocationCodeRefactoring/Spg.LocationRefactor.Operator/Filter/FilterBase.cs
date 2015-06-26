@@ -13,6 +13,7 @@ using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
+using Spg.ExampleRefactoring.Tok;
 using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Predicate;
@@ -145,18 +146,18 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>Syntax node used on filtering process</returns>
         internal IEnumerable<SyntaxNode> SyntaxNodesDymTokens()
         {
-            IEnumerable<string> nameList = GetIdentifierNames().ToList();
+            IEnumerable<Tuple<string, SyntaxNodeOrToken>> nameList = GetIdentifierNames().ToList();
             if (nameList.Any())
             {
                 var referenceDictionary = new Dictionary<string, IEnumerable<SyntaxNode>>();
-                foreach (string nameDyn in nameList)
+                foreach (Tuple<string, SyntaxNodeOrToken> nameDyn in nameList)
                 {
                     IEnumerable<SyntaxNode> nodes = Decomposer.GetInstance().SyntaxNodesWithSemanticModel(nameDyn);
                     if (nodes != null)
                     {
-                        if (!referenceDictionary.ContainsKey(nameDyn))
+                        if (!referenceDictionary.ContainsKey(nameDyn.Item1))
                         {
-                            referenceDictionary.Add(nameDyn, nodes);
+                            referenceDictionary.Add(nameDyn.Item1, nodes);
                         }
                     }
                 }
@@ -373,32 +374,72 @@ namespace Spg.LocationRefactor.Operator.Filter
             return tRegions;
         }
 
+        ///// <summary>
+        ///// Get the name used to search for references
+        ///// </summary>
+        ///// <returns>Name used to search for references</returns>
+        //private IEnumerable<string> GetIdentifierNames()
+        //{
+        //    List<string> nameList = new List<string>();
+        //    foreach (var token in Predicate.r1.Regex())
+        //    {
+        //        if (token is DymToken && !(Predicate is NotContains))
+        //        {
+        //            string name = token.token.ToString();
+        //            WorkspaceManager manager = WorkspaceManager.GetInstance();
+        //            var x = manager.GetLocalReferences(EditorController.GetInstance().ProjectInformation.ProjectPath.First(), EditorController.GetInstance().ProjectInformation.SolutionPath, token.token, name);
+                    
+        //            nameList.Add(name);
+        //        }
+        //    }
+        //    foreach (var token in Predicate.r2.Regex())
+        //    {
+        //        if (token is DymToken && !(Predicate is NotContains))
+        //        {
+        //            string name = token.token.ToString();
+        //            WorkspaceManager manager = WorkspaceManager.GetInstance();
+        //            var x = manager.GetLocalReferences(EditorController.GetInstance().ProjectInformation.ProjectPath.First(), EditorController.GetInstance().ProjectInformation.SolutionPath, token.token, name);
+        //            nameList.Add(name);
+        //        }
+        //    }
+        //    return nameList;
+        //}
+
         /// <summary>
         /// Get the name used to search for references
         /// </summary>
         /// <returns>Name used to search for references</returns>
-        private IEnumerable<string> GetIdentifierNames()
+        private IEnumerable<Tuple<string, SyntaxNodeOrToken>> GetIdentifierNames()
         {
-            List<string> nameList = new List<string>();
-            foreach (var token in Predicate.r1.Regex())
+            List<Tuple<string, SyntaxNodeOrToken>> nameList = new List<Tuple<string, SyntaxNodeOrToken>>();
+            if (!(Predicate is NotContains))
             {
-                if (token is DymToken && !(Predicate is NotContains))
-                {
-                    string name = token.token.ToString();
-                    WorkspaceManager manager = WorkspaceManager.GetInstance();
-                    var x = manager.GetFullyQualifiedName(EditorController.GetInstance().ProjectInformation.ProjectPath.First(), EditorController.GetInstance().ProjectInformation.SolutionPath, token.token, name);
-                    
-                    nameList.Add(name);
-                }
+                IEnumerable<Tuple<string, SyntaxNodeOrToken>> tokensR1 = LookUpForDymTokens(Predicate, Predicate.r1);
+                IEnumerable<Tuple<string, SyntaxNodeOrToken>> tokensR2 = LookUpForDymTokens(Predicate, Predicate.r2);
+
+                nameList.AddRange(tokensR1);
+                nameList.AddRange(tokensR2);
             }
-            foreach (var token in Predicate.r2.Regex())
+
+            return nameList;
+        }
+
+        /// <summary>
+        /// Look up for dynamic tokens on predicate
+        /// </summary>
+        /// <param name="predicate">Predicate</param>
+        /// <param name="tokenSeq">Token sequence</param>
+        /// <returns>Dynamic tokens</returns>
+        private IEnumerable<Tuple<string, SyntaxNodeOrToken>> LookUpForDymTokens(IPredicate predicate, TokenSeq tokenSeq)
+        {
+            List<Tuple<string, SyntaxNodeOrToken>> nameList = new List<Tuple<string, SyntaxNodeOrToken>>();
+            foreach (Token token in tokenSeq.Tokens)
             {
-                if (token is DymToken && !(Predicate is NotContains))
+                if (token is DymToken)
                 {
                     string name = token.token.ToString();
-                    WorkspaceManager manager = WorkspaceManager.GetInstance();
-                    var x = manager.GetFullyQualifiedName(EditorController.GetInstance().ProjectInformation.ProjectPath.First(), EditorController.GetInstance().ProjectInformation.SolutionPath, token.token, name);
-                    nameList.Add(name);
+                    Tuple<string, SyntaxNodeOrToken> tuple = Tuple.Create(name, token.token);
+                    nameList.Add(tuple);
                 }
             }
             return nameList;
