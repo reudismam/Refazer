@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -8,10 +7,9 @@ using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationCodeRefactoring.Controller;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Text;
+using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
@@ -732,7 +730,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// <returns>Least common ancestor of each region</returns>
         public static List<SyntaxNode> LeastCommonAncestors(List<TRegion> regions)
         {
-            var sourceFiles = RegionManager.GetInstance().GroupRegionBySourceFile(regions);
+            var sourceFiles = GetInstance().GroupRegionBySourceFile(regions);
             List<SyntaxNode> slist = new List<SyntaxNode>();
             foreach (var sourceCode in sourceFiles)
             {
@@ -743,82 +741,5 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
             }
             return slist;
         }
-
-        //public static List<TRegion> GroupRegionByStartAndEndPosition(List<TRegion> tregions)
-        //{
-        //    Dictionary<Tuple<int, int>, TRegion> dic = new Dictionary<Tuple<int, int>, TRegion>();
-
-        //    foreach (var entry in tregions)
-        //    {
-        //        TRegion value;
-        //        Tuple<int, int> key = Tuple.Create(entry.Start, entry.Length);
-        //        if (!dic.TryGetValue(key, out value))
-        //        {
-        //            dic[key] = entry;
-        //        }
-        //        else if (value.Node.GetText().Length > entry.Node.GetText().Length)
-        //        {
-        //            dic[key] = entry;
-        //        }
-        //    }
-        //    return dic.Values.ToList();
-        //}
-
-        // /// <summary>
-        // /// Return regions that have at least one of the syntax kind listed on syntaxKinds
-        // /// </summary>
-        // /// <param name="regions">Collection of regions</param>
-        // /// <param name="syntaxKinds">Syntax kinds</param>
-        // /// <returns>Regions that have at least one of the syntax kind listed on syntaxKinds</returns>
-        // internal static List<TRegion> RegionsThatHaveOneOfTheSyntaxKind(List<TRegion> regions, List<SyntaxNode> syntaxKinds)
-        // {
-        //     List<TRegion> list = new List<TRegion>();
-        //     foreach (var region in regions)
-        //     {
-        //         foreach (var node in syntaxKinds)
-        //         {
-        //             if (region.Node.IsKind(node.CSharpKind()))
-        //             {
-        //                 list.Add(region);
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     list = NonDuplicateRegions(list);
-        //     return list;
-        //}
-
-        //private static List<TRegion> NonDuplicateRegions(List<TRegion> regions)
-        //{
-        //    List<TRegion> nonDuplicationRegions = new List<TRegion>();
-        //    bool[] analized = Enumerable.Repeat(false, regions.Count).ToArray();
-        //    for (int i = 0; i < regions.Count; i++)
-        //    {
-        //        if (!analized[i])
-        //        {
-        //            for (int j = i + 1; j < regions.Count; j++)
-        //            {
-        //                if (regions[i].IntersectWith(regions[j]))
-        //                {
-        //                    if (regions[i].Length > regions[j].Length)
-        //                    {
-        //                        nonDuplicationRegions.Add(regions[i]);
-        //                        analized[i] = true;
-        //                    }
-        //                    else
-        //                    {
-        //                        nonDuplicationRegions.Add(regions[j]);
-        //                        analized[j] = true;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        if (analized[i] == false)
-        //        {
-        //            nonDuplicationRegions.Add(regions[i]);
-        //        }
-        //    }
-        //    return nonDuplicationRegions;
-        //} 
     }
 }

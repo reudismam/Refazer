@@ -28,6 +28,11 @@ namespace Spg.ExampleRefactoring.Util
             file.Write(sourceCode);
             file.Close();
         }
+
+        public static void DeleteFile(string path)
+        {
+            File.Delete(path);
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
@@ -32,16 +32,9 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         /// </summary>
         public EditorController Controller = EditorController.GetInstance();
 
-        ///// <summary>
-        ///// Constructor
-        ///// </summary>
-        ///// <param name="solutionPath">Solution path</param>
-        //public LocationExtractor(string solutionPath)
-        //{
-        //    //this._solutionPath = solutionPath;
-        //    _learn = new Learner();
-        //}
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public LocationExtractor()
         {
             _learn = new Learner();

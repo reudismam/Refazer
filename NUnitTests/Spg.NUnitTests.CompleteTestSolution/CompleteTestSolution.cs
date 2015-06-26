@@ -937,28 +937,11 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
             dicionarySelection = dicionarySelectionFullpath;
 
-
-            //controller.RetrieveLocations(controller.CurrentViewCodeAfter);
-            //var locationsToEdit = controller.Locations;
-
-            //List<Selection> selections = new List<Selection>();
-            //foreach (var location in locationsToEdit)
-            //{
-            //    Selection selection = new Selection(location.Region.Start - 1, location.Region.Length + 2,
-            //        dicionarySelection.Keys.First(), null);
-            //    selections.Add(selection);
-
-            //}
-            //Dictionary<string, List<Selection>> d = new Dictionary<string, List<Selection>>();
-            //d.Add(dicionarySelection.Keys.First(), selections);
-            //JsonUtil<Dictionary<string, List<Selection>>>.Write(d, "selections.json");
-
-            //Tuple<string, string> beforeAfter = Tuple.Create(controller.CurrentViewCodeBefore, controller.CurrentViewCodeAfter);
             List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
             foreach (var item in editeds)
             {
                 string sourceCodeAfter = FileUtil.ReadFile(expHome + @"commit\" + commit + @"\" + item);
-                string pattern = item.ToUpperInvariant();//Regex.Escape(item.ToUpperInvariant());
+                string pattern = item.ToUpperInvariant();
                 foreach (KeyValuePair<string, List<Selection>> entry in dicionarySelection)
                 {
                     string classPath = entry.Key;
@@ -966,7 +949,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
                     Console.WriteLine(className);
                     string sourceCode = FileUtil.ReadFile(entry.Key);
-                    bool containsPattern = className.ToUpperInvariant().Equals(pattern);//Regex.IsMatch(entry.Key, pattern);
+                    bool containsPattern = className.ToUpperInvariant().Equals(pattern);
                     if (containsPattern)
                     {
                         Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
@@ -977,7 +960,6 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                 
             }
 
-            //documents.Add(beforeAfter);
             controller.DocumentsBeforeAndAfter = documents;
             controller.EditedLocations = dicionarySelection;
             
@@ -989,8 +971,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                 string classPath = transformation.SourcePath;
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
                 string classNamePath = expHome + @"commit\" + commit + @"\tool\" + className;
-                //string source = FileUtil.ReadFile(classPath);
-                //FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
+//                FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
 
                 Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(classNamePath), transformation.transformation.Item2);
                 Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);
@@ -1007,6 +988,10 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
             FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
+
+            string transformations = FileUtil.ReadFile("transformed_locations.json");
+            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
+            FileUtil.DeleteFile("transformed_locations.json");
             return passTransformation;
         }
     }

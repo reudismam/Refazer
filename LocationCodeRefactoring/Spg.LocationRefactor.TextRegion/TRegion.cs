@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.CodeAnalysis;
@@ -66,6 +66,10 @@ namespace Spg.LocationRefactor.TextRegion
 
         public bool IntersectWith(TRegion other)
         {
+            //if (!other.Path.ToUpperInvariant().Equals(Path.ToUpperInvariant()))
+            //{
+            //    return false;
+            //}
             bool thisWithOther =  this.Start <= other.Start && other.Start <= this.Start + this.Length;
             bool otherWithThis = other.Start <= this.Start  && this.Start <= other.Start + other.Length;
             return (thisWithOther || otherWithThis);

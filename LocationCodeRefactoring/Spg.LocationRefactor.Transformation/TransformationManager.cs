@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -72,6 +72,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         /// </summary>
         /// <param name="program">Synthesized program</param>
         /// <param name="locations">Locations</param>
+        /// <param name="compact">Indicates if entry must be compacted or not</param>
         /// <returns>Transformed program</returns>
         public virtual string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact)
         {
@@ -238,7 +239,9 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
                 return transformedLocation;
             }
             catch (ArgumentOutOfRangeException e)
-            { Console.WriteLine(e.Message); }
+            {
+                Console.WriteLine(e.Message);
+            }
 
             return null;
         }

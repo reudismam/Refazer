@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
+using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
 namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
@@ -810,17 +812,27 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             List<Selection> locations = JsonUtil<List<Selection>>.Read(expHome + @"commit\" + commit + @"\found_locations.json");
             if (locations.Count != controller.Locations.Count) return false;
 
-            bool passed = true;
-            for (int i = 0; i < locations.Count; i++)
+            List<Selection> controllerList = new List<Selection>();
+            foreach (CodeLocation location in controller.Locations)
             {
-                if (!Path.GetFullPath(locations[i].SourcePath).ToUpperInvariant().Equals(controller.Locations[i].SourceClass.ToUpperInvariant())) { passed = false; break; }
-
-                if (locations[i].Start != controller.Locations[i].Region.Start || locations[i].Length != controller.Locations[i].Region.Length)
-                {
-                    passed = false;
-                    break;
-                }
+                Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode);
+                controllerList.Add(selection);
             }
+
+            locations = locations.OrderBy(o => o.Start).ToList();
+            controllerList = controllerList.OrderBy(o => o.Start).ToList();
+
+            bool passed = locations.SequenceEqual(controllerList);
+            //for (int i = 0; i < locations.Count; i++)
+            //{
+            //    if (!Path.GetFullPath(locations[i].SourcePath).ToUpperInvariant().Equals(controller.Locations[i].SourceClass.ToUpperInvariant())) { passed = false; break; }
+
+            //    if (locations[i].Start != controller.Locations[i].Region.Start || locations[i].Length != controller.Locations[i].Region.Length)
+            //    {
+            //        passed = false;
+            //        break;
+            //    }
+            //}
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
             FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\time.t", totalTime.ToString());

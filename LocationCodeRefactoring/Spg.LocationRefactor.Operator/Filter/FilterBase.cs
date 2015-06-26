@@ -222,7 +222,12 @@ namespace Spg.LocationRefactor.Operator.Filter
                     nodes.AddRange(item.Value);
                 }
             }
-            return nodes;
+
+            if (MatchesSelectedLocations(nodes, EditorController.GetInstance().SelectedLocations))
+            {
+                return nodes;
+            }
+            return null;
         }
 
         /// <summary>
@@ -242,7 +247,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                     TRegion rSel = new TRegion();
                     rSel.Start = selection.Start;
                     rSel.Length = selection.Length;
-                    if (rSel.IntersectWith(region))
+                    if (region.Path.ToUpperInvariant().Equals(selection.SourcePath.ToUpperInvariant()) && rSel.IntersectWith(region))
                     {
                         isIntersection = true;
                         break;
@@ -265,19 +270,32 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>True if nodes match with developer selected locations</returns>
         private bool MatchesSelectedLocations(IEnumerable<SyntaxNode> nodes, List<TRegion> selectedLocations)
         {
+            Dictionary<string, List<SyntaxNode>> dicNodes = new Dictionary<string, List<SyntaxNode>>();
             IList<SyntaxNode> syntaxNodes = nodes as IList<SyntaxNode> ?? nodes.ToList();
+            foreach (SyntaxNode node in syntaxNodes)
+            {
+                List<SyntaxNode> value;
+                if (!dicNodes.TryGetValue(node.SyntaxTree.FilePath.ToUpperInvariant(), out value))
+                {
+                    dicNodes.Add(node.SyntaxTree.FilePath.ToUpperInvariant(), new List<SyntaxNode>());
+                }
+                dicNodes[node.SyntaxTree.FilePath.ToUpperInvariant()].Add(node);
+            }
             foreach (TRegion region in selectedLocations)
             {
                 bool isIntersectoin = false;
-                foreach (SyntaxNode selection in syntaxNodes)
+                if (dicNodes.ContainsKey(region.Path.ToUpperInvariant()))
                 {
-                    TRegion rSel = new TRegion();
-                    rSel.Start = selection.Span.Start;
-                    rSel.Length = selection.Span.Length;
-                    if (rSel.IntersectWith(region))
+                    foreach (SyntaxNode selection in dicNodes[region.Path.ToUpperInvariant()])
                     {
-                        isIntersectoin = true;
-                        break;
+                        TRegion rSel = new TRegion();
+                        rSel.Start = selection.Span.Start;
+                        rSel.Length = selection.Span.Length;
+                        if (rSel.IntersectWith(region))
+                        {
+                            isIntersectoin = true;
+                            break;
+                        }
                     }
                 }
 
@@ -364,17 +382,22 @@ namespace Spg.LocationRefactor.Operator.Filter
             List<string> nameList = new List<string>();
             foreach (var token in Predicate.r1.Regex())
             {
-                if (token is DymToken)
+                if (token is DymToken && !(Predicate is NotContains))
                 {
                     string name = token.token.ToString();
+                    WorkspaceManager manager = WorkspaceManager.GetInstance();
+                    var x = manager.GetFullyQualifiedName(EditorController.GetInstance().ProjectInformation.ProjectPath.First(), EditorController.GetInstance().ProjectInformation.SolutionPath, token.token, name);
+                    
                     nameList.Add(name);
                 }
             }
             foreach (var token in Predicate.r2.Regex())
             {
-                if (token is DymToken)
+                if (token is DymToken && !(Predicate is NotContains))
                 {
                     string name = token.token.ToString();
+                    WorkspaceManager manager = WorkspaceManager.GetInstance();
+                    var x = manager.GetFullyQualifiedName(EditorController.GetInstance().ProjectInformation.ProjectPath.First(), EditorController.GetInstance().ProjectInformation.SolutionPath, token.token, name);
                     nameList.Add(name);
                 }
             }

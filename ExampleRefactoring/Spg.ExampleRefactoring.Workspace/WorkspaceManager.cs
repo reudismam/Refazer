@@ -97,7 +97,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
             foreach (ProjectId projectId in solution.ProjectIds)
             {
                 Project project = solution.GetProject(projectId);
-                if (project.Name.Equals(projectName))
+                if (/*project.Name.Equals(projectName)*/ true)
                 {
                     Compilation compilation = project.GetCompilationAsync().Result;
                     foreach (DocumentId documentId  in project.DocumentIds)
