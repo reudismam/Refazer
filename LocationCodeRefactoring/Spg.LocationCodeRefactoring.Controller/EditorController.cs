@@ -507,14 +507,14 @@ namespace Spg.LocationCodeRefactoring.Controller
         {
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
             Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
-            Dictionary<string, List<TRegion>> groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
+            //Dictionary<string, List<TRegion>> groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
 
-            List<SyntaxNode> lcas = new List<SyntaxNode>();
-            foreach (KeyValuePair<string, List<TRegion>> item in groups)
-            {
-                var result = RegionManager.LeastCommonAncestors(item.Key, item.Value);
-                lcas.AddRange(result);
-            }
+            //List<SyntaxNode> lcas = new List<SyntaxNode>();
+            //foreach (KeyValuePair<string, List<TRegion>> item in groups)
+            //{
+            //    var result = RegionManager.LeastCommonAncestors(item.Key, item.Value);
+            //    lcas.AddRange(result);
+            //}
 
             List<TRegion> regions = RetrieveLocations(prog);
             foreach (TRegion region in regions)

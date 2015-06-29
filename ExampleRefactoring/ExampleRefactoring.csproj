@@ -106,12 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Spg.ExampleRefactoring.AST\ASTManager.cs" />
-    <Compile Include="Spg.ExampleRefactoring.AST\ASTRewriter.cs" />
-    <Compile Include="Spg.ExampleRefactoring.AST\ASTSyntaxWalker.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\ASTTransformation.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\UpdateASTManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Bean\Selection.cs" />
-    <Compile Include="Spg.ExampleRefactoring.Change\ChangeManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\ArgumentComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\Automato.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\ComparerBase.cs" />

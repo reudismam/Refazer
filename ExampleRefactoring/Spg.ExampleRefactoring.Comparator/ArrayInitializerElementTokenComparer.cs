@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

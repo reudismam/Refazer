@@ -1,6 +1,4 @@
 ﻿using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
-using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Tok;

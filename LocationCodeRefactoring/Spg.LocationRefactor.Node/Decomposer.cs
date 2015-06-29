@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.TextRegion;
 
 namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
 {
@@ -20,12 +21,12 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
         /// <summary>
         /// Controler instance
         /// </summary>
-        private static EditorController Ctl = EditorController.GetInstance();
+        private static readonly EditorController Ctl = EditorController.GetInstance();
 
         /// <summary>
         /// Reference dictionary
         /// </summary>
-        private Dictionary<string, IEnumerable<SyntaxNode>> _dicReferences = new Dictionary<string, IEnumerable<SyntaxNode>>();
+        private readonly Dictionary<string, IEnumerable<SyntaxNode>> _dicReferences = new Dictionary<string, IEnumerable<SyntaxNode>>();
 
         /// <summary>
         /// Singletion instance
@@ -170,8 +171,9 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
                 foreach (var fileSpans in dictionary)
                 {
                     SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
+                    var spans = fileSpans;
                     var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-                                where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
+                                where WithinLcas(node) && WithinSpans(node, spans.Value)
                                 select node;
                     nodesList.AddRange(nodes);
                 }
@@ -229,8 +231,14 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
             {
                 WorkspaceManager wsManager = WorkspaceManager.GetInstance();
                 ProjectInformation pjInfo = Ctl.ProjectInformation;
-
-                Dictionary<string, Dictionary<string, List<TextSpan>>> result = wsManager.GetLocalReferences(pjInfo.ProjectPath.First(), pjInfo.SolutionPath, name.Item2, name.Item1);
+                EditorController controller = EditorController.GetInstance();
+           
+                Dictionary<string, List<TRegion>> files = RegionManager.GetInstance().GroupRegionBySourceFile(controller.SelectedLocations);
+                Dictionary<string, Dictionary<string, List<TextSpan>>> result = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
+                if (files.Count == 1)
+                {
+                    result = wsManager.GetLocalReferences(pjInfo.ProjectPath.First(), pjInfo.SolutionPath, name.Item2, name.Item1);
+                }
 
                 if (!result.Any())
                 {

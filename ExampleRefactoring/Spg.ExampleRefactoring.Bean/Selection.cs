@@ -40,16 +40,16 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Bean
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="Start">Selection start</param>
-        /// <param name="Length">Selection Length</param>
-        /// <param name="SourcePath">Path to the class file</param>
-        /// <param name="SourceCode">Source code</param>
-        public Selection(int Start, int Length, string SourcePath, string SourceCode )
+        /// <param name="start">Selection start</param>
+        /// <param name="length">Selection Length</param>
+        /// <param name="sourcePath">Path to the class file</param>
+        /// <param name="sourceCode">Source code</param>
+        public Selection(int start, int length, string sourcePath, string sourceCode )
         {
-            this.Start = Start;
-            this.Length = Length;
-            this.SourcePath = SourcePath;
-            this.SourceCode = SourceCode;
+            this.Start = start;
+            this.Length = length;
+            this.SourcePath = sourcePath;
+            this.SourceCode = sourceCode;
         }
 
         public override bool Equals(object obj)

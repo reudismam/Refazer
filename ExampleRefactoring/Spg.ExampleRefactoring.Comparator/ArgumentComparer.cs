@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Spg.ExampleRefactoring.Comparator
 {
@@ -24,12 +23,12 @@ namespace Spg.ExampleRefactoring.Comparator
             }
 
             SyntaxNodeOrToken parent = second;
-            int nInners = 0;
+            //int nInners = 0;
             while (parent.CSharpKind() != SyntaxKind.Block)
             {
                 if (parent.CSharpKind() == SyntaxKind.Argument)
                 {
-                    nInners ++;
+                    //nInners ++;
                     //InvocationExpressionSyntax invocation = (InvocationExpressionSyntax) parent.Parent.Parent;
                     //IdentifierNameSyntax member = invocation.Expression as IdentifierNameSyntax;
                     //if (member.GetText().ToString().Equals(first))

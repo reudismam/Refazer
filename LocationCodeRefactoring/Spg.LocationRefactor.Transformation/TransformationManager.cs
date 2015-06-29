@@ -107,7 +107,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
                     ListNode lnode = new ListNode(list);
 
                     ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
-                    string transformation = treeNode.transformation;
+                    string transformation = treeNode.Transformation;
                     string nodeText = node.GetText().ToString();
                     string escaped = Regex.Escape(nodeText);
                     string replacement = Regex.Replace(text, escaped, transformation);
@@ -233,7 +233,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
             {
                 ListNode lnode = ASTProgram.Example(node).Item1;
                 ASTTransformation tree = ASTProgram.TransformString(lnode, program);
-                string transformation = tree.transformation;
+                string transformation = tree.Transformation;
 
                 Tuple<string, string> transformedLocation = Tuple.Create(region.Text, transformation);
                 return transformedLocation;

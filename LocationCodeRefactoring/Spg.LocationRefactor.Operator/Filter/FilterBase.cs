@@ -435,7 +435,7 @@ namespace Spg.LocationRefactor.Operator.Filter
             List<Tuple<string, SyntaxNodeOrToken>> nameList = new List<Tuple<string, SyntaxNodeOrToken>>();
             foreach (Token token in tokenSeq.Tokens)
             {
-                if (token is DymToken)
+                if (token is DymToken && token.token.IsKind(SyntaxKind.StringLiteralToken))
                 {
                     string name = token.token.ToString();
                     Tuple<string, SyntaxNodeOrToken> tuple = Tuple.Create(name, token.token);

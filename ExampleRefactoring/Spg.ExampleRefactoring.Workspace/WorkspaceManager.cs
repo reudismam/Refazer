@@ -137,7 +137,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         /// <param name="name">Name of the identifier</param>
         /// <returns>Fully qualified name of the node</returns>
         public Dictionary<string, Dictionary<string, List<TextSpan>>> GetLocalReferences(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
-        {
+        { 
             var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;

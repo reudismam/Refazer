@@ -198,7 +198,7 @@ namespace Spg.NUnitTests.Refactoring
 
             List<SynthesizedProgram> synthesizedProgram = program.GenerateStringProgram(data);
             ASTTransformation result = ASTProgram.TransformString(test.Item1, synthesizedProgram[0]);
-            Tuple<String, String> transformationTest = Tuple.Create(result.transformation, result.transformation);
+            Tuple<String, String> transformationTest = Tuple.Create(result.Transformation, result.Transformation);
             Tuple<ListNode, ListNode> transformation = ASTProgram.Example(transformationTest);
 
             NodeComparer comparator = new NodeComparer();

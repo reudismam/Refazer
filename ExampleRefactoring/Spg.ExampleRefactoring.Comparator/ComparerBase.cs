@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
-using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Comparator
 {
@@ -160,8 +159,6 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>True if seq1 and seq2 are equal</returns>
         public Boolean SequenceEqual(ListNode seq1, ListNode seq2)
         {
-            Boolean equals = true;
-
             if (seq1 == null || seq2 == null) return false;
 
             //List size are different
@@ -177,7 +174,7 @@ namespace Spg.ExampleRefactoring.Comparator
                     return false;
                 }
             }
-            return equals;
+            return true;
         }
 
         /// <summary>

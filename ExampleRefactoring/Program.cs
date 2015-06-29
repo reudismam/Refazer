@@ -42,7 +42,7 @@ namespace ExampleRefactoring
 
                 while (!test.Equals("#"))
                 {
-                    string result = ASTProgram.TransformString(test.Item1, hypothesis[0]).transformation;
+                    string result = ASTProgram.TransformString(test.Item1, hypothesis[0]).Transformation;
                     Console.WriteLine(result);
                     test = command.Test();
                     Console.ReadLine();

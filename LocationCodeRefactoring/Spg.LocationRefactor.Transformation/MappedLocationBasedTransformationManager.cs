@@ -97,7 +97,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
                     ListNode lnode = new ListNode(list);
 
                     ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
-                    string transformation = treeNode.transformation;
+                    string transformation = treeNode.Transformation;
                     s += ++i + "\n";
                     s += transformation + "\n";
 

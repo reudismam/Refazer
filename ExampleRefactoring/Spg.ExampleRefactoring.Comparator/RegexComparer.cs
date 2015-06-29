@@ -62,8 +62,8 @@ namespace Spg.ExampleRefactoring.Comparator
                 throw new Exception("Regular expression must have at least one token");
             }
 
-            List<Tuple<int, ListNode>> matches = new List<Tuple<int, ListNode>>();
-            /*if (regex.Length() == 0)
+            /*List<Tuple<int, ListNode>> matches = new List<Tuple<int, ListNode>>();
+            if (regex.Length() == 0)
             {
                 Tuple<int, ListNode> emptyTuple = Tuple.Create(0, input);
                 matches.Add(emptyTuple);
