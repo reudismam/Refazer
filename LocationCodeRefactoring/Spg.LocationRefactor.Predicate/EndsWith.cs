@@ -1,4 +1,4 @@
-﻿using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using System;
@@ -17,8 +17,8 @@ namespace Spg.LocationRefactor.Predicate
         /// <param name="input">Source code</param>
         /// <param name="regex">Regex</param>
         /// <returns>Evaluation</returns>
-        public override Boolean Evaluate(ListNode input, TokenSeq regex) {
-            Boolean isMatch = ASTManager.IsMatch(input, regex);
+        public override bool Evaluate(ListNode input, TokenSeq regex) {
+            bool isMatch = ASTManager.IsMatch(input, regex);
             return isMatch;
         }
 
@@ -37,3 +37,5 @@ namespace Spg.LocationRefactor.Predicate
         }
     }
 }
+
+

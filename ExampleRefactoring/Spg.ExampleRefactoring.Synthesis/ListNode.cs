@@ -57,7 +57,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             ListNode lnode = (ListNode)obj;
             if (List.Count > 0)
             {
-                Boolean isEqual = (ASTManager.Matches(this, lnode, new NodeComparer()).Count > 0);
+                bool isEqual = (ASTManager.Matches(this, lnode, new NodeComparer()).Count > 0);
                 return isEqual;
             }else
             {
@@ -99,4 +99,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+
 

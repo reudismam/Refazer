@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
@@ -425,9 +425,9 @@ namespace Spg.LocationRefactor.Learn
         /// <param name="input">Input</param>
         /// <param name="regex">Regular expression</param>
         /// <returns>True if the regex match the input</returns>
-        public Boolean Indicator(IPredicate predicate, ListNode input, TokenSeq regex)
+        public bool Indicator(IPredicate predicate, ListNode input, TokenSeq regex)
         {
-            Boolean b = predicate.Evaluate(input, regex);
+            bool b = predicate.Evaluate(input, regex);
             return b;
         }
 
@@ -502,3 +502,4 @@ namespace Spg.LocationRefactor.Learn
 //    }
 //    return predicates;
 //}
+

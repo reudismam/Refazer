@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationCodeRefactoring.Controller;
@@ -54,7 +54,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
                 }
             }
             else {
-                Boolean firstSynthesizedProg = true;
+                bool firstSynthesizedProg = true;
                 List<Merge> merges = new List<Merge>();
                 foreach(Prog h in hypo)
                 {
@@ -131,7 +131,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
             }
             else
             {
-                Boolean firstSynthesizedProg = true;
+                bool firstSynthesizedProg = true;
                 List<Merge> merges = new List<Merge>();
                 foreach (Prog h in hypo)
                 {
@@ -210,3 +210,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         protected abstract FilterLearnerBase GetFilter(List<TRegion> list);
     }
 }
+

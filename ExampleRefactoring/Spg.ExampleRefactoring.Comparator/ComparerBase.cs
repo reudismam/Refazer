@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
@@ -80,7 +80,7 @@ namespace Spg.ExampleRefactoring.Comparator
                 //Evalute if the sequence of syntax nodes is on the input.
                 else
                 {
-                    Boolean isMatch = true;
+                    bool isMatch = true;
                     int i = 0;
                     foreach (SyntaxNodeOrToken node in subNodes.List)
                     {
@@ -146,7 +146,7 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <param name="first">Syntax node or token</param>
         /// <param name="regex">Regex token</param>
         /// <returns>True if first is equal to regex</returns>
-        public Boolean IsEqual(SyntaxNodeOrToken first, SyntaxNodeOrToken regex)
+        public bool IsEqual(SyntaxNodeOrToken first, SyntaxNodeOrToken regex)
         {
             return Match(first, regex);
         }
@@ -157,7 +157,7 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <param name="seq1">First sequence</param>
         /// <param name="seq2">Second sequence</param>
         /// <returns>True if seq1 and seq2 are equal</returns>
-        public Boolean SequenceEqual(ListNode seq1, ListNode seq2)
+        public bool SequenceEqual(ListNode seq1, ListNode seq2)
         {
             if (seq1 == null || seq2 == null) return false;
 
@@ -183,6 +183,8 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <param name="first">First sequence</param>
         /// <param name="second">Second sequence</param>
         /// <returns>True if first and second syntax node or token are equal</returns>
-        public abstract Boolean Match(SyntaxNodeOrToken first, SyntaxNodeOrToken second);
+        public abstract bool Match(SyntaxNodeOrToken first, SyntaxNodeOrToken second);
     }
 }
+
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
@@ -37,7 +37,7 @@ namespace Spg.ExampleRefactoring.Expression
                 int i = 0;
                 foreach (IExpression expression in entry.Value)
                 {
-                    Boolean isValid = ValidateExpression(expression, examples);
+                    bool isValid = ValidateExpression(expression, examples);
 
                     if (!isValid)
                     {
@@ -59,12 +59,12 @@ namespace Spg.ExampleRefactoring.Expression
         /// <param name="expression">Expression to be tested</param>
         /// <param name="examples">Set of examples</param>
         /// <returns>True if expression match the examples, false otherwise</returns>
-        public Boolean ValidateExpression(IExpression expression, List<Tuple<ListNode, ListNode>> examples)
+        public bool ValidateExpression(IExpression expression, List<Tuple<ListNode, ListNode>> examples)
         {
             SynthesizedProgram syntheProg = new SynthesizedProgram();
             syntheProg.Add(expression);
 
-            Boolean isValid = false;
+            bool isValid = false;
             foreach (Tuple<ListNode, ListNode> example in examples)
             {
                 ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.Solutions);
@@ -82,3 +82,5 @@ namespace Spg.ExampleRefactoring.Expression
         }
     }
 }
+
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Comparator;
 
@@ -28,7 +28,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="example">Example</param>
         /// <returns>True</returns>
-        public Boolean IsPresentOn(Tuple<ListNode, ListNode> example) {
+        public bool IsPresentOn(Tuple<ListNode, ListNode> example) {
             return true;
         }
 
@@ -85,3 +85,4 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         }
     }
 }
+

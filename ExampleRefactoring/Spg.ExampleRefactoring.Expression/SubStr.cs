@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Position;
@@ -41,13 +41,13 @@ namespace Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="example">String to be verified.</param>
         /// <returns>True is this expression is present on the string s. False otherwise.</returns>
-        public Boolean IsPresentOn(Tuple<ListNode, ListNode> example)
+        public bool IsPresentOn(Tuple<ListNode, ListNode> example)
         {
             int position1 = p1.GetPositionIndex(example.Item1);
 
             int position2 = p2.GetPositionIndex(example.Item1);
 
-            Boolean presence = false;
+            bool presence = false;
             if (AreValidPositions(position1, position2, example.Item1))
             {
                 return true;
@@ -63,7 +63,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <param name="position2"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static Boolean AreValidPositions(int position1, int position2, ListNode input)
+        public static bool AreValidPositions(int position1, int position2, ListNode input)
         {
             if ((Math.Abs(position1) <= input.Length()) && (Math.Abs(position2) <= input.Length()) && (position2 - position1) >= 0 && position1 >= 0)
             {
@@ -133,3 +133,5 @@ namespace Spg.ExampleRefactoring.Expression
         }
     }
 }
+
+
