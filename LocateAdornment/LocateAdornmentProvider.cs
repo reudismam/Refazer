@@ -75,35 +75,35 @@ namespace LocateAdornment
 
         public void AddRegion(TRegion region, string author, string text)
         {
-            ITextSnapshot current = buffer.CurrentSnapshot;
-            SnapshotSpan span = new SnapshotSpan(current, region.Start, region.Length);
-
             try
             {
+                ITextSnapshot current = buffer.CurrentSnapshot;
+                SnapshotSpan span = new SnapshotSpan(current, region.Start, region.Length);
+            
                 RemoveComments(span);
+
+                if (span.Length == 0)
+                    throw new ArgumentOutOfRangeException("span");
+                if (author == null)
+                    throw new ArgumentNullException("author");
+                if (text == null)
+                    throw new ArgumentNullException("text");
+
+                //Create a comment adornment given the span, author and text.
+                LocateAdornment comment = new LocateAdornment(span, author, text);
+
+                //Add it to the list of comments. 
+                this.comments.Add(comment);
+
+                //Raise the changed event.
+                EventHandler<LocateChangedEventArgs> commentsChanged = this.LocationsChanged;
+                if (commentsChanged != null)
+                    commentsChanged(this, new LocateChangedEventArgs(comment, null));
             }
             catch (Exception)
             {
-                
+
             }
-
-            if (span.Length == 0)
-                throw new ArgumentOutOfRangeException("span");
-            if (author == null)
-                throw new ArgumentNullException("author");
-            if (text == null)
-                throw new ArgumentNullException("text");
-
-            //Create a comment adornment given the span, author and text.
-            LocateAdornment comment = new LocateAdornment(span, author, text);
-
-            //Add it to the list of comments. 
-            this.comments.Add(comment);
-
-            //Raise the changed event.
-            EventHandler<LocateChangedEventArgs> commentsChanged = this.LocationsChanged;
-            if (commentsChanged != null)
-                commentsChanged(this, new LocateChangedEventArgs(comment, null));
         }
         public void RemoveComments(SnapshotSpan span)
         {

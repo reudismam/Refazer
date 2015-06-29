@@ -83,7 +83,7 @@ namespace SPG.IntelliExtract
             object holder;
             Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
-            var viewHost = (IWpfTextViewHost)holder;
+            IWpfTextViewHost viewHost = (IWpfTextViewHost)holder;
 
             foreach (TRegion r in hEvent.regions)
             {
@@ -109,7 +109,7 @@ namespace SPG.IntelliExtract
                 bool isCorrectLocation = true;
                 if (inforNeg == DialogResult.Yes)
                 {
-                    DialogResult dialogResult = MessageBox.Show(location.Region.Node.GetText() + "\n",
+                    DialogResult dialogResult = MessageBox.Show("class: " + location.SourceClass + "\n" + location.Region.Node.GetText() + "\n",
                         "Is it a correct location?", MessageBoxButtons.YesNo);
 
                     if (dialogResult == DialogResult.No)

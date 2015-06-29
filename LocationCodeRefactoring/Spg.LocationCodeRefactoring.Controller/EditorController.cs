@@ -413,7 +413,8 @@ namespace Spg.LocationCodeRefactoring.Controller
             Tuple<List<CodeLocation>, List<TRegion>> tuple;
             if (list.Count() > 1)
             {
-                tuple = RetrieveLocationsMultiplesSourceClasses(prog);
+                //tuple = RetrieveLocationsMultiplesSourceClasses(prog);
+                tuple = RetrieveLocationsSingleSourceClassPosNegative(prog);
             }
             else
             {
@@ -469,13 +470,13 @@ namespace Spg.LocationCodeRefactoring.Controller
         /// <summary>
         /// Retrieve location single class after developer inform negative locations
         /// </summary>
-        /// <param name="prog"></param>
-        /// <returns></returns>
+        /// <param name="prog">Program</param>
+        /// <returns>Locations for single class considering negative posistions</returns>
         private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClassPosNegative(Prog prog)
         {
             List<TRegion> regions = new List<TRegion>();
             List<CodeLocation> locations = new List<CodeLocation>();
-            foreach (var location in Locations)
+            foreach (CodeLocation location in Locations)
             {
                 MapBase m = (MapBase)prog.Ioperator;
                 FilterBase filter = (FilterBase)m.SequenceExpression.Ioperator;
@@ -494,7 +495,6 @@ namespace Spg.LocationCodeRefactoring.Controller
             }
 
             Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(locations, regions);
-
             return tuple;
         }
 
@@ -539,7 +539,42 @@ namespace Spg.LocationCodeRefactoring.Controller
             var rs = dicRegions[CurrentViewCodePath.ToUpperInvariant()];
             Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
             return tuple;
-        }   
+        }
+
+        ///// <summary>
+        ///// Retrieve regions for multiple classes
+        ///// </summary>
+        ///// <param name="prog">Learned program</param>
+        ///// <returns>Code locations</returns>
+        //private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClassesPosNegative(Prog prog)
+        //{
+        //    List<CodeLocation> sourceLocations = new List<CodeLocation>();
+        //    Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
+
+        //    List<TRegion> regions = RetrieveLocations(prog);
+        //    foreach (TRegion region in regions)
+        //    {
+        //        List<TRegion> value;
+        //        if (!dicRegions.TryGetValue(region.Path, out value))
+        //        {
+        //            value = new List<TRegion>();
+        //            dicRegions[region.Path] = value;
+        //        }
+
+        //        dicRegions[region.Path].Add(region);
+        //        CodeLocation location = new CodeLocation
+        //        {
+        //            Region = region,
+        //            SourceCode = region.Parent.Text,
+        //            SourceClass = region.Path
+        //        };
+        //        sourceLocations.Add(location);
+        //    }
+
+        //    var rs = dicRegions[CurrentViewCodePath.ToUpperInvariant()];
+        //    Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
+        //    return tuple;
+        //}
 
         /// <summary>
         /// Retrieve locations
@@ -579,7 +614,7 @@ namespace Spg.LocationCodeRefactoring.Controller
 
             bool[] analized = Enumerable.Repeat(false, locations.Count).ToArray();
 
-            foreach (var item in groupedLocations)
+            foreach (KeyValuePair<string, List<CodeLocation>> item in groupedLocations)
             {
                 for (int i = 0; i < item.Value.Count; i++)
                 {
@@ -591,7 +626,7 @@ namespace Spg.LocationCodeRefactoring.Controller
                         {
                             var otherLocation = item.Value[j];
                             bool intersect = location.Region.IntersectWith(otherLocation.Region);
-                            if (intersect)
+                            if (intersect && location.Region.Path.ToUpperInvariant().Equals(otherLocation.Region.Path.ToUpperInvariant()))
                             {
                                 analized[j] = true;
                                 if (otherLocation.Region.Start > location.Region.Start)
