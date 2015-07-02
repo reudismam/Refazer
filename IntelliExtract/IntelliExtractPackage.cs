@@ -8,9 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ExampleRefactoring.Spg.ExampleRefactoring.Util;
 using LocateAdornment;
-using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
@@ -19,6 +17,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Spg.LocationCodeRefactoring.Controller;
 using Spg.LocationCodeRefactoring.Observer;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
@@ -57,7 +56,6 @@ namespace SPG.IntelliExtract
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
-
         public IntelliExtractPackage()
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this));
@@ -70,14 +68,14 @@ namespace SPG.IntelliExtract
         public void NotifyHilightChanged(HighlightEvent hEvent)
         {
             IVsTextManager txtMgr = (IVsTextManager)GetService(typeof(SVsTextManager));
-            IVsTextView vTextView = null;
+            IVsTextView vTextView;
             const int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
 
             IVsUserData userData = vTextView as IVsUserData;
             if (userData == null)
             {
-                Console.WriteLine("No text view is currently open");
+                Console.WriteLine(Resources.IntelliExtractPackage_NotifyHilightChanged_No_text_view_is_currently_open);
                 return;
             }
             object holder;
@@ -85,12 +83,29 @@ namespace SPG.IntelliExtract
             userData.GetData(ref guidViewHost, out holder);
             IWpfTextViewHost viewHost = (IWpfTextViewHost)holder;
 
+            ITextDocument docm = GetTextDocument(viewHost.TextView.TextBuffer);
+            string docName = docm.FilePath;
+
             foreach (TRegion r in hEvent.regions)
             {
-                Connector.Select(viewHost, r);
+                if (r.Path.ToUpperInvariant().Equals(docName.ToUpperInvariant()))
+                {
+                    Connector.Select(viewHost, r);
+                }
             }
             EditorController controler = EditorController.GetInstance();
             controler.CurrentViewCodeBefore = Connector.GetText(viewHost);
+        }
+
+        public static ITextDocument GetTextDocument(ITextBuffer textBuffer)
+        {
+            ITextDocument textDoc;
+            var rc = textBuffer.Properties.TryGetProperty(
+              typeof(ITextDocument), out textDoc);
+            if (rc)
+                return textDoc;
+ 
+                return null;
         }
 
         public void NotifyLocationsSelected(LocationEvent lEvent)
@@ -101,7 +116,7 @@ namespace SPG.IntelliExtract
             List<TRegion> positives = new List<TRegion>();
             EditorController controller = EditorController.GetInstance();
 
-            DialogResult inforNeg = MessageBox.Show("Do you want to inform negative locations?", "Do you want to inform negative locations?", MessageBoxButtons.YesNo);
+            DialogResult inforNeg = MessageBox.Show(Resources.IntelliExtractPackage_NotifyLocationsSelected_Do_you_want_to_inform_negative_locations_, Resources.IntelliExtractPackage_NotifyLocationsSelected_Do_you_want_to_inform_negative_locations_, MessageBoxButtons.YesNo);
 
             for (int index = 0; index < locations.Count; index++)
             {
@@ -109,8 +124,8 @@ namespace SPG.IntelliExtract
                 bool isCorrectLocation = true;
                 if (inforNeg == DialogResult.Yes)
                 {
-                    DialogResult dialogResult = MessageBox.Show("class: " + location.SourceClass + "\n" + location.Region.Node.GetText() + "\n",
-                        "Is it a correct location?", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = MessageBox.Show(Resources.IntelliExtractPackage_NotifyLocationsSelected_class__ + location.SourceClass + "\n" + location.Region.Node.GetText() + "\n",
+                        Resources.IntelliExtractPackage_NotifyLocationsSelected_Is_it_a_correct_location_, MessageBoxButtons.YesNo);
 
                     if (dialogResult == DialogResult.No)
                     {
@@ -141,7 +156,7 @@ namespace SPG.IntelliExtract
                 controller.Extract(positives, negatives);
                 JsonUtil<List<int>>.Write(indexNegatives, "negatives.json");
             }
-            MessageBox.Show("Done!");
+            MessageBox.Show(Resources.IntelliExtractPackage_NotifyLocationsSelected_Done_);
 
             controller.Done();
         }
@@ -204,8 +219,8 @@ namespace SPG.IntelliExtract
                 out ppunkDocData, out pdwCookie);
 
             string pbstrMkDocument;
-            uint pwdReadLooks, pwdEditLocks, pgrfRDTFlags;
-            var y = rdt.GetDocumentInfo(pdwCookie, out pgrfRDTFlags, out pwdReadLooks, out pwdEditLocks,
+            uint pwdReadLooks, pwdEditLocks, pgrfRdtFlags;
+            rdt.GetDocumentInfo(pdwCookie, out pgrfRdtFlags, out pwdReadLooks, out pwdEditLocks,
                 out pbstrMkDocument, out hierarchy, out pitemid, out ppunkDocData);
 
             try
@@ -217,9 +232,9 @@ namespace SPG.IntelliExtract
                     componentModel.GetService<IVsEditorAdaptersFactoryService>();
 
 
-                IServiceProvider sp = GetGlobalService(
-                    typeof(IServiceProvider))
-                    as IServiceProvider;
+                //IServiceProvider sp = GetGlobalService(
+                //    typeof(IServiceProvider))
+                //    as IServiceProvider;
 
                 var textBuffer = bufferData.GetDataBuffer(x);
                 var projectionBuffer = _CreateProjectionBuffer(textBuffer, locations);
@@ -227,50 +242,50 @@ namespace SPG.IntelliExtract
             }
             catch (Exception e)
             {
-                Console.WriteLine("Document not found on project: " + e.Message);
+                Console.WriteLine(Resources.IntelliExtractPackage__CreateProjectionBuffer_Document_not_found_on_project__ + e.Message);
             }
             return null;
         }
 
-        public IProjectionBuffer CreateProjectionBuffer(IWpfTextViewHost host)
-        {
-            //retrieve start and end position that we saved in MyToolWindow.CreateEditor()
-            var textView = host.TextView;
+        //public IProjectionBuffer CreateProjectionBuffer(IWpfTextViewHost host)
+        //{
+        //    //retrieve start and end position that we saved in MyToolWindow.CreateEditor()
+        //    var textView = host.TextView;
 
-            List<object> sourceSpans = new List<object>();
-            foreach (var location in EditorController.GetInstance().Locations)
-            {
+        //    List<object> sourceSpans = new List<object>();
+        //    foreach (var location in EditorController.GetInstance().Locations)
+        //    {
 
-                var startPosition = location.Region.Start;
-                var length = location.Region.Length;
-                if (startPosition != 0)
-                {
-                    startPosition -= 1;
-                    length = Math.Min(length + 2, textView.TextBuffer.CurrentSnapshot.Length);
-                }
-                else
-                {
-                    length = Math.Min(length + 1, textView.TextBuffer.CurrentSnapshot.Length);
-                }
+        //        var startPosition = location.Region.Start;
+        //        var length = location.Region.Length;
+        //        if (startPosition != 0)
+        //        {
+        //            startPosition -= 1;
+        //            length = Math.Min(length + 2, textView.TextBuffer.CurrentSnapshot.Length);
+        //        }
+        //        else
+        //        {
+        //            length = Math.Min(length + 1, textView.TextBuffer.CurrentSnapshot.Length);
+        //        }
 
-                //Take a snapshot of the text within these indices.
-                var textSnapshot = textView.TextBuffer.CurrentSnapshot;
-                var trackingSpan = textSnapshot.CreateTrackingSpan(startPosition, length, SpanTrackingMode.EdgeExclusive);
-                sourceSpans.Add(trackingSpan);
-            }
+        //        //Take a snapshot of the text within these indices.
+        //        var textSnapshot = textView.TextBuffer.CurrentSnapshot;
+        //        var trackingSpan = textSnapshot.CreateTrackingSpan(startPosition, length, SpanTrackingMode.EdgeExclusive);
+        //        sourceSpans.Add(trackingSpan);
+        //    }
 
-            //var ProjectionBufferFactory = (IProjectionBufferFactoryService) GetService(typeof(IProjectionBufferFactoryService));
-            IComponentModel componentModel = GetGlobalService(typeof(SComponentModel)) as IComponentModel;
-            IProjectionBufferFactoryService ProjectionBufferFactory = componentModel.GetService<IProjectionBufferFactoryService>();
+        //    //var ProjectionBufferFactory = (IProjectionBufferFactoryService) GetService(typeof(IProjectionBufferFactoryService));
+        //    IComponentModel componentModel = GetGlobalService(typeof(SComponentModel)) as IComponentModel;
+        //    IProjectionBufferFactoryService ProjectionBufferFactory = componentModel.GetService<IProjectionBufferFactoryService>();
 
-            //Create the actual projection buffer
-            var projectionBuffer = ProjectionBufferFactory.CreateProjectionBuffer(
-                null
-                , sourceSpans
-                , ProjectionBufferOptions.None
-                );
-            return projectionBuffer;
-        }
+        //    //Create the actual projection buffer
+        //    var projectionBuffer = ProjectionBufferFactory.CreateProjectionBuffer(
+        //        null
+        //        , sourceSpans
+        //        , ProjectionBufferOptions.None
+        //        );
+        //    return projectionBuffer;
+        //}
 
         private IProjectionBuffer _CreateProjectionBuffer(ITextBuffer textBuffer, List<CodeLocation> locations)
         {
@@ -349,7 +364,7 @@ namespace SPG.IntelliExtract
             IVsUserData userData = vTextView as IVsUserData;
             if (userData == null)
             {
-                Console.WriteLine("No text view is currently open");
+                Console.WriteLine(Resources.IntelliExtractPackage_NotifyHilightChanged_No_text_view_is_currently_open);
                 return;
             }
             object holder;

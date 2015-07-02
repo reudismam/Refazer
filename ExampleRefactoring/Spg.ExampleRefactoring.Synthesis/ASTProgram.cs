@@ -30,7 +30,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// Setting for AST synthesis computation
         /// </summary>
         /// <returns>Setting</returns>
-        private SynthesizerSetting Setting { get; set; }
+        private SynthesizerSetting Setting { get; }
 
         /// <summary>
         /// Previous computed token sequences
@@ -50,7 +50,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         public ASTProgram()
         {
             Dict = new Dictionary<DymToken, int>();
-            this.Setting = new SynthesizerSetting {Deviation = 2, ConsiderConstrStr = true};
+            this.Setting = new SynthesizerSetting { Deviation = 2, ConsiderConstrStr = true };
         }
 
         /// <summary>
@@ -85,14 +85,14 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             if (OutputIsEmpty(examples))
             {
                 IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
-                List<IExpression> expressions = new List<IExpression> {expression};
+                List<IExpression> expressions = new List<IExpression> { expression };
                 SynthesizedProgram program = new SynthesizedProgram();
                 validated.Add(program);
                 program.Solutions = expressions;
-                
+
                 return validated;
             }
-           
+
             List<Dag> dags = Dags(examples);
 
             IntersectManager intManager = new IntersectManager();
@@ -163,7 +163,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 dags.Add(GenerateStringBoundary(input, output, boundaryPoints));
             }
             return dags;
-        } 
+        }
 
         /// <summary>
         /// Create dynamic tokens
@@ -243,21 +243,21 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             SyntaxNodeOrToken parent = ASTManager.Parent(st);
 
-            if (parent.IsKind(SyntaxKind.VariableDeclaration)){ return true; }
+            if (parent.IsKind(SyntaxKind.VariableDeclaration)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.ObjectCreationExpression)) { return true;  }
+            if (parent.IsKind(SyntaxKind.ObjectCreationExpression)) { return true; }
 
             if (parent.IsKind(SyntaxKind.AttributeList)) { return true; }
 
             if (parent.IsKind(SyntaxKind.InvocationExpression)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.QualifiedName)) {  return true; }
+            if (parent.IsKind(SyntaxKind.QualifiedName)) { return true; }
 
             if (parent.IsKind(SyntaxKind.IfStatement)) { return true; }
 
             if (parent.IsKind(SyntaxKind.MethodDeclaration)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.Parameter)) { return true;}
+            if (parent.IsKind(SyntaxKind.Parameter)) { return true; }
 
             if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) return true;
 
@@ -346,6 +346,10 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);
                     subStrns.AddRange(expressions);
+
+                    List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
+                    subStrns.AddRange(idenExpr);
+
                     W.Add(tuple, subStrns);
                 }
             }
@@ -395,10 +399,19 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     {
                         IExpression expression = new ConstruStr(subNodes);
                         subStrns.Add(expression);
+                        //if (subNodes.Length() == 1 && subNodes.List[0].IsKind(SyntaxKind.StringLiteralToken))
+                        //{
+                        //    IExpression idExp = new IdenToStr(subNodes.List[0]);
+                        //    subStrns.Add(idExp);
+                        //}
                     }
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);
                     subStrns.AddRange(expressions);
+
+                    List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
+                    subStrns.AddRange(idenExpr);
+
                     if (!W.ContainsKey(tuple))
                     {
                         W.Add(tuple, subStrns);
@@ -459,10 +472,11 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     List<Token> dTSeq = TokenSeq.DymTokens(subNodesLeft, this.Dict);
                     TokenSeq dtSeq = new TokenSeq(dTSeq);
                     tokensSeqs.Add(dtSeq);
+ //                   tokensSeqs.Add(AddIdenToStr(ts));
                 }
                 //else
                 //{
-                    tokensSeqs.Add(ts);
+                tokensSeqs.Add(ts);
                 //}
                 if (subNodesLeft.List.Count > 0)
                 {
@@ -475,7 +489,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             }
 
             tokensSeqs = _computed[subNodesLeft];
-            
+
             return tokensSeqs;
         }
 
@@ -539,46 +553,74 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             List<TokenSeq> sequences = new List<TokenSeq>();
             if (add)
             {
-                TokenSeq sequence = new TokenSeq(tokens); 
+                TokenSeq sequence = new TokenSeq(tokens);
                 sequences.Add(sequence);
             }
 
-            sequences.AddRange(AddArgument(seq));
+            //sequences.AddRange(AddArgument(seq));
+            //sequences.Add(AddIdenToStr(seq));
 
             return sequences;
         }
 
-        private static IEnumerable<TokenSeq> AddArgument(TokenSeq seq)
+        //private static IEnumerable<TokenSeq> AddArgument(TokenSeq seq)
+        //{
+        //    List<Token> argumentTokens = new List<Token>();
+        //    bool addArgument = false;
+        //    bool previousIsArgument = false;
+        //    foreach (Token st in seq.Tokens)
+        //    {
+        //        Token at = new ArgumentToken(st.token);
+        //        if (at.Match(st.token))
+        //        {
+        //            if (!previousIsArgument)
+        //            {
+        //                argumentTokens.Add(at);
+        //            }
+        //            previousIsArgument = true;
+        //            addArgument = true;
+        //        }
+        //        else
+        //        {
+        //            argumentTokens.Add(st);
+        //            previousIsArgument = false;
+        //        }
+        //    }
+        //    List<TokenSeq> sequences = new List<TokenSeq>();
+        //    if (addArgument)
+        //    {
+        //        TokenSeq sequence = new TokenSeq(argumentTokens);
+        //        sequences.Add(sequence);
+        //    }
+
+        //    return sequences;
+        //}
+
+        /// <summary>
+        /// Create sequence of token with IdentToStrToken inserted where applicable
+        /// </summary>
+        /// <param name="seq">Sequence of tokens</param>
+        /// <returns>sequence of token with IdentToStrToken inserted where applicable</returns>
+        private static TokenSeq AddIdenToStr(TokenSeq seq)
         {
-            List<Token> argumentTokens = new List<Token>();
-            bool addArgument = false;
-            bool previousIsArgument = false;
+            List<Token> addIdentoToken = new List<Token>();
+
             foreach (Token st in seq.Tokens)
             {
-                Token at = new ArgumentToken(st.token);
-                if (at.Match(st.token))
+                if (st.token.IsKind(SyntaxKind.IdentifierToken))
                 {
-                    if (!previousIsArgument)
-                    {
-                        argumentTokens.Add(at);
-                    }
-                    previousIsArgument = true;
-                    addArgument = true;
+                    addIdentoToken.Add(new IdenToStrToken(st.token));
                 }
                 else
                 {
-                    argumentTokens.Add(st);
-                    previousIsArgument = false;
+                    addIdentoToken.Add(st);
                 }
             }
-            List<TokenSeq> sequences = new List<TokenSeq>();
-            if (addArgument)
-            {
-                TokenSeq sequence = new TokenSeq(argumentTokens);
-                sequences.Add(sequence);
-            }
 
-            return sequences;
+            TokenSeq sequence = new TokenSeq(addIdentoToken);
+
+
+            return sequence;
         }
 
         /// <summary>
@@ -762,6 +804,49 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             return result;
         }
 
+        /// <summary>
+        /// Generate nodes
+        /// </summary>
+        /// <param name="inputTree">Input ListNode</param>
+        /// <param name="subNodes">Substring ListNode</param>
+        /// <param name="kpositions">K positions</param>
+        /// <returns>Expression list</returns>
+        private List<IExpression> GenerateIdentToStr(ListNode inputTree, ListNode subNodes, Dictionary<int, List<IPosition>> kpositions)
+        {
+            List<IExpression> result = new List<IExpression>();
+
+            if (!(subNodes.Length() == 1 && subNodes.List[0].IsKind(SyntaxKind.StringLiteralToken)))
+            {
+                return result;
+            }
+
+            List<int> positionsIndexs = GetIndexesSubNodesIdenToStr(inputTree, subNodes);
+
+            foreach (int k in positionsIndexs)
+            {
+                List<IPosition> y1 = null;
+                if (!kpositions.TryGetValue(k, out y1))
+                {
+                    y1 = GeneratePosition(inputTree, k);
+                    kpositions.Add(k, y1);
+                }
+
+                List<IPosition> y2 = null;
+                if (!kpositions.TryGetValue((k + subNodes.Length()), out y2))
+                {
+                    y2 = GeneratePosition(inputTree, k + subNodes.Length());
+                    kpositions.Add((k + subNodes.Length()), y2);
+                }
+
+                foreach (Tuple<IPosition, IPosition> positions in ConstructCombinations(y1, y2))
+                {
+                    IExpression expression = new IdenToStr(positions.Item1, positions.Item2);
+                    result.Add(expression);
+                }
+            }
+            return result;
+        }
+
         public List<IPosition> GeneratePosition(ListNode input, int k)
         {
             List<IPosition> result = new List<IPosition>();
@@ -879,6 +964,18 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         {
             //return ASTManager.Matches(input, regex, new RegexComparer());
             return new NodeComparer().Matches(input, regex);
+        }
+
+        /// <summary>
+        /// Return the list of indexes that match the regular expression
+        /// </summary>
+        /// <param name="input">Input nodes</param>
+        /// <param name="regex">Regular expressions nodes</param>
+        /// <returns>List of index matches.</returns>
+        private static List<int> GetIndexesSubNodesIdenToStr(ListNode input, ListNode regex)
+        {
+            //return ASTManager.Matches(input, regex, new RegexComparer());
+            return new IdenToStrComparer().Matches(input, regex);
         }
 
 

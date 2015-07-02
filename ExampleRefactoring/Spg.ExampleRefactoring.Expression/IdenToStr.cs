@@ -3,16 +3,16 @@ using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Position;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Synthesis;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace Spg.ExampleRefactoring.Expression
 {
     /// <summary>
     /// SubNode atomic expression
     /// </summary>
-    public class SubStr : IExpression
+    public class IdenToStr : IExpression
     {
         /// <summary>
         /// Position one on the expression.
@@ -30,7 +30,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="p1">Position one on the string.</param>
         /// <param name="p2">Position two on the string.</param>
-        public SubStr(IPosition p1, IPosition p2)
+        public IdenToStr(IPosition p1, IPosition p2)
         {
             this.p1 = p1;
             this.p2 = p2;
@@ -84,17 +84,22 @@ namespace Spg.ExampleRefactoring.Expression
 
             ListNode nodes = ASTManager.SubNotes(input, position1, (position2 - position1));
 
-            return nodes;
-        }
+            ListNode replace = new ListNode();
+            if (nodes.Length() == 1 && nodes.List[0].IsKind(SyntaxKind.IdentifierToken))
+            {
+                SyntaxNodeOrToken identifier = nodes.List[0];
+                var newLiteral = SyntaxFactory.ParseExpression("\"" + identifier + "\"")
+                    .WithLeadingTrivia(identifier.GetLeadingTrivia())
+                    .WithTrailingTrivia(identifier.GetTrailingTrivia())
+                    .WithAdditionalAnnotations(Formatter.Annotation);
+                replace.List.Add(newLiteral);
+            }
+            else
+            {
+                throw new IndexOutOfRangeException("Cannot convert nodes to literal stirng.");
+            }
 
-        /// <summary>
-        /// Size
-        /// </summary>
-        /// <returns>Size</returns>
-        [Obsolete("No used anymore")]
-        public int Size() {
-            int size = p1.Size() * p2.Size();
-            return size;
+            return replace;
         }
 
         /// <summary>

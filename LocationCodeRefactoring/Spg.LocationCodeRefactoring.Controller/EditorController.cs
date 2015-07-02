@@ -484,13 +484,14 @@ namespace Spg.LocationCodeRefactoring.Controller
                 if (isTruePositive)
                 {
                     regions.Add(location.Region);
-                    CodeLocation filtered = new CodeLocation
-                    {
-                        Region = location.Region,
-                        SourceCode = CurrentViewCodeBefore,
-                        SourceClass = CurrentViewCodePath
-                    };
-                    locations.Add(filtered);
+                    //CodeLocation filtered = new CodeLocation
+                    //{
+                    //    Region = location.Region,
+                    //    SourceCode = CurrentViewCodeBefore,
+                    //    SourceClass = CurrentViewCodePath
+                    //};
+                    //locations.Add(filtered);
+                    locations.Add(location);
                 }
             }
 

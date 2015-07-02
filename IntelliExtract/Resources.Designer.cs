@@ -59,5 +59,70 @@ namespace SPG.IntelliExtract {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document not found on project: .
+        /// </summary>
+        internal static string IntelliExtractPackage__CreateProjectionBuffer_Document_not_found_on_project__ {
+            get {
+                return ResourceManager.GetString("IntelliExtractPackage__CreateProjectionBuffer_Document_not_found_on_project__", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No text view is currently open.
+        /// </summary>
+        internal static string IntelliExtractPackage_NotifyHilightChanged_No_text_view_is_currently_open {
+            get {
+                return ResourceManager.GetString("IntelliExtractPackage_NotifyHilightChanged_No_text_view_is_currently_open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///.
+        /// </summary>
+        internal static string IntelliExtractPackage_NotifyLocationsSelected_ {
+            get {
+                return ResourceManager.GetString("IntelliExtractPackage_NotifyLocationsSelected_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to class: .
+        /// </summary>
+        internal static string IntelliExtractPackage_NotifyLocationsSelected_class__ {
+            get {
+                return ResourceManager.GetString("IntelliExtractPackage_NotifyLocationsSelected_class__", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to inform negative locations?.
+        /// </summary>
+        internal static string IntelliExtractPackage_NotifyLocationsSelected_Do_you_want_to_inform_negative_locations_ {
+            get {
+                return ResourceManager.GetString("IntelliExtractPackage_NotifyLocationsSelected_Do_you_want_to_inform_negative_loca" +
+                        "tions_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done!.
+        /// </summary>
+        internal static string IntelliExtractPackage_NotifyLocationsSelected_Done_ {
+            get {
+                return ResourceManager.GetString("IntelliExtractPackage_NotifyLocationsSelected_Done_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is it a correct location?.
+        /// </summary>
+        internal static string IntelliExtractPackage_NotifyLocationsSelected_Is_it_a_correct_location_ {
+            get {
+                return ResourceManager.GetString("IntelliExtractPackage_NotifyLocationsSelected_Is_it_a_correct_location_", resourceCulture);
+            }
+        }
     }
 }

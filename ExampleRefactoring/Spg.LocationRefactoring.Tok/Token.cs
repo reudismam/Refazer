@@ -2,9 +2,7 @@
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Tok
 {
@@ -103,11 +101,11 @@ namespace Spg.ExampleRefactoring.Tok
         /// <summary>
         /// Two tokens are equal
         /// </summary>
-        /// <param name="token">Token</param>
+        /// <param name="otherToken">Token</param>
         /// <returns>True is tokens are equal</returns>
-        public override bool Equals(object token)
+        public override bool Equals(object otherToken)
         {
-            Token st = (Token)token;
+            Token st = (Token) otherToken;
             ComparerBase comparator = new RegexComparer();
             return comparator.IsEqual(this.token, st.token);
         }
