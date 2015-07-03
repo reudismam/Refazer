@@ -128,9 +128,9 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="mapping">Expressions mapping</param>
         /// <param name="indexs">Synthesized program sub parts</param>
         /// <returns>Expression list that forms the synthesized program</returns>
-        private static List<List<IExpression>> SynthesizedPrograms(Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping, List<Vertex> indexs)
+        private static List<Dictionary<string, List<IExpression>>> SynthesizedPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> mapping, List<Vertex> indexs)
         {
-            List<List<IExpression>> synthProgList = new List<List<IExpression>>();
+            List<Dictionary<string, List<IExpression>>> synthProgList = new List<Dictionary<string, List<IExpression>>>();
             for (int i = 1; i < indexs.Count; i++)
             {
                 Tuple<Vertex, Vertex> tuple = Tuple.Create(indexs[i - 1], indexs[i]);
@@ -352,16 +352,21 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="solutions">Solution</param>
         /// <param name="examples">Examples</param>
         /// <returns>A valid hypothesis, if it exits, null otherwise</returns>
-        public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
+        public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
         {
             SynthesizedProgram selected = null;
-            List<List<IExpression>> expressions = SynthesizedPrograms(mapping, solutions);
+            List<Dictionary<string, List<IExpression>>> expressions = SynthesizedPrograms(mapping, solutions);
 
             List<SynthesizedProgram> hypotheses = new List<SynthesizedProgram>();
-            foreach (List<IExpression> l in expressions)
+            foreach (Dictionary<string, List<IExpression>> item in expressions)
             {
-                hypotheses = CombSynthProgramExp(hypotheses, l, examples);
+                List<IExpression> l = GetExpressions(item);
+                    //foreach (List<IExpression> l in item.Values)
+                //{
+                    hypotheses = CombSynthProgramExp(hypotheses, l, examples);
+                //}
             }
+            
 
             var sorted = from hypothesis in hypotheses
                          orderby (new SelectorManager(setting)).Order(hypothesis.Solutions) descending
@@ -393,6 +398,16 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             //file.Close();
             return selected;
+        }
+
+        public List<IExpression> GetExpressions(Dictionary<string, List<IExpression>> mapping)
+        {
+            List<IExpression> expressions = new List<IExpression>();
+            foreach (KeyValuePair<string, List<IExpression>> entry in mapping)
+            {
+                expressions.AddRange(entry.Value);
+            }
+            return expressions;
         }
 
         /// <summary>

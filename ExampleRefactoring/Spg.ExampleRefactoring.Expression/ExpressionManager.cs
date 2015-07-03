@@ -29,27 +29,39 @@ namespace Spg.ExampleRefactoring.Expression
             if (examples == null) throw new ArgumentNullException("examples");
             if(!examples.Any()) throw new ArgumentException("Examples cannot be null");
 
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> expressions = dag.Mapping;
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> expressions = dag.Mapping;
 
-            foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in expressions)
+            foreach (KeyValuePair<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> entry in expressions)
             {
-                List<IExpression> removes = new List<IExpression>();
+                Dictionary<string, List<IExpression>> removes = new Dictionary<string, List<IExpression>>();
                 int i = 0;
-                foreach (IExpression expression in entry.Value)
+                foreach (KeyValuePair<string, List<IExpression>> item in entry.Value)
                 {
-                    bool isValid = ValidateExpression(expression, examples);
-
-                    if (!isValid)
+                    foreach (IExpression expression in item.Value)
                     {
-                        removes.Add(expression);
+                        bool isValid = ValidateExpression(expression, examples);
+
+                        if (!isValid)
+                        {
+                            List<IExpression> value;
+                            if (!removes.TryGetValue(item.Key, out value))
+                            {
+                                removes.Add(item.Key, new List<IExpression>());
+                            }
+                            removes[item.Key].Add(expression);
+                        }
+                        i++;
                     }
-                    i++;
                 }
 
-                foreach (IExpression expression in removes)
+                foreach (KeyValuePair<string, List<IExpression>> item in removes)
                 {
-                    entry.Value.Remove(expression);
+                    foreach (IExpression expression in item.Value)
+                    {
+                        entry.Value[item.Key].Remove(expression);
+                    }
                 }
+                
             }
         }
 

@@ -24,7 +24,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Digraph
         /// <summary>
         /// Set of mapping used to construct the synthesizer.
         /// </summary>
-        public Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> Mapping { get; set; }
+        public Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> Mapping { get; set; }
 
         /// <summary>
         /// First vertex
@@ -46,7 +46,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Digraph
         /// <param name="end">End node</param>
         /// <param name="mapping">Mapping</param>
         /// <param name="vertices">Vertexes</param>
-        public Dag(DirectedGraph dag, Vertex init, Vertex end,  Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping, Dictionary<string, Vertex> vertices)
+        public Dag(DirectedGraph dag, Vertex init, Vertex end,  Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> mapping, Dictionary<string, Vertex> vertices)
         {
             this.dag = dag;
             this.Init = init;

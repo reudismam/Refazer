@@ -185,11 +185,11 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                         bool dym;
                         if (i + 1 < t.Item1.Length())
                         {
-                            dym = IsDym(st, t.Item1.List[i + 1]);
+                            dym = IsDym(st);
                         }
                         else
                         {
-                            dym = IsDym(st, null);
+                            dym = IsDym(st);
                         }
 
                         if (!dym) continue;
@@ -233,7 +233,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <param name="st">Syntax token or node</param>
         /// <param name="next">Syntax token or node</param>
         /// <returns>True if is a dynamic token</returns>
-        private static bool IsDym(SyntaxNodeOrToken st, SyntaxNodeOrToken next)
+        private static bool IsDym(SyntaxNodeOrToken st)
         {
             if (st == null) { throw new ArgumentNullException("st"); }
 
@@ -286,14 +286,23 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             if (dag.Vertexes == null || dag.dag == null || dag.Mapping == null) { throw new ArgumentException("Some property of Dag is null"); }
 
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> dictionary = dag.Mapping;
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> dictionary = dag.Mapping;
             List<Tuple<Vertex, Vertex>> removes = new List<Tuple<Vertex, Vertex>>();
-            foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in dictionary)
+            foreach (KeyValuePair<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> entry in dictionary)
             {
-                if (entry.Value.Count == 0)
+                bool rm = true;
+                foreach (KeyValuePair<string, List<IExpression>> item in entry.Value)
+                {
+                    if (!(item.Value.Count == 0))
+                    {
+                        rm = false;      
+                    }
+                }
+                if (rm)
                 {
                     removes.Add(entry.Key);
                 }
+                
             }
 
             foreach (Tuple<Vertex, Vertex> entry in removes)
@@ -327,7 +336,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             //List<int> n_sorces = new List<int>();
             //n_sorces.Add(0);
 
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> W = new Dictionary<Tuple<Vertex, Vertex>, List<IExpression>>();
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>>();
             Dictionary<int, List<IPosition>> kpositions = new Dictionary<int, List<IPosition>>();
             for (int i = 0; i <= output.Length(); i++)
             {
@@ -335,22 +344,30 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 {
                     Tuple<Vertex, Vertex> tuple = Tuple.Create(vertexes[i.ToString()], vertexes[j.ToString()]);
 
-                    List<IExpression> subStrns = new List<IExpression>();
+                    Dictionary<string, List<IExpression>> synthExpressions = new Dictionary<string, List<IExpression>>();
+                    
                     ListNode subNodes = ASTManager.SubNotes(output, i, (j - i));
                     if (Setting.ConsiderConstrStr)
                     {
+                        List<IExpression> subStrExpressions = new List<IExpression>();
                         IExpression expression = new ConstruStr(subNodes);
-                        subStrns.Add(expression);
+                        subStrExpressions.Add(expression);
+                        synthExpressions.Add(ExpressionKind.Consttrustr, subStrExpressions);
                     }
 
+                    //List<IExpression> subStrns = new List<IExpression>();
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);
-                    subStrns.AddRange(expressions);
+                    //subStrns.AddRange(expressions);
+                    if (expressions.Any())
+                    {
+                        synthExpressions.Add(ExpressionKind.SubStr, expressions);
+                    }
 
-                    List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
-                    subStrns.AddRange(idenExpr);
+                    //List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
+                    //subStrns.AddRange(idenExpr);
 
-                    W.Add(tuple, subStrns);
+                    W.Add(tuple, synthExpressions);
                 }
             }
 
@@ -386,35 +403,44 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             //List<int> n_sorces = new List<int>();
             //n_sorces.Add(0);
 
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> W = new Dictionary<Tuple<Vertex, Vertex>, List<IExpression>>();
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>>();
             Dictionary<int, List<IPosition>> kpositions = new Dictionary<int, List<IPosition>>();
             for (int i = 0; i < boundaryPoints.Count; i++)
             {
                 for (int j = i + 1; j < boundaryPoints.Count; j++)
                 {
                     Tuple<Vertex, Vertex> tuple = Tuple.Create(vertexes[boundaryPoints[i].ToString()], vertexes[boundaryPoints[j].ToString()]);
-                    List<IExpression> subStrns = new List<IExpression>();
+                    Dictionary<string, List<IExpression>> synthExpressions = new Dictionary<string, List<IExpression>>();
+
                     ListNode subNodes = ASTManager.SubNotes(output, boundaryPoints[i], boundaryPoints[j] - boundaryPoints[i]);
                     if (Setting.ConsiderConstrStr)
                     {
+                        List<IExpression> subStrExpressions = new List<IExpression>();
                         IExpression expression = new ConstruStr(subNodes);
-                        subStrns.Add(expression);
+                        subStrExpressions.Add(expression);
+                        synthExpressions.Add(ExpressionKind.Consttrustr, subStrExpressions);
                         //if (subNodes.Length() == 1 && subNodes.List[0].IsKind(SyntaxKind.StringLiteralToken))
                         //{
                         //    IExpression idExp = new IdenToStr(subNodes.List[0]);
                         //    subStrns.Add(idExp);
                         //}
                     }
+                    //List<IExpression> subStrns = new List<IExpression>();
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);
-                    subStrns.AddRange(expressions);
+                    //subStrns.AddRange(expressions);
+                    if (expressions.Any())
+                    {
+                        synthExpressions.Add(ExpressionKind.SubStr, expressions);
+                    }
 
-                    List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
-                    subStrns.AddRange(idenExpr);
+                    //List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
+                    //subStrns.AddRange(idenExpr);
 
                     if (!W.ContainsKey(tuple))
                     {
-                        W.Add(tuple, subStrns);
+                        //W.Add(tuple, subStrns);
+                        W.Add(tuple,  synthExpressions);
                     }
                 }
             }
@@ -596,32 +622,32 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         //    return sequences;
         //}
 
-        /// <summary>
-        /// Create sequence of token with IdentToStrToken inserted where applicable
-        /// </summary>
-        /// <param name="seq">Sequence of tokens</param>
-        /// <returns>sequence of token with IdentToStrToken inserted where applicable</returns>
-        private static TokenSeq AddIdenToStr(TokenSeq seq)
-        {
-            List<Token> addIdentoToken = new List<Token>();
+        ///// <summary>
+        ///// Create sequence of token with IdentToStrToken inserted where applicable
+        ///// </summary>
+        ///// <param name="seq">Sequence of tokens</param>
+        ///// <returns>sequence of token with IdentToStrToken inserted where applicable</returns>
+        //private static TokenSeq AddIdenToStr(TokenSeq seq)
+        //{
+        //    List<Token> addIdentoToken = new List<Token>();
 
-            foreach (Token st in seq.Tokens)
-            {
-                if (st.token.IsKind(SyntaxKind.IdentifierToken))
-                {
-                    addIdentoToken.Add(new IdenToStrToken(st.token));
-                }
-                else
-                {
-                    addIdentoToken.Add(st);
-                }
-            }
+        //    foreach (Token st in seq.Tokens)
+        //    {
+        //        if (st.token.IsKind(SyntaxKind.IdentifierToken))
+        //        {
+        //            addIdentoToken.Add(new IdenToStrToken(st.token));
+        //        }
+        //        else
+        //        {
+        //            addIdentoToken.Add(st);
+        //        }
+        //    }
 
-            TokenSeq sequence = new TokenSeq(addIdentoToken);
+        //    TokenSeq sequence = new TokenSeq(addIdentoToken);
 
 
-            return sequence;
-        }
+        //    return sequence;
+        //}
 
         /// <summary>
         /// Substitute

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using DiGraph;
 using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
 using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Position;
+using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
@@ -40,7 +42,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 {
                     composition = Intersect(composition, dag);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     return null;
                 }
@@ -61,18 +63,18 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
             Dag composition;
             DirectedGraph graph = new DirectedGraph();
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> W = new Dictionary<Tuple<Vertex, Vertex>, List<IExpression>>();
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>>();
 
             Dictionary<string, Vertex> vertexes = new Dictionary<string, Vertex>();
             foreach (Tuple<Vertex, Vertex> edge1 in dag1.Mapping.Keys)
             {
                 foreach (Tuple<Vertex, Vertex> edge2 in dag2.Mapping.Keys)
                 {
-                    List<IExpression> intersection = Intersect(dag1, dag2, edge1, edge2);
+                    Dictionary<string, List<IExpression>> intersection = Intersect(dag1, dag2, edge1, edge2);
                     Vertex vertex1 = new Vertex(edge1.Item1.Id + " : " + edge2.Item1.Id, 0.0);
                     Vertex vertex2 = new Vertex(edge1.Item2.Id + " : " + edge2.Item2.Id, 0.0);
 
-                    if (intersection.Count > 0)
+                    if ((intersection.ContainsKey(ExpressionKind.SubStr) && intersection[ExpressionKind.SubStr].Count > 0) || (intersection.ContainsKey(ExpressionKind.Consttrustr) && intersection[ExpressionKind.Consttrustr].Count > 0))
                     {
                         if (!graph.HasVertex(vertex1.Id))
                         {
@@ -112,34 +114,49 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <param name="tuple1">First edge</param>
         /// <param name="tuple2">Second edge</param>
         /// <returns>Intersection</returns>
-        private List<IExpression> Intersect(Dag dag1, Dag dag2, Tuple<Vertex, Vertex> tuple1, Tuple<Vertex, Vertex> tuple2)
+        private Dictionary<string, List<IExpression>> Intersect(Dag dag1, Dag dag2, Tuple<Vertex, Vertex> tuple1, Tuple<Vertex, Vertex> tuple2)
         {
-            Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1 = Positions(dag1, tuple1);
-            Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2 = Positions(dag2, tuple2);
-
-            List<IExpression> expressions = new List<IExpression>();
-
-            List<IExpression> expressions1 = dag1.Mapping[tuple1];
-            List<IExpression> expressions2 = dag2.Mapping[tuple2];
-            if (expressions1.Count > 0 && expressions2.Count > 0 && expressions1[0] is ConstruStr && expressions1[0].Equals(expressions2[0]))
+            Dictionary<string, List<IExpression>> expressions = new Dictionary<string, List<IExpression>>();
+            Dictionary<string, List<IExpression>> expressions1 = dag1.Mapping[tuple1];
+            Dictionary<string, List<IExpression>> expressions2 = dag2.Mapping[tuple2];
+            if (expressions1.ContainsKey(ExpressionKind.Consttrustr) && expressions2.ContainsKey(ExpressionKind.Consttrustr))
             {
-                expressions.Add(expressions1[0]);
+                if (expressions1[ExpressionKind.Consttrustr].Count > 0 &&
+                    expressions2[ExpressionKind.Consttrustr].Count > 0 &&
+                    expressions1[ExpressionKind.Consttrustr][0].Equals(expressions2[ExpressionKind.Consttrustr][0]))
+                {
+                    expressions.Add(ExpressionKind.Consttrustr, expressions1[ExpressionKind.Consttrustr]);
+                }
             }
 
-            bool addIdenToken = ContainsIdenToToken(expressions1) && ContainsIdenToToken(expressions2);
-            expressions.AddRange(SubStrIntersect(hashes1, hashes2, addIdenToken));
-            
+            if (expressions1.ContainsKey(ExpressionKind.SubStr) && expressions2.ContainsKey(ExpressionKind.SubStr))
+            {
+                Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1 = Positions(dag1, tuple1);
+                Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2 = Positions(dag2, tuple2);   
+
+           
+            //if (expressions1.Count > 0 && expressions2.Count > 0 && expressions1[0] is ConstruStr && expressions1[0].Equals(expressions2[0]))
+            //{
+            //    expressions.Add(expressions1[0]);
+            //}
+           
+
+           
+                //bool addIdenToken = ContainsIdenToToken(expressions1[ExpressionKind.Identostr]) && ContainsIdenToToken(expressions2[ExpressionKind.Identostr]);
+                expressions.Add(ExpressionKind.SubStr, SubStrIntersect(hashes1, hashes2, false));
+            }
+
             return expressions;
         }
 
-        private bool ContainsIdenToToken(List<IExpression> expressions)
-        {
-            foreach (var expression in expressions)
-            {
-                if (expression is IdenToStr) return true;
-            }
-            return false;
-        }
+        //private bool ContainsIdenToToken(List<IExpression> expressions)
+        //{
+        //    foreach (var expression in expressions)
+        //    {
+        //        if (expression is IdenToStr) return true;
+        //    }
+        //    return false;
+        //}
 
         private List<IExpression> SubStrIntersect(Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1, Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2, bool addIdenToToken)
         {
@@ -167,12 +184,13 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         {
             
             Tuple<Dag, Tuple<Vertex, Vertex>> tupleposition = Tuple.Create(dag1, tuple);
-            List<IExpression> expressions = dag1.Mapping[tuple];
+            Dictionary<string, List<IExpression>> expressions = dag1.Mapping[tuple];
+
             Tuple<HashSet<IPosition>, HashSet<IPosition>> positions = null;
             if (!positionMap.TryGetValue(tupleposition, out positions))
             {
-                HashSet<IPosition>  positions1 = PositionsHash(expressions, 1);
-                HashSet<IPosition> positions2 = PositionsHash(expressions, 2);
+                HashSet<IPosition>  positions1 = PositionsHash(expressions[ExpressionKind.SubStr], 1);
+                HashSet<IPosition> positions2 = PositionsHash(expressions[ExpressionKind.SubStr], 2);
                 positions = Tuple.Create(positions1, positions2);
                 positionMap.Add(tupleposition, positions);
             }
