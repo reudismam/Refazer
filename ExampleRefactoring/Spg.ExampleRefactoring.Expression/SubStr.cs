@@ -76,7 +76,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="input">String in which this expression look at.</param>
         /// <returns>A substring of s that match this expression.</returns>
-        public ListNode RetrieveSubNodes(ListNode input)
+        public virtual ListNode RetrieveSubNodes(ListNode input)
         {
             int position1 = p1.GetPositionIndex(input);
 

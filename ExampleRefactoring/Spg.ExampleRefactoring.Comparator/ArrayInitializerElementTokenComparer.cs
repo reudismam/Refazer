@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

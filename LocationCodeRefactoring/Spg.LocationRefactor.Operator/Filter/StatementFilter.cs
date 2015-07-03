@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;

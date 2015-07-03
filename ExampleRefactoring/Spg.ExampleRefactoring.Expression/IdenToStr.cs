@@ -12,17 +12,17 @@ namespace Spg.ExampleRefactoring.Expression
     /// <summary>
     /// SubNode atomic expression
     /// </summary>
-    public class IdenToStr : IExpression
+    public class IdenToStr : SubStr
     {
-        /// <summary>
-        /// Position one on the expression.
-        /// </summary>
-        public IPosition p1 { get; set; }
+        ///// <summary>
+        ///// Position one on the expression.
+        ///// </summary>
+        //public IPosition p1 { get; set; }
 
-        /// <summary>
-        /// Position two on the expression.
-        /// </summary>
-        public IPosition p2 { get; set; }
+        ///// <summary>
+        ///// Position two on the expression.
+        ///// </summary>
+        //public IPosition p2 { get; set; }
 
 
         /// <summary>
@@ -30,53 +30,53 @@ namespace Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="p1">Position one on the string.</param>
         /// <param name="p2">Position two on the string.</param>
-        public IdenToStr(IPosition p1, IPosition p2)
+        public IdenToStr(IPosition p1, IPosition p2):base(p1, p2)
         {
-            this.p1 = p1;
-            this.p2 = p2;
+            //this.p1 = p1;
+            //this.p2 = p2;
         }
 
-        /// <summary>
-        /// Verify if this expression is present on the string s. See super class documentation.
-        /// </summary>
-        /// <param name="example">String to be verified.</param>
-        /// <returns>True is this expression is present on the string s. False otherwise.</returns>
-        public bool IsPresentOn(Tuple<ListNode, ListNode> example)
-        {
-            int position1 = p1.GetPositionIndex(example.Item1);
+        ///// <summary>
+        ///// Verify if this expression is present on the string s. See super class documentation.
+        ///// </summary>
+        ///// <param name="example">String to be verified.</param>
+        ///// <returns>True is this expression is present on the string s. False otherwise.</returns>
+        //public bool IsPresentOn(Tuple<ListNode, ListNode> example)
+        //{
+        //    int position1 = p1.GetPositionIndex(example.Item1);
 
-            int position2 = p2.GetPositionIndex(example.Item1);
+        //    int position2 = p2.GetPositionIndex(example.Item1);
 
-            if (AreValidPositions(position1, position2, example.Item1))
-            {
-                return true;
-            }
+        //    if (AreValidPositions(position1, position2, example.Item1))
+        //    {
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
-        /// <summary>
-        /// Verify is positions are valid
-        /// </summary>
-        /// <param name="position1"></param>
-        /// <param name="position2"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static bool AreValidPositions(int position1, int position2, ListNode input)
-        {
-            if ((Math.Abs(position1) <= input.Length()) && (Math.Abs(position2) <= input.Length()) && (position2 - position1) >= 0 && position1 >= 0)
-            {
-                return true;
-            }
-            return false;
-        }
+        ///// <summary>
+        ///// Verify is positions are valid
+        ///// </summary>
+        ///// <param name="position1"></param>
+        ///// <param name="position2"></param>
+        ///// <param name="input"></param>
+        ///// <returns></returns>
+        //public static bool AreValidPositions(int position1, int position2, ListNode input)
+        //{
+        //    if ((Math.Abs(position1) <= input.Length()) && (Math.Abs(position2) <= input.Length()) && (position2 - position1) >= 0 && position1 >= 0)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         /// <summary>
         /// Retrieve a substring using this expression of string s.
         /// </summary>
         /// <param name="input">String in which this expression look at.</param>
         /// <returns>A substring of s that match this expression.</returns>
-        public ListNode RetrieveSubNodes(ListNode input)
+        public override ListNode RetrieveSubNodes(ListNode input)
         {
             int position1 = p1.GetPositionIndex(input);
 
@@ -108,7 +108,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>String representation of this expression</returns>
         public override string ToString()
         {
-            return "SubStr(vi, "+ p1 +", "+ p2 +")";
+            return "IdenToStr(vi, "+ p1 +", "+ p2 +")";
         }
 
         /// <summary>
@@ -118,23 +118,23 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is SubStr))
+            if (!(obj is IdenToStr))
             {
                 return false;
             }
-            SubStr another = obj as SubStr;
+            SubStr another = obj as IdenToStr;
             bool result = another.p1.Equals(this.p1) && another.p2.Equals(this.p2);
             return result;
         }
 
-        /// <summary>
-        /// HashCode
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
-        }
+        ///// <summary>
+        ///// HashCode
+        ///// </summary>
+        ///// <returns></returns>
+        //public override int GetHashCode()
+        //{
+        //    return ToString().GetHashCode();
+        //}
     }
 }
 

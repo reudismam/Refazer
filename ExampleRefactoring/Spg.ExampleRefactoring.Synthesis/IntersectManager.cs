@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
@@ -126,12 +126,22 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                 expressions.Add(expressions1[0]);
             }
 
-            expressions.AddRange(SubStrIntersect(hashes1, hashes2));
+            bool addIdenToken = ContainsIdenToToken(expressions1) && ContainsIdenToToken(expressions2);
+            expressions.AddRange(SubStrIntersect(hashes1, hashes2, addIdenToken));
             
             return expressions;
         }
 
-        private List<IExpression> SubStrIntersect(Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1, Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2)
+        private bool ContainsIdenToToken(List<IExpression> expressions)
+        {
+            foreach (var expression in expressions)
+            {
+                if (expression is IdenToStr) return true;
+            }
+            return false;
+        }
+
+        private List<IExpression> SubStrIntersect(Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1, Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2, bool addIdenToToken)
         {
             List<IExpression> intersection = new List<IExpression>();
             IEnumerable<IPosition> hs1 =  hashes1.Item1.Intersect(hashes2.Item1);
@@ -142,6 +152,12 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             {
                 IExpression expression = new SubStr(positions.Item1, positions.Item2);
                 intersection.Add(expression);
+
+                if (addIdenToToken)
+                {
+                    IExpression expression1 = new IdenToStr(positions.Item1, positions.Item2);
+                    intersection.Add(expression1);
+                }
             }
 
             return intersection;
