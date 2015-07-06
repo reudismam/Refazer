@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Workspace;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
+namespace Spg.LocationRefactor.Node
 {
     /// <summary>
     /// Decompose element to be used on the filtering estage.
@@ -331,4 +331,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
         }
     }
 }
+
+
+
 

@@ -7,20 +7,20 @@ using Spg.ExampleRefactoring.LCS;
 using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
-using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Operator.Map;
+using Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Text.Projection;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Observer;
+using Spg.LocationRefactor.Observer;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.TextRegion;
 
-namespace Spg.LocationCodeRefactoring.Controller
+namespace Spg.LocationRefactor.Controller
 {
     /// <summary>
     /// Controller for editor graphical interface
@@ -862,5 +862,7 @@ namespace Spg.LocationCodeRefactoring.Controller
         }
     }
 }
+
+
 
 

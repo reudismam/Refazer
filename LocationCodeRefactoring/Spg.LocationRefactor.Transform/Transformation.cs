@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
+namespace Spg.LocationRefactor.Transformation
 {
     /// <summary>
     /// Represents a transformation
@@ -35,3 +35,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         }
     }
 }
+

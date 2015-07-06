@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Program;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -74,4 +74,5 @@ namespace Spg.LocationRefactor.Learn
         }
     }
 }
+
 

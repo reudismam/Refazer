@@ -1,4 +1,4 @@
-﻿namespace Spg.LocationCodeRefactoring.Observer
+namespace Spg.LocationRefactor.Observer
 {
     public interface IProgramsGeneratedObserver
     {
@@ -9,3 +9,4 @@
         void NotifyProgramGenerated(ProgramGeneratedEvent pEvent);
     }
 }
+

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.Program;
 
-namespace Spg.LocationCodeRefactoring.Observer
+namespace Spg.LocationRefactor.Observer
 {
     public class ProgramGeneratedEvent
     {
@@ -13,3 +13,4 @@ namespace Spg.LocationCodeRefactoring.Observer
         }
     }
 }
+

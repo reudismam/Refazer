@@ -7,7 +7,7 @@ using Spg.ExampleRefactoring.Util;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
@@ -840,5 +840,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
     }
 }
+
 
 

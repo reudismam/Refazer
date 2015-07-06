@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Spg.ExampleRefactoring.Util;
 using LocateAdornment;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Location;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
@@ -17,8 +17,8 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Spg.LocationCodeRefactoring.Controller;
-using Spg.LocationCodeRefactoring.Observer;
+using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Observer;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
@@ -379,4 +379,6 @@ namespace SPG.IntelliExtract
 
     }
 }
+
+
 

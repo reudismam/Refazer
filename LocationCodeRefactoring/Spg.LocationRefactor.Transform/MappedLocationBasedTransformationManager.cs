@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
+namespace Spg.LocationRefactor.Transformation
 {
     public class MappedLocationBasedTransformationManager : TransformationManager
     {
@@ -162,5 +162,8 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         }
     }
 }
+
+
+
 
 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.TextRegion;
@@ -160,4 +160,5 @@ namespace Spg.NUnitTests.Location
         }
     }
 }
+
 

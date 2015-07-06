@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using Spg.LocationRefactor.Location;
 
-namespace Spg.LocationCodeRefactoring.Observer
+namespace Spg.LocationRefactor.Observer
 {
     /// <summary>
     /// Locations selected event

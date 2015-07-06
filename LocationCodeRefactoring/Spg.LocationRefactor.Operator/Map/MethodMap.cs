@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
+namespace Spg.LocationRefactor.Operator.Map
 {
     class MethodMap : MapBase
     {

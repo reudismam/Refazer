@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using Spg.LocationRefactor.Location;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
+namespace Spg.LocationRefactor.Transformation
 {
     /// <summary>
     /// Represents a transformation
@@ -32,3 +32,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         }
     }
 }
+

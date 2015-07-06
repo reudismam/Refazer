@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactoring.Tok;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using Spg.LocationRefactor.Operator.Map;
 using Microsoft.CodeAnalysis.Text;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Expression;
@@ -72,4 +72,5 @@ namespace Spg.LocationRefactor.Operator
         //}
     }
 }
+
 

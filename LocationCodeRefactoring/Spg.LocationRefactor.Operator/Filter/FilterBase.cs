@@ -7,14 +7,14 @@ using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Workspace;
 using Spg.LocationRefactoring.Tok;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
-using LocationCodeRefactoring.Spg.LocationRefactor.Node;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Node;
+using Spg.LocationRefactor.Operator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using Spg.ExampleRefactoring.Tok;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
@@ -462,4 +462,6 @@ namespace Spg.LocationRefactor.Operator.Filter
 
     }
 }
+
+
 

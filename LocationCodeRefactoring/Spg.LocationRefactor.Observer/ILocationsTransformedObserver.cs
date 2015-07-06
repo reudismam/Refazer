@@ -1,4 +1,4 @@
-﻿namespace Spg.LocationCodeRefactoring.Observer
+namespace Spg.LocationRefactor.Observer
 {
     public interface ILocationsTransformedObserver
     {
@@ -9,3 +9,4 @@
         void NotifyLocationsTransformed(LocationsTransformedEvent ltEvent);
     }
 }
+

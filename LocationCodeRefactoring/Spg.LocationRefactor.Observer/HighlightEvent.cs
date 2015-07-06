@@ -1,7 +1,7 @@
 using Spg.LocationRefactor.TextRegion;
 using System.Collections.Generic;
 
-namespace Spg.LocationCodeRefactoring.Observer
+namespace Spg.LocationRefactor.Observer
 {
     public class HighlightEvent
     {

@@ -4,8 +4,8 @@ using System.Linq;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Transformation;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Util;
@@ -214,5 +214,7 @@ namespace NUnitTests.Spg.NUnitTests.Complete
         }
     }
 }
+
+
 
 

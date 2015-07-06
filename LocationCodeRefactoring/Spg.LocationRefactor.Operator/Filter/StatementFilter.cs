@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Learn.Filter;
+using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.Operator.Filter;
 using Microsoft.CodeAnalysis;
 using Spg.LocationRefactor.Learn;
@@ -43,4 +43,5 @@ namespace Spg.LocationRefactor.Operator
         //}
     }
 }
+
 

@@ -7,11 +7,11 @@ using System.Text.RegularExpressions;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
-using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Spg.LocationRefactor.Transformation;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 
 namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 {
@@ -996,6 +996,8 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
     }
 }
+
+
 
 
 

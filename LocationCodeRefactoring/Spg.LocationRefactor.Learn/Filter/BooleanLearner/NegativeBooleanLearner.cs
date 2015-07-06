@@ -6,7 +6,7 @@ using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearner
+namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
 {
     /// <summary>
     /// Negative boolean learner
@@ -62,4 +62,5 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
 
     }
 }
+
 

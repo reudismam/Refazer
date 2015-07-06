@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter
+namespace Spg.LocationRefactor.Learn.Filter
 {
 
     /// <summary>
@@ -31,3 +31,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter
         }
     }
 }
+

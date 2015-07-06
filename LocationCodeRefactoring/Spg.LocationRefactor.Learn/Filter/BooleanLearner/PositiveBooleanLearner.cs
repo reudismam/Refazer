@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Spg.LocationRefactoring.Tok;
 using Spg.LocationRefactor.Predicate;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearner
+namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
 {
     /// <summary>
     /// Positive boolean learner
@@ -34,4 +34,5 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
         }
     }
 }
+
 

@@ -7,7 +7,7 @@ using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.Position;
 using Spg.LocationRefactor.Predicate;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearner
+namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
 {
     /// <summary>
     /// Learn a set of predicates
@@ -247,4 +247,5 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
         }
     }
 }
+
 

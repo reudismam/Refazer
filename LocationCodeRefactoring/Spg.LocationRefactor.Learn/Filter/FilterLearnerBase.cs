@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactoring.Tok;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearner;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Learn.Filter.BooleanLearner;
+using Spg.LocationRefactor.Operator.Map;
+using Spg.LocationRefactor.Program;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Predicate;
@@ -502,5 +502,6 @@ namespace Spg.LocationRefactor.Learn
 //    }
 //    return predicates;
 //}
+
 
 

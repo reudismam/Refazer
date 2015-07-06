@@ -9,11 +9,11 @@ using Spg.ExampleRefactoring.LCS;
 using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
+namespace Spg.LocationRefactor.Location
 {
     /// <summary>
     /// Strategy
@@ -743,3 +743,5 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
     }
 }
+
+

@@ -1,4 +1,4 @@
-﻿namespace Spg.LocationCodeRefactoring.Observer
+namespace Spg.LocationRefactor.Observer
 {
     public interface ILocationsObserver
     {
@@ -6,6 +6,7 @@
         /// Notify locations transformed
         /// </summary>
         /// <param name="ltEvent">Event</param>
-        void NotifyLocationsSelected(LocationEvent lEvent);
+        void NotifyLocationsSelected(LocationEvent ltEvent);
     }
 }
+

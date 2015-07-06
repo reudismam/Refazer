@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.CodeAnalysis.Text;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
+namespace Spg.LocationRefactor.Location
 {
     internal class ReferenceManager
     {
@@ -51,3 +51,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
     }
 }
+

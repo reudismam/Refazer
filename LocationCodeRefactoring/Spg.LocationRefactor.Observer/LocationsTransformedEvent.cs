@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System;
-using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Spg.LocationRefactor.Transformation;
 
-namespace Spg.LocationCodeRefactoring.Observer
+namespace Spg.LocationRefactor.Observer
 {
     /// <summary>
     /// Location transformed event
@@ -17,3 +17,4 @@ namespace Spg.LocationCodeRefactoring.Observer
         }
     }
 }
+

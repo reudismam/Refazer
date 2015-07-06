@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Microsoft.SqlServer.Server;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Data.Dig;
@@ -722,5 +722,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         }
     }
 }
+
 
 

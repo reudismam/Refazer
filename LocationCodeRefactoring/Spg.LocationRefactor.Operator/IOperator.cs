@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
+namespace Spg.LocationRefactor.Operator
 {
     public interface IOperator
     {
@@ -46,5 +46,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
 
     }
 }
+
 
 

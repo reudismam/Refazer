@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using Spg.LocationRefactor.Learn.Filter;
+using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Operator.Map;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Learn;
@@ -11,7 +11,7 @@ using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
+namespace Spg.LocationRefactor.Learn.Map
 {
     /// <summary>
     /// Statement map learner
@@ -67,4 +67,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         }
     }
 }
+
+
 

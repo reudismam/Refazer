@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using LocateAdornment;
-using Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
@@ -164,3 +164,4 @@ namespace SPG.IntelliLocation
 
     }
 }
+

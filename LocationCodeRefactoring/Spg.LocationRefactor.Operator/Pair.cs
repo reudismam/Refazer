@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Operator;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace Spg.LocationRefactor.Operator
@@ -146,5 +146,7 @@ namespace Spg.LocationRefactor.Operator
         }
     }
 }
+
+
 
 

@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
-using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.Transformation;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
+namespace Spg.LocationRefactor.Location
 {
     /// <summary>
     /// Location extractor
@@ -172,4 +172,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
     }
 }
+
+
+
 
