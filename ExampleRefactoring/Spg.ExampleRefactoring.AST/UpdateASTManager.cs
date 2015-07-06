@@ -20,10 +20,8 @@ namespace Spg.ExampleRefactoring.AST
         /// <returns>Syntax tree transformation</returns>
         public static ASTTransformation UpdateASTTree(SyntaxTree oldTree, SynthesizedProgram synthesizedProg)
         {
-            if (oldTree == null || synthesizedProg == null)
-            {
-                throw new Exception("Old tree or synthesized program cannot be null");
-            }
+            if (oldTree == null) throw new ArgumentNullException("oldTree");
+            if (synthesizedProg == null) throw new ArgumentNullException("synthesizedProg");
             List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
             nodes = ASTManager.EnumerateSyntaxNodesAndTokens(oldTree.GetRoot(), nodes);
 
@@ -74,10 +72,8 @@ namespace Spg.ExampleRefactoring.AST
         /// <returns>Syntax tree transformation</returns>
         public static ASTTransformation UpdateASTTree(ListNode listNode, SynthesizedProgram synthesizedProg)
         {
-            if (listNode == null || synthesizedProg == null)
-            {
-                throw new Exception("Old node or synthesized program cannot be null");
-            }
+            if (listNode == null) throw new ArgumentNullException("listNode");
+            if (synthesizedProg == null) throw new ArgumentNullException("synthesizedProg");
             //List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
             //nodes = ASTManager.EnumerateSyntaxNodesAndTokens(oldNode, nodes);
 
@@ -98,10 +94,7 @@ namespace Spg.ExampleRefactoring.AST
         /// <returns>Syntax tree</returns>
         public static ASTTransformation GetSyntaxTree(ListNode nodes)
         {
-            if(nodes == null)
-            {
-                throw new Exception("Nodes cannot be true");
-            }
+            if(nodes == null)throw new ArgumentNullException("nodes");
             string astText = Parse(nodes);
             SyntaxTree tree = CSharpSyntaxTree.ParseText(astText);
             SyntaxNode root = tree.GetRoot();
@@ -118,10 +111,7 @@ namespace Spg.ExampleRefactoring.AST
         /// <returns>Syntax tree text</returns>
         public static string Parse(ListNode nodes)
         {
-            if(nodes == null)
-            {
-                throw new Exception("Nodes cannot be null");
-            }
+            if(nodes == null)throw new ArgumentNullException("nodes");
             string method = "";
             string saveTrailingTrivia = null;
             for (int i = 0; i < nodes.List.Count; i++)
@@ -174,4 +164,6 @@ namespace Spg.ExampleRefactoring.AST
         }
     }
 }
+
+
 

@@ -20,7 +20,7 @@ namespace Spg.LocationRefactor.Operator
         /// <param name="list">Region list</param>
         public StatementFilter(List<TRegion> list): base(list)
         {
-            if (list == null) { throw new Exception("List cannot be null"); }
+            if (list == null)throw new ArgumentNullException("list");
         }
 
         /// <summary>
@@ -43,3 +43,4 @@ namespace Spg.LocationRefactor.Operator
         //}
     }
 }
+

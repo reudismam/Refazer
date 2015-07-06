@@ -25,13 +25,12 @@ namespace Spg.ExampleRefactoring.AST
         /// <param name="transformation">Transformation</param>
         /// <param name="tree">Syntax tree</param>
         public ASTTransformation(string transformation, SyntaxTree tree) {
-            if (transformation == null || tree == null)
-            {
-                throw new Exception("Transformation or tree cannot be true.");
-            }
+            if (transformation == null) throw new ArgumentNullException("transformation");
+            if (tree == null) throw new ArgumentNullException("tree");
             this.Transformation = transformation;
             this.Tree = tree;
         }
     }
 }
+
 

@@ -25,10 +25,8 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>true if first and second syntax node or token type are equal</returns>
         public override bool Match(SyntaxNodeOrToken first, SyntaxNodeOrToken second)
         {
-            if(first == null  || second == null)
-            {
-                throw new Exception("Syntax node or token cannot be null");
-            }
+            if(first == null)  throw new ArgumentNullException("first");
+            if (second == null) throw new ArgumentNullException("second");
 
             if (second.AsNode() == null && second.AsNode() != null)
             {
@@ -52,10 +50,8 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>Match starts</returns>
         public virtual List<Tuple<int, ListNode>> Matches(ListNode input, TokenSeq regex)
         {
-            if(input == null || regex == null)
-            {
-                throw new Exception("Input nodes and regular expression cannot be null");
-            }
+            if(input == null) throw new ArgumentNullException("input");
+            if (regex == null) throw new ArgumentNullException("regex");
 
             if (regex.Tokens == null)
             {
@@ -166,3 +162,4 @@ namespace Spg.ExampleRefactoring.Comparator
         }*/
     }
 }
+

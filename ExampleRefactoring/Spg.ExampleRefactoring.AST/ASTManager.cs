@@ -23,10 +23,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Syntax node list</returns>
         public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
         {
-            if (root == null || nodes == null)
-            {
-                throw new Exception("Root node and list cannot be null and list must not be empty.");
-            }
+            if (root == null) throw new ArgumentNullException("root");
+            if (nodes == null) throw new ArgumentNullException("nodes");
 
             if (!root.ChildNodesAndTokens().Any())
             {
@@ -52,10 +50,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Syntax node list</returns>
         public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens2(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
         {
-            if (root == null || nodes == null)
-            {
-                throw new Exception("Root node and list cannot be null and list must not be empty.");
-            }
+            if (root == null) throw new ArgumentNullException("root");
+            if (nodes == null) throw new ArgumentNullException("nodes");
 
             if (root.IsKind(SyntaxKind.InvocationExpression) && (root.Parent.IsKind(SyntaxKind.Argument) || root.Parent.IsKind(SyntaxKind.ParenthesizedLambdaExpression) || root.Parent.IsKind(SyntaxKind.ArrayInitializerExpression)))
             {
@@ -116,10 +112,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns></returns>
         public static ListNode SubNotes(ListNode nodes, int startPosition, int selectionLength)
         {
-            if (nodes == null)
-            {
-                throw new Exception("Nodes cannot be null");
-            }
+            if (nodes == null)throw new ArgumentNullException("nodes");
             return new ListNode(nodes.List.GetRange(startPosition, selectionLength));
         }
 
@@ -131,10 +124,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>True if a match exists</returns>
         public static bool IsMatch(ListNode input, TokenSeq regex)
         {
-            if (input == null || regex == null)
-            {
-                throw new Exception("Input or regular expression cannot be null");
-            }
+            if (input == null) throw new ArgumentNullException("input");
+            if (regex == null) throw new ArgumentNullException("regex");
 
             return Regex.IsMatch(input, regex); 
         }
@@ -148,10 +139,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Matches of start matches</returns>
         public static List<int> Matches(ListNode input, ListNode subNodes, ComparerBase comparer)
         {
-            if (input == null || subNodes == null || comparer == null)
-            {
-                throw new Exception("Input or SubNodes or Comparer cannot be null");
-            }
+            if (input == null) throw new ArgumentNullException("input");
+            if (subNodes == null) throw new ArgumentNullException("subNodes");
             List<int> matches = comparer.Matches(input, subNodes);
 
             return matches;
@@ -177,10 +166,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Fist parent of a token</returns>
         public static SyntaxNodeOrToken Parent(SyntaxNodeOrToken token)
         {
-            if(token == null)
-            {
-                throw new Exception("Token cannot be null");
-            }
+            if(token == null)throw new ArgumentNullException("token");
             SyntaxNodeOrToken parent = token;
             while (parent.Parent.ChildNodesAndTokens().Count() <= 1)
             {
@@ -270,3 +256,4 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         }
     }
 }
+

@@ -17,10 +17,8 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>True if first and second syntax node or token nodes content are equal</returns>
         public override bool Match(SyntaxNodeOrToken first, SyntaxNodeOrToken second)
         {
-            if(first == null || second == null)
-            {
-                throw new Exception("Syntax nodes or token cannot be null");
-            }
+            if(first == null) throw new ArgumentNullException("first");
+            if (second == null) throw new ArgumentNullException("second");
             string firstStr = first.ToString();
             firstStr = new string(firstStr.Where(c => !char.IsPunctuation(c)).ToArray());
             string secondStr = second.ToString();
@@ -33,3 +31,4 @@ namespace Spg.ExampleRefactoring.Comparator
         }
     }
 }
+

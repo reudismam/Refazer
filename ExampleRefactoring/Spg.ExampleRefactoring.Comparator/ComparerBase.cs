@@ -18,9 +18,8 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>Match indexes</returns>
         public virtual List<int> Matches(ListNode input, ListNode subNodes)
         {
-            if (input == null || subNodes == null){
-                throw new Exception("Input or subnodes cannot be null");
-            }
+            if (input == null) throw new ArgumentNullException("input");
+            if (subNodes == null) throw new ArgumentNullException("subNodes");
 
             if (subNodes.List.Count == 0)
             {
@@ -186,5 +185,6 @@ namespace Spg.ExampleRefactoring.Comparator
         public abstract bool Match(SyntaxNodeOrToken first, SyntaxNodeOrToken second);
     }
 }
+
 
 
