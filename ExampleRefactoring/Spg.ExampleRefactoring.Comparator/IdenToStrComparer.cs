@@ -29,7 +29,7 @@ namespace Spg.ExampleRefactoring.Comparator
             string secondStr = second.ToString();
             bool isEqual = firstStr.Equals(secondStr);
 
-            MessageBox.Show(isEqual + firstStr + " | " + secondStr);
+//            MessageBox.Show(isEqual + firstStr + " | " + secondStr);
             return isEqual;
         }
     }

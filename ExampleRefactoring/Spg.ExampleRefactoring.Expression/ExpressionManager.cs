@@ -6,10 +6,9 @@ using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
 using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.AST;
+using LeastCommonAncestor;
+using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Digraph;
-using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Expression
 {
@@ -39,7 +38,8 @@ namespace Spg.ExampleRefactoring.Expression
                 {
                     foreach (IExpression expression in item.Value)
                     {
-                        bool isValid = ValidateExpression(expression, examples);
+                        //bool isValid = ValidateExpression(expression, examples);
+                        bool isValid = ValidateExpression(entry.Key, expression, examples);
 
                         if (!isValid)
                         {
@@ -63,6 +63,41 @@ namespace Spg.ExampleRefactoring.Expression
                 }
                 
             }
+        }
+
+        /// <summary>
+        /// Validate an expression in function of the examples
+        /// </summary>
+        /// <param name="expression">Expression to be tested</param>
+        /// <param name="examples">Set of examples</param>
+        /// <returns>True if expression match the examples, false otherwise</returns>
+        public bool ValidateExpression(Tuple<Vertex, Vertex> edge, IExpression expression, List<Tuple<ListNode, ListNode>> examples)
+        {
+            var firstVertex = edge.Item1.Id.Split(':');
+            var secondVertex = edge.Item2.Id.Split(':');
+
+            SynthesizedProgram syntheProg = new SynthesizedProgram();
+            syntheProg.Add(expression);
+
+            bool isValid = false;
+            for(int i = 0; i < examples.Count; i++)
+            {
+                Tuple<ListNode, ListNode> example = examples[i];
+                ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.Solutions);
+                int position1 = Convert.ToInt32(firstVertex[i]);
+                int position2 = Convert.ToInt32(secondVertex[i]);
+                ListNode sot = ASTManager.SubNotes(example.Item2, position1, (position2 - position1));
+
+                if (solution != null && new NodeComparer().SequenceEqual(sot, solution))
+                {
+                    isValid = true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return isValid;
         }
 
         /// <summary>

@@ -231,7 +231,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// Is dynamic token
         /// </summary>
         /// <param name="st">Syntax token or node</param>
-        /// <param name="next">Syntax token or node</param>
         /// <returns>True if is a dynamic token</returns>
         private static bool IsDym(SyntaxNodeOrToken st)
         {
@@ -358,14 +357,19 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     //List<IExpression> subStrns = new List<IExpression>();
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);
+
                     //subStrns.AddRange(expressions);
                     if (expressions.Any())
                     {
                         synthExpressions.Add(ExpressionKind.SubStr, expressions);
                     }
 
-                    //List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
-                    //subStrns.AddRange(idenExpr);
+                    List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
+
+                    if (idenExpr.Any())
+                    {
+                        synthExpressions.Add(ExpressionKind.Identostr, idenExpr);
+                    }
 
                     W.Add(tuple, synthExpressions);
                 }
@@ -434,8 +438,12 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                         synthExpressions.Add(ExpressionKind.SubStr, expressions);
                     }
 
-                    //List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
-                    //subStrns.AddRange(idenExpr);
+                    List<IExpression> idenExpr = GenerateIdentToStr(input, subNodes, kpositions);
+
+                    if (idenExpr.Any())
+                    {
+                        synthExpressions.Add(ExpressionKind.Identostr, idenExpr);
+                    }
 
                     if (!W.ContainsKey(tuple))
                     {

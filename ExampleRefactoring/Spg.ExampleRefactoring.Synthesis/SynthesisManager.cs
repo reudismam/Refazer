@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using ExampleRefactoring.Spg.ExampleRefactoring.Comparator;
 using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
 using ExampleRefactoring.Spg.ExampleRefactoring.Position;
@@ -101,11 +102,15 @@ namespace Spg.ExampleRefactoring.Synthesis
                         sp.Add(e2);
 
                         //ExpressionManager manager = new ExpressionManager();
-                        //bool isValid = manager.ValidateExpression(sp, examples);
-                        //if (isValid)
-                        //{
+                        bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                        if (isValid)
+                        {
                             synthesizedProgList.Add(sp);
-                        //}
+                        }
+                        else
+                        {
+                            int i = 0;
+                        }
                     }
                 }
                 return synthesizedProgList;
@@ -115,12 +120,43 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 SynthesizedProgram sp = new SynthesizedProgram();
                 sp.Add(expression);
-                synthesizedProgList.Add(sp);
+                //     bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                //if (isValid)
+                //{
+                    synthesizedProgList.Add(sp);
+                //}
             }
             return synthesizedProgList;
         }
 
-      
+        /// <summary>
+        /// Validate an expression in function of the examples
+        /// </summary>
+        /// <param name="expressions">Expression to be tested</param>
+        /// <param name="examples">Set of examples</param>
+        /// <returns>True if expression match the examples, false otherwise</returns>
+        public bool ValidateSubExpression(List<IExpression> expressions, List<Tuple<ListNode, ListNode>> examples)
+        {
+            SynthesizedProgram syntheProg = new SynthesizedProgram();
+            syntheProg.Solutions = expressions;
+//            syntheProg.Add(expression);
+
+            bool isValid = false;
+            foreach (Tuple<ListNode, ListNode> example in examples)
+            {
+                ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.Solutions);
+
+                if (solution != null && ASTManager.Matches(example.Item2, solution, new NodeComparer()).Count > 0)
+                {
+                    isValid = true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return isValid;
+        }
 
         /// <summary>
         /// Expression list that forms the synthesized program
@@ -365,8 +401,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 //{
                     hypotheses = CombSynthProgramExp(hypotheses, l, examples);
                 //}
-            }
-            
+            }           
 
             var sorted = from hypothesis in hypotheses
                          orderby (new SelectorManager(setting)).Order(hypothesis.Solutions) descending
@@ -398,6 +433,51 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             //file.Close();
             return selected;
+        }
+
+        public SynthesizedProgram ComputeSynthesizedProgram(List<Dictionary<string, List<IExpression>>> expressions, List<IExpression> solution, List<Tuple<ListNode, ListNode>> examples)
+        {
+            //int row, col;
+
+            if (!FindSynthesizedProgram())
+                //all locations successfully assigned
+                return prog;
+
+            for (int num = 1; num <= expressions.Count; num++)
+            {
+                List<IExpression> exps = GetExpressions(expressions[num]);
+                foreach (IExpression expression in exps)
+                {
+                    if (ValidateSynthesizedProgram(solution, examples))
+                    {
+                        prog = new SynthesizedProgram();
+                        prog.Solutions = solution;
+                        return prog;
+                    }
+                }
+                ////if number is allowed to be placed in the square
+                //if (NoConflicts(grid, row, col, num))
+                //{
+                //    //place the number in the square
+                //    grid[row][col] = num;
+
+                    //recur, if successful then stop
+                    //if (SolveSudoku(grid))
+                    //    return true;
+
+                //    //undo and try again
+                //    grid[row][col] = UNASSIGNED;
+                //}
+            }
+            //this triggers backtracking from early decisions
+            return null;
+        }
+
+        private SynthesizedProgram prog = null;
+        //private List<IExpression> expressions; 
+        private bool FindSynthesizedProgram()
+        {
+            return prog != null;
         }
 
         public List<IExpression> GetExpressions(Dictionary<string, List<IExpression>> mapping)

@@ -18,7 +18,7 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>Match indexes</returns>
         public virtual List<int> Matches(ListNode input, ListNode subNodes)
         {
-            if(input == null || subNodes == null){
+            if (input == null || subNodes == null){
                 throw new Exception("Input or subnodes cannot be null");
             }
 
