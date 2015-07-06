@@ -80,13 +80,49 @@ namespace Spg.ExampleRefactoring.Synthesis
         //    return synthesizedProgList;
         //}
 
-        /// <summary>
-        /// Create new synthesized program combining current synthesized programs with expressions
-        /// </summary>
-        /// <param name="synthesizedProgramList">Synthesized programs list</param>
-        /// <param name="expressionList">Expression list</param>
-        /// <param name="examples">Examples</param>
-        /// <returns>Synthesized programs list</returns>
+        ///// <summary>
+        ///// Create new synthesized program combining current synthesized programs with expressions
+        ///// </summary>
+        ///// <param name="synthesizedProgramList">Synthesized programs list</param>
+        ///// <param name="expressionList">Expression list</param>
+        ///// <param name="examples">Examples</param>
+        ///// <returns>Synthesized programs list</returns>
+        //private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
+        //{
+        //    List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
+        //    if (synthesizedProgramList.Count > 0)
+        //    {
+        //        foreach (SynthesizedProgram sd1 in synthesizedProgramList)
+        //        {
+        //            foreach (IExpression e2 in expressionList)
+        //            {
+        //                List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
+        //                SynthesizedProgram sp = new SynthesizedProgram();
+        //                sp.Solutions = solutions;
+        //                sp.Add(e2);
+
+        //                //ExpressionManager manager = new ExpressionManager();
+        //                bool isValid = ValidateSubExpression(sp.Solutions, examples);
+        //                if (isValid)
+        //                {
+        //                    synthesizedProgList.Add(sp);
+        //                }
+        //                else
+        //                {
+        //                    int i = 0;
+        //                }
+        //            }
+        //        }
+        //        return synthesizedProgList;
+        //    }
+
+            /// <summary>
+            /// Create new synthesized program combining current synthesized programs with expressions
+            /// </summary>
+            /// <param name="synthesizedProgramList">Synthesized programs list</param>
+            /// <param name="expressionList">Expression list</param>
+            /// <param name="examples">Examples</param>
+            /// <returns>Synthesized programs list</returns>
         private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
         {
             List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
@@ -124,6 +160,59 @@ namespace Spg.ExampleRefactoring.Synthesis
                 //if (isValid)
                 //{
                     synthesizedProgList.Add(sp);
+                //}
+            }
+            return synthesizedProgList;
+        }
+
+        /// <summary>
+        /// Create new synthesized program combining current synthesized programs with expressions
+        /// </summary>
+        /// <param name="synthesizedProgramList">Synthesized programs list</param>
+        /// <param name="expressionList">Expression list</param>
+        /// <param name="examples">Examples</param>
+        /// <returns>Synthesized programs list</returns>
+        private List<SynthesizedProgram> CombSynthProgramExp2(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
+        {
+            List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
+            var items = from expression in expressionList
+                        orderby new SelectorManager(setting).Order(expression) descending
+                        select expression;
+            if (synthesizedProgramList.Count > 0)
+            {
+
+                foreach (SynthesizedProgram sd1 in synthesizedProgramList)
+                {
+                    //foreach (IExpression e2 in expressionList)
+                    //{
+                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
+                        SynthesizedProgram sp = new SynthesizedProgram();
+                        sp.Solutions = solutions;
+                        sp.Add(items.First());
+
+                        //ExpressionManager manager = new ExpressionManager();
+                        bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                        if (isValid)
+                        {
+                            synthesizedProgList.Add(sp);
+                        }
+                        else
+                        {
+                            int i = 0;
+                        }
+                    //}
+                }
+                return synthesizedProgList;
+            }
+
+            foreach (IExpression expression in expressionList)
+            {
+                SynthesizedProgram sp = new SynthesizedProgram();
+                sp.Add(expression);
+                //     bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                //if (isValid)
+                //{
+                synthesizedProgList.Add(sp);
                 //}
             }
             return synthesizedProgList;
@@ -399,7 +488,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 List<IExpression> l = GetExpressions(item);
                     //foreach (List<IExpression> l in item.Values)
                 //{
-                    hypotheses = CombSynthProgramExp(hypotheses, l, examples);
+                    hypotheses = CombSynthProgramExp2(hypotheses, l, examples);
                 //}
             }           
 
