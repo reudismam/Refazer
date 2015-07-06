@@ -4,7 +4,7 @@ using System.Linq;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Program;
-using Spg.LocationRefactor.Transformation;
+using Spg.LocationRefactor.Transform;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.LocationRefactor.Learn;
@@ -126,7 +126,7 @@ namespace Spg.LocationRefactor.Location
         /// Transform selection regions
         /// </summary>
         /// <returns>Transformation</returns>
-        public List<Transformation.Transformation> TransformProgram(bool compact)
+        public List<Transformation> TransformProgram(bool compact)
         {
             var manager = new MappedLocationBasedTransformationManager();
             return manager.TransformProgram(compact);
@@ -172,6 +172,7 @@ namespace Spg.LocationRefactor.Location
         }
     }
 }
+
 
 
 

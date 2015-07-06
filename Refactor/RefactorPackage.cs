@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using LocateAdornment;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.Transformation;
+using Spg.LocationRefactor.Transform;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
@@ -214,5 +214,6 @@ namespace SPG.Refactor
         //}
     }
 }
+
 
 

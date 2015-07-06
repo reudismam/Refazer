@@ -15,7 +15,7 @@ using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
-namespace Spg.LocationRefactor.Transformation
+namespace Spg.LocationRefactor.Transform
 {
     public class TransformationManager
     {
@@ -247,6 +247,7 @@ namespace Spg.LocationRefactor.Transformation
         }
     }
 }
+
 
 
 

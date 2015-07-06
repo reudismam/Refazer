@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Spg.LocationRefactor.Transformation
+namespace Spg.LocationRefactor.Transform
 {
     /// <summary>
     /// Represents a transformation
@@ -35,4 +35,5 @@ namespace Spg.LocationRefactor.Transformation
         }
     }
 }
+
 
