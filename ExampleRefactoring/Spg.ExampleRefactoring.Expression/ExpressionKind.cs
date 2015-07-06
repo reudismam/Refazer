@@ -1,4 +1,4 @@
-﻿namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
+namespace Spg.ExampleRefactoring.Expression
 {
     public class ExpressionKind
     {

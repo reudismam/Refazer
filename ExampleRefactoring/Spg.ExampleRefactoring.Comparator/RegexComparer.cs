@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.RegularExpression;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
@@ -162,4 +162,5 @@ namespace Spg.ExampleRefactoring.Comparator
         }*/
     }
 }
+
 

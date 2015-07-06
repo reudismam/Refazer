@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
@@ -210,4 +210,5 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         protected abstract FilterLearnerBase GetFilter(List<TRegion> list);
     }
 }
+
 

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Bean;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Workspace;
+using Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Node;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
@@ -462,3 +462,4 @@ namespace Spg.LocationRefactor.Operator.Filter
 
     }
 }
+

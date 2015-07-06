@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactoring.Tok;
 
-namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
+namespace Spg.LocationRefactoring.Tok
 {
     /// <summary>
     /// Token sequence
@@ -157,4 +157,6 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
         }
     }
 }
+
+
 

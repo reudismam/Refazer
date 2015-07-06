@@ -1,8 +1,8 @@
 using System;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Comparator;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
+namespace Spg.ExampleRefactoring.Expression
 {
     /// <summary>
     /// ConstruStr expression
@@ -85,4 +85,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         }
     }
 }
+
+
 

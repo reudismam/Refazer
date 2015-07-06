@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
@@ -67,3 +67,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         }
     }
 }
+

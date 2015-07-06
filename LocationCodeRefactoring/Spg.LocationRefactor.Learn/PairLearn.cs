@@ -1,11 +1,11 @@
-﻿using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Operator;
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Setting;
+using Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 
@@ -74,3 +74,4 @@ namespace Spg.LocationRefactor.Learn
         }
     }
 }
+

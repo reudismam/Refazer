@@ -1,5 +1,5 @@
 using System;
-using ExampleRefactoring.Spg.ExampleRefactoring.Data;
+using Spg.ExampleRefactoring.Data;
 using Spg.ExampleRefactoring.Data.Dig;
 
 namespace Spg.ExampleRefactoring.Data
@@ -95,4 +95,5 @@ namespace Spg.ExampleRefactoring.Data
 
     }
 }
+
 

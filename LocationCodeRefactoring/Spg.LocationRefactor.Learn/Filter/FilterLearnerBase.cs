@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearner;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
@@ -502,4 +502,5 @@ namespace Spg.LocationRefactor.Learn
 //    }
 //    return predicates;
 //}
+
 

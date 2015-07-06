@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Digraph;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Synthesis;
 using LeastCommonAncestor;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
@@ -129,5 +129,6 @@ namespace Spg.ExampleRefactoring.Expression
         }
     }
 }
+
 
 

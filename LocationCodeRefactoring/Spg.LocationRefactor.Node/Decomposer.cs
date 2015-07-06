@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
-using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
+using Spg.ExampleRefactoring.Projects;
+using Spg.ExampleRefactoring.Workspace;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -331,3 +331,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Node
         }
     }
 }
+

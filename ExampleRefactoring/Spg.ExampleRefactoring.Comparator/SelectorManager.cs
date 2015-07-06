@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
+using System.Collections.Generic;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Comparator
+namespace Spg.ExampleRefactoring.Comparator
 {
     /// <summary>
     /// Selection manager
@@ -103,3 +103,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Comparator
         }
     }
 }
+
+

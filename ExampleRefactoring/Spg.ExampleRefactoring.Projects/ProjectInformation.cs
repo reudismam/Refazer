@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Projects
+namespace Spg.ExampleRefactoring.Projects
 {
     /// <summary>
     /// Information related to the project
@@ -49,3 +49,4 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Projects
         //}
     }
 }
+

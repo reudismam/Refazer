@@ -1,8 +1,8 @@
 using System;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Formatting;
@@ -137,5 +137,6 @@ namespace Spg.ExampleRefactoring.Expression
         //}
     }
 }
+
 
 

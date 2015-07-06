@@ -27,6 +27,7 @@ namespace Spg.ExampleRefactoring.AST
         public ASTTransformation(string transformation, SyntaxTree tree) {
             if (transformation == null) throw new ArgumentNullException("transformation");
             if (tree == null) throw new ArgumentNullException("tree");
+
             this.Transformation = transformation;
             this.Tree = tree;
         }

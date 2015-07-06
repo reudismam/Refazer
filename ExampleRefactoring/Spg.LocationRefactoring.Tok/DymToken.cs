@@ -1,4 +1,4 @@
-﻿using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Tok;
@@ -94,3 +94,4 @@ namespace Spg.LocationRefactoring.Tok
         }
     }
 }
+

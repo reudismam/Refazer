@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.RegularExpression;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
@@ -221,4 +221,5 @@ namespace Spg.ExampleRefactoring.Position
         }
     }
 }
+
 

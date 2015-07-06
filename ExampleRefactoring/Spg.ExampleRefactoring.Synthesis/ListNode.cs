@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Representation of a list of nodes
@@ -99,5 +99,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+
+
 
 

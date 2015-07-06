@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -260,3 +260,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map
 //    }
 //    return tRegions;
 //}
+

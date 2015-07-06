@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
@@ -135,3 +135,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
         }
     }
 }
+

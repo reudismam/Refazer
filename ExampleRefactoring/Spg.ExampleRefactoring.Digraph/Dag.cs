@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using DiGraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Expression;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Digraph
+namespace Spg.ExampleRefactoring.Digraph
 {
     /// <summary>
     /// Class used to represent the set of mapping present in a given string
@@ -56,3 +56,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Digraph
         }
     }
 }
+
+

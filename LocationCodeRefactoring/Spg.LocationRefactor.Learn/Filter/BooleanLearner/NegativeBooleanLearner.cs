@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using System.Collections.Generic;
+using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Tok;
@@ -62,3 +62,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
 
     }
 }
+

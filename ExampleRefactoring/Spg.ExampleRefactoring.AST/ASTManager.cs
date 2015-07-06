@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.RegularExpression;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Comparator;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
+namespace Spg.ExampleRefactoring.AST
 {
     /// <summary>
     /// Abstract syntax tree (AST) operations
@@ -112,7 +112,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns></returns>
         public static ListNode SubNotes(ListNode nodes, int startPosition, int selectionLength)
         {
-            if (nodes == null)throw new ArgumentNullException("nodes");
+            if (nodes == null) throw new ArgumentNullException("nodes");
             return new ListNode(nodes.List.GetRange(startPosition, selectionLength));
         }
 
@@ -141,6 +141,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         {
             if (input == null) throw new ArgumentNullException("input");
             if (subNodes == null) throw new ArgumentNullException("subNodes");
+            if (comparer == null) throw new ArgumentNullException("comparer");
+
             List<int> matches = comparer.Matches(input, subNodes);
 
             return matches;
@@ -209,7 +211,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
             return decedents;
         }
 
-
         /// <summary>
         /// Descendant nodes with the syntax kind specified
         /// </summary>
@@ -223,7 +224,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
                                   select snode;
             return treeDescendents;
         }
-
 
         /// <summary>
         /// Descendant node with the start position specified
@@ -256,4 +256,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         }
     }
 }
+
+
 

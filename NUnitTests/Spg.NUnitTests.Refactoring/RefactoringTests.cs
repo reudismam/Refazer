@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Data;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Data;
+using Spg.ExampleRefactoring.Synthesis;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
@@ -208,5 +208,6 @@ namespace Spg.NUnitTests.Refactoring
         }
     }
 }
+
 
 

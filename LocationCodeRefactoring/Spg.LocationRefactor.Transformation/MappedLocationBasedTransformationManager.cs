@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Synthesis;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -162,4 +162,5 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Transformation
         }
     }
 }
+
 

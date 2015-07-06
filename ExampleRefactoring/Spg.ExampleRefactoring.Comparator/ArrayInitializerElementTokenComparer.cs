@@ -1,7 +1,7 @@
 using System;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Spg.ExampleRefactoring.AST;
 
 namespace Spg.ExampleRefactoring.Comparator
 {
@@ -20,9 +20,7 @@ namespace Spg.ExampleRefactoring.Comparator
         {
             if(first == null) throw new ArgumentNullException("first");
             if (second == null) throw new ArgumentNullException("second");
-            //bool isEqual = ASTManager.Parent(second).IsKind(SyntaxKind.ArrayInitializerExpression) &&
-            //       (second.IsKind(SyntaxKind.StringLiteralToken) || second.IsKind(SyntaxKind.NullKeyword) ||
-            //        second.IsKind(SyntaxKind.IdentifierToken));
+
             bool isEqual = ASTManager.Parent(second).IsKind(SyntaxKind.ArrayInitializerExpression) &&
                   !(second.IsKind(SyntaxKind.CommaToken) || second.IsKind(SyntaxKind.OpenBraceToken) ||
                    second.IsKind(SyntaxKind.CloseBraceToken));

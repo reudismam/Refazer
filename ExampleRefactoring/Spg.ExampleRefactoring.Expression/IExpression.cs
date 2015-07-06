@@ -1,7 +1,7 @@
 using System;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
+namespace Spg.ExampleRefactoring.Expression
 {
     /// <summary>
     /// IExpression
@@ -22,4 +22,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         ListNode RetrieveSubNodes(ListNode input);
     }
 }
+
+
 

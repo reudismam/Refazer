@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
-using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Bean;
+using Spg.ExampleRefactoring.LCS;
+using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.LocationCodeRefactoring.Controller;

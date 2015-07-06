@@ -1,9 +1,9 @@
-﻿using Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.Comparator;
 
 namespace Spg.LocationRefactor.Predicate
@@ -64,3 +64,4 @@ namespace Spg.LocationRefactor.Predicate
         }
     }
 }
+

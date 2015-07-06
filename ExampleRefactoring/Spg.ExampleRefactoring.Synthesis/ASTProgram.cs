@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Digraph;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Setting;
+using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -19,7 +19,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactoring.Tok;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Class to generate programs
@@ -1141,4 +1141,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+
+
 

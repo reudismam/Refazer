@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using System.Collections.Generic;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 
@@ -121,3 +121,4 @@ namespace Spg.ExampleRefactoring.Tok
 
     }
 }
+

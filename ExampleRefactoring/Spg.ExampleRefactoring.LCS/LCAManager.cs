@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.AST;
 using LeastCommonAncestor;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
+namespace Spg.ExampleRefactoring.LCS
 {
     /// <summary>
     /// LCA manager
@@ -297,3 +297,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.LCS
         }
     }
 }
+
+

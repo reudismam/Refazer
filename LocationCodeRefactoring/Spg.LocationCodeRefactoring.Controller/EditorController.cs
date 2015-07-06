@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
-using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
-using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.ExampleRefactoring.Util;
+using Spg.ExampleRefactoring.Bean;
+using Spg.ExampleRefactoring.LCS;
+using Spg.ExampleRefactoring.Projects;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Util;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
@@ -862,4 +862,5 @@ namespace Spg.LocationCodeRefactoring.Controller
         }
     }
 }
+
 

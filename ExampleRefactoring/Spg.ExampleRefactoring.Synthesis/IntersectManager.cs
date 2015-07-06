@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Digraph;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Expression;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Intersect manager
@@ -231,3 +231,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 
     }
 }
+
+

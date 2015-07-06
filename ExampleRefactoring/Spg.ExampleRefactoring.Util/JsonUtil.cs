@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Spg.ExampleRefactoring.Util;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Util
+namespace Spg.ExampleRefactoring.Util
 {
     /// <summary>
     /// Json utility
@@ -49,3 +49,4 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Util
         }
     }
 }
+

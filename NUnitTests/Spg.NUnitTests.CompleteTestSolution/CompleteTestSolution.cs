@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.ExampleRefactoring.Util;
+using Spg.ExampleRefactoring.Bean;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Util;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Comparator;
@@ -996,5 +996,6 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
     }
 }
+
 
 

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using ExampleRefactoring.Spg.ExampleRefactoring.LCS;
+using Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.CodeAnalysis.Text;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
+namespace Spg.ExampleRefactoring.Workspace
 {
     /// <summary>
     /// Manager the workspace
@@ -263,6 +263,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Workspace
         }
     }
 }
+
+
 
 
 

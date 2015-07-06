@@ -21,27 +21,14 @@ namespace Spg.ExampleRefactoring.Comparator
             if (second == null) throw new ArgumentNullException("second");
 
             SyntaxNodeOrToken parent = second;
-            //int nInners = 0;
             while (parent.CSharpKind() != SyntaxKind.Block)
             {
                 if (parent.CSharpKind() == SyntaxKind.Argument)
-                {
-                    //nInners ++;
-                    //InvocationExpressionSyntax invocation = (InvocationExpressionSyntax) parent.Parent.Parent;
-                    //IdentifierNameSyntax member = invocation.Expression as IdentifierNameSyntax;
-                    //if (member.GetText().ToString().Equals(first))
-                    //{
-                    //    return false;
-                    //}
-
+                {                 
                     return true;
                 }
                 parent = parent.Parent; // up on the tree.
             }
-            //if (nInners == 1)
-            //{
-            //    return true; //the argument is the last argument or the tree hierarchy.
-            //}
             return false;
         }
     }

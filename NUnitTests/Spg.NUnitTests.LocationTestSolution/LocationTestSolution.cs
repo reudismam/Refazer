@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
-using ExampleRefactoring.Spg.ExampleRefactoring.Util;
+using Spg.ExampleRefactoring.Bean;
+using Spg.ExampleRefactoring.Util;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Util;
@@ -840,4 +840,5 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
     }
 }
+
 

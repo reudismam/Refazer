@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
+using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Comparator
 {
@@ -39,32 +39,13 @@ namespace Spg.ExampleRefactoring.Comparator
             return matches;
         }
 
-       /* /// <summary>
-        /// Regex matches
+        /// <summary>
+        /// Evaluate matches
         /// </summary>
-        /// <param name="input">Input nodes</param>
-        /// <param name="regex">Regex</param>
-        /// <returns>Match starts</returns>
-        public virtual List<int> Matches(ListNode input, TokenSeq regex)
-        {
-            List<int> matches = new List<int>();
-
-            IEnumerator<SyntaxNodeOrToken> enumerator = input.List.GetEnumerator();
-
-            //First token
-            Token firstNode = regex.Tokens[0];
-            for (int i = 0; i < input.Length(); i++)
-            {
-                if (firstNode.Comparer().IsEqual(input.List[i], firstNode.token))
-                {
-                    matches.Add(i);
-                }
-            }
-
-            matches = EvaluateMatches(input, regex, matches);
-            return matches;
-        }*/
-
+        /// <param name="input">Evaluate each match of first token on listNode</param>
+        /// <param name="subNodes">Match nodes</param>
+        /// <param name="matches">All matches of the first element</param>
+        /// <returns>Matches</returns>
         private List<int> EvaluateMatches(ListNode input, ListNode subNodes, List<int> matches)
         {
             List<int> removes = new List<int>();
@@ -101,43 +82,6 @@ namespace Spg.ExampleRefactoring.Comparator
             matches.RemoveAll(i => removes.Contains(i));
             return matches;
         }
-
-        /*private List<int> EvaluateMatches(ListNode input, TokenSeq subNodes, List<int> matches)
-        {
-            List<int> removes = new List<int>();
-            foreach (int match in matches)
-            {
-                //Is not a match because the match is out of bound of 
-                //the input string.
-                if (match + subNodes.Tokens.Count() > input.Length())
-                {
-                    removes.Add(match);
-                }
-                //Evalute if the sequence of syntax nodes is on the input.
-                else
-                {
-                    Boolean isMatch = true;
-                    int i = 0;
-                    foreach(Token node in subNodes.Tokens)
-                    {
-                        if (!node.Comparer().IsEqual(input.List[match + i], node.token))
-                        {
-                            isMatch = false;
-                            break;
-                        }
-                        i++;
-                    }
-
-                    if (!isMatch)
-                    {
-                        removes.Add(match);
-                    }
-                }
-            }
-
-            matches.RemoveAll(i => removes.Contains(i));
-            return matches;
-        }*/
 
         /// <summary>
         /// Is Equal

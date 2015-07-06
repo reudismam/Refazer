@@ -3,9 +3,9 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Predicate
 {
@@ -37,5 +37,6 @@ namespace Spg.LocationRefactor.Predicate
         }
     }
 }
+
 
 

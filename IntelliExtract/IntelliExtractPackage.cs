@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using ExampleRefactoring.Spg.ExampleRefactoring.Util;
+using Spg.ExampleRefactoring.Util;
 using LocateAdornment;
 using LocationCodeRefactoring.Spg.LocationRefactor.Location;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -379,3 +379,4 @@ namespace SPG.IntelliExtract
 
     }
 }
+

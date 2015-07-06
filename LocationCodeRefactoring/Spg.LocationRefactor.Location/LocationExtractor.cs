@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationCodeRefactoring.Controller;
 using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
@@ -172,3 +172,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Location
         }
     }
 }
+

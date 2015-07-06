@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Expression;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Synthesized program
@@ -44,4 +44,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+
+
 

@@ -1,7 +1,7 @@
-﻿using System;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using System;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Predicate
 {
@@ -28,3 +28,4 @@ namespace Spg.LocationRefactor.Predicate
         }
     }
 }
+

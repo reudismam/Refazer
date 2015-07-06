@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Setting;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.Position;
 using Spg.LocationRefactor.Predicate;
 
@@ -247,3 +247,4 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
         }
     }
 }
+

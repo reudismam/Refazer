@@ -1,5 +1,4 @@
 using System;
-using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -27,7 +26,6 @@ namespace Spg.ExampleRefactoring.Comparator
             string secondStr = second.ToString();
             bool isEqual = firstStr.Equals(secondStr);
 
-//            MessageBox.Show(isEqual + firstStr + " | " + secondStr);
             return isEqual;
         }
     }
