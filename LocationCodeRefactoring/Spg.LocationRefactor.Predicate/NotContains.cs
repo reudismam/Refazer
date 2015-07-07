@@ -1,4 +1,3 @@
-using System;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactoring.Tok;
@@ -22,6 +21,10 @@ namespace Spg.LocationRefactor.Predicate
             return !isMatch;
         }
 
+        /// <summary>
+        /// String representation for this object.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return "Not Contains("+ base.r1 + base.r2 +", S), Split(R0, S)";

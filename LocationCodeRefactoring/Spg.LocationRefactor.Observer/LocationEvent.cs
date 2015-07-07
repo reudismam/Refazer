@@ -1,6 +1,4 @@
-using Spg.LocationRefactor.TextRegion;
 using System.Collections.Generic;
-using System;
 using Spg.LocationRefactor.Location;
 
 namespace Spg.LocationRefactor.Observer

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
@@ -21,13 +19,6 @@ namespace Spg.LocationRefactor.Operator
         /// <param name="input">SyntaxNode syntaxNode</param>
         /// <returns>ListNode</returns>
         ListNode Execute(SyntaxNode input);
-
-        ///// <summary>
-        ///// Retrieve region
-        ///// </summary>
-        ///// <param name = "input" > Source code </ param >
-        ///// < returns > Regions </ returns >
-        //List < TRegion > RetrieveRegion(String input);
 
         /// <summary>
         /// Retrieve region on all files on program

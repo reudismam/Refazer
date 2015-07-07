@@ -61,74 +61,6 @@ namespace Spg.LocationRefactor.Node
             _instance = null;
         }
 
-
-        ///// <summary>
-        /////   Syntax nodes to be used on filtering
-        ///// </summary>
-        ///// <param name="name">Identifier name</param>
-        ///// <returns>Syntax nodes to be used on filtering</returns>
-        //internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string name)
-        //{
-        //    if (name == null) return null;
-
-        //    IEnumerable<SyntaxNode> output;
-        //    if (!_dicReferences.TryGetValue(name, out output))
-        //    {
-        //        Dictionary<string, Dictionary<string, List<TextSpan>>> result = GetReferences(name);
-
-        //        Dictionary<string, Dictionary<string, List<TextSpan>>> referencedSymbols =
-        //            ReferenceManager.GroupReferencesBySelection(result, Ctl.SelectedLocations);
-        //        List<SyntaxNode> nodesList = new List<SyntaxNode>();
-        //        Dictionary<string, List<TextSpan>> dictionary;
-
-        //        if (referencedSymbols.Count == 1)
-        //        {
-        //            dictionary = referencedSymbols.First().Value;
-        //        }
-        //        else
-        //        {
-        //            dictionary = new Dictionary<string, List<TextSpan>>();
-        //            foreach (KeyValuePair<string, Dictionary<string, List<TextSpan>>> symbol in result)
-        //            {
-        //                foreach (KeyValuePair<string, List<TextSpan>> dic in symbol.Value)
-        //                {
-        //                    if (!dictionary.ContainsKey(dic.Key))
-        //                    {
-        //                        dictionary.Add(dic.Key, dic.Value);
-        //                    }
-        //                    dictionary[dic.Key].AddRange(dic.Value);
-        //                }
-        //            }
-        //        }
-        //        //for each file
-        //        foreach (var fileSpans in dictionary)
-        //        {
-        //            SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
-        //            var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-        //                        where WithinLcas(node) && WithinSpans(node, fileSpans.Value)
-        //                        select node;
-        //            nodesList.AddRange(nodes);
-        //        }
-        //        //}
-        //        //else
-        //        //{
-        //        //MessageBox.Show("More than one syntax reference");
-        //        //}
-
-        //        if (!result.Any() || !nodesList.Any())
-        //        {
-        //            //return null; //return SyntaxNodesWithoutSemanticModel(tree);
-        //            _dicReferences.Add(name, null);
-        //        }
-        //        //return nodesList;
-        //        else
-        //        {
-        //            _dicReferences.Add(name, nodesList);
-        //        }
-        //    }
-        //    return _dicReferences[name];
-        //}
-
         /// <summary>
         ///   Syntax nodes to be used on filtering
         /// </summary>
@@ -196,29 +128,6 @@ namespace Spg.LocationRefactor.Node
             }
             return _dicReferences[name.Item1];
         }
-
-        ///// <summary>
-        ///// Generates references on the format: key referenced type, and values dictionary of referencee file and list of referecees.
-        ///// </summary>
-        ///// <param name="name">Name to perform look up</param>
-        ///// <returns>Generates references on the format: key referenced type, and values dictionary of referencee file and list of referecees.</returns>
-        //internal static Dictionary<string, Dictionary<string, List<TextSpan>>> GetReferences(string name)
-        //{
-        //    try
-        //    {
-        //        WorkspaceManager wsManager = WorkspaceManager.GetInstance();
-        //        ProjectInformation pjInfo = Ctl.ProjectInformation;
-        //        Dictionary<string, Dictionary<string, List<TextSpan>>> result = wsManager.GetDeclaredReferences(pjInfo.ProjectPath, pjInfo.SolutionPath, name);
-        //        return result;
-        //    }
-        //    catch (AggregateException)
-        //    {
-        //        Console.WriteLine("Could not find references for: " + name);
-        //    }
-
-        //    return new Dictionary<string, Dictionary<string, List<TextSpan>>>();
-        //}
-
 
         /// <summary>
         /// Generates references on the format: key referenced type, and values dictionary of referencee file and list of referecees.

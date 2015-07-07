@@ -47,12 +47,6 @@ namespace Spg.LocationRefactor.TextRegion
         public string Path { get; set; }
 
         /// <summary>
-        /// Region range
-        /// </summary>
-       // public Range Range { get; internal set; }
-
-
-        /// <summary>
         /// Evaluate region
         /// </summary>
         /// <param name="region">Region</param>
@@ -74,16 +68,6 @@ namespace Spg.LocationRefactor.TextRegion
             bool otherWithThis = other.Start <= this.Start  && this.Start <= other.Start + other.Length;
             return (thisWithOther || otherWithThis);
         }
-
-       /* public override string ToString()
-        {
-            if (Text != null)
-            {
-                return Text;
-            }
-
-            return " ";
-        }*/
     }
 }
 

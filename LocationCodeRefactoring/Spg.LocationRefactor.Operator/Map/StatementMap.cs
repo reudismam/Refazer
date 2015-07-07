@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator.Map
@@ -25,8 +24,8 @@ namespace Spg.LocationRefactor.Operator.Map
         public override string ToString()
         {
             return "StatementMap(λSyntaxNode: Pair(Pos(S, p1), Pos(S, p2)), S)"
-                + "\n\tp1 = " + ((Pair)ScalarExpression.Ioperator).expression.p1
-                + "\n\tp2 = " + ((Pair)ScalarExpression.Ioperator).expression.p2
+                + "\n\tp1 = " + ((Pair)ScalarExpression.Ioperator).Expression.p1
+                + "\n\tp2 = " + ((Pair)ScalarExpression.Ioperator).Expression.p2
                 + "\n\tS=" + SequenceExpression;
         }
     }

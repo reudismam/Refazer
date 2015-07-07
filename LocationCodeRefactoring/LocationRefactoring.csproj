@@ -114,13 +114,11 @@
     <Compile Include="Spg.LocationRefactor.Location\ReferenceManager.cs" />
     <Compile Include="Spg.LocationRefactor.Location\RegionManager.cs" />
     <Compile Include="Spg.LocationRefactor.Location\LocationExtractor.cs" />
-    <Compile Include="Spg.LocationRefactor.Location\StatementExtrategy.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\IProgramRefactoredObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\IProgramsGeneratedObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\ProgramRefactoredEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Node\Decomposer.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\EndPosFilter.cs" />
-    <Compile Include="Spg.LocationRefactor.Operator\Filter\MethodFilter.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\StatementFilter.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Map\MethodMap.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Map\EndPosMap.cs" />
@@ -136,7 +134,6 @@
     <Compile Include="Spg.LocationRefactor.Predicate\IPredicate.cs" />
     <Compile Include="Spg.LocationRefactor.Predicate\PredicateFactory.cs" />
     <Compile Include="Spg.LocationRefactor.Program\Prog.cs" />
-    <Compile Include="Spg.LocationRefactor.Synthesize\Synthesizer.cs" />
     <Compile Include="Spg.LocationRefactor.TextRegion\TRegion.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\HighlightEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\IHilightObserver.cs" />

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System;
 using Spg.LocationRefactor.Transform;
 
 namespace Spg.LocationRefactor.Observer

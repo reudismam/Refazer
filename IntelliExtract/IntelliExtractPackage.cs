@@ -86,7 +86,7 @@ namespace SPG.IntelliExtract
             ITextDocument docm = GetTextDocument(viewHost.TextView.TextBuffer);
             string docName = docm.FilePath;
 
-            foreach (TRegion r in hEvent.regions)
+            foreach (TRegion r in hEvent.Regions)
             {
                 if (r.Path.ToUpperInvariant().Equals(docName.ToUpperInvariant()))
                 {

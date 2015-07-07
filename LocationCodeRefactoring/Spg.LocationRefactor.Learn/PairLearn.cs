@@ -38,7 +38,7 @@ namespace Spg.LocationRefactor.Learn
                     Prog prog = new Prog();
                     if (solution is SubStr)
                     {
-                        pair.expression = ((SubStr)solution);
+                        pair.Expression = ((SubStr)solution);
                         prog.Ioperator = pair;
                         progs.Add(prog);
                     }
@@ -64,7 +64,7 @@ namespace Spg.LocationRefactor.Learn
                     Prog prog = new Prog();
                     if (solution is SubStr)
                     {
-                        pair.expression = ((SubStr)solution);
+                        pair.Expression = ((SubStr)solution);
                         prog.Ioperator = pair;
                         progs.Add(prog);
                     }

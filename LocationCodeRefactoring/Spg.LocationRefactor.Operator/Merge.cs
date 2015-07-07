@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Operator.Map;
 using Spg.LocationRefactor.Program;
-using Microsoft.CodeAnalysis;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator

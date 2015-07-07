@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Setting;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
+using Spg.ExampleRefactoring.Setting;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
@@ -242,7 +240,6 @@ namespace Spg.LocationRefactor.Transform
             {
                 Console.WriteLine(e.Message);
             }
-
             return null;
         }
     }

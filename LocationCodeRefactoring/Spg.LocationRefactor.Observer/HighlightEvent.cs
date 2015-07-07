@@ -5,11 +5,11 @@ namespace Spg.LocationRefactor.Observer
 {
     public class HighlightEvent
     {
-        public List<TRegion> regions { get; set; }
+        public List<TRegion> Regions { get; set; }
 
         public HighlightEvent(List<TRegion> regions)
         {
-            this.regions = regions;
+            this.Regions = regions;
         }
     }
 }

@@ -822,7 +822,7 @@ namespace Spg.LocationRefactor.Controller
                 if (transformedLocation == null) continue;
 
                 CodeTransformation transformation = new CodeTransformation(location, transformedLocation);
-                transformation.location.Region.Node = null; //needed for not get out of memory exception
+                transformation.Location.Region.Node = null; //needed for not get out of memory exception
                 transformations.Add(transformation);
             }
 

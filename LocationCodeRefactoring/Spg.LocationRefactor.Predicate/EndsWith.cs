@@ -1,10 +1,7 @@
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
-using System;
 using System.Collections.Generic;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Predicate
@@ -23,14 +20,9 @@ namespace Spg.LocationRefactor.Predicate
         }
 
         /// <summary>
-        /// Regex
+        /// String representation of this object
         /// </summary>
-        /// <returns>Token list</returns>
-        public override List<Token> Regex()
-        {
-            return base.Regex();
-        }
-
+        /// <returns>String representation of this object</returns>
         public override string ToString()
         {
             return "EndSeqPos(" + r1 + ", " + r2 + " x), Split(R0, \\n)";

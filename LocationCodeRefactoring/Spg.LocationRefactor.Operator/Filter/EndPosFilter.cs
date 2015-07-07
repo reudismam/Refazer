@@ -1,7 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
 using Spg.LocationRefactor.Learn;
-using System;
-using System.Collections.Generic;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.TextRegion;
 

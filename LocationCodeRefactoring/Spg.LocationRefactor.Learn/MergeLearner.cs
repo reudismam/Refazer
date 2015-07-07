@@ -49,7 +49,7 @@ namespace Spg.LocationRefactor.Learn
                 {
                     Prog scalar = new Prog();
                     Pair pair = new Pair();
-                    pair.expression = (SubStr)e;
+                    pair.Expression = (SubStr)e;
 
                     scalar.Ioperator = pair;
 
@@ -94,7 +94,7 @@ namespace Spg.LocationRefactor.Learn
                 {
                     Prog scalar = new Prog();
                     Pair pair = new Pair();
-                    pair.expression = (SubStr)e;
+                    pair.Expression = (SubStr)e;
 
                     scalar.Ioperator = pair;
 

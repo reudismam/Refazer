@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.LCS;
 using Spg.ExampleRefactoring.Synthesis;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Spg.LocationRefactor.Controller;
-using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Location
