@@ -13,13 +13,13 @@ namespace Spg.ExampleRefactoring.Data
         /// Return the train data set.
         /// </summary>
         /// <returns>List of examples</returns>
-        public override List<Tuple<String, String>> Train() {
+        public override List<Tuple<string, string>> Train() {
             Console.WriteLine("WRITE YOUR EXAMPLES BELOW OR # TO GO OUT\nINPUT.");
 
 
             string input = Console.ReadLine();;
 
-            List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> tuples = new List<Tuple<string, string>>();
 
             while (!input.Equals("#")) {
                 //option = Console.ReadLine();
@@ -27,7 +27,7 @@ namespace Spg.ExampleRefactoring.Data
                 //String input = Console.ReadLine();
                 Console.WriteLine("OUTPUT");
                 string output = Console.ReadLine();
-                Tuple<String, String> tuple = Tuple.Create(input, output);
+                Tuple<string, string> tuple = Tuple.Create(input, output);
                 tuples.Add(tuple);
                 Console.WriteLine("NEW EXAMPLE OR # TO GO OUT.\nINPUT");
                 input = Console.ReadLine();
@@ -40,7 +40,7 @@ namespace Spg.ExampleRefactoring.Data
         /// Return the test data.
         /// </summary>
         /// <returns>Return a string to be tested.</returns>
-        public override Tuple<String, String> Test() {
+        public override Tuple<string, string> Test() {
             Console.WriteLine("WRITE OUR INPUT TEXT OR WRITE # TO GO OUT. \n");
             string str = Console.ReadLine();
 
@@ -48,4 +48,5 @@ namespace Spg.ExampleRefactoring.Data
         }
     }
 }
+
 

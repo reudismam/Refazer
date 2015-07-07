@@ -32,13 +32,13 @@ namespace ExampleRefactoring
                     command = ExampleManager.GetCommand(inputexamples);
                 }
 
-                List<Tuple<String, String>> examples = command.Train();
+                List<Tuple<string, string>> examples = command.Train();
 
                 List<Tuple<ListNode, ListNode>> data = ASTProgram.Examples(examples);
 
                 List<SynthesizedProgram> hypothesis = program.GenerateStringProgram(data);
 
-                Tuple<String, String> test = command.Test();
+                Tuple<string, string> test = command.Test();
 
                 while (!test.Equals("#"))
                 {
@@ -56,5 +56,6 @@ namespace ExampleRefactoring
         }
     }
 }
+
 
 

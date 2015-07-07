@@ -69,7 +69,7 @@ namespace Spg.LocationRefactor.Operator
         public List<TRegion> RetrieveRegion(string sourceCode) {
             List<TRegion> tRegions = new List<TRegion>();
 
-            Tuple<String, String> t = Tuple.Create(sourceCode, sourceCode);
+            Tuple<string, string> t = Tuple.Create(sourceCode, sourceCode);
             Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
             ListNode input = lNode.Item1;
 
@@ -144,6 +144,7 @@ namespace Spg.LocationRefactor.Operator
         }
     }
 }
+
 
 
 

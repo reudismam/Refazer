@@ -185,20 +185,20 @@ namespace Spg.NUnitTests.Refactoring
 
         private bool Core(ExampleCommand command)
         {
-            List<Tuple<String, String>> examples = command.Train();
+            List<Tuple<string, string>> examples = command.Train();
             List<Tuple<ListNode, ListNode>> data = ASTProgram.Examples(examples);
 
             //List<int> boundaryPoints = SynthesisManager.CreateBoundaryPoints(examples[0].Item1, examples[0].Item2, data[0]);
             ASTProgram program = new ASTProgram();
             //program.boundary = boundaryPoints;
 
-            Tuple<String, String> test = command.Test();
+            Tuple<string, string> test = command.Test();
             Tuple<String, String> outputtest = Tuple.Create(test.Item1, test.Item2);
             Tuple<ListNode, ListNode> output = ASTProgram.Example(outputtest);
 
             List<SynthesizedProgram> synthesizedProgram = program.GenerateStringProgram(data);
             ASTTransformation result = ASTProgram.TransformString(test.Item1, synthesizedProgram[0]);
-            Tuple<String, String> transformationTest = Tuple.Create(result.Transformation, result.Transformation);
+            Tuple<string, string> transformationTest = Tuple.Create(result.Transformation, result.Transformation);
             Tuple<ListNode, ListNode> transformation = ASTProgram.Example(transformationTest);
 
             NodeComparer comparator = new NodeComparer();
@@ -208,6 +208,7 @@ namespace Spg.NUnitTests.Refactoring
         }
     }
 }
+
 
 
 

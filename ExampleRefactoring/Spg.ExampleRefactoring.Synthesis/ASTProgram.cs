@@ -258,7 +258,9 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (parent.IsKind(SyntaxKind.Parameter)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) return true;
+            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) { return true;}
+
+            if (parent.IsKind(SyntaxKind.TypeArgumentList)) { return true;}
 
             //if (parent.IsKind(SyntaxKind.Argument)) { return true;}
 
@@ -734,10 +736,10 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// </summary>
         /// <param name="examples">Examples</param>
         /// <returns>ListNode representation</returns>
-        public static List<Tuple<ListNode, ListNode>> Examples(List<Tuple<String, String>> examples)
+        public static List<Tuple<ListNode, ListNode>> Examples(List<Tuple<string, string>> examples)
         {
             List<Tuple<ListNode, ListNode>> data = new List<Tuple<ListNode, ListNode>>();
-            foreach (Tuple<String, String> example in examples)
+            foreach (Tuple<string, string> example in examples)
             {
                 Tuple<ListNode, ListNode> tuple = Example(example);
 
@@ -1141,6 +1143,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+
 
 
 
