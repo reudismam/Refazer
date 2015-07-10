@@ -2,23 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio.Text.Projection;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.LCS;
 using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Observer;
+using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Operator.Map;
 using Spg.LocationRefactor.Program;
-using Spg.LocationRefactor.Transform;
-using Microsoft.CodeAnalysis;
-using Microsoft.VisualStudio.Text.Projection;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Util;
-using Spg.LocationRefactor.Observer;
-using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.TextRegion;
+using Spg.LocationRefactor.Transform;
 
 namespace Spg.LocationRefactor.Controller
 {

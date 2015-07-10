@@ -412,8 +412,8 @@ namespace Spg.LocationRefactor.Operator.Filter
             List<Tuple<string, SyntaxNodeOrToken>> nameList = new List<Tuple<string, SyntaxNodeOrToken>>();
             if (!(Predicate is NotContains))
             {
-                IEnumerable<Tuple<string, SyntaxNodeOrToken>> tokensR1 = LookUpForDymTokens(Predicate, Predicate.r1);
-                IEnumerable<Tuple<string, SyntaxNodeOrToken>> tokensR2 = LookUpForDymTokens(Predicate, Predicate.r2);
+                IEnumerable<Tuple<string, SyntaxNodeOrToken>> tokensR1 = LookUpForDymTokens(Predicate.r1);
+                IEnumerable<Tuple<string, SyntaxNodeOrToken>> tokensR2 = LookUpForDymTokens(Predicate.r2);
 
                 nameList.AddRange(tokensR1);
                 nameList.AddRange(tokensR2);
@@ -428,12 +428,12 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <param name="predicate">Predicate</param>
         /// <param name="tokenSeq">Token sequence</param>
         /// <returns>Dynamic tokens</returns>
-        private IEnumerable<Tuple<string, SyntaxNodeOrToken>> LookUpForDymTokens(IPredicate predicate, TokenSeq tokenSeq)
+        private IEnumerable<Tuple<string, SyntaxNodeOrToken>> LookUpForDymTokens(TokenSeq tokenSeq)
         {
             List<Tuple<string, SyntaxNodeOrToken>> nameList = new List<Tuple<string, SyntaxNodeOrToken>>();
             foreach (Token token in tokenSeq.Tokens)
             {
-                if (token is DymToken && token.token.IsKind(SyntaxKind.StringLiteralToken))
+                if (token is DymToken && token.token.IsKind(SyntaxKind.IdentifierToken))
                 {
                     string name = token.token.ToString();
                     Tuple<string, SyntaxNodeOrToken> tuple = Tuple.Create(name, token.token);

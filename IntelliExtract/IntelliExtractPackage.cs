@@ -86,14 +86,15 @@ namespace SPG.IntelliExtract
             ITextDocument docm = GetTextDocument(viewHost.TextView.TextBuffer);
             string docName = docm.FilePath;
 
+            EditorController controler = EditorController.GetInstance();
             foreach (TRegion r in hEvent.Regions)
             {
-                if (r.Path.ToUpperInvariant().Equals(docName.ToUpperInvariant()))
+                if (r.Path.ToUpperInvariant().Equals(docName.ToUpperInvariant()) || RegionManager.GetInstance().GroupRegionBySourceFile(controler.SelectedLocations).Count == 1)
                 {
                     Connector.Select(viewHost, r);
                 }
             }
-            EditorController controler = EditorController.GetInstance();
+            
             controler.CurrentViewCodeBefore = Connector.GetText(viewHost);
         }
 

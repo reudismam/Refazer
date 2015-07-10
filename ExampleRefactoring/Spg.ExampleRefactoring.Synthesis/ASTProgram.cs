@@ -180,7 +180,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 for (int i = 0; i < t.Item1.List.Count; i++)
                 {
                     SyntaxNodeOrToken st = t.Item1.List[i];
-                    if (st.IsKind(SyntaxKind.IdentifierToken) || st.IsKind(SyntaxKind.StringLiteralToken))
+                    if (st.IsKind(SyntaxKind.IdentifierToken) || st.IsKind(SyntaxKind.StringLiteralToken) || st.IsKind(SyntaxKind.NumericLiteralToken))
                     {
                         bool dym;
                         if (i + 1 < t.Item1.Length())
@@ -238,6 +238,8 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (st.IsKind(SyntaxKind.StringLiteralToken)) { return true; }
 
+            if(st.IsKind(SyntaxKind.NumericLiteralToken)) { return true; }
+
             if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
 
             SyntaxNodeOrToken parent = ASTManager.Parent(st);
@@ -261,6 +263,8 @@ namespace Spg.ExampleRefactoring.Synthesis
             if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) { return true;}
 
             if (parent.IsKind(SyntaxKind.TypeArgumentList)) { return true;}
+
+            if (parent.IsKind(SyntaxKind.Attribute)) { return true;}
 
             //if (parent.IsKind(SyntaxKind.Argument)) { return true;}
 

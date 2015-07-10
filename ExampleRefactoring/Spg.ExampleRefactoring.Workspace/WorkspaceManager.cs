@@ -171,7 +171,7 @@ namespace Spg.ExampleRefactoring.Workspace
                                         if (!spansDictionary.TryGetValue(treeSymbol.FilePath.ToUpperInvariant(), out value))
                                         {
                                             value = new List<TextSpan>();
-                                            spansDictionary.Add(tree.FilePath.ToUpperInvariant(), value);
+                                            spansDictionary.Add(treeSymbol.FilePath.ToUpperInvariant(), value);
                                         }
                                         value.Add(location.Location.SourceSpan);
                                     }

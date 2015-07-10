@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -651,7 +652,7 @@ namespace Spg.LocationRefactor.Location
                         Parent = parent,
                         Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
                     };
-                    //MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
+                    MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
 
                     outputRegions.Add(tregion);
                 }
