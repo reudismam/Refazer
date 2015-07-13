@@ -68,6 +68,26 @@ namespace Spg.LocationRefactor.TextRegion
             bool otherWithThis = other.Start <= this.Start  && this.Start <= other.Start + other.Length;
             return (thisWithOther || otherWithThis);
         }
+
+        /// <summary>
+        /// Indicate if other region is inside this region.
+        /// </summary>
+        /// <param name="other">Other region</param>
+        /// <returns>True if other object is inside this region</returns>
+        public bool IsInside(TRegion other)
+        {
+            bool thisWithOther = other.Start <= this.Start && this.Start + this.Length<= other.Start + other.Length;
+            return (thisWithOther);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is TRegion)) return false;
+
+            TRegion other = (TRegion) obj;
+
+            return Start.Equals(other.Start) && Length.Equals(other.Length);
+        }
     }
 }
 

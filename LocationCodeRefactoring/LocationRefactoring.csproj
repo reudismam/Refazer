@@ -90,6 +90,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Spg.LocationRefactor.Comparer\CodeLocationComparer.cs" />
     <Compile Include="Spg.LocationRefactor.Controller\EditorController.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\ILocationsObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\LocationEvent.cs" />

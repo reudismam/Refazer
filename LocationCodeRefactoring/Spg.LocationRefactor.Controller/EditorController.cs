@@ -10,6 +10,7 @@ using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Observer;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Operator.Map;
@@ -360,11 +361,11 @@ namespace Spg.LocationRefactor.Controller
         /// Retrieve locations
         /// </summary>
         /// <param name="program">Selected program</param>
-        public void RetrieveLocations(string program)
+        public void RetrieveLocations()
         {
             if (ProgramsWithNegatives != null)
             {
-                RetrieveLocationsPosNegatives(program);
+                RetrieveLocationsPosNegatives();
                 return;
             }
 
@@ -380,8 +381,7 @@ namespace Spg.LocationRefactor.Controller
             {
                 tuple = RetrieveLocationsSingleSourceClass(prog);
             }
-            var sourceLocations = tuple.Item1;
-
+            var sourceLocations = tuple.Item1;        
             Locations = NonDuplicateLocations(sourceLocations);
 
             //remove
@@ -401,8 +401,7 @@ namespace Spg.LocationRefactor.Controller
         /// <summary>
         /// Retrieve locations after developer indicate negative locations
         /// </summary>
-        /// <param name="program"></param>
-        public void RetrieveLocationsPosNegatives(string program)
+        public void RetrieveLocationsPosNegatives()
         {
             Prog prog = ProgramsWithNegatives.First();
             Dictionary<string, List<TRegion>> list = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
@@ -607,6 +606,7 @@ namespace Spg.LocationRefactor.Controller
         /// <returns>Non duplicate locations</returns>
         private List<CodeLocation> NonDuplicateLocations(List<CodeLocation> locations)
         {
+            locations = SegmentBySyntaxKind(locations);
             List<CodeLocation> clocations = new List<CodeLocation>();
             var groupedLocations = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
 
@@ -638,6 +638,46 @@ namespace Spg.LocationRefactor.Controller
                 }
             }
             return clocations;
+        }
+
+        private List<CodeLocation> SegmentBySyntaxKind(List<CodeLocation> locations)
+        {
+            Dictionary<CodeLocation, List<CodeLocation>> intersections = new Dictionary<CodeLocation, List<CodeLocation>>();
+
+            var grouped = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
+            foreach (KeyValuePair<string, List<CodeLocation>> item in grouped)
+            {
+                foreach (var location in item.Value)
+                {
+                    TRegion locRegion = new TRegion();
+                    locRegion.Start = location.Region.Node.SpanStart;
+                    locRegion.Length = location.Region.Node.Span.Length;
+                    foreach (var otherLocation in item.Value)
+                    {
+                        TRegion locOtherRegion = new TRegion();
+                        locOtherRegion.Start = otherLocation.Region.Node.SpanStart;
+                        locOtherRegion.Length = otherLocation.Region.Node.Span.Length;
+                        if (!(location.Equals(otherLocation)) && locOtherRegion.IsInside(locRegion) && location.Region.Node.IsKind(otherLocation.Region.Node.CSharpKind()))
+                        {
+                            if (!intersections.ContainsKey(location))
+                            {
+                                intersections.Add(location, new List<CodeLocation>());
+                            }
+                            intersections[location].Add(otherLocation);
+                        }
+                    }
+                }
+            }
+
+            List<CodeLocation> insides = new List<CodeLocation>();
+            foreach (var codeLocation in locations)
+            {
+                if (!intersections.ContainsKey(codeLocation))
+                {
+                    insides.Add(codeLocation);
+                }   
+            }
+            return insides;
         }
 
         /// <summary>

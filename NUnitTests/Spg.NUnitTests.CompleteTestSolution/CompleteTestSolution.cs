@@ -698,6 +698,20 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
 
         [Test]
+        public void Proj4_14623da()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("UnitTests");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"EntityFramewok\4_14623da", @"EntityFramework\entityframework10\EntityFramework.sln", projects);
+
+            List<string> list = new List<string>();
+            list.Add("HistoryRepositoryTests.cs");
+            bool passTransformation = CompleteTestBase(list, @"EntityFramewok\4_14623da");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
         public void Proj2bae908()
         {
             List<string> projects = new List<string>();
@@ -1212,7 +1226,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                 string classPath = transformation.SourcePath;
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
                 string classNamePath = expHome + @"commit\" + commit + @"\tool\" + className;
-                FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
+//                FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
 
                 Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(classNamePath), transformation.transformation.Item2);
                 Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);

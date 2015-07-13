@@ -24,5 +24,24 @@ namespace Spg.LocationRefactor.Location
         /// </summary>
         /// <returns>Source class</returns>
         public string SourceClass { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is CodeLocation)) return false;
+
+            CodeLocation other = (CodeLocation) obj;
+
+            return SourceClass.ToUpperInvariant().Equals(other.SourceClass.ToUpperInvariant()) && Region.Node.SpanStart == other.Region.Node.SpanStart && Region.Node.Span.End == other.Region.Node.Span.End;
+        }
+
+        public override string ToString()
+        {
+            return SourceClass + "\n" + Region.Start + " : " + Region.Length + "\n";
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
     }
 }

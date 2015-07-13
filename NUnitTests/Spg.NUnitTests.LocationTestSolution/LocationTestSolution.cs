@@ -510,6 +510,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
 
         [Test]
+        public void Proj4_14623da()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("UnitTests");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\4_14623da", @"EntityFramework\entityframework10\EntityFramework.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
         public void Proj2bae908()
         {
             List<string> projects = new List<string>();

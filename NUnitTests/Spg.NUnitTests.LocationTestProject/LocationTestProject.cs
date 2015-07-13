@@ -653,6 +653,8 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestProject
         /// Locale test base method
         /// </summary>
         /// <param name="commit">commit id</param>
+        /// <param name="solution">Solution</param>
+        /// <param name="project">Project</param>
         /// <returns>True if locale passed</returns>
         public static bool LocaleTest(string commit, string solution, List<string> project)
         {
