@@ -361,7 +361,7 @@ namespace Spg.LocationRefactor.Controller
         /// Retrieve locations
         /// </summary>
         /// <param name="program">Selected program</param>
-        public void RetrieveLocations(string program)
+        public void RetrieveLocations()
         {
             if (ProgramsWithNegatives != null)
             {

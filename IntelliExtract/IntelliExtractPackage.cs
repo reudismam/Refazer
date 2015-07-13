@@ -184,7 +184,7 @@ namespace SPG.IntelliExtract
 
             EditorController controler = EditorController.GetInstance();
 
-            controler.RetrieveLocations(text);
+            controler.RetrieveLocations();
             controler.ProjectionBuffers = _CreateProjectionBuffers();
         }
 
@@ -380,6 +380,7 @@ namespace SPG.IntelliExtract
 
     }
 }
+
 
 
 

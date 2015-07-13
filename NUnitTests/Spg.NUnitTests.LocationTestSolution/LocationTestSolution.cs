@@ -871,7 +871,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
             controller.Extract();
 
-            controller.RetrieveLocations(controller.CurrentViewCodeBefore);
+            controller.RetrieveLocations();
 
             if (File.Exists(expHome + @"commit\" + commit + @"\negatives.json"))
             {
@@ -898,7 +898,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 //controller.Extract(controller.SelectedLocations, negativesRegions);
                 controller.Extract(positivesRegions, negativesRegions);
             }
-            controller.RetrieveLocations(controller.CurrentViewCodeBefore);
+            controller.RetrieveLocations();
 
             List<Selection> locations = JsonUtil<List<Selection>>.Read(expHome + @"commit\" + commit + @"\found_locations.json");
             if (locations.Count != controller.Locations.Count) return false;
@@ -931,6 +931,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
     }
 }
+
 
 
 

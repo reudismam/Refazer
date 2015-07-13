@@ -140,7 +140,7 @@ namespace Spg.NUnitTests.Location
             controller.SetSolution(FilePath.SOLUTION_PATH);
             controller.Extract();
             
-            controller.RetrieveLocations(controller.CurrentViewCodeBefore);
+            controller.RetrieveLocations();
 
             List<Selection> locations = JsonUtil<List<Selection>>.Read(output);
             bool passed = true;
@@ -160,5 +160,6 @@ namespace Spg.NUnitTests.Location
         }
     }
 }
+
 
 
