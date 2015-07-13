@@ -361,7 +361,7 @@ namespace Spg.LocationRefactor.Controller
         /// Retrieve locations
         /// </summary>
         /// <param name="program">Selected program</param>
-        public void RetrieveLocations()
+        public void RetrieveLocations(string program)
         {
             if (ProgramsWithNegatives != null)
             {
@@ -404,21 +404,8 @@ namespace Spg.LocationRefactor.Controller
         public void RetrieveLocationsPosNegatives()
         {
             Prog prog = ProgramsWithNegatives.First();
-            Dictionary<string, List<TRegion>> list = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
-
-            Tuple<List<CodeLocation>, List<TRegion>> tuple;
-            if (list.Count() > 1)
-            {
-                //tuple = RetrieveLocationsMultiplesSourceClasses(prog);
-                tuple = RetrieveLocationsSingleSourceClassPosNegative(prog);
-            }
-            else
-            {
-                tuple = RetrieveLocationsSingleSourceClassPosNegative(prog);
-            }
-            var sourceLocations = tuple.Item1;
-
-            Locations = NonDuplicateLocations(sourceLocations);
+            Tuple<List<CodeLocation>, List<TRegion>>  tuple = RetrieveLocationsSingleSourceClassPosNegative(prog);
+            Locations = tuple.Item1;
 
             //remove
             List<Selection> selections = new List<Selection>();
