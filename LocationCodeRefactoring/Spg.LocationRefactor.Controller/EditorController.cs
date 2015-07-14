@@ -57,7 +57,6 @@ namespace Spg.LocationRefactor.Controller
         /// <summary>
         /// Learned programs
         /// </summary>
-        //public Dictionary<String, Prog> Progs { get; set; }
         public List<Prog> Progs { get; set; }
 
         /// <summary>
@@ -106,7 +105,7 @@ namespace Spg.LocationRefactor.Controller
         /// <summary>
         /// Locations computed so far
         /// </summary>
-        public Tuple<List<CodeLocation>, List<TRegion>> LocalionsComputerSoFar;
+        public Tuple<List<CodeLocation>, List<CodeLocation>> LocationsFoundSoFar;
 
         /// <summary>
         /// Program computed for negative filtering
@@ -369,16 +368,16 @@ namespace Spg.LocationRefactor.Controller
             Prog prog = Progs.First();
             Dictionary<string, List<TRegion>> list = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
 
-            Tuple<List<CodeLocation>, List<TRegion>> tuple;
+            List<CodeLocation> locationsList;
             if (list.Count() > 1)
             {
-                tuple = RetrieveLocationsMultiplesSourceClasses(prog);
+                locationsList = RetrieveLocationsMultiplesSourceClasses(prog);
             }
             else
             {
-                tuple = RetrieveLocationsSingleSourceClass(prog);
+                locationsList = RetrieveLocationsSingleSourceClass(prog);
             }
-            var sourceLocations = tuple.Item1;        
+            var sourceLocations = locationsList;        
             Locations = NonDuplicateLocations(sourceLocations);
 
             //remove
@@ -390,8 +389,10 @@ namespace Spg.LocationRefactor.Controller
             }
             JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
             //remove
+            Dictionary<string, List<CodeLocation>> codeLocs = RegionManager.GetInstance().GroupLocationsBySourceFile(Locations);
+            Tuple<List<CodeLocation>, List<CodeLocation>> tp = Tuple.Create(Locations, codeLocs[CurrentViewCodePath.ToUpperInvariant()]);
 
-            LocalionsComputerSoFar = tuple;
+            LocationsFoundSoFar = tp;
             NotifyLocationsObservers(Locations);
         }
 
@@ -401,8 +402,7 @@ namespace Spg.LocationRefactor.Controller
         public void RetrieveLocationsPosNegatives()
         {
             Prog prog = ProgramsWithNegatives.First();
-            Tuple<List<CodeLocation>, List<TRegion>>  tuple = RetrieveLocationsSingleSourceClassPosNegative(prog);
-            Locations = tuple.Item1;
+            Locations = RetrieveLocationsPosNegative(prog);
 
             //remove
             List<Selection> selections = new List<Selection>();
@@ -413,8 +413,10 @@ namespace Spg.LocationRefactor.Controller
             }
             JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
             //remove
+            Dictionary<string, List<CodeLocation>> codeLocs = RegionManager.GetInstance().GroupLocationsBySourceFile(Locations);
+            Tuple<List<CodeLocation>, List<CodeLocation>> tp = Tuple.Create(Locations, codeLocs[CurrentViewCodePath.ToUpperInvariant()]);
 
-            LocalionsComputerSoFar = tuple;
+            LocationsFoundSoFar = tp;
             NotifyLocationsObservers(Locations);
         }
 
@@ -423,7 +425,7 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public void Done()
         {
-            NotifyHilightObservers(LocalionsComputerSoFar.Item2);
+            NotifyHilightObservers(LocationsFoundSoFar.Item2);
         }
 
         /// <summary>
@@ -431,7 +433,7 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         /// <param name="prog">Learned program</param>
         /// <returns>Code locations</returns>
-        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClass(Prog prog)
+        private List<CodeLocation> RetrieveLocationsSingleSourceClass(Prog prog)
         {
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
             SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
@@ -441,10 +443,8 @@ namespace Spg.LocationRefactor.Controller
                 CodeLocation location = new CodeLocation { Region = region, SourceCode = CurrentViewCodeBefore, SourceClass = CurrentViewCodePath };
                 sourceLocations.Add(location);
             }
-
-            Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, regions);
-
-            return tuple;
+               
+            return sourceLocations;
         }
 
         /// <summary>
@@ -452,9 +452,8 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         /// <param name="prog">Program</param>
         /// <returns>Locations for single class considering negative posistions</returns>
-        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsSingleSourceClassPosNegative(Prog prog)
+        private List<CodeLocation> RetrieveLocationsPosNegative(Prog prog)
         {
-            List<TRegion> regions = new List<TRegion>();
             List<CodeLocation> locations = new List<CodeLocation>();
             foreach (CodeLocation location in Locations)
             {
@@ -463,20 +462,11 @@ namespace Spg.LocationRefactor.Controller
                 bool isTruePositive = filter.IsMatch(location.Region.Node);
                 if (isTruePositive)
                 {
-                    regions.Add(location.Region);
-                    //CodeLocation filtered = new CodeLocation
-                    //{
-                    //    Region = location.Region,
-                    //    SourceCode = CurrentViewCodeBefore,
-                    //    SourceClass = CurrentViewCodePath
-                    //};
-                    //locations.Add(filtered);
                     locations.Add(location);
                 }
             }
 
-            Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(locations, regions);
-            return tuple;
+            return locations;
         }
 
         /// <summary>
@@ -484,83 +474,28 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         /// <param name="prog">Learned program</param>
         /// <returns>Code locations</returns>
-        private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClasses(Prog prog)
+        private List<CodeLocation> RetrieveLocationsMultiplesSourceClasses(Prog prog)
         {
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
-            Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
-            //Dictionary<string, List<TRegion>> groups = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
-
-            //List<SyntaxNode> lcas = new List<SyntaxNode>();
-            //foreach (KeyValuePair<string, List<TRegion>> item in groups)
-            //{
-            //    var result = RegionManager.LeastCommonAncestors(item.Key, item.Value);
-            //    lcas.AddRange(result);
-            //}
 
             List<TRegion> regions = RetrieveLocations(prog);
             foreach (TRegion region in regions)
             {
-                List<TRegion> value;
-                if (!dicRegions.TryGetValue(region.Path, out value))
-                {
-                    value = new List<TRegion>();
-                    dicRegions[region.Path] = value;
-                }
-
-                dicRegions[region.Path].Add(region);
                 CodeLocation location = new CodeLocation
                 {
                     Region = region,
                     SourceCode = region.Parent.Text,
                     SourceClass = region.Path
                 };
+
                 sourceLocations.Add(location);
             }
-
-            var rs = dicRegions[CurrentViewCodePath.ToUpperInvariant()];
-            Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
-            return tuple;
+            return sourceLocations;
         }
-
-        ///// <summary>
-        ///// Retrieve regions for multiple classes
-        ///// </summary>
-        ///// <param name="prog">Learned program</param>
-        ///// <returns>Code locations</returns>
-        //private Tuple<List<CodeLocation>, List<TRegion>> RetrieveLocationsMultiplesSourceClassesPosNegative(Prog prog)
-        //{
-        //    List<CodeLocation> sourceLocations = new List<CodeLocation>();
-        //    Dictionary<string, List<TRegion>> dicRegions = new Dictionary<string, List<TRegion>>();
-
-        //    List<TRegion> regions = RetrieveLocations(prog);
-        //    foreach (TRegion region in regions)
-        //    {
-        //        List<TRegion> value;
-        //        if (!dicRegions.TryGetValue(region.Path, out value))
-        //        {
-        //            value = new List<TRegion>();
-        //            dicRegions[region.Path] = value;
-        //        }
-
-        //        dicRegions[region.Path].Add(region);
-        //        CodeLocation location = new CodeLocation
-        //        {
-        //            Region = region,
-        //            SourceCode = region.Parent.Text,
-        //            SourceClass = region.Path
-        //        };
-        //        sourceLocations.Add(location);
-        //    }
-
-        //    var rs = dicRegions[CurrentViewCodePath.ToUpperInvariant()];
-        //    Tuple<List<CodeLocation>, List<TRegion>> tuple = Tuple.Create(sourceLocations, rs);
-        //    return tuple;
-        //}
 
         /// <summary>
         /// Retrieve locations
         /// </summary>
-        ///// <param name="sourceCode">Selected program</param>
         /// <param name="prog">Location program</param>
         public List<TRegion> RetrieveLocations(Prog prog)
         {
@@ -768,7 +703,7 @@ namespace Spg.LocationRefactor.Controller
         /// Notify highlight observers
         /// </summary>
         /// <param name="regions">Regions</param>
-        private void NotifyHilightObservers(List<TRegion> regions)
+        private void NotifyHilightObservers(List<CodeLocation> regions)
         {
             HighlightEvent hEvent = new HighlightEvent(regions);
             foreach (IHilightObserver observer in _hilightObservers)

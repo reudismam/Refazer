@@ -5,7 +5,6 @@ using DiGraph;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Expression;
 
 namespace Spg.ExampleRefactoring.Synthesis
 {
@@ -18,7 +17,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Fist element represents the example, second element represents the position 
         /// in the example
         /// </summary>
-        public Dictionary<Tuple<Dag, Tuple<Vertex, Vertex>>, Tuple<HashSet<IPosition>, HashSet<IPosition>>> positionMap  = new Dictionary<Tuple<Dag, Tuple<Vertex, Vertex>>, Tuple<HashSet<IPosition>, HashSet<IPosition>>>();
+        public Dictionary<Tuple<Dag, Tuple<Vertex, Vertex>>, Tuple<HashSet<IPosition>, HashSet<IPosition>>> PositionMap  = new Dictionary<Tuple<Dag, Tuple<Vertex, Vertex>>, Tuple<HashSet<IPosition>, HashSet<IPosition>>>();
         /// <summary>
         /// Intersection among direct acyclic graphs
         /// </summary>
@@ -37,7 +36,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 {
                     composition = Intersect(composition, dag);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return null;
                 }
@@ -152,15 +151,13 @@ namespace Spg.ExampleRefactoring.Synthesis
             return expressions;
         } 
 
-        //private bool ContainsIdenToToken(List<IExpression> expressions)
-        //{
-        //    foreach (var expression in expressions)
-        //    {
-        //        if (expression is IdenToStr) return true;
-        //    }
-        //    return false;
-        //}
-
+        /// <summary>
+        /// Sub nodes intersection
+        /// </summary>
+        /// <param name="hashes1">First hashset</param>
+        /// <param name="hashes2">Second hashset</param>
+        /// <param name="addIdenToToken">Add idenToStr expression</param>
+        /// <returns>Intersection</returns>
         private List<IExpression> SubStrIntersect(Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1, Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2, bool addIdenToToken)
         {
             List<IExpression> intersection = new List<IExpression>();
@@ -192,15 +189,15 @@ namespace Spg.ExampleRefactoring.Synthesis
             Dictionary<string, List<IExpression>> expressions = dag1.Mapping[tuple];
 
             Tuple<HashSet<IPosition>, HashSet<IPosition>> positions = null;
-            if (!positionMap.TryGetValue(tupleposition, out positions))
+            if (!PositionMap.TryGetValue(tupleposition, out positions))
             {
                 HashSet<IPosition>  positions1 = PositionsHash(expressions[kind], 1);
                 HashSet<IPosition> positions2 = PositionsHash(expressions[kind], 2);
                 positions = Tuple.Create(positions1, positions2);
-                positionMap.Add(tupleposition, positions);
+                PositionMap.Add(tupleposition, positions);
             }
 
-            return positionMap[tupleposition];
+            return PositionMap[tupleposition];
         }
 
         private HashSet<IPosition> PositionsHash(List<IExpression> expressions, int position)

@@ -83,18 +83,18 @@ namespace SPG.IntelliExtract
             userData.GetData(ref guidViewHost, out holder);
             IWpfTextViewHost viewHost = (IWpfTextViewHost)holder;
 
-            ITextDocument docm = GetTextDocument(viewHost.TextView.TextBuffer);
-            string docName = docm.FilePath;
+            //ITextDocument docm = GetTextDocument(viewHost.TextView.TextBuffer);
+            //string docName = docm.FilePath;
 
             EditorController controler = EditorController.GetInstance();
-            foreach (TRegion r in hEvent.Regions)
+            foreach (CodeLocation r in hEvent.Regions)
             {
-                if (r.Path.ToUpperInvariant().Equals(docName.ToUpperInvariant()) || RegionManager.GetInstance().GroupRegionBySourceFile(controler.SelectedLocations).Count == 1)
-                {
-                    Connector.Select(viewHost, r);
-                }
+                //    if (r.SourceClass.ToUpperInvariant().Equals(docName.ToUpperInvariant()) || RegionManager.GetInstance().GroupRegionBySourceFile(controler.SelectedLocations).Count == 1)
+                //    {
+                Connector.Select(viewHost, r.Region);
+                //    }
             }
-            
+
             controler.CurrentViewCodeBefore = Connector.GetText(viewHost);
         }
 
@@ -105,8 +105,8 @@ namespace SPG.IntelliExtract
               typeof(ITextDocument), out textDoc);
             if (rc)
                 return textDoc;
- 
-                return null;
+
+            return null;
         }
 
         public void NotifyLocationsSelected(LocationEvent lEvent)

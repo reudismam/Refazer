@@ -1226,7 +1226,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                 string classPath = transformation.SourcePath;
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
                 string classNamePath = expHome + @"commit\" + commit + @"\tool\" + className;
-//                FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
+                //FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
 
                 Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(classNamePath), transformation.transformation.Item2);
                 Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);

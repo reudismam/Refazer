@@ -64,17 +64,24 @@ namespace Spg.LocationRefactor.Transform
                 syntaxNodeCodeLocationPairs.Add(tuple);
             }
 
-
-            var text = FileUtil.ReadFile(locations[0].SourceClass);
-            text = TransformEachLocation(text, syntaxNodeCodeLocationPairs, program, compact);
+            var sourceCode = FileUtil.ReadFile(locations[0].SourceClass);
+            sourceCode = TransformEachLocation(sourceCode, syntaxNodeCodeLocationPairs, program, compact);
             
-            SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(text);
+            SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(sourceCode);
             SyntaxNode nodeFormat = treeFormat.GetRoot();//.NormalizeWhitespace();
-            text = nodeFormat.GetText().ToString();
-            return text;
+            sourceCode = nodeFormat.GetText().ToString();
+            return sourceCode;
         }
 
-        private string TransformEachLocation(string text, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program, bool compact)
+        /// <summary>
+        /// Transform each location of source code specified
+        /// </summary>
+        /// <param name="sourceCode">Source code</param>
+        /// <param name="update">Tuple of sintax node and code location list</param>
+        /// <param name="program">Synthesized program</param>
+        /// <param name="compact">Indicates if it is needed to compact input data</param>
+        /// <returns>Transformation of each location of source code specified</returns>
+        private string TransformEachLocation(string sourceCode, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program, bool compact)
         {
             string s = "";
             int i = 0;
@@ -101,8 +108,8 @@ namespace Spg.LocationRefactor.Transform
 
                     int start = nextStart + item.Item2.Region.Start;
                     int end = start + item.Item2.Region.Length;
-                    text = text.Substring(0, start) + transformation +
-                    text.Substring(end);
+                    sourceCode = sourceCode.Substring(0, start) + transformation +
+                    sourceCode.Substring(end);
 
                     nextStart += transformation.Length - item.Item2.Region.Length;
                 }
@@ -114,7 +121,7 @@ namespace Spg.LocationRefactor.Transform
             string classPath = update.First().Item2.SourceClass;
             string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
             FileUtil.WriteToFile(@"C:\Users\SPG-04\Desktop\transformations\" + className, s);
-            return text;
+            return sourceCode;
         }
 
         /// <summary>
