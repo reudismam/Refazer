@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Tok;

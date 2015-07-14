@@ -810,10 +810,10 @@ namespace Spg.LocationRefactor.Controller
         /// <summary>
         /// Notify locations observers
         /// </summary>
-        /// <param name="transformedLocations">Code locations</param>
-        private void NotifyLocationsObservers(List<CodeLocation> transformedLocations)
+        /// <param name="locations">Code locations</param>
+        private void NotifyLocationsObservers(List<CodeLocation> locations)
         {
-            LocationEvent lEvent = new LocationEvent(transformedLocations);
+            LocationEvent lEvent = new LocationEvent(locations);
 
             foreach (ILocationsObserver observer in _locationsObversers)
             {

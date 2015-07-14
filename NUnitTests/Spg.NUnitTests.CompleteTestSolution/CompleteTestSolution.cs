@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using NUnit.Framework;
 using Spg.ExampleRefactoring.Bean;
+using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
-using Spg.LocationRefactor.Transform;
-using NUnit.Framework;
-using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Transform;
 
 namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 {
