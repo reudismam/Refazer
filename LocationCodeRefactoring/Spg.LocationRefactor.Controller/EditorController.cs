@@ -10,7 +10,6 @@ using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Observer;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Operator.Map;
@@ -103,7 +102,6 @@ namespace Spg.LocationRefactor.Controller
         /// Files opened on window
         /// </summary>
         public Dictionary<string, bool> FilesOpened { get; set; }
-
 
         /// <summary>
         /// Locations computed so far
@@ -360,7 +358,6 @@ namespace Spg.LocationRefactor.Controller
         /// <summary>
         /// Retrieve locations
         /// </summary>
-        /// <param name="program">Selected program</param>
         public void RetrieveLocations()
         {
             if (ProgramsWithNegatives != null)
@@ -597,10 +594,9 @@ namespace Spg.LocationRefactor.Controller
             List<CodeLocation> clocations = new List<CodeLocation>();
             var groupedLocations = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
 
-            bool[] analized = Enumerable.Repeat(false, locations.Count).ToArray();
-
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupedLocations)
             {
+                bool[] analized = Enumerable.Repeat(false, item.Value.Count).ToArray();
                 for (int i = 0; i < item.Value.Count; i++)
                 {
                     CodeLocation location = item.Value[i];
@@ -627,6 +623,11 @@ namespace Spg.LocationRefactor.Controller
             return clocations;
         }
 
+        /// <summary>
+        /// Examine locations that are inside other locations
+        /// </summary>
+        /// <param name="locations">Locations</param>
+        /// <returns>Remove locations that are inside other locations</returns>
         private List<CodeLocation> SegmentBySyntaxKind(List<CodeLocation> locations)
         {
             Dictionary<CodeLocation, List<CodeLocation>> intersections = new Dictionary<CodeLocation, List<CodeLocation>>();
