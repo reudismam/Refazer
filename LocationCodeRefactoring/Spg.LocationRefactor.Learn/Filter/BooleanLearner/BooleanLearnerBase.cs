@@ -91,7 +91,7 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
             bool entry;
             if (!Calculated.TryGetValue(regex, out entry))
             {
-                foreach (Tuple<ListNode, Boolean> example in examples)
+                foreach (Tuple<ListNode, bool> example in examples)
                 {
                     bool b02 = predicate.Evaluate(example.Item1, regex);
                     if (b02 != example.Item2)
@@ -120,5 +120,6 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
         protected abstract TokenSeq GetTokenSeq(TokenSeq r1);
     }
 }
+
 
 

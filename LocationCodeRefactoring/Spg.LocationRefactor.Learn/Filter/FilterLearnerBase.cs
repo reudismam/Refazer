@@ -33,7 +33,7 @@ namespace Spg.LocationRefactor.Learn
         public FilterLearnerBase(List<TRegion> list)
         {
             this.List = list;
-            _calculated = new Dictionary<TokenSeq, Boolean>();
+            _calculated = new Dictionary<TokenSeq, bool>();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Spg.LocationRefactor.Learn
         public FilterLearnerBase(IPredicate predicate, List<TRegion> list)
         {
             this.List = list;
-            _calculated = new Dictionary<TokenSeq, Boolean>();
+            _calculated = new Dictionary<TokenSeq, bool>();
             this.Predicate = predicate;
         }
 
@@ -56,10 +56,10 @@ namespace Spg.LocationRefactor.Learn
         {
             List<Tuple<ListNode, ListNode>> S = MapBase.Decompose(examples);
 
-            List<Tuple<Tuple<ListNode, ListNode>, Boolean>> QLine = new List<Tuple<Tuple<ListNode, ListNode>, Boolean>>();
+            List<Tuple<Tuple<ListNode, ListNode>, bool>> QLine = new List<Tuple<Tuple<ListNode, ListNode>, bool>>();
             foreach (Tuple<ListNode, ListNode> tuple in S)
             {
-                Tuple<Tuple<ListNode, ListNode>, Boolean> t = Tuple.Create(tuple, true);
+                Tuple<Tuple<ListNode, ListNode>, bool> t = Tuple.Create(tuple, true);
                 QLine.Add(t);
             }
             List<Prog> programs = new List<Prog>();
@@ -96,16 +96,16 @@ namespace Spg.LocationRefactor.Learn
             List<Tuple<ListNode, ListNode>> S = MapBase.Decompose(positiveExamples);
             List<Tuple<ListNode, ListNode>> SN = MapBase.Decompose(negativeExamples);
 
-            List<Tuple<Tuple<ListNode, ListNode>, Boolean>> QLine = new List<Tuple<Tuple<ListNode, ListNode>, Boolean>>();
+            List<Tuple<Tuple<ListNode, ListNode>, bool>> QLine = new List<Tuple<Tuple<ListNode, ListNode>, bool>>();
             foreach (Tuple<ListNode, ListNode> tuple in S)
             {
-                Tuple<Tuple<ListNode, ListNode>, Boolean> t = Tuple.Create(tuple, true);
+                Tuple<Tuple<ListNode, ListNode>, bool> t = Tuple.Create(tuple, true);
                 QLine.Add(t);
             }
 
             foreach (Tuple<ListNode, ListNode> tuple in SN)
             {
-                Tuple<Tuple<ListNode, ListNode>, Boolean> t = Tuple.Create(tuple, false);
+                Tuple<Tuple<ListNode, ListNode>, bool> t = Tuple.Create(tuple, false);
                 QLine.Add(t);
             }
 
@@ -270,6 +270,7 @@ namespace Spg.LocationRefactor.Learn
 //    }
 //    return predicates;
 //}
+
 
 
 
