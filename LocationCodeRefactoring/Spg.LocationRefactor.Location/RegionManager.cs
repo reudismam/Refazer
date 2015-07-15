@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -10,6 +8,7 @@ using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.LCS;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Location
@@ -53,142 +52,6 @@ namespace Spg.LocationRefactor.Location
                 _instance = new RegionManager();
             }
             return _instance;
-        }
-
-        /// <summary>
-        /// Choose corresponding syntax node for the region
-        /// </summary>
-        /// <param name="statements">Statement list</param>
-        /// <param name="regions">Region</param>
-        /// <returns>Pair of region with the respectively syntax node</returns>
-        private Dictionary<TRegion, SyntaxNode> ChoosePairs(List<SyntaxNode> statements, List<TRegion> regions)
-        {
-            Dictionary<TRegion, SyntaxNode> dicRegions = new Dictionary<TRegion, SyntaxNode>();
-
-
-            foreach (SyntaxNode statement in statements)
-            {
-                foreach (TRegion region in regions)
-                {
-                    if (region.Length == 0)
-                    {
-                        dicRegions[region] = null;
-                        continue;
-                    }
-
-                    string text = region.Text;
-                    string pattern = Regex.Escape(text);
-                    string statmentText = statement.GetText().ToString();
-                    bool contains = Regex.IsMatch(statmentText, pattern);
-                    if (contains)
-                    {
-                        if (statement.SpanStart <= region.Start && region.Start <= statement.Span.End)
-                        {
-                            if (!dicRegions.ContainsKey(region))
-                            {
-                                dicRegions.Add(region, statement);
-                            }
-                            else if (statement.GetText().Length < dicRegions[region].GetText().Length)
-                            {
-                                dicRegions[region] = statement;
-                            }
-                        }
-                    }
-                }
-            }
-            return dicRegions;
-        }
-
-        /// <summary>
-        /// Decompose set of selected region to list of examples
-        /// </summary>
-        /// <param name="list">List of selected regions</param>
-        /// <returns>Decomposed examples</returns>
-        public List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
-        {
-            List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
-
-            Dictionary<string, List<TRegion>> dicRegion = GroupRegionBySourceFile(list);
-            foreach (var entry in dicRegion)
-            {
-                List<SyntaxNode> statements = SyntaxNodes(entry.Key, entry.Value);
-                //var methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
-                Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, entry.Value);
-                foreach (KeyValuePair<TRegion, SyntaxNode> pair in pairs)
-                {
-                    TRegion re = pair.Key;
-                    SyntaxNode node = pair.Value;
-
-                    //Tuple<ListNode, ListNode> val;
-                    Tuple<ListNode, ListNode> te;
-                    if (node != null)
-                    {
-                        te = Example(node, re);
-                    }
-                    else
-                    {
-                        ListNode emptyNode = new ListNode(new List<SyntaxNodeOrToken>());
-                        te = Tuple.Create(emptyNode, emptyNode);
-                    }
-                    //if (!methodsDic.TryGetValue(node, out val))
-                    //{
-                    examples.Add(te);
-                    //    methodsDic.Add(node, te);
-                    //}
-                    //else
-                    //{
-                    //    val.Item2.List.AddRange(te.Item2.List);
-                    //}
-                }
-            }
-            return examples;
-        }
-
-        /// <summary>
-        /// Decompose set of selected region to list of examples
-        /// </summary>
-        /// <param name="list">List of selected regions</param>
-        /// <returns>Decomposed examples</returns>
-        public List<Tuple<ListNode, ListNode>> DecomposeToOutput(List<TRegion> list)
-        {
-            List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
-
-            Dictionary<string, List<TRegion>> dicRegion = GroupRegionBySourceFile(list);
-            foreach (var entry in dicRegion)
-            {
-                //List<SyntaxNode> statements = SyntaxNodesWithSemanticModel(entry.Key, entry.Value);
-                //var methodsDic = new Dictionary<SyntaxNode, Tuple<ListNode, ListNode>>();
-                //Dictionary<TRegion, SyntaxNode> pairs = ChoosePairs(statements, entry.Value);
-                SyntaxTree tree = CSharpSyntaxTree.ParseText(entry.Key);
-                foreach (TRegion re in entry.Value)
-                {
-                    //TRegion re = pair.Key;
-                    //SyntaxNode node = pair.Value;
-                    SyntaxNode node = tree.GetRoot();
-
-                    //Tuple<ListNode, ListNode> val;
-                    Tuple<ListNode, ListNode> te;
-                    if (re.Length != 0)
-                    {
-                        te = Example(node, re);
-                    }
-                    else
-                    {
-                        ListNode emptyNode = new ListNode(new List<SyntaxNodeOrToken>());
-                        te = Tuple.Create(emptyNode, emptyNode);
-                    }
-                    //if (!methodsDic.TryGetValue(node, out val))
-                    //{
-                    examples.Add(te);
-                    //    methodsDic.Add(node, te);
-                    //}
-                    //else
-                    //{
-                    //    val.Item2.List.AddRange(te.Item2.List);
-                    //}
-                }
-            }
-            return examples;
         }
 
         /// <summary>
@@ -301,68 +164,7 @@ namespace Spg.LocationRefactor.Location
         //    return t;
         //}
 
-        /// <summary>
-        /// Covert the region on a method to an example ListNode
-        /// </summary>
-        /// <param name="syntaxNode">Syntax node</param>
-        /// <param name="re">Region within the method</param>
-        /// <param name="compact">Needs to be compacted</param>
-        /// <returns>An example</returns>
-        private Tuple<ListNode, ListNode> Example(SyntaxNode syntaxNode, TRegion re, bool compact = false)
-        {
-            List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-            if (compact)
-            {
-                list = ASTManager.EnumerateSyntaxNodesAndTokens2(syntaxNode, list);
-            }
-            else
-            {
-                list = ASTManager.EnumerateSyntaxNodesAndTokens(syntaxNode, list);
-            }
-            ListNode listNode = new ListNode(list);
-            listNode.OriginalText = syntaxNode.GetText().ToString();
 
-            SyntaxNodeOrToken node = list[0];
-
-            int i = 0;
-            while (re.Start > node.Span.Start)
-            {
-                node = list[i++];
-            }
-
-            int j = i;
-            bool last = false;
-            while (re.Start + re.Length >= node.Span.End)
-            {
-                if (node.Equals(list.Last()))
-                {
-                    last = true; break; //j reached the last element.
-                }
-                node = list[j++];
-            }
-
-            ListNode subNodes;
-            int iIndex = Math.Max(i - 1, 0);
-            if (last)
-            {
-                subNodes = ASTManager.SubNotes(listNode, iIndex, list.Count - iIndex);
-            }
-            else
-            {
-                List<SyntaxNodeOrToken> snort = new List<SyntaxNodeOrToken>();
-                for (int k = iIndex; !list[k].Equals(node); k++)
-                {
-                    snort.Add(list[k]);
-                }
-                subNodes = new ListNode(snort);
-            }
-
-            //subNodes = ASTManager.SubNotes(listNode, Math.Max(i - 1, 0), ((j) - i));
-            subNodes.OriginalText = re.Text;
-            Tuple<ListNode, ListNode> t = Tuple.Create(listNode, subNodes);
-
-            return t;
-        }
 
         /// <summary>
         /// Calculate least common ancestor of source code
@@ -517,7 +319,7 @@ namespace Spg.LocationRefactor.Location
                 foreach (Selection span in controller.EditedLocations[file])
                 {
                     //MessageBox.Show(sourceCodeAfter.Substring(span.Start + 1, span.Length - 2));
-              
+
                     SyntaxNode snode = LCAManager.LeastCommonAncestor(treeAfter, span.Start + 1,
                         (span.Start + 1) + (span.Length - 2));
                     aNodes.Add(snode);
@@ -617,13 +419,6 @@ namespace Spg.LocationRefactor.Location
 
             List<TRegion> inputRegions = new List<TRegion>();
             List<TRegion> outputRegions = new List<TRegion>();
-            //string line = "";
-            //foreach (var file in groupLocations)
-            //{
-            //    line += file.Key + "\n";
-            //}
-            //MessageBox.Show(line);
-            //Console.WriteLine(line);
 
             foreach (string file in files)
             {
@@ -640,27 +435,27 @@ namespace Spg.LocationRefactor.Location
 
                 string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
 
-                //if (sourceCodeAfter != null)
-                //{
-                TRegion parent = new TRegion { Text = sourceCodeAfter };
-                foreach (var span in controller.EditedLocations[fileUpper])
+                if (sourceCodeAfter != null)
                 {
-                    TRegion tregion = new TRegion
+                    TRegion parent = new TRegion { Text = sourceCodeAfter };
+                    foreach (var span in controller.EditedLocations[fileUpper])
                     {
-                        Start = span.Start + 1,
-                        Length = span.Length - 2,
-                        Parent = parent,
-                        Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
-                    };
-                    //MessageBox.Show(span.Start + tregion.Text + span.Length);
+                        TRegion tregion = new TRegion
+                        {
+                            Start = span.Start + 1,
+                            Length = span.Length - 2,
+                            Parent = parent,
+                            Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
+                        };
+                        //MessageBox.Show(span.Start + tregion.Text + span.Length);
 
-                    outputRegions.Add(tregion);
+                        outputRegions.Add(tregion);
+                    }
                 }
-                // }
             }
 
-            List<Tuple<ListNode, ListNode>> inputSelection = DecomposeToOutput(inputRegions);
-            List<Tuple<ListNode, ListNode>> ouputSelection = DecomposeToOutput(outputRegions);
+            List<Tuple<ListNode, ListNode>> inputSelection = Decomposer.GetInstance().DecomposeToOutput(inputRegions);
+            List<Tuple<ListNode, ListNode>> ouputSelection = Decomposer.GetInstance().DecomposeToOutput(outputRegions);
 
             List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
             for (int index = 0; index < inputSelection.Count; index++)

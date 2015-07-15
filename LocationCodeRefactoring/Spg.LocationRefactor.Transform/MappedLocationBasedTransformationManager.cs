@@ -15,7 +15,6 @@ namespace Spg.LocationRefactor.Transform
 {
     public class MappedLocationBasedTransformationManager : TransformationManager
     {
-
         /// <summary>
         /// Transform selection regions
         /// </summary>

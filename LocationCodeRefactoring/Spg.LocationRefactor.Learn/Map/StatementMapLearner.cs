@@ -7,6 +7,7 @@ using Spg.LocationRefactor.Operator.Map;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
@@ -18,7 +19,7 @@ namespace Spg.LocationRefactor.Learn.Map
     /// </summary>
     public class StatementMapLearner : MapLearnerBase
     {
-        RegionManager strategy = RegionManager.GetInstance();
+        Decomposer strategy = Decomposer.GetInstance();
         /// <summary>
         /// Filter
         /// </summary>
@@ -63,7 +64,7 @@ namespace Spg.LocationRefactor.Learn.Map
         /// <returns>Syntax nodes</returns>
         public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
-            return strategy.SyntaxNodes(sourceCode, list);
+            return RegionManager.GetInstance().SyntaxNodes(sourceCode, list);
         }
     }
 }

@@ -40,7 +40,6 @@ namespace Spg.ExampleRefactoring.LCS
         {
             _instance = null;
             LCA<SyntaxNodeOrToken>.LeastCommonAncestorFinder<SyntaxNodeOrToken>.Init();
-
         }
 
         /// <summary>
