@@ -59,7 +59,7 @@ namespace Spg.LocationRefactor.Learn
             List<Tuple<ListNode, ListNode, bool>> QLine = new List<Tuple<ListNode, ListNode, bool>>();
             foreach (Tuple<ListNode, ListNode> tuple in S)
             {
-                Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple, true);
+                Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple.Item1, tuple.Item2, true);
                 QLine.Add(t);
             }
             List<Prog> programs = new List<Prog>();
@@ -99,13 +99,13 @@ namespace Spg.LocationRefactor.Learn
             List<Tuple<ListNode, ListNode, bool>> QLine = new List<Tuple<ListNode, ListNode, bool>>();
             foreach (Tuple<ListNode, ListNode> tuple in S)
             {
-                Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple, true);
+                Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple.Item1, tuple.Item2, true);
                 QLine.Add(t);
             }
 
             foreach (Tuple<ListNode, ListNode> tuple in SN)
             {
-                Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple, false);
+                Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple.Item1, tuple.Item2, false);
                 QLine.Add(t);
             }
 
@@ -207,6 +207,7 @@ namespace Spg.LocationRefactor.Learn
         protected abstract FilterBase GetFilter(List<TRegion> list);
     }
 }
+
 
 
 
