@@ -28,13 +28,13 @@ namespace Spg.ExampleRefactoring.Expression
             if (examples == null) throw new ArgumentNullException("examples");
             if(!examples.Any()) throw new ArgumentException("Examples cannot be null");
 
-            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> expressions = dag.Mapping;
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> expressions = dag.Mapping;
 
-            foreach (KeyValuePair<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> entry in expressions)
+            foreach (KeyValuePair<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> entry in expressions)
             {
-                Dictionary<string, List<IExpression>> removes = new Dictionary<string, List<IExpression>>();
+                Dictionary<ExpressionKind, List<IExpression>> removes = new Dictionary<ExpressionKind, List<IExpression>>();
                 int i = 0;
-                foreach (KeyValuePair<string, List<IExpression>> item in entry.Value)
+                foreach (KeyValuePair<ExpressionKind, List<IExpression>> item in entry.Value)
                 {
                     foreach (IExpression expression in item.Value)
                     {
@@ -54,7 +54,7 @@ namespace Spg.ExampleRefactoring.Expression
                     }
                 }
 
-                foreach (KeyValuePair<string, List<IExpression>> item in removes)
+                foreach (KeyValuePair<ExpressionKind, List<IExpression>> item in removes)
                 {
                     foreach (IExpression expression in item.Value)
                     {
@@ -129,6 +129,7 @@ namespace Spg.ExampleRefactoring.Expression
         }
     }
 }
+
 
 
 

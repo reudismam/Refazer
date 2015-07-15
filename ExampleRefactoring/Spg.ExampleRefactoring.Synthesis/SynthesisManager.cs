@@ -253,9 +253,9 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="mapping">Expressions mapping</param>
         /// <param name="indexs">Synthesized program sub parts</param>
         /// <returns>Expression list that forms the synthesized program</returns>
-        private static List<Dictionary<string, List<IExpression>>> SynthesizedPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> mapping, List<Vertex> indexs)
+        private static List<Dictionary<ExpressionKind, List<IExpression>>> SynthesizedPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> mapping, List<Vertex> indexs)
         {
-            List<Dictionary<string, List<IExpression>>> synthProgList = new List<Dictionary<string, List<IExpression>>>();
+            List<Dictionary<ExpressionKind, List<IExpression>>> synthProgList = new List<Dictionary<ExpressionKind, List<IExpression>>>();
             for (int i = 1; i < indexs.Count; i++)
             {
                 Tuple<Vertex, Vertex> tuple = Tuple.Create(indexs[i - 1], indexs[i]);
@@ -477,13 +477,13 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="solutions">Solution</param>
         /// <param name="examples">Examples</param>
         /// <returns>A valid hypothesis, if it exits, null otherwise</returns>
-        public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
+        public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
         {
             SynthesizedProgram selected = null;
-            List<Dictionary<string, List<IExpression>>> expressions = SynthesizedPrograms(mapping, solutions);
+            List<Dictionary<ExpressionKind, List<IExpression>>> expressions = SynthesizedPrograms(mapping, solutions);
 
             List<SynthesizedProgram> hypotheses = new List<SynthesizedProgram>();
-            foreach (Dictionary<string, List<IExpression>> item in expressions)
+            foreach (Dictionary<ExpressionKind, List<IExpression>> item in expressions)
             {
                 List<IExpression> l = GetExpressions(item);
                     //foreach (List<IExpression> l in item.Values)
@@ -524,7 +524,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             return selected;
         }
 
-        public SynthesizedProgram ComputeSynthesizedProgram(List<Dictionary<string, List<IExpression>>> expressions, List<IExpression> solution, List<Tuple<ListNode, ListNode>> examples)
+        public SynthesizedProgram ComputeSynthesizedProgram(List<Dictionary<ExpressionKind, List<IExpression>>> expressions, List<IExpression> solution, List<Tuple<ListNode, ListNode>> examples)
         {
             //int row, col;
 
@@ -569,10 +569,10 @@ namespace Spg.ExampleRefactoring.Synthesis
             return prog != null;
         }
 
-        public List<IExpression> GetExpressions(Dictionary<string, List<IExpression>> mapping)
+        public List<IExpression> GetExpressions(Dictionary<ExpressionKind, List<IExpression>> mapping)
         {
             List<IExpression> expressions = new List<IExpression>();
-            foreach (KeyValuePair<string, List<IExpression>> entry in mapping)
+            foreach (KeyValuePair<ExpressionKind, List<IExpression>> entry in mapping)
             {
                 expressions.AddRange(entry.Value);
             }
@@ -981,3 +981,4 @@ namespace Spg.ExampleRefactoring.Synthesis
             return sum;
         }
         */
+

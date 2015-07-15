@@ -291,12 +291,12 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (dag.Vertexes == null || dag.dag == null || dag.Mapping == null) { throw new ArgumentException("Some property of Dag is null"); }
 
-            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> dictionary = dag.Mapping;
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> dictionary = dag.Mapping;
             List<Tuple<Vertex, Vertex>> removes = new List<Tuple<Vertex, Vertex>>();
-            foreach (KeyValuePair<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> entry in dictionary)
+            foreach (KeyValuePair<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> entry in dictionary)
             {
                 bool rm = true;
-                foreach (KeyValuePair<string, List<IExpression>> item in entry.Value)
+                foreach (KeyValuePair<ExpressionKind, List<IExpression>> item in entry.Value)
                 {
                     if (!(item.Value.Count == 0))
                     {
@@ -341,7 +341,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             //List<int> n_sorces = new List<int>();
             //n_sorces.Add(0);
 
-            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>>();
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>>();
             Dictionary<int, List<IPosition>> kpositions = new Dictionary<int, List<IPosition>>();
             for (int i = 0; i <= output.Length(); i++)
             {
@@ -349,7 +349,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 {
                     Tuple<Vertex, Vertex> tuple = Tuple.Create(vertexes[i.ToString()], vertexes[j.ToString()]);
 
-                    Dictionary<string, List<IExpression>> synthExpressions = new Dictionary<string, List<IExpression>>();
+                    Dictionary<ExpressionKind, List<IExpression>> synthExpressions = new Dictionary<ExpressionKind, List<IExpression>>();
                     
                     ListNode subNodes = ASTManager.SubNotes(output, i, (j - i));
                     if (Setting.ConsiderConstrStr)
@@ -413,14 +413,14 @@ namespace Spg.ExampleRefactoring.Synthesis
             //List<int> n_sorces = new List<int>();
             //n_sorces.Add(0);
 
-            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>>();
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>>();
             Dictionary<int, List<IPosition>> kpositions = new Dictionary<int, List<IPosition>>();
             for (int i = 0; i < boundaryPoints.Count; i++)
             {
                 for (int j = i + 1; j < boundaryPoints.Count; j++)
                 {
                     Tuple<Vertex, Vertex> tuple = Tuple.Create(vertexes[boundaryPoints[i].ToString()], vertexes[boundaryPoints[j].ToString()]);
-                    Dictionary<string, List<IExpression>> synthExpressions = new Dictionary<string, List<IExpression>>();
+                    Dictionary<ExpressionKind, List<IExpression>> synthExpressions = new Dictionary<ExpressionKind, List<IExpression>>();
 
                     ListNode subNodes = ASTManager.SubNotes(output, boundaryPoints[i], boundaryPoints[j] - boundaryPoints[i]);
                     if (Setting.ConsiderConstrStr)
@@ -1147,6 +1147,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+
 
 
 

@@ -57,19 +57,19 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             Dag composition;
             DirectedGraph graph = new DirectedGraph();
-            Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<string, List<IExpression>>>();
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>>();
 
             Dictionary<string, Vertex> vertexes = new Dictionary<string, Vertex>();
             foreach (Tuple<Vertex, Vertex> edge1 in dag1.Mapping.Keys)
             {
                 foreach (Tuple<Vertex, Vertex> edge2 in dag2.Mapping.Keys)
                 {
-                    Dictionary<string, List<IExpression>> intersection = Intersect(dag1, dag2, edge1, edge2);
+                    Dictionary<ExpressionKind, List<IExpression>> intersection = Intersect(dag1, dag2, edge1, edge2);
                     Vertex vertex1 = new Vertex(edge1.Item1.Id + " : " + edge2.Item1.Id, 0.0);
                     Vertex vertex2 = new Vertex(edge1.Item2.Id + " : " + edge2.Item2.Id, 0.0);
 
                     bool containElement = false;
-                    foreach (KeyValuePair<string, List<IExpression>> item in intersection)
+                    foreach (KeyValuePair<ExpressionKind, List<IExpression>> item in intersection)
                     {
                         if (item.Value.Any())
                         {
@@ -118,11 +118,11 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="tuple1">First edge</param>
         /// <param name="tuple2">Second edge</param>
         /// <returns>Intersection</returns>
-        private Dictionary<string, List<IExpression>> Intersect(Dag dag1, Dag dag2, Tuple<Vertex, Vertex> tuple1, Tuple<Vertex, Vertex> tuple2)
+        private Dictionary<ExpressionKind, List<IExpression>> Intersect(Dag dag1, Dag dag2, Tuple<Vertex, Vertex> tuple1, Tuple<Vertex, Vertex> tuple2)
         {
-            Dictionary<string, List<IExpression>> expressions = new Dictionary<string, List<IExpression>>();
-            Dictionary<string, List<IExpression>> expressions1 = dag1.Mapping[tuple1];
-            Dictionary<string, List<IExpression>> expressions2 = dag2.Mapping[tuple2];
+            Dictionary<ExpressionKind, List<IExpression>> expressions = new Dictionary<ExpressionKind, List<IExpression>>();
+            Dictionary<ExpressionKind, List<IExpression>> expressions1 = dag1.Mapping[tuple1];
+            Dictionary<ExpressionKind, List<IExpression>> expressions2 = dag2.Mapping[tuple2];
             if (expressions1.ContainsKey(ExpressionKind.Consttrustr) && expressions2.ContainsKey(ExpressionKind.Consttrustr))
             {
                 if (expressions1[ExpressionKind.Consttrustr].Count > 0 &&
@@ -182,11 +182,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             return intersection;
         }
 
-        private Tuple<HashSet<IPosition>, HashSet<IPosition>> Positions(Dag dag1, Tuple<Vertex, Vertex> tuple, string kind)
+        private Tuple<HashSet<IPosition>, HashSet<IPosition>> Positions(Dag dag1, Tuple<Vertex, Vertex> tuple, ExpressionKind kind)
         {
             
             Tuple<Dag, Tuple<Vertex, Vertex>> tupleposition = Tuple.Create(dag1, tuple);
-            Dictionary<string, List<IExpression>> expressions = dag1.Mapping[tuple];
+            Dictionary<ExpressionKind, List<IExpression>> expressions = dag1.Mapping[tuple];
 
             Tuple<HashSet<IPosition>, HashSet<IPosition>> positions = null;
             if (!PositionMap.TryGetValue(tupleposition, out positions))
@@ -228,5 +228,6 @@ namespace Spg.ExampleRefactoring.Synthesis
 
     }
 }
+
 
 
