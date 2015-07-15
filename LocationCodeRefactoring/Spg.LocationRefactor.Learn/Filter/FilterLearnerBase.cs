@@ -159,15 +159,17 @@ namespace Spg.LocationRefactor.Learn
 
             foreach (Tuple<ListNode, ListNode, bool> e in examples)
             {
-                boolExamples.Add(Tuple.Create(e.Item1.Item1, e.Item2));
-                if (e.Item2 && positivesExamples.Count < 2)
+                boolExamples.Add(Tuple.Create(e.Item1, e.Item3));
+                if (e.Item3 && positivesExamples.Count < 2)
                 {
-                    positivesExamples.Add(e.Item1);
+                    Tuple<ListNode, ListNode> tuple = Tuple.Create(e.Item1, e.Item2);
+                    positivesExamples.Add(tuple);
 
                 }
-                else if (!e.Item2 && negativesExamples.Count < 2)
+                else if (!e.Item3 && negativesExamples.Count < 2)
                 {
-                    negativesExamples.Add(e.Item1);
+                    Tuple<ListNode, ListNode> tuple = Tuple.Create(e.Item1, e.Item2);
+                    negativesExamples.Add(tuple);
                 }
             }
 
