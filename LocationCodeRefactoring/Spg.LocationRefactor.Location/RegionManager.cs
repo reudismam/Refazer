@@ -424,19 +424,19 @@ namespace Spg.LocationRefactor.Location
             {
                 string fileUpper = file.ToUpperInvariant();
                 string sourceCode = groupLocations[fileUpper].First().SourceCode;
-                List<CodeLocation> cLocations = groupLocations[fileUpper];
-
-                TRegion iparent = new TRegion { Text = sourceCode };
-                foreach (CodeLocation codeLocation in cLocations)
-                {
-                    codeLocation.Region.Parent = iparent;
-                    inputRegions.Add(codeLocation.Region);
-                }
-
                 string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
-
                 if (sourceCodeAfter != null)
                 {
+                    List<CodeLocation> cLocations = groupLocations[fileUpper];
+
+                    TRegion iparent = new TRegion { Text = sourceCode };
+                    foreach (CodeLocation codeLocation in cLocations)
+                    {
+                        codeLocation.Region.Parent = iparent;
+                        inputRegions.Add(codeLocation.Region);
+                    }
+
+
                     TRegion parent = new TRegion { Text = sourceCodeAfter };
                     foreach (var span in controller.EditedLocations[fileUpper])
                     {
@@ -448,7 +448,6 @@ namespace Spg.LocationRefactor.Location
                             Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
                         };
                         //MessageBox.Show(span.Start + tregion.Text + span.Length);
-
                         outputRegions.Add(tregion);
                     }
                 }
