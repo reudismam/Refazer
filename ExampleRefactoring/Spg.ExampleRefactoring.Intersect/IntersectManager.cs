@@ -5,8 +5,9 @@ using DiGraph;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Synthesis;
 
-namespace Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Intersect
 {
     /// <summary>
     /// Intersect manager

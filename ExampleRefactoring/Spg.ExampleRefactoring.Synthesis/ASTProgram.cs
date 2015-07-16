@@ -2,20 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Digraph;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Setting;
-using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Intersect;
 using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactoring.Tok;
 
@@ -985,7 +980,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             var matches = new RegexComparer().Matches(input, regex);//ASTManager.Matches(input, regex, new RegexComparer());
             for (int i = 0; i < matches.Count; i++)
             {
-                int positionIndex = global::Spg.ExampleRefactoring.Position.Pos.GetPositionIndex(input, r1, r2, i + 1);
+                int positionIndex = Position.Pos.GetPositionIndex(input, r1, r2, i + 1);
                 if (positionIndex >= k1 && positionIndex <= k2)
                 {
                     return i + 1;

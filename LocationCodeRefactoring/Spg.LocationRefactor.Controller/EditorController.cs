@@ -10,7 +10,6 @@ using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Observer;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Operator.Map;
