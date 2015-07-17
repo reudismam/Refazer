@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -10,6 +10,8 @@ namespace Spg.ExampleRefactoring.Intersect
 {
     internal interface IIntersectStrategy
     {
-        List<IExpression> GetExpressions();
+        List<IExpression> GetExpressions(List<IExpression> expressions1, List<IExpression> expressions2);
     }
 }
+
+
