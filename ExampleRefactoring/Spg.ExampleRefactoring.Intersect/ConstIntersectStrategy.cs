@@ -9,7 +9,7 @@ using Spg.ExampleRefactoring.Expression;
 
 namespace Spg.ExampleRefactoring.Intersect
 {
-    internal class ConstIntersectStrategy: IIntersectStrategy
+    internal abstract  class ConstIntersectStrategyBase
     {
         /// <summary>
         /// Get Expressions for ConstruStr
@@ -24,13 +24,13 @@ namespace Spg.ExampleRefactoring.Intersect
             List<IExpression> expressions = new List<IExpression>();
             Dictionary<ExpressionKind, List<IExpression>> expressions1 = dag1.Mapping[tuple1];
             Dictionary<ExpressionKind, List<IExpression>> expressions2 = dag2.Mapping[tuple2];
-            if (expressions1.ContainsKey(ExpressionKind.Consttrustr) && expressions2.ContainsKey(ExpressionKind.Consttrustr))
+            if (expressions1.ContainsKey(GetExpressionKind()) && expressions2.ContainsKey(GetExpressionKind()))
             {
-                if (expressions1[ExpressionKind.Consttrustr].Count > 0 &&
-                    expressions2[ExpressionKind.Consttrustr].Count > 0 &&
-                    expressions1[ExpressionKind.Consttrustr][0].Equals(expressions2[ExpressionKind.Consttrustr][0]))
+                if (expressions1[GetExpressionKind()].Count > 0 &&
+                    expressions2[GetExpressionKind()].Count > 0 &&
+                    expressions1[GetExpressionKind()][0].Equals(expressions2[GetExpressionKind()][0]))
                 {
-                    expressions.AddRange(expressions1[ExpressionKind.Consttrustr]);
+                    expressions.AddRange(expressions1[GetExpressionKind()]);
                 }
             }
 
@@ -40,13 +40,12 @@ namespace Spg.ExampleRefactoring.Intersect
         /// <summary>
         /// Get the ExpressionKind for ConstIntersectStrategy
         /// </summary>
-        /// <returns>the ExpressionKind for ConstIntersectStrategy</returns>
-        public ExpressionKind GetExpressionKind()
-        {
-            return ExpressionKind.Consttrustr;
-        }
+        /// <returns>the ExpressionKind for ConstStrs</returns>
+        public abstract ExpressionKind GetExpressionKind();
+
     }
 }
+
 
 
 
