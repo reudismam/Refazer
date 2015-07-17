@@ -4,8 +4,6 @@ using System.Linq;
 using DiGraph;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Intersect
 {
@@ -14,11 +12,6 @@ namespace Spg.ExampleRefactoring.Intersect
     /// </summary>
     public class IntersectManager
     {
-        /// <summary>
-        /// Fist element represents the example, second element represents the position 
-        /// in the example
-        /// </summary>
-        public Dictionary<Tuple<Dag, Tuple<Vertex, Vertex>>, Tuple<HashSet<IPosition>, HashSet<IPosition>>> PositionMap  = new Dictionary<Tuple<Dag, Tuple<Vertex, Vertex>>, Tuple<HashSet<IPosition>, HashSet<IPosition>>>();
         /// <summary>
         /// Intersection among direct acyclic graphs
         /// </summary>
@@ -122,111 +115,25 @@ namespace Spg.ExampleRefactoring.Intersect
         private Dictionary<ExpressionKind, List<IExpression>> Intersect(Dag dag1, Dag dag2, Tuple<Vertex, Vertex> tuple1, Tuple<Vertex, Vertex> tuple2)
         {
             Dictionary<ExpressionKind, List<IExpression>> expressions = new Dictionary<ExpressionKind, List<IExpression>>();
-            Dictionary<ExpressionKind, List<IExpression>> expressions1 = dag1.Mapping[tuple1];
-            Dictionary<ExpressionKind, List<IExpression>> expressions2 = dag2.Mapping[tuple2];
-            if (expressions1.ContainsKey(ExpressionKind.Consttrustr) && expressions2.ContainsKey(ExpressionKind.Consttrustr))
+
+            List<IIntersectStrategy> strategies = GetStrategies();
+            foreach (IIntersectStrategy strategy in strategies)
             {
-                if (expressions1[ExpressionKind.Consttrustr].Count > 0 &&
-                    expressions2[ExpressionKind.Consttrustr].Count > 0 &&
-                    expressions1[ExpressionKind.Consttrustr][0].Equals(expressions2[ExpressionKind.Consttrustr][0]))
-                {
-                    expressions.Add(ExpressionKind.Consttrustr, expressions1[ExpressionKind.Consttrustr]);
-                }
+                List<IExpression> exp = strategy.GetExpressions(dag1, dag2, tuple1, tuple2);
+                expressions.Add(strategy.GetExpressionKind(), exp);
             }
-
-            if (expressions1.ContainsKey(ExpressionKind.SubStr) && expressions2.ContainsKey(ExpressionKind.SubStr))
-            {
-                Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1 = Positions(dag1, tuple1, ExpressionKind.SubStr);
-                Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2 = Positions(dag2, tuple2, ExpressionKind.SubStr);   
-
-                expressions.Add(ExpressionKind.SubStr, SubStrIntersect(hashes1, hashes2, false));
-            }
-
-            if (expressions1.ContainsKey(ExpressionKind.Identostr) && expressions2.ContainsKey(ExpressionKind.Identostr))
-            {
-                Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1 = Positions(dag1, tuple1, ExpressionKind.Identostr);
-                Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2 = Positions(dag2, tuple2, ExpressionKind.Identostr);
-                expressions.Add(ExpressionKind.Identostr, SubStrIntersect(hashes1, hashes2, true));
-            }
-
             return expressions;
-        } 
-
-        /// <summary>
-        /// Sub nodes intersection
-        /// </summary>
-        /// <param name="hashes1">First hashset</param>
-        /// <param name="hashes2">Second hashset</param>
-        /// <param name="addIdenToToken">Add idenToStr expression</param>
-        /// <returns>Intersection</returns>
-        private List<IExpression> SubStrIntersect(Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes1, Tuple<HashSet<IPosition>, HashSet<IPosition>> hashes2, bool addIdenToToken)
-        {
-            List<IExpression> intersection = new List<IExpression>();
-            IEnumerable<IPosition> hs1 =  hashes1.Item1.Intersect(hashes2.Item1);
-            IEnumerable<IPosition> hs2 =  hashes1.Item2.Intersect(hashes2.Item2);
-
-            List <Tuple<IPosition, IPosition >> combinations = ASTProgram.ConstructCombinations(hs1, hs2);
-            foreach (Tuple<IPosition, IPosition> positions in combinations)
-            {
-                if (addIdenToToken)
-                {
-                    IExpression expression1 = new IdenToStr(positions.Item1, positions.Item2);
-                    intersection.Add(expression1);
-                }
-                else
-                {
-                    IExpression expression = new SubStr(positions.Item1, positions.Item2);
-                    intersection.Add(expression);
-                }
-            }
-
-            return intersection;
         }
 
-        private Tuple<HashSet<IPosition>, HashSet<IPosition>> Positions(Dag dag1, Tuple<Vertex, Vertex> tuple, ExpressionKind kind)
+        private List<IIntersectStrategy> GetStrategies()
         {
-            
-            Tuple<Dag, Tuple<Vertex, Vertex>> tupleposition = Tuple.Create(dag1, tuple);
-            Dictionary<ExpressionKind, List<IExpression>> expressions = dag1.Mapping[tuple];
+            List<IIntersectStrategy> strategies = new List<IIntersectStrategy>();
+            strategies.Add(new ConstIntersectStrategy());
+            strategies.Add(new SubStrIntersectStrategy());
+            strategies.Add(new IdenToStrIntersectStrategy());
 
-            Tuple<HashSet<IPosition>, HashSet<IPosition>> positions = null;
-            if (!PositionMap.TryGetValue(tupleposition, out positions))
-            {
-                HashSet<IPosition>  positions1 = PositionsHash(expressions[kind], 1);
-                HashSet<IPosition> positions2 = PositionsHash(expressions[kind], 2);
-                positions = Tuple.Create(positions1, positions2);
-                PositionMap.Add(tupleposition, positions);
-            }
-
-            return PositionMap[tupleposition];
+            return strategies;
         }
-
-        private HashSet<IPosition> PositionsHash(List<IExpression> expressions, int position)
-        {
-            HashSet<IPosition> positions = new HashSet<IPosition>();
-            foreach (IExpression expression in expressions)
-            {
-                if (expression is SubStr)
-                {
-                    SubStr sbstr = expression as SubStr;
-                    if (position == 1)
-                    {
-                        if (!positions.Contains(sbstr.p1))
-                        {
-                            positions.Add(sbstr.p1);
-                        }
-                    }else
-                    {
-                        if (!positions.Contains(sbstr.p2))
-                        {
-                            positions.Add(sbstr.p2);
-                        }
-                    }
-                }
-            }
-            return positions;
-        }
-
     }
 }
 
