@@ -910,8 +910,8 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 controllerList.Add(selection);
             }
 
-            locations = locations.OrderBy(o => o.Start).ToList();
-            controllerList = controllerList.OrderBy(o => o.Start).ToList();
+            locations = locations.OrderBy(o => o.Start).ThenBy(o => o.Length).ThenBy(o => o.SourcePath).ToList();
+            controllerList = controllerList.OrderBy(o => o.Start).ThenBy(o => o.Length).ThenBy(o => o.SourcePath).ToList();
 
             bool passed = locations.SequenceEqual(controllerList);
             //for (int i = 0; i < locations.Count; i++)
