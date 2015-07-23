@@ -25,7 +25,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 
             string output01 =
 @"void start(List<Car> list){
-    for(Car car in list)
+    for(Car car in cars)
         car.start();
 }";
             Tuple<string, string> tuple01 = Tuple.Create(input01, output01);
@@ -42,7 +42,7 @@ namespace Spg.ExampleRefactoring.Data.Dig
 
             string output02 =
 @"void start(List<Book> list){
-    for(Book book in list)
+    for(Book book in books)
         book.start();
 }";
             Tuple<string, string> tuple02 = Tuple.Create(input02, output02);

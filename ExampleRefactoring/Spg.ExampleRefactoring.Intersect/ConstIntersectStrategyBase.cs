@@ -9,7 +9,7 @@ using Spg.ExampleRefactoring.Expression;
 
 namespace Spg.ExampleRefactoring.Intersect
 {
-    internal abstract  class ConstIntersectStrategyBase
+    internal abstract  class ConstIntersectStrategyBase: IIntersectStrategy
     {
         /// <summary>
         /// Get Expressions for ConstruStr

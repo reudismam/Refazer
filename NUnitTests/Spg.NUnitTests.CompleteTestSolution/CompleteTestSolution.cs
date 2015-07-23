@@ -893,6 +893,20 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
 
         [Test]
+        public void Proja883600()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("Core.Test");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"NuGet\a883600", @"NuGet\nuget4\NuGet.sln", projects);
+
+            List<string> list = new List<string>();
+            list.Add("PackageWalkerTest.cs");
+            bool passTransformation = CompleteTestBase(list, @"NuGet\a883600");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
         public void Proj2_a883600()
         {
             List<string> projects = new List<string>();

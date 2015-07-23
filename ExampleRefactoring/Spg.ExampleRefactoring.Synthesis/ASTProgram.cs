@@ -261,17 +261,17 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (parent.IsKind(SyntaxKind.Attribute)) { return true;}
 
-            //if (parent.IsKind(SyntaxKind.Argument)) { return true;}
+            ////if (parent.IsKind(SyntaxKind.Argument)) { return true;}
 
-            //if (next == null) { return false;}
+            ////if (next == null) { return false;}
 
-            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
-            {
-                return true;
-                ////string value = next.ToString();
-                //if (next.IsKind(SyntaxKind.OpenParenToken) || next.IsKind(SyntaxKind.DotToken)  || next.IsKind(SyntaxKind.None) || next == null)
-                //    return true;
-            }
+            //if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            //{
+            //    return true;
+            //    ////string value = next.ToString();
+            //    //if (next.IsKind(SyntaxKind.OpenParenToken) || next.IsKind(SyntaxKind.DotToken)  || next.IsKind(SyntaxKind.None) || next == null)
+            //    //    return true;
+            //}
             return false;
         }
 
@@ -425,14 +425,14 @@ namespace Spg.ExampleRefactoring.Synthesis
                         constStrExprs.Add(expression);
                         synthExpressions.Add(ExpressionKind.Consttrustr, constStrExprs);
 
-                        if (subNodes.Length() == 1)
-                        {
-                            List<IExpression> fakeConstStrExps = new List<IExpression>();
-                            IExpression fakeConstrStr = new FakeConstrStr(subNodes);
-                            fakeConstStrExps.Add(fakeConstrStr);
-                            synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
+                        //if (subNodes.Length() == 1 && subNodes.List.First().IsKind(SyntaxKind.IdentifierToken))
+                        //{
+                        //    List<IExpression> fakeConstStrExps = new List<IExpression>();
+                        //    IExpression fakeConstrStr = new FakeConstrStr(subNodes);
+                        //    fakeConstStrExps.Add(fakeConstrStr);
+                        //    synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
                            
-                        }
+                        //}
                     }
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);

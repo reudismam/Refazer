@@ -74,16 +74,16 @@ namespace Spg.ExampleRefactoring.Intersect
                 SubStr sbstr = expression as SubStr;
                 if (position == 1)
                 {
-                    if (sbstr != null && !positions.Contains(sbstr.p1))
+                    if (sbstr != null && !positions.Contains(sbstr.P1))
                     {
-                        positions.Add(sbstr.p1);
+                        positions.Add(sbstr.P1);
                     }
                 }
                 else
                 {
-                    if (sbstr != null && !positions.Contains(sbstr.p2))
+                    if (sbstr != null && !positions.Contains(sbstr.P2))
                     {
-                        positions.Add(sbstr.p2);
+                        positions.Add(sbstr.P2);
                     }
                 }
 

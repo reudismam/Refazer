@@ -12,7 +12,7 @@ namespace Spg.LocationRefactor.Operator
 
         public override string ToString()
         {
-            return "EndSeqMap(" + ((Pair)ScalarExpression.Ioperator).Expression.p1.ToString() + "\nLS=" + SequenceExpression.ToString() + ")";
+            return "EndSeqMap(" + ((Pair)ScalarExpression.Ioperator).Expression.P1.ToString() + "\nLS=" + SequenceExpression.ToString() + ")";
         }
     }
 }

@@ -23,8 +23,8 @@ namespace Spg.LocationRefactor.Operator.Map
         public override string ToString()
         {
             return "MethodMap(λM: Pair(Pos(M, p1), Pos(M, p2)), MS) "
-                   + "\n\tp1 = " + ((Pair)ScalarExpression.Ioperator).Expression.p1
-                   + "\n\tp2 = " + ((Pair)ScalarExpression.Ioperator).Expression.p2
+                   + "\n\tp1 = " + ((Pair)ScalarExpression.Ioperator).Expression.P1
+                   + "\n\tp2 = " + ((Pair)ScalarExpression.Ioperator).Expression.P2
                    + "\n\tMS=" + SequenceExpression;
         }
     }

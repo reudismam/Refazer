@@ -249,9 +249,11 @@ namespace Spg.LocationRefactor.Node
         {
             if (name == null) return null;
 
+            
             IEnumerable<SyntaxNode> output;
             if (!_dicReferences.TryGetValue(name.Item1, out output))
             {
+                Console.WriteLine("Looking for references!! " + name);
                 Dictionary<string, Dictionary<string, List<TextSpan>>> result = GetReferences(name);
 
                 Dictionary<string, Dictionary<string, List<TextSpan>>> referencedSymbols =

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Formatting;
@@ -54,7 +55,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            return "FakeConstructNodes(" + Nodes + ")";
+            return "FakeConstructNodes(" + Nodes.List.First() + ")";
         }
 
         /// <summary>
@@ -68,10 +69,13 @@ namespace Spg.ExampleRefactoring.Expression
             {
                 return false;
             }
-            ConstruStr another = obj as ConstruStr;
+            FakeConstrStr another = (FakeConstrStr) obj;
 
-            NodeComparer compare = new NodeComparer();
-            return compare.SequenceEqual(another.Nodes, this.Nodes);
+            if (Nodes.Length() != another.Nodes.Length()) return false;
+
+            if(Nodes.Length() != 1) throw new Exception("Nodes must have not more or less than one element.");
+
+            return true;
         }
 
         /// <summary>

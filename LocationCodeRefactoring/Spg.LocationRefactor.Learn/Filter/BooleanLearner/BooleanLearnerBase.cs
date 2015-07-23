@@ -36,8 +36,8 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
             {
                 Pos positioncopy = (Pos)position;
 
-                TokenSeq r1 = GetTokenSeq(positioncopy.r1);
-                TokenSeq r2 = GetTokenSeq(positioncopy.r2);
+                TokenSeq r1 = GetTokenSeq(positioncopy.R1);
+                TokenSeq r2 = GetTokenSeq(positioncopy.R2);
                 TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
                 TokenSeq regex = merge;
 

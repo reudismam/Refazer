@@ -129,6 +129,7 @@ namespace Spg.ExampleRefactoring.Intersect
         {
             List<IIntersectStrategy> strategies = new List<IIntersectStrategy>();
             strategies.Add(new ConstIntersectStrategy());
+            strategies.Add(new FakeConstIntersectStrategy());
             strategies.Add(new SubStrIntersectStrategy());
             strategies.Add(new IdenToStrIntersectStrategy());
 

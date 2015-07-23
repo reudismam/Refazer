@@ -29,9 +29,9 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>A substring of s that match this expression.</returns>
         public override ListNode RetrieveSubNodes(ListNode input)
         {
-            int position1 = p1.GetPositionIndex(input);
+            int position1 = P1.GetPositionIndex(input);
 
-            int position2 = p2.GetPositionIndex(input);
+            int position2 = P2.GetPositionIndex(input);
 
             ListNode nodes = ASTManager.SubNotes(input, position1, (position2 - position1));
 
@@ -59,7 +59,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>String representation of this expression</returns>
         public override string ToString()
         {
-            return "IdenToStr(vi, "+ p1 +", "+ p2 +")";
+            return "IdenToStr(vi, "+ P1 +", "+ P2 +")";
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Spg.ExampleRefactoring.Expression
                 return false;
             }
             SubStr another = obj as IdenToStr;
-            bool result = another.p1.Equals(this.p1) && another.p2.Equals(this.p2);
+            bool result = another.P1.Equals(this.P1) && another.P2.Equals(this.P2);
             return result;
         }
 

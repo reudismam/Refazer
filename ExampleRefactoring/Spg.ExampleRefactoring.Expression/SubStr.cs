@@ -17,12 +17,12 @@ namespace Spg.ExampleRefactoring.Expression
         /// <summary>
         /// Position one on the expression.
         /// </summary>
-        public IPosition p1 { get; set; }
+        public IPosition P1 { get; set; }
 
         /// <summary>
         /// Position two on the expression.
         /// </summary>
-        public IPosition p2 { get; set; }
+        public IPosition P2 { get; set; }
 
 
         /// <summary>
@@ -32,8 +32,8 @@ namespace Spg.ExampleRefactoring.Expression
         /// <param name="p2">Position two on the string.</param>
         public SubStr(IPosition p1, IPosition p2)
         {
-            this.p1 = p1;
-            this.p2 = p2;
+            this.P1 = p1;
+            this.P2 = p2;
         }
 
         /// <summary>
@@ -43,9 +43,9 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>True is this expression is present on the string s. False otherwise.</returns>
         public bool IsPresentOn(Tuple<ListNode, ListNode> example)
         {
-            int position1 = p1.GetPositionIndex(example.Item1);
+            int position1 = P1.GetPositionIndex(example.Item1);
 
-            int position2 = p2.GetPositionIndex(example.Item1);
+            int position2 = P2.GetPositionIndex(example.Item1);
 
             if (AreValidPositions(position1, position2, example.Item1))
             {
@@ -78,9 +78,9 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>A substring of s that match this expression.</returns>
         public virtual ListNode RetrieveSubNodes(ListNode input)
         {
-            int position1 = p1.GetPositionIndex(input);
+            int position1 = P1.GetPositionIndex(input);
 
-            int position2 = p2.GetPositionIndex(input);
+            int position2 = P2.GetPositionIndex(input);
 
             ListNode nodes = ASTManager.SubNotes(input, position1, (position2 - position1));
 
@@ -93,7 +93,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>Size</returns>
         [Obsolete("No used anymore")]
         public int Size() {
-            int size = p1.Size() * p2.Size();
+            int size = P1.Size() * P2.Size();
             return size;
         }
 
@@ -103,7 +103,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>String representation of this expression</returns>
         public override string ToString()
         {
-            return "SubStr(vi, "+ p1 +", "+ p2 +")";
+            return "SubStr(vi, "+ P1 +", "+ P2 +")";
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Spg.ExampleRefactoring.Expression
                 return false;
             }
             SubStr another = obj as SubStr;
-            bool result = another.p1.Equals(this.p1) && another.p2.Equals(this.p2);
+            bool result = another.P1.Equals(this.P1) && another.P2.Equals(this.P2);
             return result;
         }
 

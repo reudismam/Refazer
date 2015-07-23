@@ -312,8 +312,8 @@ namespace Spg.ExampleRefactoring.Synthesis
                 {
                     SubStr subStr = (SubStr)expression;
 
-                    IPosition p1 = subStr.p1;
-                    IPosition p2 = subStr.p2;
+                    IPosition p1 = subStr.P1;
+                    IPosition p2 = subStr.P2;
 
                     EvaluatePos(p1, features);
                     EvaluatePos(p2, features);
@@ -385,17 +385,17 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             int count = 0;
-            for (int i = 0; i < pos.r1.Tokens.Count; i++)
+            for (int i = 0; i < pos.R1.Tokens.Count; i++)
             {
-                if (pos.r1.Tokens[i] is DymToken)
+                if (pos.R1.Tokens[i] is DymToken)
                 {
                     count++;
                 }
             }
 
-            for (int i = 0; i < pos.r2.Tokens.Count; i++)
+            for (int i = 0; i < pos.R2.Tokens.Count; i++)
             {
-                if (pos.r2.Tokens[i] is DymToken)
+                if (pos.R2.Tokens[i] is DymToken)
                 {
                     count++;
                 }
@@ -415,17 +415,17 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             int count = 0;
-            for (int i = 0; i < pos.r1.Tokens.Count; i++)
+            for (int i = 0; i < pos.R1.Tokens.Count; i++)
             {
-                if (pos.r1.Tokens[i].token.AsNode() != null)
+                if (pos.R1.Tokens[i].token.AsNode() != null)
                 {
                     count++;
                 }
             }
 
-            for (int i = 0; i < pos.r2.Tokens.Count; i++)
+            for (int i = 0; i < pos.R2.Tokens.Count; i++)
             {
-                if (pos.r2.Tokens[i].token.AsNode() != null)
+                if (pos.R2.Tokens[i].token.AsNode() != null)
                 {
                     count++;
                 }
@@ -445,12 +445,12 @@ namespace Spg.ExampleRefactoring.Synthesis
                 value = 0;
             }
 
-            if (p1.r1.Length() == 0)
+            if (p1.R1.Length() == 0)
             {
                 features[key] = value + 1;
             }
 
-            if (p1.r2.Length() == 0)
+            if (p1.R2.Length() == 0)
             {
                 features[key] = value + 1;
             }

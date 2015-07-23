@@ -73,8 +73,8 @@ namespace Spg.LocationRefactor.Operator
             Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
             ListNode input = lNode.Item1;
 
-            int pOfMatch1 = Expression.p1.GetPositionIndex(input);
-            int pOfMatch2 = Expression.p2.GetPositionIndex(input);
+            int pOfMatch1 = Expression.P1.GetPositionIndex(input);
+            int pOfMatch2 = Expression.P2.GetPositionIndex(input);
 
             ListNode matchNodes = ASTManager.SubNotes(input, pOfMatch1, (pOfMatch2 - pOfMatch1));
 
@@ -116,8 +116,8 @@ namespace Spg.LocationRefactor.Operator
             Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
             ListNode input = lNode.Item1;
 
-            int pOfMatch1 = Expression.p1.GetPositionIndex(input);
-            int pOfMatch2 = Expression.p2.GetPositionIndex(input);
+            int pOfMatch1 = Expression.P1.GetPositionIndex(input);
+            int pOfMatch2 = Expression.P2.GetPositionIndex(input);
 
             ListNode matchNodes = ASTManager.SubNotes(input, pOfMatch1, (pOfMatch2 - pOfMatch1));
 
@@ -139,8 +139,8 @@ namespace Spg.LocationRefactor.Operator
         public override string ToString()
         {
             return "Pair(p1, p2, LS)\n" +
-            "p1 = " + Expression.p1 + "\n" +
-            "p2 = " + Expression.p2;
+            "p1 = " + Expression.P1 + "\n" +
+            "p2 = " + Expression.P2;
         }
     }
 }
