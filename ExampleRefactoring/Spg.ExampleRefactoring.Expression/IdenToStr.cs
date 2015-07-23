@@ -1,11 +1,10 @@
 using System;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Formatting;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Expression
 {
@@ -14,17 +13,6 @@ namespace Spg.ExampleRefactoring.Expression
     /// </summary>
     public class IdenToStr : SubStr
     {
-        ///// <summary>
-        ///// Position one on the expression.
-        ///// </summary>
-        //public IPosition p1 { get; set; }
-
-        ///// <summary>
-        ///// Position two on the expression.
-        ///// </summary>
-        //public IPosition p2 { get; set; }
-
-
         /// <summary>
         /// Construct a SubStr expression.
         /// </summary>
@@ -32,44 +20,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <param name="p2">Position two on the string.</param>
         public IdenToStr(IPosition p1, IPosition p2):base(p1, p2)
         {
-            //this.p1 = p1;
-            //this.p2 = p2;
-        }
-
-        ///// <summary>
-        ///// Verify if this expression is present on the string s. See super class documentation.
-        ///// </summary>
-        ///// <param name="example">String to be verified.</param>
-        ///// <returns>True is this expression is present on the string s. False otherwise.</returns>
-        //public bool IsPresentOn(Tuple<ListNode, ListNode> example)
-        //{
-        //    int position1 = p1.GetPositionIndex(example.Item1);
-
-        //    int position2 = p2.GetPositionIndex(example.Item1);
-
-        //    if (AreValidPositions(position1, position2, example.Item1))
-        //    {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
-        ///// <summary>
-        ///// Verify is positions are valid
-        ///// </summary>
-        ///// <param name="position1"></param>
-        ///// <param name="position2"></param>
-        ///// <param name="input"></param>
-        ///// <returns></returns>
-        //public static bool AreValidPositions(int position1, int position2, ListNode input)
-        //{
-        //    if ((Math.Abs(position1) <= input.Length()) && (Math.Abs(position2) <= input.Length()) && (position2 - position1) >= 0 && position1 >= 0)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
+        }   
 
         /// <summary>
         /// Retrieve a substring using this expression of string s.
@@ -127,14 +78,10 @@ namespace Spg.ExampleRefactoring.Expression
             return result;
         }
 
-        ///// <summary>
-        ///// HashCode
-        ///// </summary>
-        ///// <returns></returns>
-        //public override int GetHashCode()
-        //{
-        //    return ToString().GetHashCode();
-        //}
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
     }
 }
 

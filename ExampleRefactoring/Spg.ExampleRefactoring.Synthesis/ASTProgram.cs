@@ -420,20 +420,22 @@ namespace Spg.ExampleRefactoring.Synthesis
                     ListNode subNodes = ASTManager.SubNotes(output, boundaryPoints[i], boundaryPoints[j] - boundaryPoints[i]);
                     if (Setting.ConsiderConstrStr)
                     {
-                        List<IExpression> subStrExpressions = new List<IExpression>();
+                        List<IExpression> constStrExprs = new List<IExpression>();
                         IExpression expression = new ConstruStr(subNodes);
-                        subStrExpressions.Add(expression);
-                        synthExpressions.Add(ExpressionKind.Consttrustr, subStrExpressions);
-                        //if (subNodes.Length() == 1 && subNodes.List[0].IsKind(SyntaxKind.StringLiteralToken))
-                        //{
-                        //    IExpression idExp = new IdenToStr(subNodes.List[0]);
-                        //    subStrns.Add(idExp);
-                        //}
+                        constStrExprs.Add(expression);
+                        synthExpressions.Add(ExpressionKind.Consttrustr, constStrExprs);
+
+                        if (subNodes.Length() == 1)
+                        {
+                            List<IExpression> fakeConstStrExps = new List<IExpression>();
+                            IExpression fakeConstrStr = new FakeConstrStr(subNodes);
+                            fakeConstStrExps.Add(fakeConstrStr);
+                            synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
+                           
+                        }
                     }
-                    //List<IExpression> subStrns = new List<IExpression>();
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);
-                    //subStrns.AddRange(expressions);
                     if (expressions.Any())
                     {
                         synthExpressions.Add(ExpressionKind.SubStr, expressions);
@@ -448,7 +450,6 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                     if (!W.ContainsKey(tuple))
                     {
-                        //W.Add(tuple, subStrns);
                         W.Add(tuple,  synthExpressions);
                     }
                 }

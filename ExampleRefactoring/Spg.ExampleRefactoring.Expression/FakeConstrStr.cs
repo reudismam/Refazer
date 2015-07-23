@@ -1,4 +1,9 @@
 using System;
+using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Formatting;
+using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Comparator;
 
@@ -7,46 +12,40 @@ namespace Spg.ExampleRefactoring.Expression
     /// <summary>
     /// ConstruStr expression
     /// </summary>
-    public class ConstruStr: IExpression
+    public class FakeConstrStr : ConstruStr
     {
-        /// <summary>
-        /// Word constructed by this expression
-        /// </summary>
-        public ListNode Nodes {get; set;}
-
-
         /// <summary>
         /// Construct a string with the passed word.
         /// </summary>
         /// <param name="nodes">Nodes to represent the regular expression.</param>
-        public ConstruStr(ListNode nodes) {
-            this.Nodes = nodes;
+        public FakeConstrStr(ListNode nodes):base(nodes) {
         }
 
-        /// <summary>
-        /// Return always true
-        /// </summary>
-        /// <param name="example">Example</param>
-        /// <returns>True</returns>
-        public bool IsPresentOn(Tuple<ListNode, ListNode> example) {
-            return true;
-        }
 
         /// <summary>
         /// Return the internal List
         /// </summary>
         /// <param name="input">Input</param>
         /// <returns>Internal list</returns>
-        public virtual ListNode RetrieveSubNodes(ListNode input) {
-            return Nodes;
-        }
+        public override ListNode RetrieveSubNodes(ListNode input) {
+            ListNode replace = new ListNode();
+            if (Nodes.Length() == 1 && Nodes.List[0].IsKind(SyntaxKind.IdentifierToken))
+            {
+                SyntaxNodeOrToken identifier = Nodes.List[0];
+                var newLiteral = SyntaxFactory.ParseExpression(@"var _v1 = 0;");
+                List<SyntaxNodeOrToken> listTokens = ASTManager.EnumerateSyntaxNodesAndTokens(newLiteral, new List<SyntaxNodeOrToken>());
+                SyntaxNodeOrToken id = listTokens[1];
 
-        /// <summary>
-        /// Size of nodes
-        /// </summary>
-        /// <returns>Size of nodes</returns>
-        public int Size() {
-            return 1;
+                id = id.WithLeadingTrivia(identifier.GetLeadingTrivia())
+                    .WithTrailingTrivia(identifier.GetTrailingTrivia())
+                    .WithAdditionalAnnotations(Formatter.Annotation);
+                replace.List.Add(id);
+            }
+            else
+            {
+                throw new IndexOutOfRangeException("Cannot convert nodes to literal stirng.");
+            }
+            return replace;
         }
 
         /// <summary>
@@ -55,7 +54,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            return "ConstructNodes(" + Nodes + ")";
+            return "FakeConstructNodes(" + Nodes + ")";
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>True is obj is equals to this object</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is ConstruStr))
+            if (!(obj is FakeConstrStr))
             {
                 return false;
             }

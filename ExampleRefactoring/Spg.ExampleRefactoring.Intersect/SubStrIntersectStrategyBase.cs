@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DiGraph;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
@@ -11,7 +9,7 @@ using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.Intersect
 {
-    internal abstract  class SubStrIntersectStrategyBase: IIntersectStrategy
+    internal abstract class SubStrIntersectStrategyBase : IIntersectStrategy
     {
         /// <summary>
         /// Fist element represents the example, second element represents the position 
@@ -19,6 +17,14 @@ namespace Spg.ExampleRefactoring.Intersect
         /// </summary>
         public Dictionary<Tuple<Dag, Tuple<Vertex, Vertex>>, Tuple<HashSet<IPosition>, HashSet<IPosition>>> PositionMap = new Dictionary<Tuple<Dag, Tuple<Vertex, Vertex>>, Tuple<HashSet<IPosition>, HashSet<IPosition>>>();
 
+        /// <summary>
+        /// Get substr expressions
+        /// </summary>
+        /// <param name="dag1">Fisrt dag</param>
+        /// <param name="dag2">Second dag</param>
+        /// <param name="tuple1">First tuple</param>
+        /// <param name="tuple2">Second tuple</param>
+        /// <returns>Substr expressions</returns>
         public List<IExpression> GetExpressions(Dag dag1, Dag dag2, Tuple<Vertex, Vertex> tuple1, Tuple<Vertex, Vertex> tuple2)
         {
             List<IExpression> expressions = new List<IExpression>();
@@ -54,29 +60,33 @@ namespace Spg.ExampleRefactoring.Intersect
             return PositionMap[tupleposition];
         }
 
+        /// <summary>
+        /// Create a hashset of positions
+        /// </summary>
+        /// <param name="expressions">SubStrs expressions</param>
+        /// <param name="position">Indicate if we are considering first position or second position</param>
+        /// <returns>A hashset of positions</returns>
         private HashSet<IPosition> PositionsHash(List<IExpression> expressions, int position)
         {
             HashSet<IPosition> positions = new HashSet<IPosition>();
             foreach (IExpression expression in expressions)
             {
-                if (expression is SubStr)
+                SubStr sbstr = expression as SubStr;
+                if (position == 1)
                 {
-                    SubStr sbstr = expression as SubStr;
-                    if (position == 1)
+                    if (sbstr != null && !positions.Contains(sbstr.p1))
                     {
-                        if (!positions.Contains(sbstr.p1))
-                        {
-                            positions.Add(sbstr.p1);
-                        }
-                    }
-                    else
-                    {
-                        if (!positions.Contains(sbstr.p2))
-                        {
-                            positions.Add(sbstr.p2);
-                        }
+                        positions.Add(sbstr.p1);
                     }
                 }
+                else
+                {
+                    if (sbstr != null && !positions.Contains(sbstr.p2))
+                    {
+                        positions.Add(sbstr.p2);
+                    }
+                }
+
             }
             return positions;
         }
@@ -96,16 +106,8 @@ namespace Spg.ExampleRefactoring.Intersect
             List<Tuple<IPosition, IPosition>> combinations = ASTProgram.ConstructCombinations(hs1, hs2);
             foreach (Tuple<IPosition, IPosition> positions in combinations)
             {
-                //if (addIdenToToken)
-                //{
-                //    IExpression expression1 = new IdenToStr(positions.Item1, positions.Item2);
-                //    intersection.Add(expression1);
-                //}
-                //else
-                //{
-                    IExpression expression = GetExpression(positions.Item1, positions.Item2);
-                    intersection.Add(expression);
-                //}
+                IExpression expression = GetExpression(positions.Item1, positions.Item2);
+                intersection.Add(expression);
             }
 
             return intersection;

@@ -4,6 +4,7 @@ namespace Spg.ExampleRefactoring.Expression
     {
         Consttrustr,
         SubStr,
-        Identostr
+        Identostr,
+        FakeConstrStr
     }
 }
