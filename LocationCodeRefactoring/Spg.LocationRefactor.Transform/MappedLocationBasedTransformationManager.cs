@@ -9,6 +9,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Transform
@@ -19,7 +20,7 @@ namespace Spg.LocationRefactor.Transform
         /// Transform selection regions
         /// </summary>
         /// <returns>List of transformed locations</returns>
-        public override List<Transformation> TransformProgram(bool compact)
+        public override  List<Transformation> TransformProgram(bool compact)
         {
             RegionManager rManager = RegionManager.GetInstance();
             List<CodeLocation> locations = Controller.Locations; //previous locations
@@ -31,7 +32,7 @@ namespace Spg.LocationRefactor.Transform
             EditorController.GetInstance().Program = validated;
 
             Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
-            
+
             var transformations = new List<Transformation>();
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
             {
@@ -58,19 +59,78 @@ namespace Spg.LocationRefactor.Transform
             {
                 SyntaxNode selection = location.Region.Node;
                 SyntaxNode node = tree.GetRoot().FindNode(selection.Span);
-              
+
                 Tuple<SyntaxNode, CodeLocation> tuple = Tuple.Create(node, location);
                 syntaxNodeCodeLocationPairs.Add(tuple);
             }
 
             var sourceCode = FileUtil.ReadFile(locations[0].SourceClass);
             sourceCode = TransformEachLocation(sourceCode, syntaxNodeCodeLocationPairs, program, compact);
-            
+
             SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(sourceCode);
             SyntaxNode nodeFormat = treeFormat.GetRoot();//.NormalizeWhitespace();
             sourceCode = nodeFormat.GetText().ToString();
             return sourceCode;
         }
+
+        ///// <summary>
+        ///// Transform each location of source code specified
+        ///// </summary>
+        ///// <param name="sourceCode">Source code</param>
+        ///// <param name="update">Tuple of sintax node and code location list</param>
+        ///// <param name="program">Synthesized program</param>
+        ///// <param name="compact">Indicates if it is needed to compact input data</param>
+        ///// <returns>Transformation of each location of source code specified</returns>
+        //private string TransformEachLocation(string sourceCode, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program, bool compact)
+        //{
+        //    List<TRegion> regions = GetRegions(update);
+        //    List<Tuple<ListNode, ListNode>> locationsList = Decomposer.GetInstance().DecomposeToOutput(regions);
+        //    string s = "";
+        //    int i = 0;
+        //    int nextStart = 0;
+
+        //    foreach (Tuple<ListNode, ListNode> tuple in locationsList)
+        //    {
+
+        //    //foreach (var item in update)
+        //    //{
+        //        //try
+        //        //{
+        //        //    List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+        //        //    if (compact)
+        //        //    {
+        //        //        list = ASTManager.EnumerateSyntaxNodesAndTokens2(item.Item1, list);
+        //        //    }
+        //        //    else
+        //        //    {
+        //        //        list = ASTManager.EnumerateSyntaxNodesAndTokens(item.Item1, list);
+        //        //    }
+        //        //    ListNode lnode = new ListNode(list);
+        //        ListNode lnode = tuple.Item2;
+
+        //            ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
+        //            string transformation = treeNode.Transformation;
+        //            s += ++i + "\n";
+        //            s += transformation + "\n";
+
+        //            //int start = nextStart + item.Item2.Region.Start;
+        //            //int end = start + item.Item2.Region.Length;
+        //            //sourceCode = sourceCode.Substring(0, start) + transformation +
+        //            //sourceCode.Substring(end);
+
+        //            //nextStart += transformation.Length - item.Item2.Region.Length;
+
+        //        }
+        //        catch (ArgumentOutOfRangeException e)
+        //        {
+        //            Console.WriteLine(e.Message);
+        //        }
+        //    //}
+        //    string classPath = update.First().Item2.SourceClass;
+        //    string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
+        //    FileUtil.WriteToFile(@"C:\Users\SPG-04\Desktop\transformations\" + className, s);
+        //    return sourceCode;
+        //}
 
         /// <summary>
         /// Transform each location of source code specified
@@ -85,32 +145,31 @@ namespace Spg.LocationRefactor.Transform
             string s = "";
             int i = 0;
             int nextStart = 0;
-            foreach (var item in update)
+//            EditorController controller = EditorController.GetInstance();
+            foreach (Tuple<SyntaxNode, CodeLocation> item in update)
             {
                 try
                 {
-                    List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-                    if (compact)
-                    {
-                        list = ASTManager.EnumerateSyntaxNodesAndTokens2(item.Item1, list);
-                    }
-                    else
-                    {
-                        list = ASTManager.EnumerateSyntaxNodesAndTokens(item.Item1, list);
-                    }
-                    ListNode lnode = new ListNode(list);
+                    TRegion region = item.Item2.Region;
+                    Tuple<ListNode, ListNode> tuple = Decomposer.GetInstance().Example(region.Node, region, compact);
+                    ListNode lnode = tuple.Item2;
 
                     ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
                     string transformation = treeNode.Transformation;
                     s += ++i + "\n";
                     s += transformation + "\n";
 
-                    int start = nextStart + item.Item2.Region.Start;
-                    int end = start + item.Item2.Region.Length;
+                    int start = nextStart + region.Start;
+                    int end = start + region.Length;
                     sourceCode = sourceCode.Substring(0, start) + transformation +
                     sourceCode.Substring(end);
 
-                    nextStart += transformation.Length - item.Item2.Region.Length;
+                    nextStart += transformation.Length - region.Length;
+
+                    Tuple<string, string> trans = Tuple.Create(region.Text, transformation);
+                    CodeTransformation codeTransformation = new CodeTransformation(item.Item2, trans);
+                    codeTransformation.Location.Region.Node = null; //needed for not get out of memory exception
+                    Controller.CodeTransformations.Add(codeTransformation);
                 }
                 catch (ArgumentOutOfRangeException e)
                 {
@@ -122,6 +181,17 @@ namespace Spg.LocationRefactor.Transform
             FileUtil.WriteToFile(@"C:\Users\SPG-04\Desktop\transformations\" + className, s);
             return sourceCode;
         }
+
+        //private List<TRegion> GetRegions(List<Tuple<SyntaxNode, CodeLocation>> update)
+        //{
+        //    List<TRegion> regions = new List<TRegion>();
+
+        //    foreach (var item in update)
+        //    {
+        //        regions.Add(item.Item2.Region);
+        //    }
+        //    return regions;
+        //}
 
         /// <summary>
         /// Learn a transformation program
@@ -152,7 +222,7 @@ namespace Spg.LocationRefactor.Transform
         private List<Tuple<ListNode, ListNode>> EditedSelectionLocations(List<Tuple<ListNode, ListNode>> allLocationsPairs)
         {
             NodeComparer comparator = new NodeComparer();
-            List < Tuple < ListNode, ListNode >> edited = new List<Tuple<ListNode, ListNode>>();
+            List<Tuple<ListNode, ListNode>> edited = new List<Tuple<ListNode, ListNode>>();
             foreach (Tuple<ListNode, ListNode> ln in allLocationsPairs)
             {
                 bool isEqual = comparator.SequenceEqual(ln.Item1, ln.Item2);
@@ -161,7 +231,7 @@ namespace Spg.LocationRefactor.Transform
                     edited.Add(ln);
                 }
             }
-            
+
             return edited;
         }
     }

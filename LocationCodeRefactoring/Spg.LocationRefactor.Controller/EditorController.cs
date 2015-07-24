@@ -166,6 +166,7 @@ namespace Spg.LocationRefactor.Controller
             _programsRefactoredObserver = new List<IProgramRefactoredObserver>();
             _locationsTransformedObserver = new List<ILocationsTransformedObserver>();
             _locationsObversers = new List<ILocationsObserver>();
+            CodeTransformations = new List<CodeTransformation>();
             FilesOpened = new Dictionary<string, bool>();
             ProjectInformation = ProjectInformation.GetInstance();
             Program = null;
@@ -686,6 +687,7 @@ namespace Spg.LocationRefactor.Controller
             SelectedLocations = new List<TRegion>();
             Progs = new List<Prog>();
             Locations = null;
+            CodeTransformations = new List<CodeTransformation>();
             CurrentViewCodeBefore = null;
             CurrentViewCodeAfter = null;
             CurrentViewCodePath = null;
@@ -775,22 +777,22 @@ namespace Spg.LocationRefactor.Controller
         /// <param name="locations">Code locations</param>
         private void NotifyLocationsTransformedObservers(SynthesizedProgram program, IEnumerable<CodeLocation> locations)
         {
-            MappedLocationBasedTransformationManager manager = new MappedLocationBasedTransformationManager();
-            List<CodeTransformation> transformations = new List<CodeTransformation>();
-            foreach (CodeLocation location in locations)
-            {
-                Tuple<string, string> transformedLocation = manager.Transformation(location, program);
+            //MappedLocationBasedTransformationManager manager = new MappedLocationBasedTransformationManager();
+            //List<CodeTransformation> transformations = new List<CodeTransformation>();
+            //foreach (CodeLocation location in locations)
+            //{
+            //    Tuple<string, string> transformedLocation = manager.Transformation(location, program);
 
-                if (transformedLocation == null) continue;
+            //    if (transformedLocation == null) continue;
 
-                CodeTransformation transformation = new CodeTransformation(location, transformedLocation);
-                transformation.Location.Region.Node = null; //needed for not get out of memory exception
-                transformations.Add(transformation);
-            }
+            //    CodeTransformation transformation = new CodeTransformation(location, transformedLocation);
+            //    transformation.Location.Region.Node = null; //needed for not get out of memory exception
+            //    transformations.Add(transformation);
+            //}
 
-            CodeTransformations = transformations;
+            //CodeTransformations = transformations;
 
-            LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(transformations);
+            LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(CodeTransformations);
 
             JsonUtil<List<CodeTransformation>>.Write(CodeTransformations, "transformed_locations.json");
 

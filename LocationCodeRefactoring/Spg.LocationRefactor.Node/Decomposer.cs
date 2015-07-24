@@ -184,7 +184,7 @@ namespace Spg.LocationRefactor.Node
         /// <param name="re">Region within the method</param>
         /// <param name="compact">Needs to be compacted</param>
         /// <returns>An example</returns>
-        private Tuple<ListNode, ListNode> Example(SyntaxNode syntaxNode, TRegion re, bool compact = false)
+        public Tuple<ListNode, ListNode> Example(SyntaxNode syntaxNode, TRegion re, bool compact = false)
         {
             List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
             if (compact)

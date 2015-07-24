@@ -15,112 +15,116 @@ using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Transform
 {
-    public class TransformationManager
+    public abstract class TransformationManager
     {
         protected readonly EditorController Controller = EditorController.GetInstance();
-        /// <summary>
-        /// Return program able to transform locations.
-        /// </summary>
-        /// <param name="regionsToApplyTransformation">Regions to apply transformation</param>
-        /// <returns></returns>
-        public virtual SynthesizedProgram TransformationProgram(List<TRegion> regionsToApplyTransformation)
-        {
-            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractEditedRegions();
-            var manager = new TransformationManager();
-            List<Tuple<ListNode, ListNode>> examples = manager.ListNodes(exampleRegions);
+        ///// <summary>
+        ///// Return program able to transform locations.
+        ///// </summary>
+        ///// <param name="regionsToApplyTransformation">Regions to apply transformation</param>
+        ///// <returns></returns>
+        //public abstract SynthesizedProgram TransformationProgram(List<TRegion> regionsToApplyTransformation)
+        //{
+        //    List<Tuple<TRegion, TRegion>> exampleRegions = ExtractEditedRegions();
+        //    List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
 
-            ASTProgram program = new ASTProgram();
+        //    ASTProgram program = new ASTProgram();
 
-            List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
-            SynthesizedProgram validated = synthesizedProgs.Single();
+        //    List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
+        //    SynthesizedProgram validated = synthesizedProgs.Single();
 
-            return validated;
-        }
+        //    return validated;
+        //}
 
-        /// <summary>
-        /// Transform selection regions
-        /// </summary>
-        /// <returns></returns>
-        public virtual List<Transformation> TransformProgram(bool compact)
-        {
-            List<Tuple<TRegion, TRegion>> exampleRegions = ExtractEditedRegions();
+        ///// <summary>
+        ///// Transform selection regions
+        ///// </summary>
+        ///// <returns></returns>
+        //public virtual List<Transformation> TransformProgram(bool compact)
+        //{
+        //    List<Tuple<TRegion, TRegion>> exampleRegions = ExtractEditedRegions();
 
-            EditorController controller = EditorController.GetInstance();
-            List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
+        //    EditorController controller = EditorController.GetInstance();
+        //    List<Tuple<ListNode, ListNode>> examples = ListNodes(exampleRegions);
 
-            SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
+        //    SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
 
-            var locations = controller.Locations; //previous locations
+        //    var locations = controller.Locations; //previous locations
 
-            Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
+        //    Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
 
-            var transformations = new List<Transformation>();
-            foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
-            {
-                string text = Transform(validated, item.Value, compact);
-                Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
-                Transformation transformation = new Transformation(beforeAfter, item.Key);
-                transformations.Add(transformation);
-            }
-            return transformations;
-        }
+        //    var transformations = new List<Transformation>();
+        //    foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
+        //    {
+        //        string text = Transform(validated, item.Value, compact);
+        //        Tuple<string, string> beforeAfter = Tuple.Create(item.Value[0].SourceCode, text);
+        //        Transformation transformation = new Transformation(beforeAfter, item.Key);
+        //        transformations.Add(transformation);
+        //    }
+        //    return transformations;
+        //}
 
-        /// <summary>
-        /// Transform a program
-        /// </summary>
-        /// <param name="program">Synthesized program</param>
-        /// <param name="locations">Locations</param>
-        /// <param name="compact">Indicates if entry must be compacted or not</param>
-        /// <returns>Transformed program</returns>
-        public virtual string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact)
-        {
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
-            List<SyntaxNode> update = new List<SyntaxNode>();
-            foreach (CodeLocation location in locations)
-            {
-                //SyntaxNode selection = strategy.SyntaxNodesRegion(location.SourceCode, location.Region);
-                SyntaxNode selection = location.Region.Node;
+        public abstract SynthesizedProgram TransformationProgram(List<TRegion> regionsToApplyTransformation);
 
-                var decedents = from snode in tree.GetRoot().DescendantNodes()
-                                where snode.Span.Start == selection.Span.Start && snode.Span.Length == selection.Span.Length
-                                select snode;
-                update.AddRange(decedents);
-            }
+        public abstract List<Transformation> TransformProgram(bool compact);
 
-            var text = FileUtil.ReadFile(locations[0].SourceClass);
-            foreach (SyntaxNode node in update)
-            {
-                try
-                {
-                    List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-                    if (compact)
-                    {
-                        list = ASTManager.EnumerateSyntaxNodesAndTokens2(node, list);
-                    }
-                    else
-                    {
-                        list = ASTManager.EnumerateSyntaxNodesAndTokens(node, list);
-                    }
+        public abstract string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact);
+        ///// <summary>
+        ///// Transform a program
+        ///// </summary>
+        ///// <param name="program">Synthesized program</param>
+        ///// <param name="locations">Locations</param>
+        ///// <param name="compact">Indicates if entry must be compacted or not</param>
+        ///// <returns>Transformed program</returns>
+        //public virtual string Transform(SynthesizedProgram program, List<CodeLocation> locations, bool compact)
+        //{
+        //    SyntaxTree tree = CSharpSyntaxTree.ParseText(locations[0].SourceCode); // all code location have the same source code
+        //    List<SyntaxNode> update = new List<SyntaxNode>();
+        //    foreach (CodeLocation location in locations)
+        //    {
+        //        //SyntaxNode selection = strategy.SyntaxNodesRegion(location.SourceCode, location.Region);
+        //        SyntaxNode selection = location.Region.Node;
+
+        //        var decedents = from snode in tree.GetRoot().DescendantNodes()
+        //                        where snode.Span.Start == selection.Span.Start && snode.Span.Length == selection.Span.Length
+        //                        select snode;
+        //        update.AddRange(decedents);
+        //    }
+
+        //    var text = FileUtil.ReadFile(locations[0].SourceClass);
+        //    foreach (SyntaxNode node in update)
+        //    {
+        //        try
+        //        {
+        //            List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
+        //            if (compact)
+        //            {
+        //                list = ASTManager.EnumerateSyntaxNodesAndTokens2(node, list);
+        //            }
+        //            else
+        //            {
+        //                list = ASTManager.EnumerateSyntaxNodesAndTokens(node, list);
+        //            }
                     
-                    ListNode lnode = new ListNode(list);
+        //            ListNode lnode = new ListNode(list);
 
-                    ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
-                    string transformation = treeNode.Transformation;
-                    string nodeText = node.GetText().ToString();
-                    string escaped = Regex.Escape(nodeText);
-                    string replacement = Regex.Replace(text, escaped, transformation);
-                    text = replacement;
-                }
-                catch (ArgumentOutOfRangeException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-            SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(text);
-            SyntaxNode nodeFormat = treeFormat.GetRoot();//.NormalizeWhitespace();
-            text = nodeFormat.GetText().ToString();
-            return text;
-        }
+        //            ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
+        //            string transformation = treeNode.Transformation;
+        //            string nodeText = node.GetText().ToString();
+        //            string escaped = Regex.Escape(nodeText);
+        //            string replacement = Regex.Replace(text, escaped, transformation);
+        //            text = replacement;
+        //        }
+        //        catch (ArgumentOutOfRangeException e)
+        //        {
+        //            Console.WriteLine(e.Message);
+        //        }
+        //    }
+        //    SyntaxTree treeFormat = CSharpSyntaxTree.ParseText(text);
+        //    SyntaxNode nodeFormat = treeFormat.GetRoot();//.NormalizeWhitespace();
+        //    text = nodeFormat.GetText().ToString();
+        //    return text;
+        //}
 
         /// <summary>
         /// Group location by file path
@@ -182,66 +186,66 @@ namespace Spg.LocationRefactor.Transform
             return nodes;
         }
 
-        /// <summary>
-        /// Decompose location
-        /// </summary>
-        /// <returns>Locations</returns>
-        public virtual  List<Tuple<TRegion, TRegion>> ExtractEditedRegions()
-        {
-            RegionManager rManager = RegionManager.GetInstance();
-            List<Tuple<SyntaxNode, SyntaxNode>> pairs = rManager.SyntaxNodesRegionBeforeAndAfterEditing(Controller.Locations);
+        ///// <summary>
+        ///// Decompose location
+        ///// </summary>
+        ///// <returns>Locations</returns>
+        //public virtual  List<Tuple<TRegion, TRegion>> ExtractEditedRegions()
+        //{
+        //    RegionManager rManager = RegionManager.GetInstance();
+        //    List<Tuple<SyntaxNode, SyntaxNode>> pairs = rManager.SyntaxNodesRegionBeforeAndAfterEditing(Controller.Locations);
 
-            var examples = new List<Tuple<TRegion, TRegion>>();
+        //    var examples = new List<Tuple<TRegion, TRegion>>();
 
-            for (int i = 0; i < pairs.Count; i++)
-            {
-                string statementBefore = pairs[i].Item1.GetText().ToString();
-                string statementAfter = pairs[i].Item2.GetText().ToString();
-                Tuple<SyntaxNode, SyntaxNode> sn = Tuple.Create(pairs[i].Item1, pairs[i].Item2);
-                Tuple<ListNode, ListNode> ln = ASTProgram.Example(sn);
+        //    for (int i = 0; i < pairs.Count; i++)
+        //    {
+        //        string statementBefore = pairs[i].Item1.GetText().ToString();
+        //        string statementAfter = pairs[i].Item2.GetText().ToString();
+        //        Tuple<SyntaxNode, SyntaxNode> sn = Tuple.Create(pairs[i].Item1, pairs[i].Item2);
+        //        Tuple<ListNode, ListNode> ln = ASTProgram.Example(sn);
 
-                NodeComparer comparator = new NodeComparer();
-                bool isEqual = comparator.SequenceEqual(ln.Item1, ln.Item2);
-                if (!isEqual)
-                {
-                    TRegion regionBefore = new TRegion();
-                    regionBefore.Text = statementBefore;
-                    regionBefore.Node = pairs[i].Item1;
+        //        NodeComparer comparator = new NodeComparer();
+        //        bool isEqual = comparator.SequenceEqual(ln.Item1, ln.Item2);
+        //        if (!isEqual)
+        //        {
+        //            TRegion regionBefore = new TRegion();
+        //            regionBefore.Text = statementBefore;
+        //            regionBefore.Node = pairs[i].Item1;
 
-                    TRegion regionAfter = new TRegion();
-                    regionAfter.Text = statementAfter;
-                    regionAfter.Node = pairs[i].Item2;
+        //            TRegion regionAfter = new TRegion();
+        //            regionAfter.Text = statementAfter;
+        //            regionAfter.Node = pairs[i].Item2;
 
-                    Tuple<TRegion, TRegion> example = Tuple.Create(regionBefore, regionAfter);
-                    examples.Add(example);
-                }
-            }
-            return examples;
-        }
+        //            Tuple<TRegion, TRegion> example = Tuple.Create(regionBefore, regionAfter);
+        //            examples.Add(example);
+        //        }
+        //    }
+        //    return examples;
+        //}
 
-        /// <summary>
-        /// Look for a place to put this. Refactor
-        /// </summary>
-        /// <returns></returns>
-        public Tuple<string, string> Transformation(CodeLocation location, SynthesizedProgram program)
-        {
-            TRegion region = location.Region;
-            Tuple<SyntaxNode, SyntaxNode> node = Tuple.Create(region.Node, region.Node);
-            try
-            {
-                ListNode lnode = ASTProgram.Example(node).Item1;
-                ASTTransformation tree = ASTProgram.TransformString(lnode, program);
-                string transformation = tree.Transformation;
+        ///// <summary>
+        ///// Look for a place to put this. Refactor
+        ///// </summary>
+        ///// <returns></returns>
+        //public Tuple<string, string> Transformation(CodeLocation location, SynthesizedProgram program)
+        //{
+        //    TRegion region = location.Region;
+        //    Tuple<SyntaxNode, SyntaxNode> node = Tuple.Create(region.Node, region.Node);
+        //    try
+        //    {
+        //        ListNode lnode = ASTProgram.Example(node).Item1;
+        //        ASTTransformation tree = ASTProgram.TransformString(lnode, program);
+        //        string transformation = tree.Transformation;
 
-                Tuple<string, string> transformedLocation = Tuple.Create(region.Text, transformation);
-                return transformedLocation;
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            return null;
-        }
+        //        Tuple<string, string> transformedLocation = Tuple.Create(region.Text, transformation);
+        //        return transformedLocation;
+        //    }
+        //    catch (ArgumentOutOfRangeException e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //    }
+        //    return null;
+        //}
     }
 }
 
