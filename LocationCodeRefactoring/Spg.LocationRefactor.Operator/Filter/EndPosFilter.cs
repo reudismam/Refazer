@@ -1,7 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
 using Spg.LocationRefactor.Learn;
-using System;
-using System.Collections.Generic;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.TextRegion;
 
@@ -23,14 +21,14 @@ namespace Spg.LocationRefactor.Operator
             return new EndPosFilterLearner(list);
         }
 
-        /// <summary>
-        /// Syntax nodes
-        /// </summary>
-        /// <param name="input">Source code</param>
-        /// <returns>Syntax nodes</returns>
-        protected override IEnumerable<SyntaxNode> SyntaxNodes(string input)
-        {
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// Syntax nodes
+        ///// </summary>
+        ///// <param name="input">Source code</param>
+        ///// <returns>Syntax nodes</returns>
+        //protected override IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(string input)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

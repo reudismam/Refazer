@@ -1,27 +1,27 @@
 {
-  "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs": [
+  "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs": [
     {
-      "Start": 193777,
-      "Length": 77,
-      "SourcePath": "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs",
+      "Start": 193828,
+      "Length": 72,
+      "SourcePath": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs",
       "SourceCode": null
     },
     {
-      "Start": 194661,
-      "Length": 77,
-      "SourcePath": "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs",
+      "Start": 194707,
+      "Length": 72,
+      "SourcePath": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs",
       "SourceCode": null
     },
     {
-      "Start": 195084,
+      "Start": 195125,
       "Length": 68,
-      "SourcePath": "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs",
+      "SourcePath": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs",
       "SourceCode": null
     },
     {
-      "Start": 196593,
+      "Start": 196634,
       "Length": 63,
-      "SourcePath": "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs",
+      "SourcePath": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs",
       "SourceCode": null
     }
   ]

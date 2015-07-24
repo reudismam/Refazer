@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data
@@ -12,10 +12,10 @@ namespace Spg.ExampleRefactoring.Data
         /// Return the train data set.
         /// </summary>
         /// <returns>List of examples</returns>
-        public override List<Tuple<String, String>> Train() {
-            List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
+        public override List<Tuple<string, string>> Train() {
+            List<Tuple<string, string>> tuples = new List<Tuple<string, string>>();
 
-                String input01 =
+                string input01 =
 @"static void Main1(string[] args)
   {
      int j = 2;
@@ -25,19 +25,19 @@ namespace Spg.ExampleRefactoring.Data
 ";
 
 
-                String output01 =
+                string output01 =
 @"static void Main1(string[] args)
   {
      int j = 2;
      int i = 0;
   }
 ";
-                Tuple<String, String> tuple01 = Tuple.Create(input01, output01);
+                Tuple<string, string> tuple01 = Tuple.Create(input01, output01);
                 Console.WriteLine(input01);
                 Console.WriteLine(output01);
                 tuples.Add(tuple01);
 
-                String input02 =
+                string input02 =
 @"static void Main1(string[] args)
 {
     int j = 2;
@@ -47,14 +47,14 @@ namespace Spg.ExampleRefactoring.Data
 }";
             
 
-                String output02 =
+                string output02 =
 @"static void Main1(string[] args)
 {
     int j = 2;
     int i = 0;
     string z = ""4""; 
 }";
-                Tuple<String, String> tuple02 = Tuple.Create(input02, output02);
+                Tuple<string, string> tuple02 = Tuple.Create(input02, output02);
                 Console.WriteLine(input02);
                 Console.WriteLine(output02);
                 tuples.Add(tuple02);
@@ -66,8 +66,8 @@ namespace Spg.ExampleRefactoring.Data
         /// Return the test data.
         /// </summary>
         /// <returns>Return a string to be tested.</returns>
-        public override Tuple<String, String> Test() {
-            String input01 =
+        public override Tuple<string, string> Test() {
+            string input01 =
 @"static void Main1(string[] args)
 {
     int j = 2;
@@ -77,7 +77,7 @@ namespace Spg.ExampleRefactoring.Data
     Console.WriteLine(""Hello, World (For the second time.)"");
 }";
 
-            String output01 =
+            string output01 =
 @"static void Main1(string[] args)
 {
     int j = 2;
@@ -85,8 +85,10 @@ namespace Spg.ExampleRefactoring.Data
     int b = 2;
     Console.WriteLine(""Hello, World (For the second time.)"");
 }";
-            Tuple<String, String> test = Tuple.Create(input01, output01);
+            Tuple<string, string> test = Tuple.Create(input01, output01);
             return test;
         }
     }
 }
+
+

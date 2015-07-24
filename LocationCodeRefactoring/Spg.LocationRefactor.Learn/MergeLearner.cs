@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Learn.Filter;
+using Spg.LocationRefactor.Operator.Map;
+using Spg.LocationRefactor.Program;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Learn;
@@ -14,7 +14,7 @@ using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
+namespace Spg.LocationRefactor.Learn
 {
     /// <summary>
     /// Merge Learner
@@ -40,7 +40,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
             EditorController contoller = EditorController.GetInstance();
             List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
-            S.predicate = pred;
+            S.Predicate = pred;
 
             List<Prog> predicates = S.Learn(examples);
             foreach (IExpression e in X)
@@ -49,7 +49,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
                 {
                     Prog scalar = new Prog();
                     Pair pair = new Pair();
-                    pair.expression = (SubStr)e;
+                    pair.Expression = (SubStr)e;
 
                     scalar.Ioperator = pair;
 
@@ -85,7 +85,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
             EditorController contoller = EditorController.GetInstance();
             List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
-            S.predicate = pred;
+            S.Predicate = pred;
 
             List<Prog> predicates = S.Learn(positiveExamples);
             foreach (IExpression e in X)
@@ -94,7 +94,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
                 {
                     Prog scalar = new Prog();
                     Pair pair = new Pair();
-                    pair.expression = (SubStr)e;
+                    pair.Expression = (SubStr)e;
 
                     scalar.Ioperator = pair;
 
@@ -135,3 +135,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
         }
     }
 }
+
+
+
+

@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Comparator;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Comparator;
+using Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Setting;
+using Spg.ExampleRefactoring.Synthesis;
 using LCS2;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
@@ -79,13 +80,49 @@ namespace Spg.ExampleRefactoring.Synthesis
         //    return synthesizedProgList;
         //}
 
-        /// <summary>
-        /// Create new synthesized program combining current synthesized programs with expressions
-        /// </summary>
-        /// <param name="synthesizedProgramList">Synthesized programs list</param>
-        /// <param name="expressionList">Expression list</param>
-        /// <param name="examples">Examples</param>
-        /// <returns>Synthesized programs list</returns>
+        ///// <summary>
+        ///// Create new synthesized program combining current synthesized programs with expressions
+        ///// </summary>
+        ///// <param name="synthesizedProgramList">Synthesized programs list</param>
+        ///// <param name="expressionList">Expression list</param>
+        ///// <param name="examples">Examples</param>
+        ///// <returns>Synthesized programs list</returns>
+        //private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
+        //{
+        //    List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
+        //    if (synthesizedProgramList.Count > 0)
+        //    {
+        //        foreach (SynthesizedProgram sd1 in synthesizedProgramList)
+        //        {
+        //            foreach (IExpression e2 in expressionList)
+        //            {
+        //                List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
+        //                SynthesizedProgram sp = new SynthesizedProgram();
+        //                sp.Solutions = solutions;
+        //                sp.Add(e2);
+
+        //                //ExpressionManager manager = new ExpressionManager();
+        //                bool isValid = ValidateSubExpression(sp.Solutions, examples);
+        //                if (isValid)
+        //                {
+        //                    synthesizedProgList.Add(sp);
+        //                }
+        //                else
+        //                {
+        //                    int i = 0;
+        //                }
+        //            }
+        //        }
+        //        return synthesizedProgList;
+        //    }
+
+            /// <summary>
+            /// Create new synthesized program combining current synthesized programs with expressions
+            /// </summary>
+            /// <param name="synthesizedProgramList">Synthesized programs list</param>
+            /// <param name="expressionList">Expression list</param>
+            /// <param name="examples">Examples</param>
+            /// <returns>Synthesized programs list</returns>
         private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
         {
             List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
@@ -101,11 +138,15 @@ namespace Spg.ExampleRefactoring.Synthesis
                         sp.Add(e2);
 
                         //ExpressionManager manager = new ExpressionManager();
-                        //bool isValid = manager.ValidateExpression(sp, examples);
-                        //if (isValid)
-                        //{
+                        bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                        if (isValid)
+                        {
                             synthesizedProgList.Add(sp);
-                        //}
+                        }
+                        else
+                        {
+                            int i = 0;
+                        }
                     }
                 }
                 return synthesizedProgList;
@@ -115,12 +156,96 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 SynthesizedProgram sp = new SynthesizedProgram();
                 sp.Add(expression);
-                synthesizedProgList.Add(sp);
+                //     bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                //if (isValid)
+                //{
+                    synthesizedProgList.Add(sp);
+                //}
             }
             return synthesizedProgList;
         }
 
-      
+        /// <summary>
+        /// Create new synthesized program combining current synthesized programs with expressions
+        /// </summary>
+        /// <param name="synthesizedProgramList">Synthesized programs list</param>
+        /// <param name="expressionList">Expression list</param>
+        /// <param name="examples">Examples</param>
+        /// <returns>Synthesized programs list</returns>
+        private List<SynthesizedProgram> CombSynthProgramExp2(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
+        {
+            List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
+            var items = from expression in expressionList
+                        orderby new SelectorManager(setting).Order(expression) descending
+                        select expression;
+            if (synthesizedProgramList.Count > 0)
+            {
+
+                foreach (SynthesizedProgram sd1 in synthesizedProgramList)
+                {
+                    //foreach (IExpression e2 in expressionList)
+                    //{
+                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
+                        SynthesizedProgram sp = new SynthesizedProgram();
+                        sp.Solutions = solutions;
+                        sp.Add(items.First());
+
+                        //ExpressionManager manager = new ExpressionManager();
+                        bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                        if (isValid)
+                        {
+                            synthesizedProgList.Add(sp);
+                        }
+                        else
+                        {
+                            int i = 0;
+                        }
+                    //}
+                }
+                return synthesizedProgList;
+            }
+
+            foreach (IExpression expression in expressionList)
+            {
+                SynthesizedProgram sp = new SynthesizedProgram();
+                sp.Add(expression);
+                //     bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                //if (isValid)
+                //{
+                synthesizedProgList.Add(sp);
+                //}
+            }
+            return synthesizedProgList;
+        }
+
+        /// <summary>
+        /// Validate an expression in function of the examples
+        /// </summary>
+        /// <param name="expressions">Expression to be tested</param>
+        /// <param name="examples">Set of examples</param>
+        /// <returns>True if expression match the examples, false otherwise</returns>
+        public bool ValidateSubExpression(List<IExpression> expressions, List<Tuple<ListNode, ListNode>> examples)
+        {
+            SynthesizedProgram syntheProg = new SynthesizedProgram();
+            syntheProg.Solutions = expressions;
+//            syntheProg.Add(expression);
+
+            bool isValid = false;
+            foreach (Tuple<ListNode, ListNode> example in examples)
+            {
+                ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.Solutions);
+
+                if (solution != null && ASTManager.Matches(example.Item2, solution, new NodeComparer()).Count > 0)
+                {
+                    isValid = true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return isValid;
+        }
 
         /// <summary>
         /// Expression list that forms the synthesized program
@@ -128,9 +253,9 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="mapping">Expressions mapping</param>
         /// <param name="indexs">Synthesized program sub parts</param>
         /// <returns>Expression list that forms the synthesized program</returns>
-        private static List<List<IExpression>> SynthesizedPrograms(Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping, List<Vertex> indexs)
+        private static List<Dictionary<ExpressionKind, List<IExpression>>> SynthesizedPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> mapping, List<Vertex> indexs)
         {
-            List<List<IExpression>> synthProgList = new List<List<IExpression>>();
+            List<Dictionary<ExpressionKind, List<IExpression>>> synthProgList = new List<Dictionary<ExpressionKind, List<IExpression>>>();
             for (int i = 1; i < indexs.Count; i++)
             {
                 Tuple<Vertex, Vertex> tuple = Tuple.Create(indexs[i - 1], indexs[i]);
@@ -187,8 +312,8 @@ namespace Spg.ExampleRefactoring.Synthesis
                 {
                     SubStr subStr = (SubStr)expression;
 
-                    IPosition p1 = subStr.p1;
-                    IPosition p2 = subStr.p2;
+                    IPosition p1 = subStr.P1;
+                    IPosition p2 = subStr.P2;
 
                     EvaluatePos(p1, features);
                     EvaluatePos(p2, features);
@@ -260,17 +385,17 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             int count = 0;
-            for (int i = 0; i < pos.r1.Tokens.Count; i++)
+            for (int i = 0; i < pos.R1.Tokens.Count; i++)
             {
-                if (pos.r1.Tokens[i] is DymToken)
+                if (pos.R1.Tokens[i] is DymToken)
                 {
                     count++;
                 }
             }
 
-            for (int i = 0; i < pos.r2.Tokens.Count; i++)
+            for (int i = 0; i < pos.R2.Tokens.Count; i++)
             {
-                if (pos.r2.Tokens[i] is DymToken)
+                if (pos.R2.Tokens[i] is DymToken)
                 {
                     count++;
                 }
@@ -290,17 +415,17 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             int count = 0;
-            for (int i = 0; i < pos.r1.Tokens.Count; i++)
+            for (int i = 0; i < pos.R1.Tokens.Count; i++)
             {
-                if (pos.r1.Tokens[i].token.AsNode() != null)
+                if (pos.R1.Tokens[i].token.AsNode() != null)
                 {
                     count++;
                 }
             }
 
-            for (int i = 0; i < pos.r2.Tokens.Count; i++)
+            for (int i = 0; i < pos.R2.Tokens.Count; i++)
             {
-                if (pos.r2.Tokens[i].token.AsNode() != null)
+                if (pos.R2.Tokens[i].token.AsNode() != null)
                 {
                     count++;
                 }
@@ -320,12 +445,12 @@ namespace Spg.ExampleRefactoring.Synthesis
                 value = 0;
             }
 
-            if (p1.r1.Length() == 0)
+            if (p1.R1.Length() == 0)
             {
                 features[key] = value + 1;
             }
 
-            if (p1.r2.Length() == 0)
+            if (p1.R2.Length() == 0)
             {
                 features[key] = value + 1;
             }
@@ -352,16 +477,20 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="solutions">Solution</param>
         /// <param name="examples">Examples</param>
         /// <returns>A valid hypothesis, if it exits, null otherwise</returns>
-        public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
+        public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
         {
             SynthesizedProgram selected = null;
-            List<List<IExpression>> expressions = SynthesizedPrograms(mapping, solutions);
+            List<Dictionary<ExpressionKind, List<IExpression>>> expressions = SynthesizedPrograms(mapping, solutions);
 
             List<SynthesizedProgram> hypotheses = new List<SynthesizedProgram>();
-            foreach (List<IExpression> l in expressions)
+            foreach (Dictionary<ExpressionKind, List<IExpression>> item in expressions)
             {
-                hypotheses = CombSynthProgramExp(hypotheses, l, examples);
-            }
+                List<IExpression> l = GetExpressions(item);
+                    //foreach (List<IExpression> l in item.Values)
+                //{
+                    hypotheses = CombSynthProgramExp2(hypotheses, l, examples);
+                //}
+            }           
 
             var sorted = from hypothesis in hypotheses
                          orderby (new SelectorManager(setting)).Order(hypothesis.Solutions) descending
@@ -393,6 +522,61 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             //file.Close();
             return selected;
+        }
+
+        public SynthesizedProgram ComputeSynthesizedProgram(List<Dictionary<ExpressionKind, List<IExpression>>> expressions, List<IExpression> solution, List<Tuple<ListNode, ListNode>> examples)
+        {
+            //int row, col;
+
+            if (!FindSynthesizedProgram())
+                //all locations successfully assigned
+                return prog;
+
+            for (int num = 1; num <= expressions.Count; num++)
+            {
+                List<IExpression> exps = GetExpressions(expressions[num]);
+                foreach (IExpression expression in exps)
+                {
+                    if (ValidateSynthesizedProgram(solution, examples))
+                    {
+                        prog = new SynthesizedProgram();
+                        prog.Solutions = solution;
+                        return prog;
+                    }
+                }
+                ////if number is allowed to be placed in the square
+                //if (NoConflicts(grid, row, col, num))
+                //{
+                //    //place the number in the square
+                //    grid[row][col] = num;
+
+                    //recur, if successful then stop
+                    //if (SolveSudoku(grid))
+                    //    return true;
+
+                //    //undo and try again
+                //    grid[row][col] = UNASSIGNED;
+                //}
+            }
+            //this triggers backtracking from early decisions
+            return null;
+        }
+
+        private SynthesizedProgram prog = null;
+        //private List<IExpression> expressions; 
+        private bool FindSynthesizedProgram()
+        {
+            return prog != null;
+        }
+
+        public List<IExpression> GetExpressions(Dictionary<ExpressionKind, List<IExpression>> mapping)
+        {
+            List<IExpression> expressions = new List<IExpression>();
+            foreach (KeyValuePair<ExpressionKind, List<IExpression>> entry in mapping)
+            {
+                expressions.AddRange(entry.Value);
+            }
+            return expressions;
         }
 
         /// <summary>
@@ -797,3 +981,5 @@ namespace Spg.ExampleRefactoring.Synthesis
             return sum;
         }
         */
+
+

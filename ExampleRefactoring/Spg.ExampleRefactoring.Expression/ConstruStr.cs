@@ -1,8 +1,8 @@
-﻿using System;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using System;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Comparator;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
+namespace Spg.ExampleRefactoring.Expression
 {
     /// <summary>
     /// ConstruStr expression
@@ -28,7 +28,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="example">Example</param>
         /// <returns>True</returns>
-        public Boolean IsPresentOn(Tuple<ListNode, ListNode> example) {
+        public bool IsPresentOn(Tuple<ListNode, ListNode> example) {
             return true;
         }
 
@@ -37,7 +37,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="input">Input</param>
         /// <returns>Internal list</returns>
-        public ListNode RetrieveSubNodes(ListNode input) {
+        public virtual ListNode RetrieveSubNodes(ListNode input) {
             return Nodes;
         }
 
@@ -85,3 +85,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         }
     }
 }
+
+
+

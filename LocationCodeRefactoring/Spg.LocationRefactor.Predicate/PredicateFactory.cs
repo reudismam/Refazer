@@ -21,6 +21,11 @@
             return null;
         }
 
+        /// <summary>
+        /// Create inverted predicate
+        /// </summary>
+        /// <param name="predicate">Predicate</param>
+        /// <returns>Return not contain for contain predicate</returns>
         public static IPredicate CreateInv(IPredicate predicate)
         {
             if (predicate is Contains)

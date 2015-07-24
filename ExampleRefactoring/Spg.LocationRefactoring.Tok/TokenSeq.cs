@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactoring.Tok;
 
-namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
+namespace Spg.LocationRefactoring.Tok
 {
     /// <summary>
     /// Token sequence
@@ -93,7 +93,7 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            String str = "";
+            string str = "";
             if (Length() > 1)
             {
                 int i;
@@ -157,3 +157,6 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
         }
     }
 }
+
+
+

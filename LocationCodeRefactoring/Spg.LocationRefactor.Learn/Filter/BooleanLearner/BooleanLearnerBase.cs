@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Setting;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Predicate;
+using Spg.LocationRefactoring.Tok;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearner
+namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
 {
     /// <summary>
     /// Learn a set of predicates
@@ -37,8 +36,8 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
             {
                 Pos positioncopy = (Pos)position;
 
-                TokenSeq r1 = GetTokenSeq(positioncopy.r1);
-                TokenSeq r2 = GetTokenSeq(positioncopy.r2);
+                TokenSeq r1 = GetTokenSeq(positioncopy.R1);
+                TokenSeq r2 = GetTokenSeq(positioncopy.R2);
                 TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
                 TokenSeq regex = merge;
 
@@ -58,57 +57,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
             return predicates;
         }
 
-        //public List<IPredicate> BooleanLearning(List<Tuple<ListNode, bool>> boolExamples, List<Tuple<ListNode, ListNode>> examples)
-        //{
-        //    List<IPredicate> predicates = new List<IPredicate>();
-
-        //    //Dag T = CreateDag(examples);
-
-        //    //foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in T.Mapping)
-        //    //{
-        //    //List<IExpression> expressions = entry.Value;
-        //    //foreach (IExpression exp in expressions)
-        //    //{
-        //    //    if (exp is SubStr)
-        //    //    {
-        //    //        IPosition p1 = ((SubStr)exp).p1;
-        //    //        IPosition p2 = ((SubStr)exp).p2;
-        //    //        List<IPosition> positions = new List<IPosition>();
-        //    //        positions.Add(p1);
-        //    //        positions.Add(p2);
-        //    List<IPosition> positions = GetPositions(examples);
-        //    foreach (IPosition position in positions)
-        //    {
-        //        //if (position is Pos)
-        //        //{
-        //        Pos positioncopy = (Pos)position;
-
-        //        TokenSeq r1 = GetTokenSeq(positioncopy.r1);
-        //        TokenSeq r2 = GetTokenSeq(positioncopy.r2);
-        //        TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
-        //        TokenSeq regex = merge;
-
-        //        IPredicate clone = GetPredicate();//PredicateFactory.Create(new Contains());
-        //        clone.r1 = r1;
-        //        clone.r2 = r2;
-
-
-        //        if (!Calculated.ContainsKey(regex))
-        //        {
-        //            bool b = Indicator(clone, boolExamples, regex);
-        //            if (b)
-        //            {
-        //                predicates.Add(clone);
-        //            }
-        //        }
-        //    }
-        //    //        }
-        //    //    }
-        //    //}
-        //    //}
-        //    return predicates;
-        //}
-
         /// <summary>
         /// Get position expressions
         /// </summary>
@@ -122,7 +70,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
             List<IPosition> positions = new List<IPosition>();
             foreach (var example in examples)
             {
-                ListNode input = example.Item1; //input and output are equal.
+                ListNode input = example.Item2; //input and output are equal.
                 for (int k = 0; k < input.List.Count; k++)
                 {
                     positions.AddRange(program.GeneratePos(input, k));
@@ -130,94 +78,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
             }
             return positions;
         }
-
-        //public List<IPredicate> BooleanLearning2(List<Tuple<ListNode, bool>> boolExamples, List<Tuple<ListNode, ListNode>> examples)
-        //{
-        //    List<IPredicate> predicates = new List<IPredicate>();
-
-        //    Dag T = CreateDag(examples);
-
-        //    foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in T.Mapping)
-        //    {
-        //        List<IExpression> expressions = entry.Value;
-        //        foreach (IExpression exp in expressions)
-        //        {
-        //            if (exp is SubStr)
-        //            {
-        //                IPosition p1 = ((SubStr)exp).p1;
-        //                IPosition p2 = ((SubStr)exp).p2;
-        //                List<IPosition> positions = new List<IPosition>();
-        //                positions.Add(p1);
-        //                positions.Add(p2);
-        //                foreach (IPosition position in positions)
-        //                {
-        //                    if (position is Pos)
-        //                    {
-        //                        Pos positioncopy = (Pos)position;
-
-        //                        TokenSeq r1 = GetTokenSeq(positioncopy.r1);
-        //                        TokenSeq r2 = GetTokenSeq(positioncopy.r2);
-        //                        TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
-        //                        TokenSeq regex = merge;
-
-        //                        IPredicate clone = GetPredicate();//PredicateFactory.Create(new Contains());
-        //                        clone.r1 = r1;
-        //                        clone.r2 = r2;
-
-
-        //                        if (!Calculated.ContainsKey(regex))
-        //                        {
-        //                            bool b = Indicator(clone, boolExamples, regex);
-        //                            if (b)
-        //                            {
-        //                                predicates.Add(clone);
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return predicates;
-        //}
-
-        protected abstract IPredicate GetPredicate();
-
-
-        protected abstract TokenSeq GetTokenSeq(TokenSeq r1);
-
-
-        ///// <summary>
-        ///// Create a Dag.
-        ///// </summary>
-        ///// <param name="examples"></param>
-        ///// <returns></returns>
-        //private Dag CreateDag(List<Tuple<ListNode, ListNode>> examples)
-        //{
-        //    List<Dag> dags = new List<Dag>();
-        //    SynthesizerSetting setting = new SynthesizerSetting {DynamicTokens = true, Deviation = 2};
-        //    ASTProgram program = new ASTProgram(setting, examples);
-        //    foreach (Tuple<ListNode, ListNode> e in examples)
-        //    {
-        //        List<int> boundary = new List<int>();
-        //        for (int i = 0; i <= e.Item2.Length(); i++)
-        //        {
-        //            boundary.Add(i);
-        //        }
-        //        Dag dag = program.GenerateStringBoundary(e.Item2, e.Item2, boundary);
-        //        dags.Add(dag);
-        //    }
-
-        //    IntersectManager intManager = new IntersectManager();
-        //    Dag T = intManager.Intersect(dags);
-
-        //    ExpressionManager expmanager = new ExpressionManager();
-        //    expmanager.FilterExpressions(T, examples);
-
-        //    ASTProgram.Clear(T);
-
-        //    return T;
-        //}
 
         /// <summary>
         /// True if regular expression matches the input
@@ -245,5 +105,21 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter.BooleanLearn
             }
             return entry;
         }
+
+        /// <summary>
+        /// Return predicate
+        /// </summary>
+        /// <returns>Predicate</returns>
+        protected abstract IPredicate GetPredicate();
+
+        /// <summary>
+        /// Return token sequence
+        /// </summary>
+        /// <param name="r1">TokenSeq</param>
+        /// <returns>TokenSeq</returns>
+        protected abstract TokenSeq GetTokenSeq(TokenSeq r1);
     }
 }
+
+
+

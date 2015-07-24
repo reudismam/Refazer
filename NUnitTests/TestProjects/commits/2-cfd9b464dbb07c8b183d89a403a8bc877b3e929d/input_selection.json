@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs"
+      "Path": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs"
+    "Path": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs"
   },
   {
     "Text": "this.AppendSerializedTypeName(sb, typeReference, ref isAssemQual);",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs"
+      "Path": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "..\\..\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs"
+    "Path": "C:\\Users\\SPG-04\\Documents\\Visual Studio 2013\\Projects\\intellimeta\\NUnitTests\\TestProjects\\Projects\\Portable4\\Portable\\PEWriter\\MetadataWriter.cs"
   }
 ]

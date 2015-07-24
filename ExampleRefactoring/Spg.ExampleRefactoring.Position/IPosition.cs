@@ -1,6 +1,6 @@
-﻿using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Position
+namespace Spg.ExampleRefactoring.Position
 {
     /// <summary>
     /// IPosition expression
@@ -20,3 +20,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Position
         int Size();
     }
 }
+
+

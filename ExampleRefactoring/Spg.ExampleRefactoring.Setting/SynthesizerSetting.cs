@@ -1,4 +1,4 @@
-﻿namespace ExampleRefactoring.Spg.ExampleRefactoring.Setting
+namespace Spg.ExampleRefactoring.Setting
 {
     /// <summary>
     /// Synthesizer setting
@@ -58,3 +58,4 @@
         }
     }
 }
+

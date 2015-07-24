@@ -1,6 +1,4 @@
-﻿using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Projects;
-using ExampleRefactoring.Spg.ExampleRefactoring.Workspace;
+using Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Tok;
@@ -59,6 +57,7 @@ namespace Spg.LocationRefactoring.Tok
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
+            //return this.ToString().GetHashCode();
             return base.GetHashCode();
         }
 
@@ -95,3 +94,4 @@ namespace Spg.LocationRefactoring.Tok
         }
     }
 }
+

@@ -1,0 +1,9 @@
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\CSharpCodeAnalysis.csprojResolveAssemblyReference.cache
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\Microsoft.CodeAnalysis.CSharp.CSharpResources.resources
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\CSharpCodeAnalysis.csproj.GenerateResource.Cache
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\Syntax.xml.Generated.cs
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\BoundNodes.xml.Generated.cs
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\ErrorFacts.Generated.cs
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\GeneratedStrongNameKey.cs
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\GeneratedInternalsVisibleTo.cs
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\roslyn\src\Compilers\CSharp\Portable\obj\Debug\GeneratedAssemblyInfo_1.0.0.0.cs

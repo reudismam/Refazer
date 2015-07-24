@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Microsoft.Win32;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -101,3 +101,4 @@ namespace SPG.IntelliUndo
 
     }
 }
+

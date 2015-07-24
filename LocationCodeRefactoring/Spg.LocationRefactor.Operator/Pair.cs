@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Expression;
@@ -6,23 +6,24 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace Spg.LocationRefactor.Operator
 {
     public class Pair:IOperator
     {
-        public SubStr expression { get; set; }
+        /// <summary>
+        /// Sub expression
+        /// </summary>
+        public SubStr Expression { get; set; }
 
         public Pair(SubStr expression) {
-            this.expression = expression;
+            this.Expression = expression;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Pair() { 
         }
 
@@ -31,30 +32,17 @@ namespace Spg.LocationRefactor.Operator
         /// </summary>
         /// <param name="input">Source code</param>
         /// <returns>Execution result</returns>
-        public ListNode Execute(String input)
+        public ListNode Execute(string input)
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(input);
             return Execute(tree.GetRoot());
-            //SynthesizedProgram hypothesis = new SynthesizedProgram();
-            //List<IExpression> expressions = new List<IExpression>();
-            //expressions.Add(expression);
-
-            //hypothesis.solutions = expressions;
-
-            //SyntaxTree result = ASTProgram.TransformString(input, hypothesis).tree;
-
-            //List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
-            //nodes = ASTManager.EnumerateSyntaxNodesAndTokens(result.GetRoot(), nodes);
-
-            //ListNode listNode = new ListNode(nodes);
-            //return listNode;
         }
 
         public ListNode Execute(SyntaxNode input)
         {
             SynthesizedProgram hypothesis = new SynthesizedProgram();
             List<IExpression> expressions = new List<IExpression>();
-            expressions.Add(expression);
+            expressions.Add(Expression);
 
             hypothesis.Solutions = expressions;
 
@@ -63,7 +51,7 @@ namespace Spg.LocationRefactor.Operator
             list = ASTManager.EnumerateSyntaxNodesAndTokens(input, list);
             ListNode lnode = new ListNode(list);
 
-            SyntaxTree result = ASTProgram.TransformString(lnode, hypothesis).tree;
+            SyntaxTree result = ASTProgram.TransformString(lnode, hypothesis).Tree;
 
             List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
             nodes = ASTManager.EnumerateSyntaxNodesAndTokens(result.GetRoot(), nodes);
@@ -76,17 +64,17 @@ namespace Spg.LocationRefactor.Operator
         /// <summary>
         /// Retrieve region
         /// </summary>
-        /// <param name="input">Source code</param>
+        /// <param name="sourceCode">Source code</param>
         /// <returns>Execution result</returns>
-        public List<TRegion> RetrieveRegion(String sourceCode) {
+        public List<TRegion> RetrieveRegion(string sourceCode) {
             List<TRegion> tRegions = new List<TRegion>();
 
-            Tuple<String, String> t = Tuple.Create(sourceCode, sourceCode);
+            Tuple<string, string> t = Tuple.Create(sourceCode, sourceCode);
             Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
             ListNode input = lNode.Item1;
 
-            int pOfMatch1 = expression.p1.GetPositionIndex(input);
-            int pOfMatch2 = expression.p2.GetPositionIndex(input);
+            int pOfMatch1 = Expression.P1.GetPositionIndex(input);
+            int pOfMatch2 = Expression.P2.GetPositionIndex(input);
 
             ListNode matchNodes = ASTManager.SubNotes(input, pOfMatch1, (pOfMatch2 - pOfMatch1));
 
@@ -105,6 +93,21 @@ namespace Spg.LocationRefactor.Operator
             return tRegions;
         }
 
+        /// <summary>
+        /// Retrieve region
+        /// </summary>
+        /// <returns>Regions retrieved</returns>
+        public List<TRegion> RetrieveRegion()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Retrieve regions
+        /// </summary>
+        /// <param name="syntaxNode">Syntax node</param>
+        /// <param name="sourceCode">Source code</param>
+        /// <returns>Regions retrieved</returns>
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
             List<TRegion> tRegions = new List<TRegion>();
@@ -113,8 +116,8 @@ namespace Spg.LocationRefactor.Operator
             Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
             ListNode input = lNode.Item1;
 
-            int pOfMatch1 = expression.p1.GetPositionIndex(input);
-            int pOfMatch2 = expression.p2.GetPositionIndex(input);
+            int pOfMatch1 = Expression.P1.GetPositionIndex(input);
+            int pOfMatch2 = Expression.P2.GetPositionIndex(input);
 
             ListNode matchNodes = ASTManager.SubNotes(input, pOfMatch1, (pOfMatch2 - pOfMatch1));
 
@@ -136,8 +139,13 @@ namespace Spg.LocationRefactor.Operator
         public override string ToString()
         {
             return "Pair(p1, p2, LS)\n" +
-            "p1 = " + expression.p1 + "\n" +
-            "p2 = " + expression.p2;
+            "p1 = " + Expression.P1 + "\n" +
+            "p2 = " + Expression.P2;
         }
     }
 }
+
+
+
+
+

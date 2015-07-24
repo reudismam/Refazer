@@ -1,9 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Filter;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Learn.Filter;
 using Spg.LocationRefactor.Operator.Filter;
-using Microsoft.CodeAnalysis;
 using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.TextRegion;
 
@@ -20,7 +18,7 @@ namespace Spg.LocationRefactor.Operator
         /// <param name="list">Region list</param>
         public StatementFilter(List<TRegion> list): base(list)
         {
-            if (list == null) { throw new Exception("List cannot be null"); }
+            if (list == null)throw new ArgumentNullException("list");
         }
 
         /// <summary>
@@ -31,15 +29,7 @@ namespace Spg.LocationRefactor.Operator
         {
             return new StatementFilterLearner(list);
         }
-
-        /// <summary>
-        /// Syntax nodes
-        /// </summary>
-        /// <param name="sourceCode">Source code</param>
-        /// <returns>Syntax nodes</returns>
-        protected override IEnumerable<SyntaxNode> SyntaxNodes(string sourceCode)
-        {
-            return RegionManager.SyntaxNodesForFiltering(sourceCode, List);
-        }
     }
 }
+
+

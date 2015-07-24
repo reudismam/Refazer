@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.CodeAnalysis;
 
 namespace Spg.ExampleRefactoring.AST
@@ -12,25 +12,26 @@ namespace Spg.ExampleRefactoring.AST
         /// Transformation
         /// </summary>
         /// <returns>Get or set transformation</returns>
-        public String transformation { get; set; }
+        public String Transformation { get; set; }
         /// <summary>
         /// Syntax tree
         /// </summary>
         /// <returns>Get or set syntax tree</returns>
-        public SyntaxTree tree { get; set; }
+        public SyntaxTree Tree { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="transformation">Transformation</param>
         /// <param name="tree">Syntax tree</param>
-        public ASTTransformation(String transformation, SyntaxTree tree) {
-            if (transformation == null || tree == null)
-            {
-                throw new Exception("Transformation or tree cannot be true.");
-            }
-            this.transformation = transformation;
-            this.tree = tree;
+        public ASTTransformation(string transformation, SyntaxTree tree) {
+            if (transformation == null) throw new ArgumentNullException("transformation");
+            if (tree == null) throw new ArgumentNullException("tree");
+
+            this.Transformation = transformation;
+            this.Tree = tree;
         }
     }
 }
+
+

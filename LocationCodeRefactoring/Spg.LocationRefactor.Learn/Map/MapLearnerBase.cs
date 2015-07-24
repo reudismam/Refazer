@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Operator.Map;
+using Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Learn;
@@ -11,7 +11,7 @@ using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
+namespace Spg.LocationRefactor.Learn.Map
 {
     /// <summary>
     /// Map Learner base
@@ -35,7 +35,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
             EditorController contoller = EditorController.GetInstance();
             List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
-            S.predicate = pred;
+            S.Predicate = pred;
 
             List<Prog> predicates = S.Learn(examples);
             if (hypo.Count == 1)
@@ -54,7 +54,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
                 }
             }
             else {
-                Boolean firstSynthesizedProg = true;
+                bool firstSynthesizedProg = true;
                 List<Merge> merges = new List<Merge>();
                 foreach(Prog h in hypo)
                 {
@@ -111,7 +111,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
             EditorController contoller = EditorController.GetInstance();
             List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
-            S.predicate = pred;
+            S.Predicate = pred;
 
             List<Prog> predicates = S.Learn(positiveExamples, negativeExamples);
             if (hypo.Count == 1)
@@ -131,7 +131,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
             }
             else
             {
-                Boolean firstSynthesizedProg = true;
+                bool firstSynthesizedProg = true;
                 List<Merge> merges = new List<Merge>();
                 foreach (Prog h in hypo)
                 {
@@ -210,3 +210,8 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         protected abstract FilterLearnerBase GetFilter(List<TRegion> list);
     }
 }
+
+
+
+
+

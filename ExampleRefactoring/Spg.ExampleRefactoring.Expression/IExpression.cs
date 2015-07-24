@@ -1,7 +1,7 @@
-﻿using System;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using System;
+using Spg.ExampleRefactoring.Synthesis;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
+namespace Spg.ExampleRefactoring.Expression
 {
     /// <summary>
     /// IExpression
@@ -13,7 +13,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="example">Examples</param>
         /// <returns>true if expression is present on the nodes</returns>
-        Boolean IsPresentOn(Tuple<ListNode, ListNode> example);
+        bool IsPresentOn(Tuple<ListNode, ListNode> example);
 
         /// <summary>
         /// Sub nodes of expression on input s
@@ -22,3 +22,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Expression
         ListNode RetrieveSubNodes(ListNode input);
     }
 }
+
+
+

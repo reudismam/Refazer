@@ -1,10 +1,7 @@
-﻿using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
-using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
-using Spg.ExampleRefactoring.Comparator;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Tok;
+using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Predicate
 {
@@ -31,6 +28,11 @@ namespace Spg.LocationRefactor.Predicate
         /// <returns>Evaluation</returns>
         public abstract bool Evaluate(ListNode input, TokenSeq regex);
 
+        /// <summary>
+        /// Evalute input
+        /// </summary>
+        /// <param name="input">Input data</param>
+        /// <returns>Evaluation of regex for this input</returns>
         public bool Evaluate(ListNode input)
         {
             TokenSeq regex = ASTProgram.ConcatenateRegularExpression(r1, r2);
@@ -47,6 +49,11 @@ namespace Spg.LocationRefactor.Predicate
             return tokens.Regex();
         }
 
+        /// <summary>
+        /// Calculate if object is equal to this object
+        /// </summary>
+        /// <param name="obj">Another object</param>
+        /// <returns>True if obj is equal to this object</returns>
         public override bool Equals(object obj)
         {
             if (!(obj is IPredicate)) { return false; }
@@ -58,9 +65,14 @@ namespace Spg.LocationRefactor.Predicate
             return r1.Equals(other.r1) && r2.Equals(other.r2);
         }
 
+        /// <summary>
+        /// Hash code
+        /// </summary>
+        /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
         }
     }
 }
+

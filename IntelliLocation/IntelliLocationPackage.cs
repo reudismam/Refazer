@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using LocateAdornment;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.LocationRefactor.Controller;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
@@ -123,7 +123,7 @@ namespace SPG.IntelliLocation
 
             var project = proj.ContainingProject;
 
-            EditorController.GetInstance().ProjectInformation.ProjectPath = project.Name;
+            EditorController.GetInstance().ProjectInformation.ProjectPath.Add(project.Name);
             EditorController.GetInstance().ProjectInformation.SolutionPath = fullName;
             EditorController.GetInstance().CurrentViewCodePath = document.FullName;
             EditorController.GetInstance().FilesOpened[document.FullName] = true;
@@ -164,3 +164,4 @@ namespace SPG.IntelliLocation
 
     }
 }
+

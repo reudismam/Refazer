@@ -1,19 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
-using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
-using Spg.LocationRefactor.Operator.Filter;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Microsoft.CodeAnalysis;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Operator.Map;
+using Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Operator
 {
@@ -39,7 +30,8 @@ namespace Spg.LocationRefactor.Operator
         public List<MapBase> maps { get; set; }
 
 
-        public Merge(List<MapBase> maps) {
+        public Merge(List<MapBase> maps)
+        {
             this.maps = maps;
         }
 
@@ -75,66 +67,67 @@ namespace Spg.LocationRefactor.Operator
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Retrieve region
-        /// </summary>
-        /// <param name="input">Source code</param>
-        /// <returns>Retrieve regions</returns>
-        public List<TRegion> RetrieveRegion(string input)
-        {
-            List<TRegion> tRegions = new List<TRegion>();
+        ///// <summary>
+        ///// Retrieve region
+        ///// </summary>
+        ///// <param name="input">Source code</param>
+        ///// <returns>Retrieve regions</returns>
+        //public List<TRegion> RetrieveRegion(string input)
+        //{
+        //    List<TRegion> tRegions = new List<TRegion>();
 
-            FilterBase filter = (FilterBase)maps[0].SequenceExpression.Ioperator;
+        //    FilterBase filter = (FilterBase)maps[0].SequenceExpression.Ioperator;
 
-            TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.Predicate.r1, filter.Predicate.r2);
-            List<Token> regex = tokens.Regex();
+        //    //TokenSeq tokens = ASTProgram.ConcatenateRegularExpression(filter.Predicate.r1, filter.Predicate.r2);
+        //    //List<Token> regex = tokens.Regex();
 
-            List<TRegion> filtereds = filter.RetrieveRegion(input);
+        //    List<TRegion> filtereds = filter.RetrieveRegion(input);
 
-            SynthesizedProgram synt = new SynthesizedProgram();
-            foreach (MapBase map in maps)
-            {
-                Pair pair = (Pair) map.ScalarExpression.Ioperator;
-                synt.Add(pair.expression);
-            }
+        //    SynthesizedProgram synt = new SynthesizedProgram();
+        //    foreach (MapBase map in maps)
+        //    {
+        //        Pair pair = (Pair)map.ScalarExpression.Ioperator;
+        //        synt.Add(pair.expression);
+        //    }
 
-            ASTProgram program = new ASTProgram();
-            foreach (TRegion r in filtereds)
-            {
-                TRegion region = new TRegion();
-                Tuple<String, String> tu = Tuple.Create(input.Substring(r.Start, r.Length), input.Substring(r.Start, r.Length));
-                Tuple<ListNode, ListNode> tnodes = ASTProgram.Example(tu);
+        //    //ASTProgram program = new ASTProgram();
+        //    foreach (TRegion r in filtereds)
+        //    {
+        //        TRegion region = new TRegion();
+        //        Tuple<string, string> tu = Tuple.Create(input.Substring(r.Start, r.Length), input.Substring(r.Start, r.Length));
+        //        Tuple<ListNode, ListNode> tnodes = ASTProgram.Example(tu);
 
-                ListNode lnode = ASTProgram.RetrieveNodes(tnodes, synt.Solutions);
+        //        ListNode lnode = ASTProgram.RetrieveNodes(tnodes, synt.Solutions);
 
-                List<int> matches= ASTManager.Matches(tnodes.Item1, lnode, new NodeComparer());
-                if (matches.Count == 1) {
-                    lnode = ASTManager.SubNotes(tnodes.Item1, matches[0], lnode.Length());
-                }
+        //        List<int> matches = ASTManager.Matches(tnodes.Item1, lnode, new NodeComparer());
+        //        if (matches.Count == 1)
+        //        {
+        //            lnode = ASTManager.SubNotes(tnodes.Item1, matches[0], lnode.Length());
+        //        }
 
-                if (lnode.Length() > 0)
-                {
-                    SyntaxNodeOrToken first = lnode.List[0];
-                    SyntaxNodeOrToken last = lnode.List[lnode.Length() - 1];
+        //        if (lnode.Length() > 0)
+        //        {
+        //            SyntaxNodeOrToken first = lnode.List[0];
+        //            SyntaxNodeOrToken last = lnode.List[lnode.Length() - 1];
 
-                    TextSpan span = first.Span;
+        //            TextSpan span = first.Span;
 
-                    int start = r.Start + span.Start;
-                    int length = last.Span.Start + last.Span.Length - span.Start;
+        //            int start = r.Start + span.Start;
+        //            int length = last.Span.Start + last.Span.Length - span.Start;
 
-                    region.Start = start;
-                    region.Length = length;
+        //            region.Start = start;
+        //            region.Length = length;
 
-                    tRegions.Add(region);
-                }
-            }
-            return tRegions;
-        }
+        //            tRegions.Add(region);
+        //        }
+        //    }
+        //    return tRegions;
+        //}
 
-        public List<TRegion> RetrieveRegion(SyntaxNode input)
-        {
-            throw new NotImplementedException();
-        }
+        //public List<TRegion> RetrieveRegion(SyntaxNode input)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         /// <summary>
         /// String representation
@@ -142,7 +135,7 @@ namespace Spg.LocationRefactor.Operator
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            String s = "Merge(";
+            string s = "Merge(";
             foreach (MapBase hypothesis in maps)
             {
                 s += hypothesis + ", ";
@@ -156,5 +149,13 @@ namespace Spg.LocationRefactor.Operator
         {
             throw new NotImplementedException();
         }
+
+        public List<TRegion> RetrieveRegion()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
+
+
+

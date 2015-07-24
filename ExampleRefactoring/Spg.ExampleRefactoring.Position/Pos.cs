@@ -1,13 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
+using Spg.ExampleRefactoring.RegularExpression;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.Tok;
+using Spg.LocationRefactoring.Tok;
 
 namespace Spg.ExampleRefactoring.Position
 {
@@ -19,17 +15,17 @@ namespace Spg.ExampleRefactoring.Position
         /// <summary>
         /// First regular expression
         /// </summary>
-        public TokenSeq r1 { get; set; }
+        public TokenSeq R1 { get; set; }
 
         /// <summary>
         /// Second regular expression
         /// </summary>
-        public TokenSeq r2 { get; set; }
+        public TokenSeq R2 { get; set; }
 
         /// <summary>
         /// Kth index of match
         /// </summary>
-        public int position { get; set; }
+        public int Position { get; set; }
 
 
         /// <summary>
@@ -40,9 +36,9 @@ namespace Spg.ExampleRefactoring.Position
         /// <param name="position">Kth position of match [r1r2]</param>
         public Pos(TokenSeq r1, TokenSeq r2, int position)
         {
-            this.r1 = r1;
-            this.r2 = r2;
-            this.position = position;
+            this.R1 = r1;
+            this.R2 = r2;
+            this.Position = position;
         }
 
         /// <summary>
@@ -52,17 +48,17 @@ namespace Spg.ExampleRefactoring.Position
         /// <returns>Index</returns>
         public int GetPositionIndex(ListNode s)
         {
-            if(s == null || r1 == null || r2 == null)
+            if(s == null || R1 == null || R2 == null)
             {
                 return -1;
             }
 
-            if (r1.Tokens == null || r2.Tokens == null)
+            if (R1.Tokens == null || R2.Tokens == null)
             {
                 return -1;
             }
 
-            return GetPositionIndex(s, this.r1, this.r2, this.position);
+            return GetPositionIndex(s, this.R1, this.R2, this.Position);
         }
 
         /// <summary>
@@ -170,29 +166,29 @@ namespace Spg.ExampleRefactoring.Position
         /// <returns>String representation of this object</returns>
         public override string ToString()
         {
-            if(r1 == null || r2 == null)
+            if(R1 == null || R2 == null)
             {
                 return null;
             }
 
-            if (r1.Tokens == null || r2.Tokens == null)
+            if (R1.Tokens == null || R2.Tokens == null)
             {
                 return null;
             }
 
-            String r1String = this.r1.ToString();
-            String r2String = this.r2.ToString();
+            string r1String = this.R1.ToString();
+            string r2String = this.R2.ToString();
 
-            if (r1.Tokens.Count() == 0)
+            if (R1.Tokens.Count() == 0)
             {
                 r1String = "Empty";
             }
 
-            if (r2.Tokens.Count() == 0)
+            if (R2.Tokens.Count() == 0)
             {
                 r2String = "Empty";
             }
-            return "Pos(vi, " + r1String + " ," + r2String + " ," + this.position + ")";
+            return "Pos(vi, " + r1String + ", " + r2String + ", " + this.Position + ")";
         }
 
         /// <summary>
@@ -208,7 +204,7 @@ namespace Spg.ExampleRefactoring.Position
             }
 
             Pos another = obj as Pos;
-            return another.r1.Equals(this.r1) && another.r2.Equals(this.r2) && another.position == this.position;
+            return another.R1.Equals(this.R1) && another.R2.Equals(this.R2) && another.Position == this.Position;
         }
 
         /// <summary>
@@ -221,3 +217,5 @@ namespace Spg.ExampleRefactoring.Position
         }
     }
 }
+
+

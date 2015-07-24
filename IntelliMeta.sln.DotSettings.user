@@ -1,9 +1,17 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Int64 x:Key="/Default/Environment/SearchAndNavigation/DefaultOccurencesGroupingIndex/@EntryValue">11</s:Int64>
+	<s:Boolean x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=30F43A4E78254A92B0590A88E60AB624/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=30F43A4E78254A92B0590A88E60AB624/GroupingIndex/@EntryValue">4</s:Int64>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=30F43A4E78254A92B0590A88E60AB624/Name/@EntryValue">All tests from ASTProgramTests.cs</s:String>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=30F43A4E78254A92B0590A88E60AB624/XmlSerializedElements/@EntryValue">&lt;Session&gt;&lt;/Session&gt;</s:String>
 	<s:Boolean x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=416FDFEFE18C4BBFB16BE08AA5CA671B/@KeyIndexDefined">True</s:Boolean>
 	<s:Int64 x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=416FDFEFE18C4BBFB16BE08AA5CA671B/GroupingIndex/@EntryValue">4</s:Int64>
 	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=416FDFEFE18C4BBFB16BE08AA5CA671B/Name/@EntryValue">LocationTestProject</s:String>
 	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=416FDFEFE18C4BBFB16BE08AA5CA671B/XmlSerializedElements/@EntryValue">&lt;Session&gt;&lt;/Session&gt;</s:String>
+	<s:Boolean x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=F608DCCD0B674C39A49C1B11131BC900/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=F608DCCD0B674C39A49C1B11131BC900/GroupingIndex/@EntryValue">4</s:Int64>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=F608DCCD0B674C39A49C1B11131BC900/Name/@EntryValue">Proj5_c96d9ce</s:String>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=F608DCCD0B674C39A49C1B11131BC900/XmlSerializedElements/@EntryValue">&lt;Session&gt;&lt;e Id="NUnitTests.Spg.NUnitTests.CompleteTestSolution.CompleteTestSolution.Proj5_c96d9ce" Project="853D5162-EAAD-4373-9CAA-62C21476965B" Provider="nUnit" /&gt;&lt;e Id="NUnitTests.Spg.NUnitTests.CompleteTestSolution.CompleteTestSolution" Project="853D5162-EAAD-4373-9CAA-62C21476965B" Provider="nUnit" /&gt;&lt;e Id="NUnitTests.Spg.NUnitTests.CompleteTestSolution.CompleteTestSolution.Proj2_a883600" Project="853D5162-EAAD-4373-9CAA-62C21476965B" Provider="nUnit" /&gt;&lt;e Id="NUnitTests.Spg.NUnitTests.CompleteTestSolution.CompleteTestSolution.Proja883600" Project="853D5162-EAAD-4373-9CAA-62C21476965B" Provider="nUnit" /&gt;&lt;/Session&gt;</s:String>
 	
 	
 	

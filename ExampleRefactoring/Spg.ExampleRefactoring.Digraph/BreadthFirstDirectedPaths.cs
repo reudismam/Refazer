@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using DiGraph;
 
@@ -89,7 +89,7 @@ namespace Spg.ExampleRefactoring.Digraph
         /// </summary>
         /// <param name="v">Final vertex</param>
         /// <returns>True is there is a path from vertex s to vertex v</returns>
-        public Boolean HasPathTo(string v)
+        public bool HasPathTo(string v)
         {
             return Marked[v];
         }
@@ -114,3 +114,4 @@ namespace Spg.ExampleRefactoring.Digraph
         }
     }
 }
+

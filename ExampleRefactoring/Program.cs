@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Data;
 using Spg.ExampleRefactoring.Synthesis;
 
@@ -19,7 +19,7 @@ namespace ExampleRefactoring
 
             Console.WriteLine("CHOOSE A NUMBER BETWEEM 1 AND 10\n");
 
-            String inputexamples = Console.ReadLine();
+            string inputexamples = Console.ReadLine();
             System.IO.StreamWriter file = new System.IO.StreamWriter("hypothesis.txt");
             ExampleCommand command = null;
             while (!inputexamples.Equals("&"))
@@ -32,17 +32,17 @@ namespace ExampleRefactoring
                     command = ExampleManager.GetCommand(inputexamples);
                 }
 
-                List<Tuple<String, String>> examples = command.Train();
+                List<Tuple<string, string>> examples = command.Train();
 
                 List<Tuple<ListNode, ListNode>> data = ASTProgram.Examples(examples);
 
                 List<SynthesizedProgram> hypothesis = program.GenerateStringProgram(data);
 
-                Tuple<String, String> test = command.Test();
+                Tuple<string, string> test = command.Test();
 
                 while (!test.Equals("#"))
                 {
-                    String result = ASTProgram.TransformString(test.Item1, hypothesis[0]).transformation;
+                    string result = ASTProgram.TransformString(test.Item1, hypothesis[0]).Transformation;
                     Console.WriteLine(result);
                     test = command.Test();
                     Console.ReadLine();
@@ -56,3 +56,6 @@ namespace ExampleRefactoring
         }
     }
 }
+
+
+

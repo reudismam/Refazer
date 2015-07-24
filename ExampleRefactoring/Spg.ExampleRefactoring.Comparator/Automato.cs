@@ -1,9 +1,9 @@
-﻿using System;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using System;
+using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Tok;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Comparator
+namespace Spg.ExampleRefactoring.Comparator
 {
     /// <summary>
     /// Automaton representation
@@ -133,3 +133,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Comparator
         }
     }
 }
+
+

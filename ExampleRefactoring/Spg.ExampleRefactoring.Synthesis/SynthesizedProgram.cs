@@ -1,8 +1,7 @@
-﻿using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.Expression;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Synthesized program
@@ -36,7 +35,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <returns>String representing this instance</returns>
         public override string ToString()
         {
-            String s = "";
+            string s = "";
             foreach(IExpression str in Solutions){
                 s += str + "\n\n";
             }
@@ -45,3 +44,6 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+
+
+

@@ -65,7 +65,7 @@
         <Parent guid="guidRefactorCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>IntelliRefactor</ButtonText>
+          <ButtonText>IntelliEdit</ButtonText>
         </Strings>
       </Button>
 

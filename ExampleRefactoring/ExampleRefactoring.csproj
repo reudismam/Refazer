@@ -106,17 +106,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Spg.ExampleRefactoring.AST\ASTManager.cs" />
-    <Compile Include="Spg.ExampleRefactoring.AST\ASTRewriter.cs" />
-    <Compile Include="Spg.ExampleRefactoring.AST\ASTSyntaxWalker.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\ASTTransformation.cs" />
-    <Compile Include="Spg.ExampleRefactoring.AST\SyntacticalDecomposer.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\UpdateASTManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Bean\Selection.cs" />
-    <Compile Include="Spg.ExampleRefactoring.Change\ChangeManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\ArgumentComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\Automato.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\ComparerBase.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\ArrayInitializerElementTokenComparer.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Comparator\IdenToStrComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\SubStrNodeComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\NodeComparer.cs" />
     <Compile Include="Spg.ExampleRefactoring.Comparator\RegexEndComparer.cs" />
@@ -151,10 +148,20 @@
     <Compile Include="Spg.ExampleRefactoring.Data\ExampleCommand.cs" />
     <Compile Include="Spg.ExampleRefactoring.Data\ExampleManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Data\FreeCommand.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Expression\FakeConstrStr.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\ConstruStr.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Expression\ExpressionKind.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\ExpressionManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\IExpression.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Expression\IdenToStr.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\SubStr.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Intersect\FakeConstIntersectStrategy.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Intersect\IIntersectStrategy.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Intersect\ConstIntersectStrategy.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Intersect\SubStrIntersectStrategyBase.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Intersect\IdenToStrIntersectStrategy.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Intersect\SubStrIntersectStrategy.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Intersect\ConstIntersectStrategyBase.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\CollectionDiffer.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ComparisonObject.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ComparisonResult.cs" />
@@ -167,7 +174,7 @@
     <Compile Include="Spg.ExampleRefactoring.Setting\SynthesizerSetting.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\BoundaryManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\FeatureType.cs" />
-    <Compile Include="Spg.ExampleRefactoring.Synthesis\IntersectManager.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Intersect\IntersectManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\SynthesizedProgram.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\SynthesisManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Position\CPos.cs" />

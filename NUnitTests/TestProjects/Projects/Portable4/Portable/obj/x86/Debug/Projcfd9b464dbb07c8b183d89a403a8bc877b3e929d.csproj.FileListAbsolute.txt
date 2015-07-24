@@ -1,3 +1,0 @@
-C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\intellimeta\NUnitTests\TestProjects\Projects\Portable4\Portable\obj\x86\Debug\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.csprojResolveAssemblyReference.cache
-C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\intellimeta\NUnitTests\TestProjects\Projects\Portable4\Portable\obj\x86\Debug\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.CodeAnalysisResources.resources
-C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\intellimeta\NUnitTests\TestProjects\Projects\Portable4\Portable\obj\x86\Debug\Projcfd9b464dbb07c8b183d89a403a8bc877b3e929d.csproj.GenerateResource.Cache
