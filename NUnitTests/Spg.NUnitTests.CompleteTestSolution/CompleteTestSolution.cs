@@ -543,7 +543,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"Roslyn\cfd9b46", @"Roslyn\roslyn6\src\Roslyn.sln", projects);
 
             List<string> list = new List<string>();
-            list.Add("MetadataWriter.cs"); 
+            list.Add("MetadataWriter.cs");
             bool passTransformation = CompleteTestBase(list, @"Roslyn\cfd9b46");
 
             Assert.IsTrue(passLocation && passTransformation);
@@ -1204,40 +1204,40 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             dicionarySelection = dicionarySelectionFullpath;
 
             List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
-            foreach (var item in editeds)
-            {
-                string sourceCodeAfter = FileUtil.ReadFile(expHome + @"commit\" + commit + @"\" + item);
-                string pattern = item.ToUpperInvariant();
-                foreach (KeyValuePair<string, List<Selection>> entry in dicionarySelection)
-                {
-                    string classPath = entry.Key;
-                    string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
+            //foreach (var item in editeds)
+            //{
 
-                    //Console.WriteLine(className);
-                    string sourceCode = FileUtil.ReadFile(entry.Key);
-                    bool containsPattern = className.ToUpperInvariant().Equals(pattern);
-                    if (containsPattern)
-                    {
-                        Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
-                        documents.Add(tuple);
-                        controller.FilesOpened[entry.Key] = true;
-                    }
-                }
-                
+            //string pattern = item.ToUpperInvariant();
+            foreach (KeyValuePair<string, List<Selection>> entry in dicionarySelection)
+            {
+                string classPath = entry.Key;
+                string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
+
+                string sourceCodeAfter = FileUtil.ReadFile(expHome + @"commit\" + commit + @"\" + className);
+                //Console.WriteLine(className);
+                string sourceCode = FileUtil.ReadFile(entry.Key);
+                //bool containsPattern = className.ToUpperInvariant().Equals(pattern);
+                //if (containsPattern)
+                //{
+                    Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
+                    documents.Add(tuple);
+                    controller.FilesOpened[entry.Key] = true;
+                //}
             }
+            //}
 
             controller.DocumentsBeforeAndAfter = documents;
             controller.EditedLocations = dicionarySelection;
-            
+
             controller.Refact();
 
             bool passTransformation = true;
             foreach (Transformation transformation in controller.SourceTransformations)
-            { 
+            {
                 string classPath = transformation.SourcePath;
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
                 string classNamePath = expHome + @"commit\" + commit + @"\tool\" + className;
-                //FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
+                FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
 
                 Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(classNamePath), transformation.transformation.Item2);
                 Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);
