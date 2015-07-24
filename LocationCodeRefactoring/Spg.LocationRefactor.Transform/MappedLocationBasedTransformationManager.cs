@@ -31,7 +31,8 @@ namespace Spg.LocationRefactor.Transform
             SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
             EditorController.GetInstance().Program = validated;
 
-            Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
+            //Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
+            Dictionary<string, List<CodeLocation>> groupLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(locations); //location for each file
 
             var transformations = new List<Transformation>();
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)

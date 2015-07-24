@@ -126,26 +126,26 @@ namespace Spg.LocationRefactor.Transform
         //    return text;
         //}
 
-        /// <summary>
-        /// Group location by file path
-        /// </summary>
-        /// <param name="locations">Location</param>
-        /// <returns>Grouping</returns>
-        protected static Dictionary<string, List<CodeLocation>> Groups(List<CodeLocation> locations)
-        {
-            Dictionary<string, List<CodeLocation>> dic = new Dictionary<string, List<CodeLocation>>();
-            foreach (CodeLocation location in locations)
-            {
-                List<CodeLocation> value;
-                if (!dic.TryGetValue(location.SourceClass, out value))
-                {
-                    value = new List<CodeLocation>();
-                    dic[location.SourceClass] = value;
-                }
-                value.Add(location);
-            }
-            return dic;
-        }
+        ///// <summary>
+        ///// Group location by file path
+        ///// </summary>
+        ///// <param name="locations">Location</param>
+        ///// <returns>Grouping</returns>
+        //protected static Dictionary<string, List<CodeLocation>> Groups(List<CodeLocation> locations)
+        //{
+        //    Dictionary<string, List<CodeLocation>> dic = new Dictionary<string, List<CodeLocation>>();
+        //    foreach (CodeLocation location in locations)
+        //    {
+        //        List<CodeLocation> value;
+        //        if (!dic.TryGetValue(location.SourceClass, out value))
+        //        {
+        //            value = new List<CodeLocation>();
+        //            dic[location.SourceClass] = value;
+        //        }
+        //        value.Add(location);
+        //    }
+        //    return dic;
+        //}
 
         /// <summary>
         /// Learn a synthesizer program
