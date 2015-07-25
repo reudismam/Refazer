@@ -1038,7 +1038,6 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             EditorController controller = EditorController.GetInstance();
 
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-            controller.CurrentViewCodeAfter = FileUtil.ReadFile(expHome + @"commit\" + commit + @"\" + editeds.First());
 
             var dicionarySelection = JsonUtil<Dictionary<string, List<Selection>>>.Read(expHome + @"commit\" + commit + @"\edited_selections.json");
 
@@ -1051,27 +1050,21 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             dicionarySelection = dicionarySelectionFullpath;
 
             List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
-            //foreach (var item in editeds)
-            //{
 
-            //string pattern = item.ToUpperInvariant();
             foreach (KeyValuePair<string, List<Selection>> entry in dicionarySelection)
             {
                 string classPath = entry.Key;
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
 
                 string sourceCodeAfter = FileUtil.ReadFile(expHome + @"commit\" + commit + @"\" + className);
-                //Console.WriteLine(className);
+                controller.CurrentViewCodeAfter = sourceCodeAfter;
+
                 string sourceCode = FileUtil.ReadFile(entry.Key);
-                //bool containsPattern = className.ToUpperInvariant().Equals(pattern);
-                //if (containsPattern)
-                //{
-                    Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
-                    documents.Add(tuple);
-                    controller.FilesOpened[entry.Key] = true;
-                //}
+                Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
+                documents.Add(tuple);
+                controller.FilesOpened[entry.Key] = true;
             }
-            //}
+
 
             controller.DocumentsBeforeAndAfter = documents;
             controller.EditedLocations = dicionarySelection;
