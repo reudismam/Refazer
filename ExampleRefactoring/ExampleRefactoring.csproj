@@ -186,6 +186,7 @@
     <Compile Include="Spg.ExampleRefactoring.Workspace\WorkspaceManager.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\ArgumentToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\ArrayInitializerElementToken.cs" />
+    <Compile Include="Spg.LocationRefactoring.Tok\RawDymToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\SubStrToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\DymToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\Token.cs" />

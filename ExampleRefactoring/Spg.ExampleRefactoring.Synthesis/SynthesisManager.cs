@@ -116,54 +116,54 @@ namespace Spg.ExampleRefactoring.Synthesis
         //        return synthesizedProgList;
         //    }
 
-            /// <summary>
-            /// Create new synthesized program combining current synthesized programs with expressions
-            /// </summary>
-            /// <param name="synthesizedProgramList">Synthesized programs list</param>
-            /// <param name="expressionList">Expression list</param>
-            /// <param name="examples">Examples</param>
-            /// <returns>Synthesized programs list</returns>
-        private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
-        {
-            List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
-            if (synthesizedProgramList.Count > 0)
-            {
-                foreach (SynthesizedProgram sd1 in synthesizedProgramList)
-                {
-                    foreach (IExpression e2 in expressionList)
-                    {
-                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
-                        SynthesizedProgram sp = new SynthesizedProgram();
-                        sp.Solutions = solutions;
-                        sp.Add(e2);
+        //    /// <summary>
+        //    /// Create new synthesized program combining current synthesized programs with expressions
+        //    /// </summary>
+        //    /// <param name="synthesizedProgramList">Synthesized programs list</param>
+        //    /// <param name="expressionList">Expression list</param>
+        //    /// <param name="examples">Examples</param>
+        //    /// <returns>Synthesized programs list</returns>
+        //private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
+        //{
+        //    List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
+        //    if (synthesizedProgramList.Count > 0)
+        //    {
+        //        foreach (SynthesizedProgram sd1 in synthesizedProgramList)
+        //        {
+        //            foreach (IExpression e2 in expressionList)
+        //            {
+        //                List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
+        //                SynthesizedProgram sp = new SynthesizedProgram();
+        //                sp.Solutions = solutions;
+        //                sp.Add(e2);
 
-                        //ExpressionManager manager = new ExpressionManager();
-                        bool isValid = ValidateSubExpression(sp.Solutions, examples);
-                        if (isValid)
-                        {
-                            synthesizedProgList.Add(sp);
-                        }
-                        else
-                        {
-                            int i = 0;
-                        }
-                    }
-                }
-                return synthesizedProgList;
-            }
+        //                //ExpressionManager manager = new ExpressionManager();
+        //                bool isValid = ValidateSubExpression(sp.Solutions, examples);
+        //                if (isValid)
+        //                {
+        //                    synthesizedProgList.Add(sp);
+        //                }
+        //                else
+        //                {
+        //                    int i = 0;
+        //                }
+        //            }
+        //        }
+        //        return synthesizedProgList;
+        //    }
 
-            foreach (IExpression expression in expressionList)
-            {
-                SynthesizedProgram sp = new SynthesizedProgram();
-                sp.Add(expression);
-                //     bool isValid = ValidateSubExpression(sp.Solutions, examples);
-                //if (isValid)
-                //{
-                    synthesizedProgList.Add(sp);
-                //}
-            }
-            return synthesizedProgList;
-        }
+        //    foreach (IExpression expression in expressionList)
+        //    {
+        //        SynthesizedProgram sp = new SynthesizedProgram();
+        //        sp.Add(expression);
+        //        //     bool isValid = ValidateSubExpression(sp.Solutions, examples);
+        //        //if (isValid)
+        //        //{
+        //            synthesizedProgList.Add(sp);
+        //        //}
+        //    }
+        //    return synthesizedProgList;
+        //}
 
         /// <summary>
         /// Create new synthesized program combining current synthesized programs with expressions
@@ -180,7 +180,6 @@ namespace Spg.ExampleRefactoring.Synthesis
                         select expression;
             if (synthesizedProgramList.Count > 0)
             {
-
                 foreach (SynthesizedProgram sd1 in synthesizedProgramList)
                 {
                     //foreach (IExpression e2 in expressionList)
@@ -272,11 +271,6 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>True if valid</returns>
         private bool ValidateSynthesizedProgram(List<IExpression> solutions, List<Tuple<ListNode, ListNode>> examples/*, StreamWriter file*/)
         {
-            /*if (setting.considerConstrStr && solutions.Count == 1 && solutions[0] is ConstruStr)
-            {
-                return false;
-            }*/
-
             foreach (Tuple<ListNode, ListNode> example in examples)
             {
                 ListNode match = ASTProgram.RetrieveNodes(example, solutions);

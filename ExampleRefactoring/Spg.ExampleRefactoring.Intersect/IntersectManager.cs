@@ -120,7 +120,10 @@ namespace Spg.ExampleRefactoring.Intersect
             foreach (IIntersectStrategy strategy in strategies)
             {
                 List<IExpression> exp = strategy.GetExpressions(dag1, dag2, tuple1, tuple2);
-                expressions.Add(strategy.GetExpressionKind(), exp);
+                if (exp.Any())
+                {
+                    expressions.Add(strategy.GetExpressionKind(), exp);
+                }
             }
             return expressions;
         }

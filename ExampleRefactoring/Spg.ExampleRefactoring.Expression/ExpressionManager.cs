@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using DiGraph;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Digraph;
@@ -38,10 +39,9 @@ namespace Spg.ExampleRefactoring.Expression
                 {
                     foreach (IExpression expression in item.Value)
                     {
-                        //bool isValid = ValidateExpression(expression, examples);
                         bool isValid = ValidateExpression(entry.Key, expression, examples);
 
-                        if (!isValid)
+                        if (!isValid && !item.Key.Equals(ExpressionKind.FakeConstrStr))
                         {
                             List<IExpression> value;
                             if (!removes.TryGetValue(item.Key, out value))
@@ -54,14 +54,30 @@ namespace Spg.ExampleRefactoring.Expression
                     }
                 }
 
+                if (entry.Value.Count != 1)
+                {
+                    if (entry.Value.ContainsKey(ExpressionKind.FakeConstrStr))
+                    {
+                        List<IExpression> value;
+                        if (!removes.TryGetValue(ExpressionKind.FakeConstrStr, out value))
+                        {
+                            removes.Add(ExpressionKind.FakeConstrStr, new List<IExpression>());
+                        }
+                        removes[ExpressionKind.FakeConstrStr].Add(entry.Value[ExpressionKind.FakeConstrStr].First());
+                    }
+                }
+
                 foreach (KeyValuePair<ExpressionKind, List<IExpression>> item in removes)
                 {
                     foreach (IExpression expression in item.Value)
                     {
                         entry.Value[item.Key].Remove(expression);
+                        if (entry.Value[item.Key].Count == 0)
+                        {
+                            expressions[entry.Key].Remove(item.Key);
+                        }
                     }
-                }
-                
+                }               
             }
         }
 
@@ -73,6 +89,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>True if expression match the examples, false otherwise</returns>
         public bool ValidateExpression(Tuple<Vertex, Vertex> edge, IExpression expression, List<Tuple<ListNode, ListNode>> examples)
         {
+//            if (expression is FakeConstrStr) return true;//FakeConstruStr is not present on al output entries
             var firstVertex = edge.Item1.Id.Split(':');
             var secondVertex = edge.Item2.Id.Split(':');
 
