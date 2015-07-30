@@ -529,36 +529,98 @@ namespace Spg.LocationRefactor.Controller
         private List<CodeLocation> NonDuplicateLocations(List<CodeLocation> locations)
         {
             locations = SegmentBySyntaxKind(locations);
-            List<CodeLocation> clocations = new List<CodeLocation>();
-            var groupedLocations = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
+            locations = EnclosedSyntaxKind(locations);
+            return locations;
+            //List<CodeLocation> clocations = new List<CodeLocation>();
+            //var groupedLocations = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
 
-            foreach (KeyValuePair<string, List<CodeLocation>> item in groupedLocations)
+            //foreach (KeyValuePair<string, List<CodeLocation>> item in groupedLocations)
+            //{
+            //    bool[] analized = Enumerable.Repeat(false, item.Value.Count).ToArray();
+            //    for (int i = 0; i < item.Value.Count; i++)
+            //    {
+            //        CodeLocation location = item.Value[i];
+            //        CodeLocation choosed = location;
+            //        if (!analized[i])
+            //        {
+            //            for (int j = i + 1; j < item.Value.Count; j++)
+            //            {
+            //                var otherLocation = item.Value[j];
+            //                bool intersect = location.Region.IntersectWith(otherLocation.Region);
+            //                if (intersect && location.Region.Path.ToUpperInvariant().Equals(otherLocation.Region.Path.ToUpperInvariant()))
+            //                {
+            //                    analized[j] = true;
+            //                    if (otherLocation.Region.Start > location.Region.Start)
+            //                    {
+            //                        choosed = otherLocation;
+            //                    }
+            //                }
+            //            }
+            //            clocations.Add(choosed);
+            //        }
+            //    }
+            //}
+
+            //if(locations.Count != clocations.Count) throw new Exception("Error in calculating non-duplicated locations."); 
+            //return clocations;
+        }
+
+        private List<CodeLocation> EnclosedSyntaxKind(List<CodeLocation> locations)
+        {
+            Dictionary<CodeLocation, List<CodeLocation>> intersections = new Dictionary<CodeLocation, List<CodeLocation>>();
+
+            var grouped = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
+            foreach (KeyValuePair<string, List<CodeLocation>> item in grouped)
             {
-                bool[] analized = Enumerable.Repeat(false, item.Value.Count).ToArray();
-                for (int i = 0; i < item.Value.Count; i++)
+                foreach (var location in item.Value)
                 {
-                    CodeLocation location = item.Value[i];
-                    CodeLocation choosed = location;
-                    if (!analized[i])
+                    TRegion locRegion = new TRegion();
+                    locRegion.Start = location.Region.Node.SpanStart;
+                    locRegion.Length = location.Region.Node.Span.Length;
+                    foreach (var otherLocation in item.Value)
                     {
-                        for (int j = i + 1; j < item.Value.Count; j++)
+                        TRegion locOtherRegion = new TRegion();
+                        locOtherRegion.Start = otherLocation.Region.Node.SpanStart;
+                        locOtherRegion.Length = otherLocation.Region.Node.Span.Length;
+                        if (!(location.Equals(otherLocation)) && locOtherRegion.IsInside(locRegion) && !location.Region.Node.IsKind(otherLocation.Region.Node.CSharpKind()))
                         {
-                            var otherLocation = item.Value[j];
-                            bool intersect = location.Region.IntersectWith(otherLocation.Region);
-                            if (intersect && location.Region.Path.ToUpperInvariant().Equals(otherLocation.Region.Path.ToUpperInvariant()))
+                            if (!intersections.ContainsKey(location))
                             {
-                                analized[j] = true;
-                                if (otherLocation.Region.Start > location.Region.Start)
-                                {
-                                    choosed = otherLocation;
-                                }
+                                intersections.Add(location, new List<CodeLocation>());
                             }
+                            intersections[location].Add(otherLocation);
                         }
-                        clocations.Add(choosed);
                     }
                 }
             }
-            return clocations;
+
+            List<CodeLocation> removes = new List<CodeLocation>();
+            foreach (var codeLocation in locations)
+            {
+                if (intersections.ContainsKey(codeLocation))
+                {
+                    if (intersections[codeLocation].Count > 1)
+                    {
+                        foreach (var cdLocation in intersections[codeLocation])
+                        {
+                            removes.Add(cdLocation);
+                        }
+                    }else if (intersections[codeLocation].Count == 1)
+                    {
+                        if (codeLocation.Region.Start == intersections[codeLocation].First().Region.Start)
+                        {
+                            removes.Add(intersections[codeLocation].First());
+                        }
+                        else
+                        {
+                            removes.Add(codeLocation);
+                        }
+                    }
+                }   
+            }
+
+            locations = locations.Except(removes).ToList();
+            return locations;
         }
 
         /// <summary>
@@ -648,7 +710,7 @@ namespace Spg.LocationRefactor.Controller
             FileUtil.WriteToFile(@"edit.t", totalTime.ToString());
 
             NotifyProgramRefactoredObservers(transformations);
-            NotifyLocationsTransformedObservers(Program, Locations);
+            NotifyLocationsTransformedObservers(/*Program, Locations*/);
 
             ClearAfterRefact();
 
@@ -775,7 +837,7 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         /// <param name="program">Synthesized program</param>
         /// <param name="locations">Code locations</param>
-        private void NotifyLocationsTransformedObservers(SynthesizedProgram program, IEnumerable<CodeLocation> locations)
+        private void NotifyLocationsTransformedObservers(/*SynthesizedProgram program, IEnumerable<CodeLocation> locations*/)
         {
             //MappedLocationBasedTransformationManager manager = new MappedLocationBasedTransformationManager();
             //List<CodeTransformation> transformations = new List<CodeTransformation>();

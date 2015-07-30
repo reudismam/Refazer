@@ -440,6 +440,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
+        [Test]
+        public void Proj3_7c885ca()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CSharpFxCopRulesDiagnosticAnalyzers");
+            bool isValid = LocaleTestSolution(@"Roslyn\3_7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
         ///// <summary>
         ///// ASTManager to parent test case
         ///// </summary>

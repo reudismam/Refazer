@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using DiGraph;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -97,6 +98,14 @@ namespace Spg.ExampleRefactoring.Synthesis
             if (T == null)
             {
                 dags = Dags(examples, false);
+                T = intManager.Intersect(dags);
+            }
+
+            if (T == null)
+            {
+                Setting.Deviation = 1;
+                Console.WriteLine("Cannot generate programs for the defaut deviation. Setting deviation for 1.");
+                dags = Dags(examples);
                 T = intManager.Intersect(dags);
             }
 
