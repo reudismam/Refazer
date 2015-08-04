@@ -43,5 +43,14 @@ namespace Spg.LocationRefactor.Location
         {
             return ToString().GetHashCode();
         }
+
+        //public object Clone()
+        //{
+        //    CodeLocation cdLocation = new CodeLocation();
+        //    cdLocation.SourceCode = SourceCode;
+        //    cdLocation.Region = Region;
+        //    cdLocation.SourceClass = SourceClass;
+        //    return cdLocation;
+        //}
     }
 }

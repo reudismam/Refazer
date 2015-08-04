@@ -387,7 +387,7 @@ namespace Spg.LocationRefactor.Controller
             List<Selection> selections = new List<Selection>();
             foreach (CodeLocation location in Locations)
             {
-                Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode);
+                Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode, location.Region.Text);
                 selections.Add(selection);
             }
             JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
@@ -411,7 +411,7 @@ namespace Spg.LocationRefactor.Controller
             List<Selection> selections = new List<Selection>();
             foreach (CodeLocation location in Locations)
             {
-                Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode);
+                Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode, location.Region.Text);
                 selections.Add(selection);
             }
             JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
@@ -729,7 +729,7 @@ namespace Spg.LocationRefactor.Controller
                 List<Selection> selections = new List<Selection>();
                 foreach (var span in item.Value.CurrentSnapshot.GetSourceSpans())
                 {
-                    Selection selection = new Selection(span.Start, span.Length, item.Key, null);
+                    Selection selection = new Selection(span.Start, span.Length, item.Key, null, null);
                     selections.Add(selection);
                 }
                 dicSelections.Add(item.Key, selections);
@@ -835,8 +835,6 @@ namespace Spg.LocationRefactor.Controller
         /// <summary>
         /// Notify locations transformation observers
         /// </summary>
-        /// <param name="program">Synthesized program</param>
-        /// <param name="locations">Code locations</param>
         private void NotifyLocationsTransformedObservers(/*SynthesizedProgram program, IEnumerable<CodeLocation> locations*/)
         {
             //MappedLocationBasedTransformationManager manager = new MappedLocationBasedTransformationManager();

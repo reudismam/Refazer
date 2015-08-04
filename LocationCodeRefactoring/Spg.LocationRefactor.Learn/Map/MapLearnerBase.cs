@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Controller;
-using Spg.LocationRefactor.Operator.Map;
-using Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Operator.Map;
 using Spg.LocationRefactor.Predicate;
+using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Learn.Map

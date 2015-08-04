@@ -22,6 +22,8 @@ namespace Spg.ExampleRefactoring.Intersect
             {
                 throw new Exception("Dag list cannot be empty");
             }
+            if (dags.Count == 1) return dags.First();
+
             var composition = dags[0];
             for (int i = 1; i < dags.Count; i++)
             {
