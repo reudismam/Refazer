@@ -96,7 +96,8 @@ namespace Spg.LocationRefactor.TextRegion
 
             TRegion other = (TRegion) obj;
 
-            return Start.Equals(other.Start) && Length.Equals(other.Length);
+            return Start.Equals(other.Start) && Length.Equals(other.Length)
+                && Path.ToUpperInvariant().Equals(other.Path.ToUpperInvariant());
         }
     }
 }

@@ -73,6 +73,13 @@ namespace Spg.ExampleRefactoring.Workspace
                     }
                 }
             }
+            //foreach (var file in sourceFiles)
+            //{
+            //    if (file.Item2.ToUpperInvariant().Contains("FaultyAnalyzer.cs".ToUpperInvariant()))
+            //    {
+            //        MessageBox.Show("Reudismam");
+            //    }
+            //}
             return sourceFiles;
         }
 

@@ -59,6 +59,16 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
+
+        [Test]
+        public void Proj3_8c14644()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CSharpCodeAnalysis");
+            bool isValid = LocaleTestSolution(@"Roslyn\3_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
         [Test]
         public void Proj673f18e()
         {

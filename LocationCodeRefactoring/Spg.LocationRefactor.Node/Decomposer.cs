@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Workspace;
 using Spg.LocationRefactor.Location;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.VisualStudio.Utilities;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Controller;
@@ -29,7 +31,7 @@ namespace Spg.LocationRefactor.Node
         /// <summary>
         /// Reference dictionary
         /// </summary>
-        private readonly Dictionary<string, IEnumerable<SyntaxNode>> _dicReferences = new Dictionary<string, IEnumerable<SyntaxNode>>();
+        private readonly Dictionary<SelectionInfo, IEnumerable<SyntaxNode>> _dicReferences = new Dictionary<SelectionInfo, IEnumerable<SyntaxNode>>();
 
         /// <summary>
         /// Singletion instance
@@ -248,10 +250,10 @@ namespace Spg.LocationRefactor.Node
         internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(Tuple<string, SyntaxNodeOrToken> name)
         {
             if (name == null) return null;
-
-            
+     
+            SelectionInfo info = new SelectionInfo(name.Item1, new List<TRegion>(Ctl.SelectedLocations));
             IEnumerable<SyntaxNode> output;
-            if (!_dicReferences.TryGetValue(name.Item1, out output))
+            if (!_dicReferences.TryGetValue(info, out output))
             {
                 Console.WriteLine("Looking for references!! " + name);
                 Dictionary<string, Dictionary<string, List<TextSpan>>> result = GetReferences(name);
@@ -299,15 +301,15 @@ namespace Spg.LocationRefactor.Node
                 if (!result.Any() || !nodesList.Any())
                 {
                     //return null; //return SyntaxNodesWithoutSemanticModel(tree);
-                    _dicReferences.Add(name.Item1, null);
+                    _dicReferences.Add(info, null);
                 }
                 //return nodesList;
                 else
                 {
-                    _dicReferences.Add(name.Item1, nodesList);
+                    _dicReferences.Add(info, nodesList);
                 }
             }
-            return _dicReferences[name.Item1];
+            return _dicReferences[info];
         }
 
         /// <summary>

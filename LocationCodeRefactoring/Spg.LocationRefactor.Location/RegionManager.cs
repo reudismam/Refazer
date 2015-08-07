@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -19,7 +20,7 @@ namespace Spg.LocationRefactor.Location
     /// </summary>
     public class RegionManager
     {
-        private readonly Dictionary<string, List<SyntaxNode>> _computed;
+        private readonly Dictionary<SelectionInfo, List<SyntaxNode>> _computed;
 
         /// <summary>
         /// Singleton instance
@@ -31,7 +32,7 @@ namespace Spg.LocationRefactor.Location
         /// </summary>
         private RegionManager()
         {
-            _computed = new Dictionary<string, List<SyntaxNode>>();
+            _computed = new Dictionary<SelectionInfo, List<SyntaxNode>>();
         }
 
         /// <summary>
@@ -241,14 +242,15 @@ namespace Spg.LocationRefactor.Location
         /// <returns>Syntax nodes</returns>
         public List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
+            SelectionInfo info = new SelectionInfo(sourceCode, new List<TRegion>(list));
             List<SyntaxNode> nodes;
-            if (!_computed.TryGetValue(sourceCode, out nodes))
+            if (!_computed.TryGetValue(info, out nodes))
             {
                 nodes = SyntaxNodesForFiltering(sourceCode, list);
-                _computed.Add(sourceCode, nodes);
+                _computed.Add(info, nodes);
             }
-
-            return _computed[sourceCode];
+            //return nodes;
+            return _computed[info];
         }
 
         ///// <summary>

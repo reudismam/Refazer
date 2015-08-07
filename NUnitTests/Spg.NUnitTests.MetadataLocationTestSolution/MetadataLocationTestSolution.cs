@@ -52,17 +52,23 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         //    Assert.IsTrue(isValid);
         //}
 
-        ///// <summary>
-        ///// Test Method Call To Identifier transformation
-        ///// </summary>
-        //[Test]
-        //public void Proj2_8c14644()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("CSharpCodeAnalysis");
-        //    bool isValid = LocaleTestSolution(@"Roslyn\2_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        [Test]
+        public void Proj2_8c14644()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CSharpCodeAnalysis");
+            bool isValid = LocaleTestSolution(@"Roslyn\2_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj3_8c14644()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CSharpCodeAnalysis");
+            bool isValid = LocaleTestSolution(@"Roslyn\3_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", projects);
+            Assert.IsTrue(isValid);
+        }
 
         [Test]
         public void Proj673f18e()
@@ -91,14 +97,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void Proj4_673f18e()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("CSharpCommandLineTest");
-        //    bool isValid = LocaleTestSolution(@"Roslyn\4_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        [Test]
+        public void Proj4_673f18e()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CSharpCommandLineTest");
+            bool isValid = LocaleTestSolution(@"Roslyn\4_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
+            Assert.IsTrue(isValid);
+        }
 
         [Test]
         public void Proj5_673f18e()
@@ -333,15 +339,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void Proj7c885ca()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("CSharpCommandLineTest");
-        //    projects.Add("CodeAnalysisTest");
-        //    bool isValid = LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        [Test]
+        public void Proj7c885ca()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CSharpCommandLineTest");
+            projects.Add("CodeAnalysisTest");
+            bool isValid = LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
+            Assert.IsTrue(isValid);
+        }
 
         [Test]
         public void Proj2_7c885ca()
@@ -351,15 +357,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             bool isValid = LocaleTestSolution(@"Roslyn\2_7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
         }
-
-        //[Test]
-        //public void Proj3_7c885ca()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("CSharpFxCopRulesDiagnosticAnalyzers");
-        //    bool isValid = LocaleTestSolution(@"Roslyn\3_7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
 
         [Test]
         public void Proje28c812()
@@ -819,6 +816,11 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             JsonUtil<List<TRegion>>.Write(nselections, expHome + @"commit\" + commit + @"\metadata_tool\locations_on_commit.json");
             //remove
             return true;
+        }
+
+        public void Log()
+        {
+            
         }
 
         private static bool ContainsTRegion(List<TRegion> metadataLocations, TRegion tregion)
