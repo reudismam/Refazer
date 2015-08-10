@@ -26,7 +26,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Setting for AST synthesis computation
         /// </summary>
         /// <returns>Setting</returns>
-        private SynthesizerSetting Setting { get; }
+        public SynthesizerSetting Setting { get; set; }
 
         /// <summary>
         /// Previous computed token sequences

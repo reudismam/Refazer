@@ -2,11 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Remoting.Messaging;
+using Microsoft.CodeAnalysis;
+using Microsoft.Office.Interop.Excel;
 using NUnit.Framework;
+using Spg.ExampleRefactoring.RegularExpression;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
+using Taramon.Exceller;
 
 namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 {
@@ -758,6 +764,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         /// <returns>True if locale passed</returns>
         public static bool LocaleTestSolution(string commit, string solution, List<string> project)
         {
+            long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             EditorController.ReInit();
             EditorController controller = EditorController.GetInstance();
 
@@ -794,6 +801,32 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 metadataLocations.Add(tregion);
             }
 
+            List<TRegion> negativesRegions = new List<TRegion>();
+            if (File.Exists(expHome + @"commit\" + commit + @"\negatives.json"))
+            {
+                List<int> negatives = JsonUtil<List<int>>.Read(expHome + @"commit\" + commit + @"\negatives.json");
+                List<TRegion> positivesRegions = new List<TRegion>();
+                for (int i = 0; i < controller.Locations.Count; i++)
+                {
+                    TRegion parent = new TRegion();
+                    parent.Text = controller.Locations[i].SourceCode;
+                    controller.Locations[i].Region.Parent = parent;
+                    if (negatives.Contains(i))
+                    {
+                        negativesRegions.Add(controller.Locations[i].Region);
+                    }
+                    else
+                    {
+                        positivesRegions.Add(controller.Locations[i].Region);
+                    }
+                }
+                controller.Extract(positivesRegions, negativesRegions);
+                controller.RetrieveLocations();
+            }
+
+            long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTime = (millAfer - millBefore);
+            Log(commit, totalTime, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count);
             //remove
             List<TRegion> nselections = new List<TRegion>();
             foreach (CodeLocation location in controller.Locations)
@@ -818,9 +851,69 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             return true;
         }
 
-        public void Log()
+        private static Microsoft.Office.Interop.Excel.Workbook mWorkBook;
+        private static Microsoft.Office.Interop.Excel.Sheets mWorkSheets;
+        private static Microsoft.Office.Interop.Excel.Worksheet mWSheet1;
+        private static Microsoft.Office.Interop.Excel.Application oXL;
+        public static void Log(string commit, double time, int exLocations, int negs, int acLocations, int locations)
         {
-            
+            using (ExcelManager em = new ExcelManager())
+            {
+
+                em.Open(@"C:\Users\SPG-04\Documents\Research\Log2.xlsx");
+
+                int empty;
+                for (int i = 1;; i++)
+                {
+                    if (em.GetValue("A" + i, Category.Formatted).ToString().Equals(""))
+                    {
+                        empty = i;
+                        break;
+                    }
+                }
+                em.SetValue("A" + empty, commit);
+                em.SetValue("B" + empty, time);
+                em.SetValue("C" + empty, exLocations);
+                em.SetValue("D" + empty, negs);
+                em.SetValue("E" + empty, exLocations + negs);
+                em.SetValue("F" + empty, acLocations);
+                em.SetValue("G" + empty, locations);
+                Console.WriteLine("" + empty);
+                em.Save();
+            }
+
+            //string path = @"C:\Users\SPG-04\Documents\Research\Log.xls";
+
+            //oXL = new Microsoft.Office.Interop.Excel.Application();
+            //oXL.Visible = true;
+            //oXL.DisplayAlerts = false;
+            //mWorkBook = oXL.Workbooks.Open(path, 0, false, 5, "", "", false, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "", true, false, 0, true, false, false);
+            ////Get all the sheets in the workbook
+            //mWorkSheets = mWorkBook.Worksheets;
+            ////Get the allready exists sheet
+            //mWSheet1 = (Microsoft.Office.Interop.Excel.Worksheet)mWorkSheets.get_Item("1");
+            //Microsoft.Office.Interop.Excel.Range range = mWSheet1.UsedRange;
+            //int colCount = range.Columns.Count;
+            //int rowCount = range.Rows.Count;
+            //Console.WriteLine(rowCount);
+            //for (int index = 1; index < 15; index++)
+            //{
+            //    mWSheet1.Cells[rowCount + index, 1] = rowCount + index;
+            //    mWSheet1.Cells[rowCount + index, 2] = "New Item" + index;
+            //}
+            //mWorkBook.SaveAs(path, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal,
+            //Missing.Value, Missing.Value, Missing.Value, Missing.Value, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive,
+            //Missing.Value, Missing.Value, Missing.Value,
+            //Missing.Value, Missing.Value);
+            //mWorkBook.Close(Missing.Value, Missing.Value, Missing.Value);
+            //mWSheet1 = null;
+            //mWorkBook = null;
+            //oXL.Quit();
+            //GC.WaitForPendingFinalizers();
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
+            //GC.Collect();
+
         }
 
         private static bool ContainsTRegion(List<TRegion> metadataLocations, TRegion tregion)
