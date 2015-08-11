@@ -173,6 +173,10 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExampleRefactoring\ExampleRefactoring.csproj">
+      <Project>{6060b3c1-8b16-47ae-a7a5-b34eb1c170ad}</Project>
+      <Name>ExampleRefactoring</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LocateAdornment\LocateAdornment.csproj">
       <Project>{6C48821E-FFA3-42D4-9201-078ED13D554F}</Project>
       <Name>LocateAdornment</Name>

@@ -166,7 +166,7 @@ namespace Spg.LocationRefactor.Controller
             _programsRefactoredObserver = new List<IProgramRefactoredObserver>();
             _locationsTransformedObserver = new List<ILocationsTransformedObserver>();
             _locationsObversers = new List<ILocationsObserver>();
-            CodeTransformations = new List<CodeTransformation>();
+            //CodeTransformations = new List<CodeTransformation>();
             FilesOpened = new Dictionary<string, bool>();
             ProjectInformation = ProjectInformation.GetInstance();
             Program = null;
@@ -699,6 +699,7 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public void Refact()
         {
+            CodeTransformations = new List<CodeTransformation>();
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             FillEditedLocations();
             LocationExtractor extractor = new LocationExtractor();
@@ -710,10 +711,9 @@ namespace Spg.LocationRefactor.Controller
             FileUtil.WriteToFile(@"edit.t", totalTime.ToString());
 
             NotifyProgramRefactoredObservers(transformations);
-            NotifyLocationsTransformedObservers(/*Program, Locations*/);
+            NotifyLocationsTransformedObservers();
 
-            ClearAfterRefact();
-
+//            ClearAfterRefact();
         }
 
         /// <summary>
@@ -749,7 +749,7 @@ namespace Spg.LocationRefactor.Controller
             SelectedLocations = new List<TRegion>();
             Progs = new List<Prog>();
             Locations = null;
-            CodeTransformations = new List<CodeTransformation>();
+            //CodeTransformations = new List<CodeTransformation>();
             CurrentViewCodeBefore = null;
             CurrentViewCodeAfter = null;
             CurrentViewCodePath = null;
@@ -837,24 +837,28 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         private void NotifyLocationsTransformedObservers(/*SynthesizedProgram program, IEnumerable<CodeLocation> locations*/)
         {
-            //MappedLocationBasedTransformationManager manager = new MappedLocationBasedTransformationManager();
-            //List<CodeTransformation> transformations = new List<CodeTransformation>();
-            //foreach (CodeLocation location in locations)
-            //{
-            //    Tuple<string, string> transformedLocation = manager.Transformation(location, program);
 
-            //    if (transformedLocation == null) continue;
+            List<CodeTransformation> transformations = new List<CodeTransformation>();
+            foreach (CodeTransformation codeTransformation in CodeTransformations)
+            {
+                CodeLocation location = new CodeLocation();
+                location.SourceClass = codeTransformation.Location.SourceClass;
+                location.SourceCode = codeTransformation.Location.SourceCode;
+                TRegion region = new TRegion();
+                region.Start = codeTransformation.Location.Region.Start;
+                region.Length = codeTransformation.Location.Region.Length;
+                region.Path = codeTransformation.Location.Region.Path;
+                region.Parent = codeTransformation.Location.Region.Parent;
+                region.Text = codeTransformation.Location.Region.Text;
+                location.Region = region;
 
-            //    CodeTransformation transformation = new CodeTransformation(location, transformedLocation);
-            //    transformation.Location.Region.Node = null; //needed for not get out of memory exception
-            //    transformations.Add(transformation);
-            //}
+                CodeTransformation transformation = new CodeTransformation(location, codeTransformation.Trans, codeTransformation.Transformation);
+                transformations.Add(transformation);
+            }
 
-            //CodeTransformations = transformations;
+            LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(transformations);
 
-            LocationsTransformedEvent ltEvent = new LocationsTransformedEvent(CodeTransformations);
-
-            JsonUtil<List<CodeTransformation>>.Write(CodeTransformations, "transformed_locations.json");
+            JsonUtil<List<CodeTransformation>>.Write(transformations, "transformed_locations.json");
 
             foreach (ILocationsTransformedObserver observer in _locationsTransformedObserver)
             {

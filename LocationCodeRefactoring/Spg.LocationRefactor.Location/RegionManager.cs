@@ -12,6 +12,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.TextRegion;
+using Spg.LocationRefactor.Transform;
 
 namespace Spg.LocationRefactor.Location
 {
@@ -74,6 +75,52 @@ namespace Spg.LocationRefactor.Location
                 }
 
                 dic[item.Parent.Text].Add(item);
+            }
+
+            return dic;
+        }
+
+        /// <summary>
+        /// Group region by source file
+        /// </summary>
+        /// <param name="list">List of no grouped regions</param>
+        /// <returns>Regions grouped by source file</returns>
+        public Dictionary<string, List<TRegion>> GroupRegionBySourcePath(List<TRegion> list)
+        {
+            Dictionary<string, List<TRegion>> dic = new Dictionary<string, List<TRegion>>();
+            foreach (var item in list)
+            {
+                List<TRegion> value;
+                if (!dic.TryGetValue(item.Path, out value))
+                {
+                    value = new List<TRegion>();
+                    dic[item.Path] = value;
+                }
+
+                dic[item.Path].Add(item);
+            }
+
+            return dic;
+        }
+
+        /// <summary>
+        /// Group region by source file
+        /// </summary>
+        /// <param name="list">List of no grouped regions</param>
+        /// <returns>Regions grouped by source file</returns>
+        public Dictionary<string, List<CodeTransformation>> GroupTransformationsBySourcePath(List<CodeTransformation> list)
+        {
+            Dictionary<string, List<CodeTransformation>> dic = new Dictionary<string, List<CodeTransformation>>();
+            foreach (var item in list)
+            {
+                List<CodeTransformation> value;
+                if (!dic.TryGetValue(item.Location.SourceClass, out value))
+                {
+                    value = new List<CodeTransformation>();
+                    dic[item.Location.SourceClass] = value;
+                }
+
+                dic[item.Location.SourceClass].Add(item);
             }
 
             return dic;
@@ -450,7 +497,7 @@ namespace Spg.LocationRefactor.Location
                             Parent = parent,
                             Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
                         };
-                        //MessageBox.Show(span.Start + tregion.Text + span.Length);
+                        MessageBox.Show(span.Start + tregion.Text + span.Length);
                         outputRegions.Add(tregion);
                     }
                 }

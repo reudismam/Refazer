@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -15,7 +16,7 @@ using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Transform
 {
-    public class MappedLocationBasedTransformationManager : TransformationManager
+    public class MappedLocationBasedTransformationManager
     {
         protected readonly EditorController Controller = EditorController.GetInstance();
         /// <summary>
@@ -178,6 +179,7 @@ namespace Spg.LocationRefactor.Transform
                     TRegion region = item.Item2.Region;
                     Tuple<ListNode, ListNode> tuple = Decomposer.GetInstance().Example(region.Node, region, compact);
                     ListNode lnode = tuple.Item2;
+                    //MessageBox.Show(lnode.ToString());
 
                     ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
                     string transformation = treeNode.Transformation;
@@ -192,8 +194,25 @@ namespace Spg.LocationRefactor.Transform
                     nextStart += transformation.Length - region.Length;
 
                     Tuple<string, string> trans = Tuple.Create(region.Text, transformation);
-                    CodeTransformation codeTransformation = new CodeTransformation(item.Item2, trans);
-                    codeTransformation.Location.Region.Node = null; //needed for not get out of memory exception
+
+                    TRegion transTRegion = new TRegion();
+                    transTRegion.Start = start;
+                    transTRegion.Length = transformation.Length;
+                    transTRegion.Text = transformation;
+                    transTRegion.Path = region.Path;
+
+                    if (transTRegion.Start != 0)
+                    {
+                        transTRegion.Start -= 1;
+                        transTRegion.Length = Math.Min(transTRegion.Length + 2, sourceCode.Length);
+                    }
+                    else
+                    {
+                        transTRegion.Length = Math.Min(transTRegion.Length + 1, sourceCode.Length);
+                    }
+
+                    CodeTransformation codeTransformation = new CodeTransformation(item.Item2, transTRegion, trans);
+                    //codeTransformation.Location.Region.Node = null; //needed for not get out of memory exception
                     Controller.CodeTransformations.Add(codeTransformation);
                 }
                 catch (ArgumentOutOfRangeException e)
@@ -201,9 +220,9 @@ namespace Spg.LocationRefactor.Transform
                     Console.WriteLine(e.Message);
                 }
             }
-            string classPath = update.First().Item2.SourceClass;
-            string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
-            FileUtil.WriteToFile(@"C:\Users\SPG-04\Desktop\transformations\" + className, s);
+            //string classPath = update.First().Item2.SourceClass;
+            //string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
+            //FileUtil.WriteToFile(@"C:\Users\SPG-04\Desktop\transformations\" + className, s);
             return sourceCode;
         }
 

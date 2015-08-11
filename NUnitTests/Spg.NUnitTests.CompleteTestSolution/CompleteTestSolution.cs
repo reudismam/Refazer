@@ -8,6 +8,8 @@ using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 
 namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
@@ -1051,6 +1053,23 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
 
+            //remove
+            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
+            List<CodeLocation> metaLocList = new List<CodeLocation>();
+            foreach (CodeLocation metaLoc in controller.Locations)
+            {
+                metaLoc.Region.Path = metaLoc.SourceClass;
+                foreach (TRegion metaSelec in selections)
+                {
+                    if (metaLoc.Region.Equals(metaSelec))
+                    {
+                        metaLocList.Add(metaLoc);
+                    }
+                }
+            }
+            controller.Locations = metaLocList;
+            //remove
+
             var dicionarySelection = JsonUtil<Dictionary<string, List<Selection>>>.Read(expHome + @"commit\" + commit + @"\edited_selections.json");
 
             var dicionarySelectionFullpath = new Dictionary<string, List<Selection>>();
@@ -1083,12 +1102,16 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
             controller.Refact();
 
+            FileInfo file = new FileInfo(expHome + @"commit\" + commit + @"\metadata\cs\");
+            file.Directory.Create();
+
             bool passTransformation = true;
             foreach (Transformation transformation in controller.SourceTransformations)
             {
                 string classPath = transformation.SourcePath;
                 string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
-                string classNamePath = expHome + @"commit\" + commit + @"\tool\" + className;
+                //string classNamePath = expHome + @"commit\" + commit + @"\tool\" + className;
+                string classNamePath = expHome + @"commit\" + commit + @"\metadata\cs\" + className;
                 FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
 
                 Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(classNamePath), transformation.transformation.Item2);
@@ -1109,6 +1132,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
             string transformations = FileUtil.ReadFile("transformed_locations.json");
             FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
+            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\metadata\transformed_locations.json", transformations);
             FileUtil.DeleteFile("transformed_locations.json");
             return passTransformation;
         }
