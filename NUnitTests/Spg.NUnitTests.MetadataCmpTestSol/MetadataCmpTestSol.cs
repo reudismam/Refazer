@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
+using NUnitTests.Spg.NUnitTests.Util;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Comparator;
@@ -455,18 +456,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             Assert.IsTrue(passLocation && passTransformation);
         }
 
-        //[Test]
-        //public void Proj2_14623da()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("EntityFramework");
-        //    projects.Add("UnitTests");
-        //    bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"EntityFramewok\2_14623da", @"EntityFramework\entityframework10\EntityFramework.sln", projects);
+        [Test]
+        public void Proj2_14623da()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("EntityFramework");
+            projects.Add("UnitTests");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"EntityFramewok\2_14623da", @"EntityFramework\entityframework10\EntityFramework.sln", projects);
 
-        //    bool passTransformation = CompleteTestBase(@"EntityFramewok\2_14623da");
+            bool passTransformation = CompleteTestBase(@"EntityFramewok\2_14623da");
 
-        //    Assert.IsTrue(passLocation && passTransformation);
-        //}
+            Assert.IsTrue(passLocation && passTransformation);
+        }
 
         [Test]
         public void Proj3_14623da()
@@ -636,17 +637,17 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             Assert.IsTrue(passLocation && passTransformation);
         }
 
-        //[Test]
-        //public void Proj2_326d525()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("FunctionalTests");
-        //    bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"EntityFramewok\2_326d525", @"EntityFramework\entityframework9\EntityFramework.sln", projects);
+        [Test]
+        public void Proj2_326d525()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("FunctionalTests");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"EntityFramewok\2_326d525", @"EntityFramework\entityframework9\EntityFramework.sln", projects);
 
-        //    bool passTransformation = CompleteTestBase(@"EntityFramewok\2_326d525");
+            bool passTransformation = CompleteTestBase(@"EntityFramewok\2_326d525");
 
-        //    Assert.IsTrue(passLocation && passTransformation);
-        //}
+            Assert.IsTrue(passLocation && passTransformation);
+        }
 
         //[Test]
         //public void Proja883600()
@@ -720,17 +721,17 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             Assert.IsTrue(passLocation && passTransformation);
         }
 
-        //[Test]
-        //public void Proj3_8da9f0e()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("Test.Utility");
-        //    bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"NuGet\3_8da9f0e", @"NuGet\nuget3\NuGet.sln", projects);
+        [Test]
+        public void Proj3_8da9f0e()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("Test.Utility");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"NuGet\3_8da9f0e", @"NuGet\nuget3\NuGet.sln", projects);
 
-        //    bool passTransformation = CompleteTestBase(@"NuGet\3_8da9f0e");
+            bool passTransformation = CompleteTestBase(@"NuGet\3_8da9f0e");
 
-        //    Assert.IsTrue(passLocation && passTransformation);
-        //}
+            Assert.IsTrue(passLocation && passTransformation);
+        }
 
         [Test]
         public void Proj4_8da9f0e()
@@ -902,21 +903,9 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
 
             //remove
-            List<TRegion> selections =
-                JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
-            List<CodeLocation> metaLocList = new List<CodeLocation>();
-            foreach (CodeLocation metaLoc in controller.Locations)
-            {
-                metaLoc.Region.Path = metaLoc.SourceClass;
-                foreach (TRegion metaSelec in selections)
-                {
-                    if (metaLoc.Region.Equals(metaSelec))
-                    {
-                        metaLocList.Add(metaLoc);
-                    }
-                }
-            }
-            controller.Locations = metaLocList;
+            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
+            List<CodeLocation> locations = TestUtil.GetAllLocationsOnCommit(selections, controller.Locations);
+            controller.Locations = locations;
             //remove
 
             List<TRegion> regions = new List<TRegion>();
@@ -942,7 +931,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                     Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key], metadataRegions);
                     string sourceCodeAfter = tu.Item1;
                     List <Selection> selectionsList = new List<Selection>();
-                    foreach (TRegion region in tu.Item2/*ListTransform(globalTransformations[entry.Key], metadataRegions)*/)
+                    foreach (TRegion region in tu.Item2)
                     {
                         Selection selectionRegion = new Selection(region.Start, region.Length, region.Path, sourceCodeAfter, region.Text);
                         selectionsList.Add(selectionRegion);

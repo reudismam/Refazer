@@ -89,6 +89,7 @@
     <Compile Include="Spg.NUnitTests.Refactoring\RefactoringTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spg.NUnitTests.Util\FilePath.cs" />
+    <Compile Include="Spg.NUnitTests.Util\TestUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

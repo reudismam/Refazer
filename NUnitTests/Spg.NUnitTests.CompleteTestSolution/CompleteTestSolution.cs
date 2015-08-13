@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using NUnitTests.Spg.NUnitTests.Util;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Synthesis;
@@ -1054,27 +1055,15 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
 
             //remove
-            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
-            List<CodeLocation> metaLocList = new List<CodeLocation>();
-            foreach (CodeLocation metaLoc in controller.Locations)
-            {
-                metaLoc.Region.Path = metaLoc.SourceClass;
-                foreach (TRegion metaSelec in selections)
-                {
-                    if (metaLoc.Region.Equals(metaSelec))
-                    {
-                        metaLocList.Add(metaLoc);
-                    }
-                }
-            }
-
             List<CodeLocation> controllerLocations = new List<CodeLocation>(controller.Locations);
-            controller.Locations = metaLocList;
-            //remove
+            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
+            List<CodeLocation> locations = TestUtil.GetAllLocationsOnCommit(selections, controller.Locations);
+            controller.Locations = locations;
+            
 
-            Dictionary<string, List<CodeLocation>> dicLocs = RegionManager.GetInstance().GroupLocationsBySourceFile(controllerLocations);
-
-            var dicionarySelection = JsonUtil<Dictionary<string, List<Selection>>>.Read(expHome + @"commit\" + commit + @"\edited_selections.json");
+            Dictionary<string, List<Selection>> dicionarySelection = JsonUtil<Dictionary<string, List<Selection>>>.Read(expHome + @"commit\" + commit + @"\edited_selections.json");
+            dicionarySelection = TestUtil.FilterLocationsNotPresentOnCommit(dicionarySelection, controllerLocations, locations);
+            ////remove
 
             var dicionarySelectionFullpath = new Dictionary<string, List<Selection>>();
             foreach (var entry in dicionarySelection)
@@ -1082,7 +1071,8 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                 dicionarySelectionFullpath.Add(Path.GetFullPath(entry.Key), entry.Value);
             }
 
-            dicionarySelection = dicionarySelectionFullpath;
+//            dicionarySelection = dicionarySelectionFullpath;
+            controller.EditedLocations = dicionarySelectionFullpath;
 
             List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
 
@@ -1100,9 +1090,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                 controller.FilesOpened[entry.Key] = true;
             }
 
-
             controller.DocumentsBeforeAndAfter = documents;
-            controller.EditedLocations = dicionarySelection;
 
             controller.Refact();
 
