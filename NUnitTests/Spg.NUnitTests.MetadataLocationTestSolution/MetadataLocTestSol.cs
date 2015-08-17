@@ -868,7 +868,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                     }
                 }
                 em.SetValue("A" + empty, commit);
-                em.SetValue("B" + empty, time);
+                em.SetValue("B" + empty, time / 1000);
                 em.SetValue("C" + empty, exLocations);
                 em.SetValue("D" + empty, negs);
                 em.SetValue("E" + empty, exLocations + negs);
