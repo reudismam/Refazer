@@ -1124,7 +1124,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
             string transformations = FileUtil.ReadFile("transformed_locations.json");
             FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
-            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\metadata\transformed_locations.json", transformations);
+            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\metadata_tool\transformed_locations.json", transformations);
             FileUtil.DeleteFile("transformed_locations.json");
             return passTransformation;
         }

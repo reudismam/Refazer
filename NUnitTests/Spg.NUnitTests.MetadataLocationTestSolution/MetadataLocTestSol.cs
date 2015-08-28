@@ -760,7 +760,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         /// <returns>True if locale passed</returns>
         public static bool LocaleTestSolution(string commit, string solution, List<string> project)
         {
-            long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long millBefore;// = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             EditorController.ReInit();
             EditorController controller = EditorController.GetInstance();
 
@@ -781,6 +781,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             while (true)
             {
                 controller.SelectedLocations = metadataLocations;
+                millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.Extract();
                 controller.RetrieveLocations();
 
@@ -816,6 +817,8 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                         positivesRegions.Add(controller.Locations[i].Region);
                     }
                 }
+
+                millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.Extract(positivesRegions, negativesRegions);
                 controller.RetrieveLocations();
             }

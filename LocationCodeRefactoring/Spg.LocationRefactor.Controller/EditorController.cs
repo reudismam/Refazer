@@ -123,6 +123,8 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public SynthesizedProgram Program { get; set; }
 
+        public List<TRegion> CodeTransformationsExceptions { get; set; }
+
         /// <summary>
         /// Singleton instance
         /// </summary>
