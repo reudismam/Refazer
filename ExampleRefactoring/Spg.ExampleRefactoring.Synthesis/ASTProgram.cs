@@ -10,9 +10,11 @@ using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Intersect;
+using Spg.ExampleRefactoring.Partition;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Tok;
+using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
 
 namespace Spg.ExampleRefactoring.Synthesis
@@ -68,6 +70,80 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
         }
 
+        ///// <summary>
+        ///// Generate synthesized programs
+        ///// </summary>
+        ///// <param name="examples">Example set</param>
+        ///// <returns>Synthesized program list</returns>
+        //public List<SynthesizedProgram> GenerateStringProgram(List<Tuple<ListNode, ListNode>> examples)
+        //{
+        //    if (examples == null || examples.Count == 0) { throw new ArgumentException("Examples cannot be null or empty"); }
+
+        //    List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
+        //    if (OutputIsEmpty(examples))
+        //    {
+        //        return GetEmptyProgram();
+        //    }
+
+        //    List<Dag> dags = Dags(examples);
+
+        //    IntersectManager intManager = new IntersectManager();
+
+        //    Dag T = intManager.Intersect(dags);
+
+        //    //remove
+        //    PartitionManager pManager = new PartitionManager();
+        //    pManager.GeneratePartition(dags);
+        //    //remove
+
+        //    if (T == null)
+        //    {
+        //        dags = Dags(examples, false);
+        //        T = intManager.Intersect(dags);
+
+        //        //remove
+        //        pManager = new PartitionManager();
+        //        pManager.GeneratePartition(dags);
+        //        //remove
+        //    }
+
+        //    if (T == null)
+        //    {
+        //        Setting.Deviation = 1;
+        //        Console.WriteLine("Cannot generate programs for the defaut deviation. Setting deviation for 1.");
+        //        dags = Dags(examples);
+        //        T = intManager.Intersect(dags);
+
+        //        //remove
+        //        pManager = new PartitionManager();
+        //        pManager.GeneratePartition(dags);
+        //        //remove
+        //    }
+
+        //    ExpressionManager expmanager = new ExpressionManager();
+        //    expmanager.FilterExpressions(T, examples);
+
+        //    Clear(T);
+
+        //    BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.Init.Id);
+        //    double dist = bfs.DistTo(T.End.Id);
+        //    Console.WriteLine(dist);
+
+        //    List<Vertex> solutions = new List<Vertex>();
+
+        //    foreach (string s in bfs.PathTo(T.End.Id))
+        //    {
+        //        solutions.Add(T.Vertexes[s]);
+        //    }
+
+        //    SynthesisManager manager = new SynthesisManager(Setting);
+        //    SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
+        //    Console.WriteLine(valid);
+
+        //    validated.Add(valid);
+        //    return validated;
+        //}
+
         /// <summary>
         /// Generate synthesized programs
         /// </summary>
@@ -80,57 +156,53 @@ namespace Spg.ExampleRefactoring.Synthesis
             List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
             if (OutputIsEmpty(examples))
             {
-                IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
-                List<IExpression> expressions = new List<IExpression> { expression };
-                SynthesizedProgram program = new SynthesizedProgram();
-                validated.Add(program);
-                program.Solutions = expressions;
-
-                return validated;
+                return GetEmptyProgram();
             }
 
-            List<Dag> dags = Dags(examples);
+            Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags = Dags(examples);
 
-            IntersectManager intManager = new IntersectManager();
+            //remove
+            PartitionManager pManager = new PartitionManager();
+            List<Dag> Ts = pManager.GeneratePartition(dags);
+            //remove
 
-            Dag T = intManager.Intersect(dags);
-
-            if (T == null)
+            List<Tuple<IPredicate, SynthesizedProgram>> S = new List<Tuple<IPredicate, SynthesizedProgram>>();
+            foreach (Dag T in Ts)
             {
-                dags = Dags(examples, false);
-                T = intManager.Intersect(dags);
+                ExpressionManager expmanager = new ExpressionManager();
+                expmanager.FilterExpressions(T, examples);
+
+                Clear(T);
+
+                BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.Init.Id);
+                double dist = bfs.DistTo(T.End.Id);
+
+                List<Vertex> solutions = new List<Vertex>();
+
+                foreach (string s in bfs.PathTo(T.End.Id))
+                {
+                    solutions.Add(T.Vertexes[s]);
+                }
+
+                SynthesisManager manager = new SynthesisManager(Setting);
+                SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
+
+
             }
-
-            if (T == null)
-            {
-                Setting.Deviation = 1;
-                Console.WriteLine("Cannot generate programs for the defaut deviation. Setting deviation for 1.");
-                dags = Dags(examples);
-                T = intManager.Intersect(dags);
-            }
-
-            //var list = T.Mapping.ToList();
-            ExpressionManager expmanager = new ExpressionManager();
-            expmanager.FilterExpressions(T, examples);
-
-            Clear(T);
-
-            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.Init.Id);
-            double dist = bfs.DistTo(T.End.Id);
-            Console.WriteLine(dist);
-
-            List<Vertex> solutions = new List<Vertex>();
-
-            foreach (string s in bfs.PathTo(T.End.Id))
-            {
-                solutions.Add(T.Vertexes[s]);
-            }
-
-            SynthesisManager manager = new SynthesisManager(Setting);
-            SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
-            Console.WriteLine(valid);
 
             validated.Add(valid);
+            return validated;
+        }
+
+        public static List<SynthesizedProgram> GetEmptyProgram()
+        {
+            List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
+            IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
+            List<IExpression> expressions = new List<IExpression> { expression };
+            SynthesizedProgram program = new SynthesizedProgram();
+            validated.Add(program);
+            program.Solutions = expressions;
+
             return validated;
         }
 
@@ -153,9 +225,9 @@ namespace Spg.ExampleRefactoring.Synthesis
             return isEmpty;
         }
 
-        private List<Dag> Dags(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
+        private Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Dags(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
         {
-            List<Dag> dags = new List<Dag>();
+            Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags = new Dictionary<Dag, List<Tuple<ListNode, ListNode>>>();
             foreach (var example in examples)
             {
                 List<int> boundaryPoints = null;
@@ -164,7 +236,10 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                 ListNode input = example.Item1;
                 ListNode output = example.Item2;
-                dags.Add(GenerateStringBoundary(input, output, boundaryPoints));
+
+                List<Tuple<ListNode, ListNode>> exs = new List<Tuple<ListNode, ListNode>> {example};
+                Dag d = GenerateStringBoundary(input, output, boundaryPoints);
+                dags.Add(d, exs);
             }
             return dags;
         }
@@ -1114,16 +1189,16 @@ namespace Spg.ExampleRefactoring.Synthesis
             return UpdateASTManager.UpdateASTTree(tree, synthesizedProgram);
         }
 
-        /// <summary>
-        /// Retrieve the string corresponding to the hypothesis passed as parameter.
-        /// </summary>
-        /// <param name="input">Input syntax node</param>
-        /// <param name="synthesizedProgram">Synthesized program</param>
-        /// <returns></returns>
-        public static ASTTransformation TransformString(ListNode input, SynthesizedProgram synthesizedProgram)
-        {
-            return UpdateASTManager.UpdateASTTree(input, synthesizedProgram);
-        }
+        ///// <summary>
+        ///// Retrieve the string corresponding to the hypothesis passed as parameter.
+        ///// </summary>
+        ///// <param name="input">Input syntax node</param>
+        ///// <param name="synthesizedProgram">Synthesized program</param>
+        ///// <returns></returns>
+        //public static ASTTransformation TransformString(ListNode input, SynthesizedProgram synthesizedProgram)
+        //{
+        //    return UpdateASTManager.UpdateASTTree(input, synthesizedProgram);
+        //}
 
         ///// <summary>
         ///// Retrieve the string corresponding to the hypothesis passed as parameter.

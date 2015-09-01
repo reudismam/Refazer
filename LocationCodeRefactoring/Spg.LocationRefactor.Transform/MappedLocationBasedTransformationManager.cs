@@ -181,7 +181,7 @@ namespace Spg.LocationRefactor.Transform
                     ListNode lnode = tuple.Item2;
                     //MessageBox.Show(lnode.ToString());
 
-                    ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
+                    ASTTransformation treeNode = program.TransformString(lnode);
                     string transformation = treeNode.Transformation;
                     s += ++i + "\n";
                     s += transformation + "\n";

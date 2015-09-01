@@ -2,17 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
+using LCS2;
+using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Setting;
-using Spg.ExampleRefactoring.Synthesis;
-using LCS2;
-using Microsoft.CodeAnalysis;
-using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Position;
 using Spg.LocationRefactoring.Tok;
 
 namespace Spg.ExampleRefactoring.Synthesis
@@ -26,14 +22,14 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Settings
         /// </summary>
         /// <returns>Get or set synthesis setting</returns>
-        public SynthesizerSetting setting { get; set; }
+        public SynthesizerSetting Setting { get; set; }
 
         /// <summary>
         /// Default constructor
         /// </summary>
         public SynthesisManager()
         {
-            this.setting = new SynthesizerSetting();
+            this.Setting = new SynthesizerSetting();
         }
 
         /// <summary>
@@ -42,7 +38,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="setting">Setting</param>
         public SynthesisManager(SynthesizerSetting setting)
         {
-            this.setting = setting;
+            this.Setting = setting;
         }
 
         ///// <summary>
@@ -176,7 +172,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         {
             List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
             var items = from expression in expressionList
-                        orderby new SelectorManager(setting).Order(expression) descending
+                        orderby new SelectorManager(Setting).Order(expression) descending
                         select expression;
             if (synthesizedProgramList.Count > 0)
             {
@@ -487,7 +483,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             }           
 
             var sorted = from hypothesis in hypotheses
-                         orderby (new SelectorManager(setting)).Order(hypothesis.Solutions) descending
+                         orderby (new SelectorManager(Setting)).Order(hypothesis.Solutions) descending
                          select hypothesis;
 
             int count = 0;
@@ -518,50 +514,50 @@ namespace Spg.ExampleRefactoring.Synthesis
             return selected;
         }
 
-        public SynthesizedProgram ComputeSynthesizedProgram(List<Dictionary<ExpressionKind, List<IExpression>>> expressions, List<IExpression> solution, List<Tuple<ListNode, ListNode>> examples)
-        {
-            //int row, col;
+        //public SynthesizedProgram ComputeSynthesizedProgram(List<Dictionary<ExpressionKind, List<IExpression>>> expressions, List<IExpression> solution, List<Tuple<ListNode, ListNode>> examples)
+        //{
+        //    //int row, col;
 
-            if (!FindSynthesizedProgram())
-                //all locations successfully assigned
-                return prog;
+        //    if (!FindSynthesizedProgram())
+        //        //all locations successfully assigned
+        //        return prog;
 
-            for (int num = 1; num <= expressions.Count; num++)
-            {
-                List<IExpression> exps = GetExpressions(expressions[num]);
-                foreach (IExpression expression in exps)
-                {
-                    if (ValidateSynthesizedProgram(solution, examples))
-                    {
-                        prog = new SynthesizedProgram();
-                        prog.Solutions = solution;
-                        return prog;
-                    }
-                }
-                ////if number is allowed to be placed in the square
-                //if (NoConflicts(grid, row, col, num))
-                //{
-                //    //place the number in the square
-                //    grid[row][col] = num;
+        //    for (int num = 1; num <= expressions.Count; num++)
+        //    {
+        //        List<IExpression> exps = GetExpressions(expressions[num]);
+        //        foreach (IExpression expression in exps)
+        //        {
+        //            if (ValidateSynthesizedProgram(solution, examples))
+        //            {
+        //                prog = new SynthesizedProgram();
+        //                prog.Solutions = solution;
+        //                return prog;
+        //            }
+        //        }
+        //        ////if number is allowed to be placed in the square
+        //        //if (NoConflicts(grid, row, col, num))
+        //        //{
+        //        //    //place the number in the square
+        //        //    grid[row][col] = num;
 
-                    //recur, if successful then stop
-                    //if (SolveSudoku(grid))
-                    //    return true;
+        //            //recur, if successful then stop
+        //            //if (SolveSudoku(grid))
+        //            //    return true;
 
-                //    //undo and try again
-                //    grid[row][col] = UNASSIGNED;
-                //}
-            }
-            //this triggers backtracking from early decisions
-            return null;
-        }
+        //        //    //undo and try again
+        //        //    grid[row][col] = UNASSIGNED;
+        //        //}
+        //    }
+        //    //this triggers backtracking from early decisions
+        //    return null;
+        //}
 
-        private SynthesizedProgram prog = null;
-        //private List<IExpression> expressions; 
-        private bool FindSynthesizedProgram()
-        {
-            return prog != null;
-        }
+        private SynthesizedProgram _prog = null;
+        ////private List<IExpression> expressions; 
+        //private bool FindSynthesizedProgram()
+        //{
+        //    return prog != null;
+        //}
 
         public List<IExpression> GetExpressions(Dictionary<ExpressionKind, List<IExpression>> mapping)
         {

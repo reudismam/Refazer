@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.AST
 {
@@ -74,10 +73,7 @@ namespace Spg.ExampleRefactoring.AST
         {
             if (listNode == null) throw new ArgumentNullException("listNode");
             if (synthesizedProg == null) throw new ArgumentNullException("synthesizedProg");
-            //List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
-            //nodes = ASTManager.EnumerateSyntaxNodesAndTokens(oldNode, nodes);
 
-            //ListNode listNode = new ListNode(nodes);
             ListNode composition = new ListNode();
             for (int i = 0; i < synthesizedProg.Solutions.Count; i++)
             {

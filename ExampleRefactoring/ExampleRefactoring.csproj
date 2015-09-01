@@ -105,6 +105,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BooleanLearner\BooleanLearnerBase.cs" />
+    <Compile Include="BooleanLearner\NegativeBooleanLearner.cs" />
+    <Compile Include="BooleanLearner\PositiveBooleanLearner.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\ASTManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\ASTTransformation.cs" />
     <Compile Include="Spg.ExampleRefactoring.AST\UpdateASTManager.cs" />
@@ -169,12 +172,14 @@
     <Compile Include="Spg.ExampleRefactoring.LCS\LCAManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\LCAProcessing.cs" />
     <Compile Include="Spg.ExampleRefactoring.LCS\ModificationType.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Partition\PartitionManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Projects\ProjectInformation.cs" />
     <Compile Include="Spg.ExampleRefactoring.RegularExpression\Regex.cs" />
     <Compile Include="Spg.ExampleRefactoring.Setting\SynthesizerSetting.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\BoundaryManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\FeatureType.cs" />
     <Compile Include="Spg.ExampleRefactoring.Intersect\IntersectManager.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Synthesis\Switch.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\SynthesizedProgram.cs" />
     <Compile Include="Spg.ExampleRefactoring.Synthesis\SynthesisManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Position\CPos.cs" />
@@ -184,6 +189,11 @@
     <Compile Include="Spg.ExampleRefactoring.Synthesis\ASTProgram.cs" />
     <Compile Include="Spg.ExampleRefactoring.Util\JsonUtil.cs" />
     <Compile Include="Spg.ExampleRefactoring.Workspace\WorkspaceManager.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\Contains.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\EndsWith.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\IPredicate.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\NotContains.cs" />
+    <Compile Include="Spg.LocationRefactor.Predicate\PredicateFactory.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\ArgumentToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\ArrayInitializerElementToken.cs" />
     <Compile Include="Spg.LocationRefactoring.Tok\RawDymToken.cs" />
@@ -222,6 +232,7 @@
       <Name>DirectedGraph</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

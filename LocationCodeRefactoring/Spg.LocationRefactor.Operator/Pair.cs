@@ -40,18 +40,18 @@ namespace Spg.LocationRefactor.Operator
 
         public ListNode Execute(SyntaxNode input)
         {
-            SynthesizedProgram hypothesis = new SynthesizedProgram();
+            SynthesizedProgram sprogram = new SynthesizedProgram();
             List<IExpression> expressions = new List<IExpression>();
             expressions.Add(Expression);
 
-            hypothesis.Solutions = expressions;
+            sprogram.Solutions = expressions;
 
             List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
             
             list = ASTManager.EnumerateSyntaxNodesAndTokens(input, list);
             ListNode lnode = new ListNode(list);
 
-            SyntaxTree result = ASTProgram.TransformString(lnode, hypothesis).Tree;
+            SyntaxTree result = sprogram.TransformString(lnode).Tree;
 
             List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
             nodes = ASTManager.EnumerateSyntaxNodesAndTokens(result.GetRoot(), nodes);

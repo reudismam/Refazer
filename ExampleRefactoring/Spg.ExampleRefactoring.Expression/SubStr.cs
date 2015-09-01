@@ -1,9 +1,5 @@
 using System;
 using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Synthesis;
 
