@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using DiGraph;
+using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -14,6 +15,7 @@ using Spg.ExampleRefactoring.Partition;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Tok;
+using Spg.LocationRefactor.Learn.Filter.BooleanLearner;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
 
@@ -163,34 +165,59 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             //remove
             PartitionManager pManager = new PartitionManager();
-            List<Dag> Ts = pManager.GeneratePartition(dags);
+            Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts = pManager.GeneratePartition(dags);
             //remove
 
             List<Tuple<IPredicate, SynthesizedProgram>> S = new List<Tuple<IPredicate, SynthesizedProgram>>();
-            foreach (Dag T in Ts)
+            foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T in Ts)
             {
                 ExpressionManager expmanager = new ExpressionManager();
-                expmanager.FilterExpressions(T, examples);
+                expmanager.FilterExpressions(T.Key, T.Value);
 
-                Clear(T);
+                Clear(T.Key);
 
-                BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.Init.Id);
-                double dist = bfs.DistTo(T.End.Id);
+                BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.Key.dag, T.Key.Init.Id);
+                double dist = bfs.DistTo(T.Key.End.Id);
 
                 List<Vertex> solutions = new List<Vertex>();
 
-                foreach (string s in bfs.PathTo(T.End.Id))
+                foreach (string s in bfs.PathTo(T.Key.End.Id))
                 {
-                    solutions.Add(T.Vertexes[s]);
+                    solutions.Add(T.Key.Vertexes[s]);
                 }
 
                 SynthesisManager manager = new SynthesisManager(Setting);
-                SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
+                SynthesizedProgram valid = manager.FilterASTPrograms(T.Key.Mapping, solutions, T.Value);
 
+                if (Ts.Count == 1) return new List<SynthesizedProgram> { valid };
 
+                List<Tuple<ListNode, ListNode, bool>> ln = new List<Tuple<ListNode, ListNode, bool>>();
+                foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> TC in Ts)
+                {
+                    foreach (Tuple<ListNode, ListNode> dItem in TC.Value)
+                    {
+                        Tuple<ListNode, ListNode, bool> tuple;
+                        if (TC.Key.Equals(T.Key))
+                        {
+                            tuple = Tuple.Create(dItem.Item1, dItem.Item2, false);
+                        }
+                        else
+                        {
+                            tuple = Tuple.Create(dItem.Item1, dItem.Item2, true);
+                        }
+                        ln.Add(tuple);
+                    }   
+                }
+
+                List<IPredicate> predicates = pManager.BooleanLearning(ln);
+
+                Tuple<IPredicate, SynthesizedProgram> tSol = Tuple.Create(predicates.First(), valid);
+                S.Add(tSol);
             }
 
-            validated.Add(valid);
+            Switch sSwitch = new Switch(S);
+
+            validated.Add(sSwitch);
             return validated;
         }
 
@@ -470,6 +497,12 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             Dag digraph = new Dag(dag, vertexes["0"], vertexes[output.Length().ToString()], W, vertexes);
+
+            foreach (var m in W.Keys)
+            {
+                digraph.dag.AddEdge(m.Item1.ToString(), m.Item2.ToString());
+            }
+
             return digraph;
         }
 
@@ -524,7 +557,6 @@ namespace Spg.ExampleRefactoring.Synthesis
                             IExpression fakeConstrStr = new FakeConstrStr(subNodes);
                             fakeConstStrExps.Add(fakeConstrStr);
                             synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
-
                         }
                     }
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
@@ -556,6 +588,12 @@ namespace Spg.ExampleRefactoring.Synthesis
             }*/
 
             Dag digraph = new Dag(dag, vertexes["0"], vertexes[output.Length().ToString()], W, vertexes);
+
+            foreach (var m in W.Keys)
+            {
+                digraph.dag.AddEdge(m.Item1.ToString(), m.Item2.ToString());
+            }
+
             return digraph;
         }
 

@@ -8,7 +8,12 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
 {
     internal  class Switch: SynthesizedProgram
     {
-        public List<Tuple<IPredicate, SynthesizedProgram>> Gates = new List<Tuple<IPredicate, SynthesizedProgram>>();
+        public List<Tuple<IPredicate, SynthesizedProgram>> Gates;
+
+        public Switch(List<Tuple<IPredicate, SynthesizedProgram>> gates)
+        { 
+            this.Gates = gates;
+        }
 
         public override ASTTransformation TransformString(ListNode input)
         {

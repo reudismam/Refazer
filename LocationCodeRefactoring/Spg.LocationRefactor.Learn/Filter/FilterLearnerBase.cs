@@ -36,16 +36,16 @@ namespace Spg.LocationRefactor.Learn
             _calculated = new Dictionary<TokenSeq, bool>();
         }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        /// <param name="predicate">Predicate</param>
-        public FilterLearnerBase(IPredicate predicate, List<TRegion> list)
-        {
-            this.List = list;
-            _calculated = new Dictionary<TokenSeq, bool>();
-            this.Predicate = predicate;
-        }
+        ///// <summary>
+        ///// Create a new instance
+        ///// </summary>
+        ///// <param name="predicate">Predicate</param>
+        //public FilterLearnerBase(IPredicate predicate, List<TRegion> list)
+        //{
+        //    this.List = list;
+        //    _calculated = new Dictionary<TokenSeq, bool>();
+        //    this.Predicate = predicate;
+        //}
 
         /// <summary>
         /// Learn a list filters
