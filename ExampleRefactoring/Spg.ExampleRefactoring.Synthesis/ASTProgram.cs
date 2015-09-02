@@ -171,11 +171,6 @@ namespace Spg.ExampleRefactoring.Synthesis
             List<Tuple<IPredicate, SynthesizedProgram>> S = new List<Tuple<IPredicate, SynthesizedProgram>>();
             foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T in Ts)
             {
-                ExpressionManager expmanager = new ExpressionManager();
-                expmanager.FilterExpressions(T.Key, T.Value);
-
-                Clear(T.Key);
-
                 BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.Key.dag, T.Key.Init.Id);
                 double dist = bfs.DistTo(T.Key.End.Id);
 
@@ -192,25 +187,45 @@ namespace Spg.ExampleRefactoring.Synthesis
                 if (Ts.Count == 1) return new List<SynthesizedProgram> { valid };
 
                 List<Tuple<ListNode, ListNode, bool>> ln = new List<Tuple<ListNode, ListNode, bool>>();
+
+                foreach (Tuple<ListNode, ListNode> dItem in T.Value)
+                {
+                    Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, true);
+                    ln.Add(tuple);
+                }
+
                 foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> TC in Ts)
                 {
                     foreach (Tuple<ListNode, ListNode> dItem in TC.Value)
                     {
-                        Tuple<ListNode, ListNode, bool> tuple;
-                        if (TC.Key.Equals(T.Key))
+                        //Tuple<ListNode, ListNode, bool> tuple;
+                        //if (TC.Key.Equals(T.Key))
+                        //{
+                        //    tuple = Tuple.Create(dItem.Item1, dItem.Item1, true);
+                        //    ln.Add(tuple);
+                        //}
+                        //else
+                        if (!TC.Key.Equals(T.Key))
                         {
-                            tuple = Tuple.Create(dItem.Item1, dItem.Item2, false);
+                            Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, false);
+                            List<Tuple<ListNode, ListNode, bool>> l = new List<Tuple<ListNode, ListNode, bool>>(ln);
+                            l.Add(tuple);
+                            List<IPredicate> ps = pManager.BooleanLearning(l);
+                            if (ps.Any())
+                            {
+                                ln.Add(tuple);
+                            }
                         }
-                        else
-                        {
-                            tuple = Tuple.Create(dItem.Item1, dItem.Item2, true);
-                        }
-                        ln.Add(tuple);
-                    }   
+                    } 
                 }
 
                 List<IPredicate> predicates = pManager.BooleanLearning(ln);
 
+                if (!predicates.Any())
+                {
+                    Setting.Deviation = 1;
+                    return GenerateStringProgram(examples);
+                }
                 Tuple<IPredicate, SynthesizedProgram> tSol = Tuple.Create(predicates.First(), valid);
                 S.Add(tSol);
             }

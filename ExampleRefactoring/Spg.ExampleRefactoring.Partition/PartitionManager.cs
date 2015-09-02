@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using DiGraph;
+using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Digraph;
+using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Intersect;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Learn.Filter.BooleanLearner;
@@ -12,28 +16,23 @@ namespace Spg.ExampleRefactoring.Partition
 {
     internal class PartitionManager
     {
-        /// <summary>
-        /// Store the filters calculated
-        /// </summary>
-        private readonly Dictionary<TokenSeq, bool> _calculated = new Dictionary<TokenSeq, bool>();
-
         public Dictionary<Dag, List<Tuple<ListNode, ListNode>>> GeneratePartition(Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
         {
             List<Dag> T = new List<Dag>(dags.Keys);
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dictionary = new Dictionary<Dag, List<Tuple<ListNode, ListNode>>>(dags);
-            while (ExistComp(T))
+            while (ExistComp(T, dictionary))
             {
-                Tuple<Dag, Dag, Dag> dag = CS(T);
+                Tuple<Dag, Dag, Dag> dag = CS(T, dictionary);
                 T.Remove(dag.Item1);
                 T.Remove(dag.Item2);
                 T.Add(dag.Item3);
 
-                if (!dictionary.ContainsKey(dag.Item3))
-                {
-                    dictionary.Add(dag.Item3, new List<Tuple<ListNode, ListNode>>());
-                }
-                dictionary[dag.Item3].AddRange(dictionary[dag.Item1]);
-                dictionary[dag.Item3].AddRange(dictionary[dag.Item2]);
+                //if (!dictionary.ContainsKey(dag.Item3))
+                //{
+                //    dictionary.Add(dag.Item3, new List<Tuple<ListNode, ListNode>>());
+                //}
+                //dictionary[dag.Item3].AddRange(dictionary[dag.Item1]);
+                //dictionary[dag.Item3].AddRange(dictionary[dag.Item2]);
             }
 
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> rt = new Dictionary<Dag, List<Tuple<ListNode, ListNode>>>();
@@ -46,7 +45,7 @@ namespace Spg.ExampleRefactoring.Partition
             return rt;
         }
 
-        private static bool ExistComp(List<Dag> T)
+        private static bool ExistComp(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
         {
             if (T.Count == 1) return false;
 
@@ -55,20 +54,30 @@ namespace Spg.ExampleRefactoring.Partition
             {
                 for (int j = i + 1; j < T.Count; j++)
                 {
+                    List<Tuple<ListNode, ListNode>> examples =  new List<Tuple<ListNode, ListNode>>();
+                    examples.AddRange(dags[T[i]]);
+                    examples.AddRange(dags[T[j]]);
                     List<Dag> comp = new List<Dag>();
                     comp.Add(T[i]);
                     comp.Add(T[j]);
                     Dag inter = intersectManager.Intersect(comp);
                     if (inter != null)
                     {
-                        return true;
+                        ExpressionManager expmanager = new ExpressionManager();
+                        expmanager.FilterExpressions(inter, examples);
+                        ASTProgram.Clear(inter);
+                        BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(inter.dag, inter.Init.Id);
+                        if (bfs.HasPathTo(inter.End.Id))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
             return false;
         }
 
-        private static Tuple<Dag, Dag, Dag> CS(List<Dag> T)
+        private Tuple<Dag, Dag, Dag> CS(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dictionary)
         {
             IntersectManager intersectManager = new IntersectManager();
             //first dag, second dag, intersection
@@ -79,10 +88,27 @@ namespace Spg.ExampleRefactoring.Partition
                 {
                     List<Dag> comp = new List<Dag> { T[i], T[j] };
                     Dag inter = intersectManager.Intersect(comp);
+                    
                     if (inter != null)
                     {
-                        Tuple<Dag, Dag, Dag> tuple = Tuple.Create(T[i], T[j], inter);
-                        dags.Add(tuple);
+                        ASTProgram.Clear(inter);
+                        BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(inter.dag, inter.Init.Id);
+                        if (bfs.HasPathTo(inter.End.Id))
+                        {
+                            Tuple<Dag, Dag, Dag> tuple = Tuple.Create(T[i], T[j], inter);
+                            dags.Add(tuple);
+
+                            List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
+                            examples.AddRange(dictionary[T[i]]);
+                            examples.AddRange(dictionary[T[j]]);
+
+                            if (!dictionary.ContainsKey(inter))
+                            {
+                                dictionary.Add(inter, new List<Tuple<ListNode, ListNode>>());
+                            }
+
+                            dictionary[inter] = examples;
+                        }
                     }
                 }
             }
@@ -105,9 +131,13 @@ namespace Spg.ExampleRefactoring.Partition
                         List<Dag> de2 = new List<Dag> { tuple.Item2, dag };
                         List<Dag> dei = new List<Dag> { tuple.Item3, dag };
 
-                        bool ede1 = ExistComp(de1);
-                        bool ede2 = ExistComp(de2);
-                        bool edei = ExistComp(dei);
+                        bool ede1 = ExistComp(de1, dictionary);
+                        bool ede2 = ExistComp(de2, dictionary);
+                        bool edei = ExistComp(dei, dictionary);
+                        //bool ede1 = CanCreateFilter(de1, dictionary);
+                        //bool ede2 = CanCreateFilter(de2, dictionary);
+                        //bool edei = CanCreateFilter(dei, dictionary);
+
                         if (ede1 == ede2 && ede2 == edei)
                         {
                             scores[tuple]++;
@@ -125,9 +155,43 @@ namespace Spg.ExampleRefactoring.Partition
                     max = item.Key;
                     maxVal = item.Value;
                 }
+
+                if (item.Value == maxVal)
+                {
+                    int cs2Item = item.Key.Item3.Mapping.Count / Math.Max(item.Key.Item1.Mapping.Count, item.Key.Item2.Mapping.Count);
+                    int cs2MaxVal = max.Item3.Mapping.Count / Math.Max(max.Item1.Mapping.Count, max.Item2.Mapping.Count);
+
+                    if (cs2Item > cs2MaxVal)
+                    {
+                        max = item.Key;
+                    }
+                }
             }
 
             return max;
+        }
+
+        public bool CanCreateFilter(List<Dag> dags, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts)
+        {
+            if (!ExistComp(dags, Ts)) return false; 
+
+            List<Tuple<ListNode, ListNode, bool>> ln = new List<Tuple<ListNode, ListNode, bool>>();
+
+            foreach (Tuple<ListNode, ListNode> example in Ts[dags.First()])
+            {
+                Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(example.Item2, example.Item2, true);
+                ln.Add(tuple);
+            }
+
+            foreach (var example in Ts[dags[1]])
+            {
+                Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(example.Item2, example.Item2, false);
+                ln.Add(tuple);
+            }
+
+            List<IPredicate> predicates = BooleanLearning(ln);
+
+            return predicates.Any();
         }
 
         /// <summary>
@@ -157,9 +221,9 @@ namespace Spg.ExampleRefactoring.Partition
                 }
             }
 
+            Dictionary<TokenSeq, bool> _calculated = new Dictionary<TokenSeq, bool>();
             BooleanLearnerBase bbase = new PositiveBooleanLearner(_calculated);
             var predicates = bbase.BooleanLearning(boolExamples, positivesExamples);
-
 
             if (!negativesExamples.Any())
             {

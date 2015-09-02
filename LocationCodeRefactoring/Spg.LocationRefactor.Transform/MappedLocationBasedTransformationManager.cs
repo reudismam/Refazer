@@ -215,7 +215,7 @@ namespace Spg.LocationRefactor.Transform
                     //codeTransformation.Location.Region.Node = null; //needed for not get out of memory exception
                     Controller.CodeTransformations.Add(codeTransformation);
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
