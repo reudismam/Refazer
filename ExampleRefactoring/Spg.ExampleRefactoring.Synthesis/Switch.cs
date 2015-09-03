@@ -26,5 +26,17 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             }
             return null;
         }
+
+        public virtual ListNode TransformInput(ListNode input)
+        {
+            foreach (Tuple<IPredicate, SynthesizedProgram> item in Gates)
+            {
+                if (item.Item1.Evaluate(input))
+                {
+                    return item.Item2.TransformInput(input);
+                }
+            }
+            return null;
+        }
     }
 }

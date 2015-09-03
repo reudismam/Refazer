@@ -122,7 +122,8 @@ namespace Spg.LocationRefactor.Operator.Map
                 ListNode lnode = new ListNode();
                 try
                 {
-                    lnode = pair.Expression.RetrieveSubNodes(tnodes.Item1);
+                    //lnode = pair.Expression.RetrieveSubNodes(tnodes.Item1);
+                    lnode = pair.Expression.TransformInput(tnodes.Item1);
                 }
                 catch (Exception e)
                 {

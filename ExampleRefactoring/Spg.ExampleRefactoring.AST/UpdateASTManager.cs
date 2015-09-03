@@ -83,6 +83,26 @@ namespace Spg.ExampleRefactoring.AST
             ASTTransformation combTree = GetSyntaxTree(composition);
             return combTree;
         }
+
+        /// <summary>
+        /// Transform the AST
+        /// </summary>
+        /// <param name="listNode">ListNodes</param>
+        /// <param name="synthesizedProg">Synthesized program</param>
+        /// <returns>Syntax tree transformation</returns>
+        public static ListNode UpdateInput(ListNode listNode, SynthesizedProgram synthesizedProg)
+        {
+            if (listNode == null) throw new ArgumentNullException("listNode");
+            if (synthesizedProg == null) throw new ArgumentNullException("synthesizedProg");
+
+            ListNode composition = new ListNode();
+            for (int i = 0; i < synthesizedProg.Solutions.Count; i++)
+            {
+                ListNode subNodes = synthesizedProg.Solutions[i].RetrieveSubNodes(listNode);
+                composition.List.AddRange(subNodes.List);
+            }
+            return composition;
+        }
         /// <summary>
         /// Create a tree
         /// </summary>

@@ -41,6 +41,16 @@ namespace Spg.ExampleRefactoring.Synthesis
         }
 
         /// <summary>
+        /// Retrieve the string corresponding to the hypothesis passed as parameter.
+        /// </summary>
+        /// <param name="input">Input syntax node</param>
+        /// <returns>AST transformation</returns>
+        public virtual ListNode TransformInput(ListNode input)
+        {
+            return UpdateASTManager.UpdateInput(input, this);
+        }
+
+        /// <summary>
         /// To string method
         /// </summary>
         /// <returns>String representing this instance</returns>
