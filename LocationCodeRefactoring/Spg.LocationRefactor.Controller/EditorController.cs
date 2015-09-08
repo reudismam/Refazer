@@ -597,6 +597,7 @@ namespace Spg.LocationRefactor.Controller
             }
 
             List<CodeLocation> removes = new List<CodeLocation>();
+            bool isLocationInsideAnother = ExistInsideAntoher(intersections);
             foreach (var codeLocation in locations)
             {
                 if (intersections.ContainsKey(codeLocation))
@@ -611,7 +612,14 @@ namespace Spg.LocationRefactor.Controller
                     {
                         if (codeLocation.Region.Start == intersections[codeLocation].First().Region.Start)
                         {
-                            removes.Add(intersections[codeLocation].First());
+                            if (isLocationInsideAnother)
+                            {
+                                removes.Add(codeLocation);
+                            }
+                            else
+                            {
+                                removes.Add(intersections[codeLocation].First());
+                            }
                         }
                         else
                         {
@@ -623,6 +631,18 @@ namespace Spg.LocationRefactor.Controller
 
             locations = locations.Except(removes).ToList();
             return locations;
+        }
+
+        private bool ExistInsideAntoher(Dictionary<CodeLocation, List<CodeLocation>> intersections)
+        {
+            foreach (KeyValuePair<CodeLocation, List<CodeLocation>> item in intersections)
+            {
+                if (item.Value.Count() > 1)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>

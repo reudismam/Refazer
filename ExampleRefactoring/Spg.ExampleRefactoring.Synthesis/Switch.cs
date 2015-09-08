@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Predicate;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Synthesis
 {
-    internal  class Switch: SynthesizedProgram
+    public class Switch: SynthesizedProgram
     {
         public List<Tuple<IPredicate, SynthesizedProgram>> Gates;
 
@@ -27,7 +26,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             return null;
         }
 
-        public virtual ListNode TransformInput(ListNode input)
+        public override ListNode TransformInput(ListNode input)
         {
             foreach (Tuple<IPredicate, SynthesizedProgram> item in Gates)
             {
@@ -36,7 +35,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
                     return item.Item2.TransformInput(input);
                 }
             }
-            return null;
+            throw new ArgumentException("The given argument if not valid for this program");
         }
     }
 }

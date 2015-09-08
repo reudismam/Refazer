@@ -16,6 +16,7 @@ namespace Spg.ExampleRefactoring.Partition
 {
     internal class PartitionManager
     {
+        private Dictionary<Tuple<Dag, Dag>, Dag> computed = new Dictionary<Tuple<Dag, Dag>, Dag>();
         public Dictionary<Dag, List<Tuple<ListNode, ListNode>>> GeneratePartition(Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
         {
             List<Dag> T = new List<Dag>(dags.Keys);
@@ -45,7 +46,7 @@ namespace Spg.ExampleRefactoring.Partition
             return rt;
         }
 
-        private static bool ExistComp(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
+        private bool ExistComp(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
         {
             if (T.Count == 1) return false;
 
@@ -60,7 +61,19 @@ namespace Spg.ExampleRefactoring.Partition
                     List<Dag> comp = new List<Dag>();
                     comp.Add(T[i]);
                     comp.Add(T[j]);
-                    Dag inter = intersectManager.Intersect(comp);
+
+                    Dag inter;
+                    Tuple<Dag, Dag> dt = Tuple.Create(T[i], T[j]);
+                    if (computed.ContainsKey(dt))
+                    {
+                        inter = computed[dt];
+                    }
+                    else
+                    {
+                        inter = intersectManager.Intersect(comp);  
+                        computed.Add(dt, inter);
+                    }
+                    //Dag inter = intersectManager.Intersect(comp);
                     if (inter != null)
                     {
                         ExpressionManager expmanager = new ExpressionManager();
@@ -80,17 +93,36 @@ namespace Spg.ExampleRefactoring.Partition
         private Tuple<Dag, Dag, Dag> CS(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dictionary)
         {
             IntersectManager intersectManager = new IntersectManager();
-            //first dag, second dag, intersection
+
             List<Tuple<Dag, Dag, Dag>> dags = new List<Tuple<Dag, Dag, Dag>>();
             for (int i = 0; i < T.Count; i++)
             {
                 for (int j = i + 1; j < T.Count; j++)
                 {
                     List<Dag> comp = new List<Dag> { T[i], T[j] };
-                    Dag inter = intersectManager.Intersect(comp);
-                    
+
+                    Tuple<Dag, Dag> dt = Tuple.Create(T[i], T[j]);
+
+                    Dag inter;
+                    if (computed.ContainsKey(dt))
+                    {
+                        inter = computed[dt];
+                    }
+                    else
+                    {
+                        inter = intersectManager.Intersect(comp);
+                        computed.Add(dt, inter);
+                    }                
+
                     if (inter != null)
                     {
+                        List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
+                        examples.AddRange(dictionary[T[i]]);
+                        examples.AddRange(dictionary[T[j]]);
+                        ExpressionManager expmanager = new ExpressionManager();
+
+                        expmanager.FilterExpressions(inter, examples);
+
                         ASTProgram.Clear(inter);
                         BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(inter.dag, inter.Init.Id);
                         if (bfs.HasPathTo(inter.End.Id))
@@ -98,14 +130,15 @@ namespace Spg.ExampleRefactoring.Partition
                             Tuple<Dag, Dag, Dag> tuple = Tuple.Create(T[i], T[j], inter);
                             dags.Add(tuple);
 
-                            List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
-                            examples.AddRange(dictionary[T[i]]);
-                            examples.AddRange(dictionary[T[j]]);
-
                             if (!dictionary.ContainsKey(inter))
                             {
                                 dictionary.Add(inter, new List<Tuple<ListNode, ListNode>>());
                             }
+
+                            //if (!computed.ContainsKey(dt))
+                            //{
+                            //    computed.Add(dt, inter);
+                            //}
 
                             dictionary[inter] = examples;
                         }
@@ -127,13 +160,22 @@ namespace Spg.ExampleRefactoring.Partition
                     }
                     if (dag != tuple.Item1 && dag != tuple.Item2)
                     {
-                        List<Dag> de1 = new List<Dag> { tuple.Item1, dag };
-                        List<Dag> de2 = new List<Dag> { tuple.Item2, dag };
+                        //List<Dag> de1 = new List<Dag> { tuple.Item1, dag };
+                        //List<Dag> de2 = new List<Dag> { tuple.Item2, dag };
+                        //List<Dag> dei = new List<Dag> { tuple.Item3, dag };
+
+                        Tuple<Dag, Dag> de1 = Tuple.Create(tuple.Item1, dag);
+                        Tuple<Dag, Dag> de2 = Tuple.Create(tuple.Item2, dag);
                         List<Dag> dei = new List<Dag> { tuple.Item3, dag };
 
-                        bool ede1 = ExistComp(de1, dictionary);
-                        bool ede2 = ExistComp(de2, dictionary);
+                        //bool ede1 = ExistComp(de1, dictionary);
+                        //bool ede2 = ExistComp(de2, dictionary);
+                        //bool edei = ExistComp(dei, dictionary);
+
+                        bool ede1 = computed.ContainsKey(de1);
+                        bool ede2 = computed.ContainsKey(de2);
                         bool edei = ExistComp(dei, dictionary);
+
                         //bool ede1 = CanCreateFilter(de1, dictionary);
                         //bool ede2 = CanCreateFilter(de2, dictionary);
                         //bool edei = CanCreateFilter(dei, dictionary);

@@ -1,13 +1,9 @@
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Operator;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Program;
 
 namespace Spg.LocationRefactor.Learn
@@ -40,6 +36,9 @@ namespace Spg.LocationRefactor.Learn
                 Prog prog = new Prog();
                 if (sprog is Switch)
                 {
+                    pair.Expression = sprog;
+                    prog.Ioperator = pair;
+                    progs.Add(prog);
                 }
                 else
                 {

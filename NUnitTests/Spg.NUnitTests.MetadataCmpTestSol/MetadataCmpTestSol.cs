@@ -177,6 +177,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
 
         [Test]
+        public void Proj3_8c14644()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CSharpCodeAnalysis");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"Roslyn\3_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", projects);
+
+            bool passTransformation = CompleteTestBase(@"Roslyn\3_8c14644");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
         public void Proj83e4349()
         {
             List<string> projects = new List<string>();

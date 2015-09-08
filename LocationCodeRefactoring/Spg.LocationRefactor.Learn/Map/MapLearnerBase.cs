@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Operator.Map;
 using Spg.LocationRefactor.Predicate;
@@ -100,14 +102,18 @@ namespace Spg.LocationRefactor.Learn.Map
         public List<Prog> Learn(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples)
         {
             List<Prog> programs = new List<Prog>();
-            List<Tuple<ListNode, ListNode>> Q = MapBase.Decompose(positiveExamples);
+
+            EditorController contoller = EditorController.GetInstance();
+            List<TRegion> list = contoller.SelectedLocations;
+            Decomposer deco = Decomposer.GetInstance();
+            List<Tuple<ListNode, ListNode>> exampleList = deco.Decompose(list);
+            List<Tuple<ListNode, ListNode>> Q = MapBase.Decompose(exampleList);
 
             PairLearn F = new PairLearn();
             List<Prog> hypo = F.Learn(Q);
 
             IPredicate pred = GetPredicate();
-            EditorController contoller = EditorController.GetInstance();
-            List<TRegion> list = contoller.SelectedLocations;
+            
             FilterLearnerBase S = GetFilter(list);
             S.Predicate = pred;
 
