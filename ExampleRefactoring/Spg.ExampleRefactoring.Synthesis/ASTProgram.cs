@@ -147,6 +147,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Generate synthesized programs
         /// </summary>
         /// <param name="examples">Example set</param>
+        /// <param name="boundary">Determine if to generate the program the tool needs to use boundaries.</param>
         /// <returns>Synthesized program list</returns>
         public List<SynthesizedProgram> GenerateStringProgram(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
         {
@@ -159,75 +160,23 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags = Dags(examples, boundary);
-
-            //remove
             PartitionManager pManager = new PartitionManager();
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts = pManager.GeneratePartition(dags);
-            //remove
 
             if (Ts.Count == examples.Count && boundary)
             {
                 Setting.Deviation = 1;
                 return GenerateStringProgram(examples, false);
             }
-            //MessageBox.Show(examples.Count + " : " + Ts.Count);
 
             List<Tuple<IPredicate, SynthesizedProgram>> S = new List<Tuple<IPredicate, SynthesizedProgram>>();
             foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T in Ts)
             {
-                ExpressionManager expmanager = new ExpressionManager();
-                expmanager.FilterExpressions(T.Key, T.Value);
-
-                Clear(T.Key);
-
-                BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.Key.dag, T.Key.Init.Id);
-                double dist = bfs.DistTo(T.Key.End.Id);
-
-                List<Vertex> solutions = new List<Vertex>();
-
-                foreach (string s in bfs.PathTo(T.Key.End.Id))
-                {
-                    solutions.Add(T.Key.Vertexes[s]);
-                }
-
-                SynthesisManager manager = new SynthesisManager(Setting);
-                SynthesizedProgram valid = manager.FilterASTPrograms(T.Key.Mapping, solutions, T.Value);
+                SynthesizedProgram valid = CreateSynthesizedProgram(T.Key, T.Value);
 
                 if (Ts.Count == 1) return new List<SynthesizedProgram> { valid };
 
-                List<Tuple<ListNode, ListNode, bool>> ln = new List<Tuple<ListNode, ListNode, bool>>();
-
-                foreach (Tuple<ListNode, ListNode> dItem in T.Value)
-                {
-                    Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, true);
-                    ln.Add(tuple);
-                }
-
-                foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> TC in Ts)
-                {
-                    foreach (Tuple<ListNode, ListNode> dItem in TC.Value)
-                    {
-                        //Tuple<ListNode, ListNode, bool> tuple;
-                        //if (TC.Key.Equals(T.Key))
-                        //{
-                        //    tuple = Tuple.Create(dItem.Item1, dItem.Item1, true);
-                        //    ln.Add(tuple);
-                        //}
-                        //else
-                        if (!TC.Key.Equals(T.Key))
-                        {
-                            Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, false);
-                            List<Tuple<ListNode, ListNode, bool>> l = new List<Tuple<ListNode, ListNode, bool>>(ln);
-                            l.Add(tuple);
-                            List<IPredicate> ps = pManager.BooleanLearning(l);
-                            if (ps.Any())
-                            {
-                                ln.Add(tuple);
-                            }
-                        }
-                    }
-                }
-
+                List<Tuple<ListNode, ListNode, bool>> ln = CreateConditionalExamples(T.Key, T.Value, Ts, pManager);
                 List<IPredicate> predicates = pManager.BooleanLearning(ln);
 
                 if (!predicates.Any())
@@ -235,14 +184,78 @@ namespace Spg.ExampleRefactoring.Synthesis
                     Setting.Deviation = 1;
                     return GenerateStringProgram(examples);
                 }
+
                 Tuple<IPredicate, SynthesizedProgram> tSol = Tuple.Create(predicates.First(), valid);
                 S.Add(tSol);
             }
 
             Switch sSwitch = new Switch(S);
-
             validated.Add(sSwitch);
             return validated;
+        }
+
+        /// <summary>
+        /// Create a synthesized program
+        /// </summary>
+        /// <param name="dag">Dag to be analyzed</param>
+        /// <param name="examples">Examples</param>
+        /// <returns></returns>
+        private SynthesizedProgram CreateSynthesizedProgram(Dag dag, List<Tuple<ListNode, ListNode>> examples)
+        {
+            ExpressionManager expmanager = new ExpressionManager();
+            expmanager.FilterExpressions(dag, examples);
+            Clear(dag);
+
+            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(dag.dag, dag.Init.Id);
+            List<Vertex> solutions = new List<Vertex>();
+
+            foreach (string s in bfs.PathTo(dag.End.Id))
+            {
+                solutions.Add(dag.Vertexes[s]);
+            }
+
+            SynthesisManager manager = new SynthesisManager(Setting);
+            SynthesizedProgram valid = manager.FilterASTPrograms(dag.Mapping, solutions, examples);
+            return valid;
+        }
+
+        /// <summary>
+        /// Create condictional examples
+        /// </summary>
+        /// <param name="d">Dag analyzed</param>
+        /// <param name="examples">Examples associated with the dag</param>
+        /// <param name="Ts">Other dags created</param>
+        /// <param name="pManager">Partition manager</param>
+        /// <returns></returns>
+        private static List<Tuple<ListNode, ListNode, bool>> CreateConditionalExamples(Dag d, List<Tuple<ListNode, ListNode>> examples, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts, PartitionManager pManager)
+        {
+            KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T;
+            List<Tuple<ListNode, ListNode, bool>> ln = new List<Tuple<ListNode, ListNode, bool>>();
+
+            foreach (Tuple<ListNode, ListNode> dItem in examples)
+            {
+                Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, true);
+                ln.Add(tuple);
+            }
+
+            foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> TC in Ts)
+            {
+                foreach (Tuple<ListNode, ListNode> dItem in TC.Value)
+                {
+                    if (!TC.Key.Equals(d))
+                    {
+                        Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, false);
+                        List<Tuple<ListNode, ListNode, bool>> l = new List<Tuple<ListNode, ListNode, bool>>(ln);
+                        l.Add(tuple);
+                        List<IPredicate> ps = pManager.BooleanLearning(l);
+                        if (ps.Any())
+                        {
+                            ln.Add(tuple);
+                        }
+                    }
+                }
+            }
+            return ln;
         }
 
         public static List<SynthesizedProgram> GetEmptyProgram()
