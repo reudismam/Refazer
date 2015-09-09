@@ -175,10 +175,10 @@ namespace Spg.ExampleRefactoring.Synthesis
             List<Tuple<IPredicate, SynthesizedProgram>> S = new List<Tuple<IPredicate, SynthesizedProgram>>();
             foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T in Ts)
             {
-                //ExpressionManager expmanager = new ExpressionManager();
-                //expmanager.FilterExpressions(T.Key, T.Value);
+                ExpressionManager expmanager = new ExpressionManager();
+                expmanager.FilterExpressions(T.Key, T.Value);
 
-                //Clear(T.Key);
+                Clear(T.Key);
 
                 BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.Key.dag, T.Key.Init.Id);
                 double dist = bfs.DistTo(T.Key.End.Id);
