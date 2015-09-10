@@ -396,6 +396,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
 
         [Test]
+        public void Projbc42e49()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("EntityFramework");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\bc42e49", @"EntityFramework\entityframework2\EntityFramework.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
         public void Proj14623da()
         {
             List<string> projects = new List<string>();
@@ -719,6 +728,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             List<string> projects = new List<string>();
             projects.Add("NuGet.Client.CommandLine");
             bool isValid = LocaleTestSolution(@"NuGet\7d11ddd", @"NuGet\nuget9\NuGet.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj2_7d11ddd()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("NuGet.Client.CommandLine");
+            bool isValid = LocaleTestSolution(@"NuGet\2_7d11ddd", @"NuGet\nuget9\NuGet.sln", projects);
             Assert.IsTrue(isValid);
         }
 

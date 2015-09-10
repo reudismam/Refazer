@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using NUnitTests.Spg.NUnitTests.LocationTestSolution;
 using NUnitTests.Spg.NUnitTests.Util;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Comparator;
@@ -607,6 +608,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
 
         [Test]
+        public void Projbc42e49()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("EntityFramework");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"EntityFramewok\bc42e49", @"EntityFramework\entityframework2\EntityFramework.sln", projects);
+
+            bool passTransformation = CompleteTestBase(@"EntityFramewok\bc42e49");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
         public void Proj14623da()
         {
             List<string> projects = new List<string>();
@@ -1013,6 +1026,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"NuGet\7d11ddd", @"NuGet\nuget9\NuGet.sln", projects);
 
             bool passTransformation = CompleteTestBase(@"NuGet\7d11ddd");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void Proj2_7d11ddd()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("NuGet.Client.CommandLine");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"NuGet\2_7d11ddd", @"NuGet\nuget9\NuGet.sln", projects);
+
+            bool passTransformation = CompleteTestBase(@"NuGet\2_7d11ddd");
 
             Assert.IsTrue(passLocation && passTransformation);
         }

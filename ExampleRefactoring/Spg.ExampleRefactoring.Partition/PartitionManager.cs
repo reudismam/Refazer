@@ -16,6 +16,11 @@ namespace Spg.ExampleRefactoring.Partition
 {
     internal class PartitionManager
     {
+        /// <summary>
+        /// Generate partitions
+        /// </summary>
+        /// <param name="dags">Dags</param>
+        /// <returns>Partitions</returns>
         public Dictionary<Dag, List<Tuple<ListNode, ListNode>>> GeneratePartition(Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
         {
             List<Dag> T = new List<Dag>(dags.Keys);
@@ -26,17 +31,9 @@ namespace Spg.ExampleRefactoring.Partition
                 T.Remove(dag.Item1);
                 T.Remove(dag.Item2);
                 T.Add(dag.Item3);
-
-                //if (!dictionary.ContainsKey(dag.Item3))
-                //{
-                //    dictionary.Add(dag.Item3, new List<Tuple<ListNode, ListNode>>());
-                //}
-                //dictionary[dag.Item3].AddRange(dictionary[dag.Item1]);
-                //dictionary[dag.Item3].AddRange(dictionary[dag.Item2]);
             }
 
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> rt = new Dictionary<Dag, List<Tuple<ListNode, ListNode>>>();
-
             foreach (Dag dag in T)
             {
                 rt.Add(dag, dictionary[dag]);
@@ -77,6 +74,12 @@ namespace Spg.ExampleRefactoring.Partition
             return false;
         }
 
+        /// <summary>
+        /// Computed score
+        /// </summary>
+        /// <param name="T">Partitions found so far</param>
+        /// <param name="dictionary">Mapping of each partition to its examples</param>
+        /// <returns></returns>
         private Tuple<Dag, Dag, Dag> CS(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dictionary)
         {
             IntersectManager intersectManager = new IntersectManager();
@@ -134,9 +137,6 @@ namespace Spg.ExampleRefactoring.Partition
                         bool ede1 = ExistComp(de1, dictionary);
                         bool ede2 = ExistComp(de2, dictionary);
                         bool edei = ExistComp(dei, dictionary);
-                        //bool ede1 = CanCreateFilter(de1, dictionary);
-                        //bool ede2 = CanCreateFilter(de2, dictionary);
-                        //bool edei = CanCreateFilter(dei, dictionary);
 
                         if (ede1 == ede2 && ede2 == edei)
                         {
@@ -169,37 +169,14 @@ namespace Spg.ExampleRefactoring.Partition
             }
 
             return max;
-        }
-
-        public bool CanCreateFilter(List<Dag> dags, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts)
-        {
-            if (!ExistComp(dags, Ts)) return false; 
-
-            List<Tuple<ListNode, ListNode, bool>> ln = new List<Tuple<ListNode, ListNode, bool>>();
-
-            foreach (Tuple<ListNode, ListNode> example in Ts[dags.First()])
-            {
-                Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(example.Item2, example.Item2, true);
-                ln.Add(tuple);
-            }
-
-            foreach (var example in Ts[dags[1]])
-            {
-                Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(example.Item2, example.Item2, false);
-                ln.Add(tuple);
-            }
-
-            List<IPredicate> predicates = BooleanLearning(ln);
-
-            return predicates.Any();
-        }
+        } 
 
         /// <summary>
         /// Learn boolean operators
         /// </summary>
         /// <param name="examples">Examples</param>
         /// <returns>List of boolean operators</returns>
-        public List<IPredicate> BooleanLearning(List<Tuple<ListNode, ListNode, bool>> examples)
+        public List<IPredicate> LearnPredicates(List<Tuple<ListNode, ListNode, bool>> examples)
         {
             List<Tuple<ListNode, bool>> boolExamples = new List<Tuple<ListNode, bool>>();
             List<Tuple<ListNode, ListNode>> positivesExamples = new List<Tuple<ListNode, ListNode>>();
@@ -221,8 +198,8 @@ namespace Spg.ExampleRefactoring.Partition
                 }
             }
 
-            Dictionary<TokenSeq, bool> _calculated = new Dictionary<TokenSeq, bool>();
-            BooleanLearnerBase bbase = new PositiveBooleanLearner(_calculated);
+            Dictionary<TokenSeq, bool> calculated = new Dictionary<TokenSeq, bool>();
+            BooleanLearnerBase bbase = new PositiveBooleanLearner(calculated);
             var predicates = bbase.BooleanLearning(boolExamples, positivesExamples);
 
             if (!negativesExamples.Any())

@@ -249,7 +249,7 @@ namespace Spg.LocationRefactor.Node
         /// <returns>Syntax nodes to be used on filtering</returns>
         internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(Tuple<string, SyntaxNodeOrToken> name)
         {
-            return null;
+            //return null;
             if (name == null) return null;
      
             SelectionInfo info = new SelectionInfo(name.Item1, new List<TRegion>(Ctl.SelectedLocations));

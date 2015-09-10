@@ -177,7 +177,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 if (Ts.Count == 1) return new List<SynthesizedProgram> { valid };
 
                 List<Tuple<ListNode, ListNode, bool>> ln = CreateConditionalExamples(T.Key, T.Value, Ts, pManager);
-                List<IPredicate> predicates = pManager.BooleanLearning(ln);
+                List<IPredicate> predicates = pManager.LearnPredicates(ln);
 
                 if (!predicates.Any())
                 {
@@ -247,7 +247,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                         Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, false);
                         List<Tuple<ListNode, ListNode, bool>> l = new List<Tuple<ListNode, ListNode, bool>>(ln);
                         l.Add(tuple);
-                        List<IPredicate> ps = pManager.BooleanLearning(l);
+                        List<IPredicate> ps = pManager.LearnPredicates(l);
                         if (ps.Any())
                         {
                             ln.Add(tuple);
