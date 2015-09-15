@@ -83,57 +83,57 @@ namespace Spg.ExampleRefactoring.Workspace
             return sourceFiles;
         }
 
-        /// <summary>
-        /// Get fully qualified name of a node
-        /// </summary>
-        /// <param name="projectName">Project name</param>
-        /// <param name="solutionPath">Solution path</param>
-        /// <param name="node">Node to be analyzed</param>
-        /// <param name="name">Name of the identifier</param>
-        /// <returns>Fully qualified name of the node</returns>
-        public string GetFullyQualifiedName(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
-        {
-            Tuple<LCAManager.Node, string> tuple =
-                Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
-                    node.SyntaxTree.GetText().ToString());
-            if (_dictionary.ContainsKey(tuple))
-            {
-                return _dictionary[tuple];
-            }
-            MSBuildWorkspace workspace = MSBuildWorkspace.Create();
-            Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
+        ///// <summary>
+        ///// Get fully qualified name of a node
+        ///// </summary>
+        ///// <param name="projectName">Project name</param>
+        ///// <param name="solutionPath">Solution path</param>
+        ///// <param name="node">Node to be analyzed</param>
+        ///// <param name="name">Name of the identifier</param>
+        ///// <returns>Fully qualified name of the node</returns>
+        //public string GetFullyQualifiedName(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
+        //{
+        //    Tuple<LCAManager.Node, string> tuple =
+        //        Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
+        //            node.SyntaxTree.GetText().ToString());
+        //    if (_dictionary.ContainsKey(tuple))
+        //    {
+        //        return _dictionary[tuple];
+        //    }
+        //    MSBuildWorkspace workspace = MSBuildWorkspace.Create();
+        //    Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
-            foreach (ProjectId projectId in solution.ProjectIds)
-            {
-                Project project = solution.GetProject(projectId);
-                if (/*project.Name.Equals(projectName)*/ true)
-                {
-                    Compilation compilation = project.GetCompilationAsync().Result;
-                    foreach (DocumentId documentId in project.DocumentIds)
-                    {
-                        var document = solution.GetDocument(documentId);
+        //    foreach (ProjectId projectId in solution.ProjectIds)
+        //    {
+        //        Project project = solution.GetProject(projectId);
+        //        if (/*project.Name.Equals(projectName)*/ true)
+        //        {
+        //            Compilation compilation = project.GetCompilationAsync().Result;
+        //            foreach (DocumentId documentId in project.DocumentIds)
+        //            {
+        //                var document = solution.GetDocument(documentId);
 
-                        SyntaxTree tree;
-                        document.TryGetSyntaxTree(out tree);
-                        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
-                        {
-                            document.TryGetSyntaxTree(out tree);
-                            SemanticModel model2 = compilation.GetSemanticModel(tree);
-                            foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
-                            {
-                                if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
-                                {
-                                    _dictionary.Add(tuple, symbol.ToDisplayString());
-                                    return symbol.ToDisplayString();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            _dictionary.Add(tuple, null);
-            return null;
-        }
+        //                SyntaxTree tree;
+        //                document.TryGetSyntaxTree(out tree);
+        //                if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+        //                {
+        //                    document.TryGetSyntaxTree(out tree);
+        //                    SemanticModel model2 = compilation.GetSemanticModel(tree);
+        //                    foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
+        //                    {
+        //                        if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
+        //                        {
+        //                            _dictionary.Add(tuple, symbol.ToDisplayString());
+        //                            return symbol.ToDisplayString();
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    _dictionary.Add(tuple, null);
+        //    return null;
+        //}
 
         /// <summary>
         /// Get fully qualified name of a node
@@ -198,6 +198,75 @@ namespace Spg.ExampleRefactoring.Workspace
                 }
             }
             return referenceDictionary;
+        }
+
+        /// <summary>
+        /// Get fully qualified name of a node
+        /// </summary>
+        /// <param name="projectName">Project name</param>
+        /// <param name="solutionPath">Solution path</param>
+        /// <param name="node">Node to be analyzed</param>
+        /// <param name="name">Name of the identifier</param>
+        /// <returns>Fully qualified name of the node</returns>
+        public List<TextSpan> GetErrorSpans(List<string> projectName, string solutionPath, string docPath)
+        {
+            MSBuildWorkspace workspace = MSBuildWorkspace.Create();
+            Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
+
+            foreach (ProjectId projectId in solution.ProjectIds)
+            {
+                Project project = solution.GetProject(projectId);
+                Compilation compilation = project.GetCompilationAsync().Result;
+                foreach (DocumentId documentId in project.DocumentIds)
+                {
+                    var document = solution.GetDocument(documentId);
+                    SyntaxTree tree;
+                    document.TryGetSyntaxTree(out tree);
+                    compilation.GetSemanticModel(tree);
+                    if (document.FilePath.ToUpperInvariant().Equals(docPath.ToUpperInvariant()))
+                    {
+                        document.TryGetSyntaxTree(out tree);
+
+                        if (tree == null)
+                        {
+                            throw new Exception("Document not found on this project");
+                        }
+                        return GetErrorSpans(tree);
+                    }
+                }
+            }
+            
+            throw new Exception("Document not found on this project");
+        }
+
+        protected List<TextSpan> GetErrorSpans(SyntaxTree tree)
+        {
+            if (tree == null) throw new ArgumentNullException(nameof(tree));
+
+            List<TextSpan> spans = new List<TextSpan>();
+            string strDetail = "";
+
+            if (!tree.GetDiagnostics().Any())
+            {
+                strDetail += "Diagnostic test passed!!!";
+            }
+
+            Diagnostic obj = null;
+            for (int i = 0; i < tree.GetDiagnostics().Count(); i++)
+            {
+                obj = tree.GetDiagnostics().ElementAt(i);
+                strDetail += "<b>" + (i + 1) + ". Info: </b>" + obj;
+                strDetail += " <b>Warning Level: </b>" + obj.WarningLevel;
+                strDetail += " <b>Severity Level: </b>" + obj.Severity + "<br/>";
+                strDetail += " <b>Location: </b>" + obj.Location.Kind;
+                strDetail += " <b>Character at: </b>" + obj.Location.GetLineSpan().StartLinePosition.Character;
+                strDetail += " <b>On Line: </b>" + obj.Location.GetLineSpan().StartLinePosition.Line;
+                strDetail += "</br>";
+                spans.Add(obj.Location.SourceSpan);
+            }
+
+            Console.WriteLine(strDetail);
+            return spans;
         }
 
         /// <summary>

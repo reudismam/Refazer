@@ -53,8 +53,6 @@ namespace LocateAdornment
             }
         }
 
-        
-
         static public void Select(IWpfTextViewHost host, TRegion region)
         {
             IWpfTextView view = host.TextView;

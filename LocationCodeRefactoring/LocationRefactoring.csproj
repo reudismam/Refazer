@@ -141,7 +141,6 @@
     <Compile Include="Spg.LocationRefactor.Transform\CodeTransformation.cs" />
     <Compile Include="Spg.LocationRefactor.Transform\MappedLocationBasedTransformationManager.cs" />
     <Compile Include="Spg.LocationRefactor.Transform\Transformation.cs" />
-    <Compile Include="Spg.LocationRefactor.Transform\TransformationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

@@ -9,6 +9,7 @@ using Spg.ExampleRefactoring.LCS;
 using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
+using Spg.ExampleRefactoring.Workspace;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.Observer;
 using Spg.LocationRefactor.Operator.Filter;
@@ -289,7 +290,9 @@ namespace Spg.LocationRefactor.Controller
 
             if (withNegatives.Any())
             {
+                //Locations = RetrieveLocationsSingleSourceClass(Progs.First());
                 Progs = withNegatives;
+                //ProgramsWithNegatives = withNegatives;
             }
 
             return Progs;
@@ -306,7 +309,6 @@ namespace Spg.LocationRefactor.Controller
                 string sourceCode = transformation.transformation.Item1;
                 FileUtil.WriteToFile(path, sourceCode);
             }
-            CodeTransformations = null;
         }
 
         /// <summary>
@@ -728,14 +730,44 @@ namespace Spg.LocationRefactor.Controller
             List<Transformation> transformations = extractor.TransformProgram(false);
             SourceTransformations = transformations;
 
+            UpdateFiles(transformations);
+            EvaluateTransformation(transformations);
+            Undo();
+
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
             FileUtil.WriteToFile(@"edit.t", totalTime.ToString());
 
             NotifyProgramRefactoredObservers(transformations);
             NotifyLocationsTransformedObservers();
+        }
 
-//            ClearAfterRefact();
+        private static void UpdateFiles(List<Transformation> transformations)
+        {
+            foreach (var transformation in transformations)
+            {
+                FileUtil.WriteToFile(transformation.SourcePath, transformation.transformation.Item2);     
+            }
+        }
+
+        /// <summary>
+        /// Evalute the insertion of errors after transformation
+        /// </summary>
+        /// <param name="transformations"></param>
+        private void EvaluateTransformation(List<Transformation> transformations)
+        {
+            WorkspaceManager manager = WorkspaceManager.GetInstance();
+            foreach (Transformation transformation in transformations)
+            {
+                try
+                {
+                    manager.GetErrorSpans(ProjectInformation.ProjectPath, ProjectInformation.SolutionPath, transformation.SourcePath);
+                }
+                catch (Exception e)
+                {
+                    
+                }
+            }
         }
 
         /// <summary>
