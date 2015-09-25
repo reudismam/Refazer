@@ -290,9 +290,9 @@ namespace Spg.LocationRefactor.Controller
 
             if (withNegatives.Any())
             {
-                //Locations = RetrieveLocationsSingleSourceClass(Progs.First());
+                Locations = RetrieveLocationsSingleSourceClass(Progs.First());
                 Progs = withNegatives;
-                //ProgramsWithNegatives = withNegatives;
+                ProgramsWithNegatives = withNegatives;
             }
 
             return Progs;
@@ -730,9 +730,9 @@ namespace Spg.LocationRefactor.Controller
             List<Transformation> transformations = extractor.TransformProgram(false);
             SourceTransformations = transformations;
 
-            UpdateFiles(transformations);
-            EvaluateTransformation(transformations);
-            Undo();
+            //UpdateFiles(transformations);
+            //EvaluateTransformation(transformations);
+            //Undo();
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);

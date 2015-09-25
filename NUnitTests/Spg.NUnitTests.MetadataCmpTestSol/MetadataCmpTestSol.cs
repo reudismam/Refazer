@@ -863,17 +863,17 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             Assert.IsTrue(passLocation && passTransformation);
         }
 
-        [Test]
-        public void Proj7d11ddd()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("NuGet.Client.CommandLine");
-            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"NuGet\7d11ddd", @"NuGet\nuget9\NuGet.sln", projects);
+        //[Test]
+        //public void Proj7d11ddd()
+        //{
+        //    List<string> projects = new List<string>();
+        //    projects.Add("NuGet.Client.CommandLine");
+        //    bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"NuGet\7d11ddd", @"NuGet\nuget9\NuGet.sln", projects);
 
-            bool passTransformation = CompleteTestBase(@"NuGet\7d11ddd");
+        //    bool passTransformation = CompleteTestBase(@"NuGet\7d11ddd");
 
-            Assert.IsTrue(passLocation && passTransformation);
-        }
+        //    Assert.IsTrue(passLocation && passTransformation);
+        //}
 
         [Test]
         public void Proj2_7d11ddd()
