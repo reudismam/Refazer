@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
+using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -10,6 +12,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.TextRegion;
+using Spg.LocationRefactor.Transform;
 
 namespace Spg.LocationRefactor.Location
 {
@@ -18,7 +21,7 @@ namespace Spg.LocationRefactor.Location
     /// </summary>
     public class RegionManager
     {
-        private readonly Dictionary<string, List<SyntaxNode>> _computed;
+        private readonly Dictionary<SelectionInfo, List<SyntaxNode>> _computed;
 
         /// <summary>
         /// Singleton instance
@@ -30,7 +33,7 @@ namespace Spg.LocationRefactor.Location
         /// </summary>
         private RegionManager()
         {
-            _computed = new Dictionary<string, List<SyntaxNode>>();
+            _computed = new Dictionary<SelectionInfo, List<SyntaxNode>>();
         }
 
         /// <summary>
@@ -72,6 +75,52 @@ namespace Spg.LocationRefactor.Location
                 }
 
                 dic[item.Parent.Text].Add(item);
+            }
+
+            return dic;
+        }
+
+        /// <summary>
+        /// Group region by source file
+        /// </summary>
+        /// <param name="list">List of no grouped regions</param>
+        /// <returns>Regions grouped by source file</returns>
+        public Dictionary<string, List<TRegion>> GroupRegionBySourcePath(List<TRegion> list)
+        {
+            Dictionary<string, List<TRegion>> dic = new Dictionary<string, List<TRegion>>();
+            foreach (var item in list)
+            {
+                List<TRegion> value;
+                if (!dic.TryGetValue(item.Path, out value))
+                {
+                    value = new List<TRegion>();
+                    dic[item.Path] = value;
+                }
+
+                dic[item.Path].Add(item);
+            }
+
+            return dic;
+        }
+
+        /// <summary>
+        /// Group region by source file
+        /// </summary>
+        /// <param name="list">List of no grouped regions</param>
+        /// <returns>Regions grouped by source file</returns>
+        public Dictionary<string, List<CodeTransformation>> GroupTransformationsBySourcePath(List<CodeTransformation> list)
+        {
+            Dictionary<string, List<CodeTransformation>> dic = new Dictionary<string, List<CodeTransformation>>();
+            foreach (var item in list)
+            {
+                List<CodeTransformation> value;
+                if (!dic.TryGetValue(item.Location.SourceClass, out value))
+                {
+                    value = new List<CodeTransformation>();
+                    dic[item.Location.SourceClass] = value;
+                }
+
+                dic[item.Location.SourceClass].Add(item);
             }
 
             return dic;
@@ -240,14 +289,15 @@ namespace Spg.LocationRefactor.Location
         /// <returns>Syntax nodes</returns>
         public List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
         {
+            SelectionInfo info = new SelectionInfo(sourceCode, new List<TRegion>(list));
             List<SyntaxNode> nodes;
-            if (!_computed.TryGetValue(sourceCode, out nodes))
+            if (!_computed.TryGetValue(info, out nodes))
             {
                 nodes = SyntaxNodesForFiltering(sourceCode, list);
-                _computed.Add(sourceCode, nodes);
+                _computed.Add(info, nodes);
             }
-
-            return _computed[sourceCode];
+            //return nodes;
+            return _computed[info];
         }
 
         ///// <summary>
@@ -335,73 +385,6 @@ namespace Spg.LocationRefactor.Location
             return result;
         }
 
-        ///// <summary>
-        ///// Pair of syntax node before and after transformation
-        ///// </summary>
-        ///// <param name="locations">Selected locations</param>
-        ///// <returns>Pair of syntax node before and after transformation</returns>
-        //internal List<Tuple<ListNode, ListNode>> ElementsSelectionBeforeAndAfterEditing(List<CodeLocation> locations )
-        //{
-        //    if (locations == null) throw new ArgumentNullException("locations");
-        //    if (!locations.Any()) throw new Exception("Locations cannot be null.");
-
-        //    Dictionary<string, List<CodeLocation>> groupLocations = GroupLocationsBySourceFile(locations);
-
-        //    EditorController controller = EditorController.GetInstance();
-
-        //    List<TRegion> inputRegions = new List<TRegion>();
-        //    List<TRegion> outputRegions = new List<TRegion>();
-
-        //    foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocations)
-        //    {
-        //        string sourceCode = item.Value.First().SourceCode;
-
-        //        TRegion iparent = new TRegion { Text = sourceCode };
-        //        foreach (CodeLocation codeLocation in item.Value)
-        //        {
-        //            codeLocation.Region.Parent = iparent;
-        //            if (controller.FilesOpened.ContainsKey(item.Key))
-        //            {
-        //                inputRegions.Add(codeLocation.Region);
-        //            }
-        //        }
-
-        //        string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
-        //        if (sourceCodeAfter != null)
-        //        {
-        //            TRegion parent = new TRegion { Text = sourceCodeAfter };
-        //            foreach (var span in controller.EditedLocations[item.Key])
-        //            {
-        //                TRegion tregion = new TRegion
-        //                {
-        //                    Start = span.Start + 1,
-        //                    Length = span.Length - 2,
-        //                    Parent = parent,
-        //                    Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
-        //                };
-        //                //MessageBox.Show(tregion.Text + span.Start + " " + span.Length);
-
-        //                outputRegions.Add(tregion);
-        //            }
-        //        }
-        //    }
-
-        //    List<Tuple<ListNode, ListNode>> inputSelection = DecomposeToOutput(inputRegions);
-        //    List<Tuple<ListNode, ListNode>> ouputSelection = DecomposeToOutput(outputRegions);
-
-        //    List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
-        //    for (int index = 0; index < inputSelection.Count; index++)
-        //    {
-        //        ListNode input = inputSelection[index].Item2;
-        //        ListNode output = ouputSelection[index].Item2;
-        //        Tuple<ListNode, ListNode> tuple = Tuple.Create(input, output);
-        //        examples.Add(tuple);
-        //    }
-
-        //    return examples;
-        //}
-
-
         /// <summary>
         /// Pair of syntax node before and after transformation
         /// </summary>
@@ -447,7 +430,7 @@ namespace Spg.LocationRefactor.Location
                             Parent = parent,
                             Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
                         };
-                        //MessageBox.Show(span.Start + tregion.Text + span.Length);
+                        MessageBox.Show(span.Start + tregion.Text + span.Length);
                         outputRegions.Add(tregion);
                     }
                 }

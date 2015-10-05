@@ -74,9 +74,14 @@ namespace Spg.LocationRefactoring.Tok
             foreach (SyntaxNodeOrToken st in nodes.List)
             {
                 DymToken dtoken = new DymToken(st, true);
+                RawDymToken rdtoken = new RawDymToken(st, true);
                 if (dict.ContainsKey(dtoken))
                 {
                     tokens.Add(dtoken);
+                }
+                else if (dict.ContainsKey(rdtoken))
+                {
+                    tokens.Add(rdtoken);
                 }
                 else {
                     Token token = new Token(st);

@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.ExampleRefactoring.AST
 {
@@ -74,10 +73,7 @@ namespace Spg.ExampleRefactoring.AST
         {
             if (listNode == null) throw new ArgumentNullException("listNode");
             if (synthesizedProg == null) throw new ArgumentNullException("synthesizedProg");
-            //List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
-            //nodes = ASTManager.EnumerateSyntaxNodesAndTokens(oldNode, nodes);
 
-            //ListNode listNode = new ListNode(nodes);
             ListNode composition = new ListNode();
             for (int i = 0; i < synthesizedProg.Solutions.Count; i++)
             {
@@ -86,6 +82,26 @@ namespace Spg.ExampleRefactoring.AST
             }
             ASTTransformation combTree = GetSyntaxTree(composition);
             return combTree;
+        }
+
+        /// <summary>
+        /// Transform the AST
+        /// </summary>
+        /// <param name="listNode">ListNodes</param>
+        /// <param name="synthesizedProg">Synthesized program</param>
+        /// <returns>Syntax tree transformation</returns>
+        public static ListNode UpdateInput(ListNode listNode, SynthesizedProgram synthesizedProg)
+        {
+            if (listNode == null) throw new ArgumentNullException("listNode");
+            if (synthesizedProg == null) throw new ArgumentNullException("synthesizedProg");
+
+            ListNode composition = new ListNode();
+            for (int i = 0; i < synthesizedProg.Solutions.Count; i++)
+            {
+                ListNode subNodes = synthesizedProg.Solutions[i].RetrieveSubNodes(listNode);
+                composition.List.AddRange(subNodes.List);
+            }
+            return composition;
         }
         /// <summary>
         /// Create a tree

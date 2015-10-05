@@ -22,6 +22,8 @@ namespace Spg.ExampleRefactoring.Intersect
             {
                 throw new Exception("Dag list cannot be empty");
             }
+            if (dags.Count == 1) return dags.First();
+
             var composition = dags[0];
             for (int i = 1; i < dags.Count; i++)
             {
@@ -120,7 +122,10 @@ namespace Spg.ExampleRefactoring.Intersect
             foreach (IIntersectStrategy strategy in strategies)
             {
                 List<IExpression> exp = strategy.GetExpressions(dag1, dag2, tuple1, tuple2);
-                expressions.Add(strategy.GetExpressionKind(), exp);
+                if (exp.Any())
+                {
+                    expressions.Add(strategy.GetExpressionKind(), exp);
+                }
             }
             return expressions;
         }

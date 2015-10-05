@@ -2,17 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Office.Interop.Excel;
 using NUnit.Framework;
-using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
+using Taramon.Exceller;
 
 namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 {
     [TestFixture]
-    public class LocationTestSolution
+    public class MetadataLocTestSol
     {
         [Test]
         public void Proj00552fc()
@@ -41,14 +42,17 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        [Test]
-        public void Proj8c146441b4ecedbf7648e890d33f946f9b206e01()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("Proj8c146441b4ecedbf7648e890d33f946f9b206e01");
-            bool isValid = LocaleTestSolution("8c146441b4ecedbf7648e890d33f946f9b206e01", @"..\..\TestProjects\Projects\Portable12\Proj8c146441b4ecedbf7648e890d33f946f9b206e01.sln", projects);
-            Assert.IsTrue(isValid);
-        }
+        ///// <summary>
+        ///// Test Method Call To Identifier transformation
+        ///// </summary>
+        //[Test]
+        //public void Proj8c146441b4ecedbf7648e890d33f946f9b206e01()
+        //{
+        //    List<string> projects = new List<string>();
+        //    projects.Add("Proj8c146441b4ecedbf7648e890d33f946f9b206e01");
+        //    bool isValid = LocaleTestSolution("8c146441b4ecedbf7648e890d33f946f9b206e01", @"..\..\TestProjects\Projects\Portable12\Proj8c146441b4ecedbf7648e890d33f946f9b206e01.sln", projects);
+        //    Assert.IsTrue(isValid);
+        //}
 
         [Test]
         public void Proj2_8c14644()
@@ -58,7 +62,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             bool isValid = LocaleTestSolution(@"Roslyn\2_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
         }
-
 
         [Test]
         public void Proj3_8c14644()
@@ -210,9 +213,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         {
             List<string> projects = new List<string>();
             projects.Add("CSharpCodeAnalysis");
-            bool isValid = LocaleTestSolution(@"Roslyn\8ecd058", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
+            bool isValid = LocaleTestSolution(@"Roslyn\cfd9b46", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
-        }     
+        }
 
         [Test]
         public void Proj04d0604()
@@ -224,14 +227,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void Proj318b2b0e476a122ebc033b13d41449ef1c814c1d()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("Proj318b2b0e476a122ebc033b13d41449ef1c814c1d");
-        //    bool isValid = LocaleTestSolution("318b2b0e476a122ebc033b13d41449ef1c814c1d", @"..\..\TestProjects\Projects\Core2\Proj318b2b0e476a122ebc033b13d41449ef1c814c1d.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        ////[Test]
+        ////public void Proj318b2b0e476a122ebc033b13d41449ef1c814c1d()
+        ////{
+        ////    List<string> projects = new List<string>();
+        ////    projects.Add("Proj318b2b0e476a122ebc033b13d41449ef1c814c1d");
+        ////    bool isValid = LocaleTestSolution("318b2b0e476a122ebc033b13d41449ef1c814c1d", @"..\..\TestProjects\Projects\Core2\Proj318b2b0e476a122ebc033b13d41449ef1c814c1d.sln", projects);
+        ////    Assert.IsTrue(isValid);
+        ////}
 
         /// <summary>
         /// Test case for parameter to constant value
@@ -245,14 +248,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd");
-        //    bool isValid = LocaleTestSolution("e7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd", @"..\..\TestProjects\Projects\Portable3\Portable\Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        ////[Test]
+        ////public void Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd()
+        ////{
+        ////    List<string> projects = new List<string>();
+        ////    projects.Add("Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd");
+        ////    bool isValid = LocaleTestSolution("e7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd", @"..\..\TestProjects\Projects\Portable3\Portable\Proje7184bd18b5e2de6e1b71ba8f893c6d5e9a7bebd.sln", projects);
+        ////    Assert.IsTrue(isValid);
+        ////}
 
         [Test]
         public void Proj1113fd3()
@@ -263,26 +266,26 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        ///// <summary>
-        ///// Change Exception test
-        ///// </summary>
-        //[Test]
-        //public void Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf");
-        //    bool isValid = LocaleTestSolution("cc3d32746f60ed5a9f3775ef0ec44424b03d65cf", @"..\..\TestProjects\Projects\Portable2\Portable\Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        /////// <summary>
+        /////// Change Exception test
+        /////// </summary>
+        ////[Test]
+        ////public void Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf()
+        ////{
+        ////    List<string> projects = new List<string>();
+        ////    projects.Add("Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf");
+        ////    bool isValid = LocaleTestSolution("cc3d32746f60ed5a9f3775ef0ec44424b03d65cf", @"..\..\TestProjects\Projects\Portable2\Portable\Projcc3d32746f60ed5a9f3775ef0ec44424b03d65cf.sln", projects);
+        ////    Assert.IsTrue(isValid);
+        ////}
 
-        //[Test]
-        //public void Proj2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
-        //    bool isValid = LocaleTestSolution("2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        ////[Test]
+        ////public void Proj2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38()
+        ////{
+        ////    List<string> projects = new List<string>();
+        ////    projects.Add("Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38");
+        ////    bool isValid = LocaleTestSolution("2_c96d9ce1b2626b464cf2746ca53cb338d7d2ce38", @"..\..\TestProjects\Projects\Portable5\Projc96d9ce1b2626b464cf2746ca53cb338d7d2ce38.sln", projects);
+        ////    Assert.IsTrue(isValid);
+        ////}
 
         [Test]
         public void Proj3_c96d9ce()
@@ -311,14 +314,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void Proj49cdaceb2828acc1f50223826d478a00a80a59e2()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("Proj49cdaceb2828acc1f50223826d478a00a80a59e2");
-        //    bool isValid = LocaleTestSolution("49cdaceb2828acc1f50223826d478a00a80a59e2", @"..\..\TestProjects\Projects\CSharp\Proj49cdaceb2828acc1f50223826d478a00a80a59e2.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        ////[Test]
+        ////public void Proj49cdaceb2828acc1f50223826d478a00a80a59e2()
+        ////{
+        ////    List<string> projects = new List<string>();
+        ////    projects.Add("Proj49cdaceb2828acc1f50223826d478a00a80a59e2");
+        ////    bool isValid = LocaleTestSolution("49cdaceb2828acc1f50223826d478a00a80a59e2", @"..\..\TestProjects\Projects\CSharp\Proj49cdaceb2828acc1f50223826d478a00a80a59e2.sln", projects);
+        ////    Assert.IsTrue(isValid);
+        ////}
 
         [Test]
         public void Projcfd9b46()
@@ -354,15 +357,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             List<string> projects = new List<string>();
             projects.Add("CSharpFxCopRulesDiagnosticAnalyzers");
             bool isValid = LocaleTestSolution(@"Roslyn\2_7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
-            Assert.IsTrue(isValid);
-        }
-
-        [Test]
-        public void Proj3_7c885ca()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("CSharpFxCopRulesDiagnosticAnalyzers");
-            bool isValid = LocaleTestSolution(@"Roslyn\3_7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
         }
 
@@ -414,7 +408,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-
         [Test]
         public void Proj2_14623da()
         {
@@ -461,14 +454,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        [Test]
-        public void Proj2_8d452499b23e250232406fa9c875973a054b17f9Test()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("Proj2_8d452499b23e250232406fa9c875973a054b17f9");
-            bool isValid = LocaleTestSolution("2_8d452499b23e250232406fa9c875973a054b17f9", @"..\..\TestProjects\Projects\EntityFramework4\Proj2_8d452499b23e250232406fa9c875973a054b17f9.sln", projects);
-            Assert.IsTrue(isValid);
-        }
+        //[Test]
+        //public void Proj2_8d452499b23e250232406fa9c875973a054b17f9Test()
+        //{
+        //    List<string> projects = new List<string>();
+        //    projects.Add("Proj2_8d452499b23e250232406fa9c875973a054b17f9");
+        //    bool isValid = LocaleTestSolution("2_8d452499b23e250232406fa9c875973a054b17f9", @"..\..\TestProjects\Projects\EntityFramework4\Proj2_8d452499b23e250232406fa9c875973a054b17f9.sln", projects);
+        //    Assert.IsTrue(isValid);
+        //}
 
         [Test]
         public void Proj1571862()
@@ -488,14 +481,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        [Test]
-        public void Proj4_1571862()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("FunctionalTests");
-            bool isValid = LocaleTestSolution(@"EntityFramewok\4_1571862", @"EntityFramework\entityframework4\EntityFramework.sln", projects);
-            Assert.IsTrue(isValid);
-        }
+        //[Test]
+        //public void Proj4_1571862()
+        //{
+        //    List<string> projects = new List<string>();
+        //    projects.Add("FunctionalTests");
+        //    bool isValid = LocaleTestSolution(@"EntityFramewok\4_1571862", @"EntityFramework\entityframework4\EntityFramework.sln", projects);
+        //    Assert.IsTrue(isValid);
+        //}
 
         [Test]
         public void Proj5_1571862()
@@ -506,14 +499,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        [Test]
-        public void Proj6_1571862()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("FunctionalTests.Transitional");
-            bool isValid = LocaleTestSolution(@"EntityFramewok\6_1571862", @"EntityFramework\entityframework4\EntityFramework.sln", projects);
-            Assert.IsTrue(isValid);
-        }
+        //[Test]
+        //public void Proj6_1571862()
+        //{
+        //    List<string> projects = new List<string>();
+        //    projects.Add("FunctionalTests.Transitional");
+        //    bool isValid = LocaleTestSolution(@"EntityFramewok\6_1571862", @"EntityFramework\entityframework4\EntityFramework.sln", projects);
+        //    Assert.IsTrue(isValid);
+        //}
 
         [Test]
         public void Projce1e333()
@@ -596,24 +589,6 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        [Test]
-        public void Proja569c55()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("NuGet.Client");
-            bool isValid = LocaleTestSolution(@"NuGet\a569c55", @"NuGet\nuget5\NuGet.sln", projects);
-            Assert.IsTrue(isValid);
-        }
-
-        [Test]
-        public void Proj2_a569c55()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("NuGet.Client");
-            bool isValid = LocaleTestSolution(@"NuGet\2_a569c55", @"NuGet\nuget5\NuGet.sln", projects);
-            Assert.IsTrue(isValid);
-        }
-
         //[Test]
         //public void Proj4_a883600()
         //{
@@ -629,6 +604,24 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             List<string> projects = new List<string>();
             projects.Add("Core.Test");
             bool isValid = LocaleTestSolution(@"NuGet\5_a883600", @"NuGet\nuget4\NuGet.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proja569c55()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("NuGet.Client");
+            bool isValid = LocaleTestSolution(@"NuGet\a569c55", @"NuGet\nuget5\NuGet.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj2_a569c55()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("NuGet.Client");
+            bool isValid = LocaleTestSolution(@"NuGet\2_a569c55", @"NuGet\nuget5\NuGet.sln", projects);
             Assert.IsTrue(isValid);
         }
 
@@ -767,14 +760,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51Test()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51");
-        //    bool isValid = LocaleTestSolution("2_a569c556805ce4f788b9644c1cc9a578719df3ab", @"..\..\TestProjects\Projects\NuGet.Client2\Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        ////[Test]
+        ////public void Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51Test()
+        ////{
+        ////    List<string> projects = new List<string>();
+        ////    projects.Add("Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51");
+        ////    bool isValid = LocaleTestSolution("2_a569c556805ce4f788b9644c1cc9a578719df3ab", @"..\..\TestProjects\Projects\NuGet.Client2\Proj6cf11e1d98dcc2c1c441e674af3cfc23fbd44d51.sln", projects);
+        ////    Assert.IsTrue(isValid);
+        ////}
 
         /// <summary>
         /// Locale test base method
@@ -785,14 +778,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         /// <returns>True if locale passed</returns>
         public static bool LocaleTestSolution(string commit, string solution, List<string> project)
         {
-            long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-
+            long millBefore;// = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTimeToExtract = 0;
             EditorController.ReInit();
             EditorController controller = EditorController.GetInstance();
 
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
 
-            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\input_selection.json");
+            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
 
             controller.SelectedLocations = selections;
             controller.CurrentViewCodeBefore = FileUtil.ReadFile(selections.First().Path);
@@ -801,17 +794,34 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             controller.CurrentViewCodePath = exactPath;
             controller.SetProject(project);
             controller.SetSolution(expHome + solution);
-            controller.SelectedLocations = selections;
 
-            controller.Extract();
+            List<TRegion> metadataLocations = new List<TRegion>();
+            metadataLocations.AddRange(selections.GetRange(0, 2));
+            while (true)
+            {
+                controller.SelectedLocations = metadataLocations;
+                millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                controller.Extract();
+                controller.RetrieveLocations();
 
-            controller.RetrieveLocations();
+                TRegion tregion = MatchesLocationsOnCommit(selections, controller.Locations);
+                if (tregion == null)
+                {
+                    break;
+                }
 
+                if (ContainsTRegion(metadataLocations, tregion))
+                {
+                    return false;
+                }
+                metadataLocations.Add(tregion);
+            }
+
+            List<TRegion> negativesRegions = new List<TRegion>();
             if (File.Exists(expHome + @"commit\" + commit + @"\negatives.json"))
             {
                 List<int> negatives = JsonUtil<List<int>>.Read(expHome + @"commit\" + commit + @"\negatives.json");
-                List<TRegion> negativesRegions = new List<TRegion>();
-                List<TRegion> positivesRegions = new List<TRegion>();     
+                List<TRegion> positivesRegions = new List<TRegion>();
                 for (int i = 0; i < controller.Locations.Count; i++)
                 {
                     TRegion parent = new TRegion();
@@ -826,29 +836,17 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                         positivesRegions.Add(controller.Locations[i].Region);
                     }
                 }
+
+                millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.Extract(positivesRegions, negativesRegions);
+                long millAfterExtract = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                totalTimeToExtract = (millAfterExtract - millBefore);
                 controller.RetrieveLocations();
-            }      
-
-            List<Selection> locations = JsonUtil<List<Selection>>.Read(expHome + @"commit\" + commit + @"\found_locations.json");
-            if (locations.Count != controller.Locations.Count) return false;
-
-            List<Selection> controllerList = new List<Selection>();
-            foreach (CodeLocation location in controller.Locations)
-            {
-                Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode, location.Region.Text);
-                controllerList.Add(selection);
             }
 
-            locations = locations.OrderBy(o => o.Start).ThenBy(o => o.Length).ThenBy(o => o.SourcePath).ToList();
-            controllerList = controllerList.OrderBy(o => o.Start).ThenBy(o => o.Length).ThenBy(o => o.SourcePath).ToList();
-
-            bool passed = locations.SequenceEqual(controllerList);
-            
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
-            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\time.t", totalTime.ToString());
-
+            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count);
             //remove
             List<TRegion> nselections = new List<TRegion>();
             foreach (CodeLocation location in controller.Locations)
@@ -870,8 +868,111 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
             JsonUtil<List<TRegion>>.Write(nselections, expHome + @"commit\" + commit + @"\metadata_tool\locations_on_commit.json");
             //remove
+            return true;
+        }
 
-            return passed;
+        private static Workbook mWorkBook;
+        private static Sheets mWorkSheets;
+        private static Worksheet mWSheet1;
+        private static Application oXL;
+        public static void Log(string commit, double time, double timeToExtract, int exLocations, int negs, int acLocations, int locations)
+        {
+            using (ExcelManager em = new ExcelManager())
+            {
+
+                em.Open(@"C:\Users\SPG-04\Documents\Research\Log2.xlsx");
+
+                int empty;
+                for (int i = 1;; i++)
+                {
+                    if (em.GetValue("A" + i, Category.Formatted).ToString().Equals(""))
+                    {
+                        empty = i;
+                        break;
+                    }
+                }
+                em.SetValue("A" + empty, commit);
+                em.SetValue("B" + empty, time / 1000);
+                em.SetValue("C" + empty, exLocations);
+                em.SetValue("D" + empty, negs);
+                em.SetValue("E" + empty, exLocations + negs);
+                em.SetValue("F" + empty, acLocations);
+                em.SetValue("G" + empty, locations);
+                em.SetValue("H" + empty, timeToExtract);
+                Console.WriteLine("" + empty);
+                em.Save();
+            }
+
+            //string path = @"C:\Users\SPG-04\Documents\Research\Log.xls";
+
+            //oXL = new Microsoft.Office.Interop.Excel.Application();
+            //oXL.Visible = true;
+            //oXL.DisplayAlerts = false;
+            //mWorkBook = oXL.Workbooks.Open(path, 0, false, 5, "", "", false, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "", true, false, 0, true, false, false);
+            ////Get all the sheets in the workbook
+            //mWorkSheets = mWorkBook.Worksheets;
+            ////Get the allready exists sheet
+            //mWSheet1 = (Microsoft.Office.Interop.Excel.Worksheet)mWorkSheets.get_Item("1");
+            //Microsoft.Office.Interop.Excel.Range range = mWSheet1.UsedRange;
+            //int colCount = range.Columns.Count;
+            //int rowCount = range.Rows.Count;
+            //Console.WriteLine(rowCount);
+            //for (int index = 1; index < 15; index++)
+            //{
+            //    mWSheet1.Cells[rowCount + index, 1] = rowCount + index;
+            //    mWSheet1.Cells[rowCount + index, 2] = "New Item" + index;
+            //}
+            //mWorkBook.SaveAs(path, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal,
+            //Missing.Value, Missing.Value, Missing.Value, Missing.Value, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive,
+            //Missing.Value, Missing.Value, Missing.Value,
+            //Missing.Value, Missing.Value);
+            //mWorkBook.Close(Missing.Value, Missing.Value, Missing.Value);
+            //mWSheet1 = null;
+            //mWorkBook = null;
+            //oXL.Quit();
+            //GC.WaitForPendingFinalizers();
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
+            //GC.Collect();
+
+        }
+
+        private static bool ContainsTRegion(List<TRegion> metadataLocations, TRegion tregion)
+        {
+            foreach (var location in metadataLocations)
+            {
+                if (location.Start == tregion.Start &&
+                    location.Length == tregion.Length &&
+                    location.Path.ToUpperInvariant().Equals(tregion.Path.ToUpperInvariant()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static TRegion MatchesLocationsOnCommit(List<TRegion> metadatas, List<CodeLocation> locations)
+        {
+            foreach (TRegion metadata in metadatas)
+            {
+                bool isFound = false;
+                foreach (var found in locations)
+                {
+                    if (metadata.Start == found.Region.Start &&
+                        metadata.Length == found.Region.Length &&
+                        metadata.Path.ToUpperInvariant().Equals(found.SourceClass.ToUpperInvariant()))
+                    {
+                        isFound = true;
+                        break;
+                    }
+                }
+
+                if (!isFound)
+                {
+                    return metadata;
+                }
+            }
+            return null;
         }
     }
 }

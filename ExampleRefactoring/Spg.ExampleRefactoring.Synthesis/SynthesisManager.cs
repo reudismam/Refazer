@@ -2,17 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
+using LCS2;
+using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Setting;
-using Spg.ExampleRefactoring.Synthesis;
-using LCS2;
-using Microsoft.CodeAnalysis;
-using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Position;
 using Spg.LocationRefactoring.Tok;
 
 namespace Spg.ExampleRefactoring.Synthesis
@@ -26,14 +22,14 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Settings
         /// </summary>
         /// <returns>Get or set synthesis setting</returns>
-        public SynthesizerSetting setting { get; set; }
+        public SynthesizerSetting Setting { get; set; }
 
         /// <summary>
         /// Default constructor
         /// </summary>
         public SynthesisManager()
         {
-            this.setting = new SynthesizerSetting();
+            this.Setting = new SynthesizerSetting();
         }
 
         /// <summary>
@@ -42,127 +38,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="setting">Setting</param>
         public SynthesisManager(SynthesizerSetting setting)
         {
-            this.setting = setting;
-        }
-
-        ///// <summary>
-        ///// Create new synthesized program combining current synthesized programs with expressions
-        ///// </summary>
-        ///// <param name="synthesizedProgramList">Synthesized programs list</param>
-        ///// <param name="expressionList">Expression list</param>
-        ///// <returns>Synthesized programs list</returns>
-        //private static List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList)
-        //{
-        //    List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
-        //    if (synthesizedProgramList.Count > 0)
-        //    {
-        //        foreach (SynthesizedProgram sd1 in synthesizedProgramList)
-        //        {
-        //            foreach (IExpression e2 in expressionList)
-        //            {
-        //                List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
-        //                SynthesizedProgram sp = new SynthesizedProgram();
-        //                sp.Solutions = solutions;
-        //                sp.Add(e2);
-
-        //                synthesizedProgList.Add(sp);
-        //            }
-        //        }
-        //        return synthesizedProgList;
-        //    }
-
-        //    foreach (IExpression expression in expressionList)
-        //    {
-        //        SynthesizedProgram sp = new SynthesizedProgram();
-        //        sp.Add(expression);
-        //        synthesizedProgList.Add(sp);
-        //    }
-        //    return synthesizedProgList;
-        //}
-
-        ///// <summary>
-        ///// Create new synthesized program combining current synthesized programs with expressions
-        ///// </summary>
-        ///// <param name="synthesizedProgramList">Synthesized programs list</param>
-        ///// <param name="expressionList">Expression list</param>
-        ///// <param name="examples">Examples</param>
-        ///// <returns>Synthesized programs list</returns>
-        //private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
-        //{
-        //    List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
-        //    if (synthesizedProgramList.Count > 0)
-        //    {
-        //        foreach (SynthesizedProgram sd1 in synthesizedProgramList)
-        //        {
-        //            foreach (IExpression e2 in expressionList)
-        //            {
-        //                List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
-        //                SynthesizedProgram sp = new SynthesizedProgram();
-        //                sp.Solutions = solutions;
-        //                sp.Add(e2);
-
-        //                //ExpressionManager manager = new ExpressionManager();
-        //                bool isValid = ValidateSubExpression(sp.Solutions, examples);
-        //                if (isValid)
-        //                {
-        //                    synthesizedProgList.Add(sp);
-        //                }
-        //                else
-        //                {
-        //                    int i = 0;
-        //                }
-        //            }
-        //        }
-        //        return synthesizedProgList;
-        //    }
-
-            /// <summary>
-            /// Create new synthesized program combining current synthesized programs with expressions
-            /// </summary>
-            /// <param name="synthesizedProgramList">Synthesized programs list</param>
-            /// <param name="expressionList">Expression list</param>
-            /// <param name="examples">Examples</param>
-            /// <returns>Synthesized programs list</returns>
-        private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
-        {
-            List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
-            if (synthesizedProgramList.Count > 0)
-            {
-                foreach (SynthesizedProgram sd1 in synthesizedProgramList)
-                {
-                    foreach (IExpression e2 in expressionList)
-                    {
-                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
-                        SynthesizedProgram sp = new SynthesizedProgram();
-                        sp.Solutions = solutions;
-                        sp.Add(e2);
-
-                        //ExpressionManager manager = new ExpressionManager();
-                        bool isValid = ValidateSubExpression(sp.Solutions, examples);
-                        if (isValid)
-                        {
-                            synthesizedProgList.Add(sp);
-                        }
-                        else
-                        {
-                            int i = 0;
-                        }
-                    }
-                }
-                return synthesizedProgList;
-            }
-
-            foreach (IExpression expression in expressionList)
-            {
-                SynthesizedProgram sp = new SynthesizedProgram();
-                sp.Add(expression);
-                //     bool isValid = ValidateSubExpression(sp.Solutions, examples);
-                //if (isValid)
-                //{
-                    synthesizedProgList.Add(sp);
-                //}
-            }
-            return synthesizedProgList;
+            this.Setting = setting;
         }
 
         /// <summary>
@@ -176,31 +52,21 @@ namespace Spg.ExampleRefactoring.Synthesis
         {
             List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
             var items = from expression in expressionList
-                        orderby new SelectorManager(setting).Order(expression) descending
+                        orderby new SelectorManager(Setting).Order(expression) descending
                         select expression;
             if (synthesizedProgramList.Count > 0)
             {
-
                 foreach (SynthesizedProgram sd1 in synthesizedProgramList)
                 {
-                    //foreach (IExpression e2 in expressionList)
-                    //{
-                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
-                        SynthesizedProgram sp = new SynthesizedProgram();
-                        sp.Solutions = solutions;
-                        sp.Add(items.First());
-
-                        //ExpressionManager manager = new ExpressionManager();
-                        bool isValid = ValidateSubExpression(sp.Solutions, examples);
-                        if (isValid)
-                        {
-                            synthesizedProgList.Add(sp);
-                        }
-                        else
-                        {
-                            int i = 0;
-                        }
-                    //}
+                    List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
+                    SynthesizedProgram sp = new SynthesizedProgram();
+                    sp.Solutions = solutions;
+                    sp.Add(items.First());
+                    bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                    if (isValid)
+                    {
+                        synthesizedProgList.Add(sp);
+                    }
                 }
                 return synthesizedProgList;
             }
@@ -209,11 +75,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 SynthesizedProgram sp = new SynthesizedProgram();
                 sp.Add(expression);
-                //     bool isValid = ValidateSubExpression(sp.Solutions, examples);
-                //if (isValid)
-                //{
                 synthesizedProgList.Add(sp);
-                //}
             }
             return synthesizedProgList;
         }
@@ -227,8 +89,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         public bool ValidateSubExpression(List<IExpression> expressions, List<Tuple<ListNode, ListNode>> examples)
         {
             SynthesizedProgram syntheProg = new SynthesizedProgram();
-            syntheProg.Solutions = expressions;
-//            syntheProg.Add(expression);
+            syntheProg.Solutions = expressions; ;
 
             bool isValid = false;
             foreach (Tuple<ListNode, ListNode> example in examples)
@@ -272,11 +133,6 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>True if valid</returns>
         private bool ValidateSynthesizedProgram(List<IExpression> solutions, List<Tuple<ListNode, ListNode>> examples/*, StreamWriter file*/)
         {
-            /*if (setting.considerConstrStr && solutions.Count == 1 && solutions[0] is ConstruStr)
-            {
-                return false;
-            }*/
-
             foreach (Tuple<ListNode, ListNode> example in examples)
             {
                 ListNode match = ASTProgram.RetrieveNodes(example, solutions);
@@ -342,6 +198,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             //features.Add(SIZE, 0);
         }
 
+        /// <summary>
+        /// Evalute positioning expressions
+        /// </summary>
+        /// <param name="p1">Posisition expression</param>
+        /// <param name="features">Features mapping</param>
         private static void EvaluatePos(IPosition p1, Dictionary<FeatureType, int> features)
         {
             if (p1 is Pos)
@@ -360,19 +221,24 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                 switch (position)
                 {
-                    case 0:
-                        Handle(features, FeatureType.CPOSBEGIN);
-                        break;
-                    case -1:
-                        Handle(features, FeatureType.CPOSEND);
-                        break;
-                    default:
-                        Handle(features, FeatureType.CPOS);
-                        break;
+                case 0:
+                    Handle(features, FeatureType.CPOSBEGIN);
+                    break;
+                case -1:
+                    Handle(features, FeatureType.CPOSEND);
+                    break;
+                default:
+                    Handle(features, FeatureType.CPOS);
+                    break;
                 }
             }
         }
 
+        /// <summary>
+        /// Verify the presence of dynamic token on relative position
+        /// </summary>
+        /// <param name="features">Mapping of features</param>
+        /// <param name="pos">Relative position expression</param>
         private static void HandleDymToken(Dictionary<FeatureType, int> features, Pos pos)
         {
             int value;
@@ -403,6 +269,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             features[key] += count;
         }
 
+        /// <summary>
+        /// Verify the presence of syntax elements on relative position expression
+        /// </summary>
+        /// <param name="features">Features mapping</param>
+        /// <param name="pos">Relative position expression</param>
         private static void HandleSyntax(Dictionary<FeatureType, int> features, Pos pos)
         {
             int value;
@@ -411,7 +282,6 @@ namespace Spg.ExampleRefactoring.Synthesis
             if (!features.TryGetValue(key, out value))
             {
                 features.Add(key, 0);
-                value = 0;
             }
 
             int count = 0;
@@ -433,6 +303,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             features[key] += count;
         }
 
+        /// <summary>
+        /// Identify empty elements on relative position expression
+        /// </summary>
+        /// <param name="features">Features mapping</param>
+        /// <param name="p1">Relative position expression</param>
         private static void HandleEmpty(Dictionary<FeatureType, int> features, Pos p1)
         {
             int value;
@@ -457,6 +332,11 @@ namespace Spg.ExampleRefactoring.Synthesis
 
         }
 
+        /// <summary>
+        /// Identify the number of times the feature appear on the synthesized program
+        /// </summary>
+        /// <param name="features">Dictionary of features</param>
+        /// <param name="key">Analyzed feature</param>
         private static void Handle(Dictionary<FeatureType, int> features, FeatureType key)
         {
             int value;
@@ -479,21 +359,17 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>A valid hypothesis, if it exits, null otherwise</returns>
         public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
         {
-            SynthesizedProgram selected = null;
             List<Dictionary<ExpressionKind, List<IExpression>>> expressions = SynthesizedPrograms(mapping, solutions);
 
             List<SynthesizedProgram> hypotheses = new List<SynthesizedProgram>();
             foreach (Dictionary<ExpressionKind, List<IExpression>> item in expressions)
             {
-                List<IExpression> l = GetExpressions(item);
-                    //foreach (List<IExpression> l in item.Values)
-                //{
-                    hypotheses = CombSynthProgramExp2(hypotheses, l, examples);
-                //}
-            }           
+                List<IExpression> l = GetExpressions(item);         
+                hypotheses = CombSynthProgramExp2(hypotheses, l, examples);
+            }
 
             var sorted = from hypothesis in hypotheses
-                         orderby (new SelectorManager(setting)).Order(hypothesis.Solutions) descending
+                         orderby (new SelectorManager(Setting)).Order(hypothesis.Solutions) descending
                          select hypothesis;
 
             int count = 0;
@@ -501,74 +377,21 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 count++;
 
-                bool isValid = ValidateSynthesizedProgram(sp.Solutions, examples/*, file*/);
+                bool isValid = ValidateSynthesizedProgram(sp.Solutions, examples);
                 Console.WriteLine("Processing ....");
                 if (isValid)
                 {
-                    //file.Write(1 + "\n");
-                    Console.WriteLine(count);
-                    if (selected == null)
-                    {
-                        selected = sp;
-                    }
-                    return sp;
-                }
-                else
-                {
-                    //file.Write(0 + "\n");
+                        return sp;         
                 }
             }
-            // }
-
-            //file.Close();
-            return selected;
-        }
-
-        public SynthesizedProgram ComputeSynthesizedProgram(List<Dictionary<ExpressionKind, List<IExpression>>> expressions, List<IExpression> solution, List<Tuple<ListNode, ListNode>> examples)
-        {
-            //int row, col;
-
-            if (!FindSynthesizedProgram())
-                //all locations successfully assigned
-                return prog;
-
-            for (int num = 1; num <= expressions.Count; num++)
-            {
-                List<IExpression> exps = GetExpressions(expressions[num]);
-                foreach (IExpression expression in exps)
-                {
-                    if (ValidateSynthesizedProgram(solution, examples))
-                    {
-                        prog = new SynthesizedProgram();
-                        prog.Solutions = solution;
-                        return prog;
-                    }
-                }
-                ////if number is allowed to be placed in the square
-                //if (NoConflicts(grid, row, col, num))
-                //{
-                //    //place the number in the square
-                //    grid[row][col] = num;
-
-                    //recur, if successful then stop
-                    //if (SolveSudoku(grid))
-                    //    return true;
-
-                //    //undo and try again
-                //    grid[row][col] = UNASSIGNED;
-                //}
-            }
-            //this triggers backtracking from early decisions
             return null;
         }
 
-        private SynthesizedProgram prog = null;
-        //private List<IExpression> expressions; 
-        private bool FindSynthesizedProgram()
-        {
-            return prog != null;
-        }
-
+        /// <summary>
+        /// /Get expression list
+        /// </summary>
+        /// <param name="mapping">Mapping of expression each kind</param>
+        /// <returns>Expression list</returns>
         public List<IExpression> GetExpressions(Dictionary<ExpressionKind, List<IExpression>> mapping)
         {
             List<IExpression> expressions = new List<IExpression>();
@@ -599,11 +422,10 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>Index of the difference</returns>
         public static List<int> Differ(ListNode input, ListNode output)
         {
-            List<int> indexes = new List<int>();
-            indexes.Add(0);
+            List<int> indexes = new List<int> {0};
             List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
-            List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);//new List<ComparisonObject>();
-           
+            List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
+
             ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
             List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
             for (int i = 0; i < result.Count; i++)
@@ -639,114 +461,6 @@ namespace Spg.ExampleRefactoring.Synthesis
             return indexes;
         }
 
-        //public static List<SyntaxNodeOrToken> DiffSN(ListNode input, ListNode output)
-        //{
-        //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
-        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);//new List<ComparisonObject>();
-        //    var listInput = Differ2(tinput, touput, ModificationType.Inserted); //node of output will appear as inserted
-        //    return listInput;
-        //}
-             
-        //public static List<SyntaxNodeOrToken> Differ2(List<ComparisonObject> input, List<ComparisonObject> output, ModificationType type)
-        //{
-        //    List<SyntaxNodeOrToken> lcomp = new List<SyntaxNodeOrToken>();
-
-        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
-        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(input, output);
-        //    for (int i = 0; i < result.Count; i++)
-        //    {
-        //        ComparisonResult<ComparisonObject> r = result[i];
-        //        if (r.ModificationType.Equals(type))
-        //        {
-        //              lcomp.Add(r.DataCompared.Token.token);
-        //        }
-        //    }
-        //    return lcomp;
-        //} 
-
-        ///// <summary>
-        ///// Calculate the difference point between input and output
-        ///// </summary>
-        ///// <param name="input">Input</param>
-        ///// <param name="output">Output</param>
-        ///// <returns>Index of the difference</returns>
-        //public static List<int> Differ2(ListNode input, ListNode output)
-        //{
-        //    List<int> indexes = new List<int>();
-        //    indexes.Add(0);
-        //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
-        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);//new List<ComparisonObject>();
-
-        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
-        //    List<ComparisonResult<ComparisonObject>> result1 = differ.FindDifference(tinput, touput);
-        //    List<ComparisonResult<ComparisonObject>> result2 = differ.FindDifference(touput, tinput);
-        //    List<ComparisonResult<ComparisonObject>> comparisonObjs = new List<ComparisonResult<ComparisonObject>>();
-        //    for (int i = 0; i < result1.Count; i++)
-        //    {
-        //        ComparisonResult<ComparisonObject> r = result1[i];
-
-        //        if (r.DataCompared.Indicator == ComparisonObject.OUTPUT && !r.ModificationType.Equals(ModificationType.None))
-        //        {
-        //            comparisonObjs.Add(r);
-        //        }
-
-        //        if (r.DataCompared.Indicator == ComparisonObject.INPUT && r.ModificationType.Equals(ModificationType.Inserted))
-        //        {
-        //            if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
-        //            {
-        //                indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
-        //            }
-        //        }
-        //    }
-
-        //    //for (int i = 0; i < result2.Count; i++)
-        //    //{
-        //    //    ComparisonResult<ComparisonObject> r = result2[i];
-
-        //    //    if (r.DataCompared.Indicator == ComparisonObject.OUTPUT && !r.ModificationType.Equals(ModificationType.None))
-        //    //    {
-        //    //        comparisonObjs.Add(r);
-        //    //    }
-        //    //}
-
-        //    foreach (ComparisonResult<ComparisonObject> r in comparisonObjs)
-        //    {
-        //        if (!indexes.Contains(r.DataCompared.Index))
-        //        {
-        //            indexes.Add(r.DataCompared.Index);
-        //        }
-        //    }
-
-        //    //    if (!r.ModificationType.Equals(ModificationType.None))
-        //    //    {
-        //    //        Console.WriteLine(r.DataCompared);
-        //    //        if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
-        //    //        {
-        //    //            if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
-        //    //            {
-        //    //                continue;
-        //    //            }
-        //    //            indexes.Add(r.DataCompared.Index);
-        //    //        }
-        //    //    }
-
-        //    //    if (r.ModificationType.Equals(ModificationType.Inserted))
-        //    //    {
-        //    //        if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
-        //    //        {
-        //    //            indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
-        //    //        }
-        //    //    }
-        //    //}
-
-        //    if (!indexes.Contains(output.Length()))
-        //    {
-        //        indexes.Add(output.Length());
-        //    }
-
-        //    return indexes;
-        //}
-
         /// <summary>
         /// Create comparison objects
         /// </summary>
@@ -765,221 +479,5 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
             return comparisonObjects;
         }
-
-        //public static List<int> Differ(ListNode input, ListNode output)
-        //{
-        //    List<int> indexes = new List<int>();
-        //    indexes.Add(0);
-        //    List<ComparisonObject> tinput = new List<ComparisonObject>();
-        //    for (int i = 0; i < input.List.Count; i++)
-        //    {
-        //        SyntaxNodeOrToken st = input.List[i];
-        //        DymToken token = new DymToken(st);
-        //        ComparisonObject obj = new ComparisonObject(token, i, ComparisonObject.OUTPUT);
-        //        tinput.Add(obj);
-        //    }
-
-        //    List<ComparisonObject> toutput = new List<ComparisonObject>();
-        //    for (int i = 0; i < output.List.Count; i++)
-        //    {
-        //        SyntaxNodeOrToken st = output.List[i];
-        //        DymToken token = new DymToken(st);
-        //        ComparisonObject obj = new ComparisonObject(token, i, ComparisonObject.OUTPUT);
-        //        toutput.Add(obj);
-        //    }
-
-        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
-        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, toutput);
-
-        //    ComparisonObject lastNode = null;
-        //    for (int i = 0; i < result.Count; i++)
-        //    {
-        //        ComparisonResult<ComparisonObject> r = result[i];
-        //        if (r.ModificationType.Equals(ModificationType.Deleted))
-        //        {
-        //            indexes.Add(r.DataCompared.Index);
-        //            //Console.WriteLine(r.DataCompared);
-        //            //if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
-        //            //{
-        //            //    if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
-        //            //    {
-        //            //        continue;
-        //            //    }
-        //            //    indexes.Add(r.DataCompared.Index);
-        //            //}
-        //        }
-        //        else if (r.ModificationType.Equals(ModificationType.Inserted))
-        //        {
-        //            if (lastNode != null && !indexes.Contains(lastNode.Index))
-        //            {
-        //                indexes.Add(lastNode.Index);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (lastNode == null || r.DataCompared.Index != lastNode.Index)
-        //            {
-        //                lastNode = r.DataCompared;
-        //            }
-        //        }
-
-        //        //if (r.ModificationType.Equals(ModificationType.Inserted))
-        //        //{
-        //        //    if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
-        //        //    {
-        //        //        indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
-        //        //    }
-        //        //}
-        //    }
-
-        //    if (!indexes.Contains(output.Length()))
-        //    {
-        //        indexes.Add(output.Length());
-        //    }
-
-        //    return indexes;
-        //}
     }
 }
-
-/* /// <summary>
-       /// Is a solution
-       /// </summary>
-       /// <param name="solutionCandidate">Solution candidate</param>
-       /// <param name="length">Output length</param>
-       /// <returns>True if candidate is a solution</returns>
-       private static bool IsASolution(List<Tuple<int, int>> solutionCandidate, int length)
-       {
-           if (solutionCandidate.Count > 0)
-           {
-               int i = solutionCandidate.Last().Item1;
-               int j = solutionCandidate.Last().Item2;
-
-               return (i + j == length);
-           }
-
-           return false;
-       }*/
-
-/*/// <summary>
-       /// Create boundary points
-       /// </summary>
-       /// <param name="input">Input data</param>
-       /// <param name="output">Output data</param>
-       /// <param name="original">Original data</param>
-       /// <param name="data">ListNode data</param>
-       /// <returns>Boundary points</returns>
-       public static List<int> CreateBoundaryPoints2(string input, string output, string original, Tuple<ListNode, ListNode> data)
-       {
-           SyntaxTree st1 = CSharpSyntaxTree.ParseText(input);
-           SyntaxTree st2 = CSharpSyntaxTree.ParseText(output);
-
-           var changestext = st2.GetChanges(st1);
-
-           String pattern = Regex.Escape(output);
-           int start = Regex.Match(original, pattern).Index;
-
-           List<int> boundary = new List<int>();
-           boundary.Add(0);
-           foreach (TextChange changed in changestext)
-           {
-               List<int> indexs = LookupIndex(changed, data.Item2);
-               foreach (int i in indexs)
-               {
-                   if (i > 0 && boundary.Contains(i))
-                   {
-                       boundary.Add(i);
-                   }
-               }
-           }
-
-           boundary.Add(data.Item2.Length());
-           return boundary;
-       }
-
-       /// <summary>
-       /// Index points
-       /// </summary>
-       /// <param name="re">Text changed</param>
-       /// <param name="listNode">ListNode</param>
-       /// <returns>Index Points</returns>
-       private static List<int> LookupIndex(TextChange re, ListNode listNode)
-       {
-           if (listNode == null)
-           {
-               throw new Exception("Changed text or list node cannot be null");
-           }
-
-           if (listNode.Length() == 0)
-           {
-               throw new Exception("List node must contains at least one element");
-           }
-
-           List<int> result = new List<int>();
-           SyntaxNodeOrToken firstNode = listNode.List[0];
-
-           List<SyntaxNodeOrToken> list = listNode.List;
-           int i = 0;
-           SyntaxNodeOrToken node = list[i];
-           TextSpan span = node.Span;
-           while ((firstNode.FullSpan.Start + re.Span.Start) > span.Start)
-           {
-               if (i >= list.Count())
-               {
-                   return result;
-               }
-               node = list[i++];
-               span = node.Span;
-           }
-
-           int j = i;
-           while ((firstNode.FullSpan.Start + re.Span.Start + re.NewText.Length) > span.Start)
-           {
-               if (j == list.Count)
-                   break;
-               node = list[Math.Max(j++, 0)];
-               span = node.Span;
-           }
-
-           if (i == 0 && j == 0)
-           {
-               j = list.Count;
-           }
-
-           for (int z = i - 1; z < j; z++)
-           {
-               result.Add(z);
-           }
-           return result;
-       }*/
-
-/*private static int LookupIndex(int start, ListNode data)
-{
-    for (int i = 0; i < data.Length(); i++)
-    {
-        SyntaxNodeOrToken node = data.List[i];
-        int spanStart = node.Span.Start;
-
-        if (spanStart >= start)
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}*/
-
-/*
-        private static int GetProduct(Dictionary<Tuple<int, int>, List<IExpression>> mapping, List<Tuple<int, int>> solution)
-        {
-            int sum = 1;
-            foreach (Tuple<int, int> entry in solution)
-            {
-                sum *= mapping[entry].Count();
-            }
-
-            return sum;
-        }
-        */
-
-

@@ -1,9 +1,5 @@
 using System;
 using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Synthesis;
 
@@ -87,15 +83,15 @@ namespace Spg.ExampleRefactoring.Expression
             return nodes;
         }
 
-        /// <summary>
-        /// Size
-        /// </summary>
-        /// <returns>Size</returns>
-        [Obsolete("No used anymore")]
-        public int Size() {
-            int size = P1.Size() * P2.Size();
-            return size;
-        }
+        ///// <summary>
+        ///// Size
+        ///// </summary>
+        ///// <returns>Size</returns>
+        //[Obsolete("No used anymore")]
+        //public int Size() {
+        //    int size = P1.Size() * P2.Size();
+        //    return size;
+        //}
 
         /// <summary>
         /// To String

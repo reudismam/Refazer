@@ -191,7 +191,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                 List<Selection> selections = new List<Selection>();
                 foreach (SyntaxNode syntaxNode in keypPair.Value)
                 {
-                    Selection selection = new Selection(syntaxNode.Span.Start, syntaxNode.Span.Length, syntaxNode.SyntaxTree.FilePath, syntaxNode.SyntaxTree.GetText().ToString());
+                    Selection selection = new Selection(syntaxNode.Span.Start, syntaxNode.Span.Length, syntaxNode.SyntaxTree.FilePath, syntaxNode.SyntaxTree.GetText().ToString(), syntaxNode.ToFullString());
                     selections.Add(selection);
                 }
                 dicSelections.Add(keypPair.Key, selections);
@@ -425,7 +425,6 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <summary>
         /// Look up for dynamic tokens on predicate
         /// </summary>
-        /// <param name="predicate">Predicate</param>
         /// <param name="tokenSeq">Token sequence</param>
         /// <returns>Dynamic tokens</returns>
         private IEnumerable<Tuple<string, SyntaxNodeOrToken>> LookUpForDymTokens(TokenSeq tokenSeq)

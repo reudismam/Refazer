@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using DiGraph;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -8,10 +9,11 @@ using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Digraph;
 using Spg.ExampleRefactoring.Expression;
-using Spg.ExampleRefactoring.Intersect;
+using Spg.ExampleRefactoring.Partition;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Tok;
+using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
 
 namespace Spg.ExampleRefactoring.Synthesis
@@ -25,7 +27,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Setting for AST synthesis computation
         /// </summary>
         /// <returns>Setting</returns>
-        private SynthesizerSetting Setting { get; }
+        public SynthesizerSetting Setting { get; set; }
 
         /// <summary>
         /// Previous computed token sequences
@@ -67,61 +69,204 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
         }
 
+        ///// <summary>
+        ///// Generate synthesized programs
+        ///// </summary>
+        ///// <param name="examples">Example set</param>
+        ///// <returns>Synthesized program list</returns>
+        //public List<SynthesizedProgram> GenerateStringProgram(List<Tuple<ListNode, ListNode>> examples)
+        //{
+        //    if (examples == null || examples.Count == 0) { throw new ArgumentException("Examples cannot be null or empty"); }
+
+        //    List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
+        //    if (OutputIsEmpty(examples))
+        //    {
+        //        return GetEmptyProgram();
+        //    }
+
+        //    List<Dag> dags = Dags(examples);
+
+        //    IntersectManager intManager = new IntersectManager();
+
+        //    Dag T = intManager.Intersect(dags);
+
+        //    //remove
+        //    PartitionManager pManager = new PartitionManager();
+        //    pManager.GeneratePartition(dags);
+        //    //remove
+
+        //    if (T == null)
+        //    {
+        //        dags = Dags(examples, false);
+        //        T = intManager.Intersect(dags);
+
+        //        //remove
+        //        pManager = new PartitionManager();
+        //        pManager.GeneratePartition(dags);
+        //        //remove
+        //    }
+
+        //    if (T == null)
+        //    {
+        //        Setting.Deviation = 1;
+        //        Console.WriteLine("Cannot generate programs for the defaut deviation. Setting deviation for 1.");
+        //        dags = Dags(examples);
+        //        T = intManager.Intersect(dags);
+
+        //        //remove
+        //        pManager = new PartitionManager();
+        //        pManager.GeneratePartition(dags);
+        //        //remove
+        //    }
+
+        //    ExpressionManager expmanager = new ExpressionManager();
+        //    expmanager.FilterExpressions(T, examples);
+
+        //    Clear(T);
+
+        //    BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.Init.Id);
+        //    double dist = bfs.DistTo(T.End.Id);
+        //    Console.WriteLine(dist);
+
+        //    List<Vertex> solutions = new List<Vertex>();
+
+        //    foreach (string s in bfs.PathTo(T.End.Id))
+        //    {
+        //        solutions.Add(T.Vertexes[s]);
+        //    }
+
+        //    SynthesisManager manager = new SynthesisManager(Setting);
+        //    SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
+        //    Console.WriteLine(valid);
+
+        //    validated.Add(valid);
+        //    return validated;
+        //}
+
         /// <summary>
         /// Generate synthesized programs
         /// </summary>
         /// <param name="examples">Example set</param>
+        /// <param name="boundary">Determine if to generate the program the tool needs to use boundaries.</param>
         /// <returns>Synthesized program list</returns>
-        public List<SynthesizedProgram> GenerateStringProgram(List<Tuple<ListNode, ListNode>> examples)
+        public List<SynthesizedProgram> GenerateStringProgram(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
         {
             if (examples == null || examples.Count == 0) { throw new ArgumentException("Examples cannot be null or empty"); }
 
             List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
             if (OutputIsEmpty(examples))
             {
-                IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
-                List<IExpression> expressions = new List<IExpression> { expression };
-                SynthesizedProgram program = new SynthesizedProgram();
-                validated.Add(program);
-                program.Solutions = expressions;
-
-                return validated;
+                return GetEmptyProgram();
             }
 
-            List<Dag> dags = Dags(examples);
+            Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags = Dags(examples, boundary);
+            PartitionManager pManager = new PartitionManager();
+            Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts = pManager.GeneratePartition(dags);
 
-            IntersectManager intManager = new IntersectManager();
-
-            Dag T = intManager.Intersect(dags);
-
-            if (T == null)
+            if (Ts.Count == examples.Count && boundary)
             {
-                dags = Dags(examples, false);
-                T = intManager.Intersect(dags);
+                Setting.Deviation = 1;
+                return GenerateStringProgram(examples, false);
             }
 
-            //var list = T.Mapping.ToList();
+            List<Tuple<IPredicate, SynthesizedProgram>> S = new List<Tuple<IPredicate, SynthesizedProgram>>();
+            foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T in Ts)
+            {
+                SynthesizedProgram valid = CreateSynthesizedProgram(T.Key, T.Value);
+
+                if (Ts.Count == 1) return new List<SynthesizedProgram> { valid };
+
+                List<Tuple<ListNode, ListNode, bool>> ln = CreateConditionalExamples(T.Key, T.Value, Ts, pManager);
+                List<IPredicate> predicates = pManager.LearnPredicates(ln);
+
+                if (!predicates.Any())
+                {
+                    Setting.Deviation = 1;
+                    return GenerateStringProgram(examples);
+                }
+
+                Tuple<IPredicate, SynthesizedProgram> tSol = Tuple.Create(predicates.First(), valid);
+                S.Add(tSol);
+            }
+
+            Switch sSwitch = new Switch(S);
+            validated.Add(sSwitch);
+            return validated;
+        }
+
+        /// <summary>
+        /// Create a synthesized program
+        /// </summary>
+        /// <param name="dag">Dag to be analyzed</param>
+        /// <param name="examples">Examples</param>
+        /// <returns></returns>
+        private SynthesizedProgram CreateSynthesizedProgram(Dag dag, List<Tuple<ListNode, ListNode>> examples)
+        {
             ExpressionManager expmanager = new ExpressionManager();
-            expmanager.FilterExpressions(T, examples);
+            expmanager.FilterExpressions(dag, examples);
+            Clear(dag);
 
-            Clear(T);
-
-            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(T.dag, T.Init.Id);
-            double dist = bfs.DistTo(T.End.Id);
-            Console.WriteLine(dist);
-
+            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(dag.dag, dag.Init.Id);
             List<Vertex> solutions = new List<Vertex>();
 
-            foreach (string s in bfs.PathTo(T.End.Id))
+            foreach (string s in bfs.PathTo(dag.End.Id))
             {
-                solutions.Add(T.Vertexes[s]);
+                solutions.Add(dag.Vertexes[s]);
             }
 
             SynthesisManager manager = new SynthesisManager(Setting);
-            SynthesizedProgram valid = manager.FilterASTPrograms(T.Mapping, solutions, examples);
-            Console.WriteLine(valid);
+            SynthesizedProgram valid = manager.FilterASTPrograms(dag.Mapping, solutions, examples);
+            return valid;
+        }
 
-            validated.Add(valid);
+        /// <summary>
+        /// Create condictional examples
+        /// </summary>
+        /// <param name="d">Dag analyzed</param>
+        /// <param name="examples">Examples associated with the dag</param>
+        /// <param name="Ts">Other dags created</param>
+        /// <param name="pManager">Partition manager</param>
+        /// <returns></returns>
+        private static List<Tuple<ListNode, ListNode, bool>> CreateConditionalExamples(Dag d, List<Tuple<ListNode, ListNode>> examples, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts, PartitionManager pManager)
+        {
+            KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T;
+            List<Tuple<ListNode, ListNode, bool>> ln = new List<Tuple<ListNode, ListNode, bool>>();
+
+            foreach (Tuple<ListNode, ListNode> dItem in examples)
+            {
+                Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, true);
+                ln.Add(tuple);
+            }
+
+            foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> TC in Ts)
+            {
+                foreach (Tuple<ListNode, ListNode> dItem in TC.Value)
+                {
+                    if (!TC.Key.Equals(d))
+                    {
+                        Tuple<ListNode, ListNode, bool> tuple = Tuple.Create(dItem.Item1, dItem.Item1, false);
+                        List<Tuple<ListNode, ListNode, bool>> l = new List<Tuple<ListNode, ListNode, bool>>(ln);
+                        l.Add(tuple);
+                        List<IPredicate> ps = pManager.LearnPredicates(l);
+                        if (ps.Any())
+                        {
+                            ln.Add(tuple);
+                        }
+                    }
+                }
+            }
+            return ln;
+        }
+
+        public static List<SynthesizedProgram> GetEmptyProgram()
+        {
+            List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
+            IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
+            List<IExpression> expressions = new List<IExpression> { expression };
+            SynthesizedProgram program = new SynthesizedProgram();
+            validated.Add(program);
+            program.Solutions = expressions;
+
             return validated;
         }
 
@@ -144,9 +289,9 @@ namespace Spg.ExampleRefactoring.Synthesis
             return isEmpty;
         }
 
-        private List<Dag> Dags(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
+        private Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Dags(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
         {
-            List<Dag> dags = new List<Dag>();
+            Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags = new Dictionary<Dag, List<Tuple<ListNode, ListNode>>>();
             foreach (var example in examples)
             {
                 List<int> boundaryPoints = null;
@@ -155,7 +300,10 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                 ListNode input = example.Item1;
                 ListNode output = example.Item2;
-                dags.Add(GenerateStringBoundary(input, output, boundaryPoints));
+
+                List<Tuple<ListNode, ListNode>> exs = new List<Tuple<ListNode, ListNode>> { example };
+                Dag d = GenerateStringBoundary(input, output, boundaryPoints);
+                dags.Add(d, exs);
             }
             return dags;
         }
@@ -177,15 +325,15 @@ namespace Spg.ExampleRefactoring.Synthesis
                     SyntaxNodeOrToken st = t.Item1.List[i];
                     if (st.IsKind(SyntaxKind.IdentifierToken) || st.IsKind(SyntaxKind.StringLiteralToken) || st.IsKind(SyntaxKind.NumericLiteralToken))
                     {
-                        bool dym;
-                        if (i + 1 < t.Item1.Length())
+                        bool dym = false;
+                        if (i < t.Item1.Length())
                         {
                             dym = IsDym(st);
                         }
-                        else
-                        {
-                            dym = IsDym(st);
-                        }
+                        //else
+                        //{
+                        //    dym = IsDym(st);
+                        //}
 
                         if (!dym) continue;
 
@@ -194,6 +342,12 @@ namespace Spg.ExampleRefactoring.Synthesis
                         if (!temp.TryGetValue(dt, out v))
                         {
                             temp.Add(dt, 0);
+                        }
+
+                        RawDymToken rdt = new RawDymToken(st, true);
+                        if (!temp.TryGetValue(rdt, out v))
+                        {
+                            temp.Add(rdt, 0);
                         }
                     }
                 }
@@ -205,7 +359,6 @@ namespace Spg.ExampleRefactoring.Synthesis
                     {
                         Dict.Add(dt, 0);
                     }
-
                     Dict[dt] = v + 1;
                 }
             }
@@ -215,7 +368,14 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 if (Dict[dt] == examples.Count())
                 {
-                    temp.Add(dt, examples.Count());
+                    if (!(dt is RawDymToken))
+                    {
+                        temp.Add(dt, examples.Count());
+                    }
+                    else if (Dict[(new DymToken(dt.token, true))] != examples.Count)
+                    {
+                        temp.Add(dt, examples.Count());
+                    }
                 }
             }
 
@@ -233,7 +393,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (st.IsKind(SyntaxKind.StringLiteralToken)) { return true; }
 
-            if(st.IsKind(SyntaxKind.NumericLiteralToken)) { return true; }
+            if (st.IsKind(SyntaxKind.NumericLiteralToken)) { return true; }
 
             if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
 
@@ -255,23 +415,12 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (parent.IsKind(SyntaxKind.Parameter)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) { return true;}
+            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.TypeArgumentList)) { return true;}
+            if (parent.IsKind(SyntaxKind.TypeArgumentList)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.Attribute)) { return true;}
+            if (parent.IsKind(SyntaxKind.Attribute)) { return true; }
 
-            ////if (parent.IsKind(SyntaxKind.Argument)) { return true;}
-
-            ////if (next == null) { return false;}
-
-            //if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
-            //{
-            //    return true;
-            //    ////string value = next.ToString();
-            //    //if (next.IsKind(SyntaxKind.OpenParenToken) || next.IsKind(SyntaxKind.DotToken)  || next.IsKind(SyntaxKind.None) || next == null)
-            //    //    return true;
-            //}
             return false;
         }
 
@@ -295,14 +444,14 @@ namespace Spg.ExampleRefactoring.Synthesis
                 {
                     if (!(item.Value.Count == 0))
                     {
-                        rm = false;      
+                        rm = false;
                     }
                 }
                 if (rm)
                 {
                     removes.Add(entry.Key);
                 }
-                
+
             }
 
             foreach (Tuple<Vertex, Vertex> entry in removes)
@@ -345,7 +494,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                     Tuple<Vertex, Vertex> tuple = Tuple.Create(vertexes[i.ToString()], vertexes[j.ToString()]);
 
                     Dictionary<ExpressionKind, List<IExpression>> synthExpressions = new Dictionary<ExpressionKind, List<IExpression>>();
-                    
+
                     ListNode subNodes = ASTManager.SubNotes(output, i, (j - i));
                     if (Setting.ConsiderConstrStr)
                     {
@@ -353,6 +502,15 @@ namespace Spg.ExampleRefactoring.Synthesis
                         IExpression expression = new ConstruStr(subNodes);
                         subStrExpressions.Add(expression);
                         synthExpressions.Add(ExpressionKind.Consttrustr, subStrExpressions);
+
+                        if (subNodes.Length() == 1 && subNodes.List.First().IsKind(SyntaxKind.IdentifierToken))
+                        {
+                            List<IExpression> fakeConstStrExps = new List<IExpression>();
+                            IExpression fakeConstrStr = new FakeConstrStr(subNodes);
+                            fakeConstStrExps.Add(fakeConstrStr);
+                            synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
+
+                        }
                     }
 
                     //List<IExpression> subStrns = new List<IExpression>();
@@ -377,6 +535,12 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             Dag digraph = new Dag(dag, vertexes["0"], vertexes[output.Length().ToString()], W, vertexes);
+
+            foreach (var m in W.Keys)
+            {
+                digraph.dag.AddEdge(m.Item1.ToString(), m.Item2.ToString());
+            }
+
             return digraph;
         }
 
@@ -425,14 +589,13 @@ namespace Spg.ExampleRefactoring.Synthesis
                         constStrExprs.Add(expression);
                         synthExpressions.Add(ExpressionKind.Consttrustr, constStrExprs);
 
-                        //if (subNodes.Length() == 1 && subNodes.List.First().IsKind(SyntaxKind.IdentifierToken))
-                        //{
-                        //    List<IExpression> fakeConstStrExps = new List<IExpression>();
-                        //    IExpression fakeConstrStr = new FakeConstrStr(subNodes);
-                        //    fakeConstStrExps.Add(fakeConstrStr);
-                        //    synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
-                           
-                        //}
+                        if (subNodes.Length() == 1 && subNodes.List.First().IsKind(SyntaxKind.IdentifierToken))
+                        {
+                            List<IExpression> fakeConstStrExps = new List<IExpression>();
+                            IExpression fakeConstrStr = new FakeConstrStr(subNodes);
+                            fakeConstStrExps.Add(fakeConstrStr);
+                            synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
+                        }
                     }
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);
@@ -450,7 +613,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                     if (!W.ContainsKey(tuple))
                     {
-                        W.Add(tuple,  synthExpressions);
+                        W.Add(tuple, synthExpressions);
                     }
                 }
             }
@@ -463,6 +626,12 @@ namespace Spg.ExampleRefactoring.Synthesis
             }*/
 
             Dag digraph = new Dag(dag, vertexes["0"], vertexes[output.Length().ToString()], W, vertexes);
+
+            foreach (var m in W.Keys)
+            {
+                digraph.dag.AddEdge(m.Item1.ToString(), m.Item2.ToString());
+            }
+
             return digraph;
         }
 
@@ -508,7 +677,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                     List<Token> dTSeq = TokenSeq.DymTokens(subNodesLeft, this.Dict);
                     TokenSeq dtSeq = new TokenSeq(dTSeq);
                     tokensSeqs.Add(dtSeq);
- //                   tokensSeqs.Add(AddIdenToStr(ts));
+                    //                   tokensSeqs.Add(AddIdenToStr(ts));
                 }
                 //else
                 //{
@@ -1096,16 +1265,16 @@ namespace Spg.ExampleRefactoring.Synthesis
             return UpdateASTManager.UpdateASTTree(tree, synthesizedProgram);
         }
 
-        /// <summary>
-        /// Retrieve the string corresponding to the hypothesis passed as parameter.
-        /// </summary>
-        /// <param name="input">Input syntax node</param>
-        /// <param name="synthesizedProgram">Synthesized program</param>
-        /// <returns></returns>
-        public static ASTTransformation TransformString(ListNode input, SynthesizedProgram synthesizedProgram)
-        {
-            return UpdateASTManager.UpdateASTTree(input, synthesizedProgram);
-        }
+        ///// <summary>
+        ///// Retrieve the string corresponding to the hypothesis passed as parameter.
+        ///// </summary>
+        ///// <param name="input">Input syntax node</param>
+        ///// <param name="synthesizedProgram">Synthesized program</param>
+        ///// <returns></returns>
+        //public static ASTTransformation TransformString(ListNode input, SynthesizedProgram synthesizedProgram)
+        //{
+        //    return UpdateASTManager.UpdateASTTree(input, synthesizedProgram);
+        //}
 
         ///// <summary>
         ///// Retrieve the string corresponding to the hypothesis passed as parameter.

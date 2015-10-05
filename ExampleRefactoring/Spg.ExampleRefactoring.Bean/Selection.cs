@@ -36,6 +36,11 @@ namespace Spg.ExampleRefactoring.Bean
         /// <returns>Source code of class that has the selection</returns>
         public string SourceCode { get; set; }
 
+        /// <summary>
+        /// Extracted text from the location
+        /// </summary>
+        public string Text { get; set; }
+
 
         /// <summary>
         /// Constructor
@@ -44,12 +49,13 @@ namespace Spg.ExampleRefactoring.Bean
         /// <param name="length">Selection Length</param>
         /// <param name="sourcePath">Path to the class file</param>
         /// <param name="sourceCode">Source code</param>
-        public Selection(int start, int length, string sourcePath, string sourceCode )
+        public Selection(int start, int length, string sourcePath, string sourceCode, string text)
         {
             this.Start = start;
             this.Length = length;
             this.SourcePath = sourcePath;
             this.SourceCode = sourceCode;
+            this.Text = text;
         }
 
         public override bool Equals(object obj)

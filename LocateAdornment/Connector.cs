@@ -7,6 +7,7 @@ using Spg.LocationRefactor.Transform;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
+using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.TextRegion;
 
 namespace LocateAdornment
@@ -51,8 +52,6 @@ namespace LocateAdornment
                 provider.Add(view.Selection.SelectedSpans[0], author, comment);
             }
         }
-
-        
 
         static public void Select(IWpfTextViewHost host, TRegion region)
         {
@@ -103,10 +102,11 @@ namespace LocateAdornment
         {
             foreach (var transformation in transformations)
             {
-                StreamWriter file = new StreamWriter(transformation.SourcePath);
-                file.WriteLine(transformation.transformation.Item2);
+                FileUtil.WriteToFile(transformation.SourcePath, transformation.transformation.Item2);
+                //StreamWriter file = new StreamWriter(transformation.SourcePath);
+                //file.WriteLine(transformation.transformation.Item2);
 
-                file.Close();
+                //file.Close();
             }
 
         }

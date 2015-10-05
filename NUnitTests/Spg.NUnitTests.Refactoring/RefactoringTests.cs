@@ -126,7 +126,6 @@ namespace Spg.NUnitTests.Refactoring
             Assert.IsTrue(isEqual);
         }
 
-
         [Test]
         public void WrapLoopWithTimer()
         {

@@ -1,6 +1,6 @@
 using System;
 using System.Drawing;
-using System.Windows.Forms.VisualStyles;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 
 namespace Spg.LocationRefactor.TextRegion
@@ -52,8 +52,8 @@ namespace Spg.LocationRefactor.TextRegion
         /// <param name="region">Region</param>
         /// <returns>Evaluation</returns>
         public bool IsParent(TRegion region) {
-            string text = System.Text.RegularExpressions.Regex.Escape(this.Text);
-            bool contains = System.Text.RegularExpressions.Regex.IsMatch(region.Text, text);
+            string text = Regex.Escape(this.Text);
+            bool contains = Regex.IsMatch(region.Text, text);
             bool parent = contains && region.Color != this.Color;
             return parent;
         }
@@ -80,13 +80,24 @@ namespace Spg.LocationRefactor.TextRegion
             return (thisWithOther);
         }
 
+        public override string ToString()
+        {
+            return Start + " : " + Length + "\n" + Text + "\n" + Path;
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
         public override bool Equals(object obj)
         {
             if (!(obj is TRegion)) return false;
 
             TRegion other = (TRegion) obj;
 
-            return Start.Equals(other.Start) && Length.Equals(other.Length);
+            return Start.Equals(other.Start) && Length.Equals(other.Length)
+                && Path.ToUpperInvariant().Equals(other.Path.ToUpperInvariant());
         }
     }
 }

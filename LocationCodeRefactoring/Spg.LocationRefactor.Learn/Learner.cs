@@ -1,14 +1,10 @@
-using Microsoft.CodeAnalysis.CSharp;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Operator;
-using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Learn.Map;
 using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -41,7 +37,6 @@ namespace Spg.LocationRefactor.Learn
         public List<Prog> LearnSeqRegion(List<Tuple<ListNode, ListNode>> examples)
         {
             List<Prog> programs = new List<Prog>();
-            List<IOperator> operators = new List<IOperator>();
             List<ILearn> learns = new List<ILearn>();
 
             learns.Add(map);

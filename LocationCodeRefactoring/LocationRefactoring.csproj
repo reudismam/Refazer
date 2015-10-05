@@ -88,25 +88,27 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Taramon.Exceller, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Taramon.Exceller.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Spg.LocationRefactor.Comparer\CodeLocationComparer.cs" />
     <Compile Include="Spg.LocationRefactor.Controller\EditorController.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\EndPosFilterLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\FilterLearnerBase.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\MethodFilterLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\StatementFilterLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Location\SelectionInfo.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\ILocationsObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\LocationEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\ILocationsTransformedObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\LocationsTransformedEvent.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\BooleanLearner\BooleanLearnerBase.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\BooleanLearner\NegativeBooleanLearner.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\BooleanLearner\PositiveBooleanLearner.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\EndPosFilterLearner.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\MethodFilterLearner.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\StatementFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\StatementMapLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\MergeLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\MethodMapLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\EndPosMapLearner.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\FilterLearnerBase.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\ILearn.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Learner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\MapLearnerBase.cs" />
@@ -129,11 +131,6 @@
     <Compile Include="Spg.LocationRefactor.Operator\Map\StatementMap.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Merge.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Pair.cs" />
-    <Compile Include="Spg.LocationRefactor.Predicate\NotContains.cs" />
-    <Compile Include="Spg.LocationRefactor.Predicate\Contains.cs" />
-    <Compile Include="Spg.LocationRefactor.Predicate\EndsWith.cs" />
-    <Compile Include="Spg.LocationRefactor.Predicate\IPredicate.cs" />
-    <Compile Include="Spg.LocationRefactor.Predicate\PredicateFactory.cs" />
     <Compile Include="Spg.LocationRefactor.Program\Prog.cs" />
     <Compile Include="Spg.LocationRefactor.TextRegion\TRegion.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\HighlightEvent.cs" />
@@ -144,7 +141,6 @@
     <Compile Include="Spg.LocationRefactor.Transform\CodeTransformation.cs" />
     <Compile Include="Spg.LocationRefactor.Transform\MappedLocationBasedTransformationManager.cs" />
     <Compile Include="Spg.LocationRefactor.Transform\Transformation.cs" />
-    <Compile Include="Spg.LocationRefactor.Transform\TransformationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
@@ -160,7 +156,35 @@
       <Name>ExampleRefactoring</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
