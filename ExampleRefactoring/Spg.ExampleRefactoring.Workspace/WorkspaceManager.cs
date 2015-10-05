@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
@@ -144,7 +145,7 @@ namespace Spg.ExampleRefactoring.Workspace
         /// <param name="name">Name of the identifier</param>
         /// <returns>Fully qualified name of the node</returns>
         public Dictionary<string, Dictionary<string, List<TextSpan>>> GetLocalReferences(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
-        { 
+        {
             var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
@@ -208,22 +209,24 @@ namespace Spg.ExampleRefactoring.Workspace
         /// <param name="node">Node to be analyzed</param>
         /// <param name="name">Name of the identifier</param>
         /// <returns>Fully qualified name of the node</returns>
-        public List<TextSpan> GetErrorSpans(List<string> projectName, string solutionPath, string docPath)
+        public Dictionary<string, List<TextSpan>> GetErrorSpans(List<string> projectName, string solutionPath, List<string> docPaths)
         {
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
+            Dictionary<string, List<TextSpan>> dictionary = new Dictionary<string, List<TextSpan>>();
             foreach (ProjectId projectId in solution.ProjectIds)
             {
                 Project project = solution.GetProject(projectId);
                 Compilation compilation = project.GetCompilationAsync().Result;
+
                 foreach (DocumentId documentId in project.DocumentIds)
                 {
                     var document = solution.GetDocument(documentId);
                     SyntaxTree tree;
                     document.TryGetSyntaxTree(out tree);
-                    compilation.GetSemanticModel(tree);
-                    if (document.FilePath.ToUpperInvariant().Equals(docPath.ToUpperInvariant()))
+                    SemanticModel smodel= compilation.GetSemanticModel(tree);
+                    if (docPaths.Contains(document.FilePath.ToUpperInvariant()))
                     {
                         document.TryGetSyntaxTree(out tree);
 
@@ -231,15 +234,17 @@ namespace Spg.ExampleRefactoring.Workspace
                         {
                             throw new Exception("Document not found on this project");
                         }
-                        return GetErrorSpans(tree);
+
+                        List<TextSpan> spans = GetErrorSpans(smodel);
+                        dictionary.Add(document.FilePath.ToUpperInvariant(), spans);
                     }
                 }
             }
-            
-            throw new Exception("Document not found on this project");
+            return dictionary;
         }
 
-        protected List<TextSpan> GetErrorSpans(SyntaxTree tree)
+
+        protected List<TextSpan> GetErrorSpans(SemanticModel tree)
         {
             if (tree == null) throw new ArgumentNullException(nameof(tree));
 

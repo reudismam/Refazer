@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Text.Projection;
 using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.LCS;
@@ -384,7 +386,7 @@ namespace Spg.LocationRefactor.Controller
             {
                 locationsList = RetrieveLocationsSingleSourceClass(prog);
             }
-            var sourceLocations = locationsList;        
+            var sourceLocations = locationsList;
             Locations = NonDuplicateLocations(sourceLocations);
 
             //remove
@@ -450,7 +452,7 @@ namespace Spg.LocationRefactor.Controller
                 CodeLocation location = new CodeLocation { Region = region, SourceCode = CurrentViewCodeBefore, SourceClass = CurrentViewCodePath };
                 sourceLocations.Add(location);
             }
-               
+
             return sourceLocations;
         }
 
@@ -610,7 +612,8 @@ namespace Spg.LocationRefactor.Controller
                         {
                             removes.Add(cdLocation);
                         }
-                    }else if (intersections[codeLocation].Count == 1)
+                    }
+                    else if (intersections[codeLocation].Count == 1)
                     {
                         if (codeLocation.Region.Start == intersections[codeLocation].First().Region.Start)
                         {
@@ -628,7 +631,7 @@ namespace Spg.LocationRefactor.Controller
                             removes.Add(codeLocation);
                         }
                     }
-                }   
+                }
             }
 
             locations = locations.Except(removes).ToList();
@@ -687,7 +690,7 @@ namespace Spg.LocationRefactor.Controller
                 if (!intersections.ContainsKey(codeLocation))
                 {
                     insides.Add(codeLocation);
-                }   
+                }
             }
             return insides;
         }
@@ -731,8 +734,17 @@ namespace Spg.LocationRefactor.Controller
             SourceTransformations = transformations;
 
             //UpdateFiles(transformations);
-            //EvaluateTransformation(transformations);
-            //Undo();
+            //try
+            //{
+            //    EvaluateTransformation(CodeTransformations);
+            //}
+            //catch (Exception)
+            //{
+            //}
+            //finally
+            //{
+            //    Undo();
+            //}
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
@@ -746,28 +758,78 @@ namespace Spg.LocationRefactor.Controller
         {
             foreach (var transformation in transformations)
             {
-                FileUtil.WriteToFile(transformation.SourcePath, transformation.transformation.Item2);     
+                FileUtil.WriteToFile(transformation.SourcePath, transformation.transformation.Item2);
             }
         }
 
         /// <summary>
         /// Evalute the insertion of errors after transformation
         /// </summary>
-        /// <param name="transformations"></param>
-        private void EvaluateTransformation(List<Transformation> transformations)
+        /// <param name="codeTransformations"></param>
+        private void EvaluateTransformation(List<CodeTransformation> codeTransformations)
         {
+            Dictionary<string, List<CodeTransformation>> dic = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
+
+            List<string> files = new List<string>(dic.Keys);
+            List<string> sourceFilesPaths = GetFilePathsToUpperCase(files);
+
             WorkspaceManager manager = WorkspaceManager.GetInstance();
-            foreach (Transformation transformation in transformations)
+
+            Dictionary<string, List<TextSpan>> dicSpans = manager.GetErrorSpans(ProjectInformation.ProjectPath, ProjectInformation.SolutionPath, sourceFilesPaths);
+
+            Dictionary<TRegion, int> errorsDic = new Dictionary<TRegion, int>();
+            foreach (KeyValuePair<string, List<TextSpan>> item in dicSpans)
             {
-                try
+                Console.WriteLine(item.Value.Count);
+                string text = FileUtil.ReadFile(item.Key);
+
+                foreach (TextSpan span in item.Value)
                 {
-                    manager.GetErrorSpans(ProjectInformation.ProjectPath, ProjectInformation.SolutionPath, transformation.SourcePath);
-                }
-                catch (Exception e)
-                {
-                    
+                    try
+                    {
+                        MessageBox.Show(text.Substring(span.Start, span.Length));
+
+                        foreach (CodeTransformation cTrans in dic[item.Key])
+                        {
+                            TRegion region = new TRegion();
+                            region.Start = span.Start;
+                            region.Length = span.Length;
+                            region.Path = item.Key;
+
+                            if (region.IsInside(cTrans.Trans))
+                            {
+                                if (errorsDic.ContainsKey(cTrans.Location.Region))
+                                {
+                                    errorsDic[cTrans.Location.Region]++;
+                                }
+                                else
+                                {
+                                    errorsDic.Add(cTrans.Location.Region, 1);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// Convert files paths to upper case.
+        /// </summary>
+        /// <param name="transformations">List of file paths</param>
+        /// <returns>File paths in upper case</returns>
+        private List<string> GetFilePathsToUpperCase(List<string> transformations)
+        {
+            List<string> filePaths = new List<string>();
+            foreach (string transformation in transformations)
+            {
+                filePaths.Add(transformation.ToUpperInvariant());
+            }
+            return filePaths;
         }
 
         /// <summary>

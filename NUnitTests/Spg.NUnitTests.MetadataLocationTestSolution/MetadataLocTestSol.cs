@@ -779,6 +779,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         public static bool LocaleTestSolution(string commit, string solution, List<string> project)
         {
             long millBefore;// = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTimeToExtract = 0;
             EditorController.ReInit();
             EditorController controller = EditorController.GetInstance();
 
@@ -838,12 +839,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
                 millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.Extract(positivesRegions, negativesRegions);
+                long millAfterExtract = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                totalTimeToExtract = (millAfterExtract - millBefore);
                 controller.RetrieveLocations();
             }
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
-            Log(commit, totalTime, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count);
+            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count);
             //remove
             List<TRegion> nselections = new List<TRegion>();
             foreach (CodeLocation location in controller.Locations)
@@ -872,7 +875,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         private static Sheets mWorkSheets;
         private static Worksheet mWSheet1;
         private static Application oXL;
-        public static void Log(string commit, double time, int exLocations, int negs, int acLocations, int locations)
+        public static void Log(string commit, double time, double timeToExtract, int exLocations, int negs, int acLocations, int locations)
         {
             using (ExcelManager em = new ExcelManager())
             {
@@ -895,6 +898,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 em.SetValue("E" + empty, exLocations + negs);
                 em.SetValue("F" + empty, acLocations);
                 em.SetValue("G" + empty, locations);
+                em.SetValue("H" + empty, timeToExtract);
                 Console.WriteLine("" + empty);
                 em.Save();
             }

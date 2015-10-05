@@ -37,7 +37,6 @@ namespace Spg.LocationRefactor.Learn
         public List<Prog> LearnSeqRegion(List<Tuple<ListNode, ListNode>> examples)
         {
             List<Prog> programs = new List<Prog>();
-            List<IOperator> operators = new List<IOperator>();
             List<ILearn> learns = new List<ILearn>();
 
             learns.Add(map);
