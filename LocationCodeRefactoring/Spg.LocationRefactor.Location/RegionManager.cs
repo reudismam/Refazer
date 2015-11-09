@@ -430,7 +430,7 @@ namespace Spg.LocationRefactor.Location
                             Parent = parent,
                             Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
                         };
-                        MessageBox.Show(span.Start + tregion.Text + span.Length);
+                        //MessageBox.Show(span.Start + tregion.Text + span.Length);
                         outputRegions.Add(tregion);
                     }
                 }

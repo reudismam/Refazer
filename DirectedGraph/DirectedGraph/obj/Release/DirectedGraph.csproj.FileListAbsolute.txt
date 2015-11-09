@@ -8,3 +8,8 @@ C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\intellimeta\DirectedGraph\
 C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\intellimeta\DirectedGraph\DirectedGraph\obj\Release\DirectedGraph.csprojResolveAssemblyReference.cache
 C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\intellimeta\DirectedGraph\DirectedGraph\obj\Release\DirectedGraph.dll
 C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\intellimeta\DirectedGraph\DirectedGraph\obj\Release\DirectedGraph.pdb
+C:\Users\SPG-04\Documents\Visual Studio 2015\Projects\intellimeta\DirectedGraph\DirectedGraph\bin\Release\DirectedGraph.dll
+C:\Users\SPG-04\Documents\Visual Studio 2015\Projects\intellimeta\DirectedGraph\DirectedGraph\bin\Release\DirectedGraph.pdb
+C:\Users\SPG-04\Documents\Visual Studio 2015\Projects\intellimeta\DirectedGraph\DirectedGraph\obj\Release\DirectedGraph.csprojResolveAssemblyReference.cache
+C:\Users\SPG-04\Documents\Visual Studio 2015\Projects\intellimeta\DirectedGraph\DirectedGraph\obj\Release\DirectedGraph.dll
+C:\Users\SPG-04\Documents\Visual Studio 2015\Projects\intellimeta\DirectedGraph\DirectedGraph\obj\Release\DirectedGraph.pdb
