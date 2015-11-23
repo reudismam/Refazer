@@ -163,6 +163,8 @@ namespace Spg.ExampleRefactoring.Workspace
                     {
                         document.TryGetSyntaxTree(out tree);
                         SemanticModel model2 = compilation.GetSemanticModel(tree);
+                        var test = model2.GetSymbolInfo(node.Parent);
+                       
                         foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
                         {
                             if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
