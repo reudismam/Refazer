@@ -258,7 +258,7 @@ namespace Spg.ExampleRefactoring.LCS
             {
                 this.Start = start;
                 this.End = end;
-                this.SyntaxKind = snt.CSharpKind();
+                this.SyntaxKind = snt.Kind();
                 this.Snt = snt;
             }
             /// <summary>

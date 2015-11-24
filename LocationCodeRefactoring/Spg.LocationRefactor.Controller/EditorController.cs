@@ -19,6 +19,7 @@ using Spg.LocationRefactor.Operator.Map;
 using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Spg.LocationRefactor.Controller
 {
@@ -588,7 +589,7 @@ namespace Spg.LocationRefactor.Controller
                         TRegion locOtherRegion = new TRegion();
                         locOtherRegion.Start = otherLocation.Region.Node.SpanStart;
                         locOtherRegion.Length = otherLocation.Region.Node.Span.Length;
-                        if (!(location.Equals(otherLocation)) && locOtherRegion.IsInside(locRegion) && !location.Region.Node.IsKind(otherLocation.Region.Node.CSharpKind()))
+                        if (!(location.Equals(otherLocation)) && locOtherRegion.IsInside(locRegion) && !location.Region.Node.IsKind(otherLocation.Region.Node.Kind()))
                         {
                             if (!intersections.ContainsKey(location))
                             {
@@ -672,7 +673,7 @@ namespace Spg.LocationRefactor.Controller
                         TRegion locOtherRegion = new TRegion();
                         locOtherRegion.Start = otherLocation.Region.Node.SpanStart;
                         locOtherRegion.Length = otherLocation.Region.Node.Span.Length;
-                        if (!(location.Equals(otherLocation)) && locOtherRegion.IsInside(locRegion) && location.Region.Node.IsKind(otherLocation.Region.Node.CSharpKind()))
+                        if (!(location.Equals(otherLocation)) && locOtherRegion.IsInside(locRegion) && location.Region.Node.IsKind(otherLocation.Region.Node.Kind()))
                         {
                             if (!intersections.ContainsKey(location))
                             {

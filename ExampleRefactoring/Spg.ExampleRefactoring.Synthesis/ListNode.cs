@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Spg.ExampleRefactoring.Synthesis
 {
@@ -80,11 +81,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             for (int i = 0; i < List.Count - 1; i++)
             {
                 SyntaxNodeOrToken st = List[i];
-                s += st.CSharpKind() + ", "; 
+                s += st.Kind() + ", "; 
             }
 
             if (List.Count > 0) {
-                s += List[List.Count - 1].CSharpKind() + "]";
+                s += List[List.Count - 1].Kind() + "]";
             }
             return s;
         }

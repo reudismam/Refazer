@@ -268,9 +268,9 @@ namespace Spg.LocationRefactor.Location
             foreach (var sn in lcas)
             {
                 IEnumerable<SyntaxNode> value;
-                if (!dicSyntaxNodes.TryGetValue(sn.CSharpKind(), out value))
+                if (!dicSyntaxNodes.TryGetValue(sn.Kind(), out value))
                 {
-                    dicSyntaxNodes[sn.CSharpKind()] = ASTManager.NodesWithTheSameSyntaxKind(tree.GetRoot(), sn.CSharpKind());
+                    dicSyntaxNodes[sn.Kind()] = ASTManager.NodesWithTheSameSyntaxKind(tree.GetRoot(), sn.Kind());
                 }
             }
             List<SyntaxNode> retr = new List<SyntaxNode>();

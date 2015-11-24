@@ -14,6 +14,7 @@ using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.TextRegion;
+using Spg.ExampleRefactoring.Util;
 
 namespace Spg.LocationRefactor.Node
 {
@@ -286,7 +287,9 @@ namespace Spg.LocationRefactor.Node
                 //for each file
                 foreach (var fileSpans in dictionary)
                 {
-                    SyntaxTree fileTree = CSharpSyntaxTree.ParseFile(fileSpans.Key);
+                    string strTree = FileUtil.ReadFile(fileSpans.Key);
+                    SyntaxTree fileTree = CSharpSyntaxTree.ParseText(strTree);
+
                     var spans = fileSpans;
                     var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
                                 where WithinLcas(node) && WithinSpans(node, spans.Value)
@@ -375,7 +378,8 @@ namespace Spg.LocationRefactor.Node
             List<SyntaxNode> listNodes = new List<SyntaxNode>();
             foreach (Tuple<string, string> fileTuple in files)
             {
-                SyntaxTree tree = CSharpSyntaxTree.ParseFile(fileTuple.Item2);
+                string strTree = FileUtil.ReadFile(fileTuple.Item2);
+                SyntaxTree tree = CSharpSyntaxTree.ParseText(strTree);
 
                 var nodes = from node in tree.GetRoot().DescendantNodesAndSelf()
                             where WithinLcas(node)
@@ -415,7 +419,7 @@ namespace Spg.LocationRefactor.Node
 
             foreach (var lca in EditorController.GetInstance().Lcas)
             {
-                if (node.IsKind(lca.CSharpKind()))
+                if (node.IsKind(lca.Kind()))
                 {
                     return true;
                 }

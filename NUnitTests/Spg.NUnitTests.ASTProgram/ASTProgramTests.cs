@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Synthesis;
 using NUnit.Framework;
-using Spg.ExampleRefactoring.Position;
-using Spg.ExampleRefactoring.Synthesis;
 
 namespace Spg.NUnitTests.ASTProgramTests
 {

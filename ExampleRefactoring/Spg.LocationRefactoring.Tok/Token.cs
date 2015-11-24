@@ -3,6 +3,7 @@ using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Spg.ExampleRefactoring.Tok
 {
@@ -95,7 +96,7 @@ namespace Spg.ExampleRefactoring.Tok
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            return token.CSharpKind().ToString();
+            return token.Kind().ToString();
         }
 
         /// <summary>

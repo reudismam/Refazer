@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliMeta", "IntelliMeta\IntelliMeta.csproj", "{E58856BB-13E3-4828-B548-08E7343B2FD9}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refactor", "Refactor\Refactor.csproj", "{E3086D8D-632E-42CE-AF8B-6092F627F79F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliUndo", "IntelliUndo\IntelliUndo.csproj", "{0850E0F0-9366-4E53-B817-DF0036BB4072}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompileChecker", "CompileChecker\CompileChecker.csproj", "{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +97,14 @@ Global
 		{0850E0F0-9366-4E53-B817-DF0036BB4072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0850E0F0-9366-4E53-B817-DF0036BB4072}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0850E0F0-9366-4E53-B817-DF0036BB4072}.Release|x86.ActiveCfg = Release|Any CPU
+		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Debug|x86.Build.0 = Debug|Any CPU
+		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Release|x86.ActiveCfg = Release|Any CPU
+		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

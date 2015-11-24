@@ -2,15 +2,23 @@ using Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Tok;
+using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Spg.ExampleRefactoring.Projects;
+using Spg.ExampleRefactoring.Workspace;
+using System.Windows.Forms;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Spg.LocationRefactoring.Tok
 {
     /// <summary>
     /// Represent dynamic token
     /// </summary>
-    public class DymToken: Token
+    public class DymToken : Token
     {
         private bool _getFullyQualifiedName;
+
+        DynType dynType { get; set; }
 
         /// <summary>
         /// Constructor
@@ -19,7 +27,30 @@ namespace Spg.LocationRefactoring.Tok
         /// <param name="getFullyQualifiedName">Indicate if fully qualified name have to be used</param>
         public DymToken(SyntaxNodeOrToken token, bool getFullyQualifiedName) : base(token)
         {
-            this._getFullyQualifiedName = getFullyQualifiedName;
+            _getFullyQualifiedName = getFullyQualifiedName;
+
+            ProjectInformation information = ProjectInformation.GetInstance();
+
+            string fullName = null;
+            if (_getFullyQualifiedName)
+            {
+                if (token.IsKind(SyntaxKind.IdentifierToken))
+                {
+                    fullName = WorkspaceManager.GetInstance()
+                        .GetFullyQualifiedName(information.SolutionPath,
+                            this.token.Parent);
+                    dynType = new DynType(fullName, DynType.FULLNAME);
+                }
+                else if(token.IsKind(SyntaxKind.StringLiteralToken))
+                {
+                    dynType = new DynType(token.ToFullString(), DynType.STRING);
+                }
+                else
+                {
+                    dynType = new DynType(token.ToFullString(), DynType.NUMBER);
+                }
+            }
+            Console.WriteLine(fullName);
         }
 
         /// <summary>
@@ -72,21 +103,6 @@ namespace Spg.LocationRefactoring.Tok
             {
                 return false;
             }
-            //var x = token.SyntaxTree.GetRoot().FindNode();
-            ////var x = model.GetDeclaredSymbol(token.Parent);
-            //var property = token.Parent as IdentifierNameSyntax;
-
-            //if (property != null)
-            //    Console.WriteLine("Property: " + property.Identifier);
-            //property.Identifier.
-            //ProjectInformation information = ProjectInformation.GetInstance();
-
-            //if (_getFullyQualifiedName)
-            //{
-            //    string fullName = WorkspaceManager.GetInstance()
-            //        .GetSemanticModel(information.ProjectPath, information.SolutionPath,
-            //            this.token.Parent, this.token.ToString());
-            //}
 
             DymToken st = (DymToken)obj;
             ComparerBase comparator = new NodeComparer();

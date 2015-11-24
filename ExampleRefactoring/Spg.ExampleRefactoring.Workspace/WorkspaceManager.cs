@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Windows.Forms;
 using Spg.ExampleRefactoring.LCS;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Spg.ExampleRefactoring.Workspace
 {
@@ -19,11 +18,28 @@ namespace Spg.ExampleRefactoring.Workspace
     {
 
         private static WorkspaceManager _instance;
-        private readonly Dictionary<Tuple<LCAManager.Node, string>, string> _dictionary;
+        private readonly Dictionary<string, SemanticModel> _dictionary;
+
+        private Solution solutionInstance;
 
         private WorkspaceManager()
         {
-            _dictionary = new Dictionary<Tuple<LCAManager.Node, string>, string>();
+            _dictionary = new Dictionary<string, SemanticModel>();
+        }
+
+        private Solution GetWorkSpace(string solutionPath)
+        {
+            if (solutionInstance == null)
+            {
+                MSBuildWorkspace workspace = MSBuildWorkspace.Create();
+                solutionInstance = workspace.OpenSolutionAsync(solutionPath).Result;
+            }
+            return solutionInstance;
+        }
+
+        public void SetWorkSpace(Microsoft.CodeAnalysis.Workspace workspace)
+        {
+            solutionInstance = workspace.CurrentSolution;
         }
 
         /// <summary>
@@ -48,8 +64,7 @@ namespace Spg.ExampleRefactoring.Workspace
         public List<Tuple<string, string>> GetSourcesFiles(List<string> projectName, string solutionPath)
         {
             List<Tuple<string, string>> sourceFiles = new List<Tuple<string, string>>();
-            MSBuildWorkspace workspace = MSBuildWorkspace.Create();
-            Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
+            Solution solution = GetWorkSpace(solutionPath);
 
             foreach (ProjectId projectId in solution.ProjectIds)
             {
@@ -94,47 +109,165 @@ namespace Spg.ExampleRefactoring.Workspace
         ///// <returns>Fully qualified name of the node</returns>
         //public string GetFullyQualifiedName(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
         //{
-        //    Tuple<LCAManager.Node, string> tuple =
-        //        Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
-        //            node.SyntaxTree.GetText().ToString());
-        //    if (_dictionary.ContainsKey(tuple))
-        //    {
-        //        return _dictionary[tuple];
-        //    }
-        //    MSBuildWorkspace workspace = MSBuildWorkspace.Create();
-        //    Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
+        //    //Tuple<LCAManager.Node, string> tuple =
+        //    //    Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
+        //    //        node.SyntaxTree.GetText().ToString());
+        //    //if (_dictionary.ContainsKey(tuple))
+        //    //{
+        //    //    return _dictionary[tuple];
+        //    //}
+        //    Solution solution = GetWorkSpace(solutionPath);
 
         //    foreach (ProjectId projectId in solution.ProjectIds)
         //    {
         //        Project project = solution.GetProject(projectId);
-        //        if (/*project.Name.Equals(projectName)*/ true)
-        //        {
-        //            Compilation compilation = project.GetCompilationAsync().Result;
-        //            foreach (DocumentId documentId in project.DocumentIds)
-        //            {
-        //                var document = solution.GetDocument(documentId);
+        //        //if (/*project.Name.Equals(projectName)*/ true)
+        //        //{
+        //        //    Compilation compilation = project.GetCompilationAsync().Result;
+        //        //    foreach (DocumentId documentId in project.DocumentIds)
+        //        //    {
+        //        //        var document = solution.GetDocument(documentId);
 
-        //                SyntaxTree tree;
-        //                document.TryGetSyntaxTree(out tree);
-        //                if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
-        //                {
-        //                    document.TryGetSyntaxTree(out tree);
-        //                    SemanticModel model2 = compilation.GetSemanticModel(tree);
-        //                    foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
-        //                    {
-        //                        if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
-        //                        {
-        //                            _dictionary.Add(tuple, symbol.ToDisplayString());
-        //                            return symbol.ToDisplayString();
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
+        //        //        SyntaxTree tree;
+        //        //        document.TryGetSyntaxTree(out tree);
+        //        //        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+        //        //        {
+        //        //            document.TryGetSyntaxTree(out tree);
+        //        //            SemanticModel model2 = compilation.GetSemanticModel(tree);
+        //        //            foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
+        //        //            {
+        //        //                if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
+        //        //                {
+        //        //                    _dictionary.Add(tuple, symbol.ToDisplayString());
+        //        //                    return symbol.ToDisplayString();
+        //        //                }
+        //        //            }
+        //        //        }
+        //        //    }
+        //        //}
         //    }
-        //    _dictionary.Add(tuple, null);
+        //    //_dictionary.Add(tuple, null);
         //    return null;
         //}
+
+        /// <summary>
+        /// Get fully qualified name of a node
+        /// </summary>
+        /// <param name="projectName">Project name</param>
+        /// <param name="solutionPath">Solution path</param>
+        /// <param name="node">Node to be analyzed</param>
+        /// <param name="name">Name of the identifier</param>
+        /// <returns>Fully qualified name of the node</returns>
+        public string GetFullyQualifiedName2(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
+        {
+            try
+            {
+                Solution solution = GetWorkSpace(solutionPath);
+
+                SemanticModel smodel = null;
+                if (_dictionary.ContainsKey(node.SyntaxTree.GetText().ToString()))
+                {
+                    smodel = _dictionary[node.SyntaxTree.GetText().ToString()];
+                }
+                else
+                {
+                    foreach (ProjectId projectId in solution.ProjectIds)
+                    {
+                        Project project = solution.GetProject(projectId);
+                        try
+                        {
+                            Compilation compilation = project.GetCompilationAsync().Result;
+
+                            foreach (DocumentId documentId in project.DocumentIds)
+                            {
+                                var document = solution.GetDocument(documentId);
+                                SyntaxTree tree;
+                                document.TryGetSyntaxTree(out tree);
+                                if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+                                {
+                                    document.TryGetSyntaxTree(out tree);
+                                    smodel = compilation.GetSemanticModel(tree);
+                                    _dictionary.Add(node.SyntaxTree.GetText().ToString(), smodel);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+                }
+
+                foreach (ISymbol symbol in smodel.LookupSymbols(node.SpanStart, null, name))
+                {
+                    if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
+                    {
+                        return symbol.ToDisplayString();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            //_dictionary.Add(tuple, null);
+            return null;
+        }
+
+        /// <summary>
+        /// Get fully qualified name of a node
+        /// </summary>
+        /// <param name="projectName">Project name</param>
+        /// <param name="solutionPath">Solution path</param>
+        /// <param name="node">Node to be analyzed</param>
+        /// <param name="name">Name of the identifier</param>
+        /// <returns>Fully qualified name of the node</returns>
+        public string GetFullyQualifiedName(string solutionPath, SyntaxNodeOrToken node)
+        {
+            var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
+            Solution solution = GetWorkSpace(solutionPath);
+
+            SemanticModel smodel = null;
+            if (_dictionary.ContainsKey(node.SyntaxTree.GetText().ToString()))
+            {
+                smodel = _dictionary[node.SyntaxTree.GetText().ToString()];
+            }
+            else
+            {
+                foreach (ProjectId projectId in solution.ProjectIds)
+                {
+                    Project project = solution.GetProject(projectId);
+                    Compilation compilation = project.GetCompilationAsync().Result;
+
+                    foreach (DocumentId documentId in project.DocumentIds)
+                    {
+                        var document = solution.GetDocument(documentId);
+                        SyntaxTree tree;
+                        document.TryGetSyntaxTree(out tree);
+                        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+                        {
+                            document.TryGetSyntaxTree(out tree);
+                            smodel = compilation.GetSemanticModel(tree);
+                            _dictionary.Add(tree.GetText().ToString(), smodel);
+                        }
+
+                    }
+                }
+            }
+
+            SyntaxNode snode = smodel.SyntaxTree.GetRoot().FindNode(node.Span);
+            if (snode != null && snode is IdentifierNameSyntax)
+            {
+                SymbolInfo symbolInfo = smodel.GetSymbolInfo(snode);
+                string toDisplayString = symbolInfo.Symbol.ToDisplayString();
+                return toDisplayString;
+            }
+            else
+            {
+                return snode.ToFullString();
+            }
+        }
 
         /// <summary>
         /// Get fully qualified name of a node
@@ -147,8 +280,7 @@ namespace Spg.ExampleRefactoring.Workspace
         public Dictionary<string, Dictionary<string, List<TextSpan>>> GetLocalReferences(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
         {
             var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
-            MSBuildWorkspace workspace = MSBuildWorkspace.Create();
-            Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
+            Solution solution = GetWorkSpace(solutionPath);
 
             foreach (ProjectId projectId in solution.ProjectIds)
             {
@@ -163,8 +295,7 @@ namespace Spg.ExampleRefactoring.Workspace
                     {
                         document.TryGetSyntaxTree(out tree);
                         SemanticModel model2 = compilation.GetSemanticModel(tree);
-                        var test = model2.GetSymbolInfo(node.Parent);
-                       
+
                         foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
                         {
                             if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
@@ -213,8 +344,7 @@ namespace Spg.ExampleRefactoring.Workspace
         /// <returns>Fully qualified name of the node</returns>
         public Dictionary<string, List<TextSpan>> GetErrorSpans(List<string> projectName, string solutionPath, List<string> docPaths)
         {
-            MSBuildWorkspace workspace = MSBuildWorkspace.Create();
-            Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
+            Solution solution = GetWorkSpace(solutionPath);
 
             Dictionary<string, List<TextSpan>> dictionary = new Dictionary<string, List<TextSpan>>();
             foreach (ProjectId projectId in solution.ProjectIds)
@@ -227,7 +357,7 @@ namespace Spg.ExampleRefactoring.Workspace
                     var document = solution.GetDocument(documentId);
                     SyntaxTree tree;
                     document.TryGetSyntaxTree(out tree);
-                    SemanticModel smodel= compilation.GetSemanticModel(tree);
+                    SemanticModel smodel = compilation.GetSemanticModel(tree);
                     if (docPaths.Contains(document.FilePath.ToUpperInvariant()))
                     {
                         document.TryGetSyntaxTree(out tree);
@@ -286,8 +416,7 @@ namespace Spg.ExampleRefactoring.Workspace
         public Dictionary<string, Dictionary<string, List<TextSpan>>> GetDeclaredReferences(List<string> projectName, string solutionPath, string name)
         {
             var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
-            MSBuildWorkspace workspace = MSBuildWorkspace.Create();
-            Solution solution = workspace.OpenSolutionAsync(solutionPath).Result;
+            Solution solution = GetWorkSpace(solutionPath);
 
             IEnumerable<ISymbol> sourceDeclarations = new List<ISymbol>();
             try

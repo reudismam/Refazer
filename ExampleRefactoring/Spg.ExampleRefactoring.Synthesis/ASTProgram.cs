@@ -330,10 +330,6 @@ namespace Spg.ExampleRefactoring.Synthesis
                         {
                             dym = IsDym(st);
                         }
-                        //else
-                        //{
-                        //    dym = IsDym(st);
-                        //}
 
                         if (!dym) continue;
 

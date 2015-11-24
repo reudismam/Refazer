@@ -2,16 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Spg.ExampleRefactoring.Bean;
-using Spg.ExampleRefactoring.RegularExpression;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Transform;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Comparator;
-using Spg.ExampleRefactoring.Util;
-using Spg.NUnitTests.Util;
-using NUnitTests.Spg.NUnitTests.LocationTestProject;
 using System.IO;
 
 namespace NUnitTests.Spg.NUnitTests.CompleteTestProject

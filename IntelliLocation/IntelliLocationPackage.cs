@@ -10,6 +10,8 @@ using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Spg.ExampleRefactoring.Workspace;
+using Microsoft.VisualStudio.ComponentModelHost;
 
 namespace SPG.IntelliLocation
 {
@@ -110,7 +112,7 @@ namespace SPG.IntelliLocation
                 return;
             }
             object holder;
-            Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
+            Guid guidViewHost = Microsoft.VisualStudio.Editor.DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
             var viewHost = (IWpfTextViewHost)holder;
 
@@ -127,6 +129,13 @@ namespace SPG.IntelliLocation
             EditorController.GetInstance().ProjectInformation.SolutionPath = fullName;
             EditorController.GetInstance().CurrentViewCodePath = document.FullName;
             EditorController.GetInstance().FilesOpened[document.FullName] = true;
+
+            WorkspaceManager manager = WorkspaceManager.GetInstance();
+
+            var componentModel = (IComponentModel)GetService(typeof(SComponentModel));
+            var workspace = componentModel.GetService<Microsoft.VisualStudio.LanguageServices.VisualStudioWorkspace>();
+
+            manager.SetWorkSpace(workspace);
 
             Connector.Execute(viewHost);
         }

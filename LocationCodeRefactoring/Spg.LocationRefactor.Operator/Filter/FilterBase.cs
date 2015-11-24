@@ -17,6 +17,7 @@ using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Util;
 
 namespace Spg.LocationRefactor.Operator.Filter
 {
@@ -210,7 +211,8 @@ namespace Spg.LocationRefactor.Operator.Filter
             {
                 foreach (Selection selection in enumerable)
                 {
-                    SyntaxTree root = CSharpSyntaxTree.ParseFile(selection.SourcePath);
+                    string strTree = FileUtil.ReadFile(selection.SourcePath);
+                    SyntaxTree root = CSharpSyntaxTree.ParseText(strTree);
                     nodes.Add(root.GetRoot().FindNode(new TextSpan(selection.Start, selection.Length)));
                 } 
             }

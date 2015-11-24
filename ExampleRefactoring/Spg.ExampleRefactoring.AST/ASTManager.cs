@@ -206,7 +206,7 @@ namespace Spg.ExampleRefactoring.AST
             SyntaxKind syntaxKind)
         {
             var decedents = from snode in tree.GetRoot().DescendantNodes()
-                            where snode.Span.Start == start && snode.Span.End == end && snode.CSharpKind() == syntaxKind
+                            where snode.Span.Start == start && snode.Span.End == end && snode.Kind() == syntaxKind
                             select snode;
             return decedents;
         }
@@ -220,7 +220,7 @@ namespace Spg.ExampleRefactoring.AST
         public static IEnumerable<SyntaxNode> NodesWithTheSameSyntaxKind(SyntaxNode tree, SyntaxKind syntaxKind)
         {
             var treeDescendents = from snode in tree.DescendantNodes()
-                                  where snode.CSharpKind() == syntaxKind
+                                  where snode.Kind() == syntaxKind
                                   select snode;
             return treeDescendents;
         }

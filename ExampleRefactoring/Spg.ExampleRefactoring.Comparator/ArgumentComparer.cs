@@ -21,9 +21,9 @@ namespace Spg.ExampleRefactoring.Comparator
             if (second == null) throw new ArgumentNullException("second");
 
             SyntaxNodeOrToken parent = second;
-            while (parent.CSharpKind() != SyntaxKind.Block)
+            while (parent.Kind() != SyntaxKind.Block)
             {
-                if (parent.CSharpKind() == SyntaxKind.Argument)
+                if (parent.Kind() == SyntaxKind.Argument)
                 {                 
                     return true;
                 }
