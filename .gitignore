@@ -47,6 +47,6 @@ IntelliMeta.sln.ide/*
 *.coverage
 Backup[0-9]*/*
 Backup/*
-
+*/packages/*
 
 

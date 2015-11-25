@@ -92,7 +92,7 @@ namespace Spg.LocationRefactor.Operator.Filter
             bool indicator = learn.Indicator(Predicate, listNode, regex);
 
             return indicator;
-        }     
+        }
 
         /// <summary>
         /// Retrieve regions
@@ -129,7 +129,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>List of regions</returns>
         public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
         {
-            IEnumerable<SyntaxNode>  nodesForFiltering = SyntaxNodesDymTokens();
+            IEnumerable<SyntaxNode> nodesForFiltering = SyntaxNodesDymTokens();
             if (nodesForFiltering == null)
             {
                 nodesForFiltering = Decomposer.SyntaxNodesWithoutSemanticModel(syntaxNode);
@@ -145,29 +145,29 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>Syntax node used on filtering process</returns>
         internal IEnumerable<SyntaxNode> SyntaxNodesDymTokens()
         {
-            IEnumerable<Tuple<string, SyntaxNodeOrToken>> nameList = GetIdentifierNames().ToList();
+            IEnumerable<DymToken> nameList = GetIdentifierNames().ToList();
             if (nameList.Any())
             {
                 var referenceDictionary = new Dictionary<string, IEnumerable<SyntaxNode>>();
-                foreach (Tuple<string, SyntaxNodeOrToken> nameDyn in nameList)
+                foreach (DymToken nameDyn in nameList)
                 {
                     IEnumerable<SyntaxNode> nodes = Decomposer.GetInstance().SyntaxNodesWithSemanticModel(nameDyn);
                     if (nodes != null)
                     {
-                        if (!referenceDictionary.ContainsKey(nameDyn.Item1))
+                        if (!referenceDictionary.ContainsKey(nameDyn.dynType.fullName))
                         {
-                            referenceDictionary.Add(nameDyn.Item1, nodes);
+                            referenceDictionary.Add(nameDyn.dynType.fullName, nodes);
                         }
                     }
                 }
 
                 if (referenceDictionary.Count() == 1)
                 {
-                    if (MatchesSelectedLocations(referenceDictionary.First().Value.ToList(), EditorController.GetInstance().SelectedLocations))
-                    {
-                        return referenceDictionary.First().Value;
-                    }
-                    return null;
+                    //if (MatchesSelectedLocations(referenceDictionary.First().Value.ToList(), EditorController.GetInstance().SelectedLocations))
+                    //{
+                    return referenceDictionary.First().Value;
+                    //}
+                    //return null;
                 }
 
                 if (referenceDictionary.Any())
@@ -204,64 +204,66 @@ namespace Spg.LocationRefactor.Operator.Filter
                 intersection = intersection.Intersect(dicSelections.Values.ElementAt(i));
             }
 
-            IList<Selection> enumerable = intersection as IList<Selection> ?? intersection.ToList();
-            bool isIntersection = MatchesSelectedLocations(enumerable, EditorController.GetInstance().SelectedLocations);
+            List<Selection> enumerable = intersection as List<Selection> ?? intersection.ToList();
+
+            //bool isIntersection = MatchesSelectedLocations(enumerable, EditorController.GetInstance().SelectedLocations);
             List<SyntaxNode> nodes = new List<SyntaxNode>();
-            if (isIntersection)
+            //if (isIntersection)
+            //{
+            foreach (Selection selection in enumerable)
             {
-                foreach (Selection selection in enumerable)
-                {
-                    string strTree = FileUtil.ReadFile(selection.SourcePath);
-                    SyntaxTree root = CSharpSyntaxTree.ParseText(strTree);
-                    nodes.Add(root.GetRoot().FindNode(new TextSpan(selection.Start, selection.Length)));
-                } 
+                string strTree = FileUtil.ReadFile(selection.SourcePath);
+                SyntaxTree root = CSharpSyntaxTree.ParseText(strTree, path: selection.SourcePath);
+                nodes.Add(root.GetRoot().FindNode(new TextSpan(selection.Start, selection.Length)));
             }
-            else
-            {
-                foreach (KeyValuePair<string, IEnumerable<SyntaxNode>>  item in referenceDictionary)
-                {
-                    nodes.AddRange(item.Value);
-                }
-            }
+            return nodes;
+            //}
+            //else
+            //{
+            //    foreach (KeyValuePair<string, IEnumerable<SyntaxNode>>  item in referenceDictionary)
+            //    {
+            //        nodes.AddRange(item.Value);
+            //    }
+            //}
 
-            if (MatchesSelectedLocations(nodes, EditorController.GetInstance().SelectedLocations))
-            {
-                return nodes;
-            }
-            return null;
+            //if (MatchesSelectedLocations(nodes, EditorController.GetInstance().SelectedLocations))
+            //{
+            //    return nodes;
+            //}
+            //return null;
         }
 
-        /// <summary>
-        /// Verify if nodes match with developer selected locations
-        /// </summary>
-        /// <param name="nodes">List of nodes</param>
-        /// <param name="selectedLocations">Developer selected locations</param>
-        /// <returns>True if nodes match with developer selected locations</returns>
-        private bool MatchesSelectedLocations(IEnumerable<Selection> nodes, List<TRegion> selectedLocations)
-        {
-            IList<Selection> selections = nodes as IList<Selection> ?? nodes.ToList();
-            foreach (TRegion region in selectedLocations)
-            {
-                bool isIntersection = false;
-                foreach (Selection selection in selections)
-                {
-                    TRegion rSel = new TRegion();
-                    rSel.Start = selection.Start;
-                    rSel.Length = selection.Length;
-                    if (region.Path.ToUpperInvariant().Equals(selection.SourcePath.ToUpperInvariant()) && rSel.IntersectWith(region))
-                    {
-                        isIntersection = true;
-                        break;
-                    }
-                }
+        ///// <summary>
+        ///// Verify if nodes match with developer selected locations
+        ///// </summary>
+        ///// <param name="nodes">List of nodes</param>
+        ///// <param name="selectedLocations">Developer selected locations</param>
+        ///// <returns>True if nodes match with developer selected locations</returns>
+        //private bool MatchesSelectedLocations(IEnumerable<Selection> nodes, List<TRegion> selectedLocations)
+        //{
+        //    IList<Selection> selections = nodes as IList<Selection> ?? nodes.ToList();
+        //    foreach (TRegion region in selectedLocations)
+        //    {
+        //        bool isIntersection = false;
+        //        foreach (Selection selection in selections)
+        //        {
+        //            TRegion rSel = new TRegion();
+        //            rSel.Start = selection.Start;
+        //            rSel.Length = selection.Length;
+        //            if (region.Path.ToUpperInvariant().Equals(selection.SourcePath.ToUpperInvariant()) && rSel.IntersectWith(region))
+        //            {
+        //                isIntersection = true;
+        //                break;
+        //            }
+        //        }
 
-                if (!isIntersection)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        //        if (!isIntersection)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
 
         /// <summary>
         /// Verify if nodes match with developer selected locations
@@ -347,7 +349,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         private List<TRegion> RetrieveRegionsBase(IEnumerable<SyntaxNode> syntaxNodes)
         {
             List<TRegion> tRegions = new List<TRegion>();
-            
+
             foreach (SyntaxNode node in syntaxNodes)
             {
                 List<SyntaxNodeOrToken> tokens = new List<SyntaxNodeOrToken>();
@@ -388,7 +390,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         //            string name = token.token.ToString();
         //            WorkspaceManager manager = WorkspaceManager.GetInstance();
         //            var x = manager.GetLocalReferences(EditorController.GetInstance().ProjectInformation.ProjectPath.First(), EditorController.GetInstance().ProjectInformation.SolutionPath, token.token, name);
-                    
+
         //            nameList.Add(name);
         //        }
         //    }
@@ -409,13 +411,13 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// Get the name used to search for references
         /// </summary>
         /// <returns>Name used to search for references</returns>
-        private IEnumerable<Tuple<string, SyntaxNodeOrToken>> GetIdentifierNames()
+        private IEnumerable<DymToken> GetIdentifierNames()
         {
-            List<Tuple<string, SyntaxNodeOrToken>> nameList = new List<Tuple<string, SyntaxNodeOrToken>>();
+            List<DymToken> nameList = new List<DymToken>();
             if (!(Predicate is NotContains))
             {
-                IEnumerable<Tuple<string, SyntaxNodeOrToken>> tokensR1 = LookUpForDymTokens(Predicate.r1);
-                IEnumerable<Tuple<string, SyntaxNodeOrToken>> tokensR2 = LookUpForDymTokens(Predicate.r2);
+                IEnumerable<DymToken> tokensR1 = LookUpForDymTokens(Predicate.r1);
+                IEnumerable<DymToken> tokensR2 = LookUpForDymTokens(Predicate.r2);
 
                 nameList.AddRange(tokensR1);
                 nameList.AddRange(tokensR2);
@@ -429,16 +431,14 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// </summary>
         /// <param name="tokenSeq">Token sequence</param>
         /// <returns>Dynamic tokens</returns>
-        private IEnumerable<Tuple<string, SyntaxNodeOrToken>> LookUpForDymTokens(TokenSeq tokenSeq)
+        private IEnumerable<DymToken> LookUpForDymTokens(TokenSeq tokenSeq)
         {
-            List<Tuple<string, SyntaxNodeOrToken>> nameList = new List<Tuple<string, SyntaxNodeOrToken>>();
+            List<DymToken> nameList = new List<DymToken>();
             foreach (Token token in tokenSeq.Tokens)
             {
                 if (token is DymToken && token.token.IsKind(SyntaxKind.IdentifierToken))
                 {
-                    string name = token.token.ToString();
-                    Tuple<string, SyntaxNodeOrToken> tuple = Tuple.Create(name, token.token);
-                    nameList.Add(tuple);
+                    nameList.Add(token as DymToken);
                 }
             }
             return nameList;

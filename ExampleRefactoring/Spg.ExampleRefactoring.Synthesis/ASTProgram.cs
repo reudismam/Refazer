@@ -39,14 +39,14 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Dynamic tokens and occurrences
         /// </summary>
         /// <returns></returns>
-        public Dictionary<DymToken, int> Dict { get; set; }
+        public Dictionary<DymToken, List<DymToken>> Dict { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ASTProgram()
         {
-            Dict = new Dictionary<DymToken, int>();
+            Dict = new Dictionary<DymToken, List<DymToken>>();
             this.Setting = new SynthesizerSetting { Deviation = 2, ConsiderConstrStr = true };
         }
 
@@ -61,7 +61,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             if (examples == null || examples.Count == 0) { throw new ArgumentException("Examples cannot be null or empty"); }
 
             this.Setting = setting;
-            Dict = new Dictionary<DymToken, int>();
+            Dict = new Dictionary<DymToken, List<DymToken>>();
 
             if (setting.DynamicTokens)
             {
@@ -308,6 +308,76 @@ namespace Spg.ExampleRefactoring.Synthesis
             return dags;
         }
 
+        ///// <summary>
+        ///// Create dynamic tokens
+        ///// </summary>
+        ///// <param name="examples">Examples</param>
+        //private void CreateDymTokens(List<Tuple<ListNode, ListNode>> examples)
+        //{
+        //    if (examples == null) { throw new ArgumentNullException("examples"); }
+
+        //    Dictionary<DymToken, int> temp;
+        //    foreach (Tuple<ListNode, ListNode> t in examples)
+        //    {
+        //        temp = new Dictionary<DymToken, int>();
+        //        for (int i = 0; i < t.Item1.List.Count; i++)
+        //        {
+        //            SyntaxNodeOrToken st = t.Item1.List[i];
+        //            if (st.IsKind(SyntaxKind.IdentifierToken) || st.IsKind(SyntaxKind.StringLiteralToken) || st.IsKind(SyntaxKind.NumericLiteralToken))
+        //            {
+        //                bool dym = false;
+        //                if (i < t.Item1.Length())
+        //                {
+        //                    dym = IsDym(st);
+        //                }
+
+        //                if (!dym) continue;
+
+        //                DymToken dt = new DymToken(st, true);
+        //                int v;
+        //                if (!temp.TryGetValue(dt, out v))
+        //                {
+        //                    temp.Add(dt, 0);
+        //                }
+
+        //                RawDymToken rdt = new RawDymToken(st, true);
+        //                if (!temp.TryGetValue(rdt, out v))
+        //                {
+        //                    temp.Add(rdt, 0);
+        //                }
+        //            }
+        //        }
+
+        //        foreach (DymToken dt in temp.Keys)
+        //        {
+        //            int v;
+        //            if (!Dict.TryGetValue(dt, out v))
+        //            {
+        //                Dict.Add(dt, 0);
+        //            }
+        //            Dict[dt] = v + 1;
+        //        }
+        //    }
+
+        //    temp = new Dictionary<DymToken, int>();
+        //    foreach (DymToken dt in Dict.Keys)
+        //    {
+        //        if (Dict[dt] == examples.Count())
+        //        {
+        //            if (!(dt is RawDymToken))
+        //            {
+        //                temp.Add(dt, examples.Count());
+        //            }
+        //            else if (Dict[(new DymToken(dt.token, true))] != examples.Count)
+        //            {
+        //                temp.Add(dt, examples.Count());
+        //            }
+        //        }
+        //    }
+
+        //    Dict = temp;
+        //}
+
         /// <summary>
         /// Create dynamic tokens
         /// </summary>
@@ -316,10 +386,8 @@ namespace Spg.ExampleRefactoring.Synthesis
         {
             if (examples == null) { throw new ArgumentNullException("examples"); }
 
-            Dictionary<DymToken, int> temp;
             foreach (Tuple<ListNode, ListNode> t in examples)
             {
-                temp = new Dictionary<DymToken, int>();
                 for (int i = 0; i < t.Item1.List.Count; i++)
                 {
                     SyntaxNodeOrToken st = t.Item1.List[i];
@@ -334,47 +402,66 @@ namespace Spg.ExampleRefactoring.Synthesis
                         if (!dym) continue;
 
                         DymToken dt = new DymToken(st, true);
-                        int v;
-                        if (!temp.TryGetValue(dt, out v))
+                        List<DymToken> v;
+                        if (!Dict.TryGetValue(dt, out v))
                         {
-                            temp.Add(dt, 0);
+                            Dict.Add(dt, new List<DymToken>());
                         }
+                        Dict[dt].Add(dt);
 
                         RawDymToken rdt = new RawDymToken(st, true);
-                        if (!temp.TryGetValue(rdt, out v))
+                        if (!Dict.TryGetValue(rdt, out v))
                         {
-                            temp.Add(rdt, 0);
+                            Dict.Add(rdt, new List<DymToken>());
                         }
+                        Dict[rdt].Add(dt);
                     }
-                }
-
-                foreach (DymToken dt in temp.Keys)
-                {
-                    int v;
-                    if (!Dict.TryGetValue(dt, out v))
-                    {
-                        Dict.Add(dt, 0);
-                    }
-                    Dict[dt] = v + 1;
                 }
             }
 
-            temp = new Dictionary<DymToken, int>();
+            Dictionary<DymToken, List<DymToken>> temp = new Dictionary<DymToken, List<DymToken>>();
             foreach (DymToken dt in Dict.Keys)
             {
-                if (Dict[dt] == examples.Count())
+                if (Dict[dt].Count >= examples.Count())
                 {
-                    if (!(dt is RawDymToken))
-                    {
-                        temp.Add(dt, examples.Count());
-                    }
-                    else if (Dict[(new DymToken(dt.token, true))] != examples.Count)
-                    {
-                        temp.Add(dt, examples.Count());
-                    }
+                    temp.Add(dt, Dict[dt]);      
                 }
             }
 
+            Dict = temp;
+            temp = new Dictionary<DymToken, List<DymToken>>();
+            foreach (var entry in Dict)
+            {
+                if (!(entry.Key is RawDymToken))
+                {
+                    bool isFullName = true;
+                    string fullName = entry.Value.First().dynType.fullName;
+                    foreach (var dymToken in entry.Value)
+                    {
+                        if (dymToken.dynType.type.Equals(DynType.FULLNAME) && dymToken.dynType.fullName.Equals(fullName))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            isFullName = false;
+                            break;
+                        }
+                    }
+                    if (isFullName)
+                    {
+                        temp.Add(entry.Key, entry.Value);
+                    }
+                    else {
+                        entry.Key.dynType.type = DynType.STRING;
+                        entry.Key.dynType.fullName = entry.Key.token.ToString();
+                        temp.Add(entry.Key, entry.Value);
+                    }
+                }
+                else {
+                    temp.Add(entry.Key, entry.Value);
+                }
+            }
             Dict = temp;
         }
 
@@ -499,14 +586,14 @@ namespace Spg.ExampleRefactoring.Synthesis
                         subStrExpressions.Add(expression);
                         synthExpressions.Add(ExpressionKind.Consttrustr, subStrExpressions);
 
-                        if (subNodes.Length() == 1 && subNodes.List.First().IsKind(SyntaxKind.IdentifierToken))
-                        {
-                            List<IExpression> fakeConstStrExps = new List<IExpression>();
-                            IExpression fakeConstrStr = new FakeConstrStr(subNodes);
-                            fakeConstStrExps.Add(fakeConstrStr);
-                            synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
+                        //if (subNodes.Length() == 1 && subNodes.List.First().IsKind(SyntaxKind.IdentifierToken))
+                        //{
+                        //    List<IExpression> fakeConstStrExps = new List<IExpression>();
+                        //    IExpression fakeConstrStr = new FakeConstrStr(subNodes);
+                        //    fakeConstStrExps.Add(fakeConstrStr);
+                        //    synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
 
-                        }
+                        //}
                     }
 
                     //List<IExpression> subStrns = new List<IExpression>();
@@ -585,13 +672,13 @@ namespace Spg.ExampleRefactoring.Synthesis
                         constStrExprs.Add(expression);
                         synthExpressions.Add(ExpressionKind.Consttrustr, constStrExprs);
 
-                        if (subNodes.Length() == 1 && subNodes.List.First().IsKind(SyntaxKind.IdentifierToken))
-                        {
-                            List<IExpression> fakeConstStrExps = new List<IExpression>();
-                            IExpression fakeConstrStr = new FakeConstrStr(subNodes);
-                            fakeConstStrExps.Add(fakeConstrStr);
-                            synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
-                        }
+                        //if (subNodes.Length() == 1 && subNodes.List.First().IsKind(SyntaxKind.IdentifierToken))
+                        //{
+                        //    List<IExpression> fakeConstStrExps = new List<IExpression>();
+                        //    IExpression fakeConstrStr = new FakeConstrStr(subNodes);
+                        //    fakeConstStrExps.Add(fakeConstrStr);
+                        //    synthExpressions.Add(ExpressionKind.FakeConstrStr, fakeConstStrExps);
+                        //}
                     }
                     List<IExpression> expressions = GenerateNodes(input, subNodes, kpositions);
                     expressions = MinimizeExpressions(expressions);

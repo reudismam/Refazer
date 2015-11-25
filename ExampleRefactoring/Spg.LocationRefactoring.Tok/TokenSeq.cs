@@ -67,10 +67,9 @@ namespace Spg.LocationRefactoring.Tok
         /// <param name="nodes">Nodes</param>
         /// <param name="dict">Dictionary with previous dynamic tokens</param>
         /// <returns>Dynamic tokens</returns>
-        public static List<Token> DymTokens(ListNode nodes, Dictionary<DymToken, int> dict)
+        public static List<Token> DymTokens(ListNode nodes, Dictionary<DymToken, List<DymToken>> dict)
         {
             List<Token> tokens = new List<Token>();
-
             foreach (SyntaxNodeOrToken st in nodes.List)
             {
                 DymToken dtoken = new DymToken(st, true);

@@ -15,6 +15,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.TextRegion;
 using Spg.ExampleRefactoring.Util;
+using Spg.LocationRefactoring.Tok;
 
 namespace Spg.LocationRefactor.Node
 {
@@ -248,16 +249,17 @@ namespace Spg.LocationRefactor.Node
         /// </summary>
         /// <param name="name">Identifier name</param>
         /// <returns>Syntax nodes to be used on filtering</returns>
-        internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(Tuple<string, SyntaxNodeOrToken> name)
+        internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(DymToken name)
         {
             //return null;
             if (name == null) return null;
      
-            SelectionInfo info = new SelectionInfo(name.Item1, new List<TRegion>(Ctl.SelectedLocations));
+            SelectionInfo info = new SelectionInfo(name.dynType.fullName, new List<TRegion>(Ctl.SelectedLocations));
             IEnumerable<SyntaxNode> output;
             if (!_dicReferences.TryGetValue(info, out output))
             {
                 Console.WriteLine("Looking for references!! " + name);
+
                 Dictionary<string, Dictionary<string, List<TextSpan>>> result = GetReferences(name);
 
                 Dictionary<string, Dictionary<string, List<TextSpan>>> referencedSymbols =
@@ -288,7 +290,7 @@ namespace Spg.LocationRefactor.Node
                 foreach (var fileSpans in dictionary)
                 {
                     string strTree = FileUtil.ReadFile(fileSpans.Key);
-                    SyntaxTree fileTree = CSharpSyntaxTree.ParseText(strTree);
+                    SyntaxTree fileTree = CSharpSyntaxTree.ParseText(strTree, path: fileSpans.Key);
 
                     var spans = fileSpans;
                     var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
@@ -296,18 +298,11 @@ namespace Spg.LocationRefactor.Node
                                 select node;
                     nodesList.AddRange(nodes);
                 }
-                //}
-                //else
-                //{
-                //MessageBox.Show("More than one syntax reference");
-                //}
-
+                
                 if (!result.Any() || !nodesList.Any())
                 {
-                    //return null; //return SyntaxNodesWithoutSemanticModel(tree);
                     _dicReferences.Add(info, null);
                 }
-                //return nodesList;
                 else
                 {
                     _dicReferences.Add(info, nodesList);
@@ -319,9 +314,9 @@ namespace Spg.LocationRefactor.Node
         /// <summary>
         /// Generates references on the format: key referenced type, and values dictionary of referencee file and list of referecees.
         /// </summary>
-        /// <param name="name">Name to perform look up</param>
+        /// <param name="dymToken">Name to perform look up</param>
         /// <returns>Generates references on the format: key referenced type, and values dictionary of referencee file and list of referecees.</returns>
-        internal static Dictionary<string, Dictionary<string, List<TextSpan>>> GetReferences(Tuple<string, SyntaxNodeOrToken> name)
+        internal static Dictionary<string, Dictionary<string, List<TextSpan>>> GetReferences(DymToken dymToken)
         {
             try
             {
@@ -331,20 +326,22 @@ namespace Spg.LocationRefactor.Node
            
                 Dictionary<string, List<TRegion>> files = RegionManager.GetInstance().GroupRegionBySourceFile(controller.SelectedLocations);
                 Dictionary<string, Dictionary<string, List<TextSpan>>> result = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
-                if (files.Count == 1)
-                {
-                    result = wsManager.GetLocalReferences(pjInfo.ProjectPath.First(), pjInfo.SolutionPath, name.Item2, name.Item1);
-                }
+                //if (files.Count == 1)
+                //{
+                //    result = wsManager.GetLocalReferences(pjInfo.ProjectPath.First(), pjInfo.SolutionPath, dymToken);
+                //}
 
-                if (!result.Any())
-                {
-                    result = wsManager.GetDeclaredReferences(pjInfo.ProjectPath, pjInfo.SolutionPath, name.Item1);
-                }
+                //if (!result.Any())
+                //{
+                //    result = wsManager.GetDeclaredReferences(pjInfo.ProjectPath, pjInfo.SolutionPath, dymToken);
+                //}
+
+                result = wsManager.GetLocalReferences(pjInfo.ProjectPath.First(), pjInfo.SolutionPath, dymToken);
                 return result;
             }
             catch (AggregateException)
             {
-                Console.WriteLine("Could not find references for: " + name);
+                Console.WriteLine("Could not find references for: " + dymToken);
             }
 
             return new Dictionary<string, Dictionary<string, List<TextSpan>>>();
@@ -379,7 +376,7 @@ namespace Spg.LocationRefactor.Node
             foreach (Tuple<string, string> fileTuple in files)
             {
                 string strTree = FileUtil.ReadFile(fileTuple.Item2);
-                SyntaxTree tree = CSharpSyntaxTree.ParseText(strTree);
+                SyntaxTree tree = CSharpSyntaxTree.ParseText(strTree, path: fileTuple.Item2);
 
                 var nodes = from node in tree.GetRoot().DescendantNodesAndSelf()
                             where WithinLcas(node)

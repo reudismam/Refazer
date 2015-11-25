@@ -18,7 +18,7 @@ namespace Spg.LocationRefactoring.Tok
     {
         private bool _getFullyQualifiedName;
 
-        DynType dynType { get; set; }
+        public DynType dynType { get; set; }
 
         /// <summary>
         /// Constructor
