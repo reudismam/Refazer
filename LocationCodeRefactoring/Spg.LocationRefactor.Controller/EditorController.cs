@@ -179,6 +179,7 @@ namespace Spg.LocationRefactor.Controller
             LCAManager.Init();
             RegionManager.Init();
             BoundaryManager.Init();
+            WorkspaceManager.Init();
             //Decomposer.Init();
             //LCAManager.Init();
         }
@@ -209,6 +210,7 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public void Extract()
         {
+            Console.WriteLine("Synthesizing location programs...");
             Lcas = RegionManager.LeastCommonAncestors(SelectedLocations);
             LocationExtractor extractor = new LocationExtractor();
             //remove
@@ -223,6 +225,7 @@ namespace Spg.LocationRefactor.Controller
             }
 
             NotifyLocationProgramGeneratedObservers(Progs);
+            Console.WriteLine("Program synthesis completed.");
         }
 
         /// <summary>
@@ -232,9 +235,11 @@ namespace Spg.LocationRefactor.Controller
         /// <param name="negatives"></param>
         public void Extract(List<TRegion> positives, List<TRegion> negatives)
         {
+            Console.WriteLine("Synthesizing location programs...");
             LocationExtractor extractor = new LocationExtractor();
             ProgramsWithNegatives = extractor.Extract(positives, negatives);
             NotifyLocationProgramGeneratedObservers(ProgramsWithNegatives);
+            Console.WriteLine("Program synthesis completed.");
         }
 
         /// <summary>
@@ -306,12 +311,14 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public void Undo()
         {
+            Console.WriteLine("Undoing the repetitive change.");
             foreach (Transformation transformation in SourceTransformations)
             {
                 string path = transformation.SourcePath;
                 string sourceCode = transformation.transformation.Item1;
                 FileUtil.WriteToFile(path, sourceCode);
             }
+            Console.WriteLine("Undoing the repetitive change completed.");
         }
 
         /// <summary>
@@ -369,6 +376,7 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public void RetrieveLocations()
         {
+            Console.WriteLine("Searching for repetitive changes instances");
             if (ProgramsWithNegatives != null)
             {
                 RetrieveLocationsPosNegatives();
@@ -404,6 +412,7 @@ namespace Spg.LocationRefactor.Controller
 
             LocationsFoundSoFar = tp;
             NotifyLocationsObservers(Locations);
+            Console.WriteLine("Search completed: " + selections.Count + " instances found.");
         }
 
         /// <summary>
@@ -411,6 +420,7 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public void RetrieveLocationsPosNegatives()
         {
+            Console.WriteLine("Searching for repetitive changes instances (negative examples configured.)");
             Prog prog = ProgramsWithNegatives.First();
             Locations = RetrieveLocationsPosNegative(prog);
 
@@ -428,6 +438,7 @@ namespace Spg.LocationRefactor.Controller
 
             LocationsFoundSoFar = tp;
             NotifyLocationsObservers(Locations);
+            Console.WriteLine("Search completed: " + selections.Count + " instances found.");
         }
 
         /// <summary>
@@ -445,6 +456,7 @@ namespace Spg.LocationRefactor.Controller
         /// <returns>Code locations</returns>
         private List<CodeLocation> RetrieveLocationsSingleSourceClass(Prog prog)
         {
+            Console.WriteLine("Searching in a single class.");
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
             SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
             List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, prog);
@@ -486,6 +498,7 @@ namespace Spg.LocationRefactor.Controller
         /// <returns>Code locations</returns>
         private List<CodeLocation> RetrieveLocationsMultiplesSourceClasses(Prog prog)
         {
+            Console.WriteLine("Searching in multiple class.");
             List<CodeLocation> sourceLocations = new List<CodeLocation>();
 
             List<TRegion> regions = RetrieveLocations(prog);
@@ -509,8 +522,10 @@ namespace Spg.LocationRefactor.Controller
         /// <param name="prog">Location program</param>
         public List<TRegion> RetrieveLocations(Prog prog)
         {
+            Console.WriteLine("Searching for repetitive changes instances");
             LocationExtractor extractor = new LocationExtractor();
             List<TRegion> regions = extractor.RetrieveString(prog);
+            Console.WriteLine("Search completed: " + regions.Count + " instances found.");
             return regions;
         }
 
@@ -529,47 +544,17 @@ namespace Spg.LocationRefactor.Controller
         }
 
         /// <summary>
-        /// Selected only non duplicate locations
+        /// Remove duplicated location from location instances
         /// </summary>
-        /// <param name="locations">All locations</param>
+        /// <param name="locations">Location instances</param>
         /// <returns>Non duplicate locations</returns>
         private List<CodeLocation> NonDuplicateLocations(List<CodeLocation> locations)
         {
+            Console.WriteLine("Removing duplicated location instances.");
             locations = SegmentBySyntaxKind(locations);
             locations = EnclosedSyntaxKind(locations);
-            return locations;
-            //List<CodeLocation> clocations = new List<CodeLocation>();
-            //var groupedLocations = RegionManager.GetInstance().GroupLocationsBySourceFile(locations);
-
-            //foreach (KeyValuePair<string, List<CodeLocation>> item in groupedLocations)
-            //{
-            //    bool[] analized = Enumerable.Repeat(false, item.Value.Count).ToArray();
-            //    for (int i = 0; i < item.Value.Count; i++)
-            //    {
-            //        CodeLocation location = item.Value[i];
-            //        CodeLocation choosed = location;
-            //        if (!analized[i])
-            //        {
-            //            for (int j = i + 1; j < item.Value.Count; j++)
-            //            {
-            //                var otherLocation = item.Value[j];
-            //                bool intersect = location.Region.IntersectWith(otherLocation.Region);
-            //                if (intersect && location.Region.Path.ToUpperInvariant().Equals(otherLocation.Region.Path.ToUpperInvariant()))
-            //                {
-            //                    analized[j] = true;
-            //                    if (otherLocation.Region.Start > location.Region.Start)
-            //                    {
-            //                        choosed = otherLocation;
-            //                    }
-            //                }
-            //            }
-            //            clocations.Add(choosed);
-            //        }
-            //    }
-            //}
-
-            //if(locations.Count != clocations.Count) throw new Exception("Error in calculating non-duplicated locations."); 
-            //return clocations;
+            Console.WriteLine("Duplicated locations removed.");
+            return locations;  
         }
 
         private List<CodeLocation> EnclosedSyntaxKind(List<CodeLocation> locations)
@@ -727,6 +712,7 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public void Refact()
         {
+            Console.WriteLine("Performing the repetitive change.");
             CodeTransformations = new List<CodeTransformation>();
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             FillEditedLocations();
@@ -734,25 +720,13 @@ namespace Spg.LocationRefactor.Controller
             List<Transformation> transformations = extractor.TransformProgram(false);
             SourceTransformations = transformations;
 
-            //UpdateFiles(transformations);
-            //try
-            //{
-            //    EvaluateTransformation(CodeTransformations);
-            //}
-            //catch (Exception)
-            //{
-            //}
-            //finally
-            //{
-            //    Undo();
-            //}
-
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
             FileUtil.WriteToFile(@"edit.t", totalTime.ToString());
 
             NotifyProgramRefactoredObservers(transformations);
             NotifyLocationsTransformedObservers();
+            Console.WriteLine("Transformation completed.");
         }
 
         private static void UpdateFiles(List<Transformation> transformations)

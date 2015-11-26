@@ -5,10 +5,7 @@ using Spg.LocationRefactor.Learn.Filter;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.Operator.Map;
 using Microsoft.CodeAnalysis;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Learn;
 using Spg.LocationRefactor.Node;
-using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 

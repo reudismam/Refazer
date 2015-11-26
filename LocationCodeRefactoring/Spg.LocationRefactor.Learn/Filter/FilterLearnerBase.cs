@@ -36,17 +36,6 @@ namespace Spg.LocationRefactor.Learn
             _calculated = new Dictionary<TokenSeq, bool>();
         }
 
-        ///// <summary>
-        ///// Create a new instance
-        ///// </summary>
-        ///// <param name="predicate">Predicate</param>
-        //public FilterLearnerBase(IPredicate predicate, List<TRegion> list)
-        //{
-        //    this.List = list;
-        //    _calculated = new Dictionary<TokenSeq, bool>();
-        //    this.Predicate = predicate;
-        //}
-
         /// <summary>
         /// Learn a list filters
         /// </summary>
@@ -64,7 +53,10 @@ namespace Spg.LocationRefactor.Learn
             }
             List<Prog> programs = new List<Prog>();
 
+            Console.WriteLine("Learning predicates for filter.");
             List<IPredicate> predicates = BooleanLearning(QLine);
+            Console.WriteLine("Predicated learning completed.");
+
             var items = from pair in predicates
                         orderby pair.Regex().Count() descending, Order(pair) descending
                         select pair;

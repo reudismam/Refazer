@@ -64,7 +64,7 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
         /// <returns>Predicates set</returns>
         private IEnumerable<IPosition> GetPositions(List<Tuple<ListNode, ListNode>> examples)
         {
-            SynthesizerSetting setting = new SynthesizerSetting { DynamicTokens = true, Deviation = 2 };
+            SynthesizerSetting setting = new SynthesizerSetting { DynamicTokens = true, Deviation = 2, _getFullyQualifiedName = true };
             ASTProgram program = new ASTProgram(setting, examples);
 
             List<IPosition> positions = new List<IPosition>();

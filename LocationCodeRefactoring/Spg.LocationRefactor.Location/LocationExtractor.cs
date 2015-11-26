@@ -95,6 +95,9 @@ namespace Spg.LocationRefactor.Location
                 var negativeExamples = _learn.Decompose(negativeRegions);
                 programs = _learn.LearnSeqRegion(positiveExamples, negativeExamples);
             }
+
+            Console.WriteLine("Top ranked synthesized location program: " + programs.First());
+
             return programs;
         }
 

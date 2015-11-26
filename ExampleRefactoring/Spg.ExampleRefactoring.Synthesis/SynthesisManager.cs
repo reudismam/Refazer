@@ -378,7 +378,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 count++;
 
                 bool isValid = ValidateSynthesizedProgram(sp.Solutions, examples);
-                Console.WriteLine("Processing ....");
+                //Console.WriteLine("Processing ....");
                 if (isValid)
                 {
                         return sp;         
@@ -433,7 +433,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 ComparisonResult<ComparisonObject> r = result[i];
                 if (!r.ModificationType.Equals(ModificationType.None))
                 {
-                    Console.WriteLine(r.DataCompared);
+                    //Console.WriteLine(r.DataCompared);
                     if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
                     {
                         if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))

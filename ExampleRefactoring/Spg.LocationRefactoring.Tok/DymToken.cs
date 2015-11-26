@@ -3,10 +3,8 @@ using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Tok;
 using System;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Spg.ExampleRefactoring.Projects;
 using Spg.ExampleRefactoring.Workspace;
-using System.Windows.Forms;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace Spg.LocationRefactoring.Tok
@@ -60,7 +58,7 @@ namespace Spg.LocationRefactoring.Tok
         /// <returns>True if a match exists</returns>
         public override bool Match(SyntaxNodeOrToken st)
         {
-            DymToken dymToken = new DymToken(st, true);
+            DymToken dymToken = new DymToken(st, false);
             return Equals(dymToken);
         }
 

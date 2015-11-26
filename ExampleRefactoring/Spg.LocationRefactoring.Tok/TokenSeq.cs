@@ -4,6 +4,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactoring.Tok;
+using System.Linq;
 
 namespace Spg.LocationRefactoring.Tok
 {
@@ -72,16 +73,16 @@ namespace Spg.LocationRefactoring.Tok
             List<Token> tokens = new List<Token>();
             foreach (SyntaxNodeOrToken st in nodes.List)
             {
-                DymToken dtoken = new DymToken(st, true);
-                RawDymToken rdtoken = new RawDymToken(st, true);
+                DymToken dtoken = new DymToken(st, false);
+//                RawDymToken rdtoken = new RawDymToken(st);
                 if (dict.ContainsKey(dtoken))
                 {
-                    tokens.Add(dtoken);
+                    tokens.Add(dict[dtoken].First());
                 }
-                else if (dict.ContainsKey(rdtoken))
-                {
-                    tokens.Add(rdtoken);
-                }
+                //else if (dict.ContainsKey(rdtoken))
+                //{
+                //    tokens.Add(rdtoken);
+                //}
                 else {
                     Token token = new Token(st);
                     tokens.Add(token);

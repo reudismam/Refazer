@@ -65,7 +65,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (setting.DynamicTokens)
             {
-                CreateDymTokens(examples);
+                CreateDymTokens(examples, setting._getFullyQualifiedName);
             }
         }
 
@@ -174,7 +174,10 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 SynthesizedProgram valid = CreateSynthesizedProgram(T.Key, T.Value);
 
-                if (Ts.Count == 1) return new List<SynthesizedProgram> { valid };
+                if (Ts.Count == 1) {
+                    Console.WriteLine("Generated program\n" + valid);
+                    return new List<SynthesizedProgram> { valid };
+                }
 
                 List<Tuple<ListNode, ListNode, bool>> ln = CreateConditionalExamples(T.Key, T.Value, Ts, pManager);
                 List<IPredicate> predicates = pManager.LearnPredicates(ln);
@@ -191,6 +194,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             Switch sSwitch = new Switch(S);
             validated.Add(sSwitch);
+            Console.WriteLine("Generated program\n" + sSwitch);
             return validated;
         }
 
@@ -258,6 +262,10 @@ namespace Spg.ExampleRefactoring.Synthesis
             return ln;
         }
 
+        /// <summary>
+        /// Get an empty program
+        /// </summary>
+        /// <returns></returns>
         public static List<SynthesizedProgram> GetEmptyProgram()
         {
             List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
@@ -382,7 +390,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Create dynamic tokens
         /// </summary>
         /// <param name="examples">Examples</param>
-        private void CreateDymTokens(List<Tuple<ListNode, ListNode>> examples)
+        private void CreateDymTokens(List<Tuple<ListNode, ListNode>> examples, bool _getFullyQualifiedName)
         {
             if (examples == null) { throw new ArgumentNullException("examples"); }
 
@@ -401,7 +409,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                         if (!dym) continue;
 
-                        DymToken dt = new DymToken(st, true);
+                        DymToken dt = new DymToken(st, _getFullyQualifiedName);
                         List<DymToken> v;
                         if (!Dict.TryGetValue(dt, out v))
                         {
@@ -409,12 +417,12 @@ namespace Spg.ExampleRefactoring.Synthesis
                         }
                         Dict[dt].Add(dt);
 
-                        RawDymToken rdt = new RawDymToken(st, true);
-                        if (!Dict.TryGetValue(rdt, out v))
-                        {
-                            Dict.Add(rdt, new List<DymToken>());
-                        }
-                        Dict[rdt].Add(dt);
+                        //RawDymToken rdt = new RawDymToken(st);
+                        //if (!Dict.TryGetValue(rdt, out v))
+                        //{
+                        //    Dict.Add(rdt, new List<DymToken>());
+                        //}
+                        //Dict[rdt].Add(dt);
                     }
                 }
             }
@@ -424,7 +432,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 if (Dict[dt].Count >= examples.Count())
                 {
-                    temp.Add(dt, Dict[dt]);      
+                    temp.Add(dt, Dict[dt]);
                 }
             }
 
@@ -432,7 +440,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             temp = new Dictionary<DymToken, List<DymToken>>();
             foreach (var entry in Dict)
             {
-                if (!(entry.Key is RawDymToken))
+                if (_getFullyQualifiedName)
                 {
                     bool isFullName = true;
                     string fullName = entry.Value.First().dynType.fullName;
@@ -452,13 +460,15 @@ namespace Spg.ExampleRefactoring.Synthesis
                     {
                         temp.Add(entry.Key, entry.Value);
                     }
-                    else {
+                    else
+                    {
                         entry.Key.dynType.type = DynType.STRING;
                         entry.Key.dynType.fullName = entry.Key.token.ToString();
-                        temp.Add(entry.Key, entry.Value);
+                        temp.Add(entry.Key, new List<DymToken> { entry.Key });
                     }
                 }
-                else {
+                else
+                {
                     temp.Add(entry.Key, entry.Value);
                 }
             }
@@ -1135,7 +1145,34 @@ namespace Spg.ExampleRefactoring.Synthesis
             return result;
         }
 
-        public List<IPosition> GeneratePosition(ListNode input, int k)
+        /// <summary>
+        /// Generate positions
+        /// </summary>
+        /// <param name="input">Input region</param>
+        /// <param name="k">An index on input region</param>
+        /// <returns>Position list</returns>
+        public List<IPosition> GeneratePosition(ListNode input, int k) {
+            
+            List<IPosition> positions = new List<IPosition>();
+
+            for(int i = 1; i <= 3; i++)
+            {
+                Setting.Deviation = i;
+                List<IPosition> positionsi = GeneratePositionFlashFill(input, k);
+                positions.AddRange(positionsi);
+            }
+
+            return positions;
+            
+        }
+
+        /// <summary>
+        /// Genetate positions for a given input and position on this input
+        /// </summary>
+        /// <param name="input">Input region</param>
+        /// <param name="k">Index in which the position will be generated.</param>
+        /// <returns></returns>
+        public List<IPosition> GeneratePositionFlashFill(ListNode input, int k)
         {
             List<IPosition> result = new List<IPosition>();
             result.Add(CPos(k)); result.Add(CPos(-(input.Length() - k + 1)));

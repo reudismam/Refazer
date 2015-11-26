@@ -5,6 +5,8 @@ namespace Spg.ExampleRefactoring.Setting
     /// </summary>
     public class SynthesizerSetting
     {
+        public bool _getFullyQualifiedName;
+
         /// <summary>
         /// Indicates if create token sequence is to be created
         /// </summary>

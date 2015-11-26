@@ -227,7 +227,8 @@ namespace Spg.LocationRefactor.Location
             if (list == null) throw new ArgumentNullException("list");
             if (!list.Any()) { throw new ArgumentException("Selection list cannot be empty"); }
 
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+            string filePath = list.First().Path;
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode, path: filePath);
             List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
             foreach (TRegion region in list)
             {
@@ -253,7 +254,8 @@ namespace Spg.LocationRefactor.Location
             if (list == null) throw new ArgumentNullException("list");
             if (!list.Any()) { throw new ArgumentException("Selection list cannot be empty"); }
 
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+            string filePath = list.First().Path;
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode, path: filePath);
             var lcas = new List<SyntaxNode>();
             foreach (TRegion region in list)
             {
@@ -364,7 +366,7 @@ namespace Spg.LocationRefactor.Location
                 string sourceCodeAfter = GetDocumentAfterEdition(sourceCode, controller.DocumentsBeforeAndAfter);
                 //if (sourceCodeAfter != null)
                 //{
-                SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter);
+                SyntaxTree treeAfter = CSharpSyntaxTree.ParseText(sourceCodeAfter, path: file);
                 List<SyntaxNode> aNodes = new List<SyntaxNode>();
                 foreach (Selection span in controller.EditedLocations[file])
                 {
@@ -428,7 +430,8 @@ namespace Spg.LocationRefactor.Location
                             Start = span.Start + 1,
                             Length = span.Length - 2,
                             Parent = parent,
-                            Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2)
+                            Text = sourceCodeAfter.Substring(span.Start + 1, span.Length - 2),
+                            Path = fileUpper
                         };
                         //MessageBox.Show(span.Start + tregion.Text + span.Length);
                         outputRegions.Add(tregion);
@@ -474,7 +477,7 @@ namespace Spg.LocationRefactor.Location
         /// <returns>Least common ancestor of region</returns>
         private static SyntaxNode LeastCommonAncestor(string sourceCode, TRegion region)
         {
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode, path: region.Path);
             List<SyntaxNodeOrToken> nodesSelection = ASTManager.NodesBetweenStartAndEndPosition(tree, region.Start, region.Start + region.Length);
 
             SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(nodesSelection, tree);

@@ -14,7 +14,7 @@ namespace Spg.LocationRefactoring.Tok
         /// </summary>
         /// <param name="token">Dynamic token</param>
         /// <param name="getFullyQualifiedName">Indicate if fully qualified name have to be used</param>
-        public RawDymToken(SyntaxNodeOrToken token, bool getFullyQualifiedName) : base(token, getFullyQualifiedName)
+        public RawDymToken(SyntaxNodeOrToken token) : base(token, false)
         {
         }
 
@@ -25,7 +25,7 @@ namespace Spg.LocationRefactoring.Tok
         /// <returns>True if a match exists</returns>
         public override bool Match(SyntaxNodeOrToken st)
         {
-            RawDymToken dymToken = new RawDymToken(st, true);
+            RawDymToken dymToken = new RawDymToken(st);
             return Equals(dymToken);
         }
 

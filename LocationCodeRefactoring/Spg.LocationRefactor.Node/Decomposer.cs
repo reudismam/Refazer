@@ -123,7 +123,7 @@ namespace Spg.LocationRefactor.Node
             Dictionary<string, List<TRegion>> dicRegion = RegionManager.GetInstance().GroupRegionBySourceFile(list);
             foreach (var entry in dicRegion)
             {
-                SyntaxTree tree = CSharpSyntaxTree.ParseText(entry.Key);
+                SyntaxTree tree = CSharpSyntaxTree.ParseText(entry.Key, path: entry.Value.First().Path);
                 foreach (TRegion re in entry.Value)
                 {
                     SyntaxNode node = tree.GetRoot();

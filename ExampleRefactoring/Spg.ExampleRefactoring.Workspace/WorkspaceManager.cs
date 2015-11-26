@@ -28,14 +28,24 @@ namespace Spg.ExampleRefactoring.Workspace
             _dictionary = new Dictionary<string, SemanticModel>();
         }
 
+        /// <summary>
+        /// Init method
+        /// </summary>
+        public static void Init()
+        {
+            _instance = null;
+        }
+
         private Solution GetWorkSpace(string solutionPath)
         {
+            Console.WriteLine("Opening solution: " + solutionPath);
             if (solutionInstance == null)
             {
                 MSBuildWorkspace workspace = MSBuildWorkspace.Create();
                 solutionInstance = workspace.OpenSolutionAsync(solutionPath).Result;
             }
             return solutionInstance;
+            Console.WriteLine("Solution opened.");
         }
 
         public void SetWorkSpace(Microsoft.CodeAnalysis.Workspace workspace)
@@ -228,29 +238,39 @@ namespace Spg.ExampleRefactoring.Workspace
             Solution solution = GetWorkSpace(solutionPath);
 
             SemanticModel smodel = null;
-            if (_dictionary.ContainsKey(node.SyntaxTree.GetText().ToString()))
+            if (_dictionary.ContainsKey(node.SyntaxTree.FilePath.ToUpperInvariant()))
             {
-                smodel = _dictionary[node.SyntaxTree.GetText().ToString()];
+                smodel = _dictionary[node.SyntaxTree.FilePath.ToUpperInvariant()];
             }
             else
             {
                 foreach (ProjectId projectId in solution.ProjectIds)
                 {
                     Project project = solution.GetProject(projectId);
-                    Compilation compilation = project.GetCompilationAsync().Result;
+                    Compilation compilation = null;
+                    try
+                    {
+                        compilation = project.GetCompilationAsync().Result;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Could not load project: " + project.Name);
+                        continue;
+                    }
 
                     foreach (DocumentId documentId in project.DocumentIds)
                     {
                         var document = solution.GetDocument(documentId);
                         SyntaxTree tree;
                         document.TryGetSyntaxTree(out tree);
-                        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+                        if (tree.FilePath.ToUpperInvariant().Equals(node.SyntaxTree.FilePath.ToUpperInvariant()))
                         {
                             document.TryGetSyntaxTree(out tree);
                             smodel = compilation.GetSemanticModel(tree);
-                            _dictionary.Add(tree.GetText().ToString(), smodel);
+                            if (!_dictionary.ContainsKey((tree.FilePath.ToUpperInvariant()))){
+                                _dictionary.Add(tree.FilePath.ToUpperInvariant(), smodel);
+                            }
                         }
-
                     }
                 }
             }
@@ -259,8 +279,16 @@ namespace Spg.ExampleRefactoring.Workspace
             if (snode != null && snode is IdentifierNameSyntax)
             {
                 SymbolInfo symbolInfo = smodel.GetSymbolInfo(snode);
-                string toDisplayString = symbolInfo.Symbol.ToDisplayString();
-                return toDisplayString;
+                if (symbolInfo.Symbol != null)
+                {
+                    string toDisplayString = symbolInfo.Symbol.ToDisplayString();
+                    return toDisplayString;
+                }
+                else
+                {
+                    Console.WriteLine("Symbol was not found for node: " + snode.ToString());
+                    return snode.ToString();
+                }
             }
             else
             {

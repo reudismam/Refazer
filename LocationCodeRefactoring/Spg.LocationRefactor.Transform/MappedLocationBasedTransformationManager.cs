@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.AST;
@@ -19,6 +18,7 @@ namespace Spg.LocationRefactor.Transform
     public class MappedLocationBasedTransformationManager
     {
         protected readonly EditorController Controller = EditorController.GetInstance();
+
         /// <summary>
         /// Transform selection regions
         /// </summary>
@@ -34,7 +34,6 @@ namespace Spg.LocationRefactor.Transform
             SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
             EditorController.GetInstance().Program = validated;
 
-            //Dictionary<string, List<CodeLocation>> groupLocation = Groups(locations); //location for each file
             Dictionary<string, List<CodeLocation>> groupLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(locations); //location for each file
 
             var transformations = new List<Transformation>();
@@ -84,79 +83,23 @@ namespace Spg.LocationRefactor.Transform
         /// <returns>Synthesizer program</returns>
         protected SynthesizedProgram LearnSynthesizerProgram(List<Tuple<ListNode, ListNode>> examples)
         {
+            Console.WriteLine("Synthesizing transformation programs...");
             SynthesizerSetting setting = new SynthesizerSetting
             {
                 DynamicTokens = true,
                 Deviation = 2,
                 ConsiderEmpty = true,
                 ConsiderConstrStr = true,
-                CreateTokenSeq = false
+                CreateTokenSeq = false,
+                _getFullyQualifiedName = false
             }; //configure setting
 
             ASTProgram program = new ASTProgram(setting, examples); //create a new AST program and learn synthesizer
             List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
             SynthesizedProgram validated = synthesizedProgs.Single();
+            Console.WriteLine("Transformation program synthesis completed.");
             return validated;
         }
-
-        ///// <summary>
-        ///// Transform each location of source code specified
-        ///// </summary>
-        ///// <param name="sourceCode">Source code</param>
-        ///// <param name="update">Tuple of sintax node and code location list</param>
-        ///// <param name="program">Synthesized program</param>
-        ///// <param name="compact">Indicates if it is needed to compact input data</param>
-        ///// <returns>Transformation of each location of source code specified</returns>
-        //private string TransformEachLocation(string sourceCode, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program, bool compact)
-        //{
-        //    List<TRegion> regions = GetRegions(update);
-        //    List<Tuple<ListNode, ListNode>> locationsList = Decomposer.GetInstance().DecomposeToOutput(regions);
-        //    string s = "";
-        //    int i = 0;
-        //    int nextStart = 0;
-
-        //    foreach (Tuple<ListNode, ListNode> tuple in locationsList)
-        //    {
-
-        //    //foreach (var item in update)
-        //    //{
-        //        //try
-        //        //{
-        //        //    List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-        //        //    if (compact)
-        //        //    {
-        //        //        list = ASTManager.EnumerateSyntaxNodesAndTokens2(item.Item1, list);
-        //        //    }
-        //        //    else
-        //        //    {
-        //        //        list = ASTManager.EnumerateSyntaxNodesAndTokens(item.Item1, list);
-        //        //    }
-        //        //    ListNode lnode = new ListNode(list);
-        //        ListNode lnode = tuple.Item2;
-
-        //            ASTTransformation treeNode = ASTProgram.TransformString(lnode, program);
-        //            string transformation = treeNode.Transformation;
-        //            s += ++i + "\n";
-        //            s += transformation + "\n";
-
-        //            //int start = nextStart + item.Item2.Region.Start;
-        //            //int end = start + item.Item2.Region.Length;
-        //            //sourceCode = sourceCode.Substring(0, start) + transformation +
-        //            //sourceCode.Substring(end);
-
-        //            //nextStart += transformation.Length - item.Item2.Region.Length;
-
-        //        }
-        //        catch (ArgumentOutOfRangeException e)
-        //        {
-        //            Console.WriteLine(e.Message);
-        //        }
-        //    //}
-        //    string classPath = update.First().Item2.SourceClass;
-        //    string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
-        //    FileUtil.WriteToFile(@"C:\Users\SPG-04\Desktop\transformations\" + className, s);
-        //    return sourceCode;
-        //}
 
         /// <summary>
         /// Transform each location of source code specified
@@ -171,7 +114,6 @@ namespace Spg.LocationRefactor.Transform
             string s = "";
             int i = 0;
             int nextStart = 0;
-//            EditorController controller = EditorController.GetInstance();
             foreach (Tuple<SyntaxNode, CodeLocation> item in update)
             {
                 try
@@ -179,7 +121,6 @@ namespace Spg.LocationRefactor.Transform
                     TRegion region = item.Item2.Region;
                     Tuple<ListNode, ListNode> tuple = Decomposer.GetInstance().Example(region.Node, region, compact);
                     ListNode lnode = tuple.Item2;
-                    //MessageBox.Show(lnode.ToString());
 
                     ASTTransformation treeNode = program.TransformString(lnode);
                     string transformation = treeNode.Transformation;
@@ -212,7 +153,6 @@ namespace Spg.LocationRefactor.Transform
                     }
 
                     CodeTransformation codeTransformation = new CodeTransformation(item.Item2, transTRegion, trans);
-                    //codeTransformation.Location.Region.Node = null; //needed for not get out of memory exception
                     Controller.CodeTransformations.Add(codeTransformation);
                 }
                 catch (Exception e)
@@ -220,43 +160,29 @@ namespace Spg.LocationRefactor.Transform
                     Console.WriteLine(e.Message);
                 }
             }
-            //string classPath = update.First().Item2.SourceClass;
-            //string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
-            //FileUtil.WriteToFile(@"C:\Users\SPG-04\Desktop\transformations\" + className, s);
             return sourceCode;
         }
 
-        //private List<TRegion> GetRegions(List<Tuple<SyntaxNode, CodeLocation>> update)
+        ///// <summary>
+        ///// Learn a transformation program
+        ///// </summary>
+        ///// <param name="regionsToApplyTransformation">Location to apply transformations</param>
+        ///// <returns>Synthesized program</returns>
+        //public SynthesizedProgram TransformationProgram(List<TRegion> regionsToApplyTransformation)
         //{
-        //    List<TRegion> regions = new List<TRegion>();
+        //    RegionManager rManager = RegionManager.GetInstance();
+        //    List<CodeLocation> locations = Controller.Locations; //previous locations
 
-        //    foreach (var item in update)
-        //    {
-        //        regions.Add(item.Item2.Region);
-        //    }
-        //    return regions;
+        //    List<Tuple<ListNode, ListNode>> mappingSelections = rManager.ElementsSelectionBeforeAndAfterEditing(locations);
+        //    List<Tuple<ListNode, ListNode>> examples = EditedSelectionLocations(mappingSelections);
+
+        //    ASTProgram program = new ASTProgram();
+
+        //    List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
+        //    SynthesizedProgram validated = synthesizedProgs.Single();
+
+        //    return validated;
         //}
-
-        /// <summary>
-        /// Learn a transformation program
-        /// </summary>
-        /// <param name="regionsToApplyTransformation">Location to apply transformations</param>
-        /// <returns>Synthesized program</returns>
-        public SynthesizedProgram TransformationProgram(List<TRegion> regionsToApplyTransformation)
-        {
-            RegionManager rManager = RegionManager.GetInstance();
-            List<CodeLocation> locations = Controller.Locations; //previous locations
-
-            List<Tuple<ListNode, ListNode>> mappingSelections = rManager.ElementsSelectionBeforeAndAfterEditing(locations);
-            List<Tuple<ListNode, ListNode>> examples = EditedSelectionLocations(mappingSelections);
-
-            ASTProgram program = new ASTProgram();
-
-            List<SynthesizedProgram> synthesizedProgs = program.GenerateStringProgram(examples);
-            SynthesizedProgram validated = synthesizedProgs.Single();
-
-            return validated;
-        }
 
         /// <summary>
         /// Calculate the diference between location before, after edition
