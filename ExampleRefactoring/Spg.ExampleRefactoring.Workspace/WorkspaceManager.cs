@@ -44,8 +44,8 @@ namespace Spg.ExampleRefactoring.Workspace
                 MSBuildWorkspace workspace = MSBuildWorkspace.Create();
                 solutionInstance = workspace.OpenSolutionAsync(solutionPath).Result;
             }
-            return solutionInstance;
             Console.WriteLine("Solution opened.");
+            return solutionInstance;  
         }
 
         public void SetWorkSpace(Microsoft.CodeAnalysis.Workspace workspace)

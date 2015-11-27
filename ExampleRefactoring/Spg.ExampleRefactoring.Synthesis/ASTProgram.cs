@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using DiGraph;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,6 +14,7 @@ using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Intersect;
 
 namespace Spg.ExampleRefactoring.Synthesis
 {
@@ -392,6 +392,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="examples">Examples</param>
         private void CreateDymTokens(List<Tuple<ListNode, ListNode>> examples, bool _getFullyQualifiedName)
         {
+            _getFullyQualifiedName = false;
             if (examples == null) { throw new ArgumentNullException("examples"); }
 
             foreach (Tuple<ListNode, ListNode> t in examples)
@@ -417,12 +418,12 @@ namespace Spg.ExampleRefactoring.Synthesis
                         }
                         Dict[dt].Add(dt);
 
-                        //RawDymToken rdt = new RawDymToken(st);
-                        //if (!Dict.TryGetValue(rdt, out v))
-                        //{
-                        //    Dict.Add(rdt, new List<DymToken>());
-                        //}
-                        //Dict[rdt].Add(dt);
+                        RawDymToken rdt = new RawDymToken(st);
+                        if (!Dict.TryGetValue(rdt, out v))
+                        {
+                            Dict.Add(rdt, new List<DymToken>());
+                        }
+                        Dict[rdt].Add(dt);
                     }
                 }
             }
@@ -433,6 +434,22 @@ namespace Spg.ExampleRefactoring.Synthesis
                 if (Dict[dt].Count >= examples.Count())
                 {
                     temp.Add(dt, Dict[dt]);
+                }
+            }
+
+            temp = new Dictionary<DymToken, List<DymToken>>();
+            foreach (DymToken dt in Dict.Keys)
+            {
+                if (Dict[dt].Count == examples.Count())
+                {
+                    if (!(dt is RawDymToken))
+                    {
+                        temp.Add(dt, Dict[dt]);
+                    }
+                    else if (Dict[(new DymToken(dt.token, true))].Count != examples.Count)
+                    {
+                        temp.Add(dt, Dict[dt]);
+                    }
                 }
             }
 
@@ -1155,14 +1172,16 @@ namespace Spg.ExampleRefactoring.Synthesis
             
             List<IPosition> positions = new List<IPosition>();
 
-            for(int i = 1; i <= 3; i++)
+            for(int i = 1; i < 3; i++)
             {
                 Setting.Deviation = i;
                 List<IPosition> positionsi = GeneratePositionFlashFill(input, k);
                 positions.AddRange(positionsi);
             }
 
-            return positions;
+            var noDupes = new HashSet<IPosition>(positions);
+
+            return noDupes.ToList();
             
         }
 

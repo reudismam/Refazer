@@ -56,7 +56,6 @@ namespace Spg.LocationRefactor.Learn
             Console.WriteLine("Learning predicates for filter.");
             List<IPredicate> predicates = BooleanLearning(QLine);
             Console.WriteLine("Predicated learning completed.");
-
             var items = from pair in predicates
                         orderby pair.Regex().Count() descending, Order(pair) descending
                         select pair;

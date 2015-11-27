@@ -74,15 +74,15 @@ namespace Spg.LocationRefactoring.Tok
             foreach (SyntaxNodeOrToken st in nodes.List)
             {
                 DymToken dtoken = new DymToken(st, false);
-//                RawDymToken rdtoken = new RawDymToken(st);
+                RawDymToken rdtoken = new RawDymToken(st);
                 if (dict.ContainsKey(dtoken))
                 {
                     tokens.Add(dict[dtoken].First());
                 }
-                //else if (dict.ContainsKey(rdtoken))
-                //{
-                //    tokens.Add(rdtoken);
-                //}
+                else if (dict.ContainsKey(rdtoken))
+                {
+                    tokens.Add(rdtoken);
+                }
                 else {
                     Token token = new Token(st);
                     tokens.Add(token);
@@ -91,6 +91,33 @@ namespace Spg.LocationRefactoring.Tok
 
             return tokens;
         }
+
+        //public static List<List<Token>> DymTokens(ListNode nodes, Dictionary<DymToken, List<DymToken>> dict)
+        //{
+        //    List<Token> tokensDymToken = new List<Token>();
+        //    List<Token> tokensRawDymToken = new List<Token>();
+        //    foreach (SyntaxNodeOrToken st in nodes.List)
+        //    {
+        //        DymToken dtoken = new DymToken(st, false);
+        //        RawDymToken rdtoken = new RawDymToken(st);
+        //        if (dict.ContainsKey(dtoken))
+        //        {
+        //            tokensDymToken.Add(dict[dtoken].First());
+        //            if (dict.ContainsKey(rdtoken))
+        //            {
+        //                tokensRawDymToken.Add(dict[rdtoken].First());
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Token token = new Token(st);
+        //            tokensDymToken.Add(token);
+        //            tokensRawDymToken.Add(token);
+        //        }
+        //    }
+
+        //    return new List<List<Token>> { tokensDymToken, tokensRawDymToken };
+        //}
 
         /// <summary>
         /// String representation

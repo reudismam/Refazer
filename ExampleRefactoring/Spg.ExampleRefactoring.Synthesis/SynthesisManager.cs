@@ -414,6 +414,62 @@ namespace Spg.ExampleRefactoring.Synthesis
             return points;
         }
 
+        ///// <summary>
+        ///// Calculate the difference point between input and output
+        ///// </summary>
+        ///// <param name="input">Input</param>
+        ///// <param name="output">Output</param>
+        ///// <returns>Index of the difference</returns>
+        //public static List<int> Differ(ListNode input, ListNode output)
+        //{
+        //    List<int> indexes = new List<int>();
+        //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
+        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
+
+        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
+        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
+        //    List<ComparisonResult<ComparisonObject>> selecteds = new List<ComparisonResult<ComparisonObject>>();
+        //    for (int i = 0; i < result.Count; i++)
+        //    {
+        //        ComparisonResult<ComparisonObject> r = result[i];
+        //        if (!r.ModificationType.Equals(ModificationType.None))
+        //        {
+        //            //Console.WriteLine(r.DataCompared);
+        //            if (r.DataCompared.Index < output.Length())
+        //            {
+        //                //if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
+        //                //{
+        //                //    continue;
+        //                //}
+        //                indexes.Add(r.DataCompared.Index);
+        //                selecteds.Add(r);
+        //            }
+        //        }
+
+        //        if (r.ModificationType.Equals(ModificationType.Inserted))
+        //        {
+        //            if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
+        //            {
+        //                indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
+        //            }
+        //        }
+        //    }
+
+        //    indexes = FilterIndexes(selecteds);
+
+        //    if (!indexes.Contains(0)) //insert first index if it was not found.
+        //    {
+        //        indexes.Insert(0, 0);
+        //    }
+
+        //    if (!indexes.Contains(output.Length())) //insert last index if it is not found.
+        //    {
+        //        indexes.Add(output.Length());
+        //    }
+
+        //    return indexes;
+        //}
+
         /// <summary>
         /// Calculate the difference point between input and output
         /// </summary>
@@ -422,12 +478,13 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>Index of the difference</returns>
         public static List<int> Differ(ListNode input, ListNode output)
         {
-            List<int> indexes = new List<int> {0};
+            List<int> indexes = new List<int> { 0 };
             List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
             List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
 
             ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
             List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
+            List<ComparisonResult<ComparisonObject>> selecteds = new List<ComparisonResult<ComparisonObject>>();
             for (int i = 0; i < result.Count; i++)
             {
                 ComparisonResult<ComparisonObject> r = result[i];
@@ -441,6 +498,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                             continue;
                         }
                         indexes.Add(r.DataCompared.Index);
+                        selecteds.Add(r);
                     }
                 }
 
@@ -453,6 +511,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 }
             }
 
+
             if (!indexes.Contains(output.Length()))
             {
                 indexes.Add(output.Length());
@@ -460,6 +519,57 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             return indexes;
         }
+
+        private static List<int> FilterIndexes(List<ComparisonResult<ComparisonObject>> selecteds)
+        {
+            List<int> indexes = new List<int>();
+            ModificationType lastEvaluated = ModificationType.None;
+            int lastIndex = 0;
+            if (selecteds.Any())
+            {
+                var element = selecteds.First();
+                lastEvaluated = element.ModificationType;
+                lastIndex = element.DataCompared.Index;
+                indexes.Add(selecteds.First().DataCompared.Index);
+            }
+
+            for(int i = 1; i < selecteds.Count - 1; i++)
+            {
+                var result = selecteds[i];
+
+                if (result.ModificationType.Equals(lastEvaluated) )
+                {
+                    if (lastIndex != result.DataCompared.Index - 1) //sequence of evaluated elements.
+                    {
+                        indexes.Add(result.DataCompared.Index);
+                    }
+                }
+                else
+                {
+                    if (!indexes.Contains(lastIndex))
+                    {
+                        indexes.Add(lastIndex);
+                    }
+
+                    lastEvaluated = result.ModificationType;
+                    if (!indexes.Contains(lastIndex))
+                    {
+                        indexes.Add(result.DataCompared.Index);
+                    }
+                }
+
+                lastIndex = result.DataCompared.Index; //Update last index
+            }
+
+            if (selecteds.Count() > 1 && !indexes.Contains(selecteds.Last().DataCompared.Index))
+            {
+                indexes.Add(selecteds.Last().DataCompared.Index); //last element must always be inserted.
+            }
+
+            return indexes;
+        }
+
+
 
         /// <summary>
         /// Create comparison objects

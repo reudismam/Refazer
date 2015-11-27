@@ -1,4 +1,6 @@
-﻿namespace LCS2
+﻿using System;
+
+namespace LCS2
 {
     /// <summary>
     /// Comparison result
@@ -17,5 +19,6 @@
         /// </summary>
         /// <returns>Object compared</returns>
         public T DataCompared { get; set; }
+
     }
 }
