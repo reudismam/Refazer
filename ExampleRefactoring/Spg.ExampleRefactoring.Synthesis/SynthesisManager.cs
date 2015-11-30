@@ -414,15 +414,76 @@ namespace Spg.ExampleRefactoring.Synthesis
             return points;
         }
 
+        /// <summary>
+        /// Calculate the difference point between input and output
+        /// </summary>
+        /// <param name="input">Input</param>
+        /// <param name="output">Output</param>
+        /// <returns>Index of the difference</returns>
+        public static List<int> Differ(ListNode input, ListNode output)
+        {
+            List<int> indexes = new List<int>();
+            List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
+            List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
+
+            ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
+            List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
+            List<ComparisonResult<ComparisonObject>> result2 = differ.FindDifference(touput, tinput);
+            List<ComparisonResult<ComparisonObject>> selecteds = new List<ComparisonResult<ComparisonObject>>();
+            for (int i = 0; i < result.Count; i++)
+            {
+                ComparisonResult<ComparisonObject> r = result[i];
+                if (!r.ModificationType.Equals(ModificationType.None))
+                {
+                    
+                    //if (r.DataCompared.Index < output.Length())
+                    //{
+                        selecteds.Add(r);
+                    //}
+                }
+            }
+
+            //List<ComparisonResult<ComparisonObject>> selecteds2 = new List<ComparisonResult<ComparisonObject>>();
+            //for (int i = 0; i < result2.Count; i++)
+            //{
+            //    ComparisonResult<ComparisonObject> r = result2[i];
+            //    if (r.ModificationType.Equals(ModificationType.None))
+            //    {
+
+            //        //if (r.DataCompared.Index < output.Length())
+            //        //{
+            //            selecteds2.Add(r);
+            //        //}
+            //    }
+            //}
+
+            indexes = FilterIndexes(selecteds, output);
+            indexes.AddRange(FilterIndexes(result2, input));
+
+            if (!indexes.Contains(0)) //insert first index if it was not found.
+            {
+                indexes.Insert(0, 0);
+            }
+
+            if (!indexes.Contains(output.Length())) //insert last index if it is not found.
+            {
+                indexes.Add(output.Length());
+            }
+
+            HashSet<int> nonDup = new HashSet<int>(indexes);
+
+            return nonDup.ToList();
+        }
+
         ///// <summary>
         ///// Calculate the difference point between input and output
         ///// </summary>
-        ///// <param name="input">Input</param>
-        ///// <param name="output">Output</param>
+        ///// <param name = "input" > Input </ param >
+        ///// < param name="output">Output</param>
         ///// <returns>Index of the difference</returns>
         //public static List<int> Differ(ListNode input, ListNode output)
         //{
-        //    List<int> indexes = new List<int>();
+        //    List<int> indexes = new List<int> { 0 };
         //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
         //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
 
@@ -434,13 +495,13 @@ namespace Spg.ExampleRefactoring.Synthesis
         //        ComparisonResult<ComparisonObject> r = result[i];
         //        if (!r.ModificationType.Equals(ModificationType.None))
         //        {
-        //            //Console.WriteLine(r.DataCompared);
-        //            if (r.DataCompared.Index < output.Length())
+        //            Console.WriteLine(r.DataCompared);
+        //            if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
         //            {
-        //                //if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
-        //                //{
-        //                //    continue;
-        //                //}
+        //                if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
+        //                {
+        //                    continue;
+        //                }
         //                indexes.Add(r.DataCompared.Index);
         //                selecteds.Add(r);
         //            }
@@ -455,14 +516,8 @@ namespace Spg.ExampleRefactoring.Synthesis
         //        }
         //    }
 
-        //    indexes = FilterIndexes(selecteds);
 
-        //    if (!indexes.Contains(0)) //insert first index if it was not found.
-        //    {
-        //        indexes.Insert(0, 0);
-        //    }
-
-        //    if (!indexes.Contains(output.Length())) //insert last index if it is not found.
+        //    if (!indexes.Contains(output.Length()))
         //    {
         //        indexes.Add(output.Length());
         //    }
@@ -470,103 +525,133 @@ namespace Spg.ExampleRefactoring.Synthesis
         //    return indexes;
         //}
 
-        /// <summary>
-        /// Calculate the difference point between input and output
-        /// </summary>
-        /// <param name="input">Input</param>
-        /// <param name="output">Output</param>
-        /// <returns>Index of the difference</returns>
-        public static List<int> Differ(ListNode input, ListNode output)
+        //private static List<int> FilterIndexes(List<ComparisonResult<ComparisonObject>> selecteds, ListNode output)
+        //{
+        //    List<int> indexes = new List<int>();
+        //    ModificationType lastEvaluated = ModificationType.None;
+        //    int lastIndex = 0;
+        //    if (selecteds.Any())
+        //    {
+        //        var element = selecteds.First();
+        //        lastEvaluated = element.ModificationType;
+        //        lastIndex = element.DataCompared.Index;
+        //        indexes.Add(selecteds.First().DataCompared.Index);
+
+        //        if (selecteds.First().ModificationType.Equals(ModificationType.Inserted))
+        //        {
+        //            if (selecteds.First().DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), selecteds.First().DataCompared.Index + 1)))
+        //            {
+        //                indexes.Add(Math.Min(output.Length(), selecteds.First().DataCompared.Index + 1));
+        //            }
+        //        }
+        //    }
+
+        //    for(int i = 1; i < selecteds.Count - 1; i++)
+        //    {
+        //        var result = selecteds[i];
+
+        //        if (result.ModificationType.Equals(lastEvaluated) )
+        //        {
+        //            if (lastIndex != result.DataCompared.Index - 1) //sequence of evaluated elements.
+        //            {
+        //                indexes.Add(result.DataCompared.Index);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (!indexes.Contains(lastIndex))
+        //            {
+        //                indexes.Add(lastIndex);
+        //            }
+
+        //            lastEvaluated = result.ModificationType;
+        //            if (!indexes.Contains(lastIndex))
+        //            {
+        //                indexes.Add(result.DataCompared.Index);
+        //            }
+        //        }
+
+        //        if (result.ModificationType.Equals(ModificationType.Inserted))
+        //        {
+        //            if (result.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), result.DataCompared.Index + 1)))
+        //            {
+        //                indexes.Add(Math.Min(output.Length(), result.DataCompared.Index + 1));
+        //            }
+        //        }
+
+        //        lastIndex = result.DataCompared.Index; //Update last index
+        //    }
+
+        //    if (selecteds.Count() > 1 && !indexes.Contains(selecteds.Last().DataCompared.Index))
+        //    {
+        //        indexes.Add(selecteds.Last().DataCompared.Index); //last element must always be inserted.
+        //    }
+
+        //    return indexes;
+        //}
+
+        private static List<int> FilterIndexes(List<ComparisonResult<ComparisonObject>> selecteds, ListNode output)
         {
-            List<int> indexes = new List<int> { 0 };
-            List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
-            List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
 
-            ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
-            List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
-            List<ComparisonResult<ComparisonObject>> selecteds = new List<ComparisonResult<ComparisonObject>>();
-            for (int i = 0; i < result.Count; i++)
+            List<List<ComparisonResult<ComparisonObject>>> sequences = GetSubSequences(selecteds);
+
+            List<int> indexes = new List<int>();
+
+            foreach(var sequence in sequences)
             {
-                ComparisonResult<ComparisonObject> r = result[i];
-                if (!r.ModificationType.Equals(ModificationType.None))
-                {
-                    //Console.WriteLine(r.DataCompared);
-                    if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
-                    {
-                        if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
-                        {
-                            continue;
-                        }
-                        indexes.Add(r.DataCompared.Index);
-                        selecteds.Add(r);
-                    }
-                }
+                if (sequence.First().DataCompared.Indicator.Equals(ComparisonObject.OUTPUT)){
+                    indexes.Add(sequence.First().DataCompared.Index);
 
-                if (r.ModificationType.Equals(ModificationType.Inserted))
-                {
-                    if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
+                    if (sequence.First().ModificationType.Equals(ModificationType.Inserted))
                     {
-                        indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
+                        indexes.Add(sequence.Last().DataCompared.Index);
+                        indexes.Add(sequence.Last().DataCompared.Index + 1);
                     }
                 }
             }
-
-
-            if (!indexes.Contains(output.Length()))
-            {
-                indexes.Add(output.Length());
-            }
-
+            indexes.Except(indexes.Where(c => c > output.Length())).ToList();
             return indexes;
         }
 
-        private static List<int> FilterIndexes(List<ComparisonResult<ComparisonObject>> selecteds)
+        private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequences(List<ComparisonResult<ComparisonObject>> selecteds)
         {
-            List<int> indexes = new List<int>();
-            ModificationType lastEvaluated = ModificationType.None;
-            int lastIndex = 0;
-            if (selecteds.Any())
-            {
-                var element = selecteds.First();
-                lastEvaluated = element.ModificationType;
-                lastIndex = element.DataCompared.Index;
-                indexes.Add(selecteds.First().DataCompared.Index);
-            }
+            List<List<ComparisonResult<ComparisonObject>>> sequences = new List<List<ComparisonResult<ComparisonObject>>>();
 
-            for(int i = 1; i < selecteds.Count - 1; i++)
+            if (!selecteds.Any()) return sequences;
+
+            List<ComparisonResult<ComparisonObject>> subSequence = new List<ComparisonResult<ComparisonObject>>();
+            subSequence.Add(selecteds.First());
+            for(int i = 1; i < selecteds.Count; i++)
             {
                 var result = selecteds[i];
-
-                if (result.ModificationType.Equals(lastEvaluated) )
-                {
-                    if (lastIndex != result.DataCompared.Index - 1) //sequence of evaluated elements.
+                //if (result.DataCompared.Indicator.Equals(ComparisonObject.OUTPUT))
+                //{
+                    if (result.ModificationType.Equals(subSequence.Last().ModificationType) /*&& result.DataCompared.Indicator.Equals(subSequence.Last().DataCompared.Indicator)*/)
                     {
-                        indexes.Add(result.DataCompared.Index);
+                        if (subSequence.Last().DataCompared.Index == result.DataCompared.Index - 1)
+                        {
+                            subSequence.Add(result);
+                        }
+                        else
+                        {
+                            List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+                            sequences.Add(newList);
+                            subSequence = new List<ComparisonResult<ComparisonObject>>();
+                            subSequence.Add(result);
+                        }
+                    }
+                    else
+                    {
+                        List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+                        sequences.Add(newList);
+                        subSequence = new List<ComparisonResult<ComparisonObject>>();
+                        subSequence.Add(result);
                     }
                 }
-                else
-                {
-                    if (!indexes.Contains(lastIndex))
-                    {
-                        indexes.Add(lastIndex);
-                    }
+            //}
 
-                    lastEvaluated = result.ModificationType;
-                    if (!indexes.Contains(lastIndex))
-                    {
-                        indexes.Add(result.DataCompared.Index);
-                    }
-                }
-
-                lastIndex = result.DataCompared.Index; //Update last index
-            }
-
-            if (selecteds.Count() > 1 && !indexes.Contains(selecteds.Last().DataCompared.Index))
-            {
-                indexes.Add(selecteds.Last().DataCompared.Index); //last element must always be inserted.
-            }
-
-            return indexes;
+            sequences.Add(subSequence);
+            return sequences;
         }
 
 

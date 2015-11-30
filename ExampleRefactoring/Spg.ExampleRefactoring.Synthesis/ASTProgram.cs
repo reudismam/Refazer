@@ -505,31 +505,35 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (st.IsKind(SyntaxKind.NumericLiteralToken)) { return true; }
 
-            if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
+            if (st.IsKind(SyntaxKind.IdentifierToken)) { return true; }
 
-            SyntaxNodeOrToken parent = ASTManager.Parent(st);
+            //if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
 
-            if (parent.IsKind(SyntaxKind.VariableDeclaration)) { return true; }
+            //SyntaxNodeOrToken parent = ASTManager.Parent(st);
 
-            if (parent.IsKind(SyntaxKind.ObjectCreationExpression)) { return true; }
+            //if (parent.IsKind(SyntaxKind.VariableDeclaration)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.AttributeList)) { return true; }
+            //if (parent.IsKind(SyntaxKind.ObjectCreationExpression)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.InvocationExpression)) { return true; }
+            //if (parent.IsKind(SyntaxKind.AttributeList)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.QualifiedName)) { return true; }
+            //if (parent.IsKind(SyntaxKind.InvocationExpression)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.IfStatement)) { return true; }
+            //if (parent.IsKind(SyntaxKind.QualifiedName)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.MethodDeclaration)) { return true; }
+            //if (parent.IsKind(SyntaxKind.IfStatement)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.Parameter)) { return true; }
+            //if (parent.IsKind(SyntaxKind.MethodDeclaration)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) { return true; }
+            //if (parent.IsKind(SyntaxKind.Parameter)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.TypeArgumentList)) { return true; }
+            //if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression)) { return true; }
 
-            if (parent.IsKind(SyntaxKind.Attribute)) { return true; }
+            //if (parent.IsKind(SyntaxKind.TypeArgumentList)) { return true; }
+
+            //if(parent.IsKind(SyntaxKind.VariableDeclarator)) { return true;  }
+
+            //if (parent.IsKind(SyntaxKind.Attribute)) { return true; }
 
             return false;
         }

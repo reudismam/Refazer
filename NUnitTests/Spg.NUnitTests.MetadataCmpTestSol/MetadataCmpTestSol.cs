@@ -1018,13 +1018,14 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
         public static void Log(string commit, double time, int exTransformations, int acTrasnformation)
         {
+            string path = @"C:\Users\SPG-04\Documents\Research\Log2.xlsx";
             using (ExcelManager em = new ExcelManager())
             {
 
                 em.Open(@"C:\Users\SPG-04\Documents\Research\Log2.xlsx");
 
-                int empty;
-                for (int i = 1;; i++)
+                int empty = -1;
+                for (int i = 1; i < 1000; i++)
                 {
                     string comt = em.GetValue("A" + i, Category.Formatted).ToString();
                     if (comt.Equals(commit))
@@ -1033,10 +1034,17 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                         break;
                     }
                 }
-                em.SetValue("H" + empty, time / 1000);
-                em.SetValue("I" + empty, exTransformations);
-                em.SetValue("J" + empty, acTrasnformation);
-                em.Save();
+
+                if (empty != -1)
+                {
+                    em.SetValue("H" + empty, time / 1000);
+                    em.SetValue("I" + empty, exTransformations);
+                    em.SetValue("J" + empty, acTrasnformation);
+                    em.Save();
+                }
+                else {
+                    Console.WriteLine("Could not write log to " + path);
+                }
             }
         }
 
