@@ -1,0 +1,2840 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.VisualStudio.LanguageServices</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Diagnostics.VisualStudioWorkspaceDiagnosticAnalyzerProviderService">
+            <summary>
+            This service provides diagnostic analyzers from the analyzer assets specified in the manifest files of installed VSIX extensions.
+            These analyzers are used across this workspace session.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Diagnostics.IVisualStudioDiagnosticAnalyzerService.GetAllDiagnosticDescriptors(Microsoft.VisualStudio.Shell.Interop.IVsHierarchy)">
+            <summary>
+            Gets a list of the diagnostics that are provided by this service.
+            If the given <paramref name="hierarchyOpt"/> is non-null and corresponds to an existing project in the workspace, then gets the diagnostics for the project.
+            Otherwise, returns the global set of diagnostics enabled for the workspace.
+            </summary>
+            <returns>A mapping from analyzer name to the diagnostics produced by that analyzer</returns>
+            <remarks>
+            This is used by the Ruleset Editor from ManagedSourceCodeAnalysis.dll in VisualStudio.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.Interop.FILEUPDATE.LineUpdates">
+            <summary>
+            This is really an pointer to an array of "cLineUpdate" LINEUPDATE struct.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl._metadata">
+            <summary>
+            Initialized when the project switches to debug state.
+            Null if the project has no output file or we can't read the MVID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.NonReentrantContext">
+            <summary>
+            Since we can't await asynchronous operations we need to wait for them to complete.
+            The default SynchronizationContext.Wait pumps messages giving the debugger a chance to 
+            reenter our EnC implementation. To avoid that we use a specialized SynchronizationContext
+            that doesn't pump messages. We need to make sure though that the async methods we wait for
+            don't dispatch to foreground thread, otherwise we would end up in a deadlock.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.StartDebuggingPE">
+            <summary>
+            Invoked when the debugger transitions from Design mode to Run mode or Break mode.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.GetPEidentity(System.Guid[],System.String[])">
+            <summary>
+            Get MVID and file name of the project's output file.
+            </summary>
+            <remarks>
+            The MVID is used by the debugger to identify modules loaded into debuggee that correspond to this project.
+            The path seems to be unused.
+            
+            The output file path might be different from the path of the module loaded into the process.
+            For example, the binary produced by the C# compiler is stores in obj directory, 
+            and then copied to bin directory from which it is loaded to the debuggee.
+            
+            The binary produced by the compiler can also be rewritten by post-processing tools.
+            The debugger assumes that the MVID of the compiler's output file at the time we start debugging session 
+            is the same as the MVID of the module loaded into debuggee. The original MVID might be different though.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.EnterBreakStateOnPE(Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.Interop.ENC_BREAKSTATE_REASON,Microsoft.VisualStudio.Shell.Interop.ENC_ACTIVE_STATEMENT[],System.UInt32)">
+            <summary>
+            Called by the debugger when entering a Break state. 
+            </summary>
+            <param name="encBreakReason">Reason for transition to Break state.</param>
+            <param name="pActiveStatements">Statements active when the debuggee is stopped.</param>
+            <param name="cActiveStatements">Length of <paramref name="pActiveStatements"/>.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.GetExceptionSpanCount(System.UInt32@)">
+            <summary>
+            Returns the number of exception regions around current active statements.
+            This is called when the project is entering a break right after 
+            <see cref="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.EnterBreakStateOnPE(Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.Interop.ENC_BREAKSTATE_REASON,Microsoft.VisualStudio.Shell.Interop.ENC_ACTIVE_STATEMENT[],System.UInt32)"/> and prior to <see cref="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.GetExceptionSpans(System.UInt32,Microsoft.VisualStudio.Shell.Interop.ENC_EXCEPTION_SPAN[],System.UInt32@)"/>.
+            </summary>
+            <remarks>
+            Called by EnC manager.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.GetExceptionSpans(System.UInt32,Microsoft.VisualStudio.Shell.Interop.ENC_EXCEPTION_SPAN[],System.UInt32@)">
+            <summary>
+            Returns information about exception handlers in the source.
+            </summary>
+            <remarks>
+            Called by EnC manager.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.GetCurrentActiveStatementPosition(System.UInt32,Microsoft.VisualStudio.TextManager.Interop.TextSpan[])">
+            <summary>
+            Called by the debugger whenever it needs to determine a position of an active statement.
+            E.g. the user clicks on a frame in a call stack.
+            </summary>
+            <remarks>
+            Called when applying change, when setting current IP, a notification is received from 
+            <see cref="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.Interop.IDebugEncNotify.NotifyEncUpdateCurrentStatement"/>, etc.
+            In addition this API is exposed on IDebugENC2 COM interface so it can be used anytime by other components.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.GetENCBuildState(Microsoft.VisualStudio.Shell.Interop.ENC_BUILD_STATE[])">
+            <summary>
+            Returns the state of the changes made to the source. 
+            The EnC manager calls this to determine whether there are any changes to the source 
+            and if so whether there are any rude edits.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.EditAndContinue.VsENCRebuildableProjectImpl.GetCurrentExceptionSpanPosition(System.UInt32,Microsoft.VisualStudio.TextManager.Interop.TextSpan[])">
+            <summary>
+            Called when changes are being applied.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.AbstractLanguageService`2._isTornDown">
+            <summary>
+            Whether or not we have been torn down.  This is currently only used to make sure we are
+            not torn down twice.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.AbstractLanguageService`2.Setup">
+            <summary>
+            Setup and TearDown go in reverse order.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.AbstractLanguageService`2.ConnectToServices">
+            <summary>
+            Keep ConnectToServices and DisconnectFromServices in 1:1 correspondence.
+            DisconnectFromServices should clean up resources in the reverse direction that they are
+            initialized in.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.AbstractLanguageService`2.Initialize">
+            <summary>
+            Called right after we instantiate the language service.  Used to set up any internal
+            state we need.
+            
+            Try to keep this method fairly clean.  Any complicated logic should go in methods called
+            from this one.  Initialize and Uninitialize go in reverse order 
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.HACK_AbstractCreateServicesOnUiThread">
+            <summary>
+            Ensures services that must be constructed on the UI thread are appropriately created during
+            the first connection of an applicable subject buffer to an IWpfTextView. This ensures the
+            services are available by the time an open document or the interactive window needs them.
+            The <see cref="M:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.HACK_AbstractCreateServicesOnUiThread.CreateServicesOnUIThread(Microsoft.VisualStudio.ComponentModelHost.IComponentModel,System.String)"/> method should also be
+            called during package load to front load some of the work.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.HACK_AbstractCreateServicesOnUiThread.CreateServicesOnUIThread(Microsoft.VisualStudio.ComponentModelHost.IComponentModel,System.String)">
+            <summary>
+            Must be invoked from the UI thread.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.AbstractLanguageService`3._debuggerEventsCookie">
+            <summary>
+            Cookie used to register/unregister from debugger events.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.AbstractLanguageService`3._debugMode">
+            <summary>
+            The current debug mode we are in.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.LanguageService.AbstractLanguageService`3.Initialize">
+            <summary>
+            Called right after we instantiate the language service.  Used to set up any internal
+            state we need.
+            
+            Try to keep this method fairly clean.  Any complicated logic should go in methods called
+            from this one.  Initialize and Uninitialize go in reverse order 
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Library.FindResults.ExternalLanguageDefinitionTreeItem.#ctor(System.String,System.Int32,System.Int32,System.String,System.UInt16,System.IServiceProvider)">
+            <summary>
+            A definition from an external language service (e.g. xaml).
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Library.FindResults.LibraryManager.GetDefinitionPrecedence(Microsoft.CodeAnalysis.FindSymbols.ReferencedSymbol)">
+            <summary>
+            Reference locations are deduplicated across the entire find references result set
+            Order the definitions so that references to multiple definitions appear under the
+            desired definition (e.g. constructor references should prefer the constructor method
+            over the type definition). Note that this does not change the order in which
+            definitions are displayed in Find Symbol Results, it only changes which definition
+            a given reference should appear under when its location is a reference to multiple
+            definitions.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Library.ObjectBrowser.Extensions.GetProjectNavInfoName(Microsoft.CodeAnalysis.Project)">
+            <summary>
+            Returns a display name for the given project, walking its parent IVsHierarchy chain and
+            pre-pending the names of parenting hierarchies (except the solution).
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioWorkingFolder">
+            <summary>
+            Support VS working folder.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker._projectsByBinPath">
+            <summary>
+            This is a multi-map, only so we don't have any edge cases if people have two projects with
+            the same output path. It makes state tracking notably easier.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker._projectsLoadedThisBatch">
+            <summary>
+            The list of projects loaded in this batch between <see cref="M:Microsoft.VisualStudio.Shell.Interop.IVsSolutionLoadEvents.OnBeforeLoadProjectBatch(System.Boolean)" /> and
+            <see cref="M:Microsoft.VisualStudio.Shell.Interop.IVsSolutionLoadEvents.OnAfterLoadProjectBatch(System.Boolean)"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker._solutionIsClosing">
+            <summary>
+            Set to true while the solution is in the process of closing. That is, between
+            <see cref="M:Microsoft.VisualStudio.Shell.Interop.IVsSolutionEvents.OnBeforeCloseSolution(System.Object)"/> and <see cref="M:Microsoft.VisualStudio.Shell.Interop.IVsSolutionEvents.OnAfterCloseSolution(System.Object)"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker._solutionLoadComplete">
+            <summary>
+            Set to true once the solution has already been completely loaded and all future changes
+            should be pushed immediately to the workspace hosts. This may not actually result in changes
+            being pushed to a particular host if <see cref="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker.WorkspaceHostState.HostReadyForEvents"/> isn't true yet.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker.AddProject(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject)">
+            <summary>
+            Add a project to the workspace.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker.RemoveProject(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject)">
+            <summary>
+            Remove a project from the workspace.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker.WorkspaceHostState._solutionAdded">
+            <summary>
+            Set to true if we've already called <see cref="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioWorkspaceHost.OnSolutionAdded(Microsoft.CodeAnalysis.SolutionInfo)"/>
+            for this host. Set to false after the solution has closed.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker.WorkspaceHostState.HostReadyForEvents">
+            <summary>
+            Whether or not the project tracker has been notified that it should start to push state
+            to the <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioWorkspaceHost"/> or not.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.Interop.IIntPtrReturningVsInvisibleEditorManager">
+            <remarks>
+            A redefinition of Microsoft.VisualStudio.Shell.Interop.IVsInvisibleEditorManager. One critical difference
+            here is is we declare the ppEditor retval argument as IntPtr instead of IVsInvisibleEditor. Since the
+            invisible editor is saved and closed when the last reference is Released(), it's critical we have precise
+            control when the COM object goes away. By default, the COM marshaller will return a non-unique RCW, which
+            means we have no control over when the RCW will call Release(). To have control, we need a unique RCW, but
+            the only way we can (correctly) get this is if we have the native IntPtr right from the start.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject._filePathOpt">
+            <summary>
+            The path to the project file itself. This is intentionally kept private, to avoid having to deal with people who
+            want the file path without realizing they need to deal with renames. If you need the folder of the project, just
+            use <see cref="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.ContainingDirectoryPathOpt" /> which is internal and doesn't change for a project.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject._untrackedDocuments">
+            <summary>
+            The list of files which have been added to the project but we aren't tracking since they
+            aren't real source files. Sometimes we're asked to add silly things like HTML files or XAML
+            files, and if those are open in a strange editor we just bail.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject._metadataFileNameToConvertedProjectReference">
+            <summary>
+            The path to a metadata reference that was converted to project references.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject._guid">
+            <summary>
+            Guid of the _hierarchy
+            
+            it is not readonly since it can be changed while loading project
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject._projectType">
+            <summary>
+            string (Guid) of the _hierarchy project type
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.TryGetProjectDisplayName(Microsoft.VisualStudio.Shell.Interop.IVsHierarchy,System.String@)">
+            <summary>
+            Returns a display name for the given project.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.IsWebSite">
+            <summary>
+            Indicates whether this project is a website type.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.TryGetObjOutputPath">
+            <summary>
+            A full path to the project obj output binary, or null if the project doesn't have an obj output binary.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.TryGetBinOutputPath">
+            <summary>
+            A full path to the project bin output binary, or null if the project doesn't have an bin output binary.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.ContainingDirectoryPathOpt">
+            <summary>
+            The containing directory of the project. Null if none exists (consider Venus.)
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.DisplayName">
+            <summary>
+            The public display name of the project. This name is not unique and may be shared
+            between multiple projects, especially in cases like Venus where the intellisense
+            projects will match the name of their logical parent project.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.ProjectSystemName">
+            <summary>
+            The name of the project according to the project system. In "regular" projects this is
+            equivalent to <see cref="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.DisplayName"/>, but in Venus cases these will differ. The
+            ProjectSystemName is the 2_Default.aspx project name, whereas the regular display name
+            matches the display name of the project the user actually sees in the solution explorer.
+            These can be assumed to be unique within the Visual Studio workspace.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.OnImportChanged(System.Object,System.EventArgs)">
+            <summary>
+            Called when a referenced metadata file changes on disk.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.AbstractProject.CrashOnException">
+            <summary>
+            Used for unit testing: don't crash the process if something bad happens.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.LinkedFileUtilities.GetContextHierarchy(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument,Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable4)">
+            <summary>
+            Finds the current context hierarchy for the given document. If the document is in a
+            Shared Code project, this returns that project's SharedItemContextHierarchy. If the
+            document is linked into multiple projects, this returns the hierarchy in which it is
+            currently open as indicated by the running document table. Otherwise, it returns the
+            hierarchy of the document's project.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.LinkedFileUtilities.GetContextHierarchyFromRunningDocumentTable(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument,Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable4)">
+            <summary>
+            If the document is open in the running document table, this returns the hierarchy in
+            which it is currently open. Otherwise, it returns null.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.LinkedFileUtilities.GetSharedItemContextHierarchy(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument)">
+            <summary>
+            If the document is in a Shared Code project, this returns that project's 
+            SharedItemContextHierarchy. Otherwise, it returns null. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.LinkedFileUtilities.GetSharedItemContextHierarchy(Microsoft.VisualStudio.Shell.Interop.IVsHierarchy)">
+            <summary>
+            If the project is in a Shared Code project, this returns its 
+            SharedItemContextHierarchy. Otherwise, it returns null.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.LinkedFileUtilities.GetSharedHierarchyForItem(Microsoft.VisualStudio.Shell.Interop.IVsHierarchy,System.UInt32)">
+            <summary>
+            If the itemId represents a document from a Shared Code project, this returns the 
+            SharedProjectHierarchy to which it belongs. Otherwise, it returns null.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.LinkedFileUtilities.IsProjectKProject(Microsoft.CodeAnalysis.Project)">
+            <summary>
+            Check whether given project is project k project.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentKey">
+            <summary>
+            Represents the information which uniquely defines a document -- the project which contains
+            it and the moniker.
+            
+            Immutable, since this object is used as a key into some dictionaries.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider">
+            <summary>
+            This service provides a central place where the workspace/project system layer may create
+            Document objects that represent items from the project system. These IDocuments are useful
+            in that they watch the running document table, tracking open/close events, and also file
+            change events while the file is closed.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider._documentMap">
+            <summary>
+            The core data structure of this entire class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.TryGetTextBufferFromDocData(System.Object)">
+            <summary>
+            Tries to return an ITextBuffer representing the document from the document's DocData.
+            </summary>
+            <param name="docData">The DocData from the running document table.</param>
+            <returns>The ITextBuffer. If one could not be found, this returns null.</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.NotifyDocumentRegisteredToProject(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument)">
+            <summary>
+            Notifies the document provider that this document is now registered in a project.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.CloseDocuments(System.UInt32,System.String)">
+            <summary>
+            Closes all documents that match the cookie and predicate.
+            </summary>
+            <param name="docCookie">The cookie that we should close documents for.</param>
+            <param name="monikerToKeep">The moniker that we should _not_ close documents for. When a rename is happening,
+            we might have documents with both the old and new moniker attached to the same docCookie. In those cases
+            we only want to close anything that doesn't match the new name. Can be null to close everything.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.StopTrackingDocument(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.StandardTextDocument)">
+            <summary>
+            Called by a VisualStudioDocument when that document is disposed.
+            </summary>
+            <param name="document">The document to stop tracking.</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.DocumentIdHint">
+            <summary>
+            A small IDisposable object that's returned from ProvideDocumentIdHint.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.StandardTextDocument._documentProvider">
+            <summary>
+            The IDocumentProvider that created us.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.StandardTextDocument._openTextBuffer">
+            <summary>
+            The text buffer that is open in the editor. When the file is closed, this is null.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider.TextBufferDataEventsSink.HookupHandler(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider,Microsoft.VisualStudio.TextManager.Interop.IVsTextBuffer,Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentKey)">
+            <summary>
+            Helper method for creating and hooking up a <c>TextBufferDataEventsSink</c>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.FileChangeTracker._fileChangeCookie">
+            <summary>
+            The cookie received from the IVsFileChangeEx interface that is watching for changes to
+            this file.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.InvisibleEditor._buffer">
+            <summary>
+            The text buffer. null if the object has been disposed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.InvisibleEditor.Dispose">
+            <summary>
+            Closes the invisible editor and saves the underlying document as appropriate.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument">
+            <summary>
+            Represents a source document that comes from the <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.DocumentProvider"/> used in Visual Studio.
+            </summary>
+            <remarks>
+            It guarantees the existence of a Dispose method, which allows the workspace/project system layer to clean up file system watchers for this
+            document when they are no longer needed.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.Project">
+            <summary>
+            The visual studio project this document is part of.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.Key">
+            <summary>
+            The Visual Studio identity of the document within its project.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.Id">
+            <summary>
+            The workspace document Id for this document.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.FilePath">
+            <summary>
+            The path to the document's file on disk.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.Name">
+            <summary>
+            The name of the document.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.Folders">
+            <summary>
+            The logical folders associated with the document. This may be different than the actual folders
+            in the file path.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.Loader">
+            <summary>
+            A loader that can access the current stored text of the document.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.IsOpen">
+            <summary>
+            Returns true if the document is currently open in an editor.
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.UpdatedOnDisk">
+            <summary>
+            Fired after the file is updated on disk. If the file is open in the editor, this event is not fired.
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.Opened">
+            <summary>
+            Fired after the document has been opened in Visual Studio. GetTextBuffer() will return the actual live
+            editor.
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.Closing">
+            <summary>
+            Fired as the document is being closed in Visual Studio. GetTextBuffer() still returns the editor that was
+            live in Visual Studio, but is going away shortly.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.GetInitialState">
+            <summary>
+            Returns and IDocumentInfo with the initial state of this document when it was first loaded.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.GetItemId">
+            <summary>
+            The ItemID for this document. This method must be called on the UI thread, and the 
+            returned value must be used while still on the UI thread, or must be appropriately
+            invalidated when the relevant <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsHierarchyEvents"/> are triggered. 
+            Otherwise, this ItemId may be stale or destroyed within its <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsHierarchy"/>
+            before this document is removed from its project. These are only really useful for 
+            "normal" files, that is regular .cs files that are compiled in a normal project. 
+            It may be <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID.Nil"/> in the case of files that have very
+            recently been removed or that are in miscellaneous files projects, or it may not even
+            be stable in the case of strange files like .g.i.cs files.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.GetOpenTextContainer">
+            <summary>
+            Gets the text container associated with the document when it is in an opened state.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.GetOpenTextBuffer">
+            <summary>
+            Gets the text buffer associated with the document when it is in an opened state.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.UpdateText(Microsoft.CodeAnalysis.Text.SourceText)">
+            <summary>
+            Updates the text of the document.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostDocument.GetTextUndoHistory">
+            <summary>
+            Fetches the <see cref="T:Microsoft.VisualStudio.Text.Operations.ITextUndoHistory"/> that should be used to undo edits to this document.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostProject">
+            <summary>
+            The interface implemented by all types of projects within Visual Studio (like regular
+            projects, Miscellaneous files projects, etc.)
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioHostProjectContainer">
+            <summary>
+            An interface implemented by a workspace to get the set of host projects contained in the
+            workspace.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReferenceManager">
+            <summary>
+            Manages metadata references for VS projects. 
+            </summary>
+            <remarks>
+            The references correspond to hierarchy nodes in the Solution Explorer. 
+            They monitor changes in the underlying files and provide snapshot references (subclasses of <see cref="T:Microsoft.CodeAnalysis.PortableExecutableReference"/>) 
+            that can be passed to the compiler. These snapshot references serve the underlying metadata blobs from a VS-wide storage, if possible, 
+            from <see cref="T:Microsoft.CodeAnalysis.Host.ITemporaryStorageService"/>.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReferenceManager.GetMetadata(System.String,System.DateTime)">
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.BadImageFormatException" />
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReferenceManager.CreateAssemblyMetadataFromTemporaryStorage(Roslyn.Utilities.FileKey,System.Collections.Generic.List{Microsoft.CodeAnalysis.Host.ITemporaryStreamStorage})">
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.BadImageFormatException" />
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReferenceManager.TryCreateAssemblyMetadataFromMetadataImporter(Roslyn.Utilities.FileKey,Microsoft.CodeAnalysis.AssemblyMetadata@)">
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.BadImageFormatException" />
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReferenceManager.CreateAssemblyMetadata(Roslyn.Utilities.FileKey,Microsoft.CodeAnalysis.ModuleMetadata,System.Collections.Generic.List{Microsoft.CodeAnalysis.Host.ITemporaryStreamStorage},System.Func{Roslyn.Utilities.FileKey,System.Collections.Generic.List{Microsoft.CodeAnalysis.Host.ITemporaryStreamStorage},Microsoft.CodeAnalysis.ModuleMetadata})">
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.BadImageFormatException" />
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReference.Snapshot">
+            <summary>
+            Represents a metadata reference corresponding to a specific version of a file.
+            If a file changes in future this reference will still refer to the original version.
+            </summary>
+            <remarks>
+            The compiler observes the metadata content a reference refers to by calling <see cref="M:Microsoft.CodeAnalysis.PortableExecutableReference.GetMetadataImpl"/>
+            and the observed metadata is memoized by the compilation. However we drop compilations to decrease memory consumption. 
+            When the compilation is recreated for a solution the compiler asks for metadata again and we need to provide the original content,
+            not read the file again. Therefore we need to save the timestamp on the <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReference.Snapshot"/>.
+            
+            When the VS observes a change in a metadata reference file the <see cref="P:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReference.Project"/> version is advanced and a new instance of 
+            <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioMetadataReference.Snapshot"/> is created for the corresponding reference.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.Sqm">
+            <summary>
+            We want to track Roslyn adoption through SQM.  This datapoint
+            is used in a cube to track how many sessions are using the 
+            Roslyn language services.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioWorkspaceImpl">
+            <summary>
+            The Workspace for running inside Visual Studio.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioWorkspaceImpl.SetProjectTracker(Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioProjectTracker)">
+            <summary>NOTE: Call only from derived class constructor</summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioWorkspaceImpl.GetDocumentIdInCurrentContext(Microsoft.CodeAnalysis.DocumentId)">
+            <summary>
+            Finds the <see cref="T:Microsoft.CodeAnalysis.DocumentId"/> related to the given <see cref="T:Microsoft.CodeAnalysis.DocumentId"/> that
+            is in the current context. For regular files (non-shared and non-linked) and closed
+            linked files, this is always the provided <see cref="T:Microsoft.CodeAnalysis.DocumentId"/>. For open linked
+            files and open shared files, the active context is already tracked by the
+            <see cref="T:Microsoft.CodeAnalysis.Workspace"/> and can be looked up directly. For closed shared files, the
+            document in the shared project's <see cref="F:Microsoft.VisualStudio.Shell.Interop.__VSHPROPID7.VSHPROPID_SharedItemContextHierarchy"/> 
+            is preferred.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.VisualStudioWorkspaceImpl.VisualStudioWorkspaceHost">
+            <summary>
+            A trivial implementation of <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.IVisualStudioWorkspaceHost" /> that just
+            forwards the calls down to the underlying Workspace.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.SolutionSize.SolutionSizeTracker">
+            <summary>
+            Track approximate solution size.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.TableDataSource.MiscellaneousDiagnosticListTable.#ctor(Microsoft.CodeAnalysis.Workspace,Microsoft.CodeAnalysis.Diagnostics.IDiagnosticService,Microsoft.VisualStudio.Shell.TableManager.ITableManagerProvider)">
+            this is for test only
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.TableDataSource.VisualStudioDiagnosticListTable.#ctor(Microsoft.CodeAnalysis.Workspace,Microsoft.CodeAnalysis.Diagnostics.IDiagnosticService,Microsoft.VisualStudio.Shell.TableManager.ITableManagerProvider)">
+            this is for test only
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Utilities.BrowserHelper.RequestId">
+            <summary>
+            unique VS session id
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Utilities.AbstractNotifyPropertyChanged.SetProperty``1(``0@,``0,System.String)">
+            <returns>True if the property was updated</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Utilities.VisualStudioWaitContext.Callback">
+            <summary>
+            Note: this is a COM interface, however it is also free threaded.  This is necessary and
+            by design so that we can hear about cancellation happening from the wait dialog (which
+            will happen on the background).
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Versions.SemanticVersionTrackingService">
+            <summary>
+            this service tracks semantic version changes as solution changes and provide a way to get back to initial project/semantic version
+            pairs at the solution load 
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportConsent">
+            <summary>
+            The kind of consent already obtained from the user.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportConsent.NotAsked">
+            <summary>
+            Allows the error reporting infrastructure to decide whether to ask the user based on their previously established consent level.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportConsent.Approved">
+            <summary>
+            The user has already approved the submission of this error report through another means.
+            </summary>
+            <remarks>
+            This value should not be used without first obtaining approval from mailto:ddwattac.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportConsent.Denied">
+            <summary>
+            Indicates the user has denied permission to submit the report.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportConsent.AlwaysPrompt">
+            <summary>
+            Causes UI to appear to ask the user before submitting the report.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportConsent.Max">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorDumpType">
+            <summary>
+            The level of detail and size of the dump to submit.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorDumpType.MicroDump">
+            <summary>
+            Similar to MiniDump but only capture the stack trace of the thread passed into WerReportAddDump
+            which is the most reliable dump type
+            If http://watson has been configured to ask for more information, this can be
+            automatically upgraded to a heap dump.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorDumpType.MiniDump">
+            <summary>
+            By default, a dump that includes callstacks for all threads is submitted.
+            If http://watson has been configured to ask for more information, this can be
+            automatically upgraded to a heap dump.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorDumpType.HeapDump">
+            <summary>
+            Produces a much larger CAB that includes the heap.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorDumpType.Max">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType">
+            <summary>
+            The severity of the error being reported.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.Noncritical">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.Critical">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.ApplicationCrash">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.ApplicationHang">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.Kernel">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.Invalid">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileType">
+            <summary>
+            The type of files that can be added to the report.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileType.Microdump">
+            <summary>
+            A limited minidump that contains only a stack trace.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileType.Minidump">
+            <summary>
+            A minidump file.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileType.Heapdump">
+            <summary>
+            An extended minidump that contains additional data such as the process memory.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileType.UserDocument">
+            <summary>
+            The document in use by the application at the time of the event. The document is added only if the server asks for this type of document.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileType.Other">
+            <summary>
+            Any other type of file. This file will always get added to the cab (but only if the server asks for a cab).
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileFlags">
+            <summary>
+            Flags that can be specified when adding a file to the report. 
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileFlags.DeleteWhenDone">
+            <summary>
+            Delete the file once WER is done
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileFlags.AnonymousData">
+            <summary>
+            This file does not contain any PII
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportSettings">
+            <summary>
+            An immutable description of the type of error report to submit.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportSettings.#ctor(Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorDumpType,Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType,System.String,System.String,System.Collections.ObjectModel.ReadOnlyCollection{Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFile})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportSettings"/> class.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportSettings.DumpType">
+            <summary>
+            Gets the type of information to include in the error report.
+            </summary>
+            <value>The default value is <see cref="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorDumpType.MiniDump"/>.</value>
+            <remarks>
+            This value should typically be left at its default unless you first check with
+            mailto:ddwattac
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportSettings.ReportType">
+            <summary>
+            Gets the type of report being 
+            </summary>
+            <value>The default value is <see cref="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.Noncritical"/>.</value>
+            <remarks>
+            This value should typically be either <see cref="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.Noncritical"/> or <see cref="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportType.Critical"/>
+            unless you first check with mailto:ddwattac
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportSettings.Component">
+            <summary>
+            Gets the logical component where the failure occurred.
+            </summary>
+            <value>
+            A non-localized constant value.
+            If <c>null</c> the default component name is used in the report.
+            </value>
+            <remarks>
+            This value should not contain any parameterized values so that a single Watson bucket collects all instances of this failure.
+            Its value will be used to assist in matching a failure to the team that owns the feature.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportSettings.EventName">
+            <summary>
+            Gets the value that will appear as "Event Name" in the Windows Application Log and in the Watson error report.
+            </summary>
+            <value>
+            A non-localized constant value.
+            If <c>null</c> the default component name is used in the report.
+            </value>
+            <remarks>
+            This value should not contain any parameterized values so that a single Watson bucket collects all instances of this failure.
+            Generally it should be left at <c>null</c> so that the product's reserved event name can be used.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorReportSettings.Files">
+            <summary>
+            Gets the files being added to report.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFile">
+            <summary>
+            Encapsulate the info required to add a file to report.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFile.#ctor(System.String,Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileType,Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFileFlags)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFile"/> class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFile.Path">
+            <summary>
+            Gets the file path being added to report
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFile.Type">
+            <summary>
+            Gets the type of the file being added to report.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ErrorFile.Flags">
+            <summary>
+            Gets the flags of the file being added to report.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ExceptionInfo">
+            <summary>
+            Describes non-fatal exception from a given component.
+            </summary>
+            <remarks>
+            This is intended to be used by callers of <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport"/> to represent information about the non-fatal error.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ExceptionInfo.#ctor(System.Exception,System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ExceptionInfo"/>
+            </summary>
+            <param name="exception">[Required] Exception that triggered this non-fatal error</param>
+            <param name="implementationName">
+                [Required] Name of the component / implementation that triggered the error. 
+                This paramater is included in the watson bucket parameters to uniquely identify this error.
+            </param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ExceptionInfo.Exception">
+            <summary>
+            Exception that triggered this non-fatal error
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ExceptionInfo.ComponentName">
+            <summary>
+            The name of the component that triggered this error
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ExceptionInfo.ImplementationName">
+            <summary>
+            The Fully qualified identifier to what triggered this error
+            This is appended to the ModName parameter on the Watson bucket
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport">
+            <summary>
+            Helper for filing non-fatal Watson reports.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.s_minimumSubmissionInterval">
+            <summary>
+            The minimum interval that must pass between individual error submissions for the same failed component.
+            </summary>
+            <remarks>
+            This is important so we don't slam the WER servers from a single dev box that keeps crashing.
+            Particularly when the failing code happens to be in a loop or on multiple threads, we don't want to get
+            the same crash over and over.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.s_lastReportSubmissionByComponent">
+            <summary>
+            A record of when a given component last submitted an error report in this app domain's lifetime.  
+            </summary>
+            <remarks>
+            Used for throttling report submissions.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport._exceptionInfo">
+            <summary>
+            Info describing source of this non-fatal error
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport._exceptionPointersPointer">
+            <summary>
+            <see cref="T:System.IntPtr"/> pointer to ExceptionPointers structure that is created when the exception is thrown (required for submission to watson)
+            </summary>
+            <remarks>
+            We do not need to clean this memory up because it will be cleaned up at the conclusion of the exception handling
+            </remarks>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.WatsonEventType">
+            <summary>
+            WatsonBucket EventType for all non-fatal devenv errors we use "Dev11NonFatalError"
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport._snapshotId">
+            <summary>
+            Id generated when opening the event handle used to identify this request
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport._eventHandle">
+            <summary>
+            Open, Inheritable handle to the event that will be used to signal snapshotting complete
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport._processHandleDupe">
+            <summary>
+            Open, Inheritable handle to this process (this is the process that will be snapshotted)
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport._threadHandleDupe">
+            <summary>
+            Open, Inheritable handle to this thread (used by watson to identify the thread where the error happened
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport._disposed">
+            <summary>
+            Bool indicating if <see cref="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.Dispose"/> has been called on this instance
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.Finalize">
+            <summary>
+            Releases native resources.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.MinimumSubmissionInterval">
+            <summary>
+            Minimum submission interval
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.CreateNonFatalReport(Microsoft.VisualStudio.LanguageServices.Implementation.Watson.ExceptionInfo)">
+            <summary>
+            This Initializes a new instance of <see cref="T:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport"/> that must be disposed.
+            </summary>
+            <param name="exceptionInfo">Exception info describing this error</param>
+            <returns>New error report instance</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.ReportIfNecessary">
+            <summary>
+            If not throttled, this fires off a report request and waits for the snapshot to be taken. 
+            If throttled or a snapshot is not taken due to a failure this will return false.
+            </summary>
+            <remarks>
+            This must be called from a exception filter to get the pointer to the ExceptionPointers structure.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown if this object has already been disposed
+            </exception>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.InitializeHandlesForSnapshot">
+            <summary>
+            Sets up for taking a snapshot by initializing the necessary handles for the helper process
+            </summary>
+            <remarks>
+            This must be called from an Exception Filter inorder to gather the current exception information.
+            </remarks>
+            <returns>true on success and false on failure</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.ReportException">
+            <summary>
+            Reports the current non-fatal exception using a process snapshot (if InitializeHandlesForSnapshot has been called)
+            </summary>
+            <returns>true if the report was successfully taken, false otherwise</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.IsHelperExeFound(System.String@)">
+            <summary>
+            Locates the helper required to take the snapshot
+            </summary>
+            <param name="filePath">[Optional, Out] if this method returns true this will be the path to the helper exe</param>
+            <returns>true if the exe was found, false otherwise</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.TryGetBucketParameters(Microsoft.VisualStudio.LanguageServices.Implementation.Watson.Watson.BucketParameters@)">
+            <summary>
+            Assembles the Watson bucket parameters.
+            </summary>
+            <param name="bucketParameters">Receives the bucket parameters.</param>
+            <returns>A value indicating whether error details were successfully collected.</returns>
+            <remarks>
+            NOTE, this method should be called from the filter of an exception block.  Otherwise the runtime
+            will not fill in the bucket parameters because there won't be a "current" exception.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.CheckThrottledSubmission(System.String)">
+            <summary>
+            Determines whether a given component should be allowed to submit a report, considering throttling requirements.
+            </summary>
+            <param name="componentName">The name of the failed component.</param>
+            <returns><c>true</c> if the report submission is allowed; <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Watson.WatsonErrorReport.PrepareHelperArguments(System.String@)">
+            <summary>
+            Gets a string to pass to DebuggerReportingHelper as a commandline argument representing the Watson Arguments
+            </summary>
+            <param name="arguments">[Required, Out] resulting process start arguments</param>
+            <returns>Bool indicating if gathering the required arguments was successful. If false report process should be aborted.</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.WatsonReporter.Report(System.Exception)">
+            <summary>
+            Report Non-Fatal Watson
+            </summary>
+            <param name="exception">Exception that triggered this non-fatal error</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.AbstractEditorFactory">
+            <summary>
+            The base class of both the Roslyn editor factories.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.AbstractOleCommandTarget.CurrentlyExecutingCommand">
+            <summary>
+            This is set only during Exec. Currently, this is required to disambiguate the editor calls to
+            <see cref="M:Microsoft.VisualStudio.TextManager.Interop.IVsTextViewFilter.GetPairExtents(System.Int32,System.Int32,Microsoft.VisualStudio.TextManager.Interop.TextSpan[])"/> between GotoBrace and GotoBraceExt commands.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.AbstractOleCommandTarget.WpfTextView">
+            <summary>
+            The IWpfTextView that this command filter is attached to.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.AbstractOleCommandTarget.CurrentHandlers">
+            <summary>
+            The command handler service to use for dispatching commands. This is set by
+            the derived classes to this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.AbstractOleCommandTarget.NextCommandTarget">
+            <summary>
+            The next command target in the chain. This is set by the derived implementation of this
+            class.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ChangeSignature.ChangeSignatureDialog">
+            <summary>
+            Interaction logic for ExtractInterfaceDialog.xaml
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.LanguageServices.Implementation.ChangeSignature.ChangeSignatureDialog.TEST_DialogLoaded">
+            <summary>
+            For test purposes only. The integration tests need to know when the dialog is up and
+            ready for automation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ChangeSignature.ChangeSignatureDialog.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.PreviewPane.PreviewPane.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.DebuggerIntelliSense.AbstractDebuggerIntelliSenseContext.SetupImmediateWindowProjectionBuffer">
+            <summary>
+            If there's a ? mark, we want to skip the ? mark itself, and include the text that follows it
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.DebuggerIntelliSense.DebuggerTextView._innerTextView">
+            <summary>
+            The actual debugger view of the watch or immediate window that we're wrapping
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.DebuggerIntelliSense.DebuggerTextView.BufferGraph">
+            <summary>
+            We basically replace the innerTextView's BufferGraph with our own custom projection graph
+            that projects the immediate window contents into a context buffer:
+            
+                        (1)
+                    (2)     (5)
+                    (3)     (6)
+                    (4)
+            (1) Top level projection buffer - the subject buffer used by intellisense
+            (2/3) Currently a double projection buffer combo that elides away the ? in the immediate window, and may add some 
+                  boilerplate code to force an expression context.
+            (4) innerTextView.TextBuffer, what the user actually sees in the watch/immediate windows
+            (5) A read-only projection of (6)
+            (6) The context buffer which is typically a source file
+            
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.DebuggerIntelliSense.DebuggerTextView.HACK_CompletionSession">
+            <remarks>
+            Dev11's debugger intellisense uses the old completion shims and routes commands through
+            them. Since we use the new editor completion and sighelp brokers for our sessions, the shims
+            are unaware of any sessions and don't pass us any commands other than typechar. To determine
+            whether to pass commands or non, the shims simply verify that they have a pointer to an
+            ICompletionSession. We will use reflection to place an ICompletionSession in the field.
+            
+            Furthermore, Dev11's debugger intellisense does not pass commands on to SignatureHelp at
+            all. It's therefore impossible to use the arrow keys to navigate overloads, etc. If we give
+            the CompletionSessionShim an ICompletionSession, though, we still get the commands and our
+            command handlers can deal with them appropriately. To get commands when only our
+            SignatureHelp is up, we still must provide an ICompletionSession, which this class provides. 
+            Note: Any calls to methods in this class will throw, since the completion shims should not
+            be doing anything.
+            
+            We also include a counter so that we can null out the field when all of our sessions have
+            actually ended.
+            
+            See CEditCtlStatementCompletion::HandleKeyDown for more information
+            </remarks>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Debugging.AbstractBreakpointResolver.IsApplicable(Microsoft.CodeAnalysis.ISymbol,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Is this method or property a valid place to set a breakpoint and does it match the expected parameter count?
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.DesignerAttribute.AbstractDesignerAttributeIncrementalAnalyzer._dotNotAccessDirectlyDesigner">
+            <summary>
+            cache designer from UI thread
+            
+            access this field through <see cref="M:Microsoft.VisualStudio.LanguageServices.Implementation.DesignerAttribute.AbstractDesignerAttributeIncrementalAnalyzer.GetDesignerFromForegroundThread"/>
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.ExtractInterface.ExtractInterfaceDialog">
+            <summary>
+            Interaction logic for ExtractInterfaceDialog.xaml
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.LanguageServices.Implementation.ExtractInterface.ExtractInterfaceDialog.TEST_DialogLoaded">
+            <summary>
+            For test purposes only. The integration tests need to know when the dialog is up and
+            ready for automation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ExtractInterface.ExtractInterfaceDialog.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.GCManager">
+            <summary>
+            This class manages setting the GC mode to SustainedLowLatency.
+            
+            It is safe to call from any thread, but is intended to be called from
+            the UI thread whenever user keyboard or mouse input is received.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.GCManager.UseLowLatencyModeForProcessingUserInput">
+            <summary>
+            Call this method to suppress expensive blocking Gen 2 garbage GCs in
+            scenarios where high-latency is unacceptable (e.g. processing typing input).
+            
+            Blocking GCs will be re-enabled automatically after a short duration unless 
+            UseLowLatencyModeForProcessingUserInput is called again.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.GenerateType.GenerateTypeDialog">
+            <summary>
+            Interaction logic for GenerateTypeDialog.xaml
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.LanguageServices.Implementation.GenerateType.GenerateTypeDialog.TEST_DialogLoaded">
+            <summary>
+            For test purposes only. The integration tests need to know when the dialog is up and
+            ready for automation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.GenerateType.GenerateTypeDialog.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.TaskList.AbstractVisualStudioTaskList">
+            <summary>
+            Since we're using the latest IVsTaskList3 RefreshOrAddTasksAsync and RemoveTasksAsync 
+            APIs, we won't normally need to enumerate over each task list item.  
+            
+            The only exception to this is if someone were to call RefreshAllProviders.  If we 
+            want to handle that case, we should simply raise an event here that causes RoslynVSTaskList
+            to re-add all of our items.  This is a terrible waste though and should never happen to us.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.TaskList.AbstractVisualStudioTaskList.InitializeTaskList">
+            <summary>
+            should be called from derived class since registering task list will call us back to enumerate existing task items.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.TaskList.ExternalErrorDiagnosticUpdateSource.#ctor(Microsoft.CodeAnalysis.Workspace,Microsoft.CodeAnalysis.Diagnostics.IDiagnosticAnalyzerService,Microsoft.CodeAnalysis.Shared.TestHooks.IAsynchronousOperationListener)">
+            <summary>
+            internal for testing
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.TaskList.VisualStudioTaskItemBase`1.GetDisplayLocation">
+            <summary>
+            Gets the display location of the tasklist item. This is the same as the navigation 
+            location except for Venus which must have their original
+            unmapped line numbers mapped through its buffer coordinator.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.TaskList.VisualStudioTaskItemBase`1.GetNavigationLocation">
+            <summary>
+            Gets the location to be used when navigating to the item. This is the same 
+            as the display location except for Venus which must use their
+            original unmapped location as the navigation location so that it can be 
+            translated correctly during navigation.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.AbstractContainedLanguage.SubjectBuffer">
+            <summary>
+            The subject (secondary) buffer that contains the C# or VB code.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.AbstractContainedLanguage.DataBuffer">
+            <summary>
+            The underlying buffer that contains C# or VB code. NOTE: This is NOT the "document" buffer
+            that is saved to disk.  Instead it is the view that the user sees.  The normal buffer graph
+            in Venus includes 4 buffers:
+            <code>
+                       SurfaceBuffer/Databuffer (projection)
+                        /                               |
+            Subject Buffer (C#/VB projection)           |
+                        |                               |
+            Inert (generated) C#/VB Buffer         Document (aspx) buffer
+            </code>
+            In normal circumstance, the Subject and Inert C# buffer are identical in content, and the
+            Surface and Document are also identical.  The Subject Buffer is the one that is part of the
+            workspace, that most language operations deal with.  The surface buffer is the one that the
+            view is created over, and the Document buffer is the one that is saved to disk.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.AbstractContainedLanguage.SetSubjectBuffer(Microsoft.VisualStudio.Text.ITextBuffer)">
+            <summary>
+            To be called from the derived class constructor!
+            </summary>
+            <param name="subjectBuffer"></param>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.AbstractContainedLanguage.SetDataBuffer(Microsoft.VisualStudio.Text.ITextBuffer)">
+            <summary>
+            To be called from the derived class constructor!
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.CodeBlockEnumerator">
+            <summary>
+            An implementation of IVsEnumCodeBlocks used in the implementation of
+            IVsContainedCode.EnumOriginalCodeBlocks for each language's Venus interop layer.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.CodeBlockEnumerator.#ctor(Microsoft.VisualStudio.LanguageServices.Implementation.Venus.CodeBlockEnumerator)">
+            <summary>
+            Clones another instance of a CodeBockEnumerator.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.ContainedDocument">
+            <summary>
+            An IVisualStudioDocument which represents the secondary buffer to the workspace API.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.ContainedLanguage`3.EnumOriginalCodeBlocks(Microsoft.VisualStudio.TextManager.Interop.IVsEnumCodeBlocks@)">
+            <summary>
+            Returns the list of code blocks in the generated .cs file that comes from the ASP.NET
+            markup compiler. These blocks of code are delimited by #line directives (ExternSource
+            directives in VB). The TextSpan that we return is the span of the lines between the
+            start #line and ending #line default directives (#End ExternSource in VB), and the
+            cookie is the numeric line number given in the #line directive.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.ContainedLanguageCodeSupport.GetCompatibleEventHandlers(Microsoft.CodeAnalysis.Document,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Determine what methods of <paramref name=" className"/> could possibly be used as event
+            handlers.
+            </summary>
+            <param name="document">The document containing <paramref name="className"/>.</param>
+            <param name="className">The name of the type whose methods should be considered.</param>
+            <param name="objectTypeName">The fully qualified name of the type containing a member
+            that is an event. (E.g. "System.Web.Forms.Button")</param>
+            <param name="nameOfEvent">The name of the member in <paramref name="objectTypeName"/>
+            that is the event (E.g. "Clicked")</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The display name of the method, and a unique to for the method.</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.ContainedLanguageCodeSupport.EnsureEventHandler(Microsoft.CodeAnalysis.Document,Microsoft.CodeAnalysis.Document,System.String,System.String,System.String,System.String,System.String,System.UInt32,System.Boolean,Microsoft.CodeAnalysis.Formatting.Rules.IFormattingRule,System.Threading.CancellationToken)">
+            <summary>
+            Ensure that an event handler exists for a given event.
+            </summary>
+            <param name="thisDocument">The document corresponding to this operation.</param>
+            <param name="targetDocument">The document to generate the event handler in if it doesn't
+            exist.</param>
+            <param name="className">The name of the type to generate the event handler in.</param>
+            <param name="objectName">The name of the event member (if <paramref
+            name="useHandlesClause"/> is true)</param>
+            <param name="objectTypeName">The name of the type containing the event.</param>
+            <param name="nameOfEvent">The name of the event member in <paramref
+            name="objectTypeName"/></param>
+            <param name="eventHandlerName">The name of the method to be hooked up to the
+            event.</param>
+            <param name="itemidInsertionPoint">The VS itemid of the file to generate the event
+            handler in.</param>
+            <param name="useHandlesClause">If true, a vb "Handles" clause will be generated for the
+            handler.</param>
+            <param name="additionalFormattingRule">An additional formatting rule that can be used to
+            format the newly inserted method</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Either the unique id of the method if it already exists, or the unique id of
+            the to be generated method, the text of the to be generated method, and the position in
+            <paramref name="itemidInsertionPoint"/> where the text should be inserted.</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.ContainedLanguageCodeSupport.GetMembers(Microsoft.CodeAnalysis.Document,System.String,Microsoft.VisualStudio.TextManager.Interop.CODEMEMBERTYPE,System.Threading.CancellationToken)">
+            <summary>
+            Get the display names and unique ids of all the members of the given type in <paramref
+            name="className"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.ContainedLanguageCodeSupport.TryRenameElement(Microsoft.CodeAnalysis.Document,Microsoft.VisualStudio.TextManager.Interop.ContainedLanguageRenameType,System.String,System.String,System.Collections.Generic.IEnumerable{Microsoft.CodeAnalysis.Editor.IRefactorNotifyService},System.Threading.CancellationToken)">
+            <summary>
+            Try to do a symbolic rename the specified symbol.
+            </summary>
+            <returns>False ONLY if it can't resolve the name.  Other errors result in the normal
+            exception being propagated.</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.IVsContainedLanguageCodeSupport">
+            <summary>
+            This interface is redefined by copy/paste from Reflector, so that we can tweak the
+            definitions of GetMembers and GetCompatibleEventMembers, because they take optional out
+            params, and the marshalling was wrong in the PIA.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Venus.IVsContainedLanguageStaticEventBinding">
+            <summary>
+            This interface is redefined by copy/paste from Reflector, so that we can tweak the
+            definitions of GetStaticEventBindingsForObject, because they take optional out params, and
+            the marshalling was wrong in the PIA.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ICodeModelNavigationPointService.GetStartPoint(Microsoft.CodeAnalysis.SyntaxNode,System.Nullable{EnvDTE.vsCMPart})">
+            <summary>
+            Retrieves the start point of a given node for the specified EnvDTE.vsCMPart.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.ICodeModelNavigationPointService.GetEndPoint(Microsoft.CodeAnalysis.SyntaxNode,System.Nullable{EnvDTE.vsCMPart})">
+            <summary>
+            Retrieves the end point of a given node for the specified EnvDTE.vsCMPart.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Interop.ComAggregate.CreateAggregatedObject(System.Object)">
+            <summary>
+            This method creates a native COM object that aggregates the passed in managed object.
+            The reason we need to do this is to enable legacy managed code that expects managed casts
+            expressions to perform a QI on the COM object wrapped by an RCW. These clients are relying
+            on the fact that COM type equality is based on GUID, whereas type equality is identity in 
+            the managed world.
+            Example: IMethodXML is defined many times throughout VS and used by many managed clients
+                     dealing with CodeFunction objects. If the CodeFunction objects they deal with are
+                     direct references to managed objects, then casts operations are managed casts
+                     (as opposed to QI calls), and they fail, since the managed type for IMethodXML
+                     have different identity (since they are defined in different assemblies). The QI
+                     works, since under the hood, the casts operations are converted to QI with 
+                     a GUID which is shared between all these types.
+                     The solution to this is to return to these managed clients a native object,
+                     which wraps the managed implementation of these interface using aggregation.
+                     This means the interfaces will be obtained through QI, while the implementation
+                     will be forwarded to the managed implementation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Interop.ComAggregate.TryGetWrapper(System.Object)">
+            <summary>
+            Return the RCW for the native IComWrapper instance aggregating "managedObject"
+            if there is one. Return "null" if "managedObject" is not aggregated.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Interop.ComHandle`2">
+            <summary>
+            Holds onto a managed object as well as the CCW for that object if there is one.
+            </summary>
+            <typeparam name="THandle">The COM interface type to keep a reference to</typeparam>
+            <typeparam name="TObject">The managed object type to keep a reference to</typeparam>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Interop.ComHandle`2.#ctor(`0)">
+            <summary>
+            Create an instance from a "ComObject" or from a managed object.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Interop.ComHandle`2.Handle">
+            <summary>
+            Return the IComWrapper object (as T) or the managed object (as T) if the managed object is not wrapped.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Interop.ComHandle`2.Object">
+            <summary>
+            Return the managed object
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Interop.WrapperPolicy.s_ComWrapperFactory">
+            <summary>
+            Factory object for creating IComWrapper instances.
+            Internal and not readonly so that unit tests can provide an alternative implementation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Interop.WrapperPolicy.TryGetWrapper(System.Object)">
+            <summary>
+            Return the RCW for the native IComWrapper instance aggregating "managedObject"
+            if there is one. Return "null" if "managedObject" is not aggregated.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.Notification.VSNotificationServiceFactory.VSDialogService.NotificationCallback">
+            <summary>
+            For testing purposes only.  If non-null, this callback will be invoked instead of showing a dialog.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.GraphBuilder._solution">
+            <summary>
+            The input solution. Never null.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.GraphNodeIdCreation">
+            <summary>
+            A helper class that implements the creation of GraphNodeIds that matches the .dgml creation
+            by the metadata progression provider.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.GraphNodeIdCreation.GetLocalVariableIndexAsync(Microsoft.CodeAnalysis.ISymbol,Microsoft.CodeAnalysis.Solution,System.Threading.CancellationToken)">
+            <summary>
+            Get the position of where a given local variable is defined considering there could be multiple variables with the same name in method body.
+            For example, in "int M() { { int foo = 0; ...} { int foo = 1; ...} }",
+            the return value for the first "foo" would be 0 while the value for the second one would be 1.
+            It will be used to create a node with LocalVariableIndex for a non-zero value.
+            In the above example, hence, a node id for the first "foo" would look like (... Member=M LocalVariable=bar)
+            but an id for the second "foo" would be (... Member=M LocalVariable=bar LocalVariableIndex=1)
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.GraphQueryManager._gate">
+            <summary>
+            This gate locks manipulation of trackedQueries.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.GraphQueryManager.PopulateContextGraphAsync(Microsoft.CodeAnalysis.Solution,System.Collections.Generic.List{Microsoft.VisualStudio.LanguageServices.Implementation.Progression.IGraphQuery},Microsoft.VisualStudio.GraphModel.IGraphContext)">
+            <summary>
+            Populate the graph of the context with the values for the given Solution.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.RoslynGraphProperties.SymbolId">
+            <summary>
+            A graph property that holds the SymbolId of the symbol.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.RoslynGraphProperties.ContextProjectId">
+            <summary>
+            A graph property that holds the ProjectId where you can find the symbol. Note this is
+            not strictly the project that defines the symbol in the case the symbol is from metadata.
+            It's simply a project that has a compilation which you can use to get to the symbol.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.RoslynGraphProperties.ContextDocumentId">
+            <summary>
+            A graph property that holds the DocumentId where you can find the symbol. This is used
+            to distinguish between multiple locations for partial types. This will only exist
+            for symbols in source that have partial implementations.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.RoslynGraphProperties.Label">
+            <summary>
+            A graph property to hold the label we have generated for the node.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.RoslynGraphProperties.FormattedLabelWithoutContainingSymbol">
+            <summary>
+            A graph property to hold the formatted label we have generated for the node.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.RoslynGraphProperties.FormattedLabelWithContainingSymbol">
+            <summary>
+            A graph property to hold the formatted label that has the containing symbol name.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.RoslynGraphProperties.Description">
+            <summary>
+            A graph property to hold the description we have generated for the node.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Progression.RoslynGraphProperties.DescriptionWithContainingSymbol">
+            <summary>
+            A graph property to hold the description that has the containing symbol name.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ReiteratedVersionSnapshotTracker._trackingBuffer">
+            <summary>
+            tracking text buffer
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.ReiteratedVersionSnapshotTracker._latestReiteratedVersionSnapshot">
+            <summary>
+            hold onto latest ReiteratedVersionNumber snapshot of a textbuffer
+            there is a bug where many of our features just assume that if they wait, they will end up get the latest snapshot in some ways. 
+            but, unfortunately that is actually not true. they will, at the end, get latest reiterated version snapshot but 
+            not the lastest version snapshot since we might have skipped/swallowed the latest snapshot since its content didn't change.
+            this is especially unfortunate for features that want to move back and forth between source text and ITextSnapshot since holding
+            on the latest snapshot won't guarantee that. so, in VS, we hold onto right latest snapshot in VS workspace so that all feature under it
+            doesn't need to worry about it.
+            this could be moved down to workspace_editor if it actually move up to editor layer. 
+            but for now, I am putting it here. we can think about moving it down to workspace_editor later.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.Implementation.RQName.Nodes.RQMethodPropertyOrEventName.OrdinaryNameValue">
+            <summary>
+            Methods, Properties, or Events either have "ordinary" names,
+            or explicit interface names. But even explicit names have an
+            underlying ordinary name as well. This is just the value for
+            ordinary names, or the underlying ordinary name if this is an
+            explicit name.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.RQName.RQNodeBuilder.Build(Microsoft.CodeAnalysis.ISymbol)">
+            <summary>
+            Builds the RQName for a given symbol.
+            </summary>
+            <returns>The node if it could be created, otherwise null</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.SaveEventsService.TryGetTextBufferFromDocData(System.IntPtr)">
+            <summary>
+            Tries to return an ITextBuffer representing the document from the document's DocData.
+            </summary>
+            <param name="docData">The DocData from the running document table.</param>
+            <returns>The ITextBuffer. If one could not be found, this returns null.</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Snippets.AbstractSnippetExpansionClient.SetEndPositionIfNoneSpecified(Microsoft.VisualStudio.TextManager.Interop.IVsExpansionSession)">
+            <summary>
+            If there was no $end$ token, place it at the end of the snippet code. Otherwise, it
+            defaults to the beginning of the snippet code.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.Snippets.AbstractSnippetInfoService.InitialCachePopulationTask">
+            <summary>
+            This service is created on the UI thread during package initialization, but it must not
+            block the initialization process. Getting snippet information from the <see cref="T:Microsoft.VisualStudio.TextManager.Interop.IVsExpansionManager"/>
+            must be done on the UI thread, so do this work in a task that will run on the UI thread
+            with lower priority.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Snippets.AbstractSnippetInfoService.VsExpansionWithIntPtrs">
+            <summary>
+            This structure is used to facilitate the interop calls with IVsExpansionEnumeration.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Snippets.IVsContainedLanguageHostInternal">
+            <summary>
+            Redefine IVsContainedLanguageHost so we can call InsertImportsDirective which would 
+            otherwise expect the namespace string as a ushort.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.Snippets.IVsExpansionSessionInternal">
+            <summary>
+            This allows us to get pNode as an IntPtr instead of a via a RCW. Otherwise, a second 
+            invocation of the same snippet may cause an AccessViolationException.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.Snippets.IVsExpansionSessionInternal.GetSnippetNode(System.String,System.IntPtr@)">
+            <summary>
+            WARNING: Marshal pNode with GetUniqueObjectForIUnknown and call ReleaseComObject on it
+            before leaving the calling method.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.StandaloneCommandFilter`3">
+            <summary>
+            A CommandFilter used for "normal" files, as opposed to Venus files which are special.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.StandaloneCommandFilter`3.#ctor(`1,Microsoft.VisualStudio.Text.Editor.IWpfTextView,Microsoft.CodeAnalysis.Editor.ICommandHandlerServiceFactory,Microsoft.CodeAnalysis.Options.IOptionService,Microsoft.VisualStudio.Editor.IVsEditorAdaptersFactoryService)">
+            <summary>
+            Creates a new command handler that is attached to an IVsTextView.
+            </summary>
+            <param name="wpfTextView">The IWpfTextView of the view.</param>
+            <param name="commandHandlerServiceFactory">The MEF imported ICommandHandlerServiceFactory.</param>
+            <param name="featureOptionsService">The feature options service.</param>
+            <param name="editorAdaptersFactoryService">The editor adapter</param>
+            <param name="languageService">The language service</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.GlobalUndoServiceFactory">
+            <summary>
+            A service that provide a way to undo operations applied to the workspace
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.GlobalUndoServiceFactory.NoOpUndoPrimitive">
+            <summary>
+            no op undo primitive
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.PersistentStorageService">
+            <summary>
+            A service that enables storing and retrieving of information associated with solutions,
+            projects or documents across runtime sessions.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.LanguageServices.Implementation.PersistentStorageService.SolutionSizeThreshold">
+            <summary>
+            threshold to start to use esent (50MB)
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.VisualStudioDocumentTrackingService.GetActiveDocument">
+            <summary>
+            Get the <see cref="T:Microsoft.CodeAnalysis.DocumentId"/> of the active document. May be called from any thread.
+            May return null if there is no active document or the active document is not part of this
+            workspace.
+            </summary>
+            <returns>The ID of the active document (if any)</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.VisualStudioDocumentTrackingService.GetVisibleDocuments">
+            <summary>
+            Get a read only collection of the <see cref="T:Microsoft.CodeAnalysis.DocumentId"/>s of all the visible documents in the workspace.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.Implementation.VisualStudioDocumentTrackingService.DocumentFrameShowing(Microsoft.VisualStudio.Shell.Interop.IVsWindowFrame,Microsoft.CodeAnalysis.DocumentId,System.Boolean)">
+            <summary>
+            Called via the DocumentProvider's RDT OnBeforeDocumentWindowShow notification when a workspace document is being shown.
+            </summary>
+            <param name="frame">The frame containing the document being shown.</param>
+            <param name="id">The <see cref="T:Microsoft.CodeAnalysis.DocumentId"/> of the document being shown.</param>
+            <param name="firstShow">Indicates whether this is a first or subsequent show.</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.VisualStudioDocumentTrackingService.FrameListener">
+            <summary>
+            Listens to frame notifications for a visible frame. When the frame becomes invisible or closes,
+            then it automatically disconnects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Implementation.VisualStudioDocumentTrackingService.NonRoslynTextBufferTracker">
+            <summary>
+            It tracks non roslyn text buffer text changes.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.IAnalyzerNodeSetup">
+            <summary>
+            An interface to be implemented in the SolutionExplorerShim project to register the stuff needed there.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.VirtualMemoryNotificationListener">
+            <summary>
+            Listens to broadcast notifications from the Visual Studio Shell indicating that the application is running
+            low on available virtual memory.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.VirtualMemoryNotificationListener.OnBroadcastMessage(System.UInt32,System.IntPtr,System.IntPtr)">
+            <summary>
+            Called by the Visual Studio Shell to notify components of a broadcast message.
+            </summary>
+            <param name="msg">The message identifier.</param>
+            <param name="wParam">First parameter associated with the message.</param>
+            <param name="lParam">Second parameter associated with the message.</param>
+            <returns>S_OK always.</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Setup.IRoslynTelemetrySetup">
+            <summary>
+            This interface allows the host to set up a telemetry service during package initialization.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.ServicesVSResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Access">
+            <summary>
+              Looks up a localized string similar to _Access:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.AddAReference">
+            <summary>
+              Looks up a localized string similar to Add a reference to &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.AddToExistingFile">
+            <summary>
+              Looks up a localized string similar to Add to _existing file.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.BuildingProject">
+            <summary>
+              Looks up a localized string similar to Building Project.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.BuildTableSourceName">
+            <summary>
+              Looks up a localized string similar to C#/VB Build Table Data Source.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Cancel">
+            <summary>
+              Looks up a localized string similar to Cancel.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ChangeSignature">
+            <summary>
+              Looks up a localized string similar to Change Signature.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.CodefixOrRefactoringEncounteredError">
+            <summary>
+              Looks up a localized string similar to &apos;{0}&apos; encountered an error and has been disabled..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.CouldNotFindLocationOfFol">
+            <summary>
+              Looks up a localized string similar to Could not find location of folder on disk.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.CouldNotFindProject">
+            <summary>
+              Looks up a localized string similar to Could not find project &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.CreateNewFile">
+            <summary>
+              Looks up a localized string similar to _Create new file.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.CreateNodeIdFailed">
+            <summary>
+              Looks up a localized string similar to Can&apos;t create a node id for this symbol kind: &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.CurrentBlock">
+            <summary>
+              Looks up a localized string similar to Current block.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Debugger">
+            <summary>
+              Looks up a localized string similar to Debugger.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Default">
+            <summary>
+              Looks up a localized string similar to Default.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.DeselectAll">
+            <summary>
+              Looks up a localized string similar to _Deselect All.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.DeterminingAutos">
+            <summary>
+              Looks up a localized string similar to Determining autos....
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.DeterminingBreakpointLocation">
+            <summary>
+              Looks up a localized string similar to Determining breakpoint location....
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.DeterminingCurrentBlock">
+            <summary>
+              Looks up a localized string similar to Determining current block..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.DiagnosticIdHyperlinkTooltipText">
+            <summary>
+              Looks up a localized string similar to Get help for &apos;{0}&apos;{1}{2}{3}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.DiagnosticsTableSourceName">
+            <summary>
+              Looks up a localized string similar to C#/VB Diagnostics Table Data Source.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.DocumentIdNotFromWorkspace">
+            <summary>
+              Looks up a localized string similar to The given DocumentId did not come from the Visual Studio workspace..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ElementIsNotValid">
+            <summary>
+              Looks up a localized string similar to Element is not valid..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ElementRenameFailed">
+            <summary>
+              Looks up a localized string similar to Can&apos;t rename &apos;other&apos; elements.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Enable">
+            <summary>
+              Looks up a localized string similar to Enable.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.EnableAndIgnore">
+            <summary>
+              Looks up a localized string similar to Enable and ignore future errors.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.EndPositionMustBeGreaterThanStart">
+            <summary>
+              Looks up a localized string similar to End position must be &gt;= start position.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ERR_CantReadRulesetFileId">
+            <summary>
+              Looks up a localized string similar to ErrorReadingRuleset.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ERR_CantReadRulesetFileMessage">
+            <summary>
+              Looks up a localized string similar to Error reading ruleset file {0} - {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ErrorCategory">
+            <summary>
+              Looks up a localized string similar to Roslyn.HostError.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ErrorWhileReading">
+            <summary>
+              Looks up a localized string similar to Error while reading &apos;{0}&apos;: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.EventTypeIsInvalid">
+            <summary>
+              Looks up a localized string similar to Event type is invalid.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ExtractInterface">
+            <summary>
+              Looks up a localized string similar to Extract Interface.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.FailedToCreateDocumentInMiscellaneousFiles">
+            <summary>
+              Looks up a localized string similar to Failed to create document in miscellaneous files project..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.FileAlreadyExists">
+            <summary>
+              Looks up a localized string similar to File already exists.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.FileName">
+            <summary>
+              Looks up a localized string similar to File Name:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.FileNameMustHaveTheExtension">
+            <summary>
+              Looks up a localized string similar to File name must have the &quot;{0}&quot; extension..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.FilePathCannotUseReservedKeywords">
+            <summary>
+              Looks up a localized string similar to File path cannot use reserved keywords.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.FromBing">
+            <summary>
+              Looks up a localized string similar to  from Bing.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.GeneratedName">
+            <summary>
+              Looks up a localized string similar to Generated name:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.GenerateType">
+            <summary>
+              Looks up a localized string similar to Generate Type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.GettingDataTipText">
+            <summary>
+              Looks up a localized string similar to Getting DataTip text....
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.IllegalCharactersInPath">
+            <summary>
+              Looks up a localized string similar to Illegal characters in path..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.IllegalPathForDocument">
+            <summary>
+              Looks up a localized string similar to DocumentPath is illegal.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.IllegalPathForProject">
+            <summary>
+              Looks up a localized string similar to Project Path is illegal.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ImplementedBy">
+            <summary>
+              Looks up a localized string similar to Implemented By.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Implements">
+            <summary>
+              Looks up a localized string similar to Implements.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.InheritedBy">
+            <summary>
+              Looks up a localized string similar to Inherited By.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Inherits">
+            <summary>
+              Looks up a localized string similar to Inherits.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.InterfaceNameConflictsWithTypeName">
+            <summary>
+              Looks up a localized string similar to Interface name conflicts with an existing type name..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.InterfaceNameIsNotAValidIdentifier">
+            <summary>
+              Looks up a localized string similar to Interface name is not a valid {0} identifier..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.InvalidAccess">
+            <summary>
+              Looks up a localized string similar to Invalid access..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Kind">
+            <summary>
+              Looks up a localized string similar to _Kind:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.LearnMoreLinkText">
+            <summary>
+              Looks up a localized string similar to More about {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_Assembly">
+            <summary>
+              Looks up a localized string similar to Assembly .
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_BaseTypes">
+            <summary>
+              Looks up a localized string similar to Base Types.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_Exceptions">
+            <summary>
+              Looks up a localized string similar to Exceptions:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_MemberOf">
+            <summary>
+              Looks up a localized string similar to Member of {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_Parameters">
+            <summary>
+              Looks up a localized string similar to Parameters:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_Project">
+            <summary>
+              Looks up a localized string similar to Project .
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_ProjectReferences">
+            <summary>
+              Looks up a localized string similar to Project References.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_Remarks">
+            <summary>
+              Looks up a localized string similar to Remarks:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_Returns">
+            <summary>
+              Looks up a localized string similar to Returns:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_Summary">
+            <summary>
+              Looks up a localized string similar to Summary:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Library_TypeParameters">
+            <summary>
+              Looks up a localized string similar to Type Parameters:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Location">
+            <summary>
+              Looks up a localized string similar to Location:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.MaximumNumberOfDocumentsAreOpen">
+            <summary>
+              Looks up a localized string similar to Maximum number of documents are open..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.MemberInsertionFailed">
+            <summary>
+              Looks up a localized string similar to Can&apos;t find where to insert member.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.MiscellaneousFiles">
+            <summary>
+              Looks up a localized string similar to Miscellaneous Files.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Modifier">
+            <summary>
+              Looks up a localized string similar to Modifier.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Name">
+            <summary>
+              Looks up a localized string similar to Name:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.NavBarTooltip">
+             <summary>
+               Looks up a localized string similar to {0}
+            
+            Use the dropdown to view and navigate to other items in this file..
+             </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.NavigationMustBePerformedOnTheForegroundThread">
+            <summary>
+              Looks up a localized string similar to Navigation must be performed on the foreground thread..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.NewFileName">
+            <summary>
+              Looks up a localized string similar to New _file name:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.NewInterfaceName">
+            <summary>
+              Looks up a localized string similar to New _interface name:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.NoChanges">
+            <summary>
+              Looks up a localized string similar to No Changes.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.NotAValidValue">
+            <summary>
+              Looks up a localized string similar to Not a valid value.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.OK">
+            <summary>
+              Looks up a localized string similar to OK.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.OverriddenBy">
+            <summary>
+              Looks up a localized string similar to Overridden By.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Overrides">
+            <summary>
+              Looks up a localized string similar to Overrides.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Parameter">
+            <summary>
+              Looks up a localized string similar to Parameter.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Parameters">
+            <summary>
+              Looks up a localized string similar to Parameters:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PathCannotHaveEmptyFileName">
+            <summary>
+              Looks up a localized string similar to Path cannot have empty filename.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewChangesAddedPrefix">
+            <summary>
+              Looks up a localized string similar to [+] .
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewChangesAnalyzerReference">
+            <summary>
+              Looks up a localized string similar to Analyzer reference to &apos;{0}&apos; in project &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewChangesDeletedPrefix">
+            <summary>
+              Looks up a localized string similar to [-] .
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewChangesMetadataReference">
+            <summary>
+              Looks up a localized string similar to Reference to &apos;{0}&apos; in project &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewChangesProjectReference">
+            <summary>
+              Looks up a localized string similar to Project reference to &apos;{0}&apos; in project &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewChangesUnknownReferenceName">
+            <summary>
+              Looks up a localized string similar to &lt;Unknown&gt;.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewMethodSignature">
+            <summary>
+              Looks up a localized string similar to Preview method signature:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewReferenceChanges">
+            <summary>
+              Looks up a localized string similar to Preview reference changes.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.PreviewUnavailable">
+            <summary>
+              Looks up a localized string similar to Preview unavailable.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Project">
+            <summary>
+              Looks up a localized string similar to _Project:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ProjectNavBarTooltipWithoutShortcut">
+             <summary>
+               Looks up a localized string similar to Project: {0}
+            
+            Use the dropdown to view and switch to other projects this file may belong to..
+             </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ProjectNavBarTooltipWithShortcut">
+             <summary>
+               Looks up a localized string similar to Project: {0} ({1})
+            
+            Use the dropdown to view and switch to other projects this file may belong to..
+             </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ReferenceCountPlural">
+            <summary>
+              Looks up a localized string similar to {0} references.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ReferenceCountSingular">
+            <summary>
+              Looks up a localized string similar to 1 reference.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ReferencesNotFound">
+            <summary>
+              Looks up a localized string similar to The following references were not found. {0}Please locate and add them manually..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Remove">
+            <summary>
+              Looks up a localized string similar to Re_move.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ResettingInteractive">
+            <summary>
+              Looks up a localized string similar to Resetting Interactive.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ResolvingBreakpointLocation">
+            <summary>
+              Looks up a localized string similar to Resolving breakpoint location....
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Restore">
+            <summary>
+              Looks up a localized string similar to _Restore.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.SelectAll">
+            <summary>
+              Looks up a localized string similar to _Select All.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.SelectPublicMembersToFormInterface">
+            <summary>
+              Looks up a localized string similar to Select public _members to form interface.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.SymbolTypeIdInvalid">
+            <summary>
+              Looks up a localized string similar to IDs are not supported for this symbol type..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.TodoTableSourceName">
+            <summary>
+              Looks up a localized string similar to C#/VB Todo List Table Data Source.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.Type">
+            <summary>
+              Looks up a localized string similar to Type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.TypeDetails">
+            <summary>
+              Looks up a localized string similar to Type Details:.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.UnknownRenameType">
+            <summary>
+              Looks up a localized string similar to Unknown rename type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.ValidatingBreakpointLocation">
+            <summary>
+              Looks up a localized string similar to Validating breakpoint location....
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WorkspaceOutputPaneTitle">
+            <summary>
+              Looks up a localized string similar to IntelliSense.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WorkspaceUndoNotSupported">
+            <summary>
+              Looks up a localized string similar to given workspace doesn&apos;t support undo.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_AnalyzerCannotBeCreated">
+            <summary>
+              Looks up a localized string similar to An instance of analyzer {0} cannot be created from {1}: {2}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_AnalyzerChangedId">
+            <summary>
+              Looks up a localized string similar to AnalyzerChangedOnDisk.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_AnalyzerChangedMessage">
+            <summary>
+              Looks up a localized string similar to The analyzer assembly &apos;{0}&apos; has changed. Diagnostics may be incorrect until Visual Studio is restarted..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_AnalyzerDependencyConflictId">
+            <summary>
+              Looks up a localized string similar to AnalyzerDependencyConflict.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_AnalyzerDependencyConflictMessage">
+            <summary>
+              Looks up a localized string similar to Analyzer assemblies &apos;{0}&apos; and &apos;{1}&apos; both have identity &apos;{2}&apos; but different contents. Only one will be loaded and analyzers using these assemblies may not run correctly..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_MissingAnalyzerReferenceId">
+            <summary>
+              Looks up a localized string similar to MissingAnalyzerReference.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_MissingAnalyzerReferenceMessage">
+            <summary>
+              Looks up a localized string similar to Analyzer assembly &apos;{0}&apos; depends on &apos;{1}&apos; but it was not found. Analyzers may not run correctly..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_NoAnalyzerInAssembly">
+            <summary>
+              Looks up a localized string similar to The assembly {0} does not contain any analyzers..
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.WRN_UnableToLoadAnalyzer">
+            <summary>
+              Looks up a localized string similar to Unable to load Analyzer assembly {0}: {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.ServicesVSResources.YouMustSelectAtLeastOneMember">
+            <summary>
+              Looks up a localized string similar to You must select at least one member..
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.SolutionEventMonitor">
+            <summary>
+            Monitors Visual Studio's UIContext for SolutionBuilding and notifies the GlobalOperationService.
+            The intent is to suspend analysis of non-essential files for the duration of a build.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.WorkspaceCacheService.FlushCaches">
+            <summary>
+            Called by the host to try and reduce memory occupied by caches.
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.LanguageServices.WorkspaceCacheService.CacheFlushRequested">
+            <summary>
+            Raised by the host when available memory is getting low in order to request that caches be flushed.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.VSPackage">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.VSPackage.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.LanguageServices.VSPackage.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.HACK_ThemeColorFixer">
+            <summary>
+            This class works around the fact that shell theme changes are not fully propagated into an
+            editor classification format map unless a classification type is registered as a font and
+            color item in that format map's font and color category. So, for example, the "Keyword"
+            classification type in the "tooltip" classification format map is never is never updated
+            from its default blue. As a work around, we listen to <see cref="E:Microsoft.VisualStudio.Text.Classification.IClassificationFormatMap.ClassificationFormatMappingChanged"/>
+            and update the classification format maps that we care about.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.ID.CSharpCommands">
+            <summary>
+            Commands using the old C# command set GUID.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.ID.RoslynCommands">
+            <summary>
+            Commands using the old Roslyn command set GUID.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.VisualStudioWorkspace">
+            <summary>
+            A Workspace specific to Visual Studio.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.VisualStudioWorkspace.OpenInvisibleEditor(Microsoft.CodeAnalysis.DocumentId)">
+            <summary>
+            Given a document id, opens an invisible editor for the document.
+            </summary>
+            <returns>A unique instance of IInvisibleEditor that must be disposed by the caller.</returns>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.VisualStudioWorkspace.GetFileCodeModel(Microsoft.CodeAnalysis.DocumentId)">
+            <summary>
+            Returns the <see cref="T:EnvDTE.FileCodeModel"/> for a given document.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.VisualStudioWorkspace.CreatePortableExecutableReference(System.String,Microsoft.CodeAnalysis.MetadataReferenceProperties)">
+            <summary>
+            Creates a <see cref="T:Microsoft.CodeAnalysis.PortableExecutableReference" /> that correctly retrieves the Visual Studio context,
+            such as documentation comments in the correct language.
+            </summary>
+            <param name="filePath">The file path of the assembly or module.</param>
+            <param name="properties">The properties for the reference.</param>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.RQName">
+            <summary>
+            Helpers related to <see cref="T:Microsoft.VisualStudio.LanguageServices.RQName"/>s. The resulting strings are suitable to pass as the pszRQName
+            arguments to methods in <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsRefactorNotify"/> and <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsSymbolicNavigationNotify"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.LanguageServices.RQName.From(Microsoft.CodeAnalysis.ISymbol)">
+            <summary>
+            Returns an RQName for the given symbol, or <code>null</code>if the symbol cannot be represented by an RQName.
+            </summary>
+            <param name="symbol">The symbol to build an RQName for.</param>
+            <returns>A string suitable to pass as the pszRQName argument to methods in <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsRefactorNotify"/>
+            and <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsSymbolicNavigationNotify"/>.</returns>
+        </member>
+        <member name="T:Microsoft.VisualStudio.LanguageServices.Progression.GraphNodeCreation">
+            <summary>
+            A helper class that implements the creation of <see cref="T:Microsoft.VisualStudio.GraphModel.GraphNode"/>s.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ShadowCopyAnalyzerAssemblyLoader._baseDirectory">
+            <summary>
+            The base directory for shadow copies. Each instance of
+            <see cref="T:Microsoft.CodeAnalysis.ShadowCopyAnalyzerAssemblyLoader"/> gets its own
+            subdirectory under this directory. This is also the starting point
+            for scavenge operations.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ShadowCopyAnalyzerAssemblyLoader._shadowCopyDirectory">
+            <summary>
+            The directory where this instance of <see cref="T:Microsoft.CodeAnalysis.ShadowCopyAnalyzerAssemblyLoader"/>
+            will shadow-copy assemblies.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ShadowCopyAnalyzerAssemblyLoader._assemblyDirectoryId">
+            <summary>
+            Used to generate unique names for per-assembly directories.
+            </summary>
+        </member>
+        <member name="T:Microsoft.CodeAnalysis.CustomDebugInfoReader">
+            <summary>
+            A collection of utility method for consuming custom debug info from a PDB.
+            </summary>
+            <remarks>
+            This is not a public API, so we're just going to let bad offsets fail on their own.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.ReadGlobalHeader(System.Byte[],System.Int32@,System.Byte@,System.Byte@)">
+            <summary>
+            This is the first header in the custom debug info blob.
+            </summary>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.ReadRecordHeader(System.Byte[],System.Int32@,System.Byte@,Microsoft.CodeAnalysis.CustomDebugInfoKind@,System.Int32@,System.Int32@)">
+            <summary>
+            After the global header (see <see cref="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.ReadGlobalHeader(System.Byte[],System.Int32@,System.Byte@,System.Byte@)"/> comes list of custom debug info record.
+            Each record begins with a standard header.
+            </summary>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.TryGetCustomDebugInfoRecord(System.Byte[],Microsoft.CodeAnalysis.CustomDebugInfoKind)">
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.GetCustomDebugInfoRecords(System.Byte[])">
+            <remarks>
+            Exposed for <see cref="T:Roslyn.Test.PdbUtilities.PdbToXmlConverter"/>.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.DecodeUsingRecord(System.Collections.Immutable.ImmutableArray{System.Byte})">
+            <summary>
+            For each namespace declaration enclosing a method (innermost-to-outermost), there is a count
+            of the number of imports in that declaration.
+            </summary>
+            <remarks>
+            There's always at least one entry (for the global namespace).
+            Exposed for <see cref="T:Roslyn.Test.PdbUtilities.PdbToXmlConverter"/>.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.DecodeForwardRecord(System.Collections.Immutable.ImmutableArray{System.Byte})">
+            <summary>
+            This indicates that further information can be obtained by looking at the custom debug
+            info of another method (specified by token).
+            </summary>
+            <remarks>
+            Appears when multiple method would otherwise have identical using records (see <see cref="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.DecodeUsingRecord(System.Collections.Immutable.ImmutableArray{System.Byte})"/>).
+            Exposed for <see cref="T:Roslyn.Test.PdbUtilities.PdbToXmlConverter"/>.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.DecodeForwardToModuleRecord(System.Collections.Immutable.ImmutableArray{System.Byte})">
+            <summary>
+            This indicates that further information can be obtained by looking at the custom debug
+            info of another method (specified by token).
+            </summary>
+            <remarks>
+            Appears when there are extern aliases and edit-and-continue is disabled.
+            Exposed for <see cref="T:Roslyn.Test.PdbUtilities.PdbToXmlConverter"/>.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.DecodeStateMachineHoistedLocalScopesRecord(System.Collections.Immutable.ImmutableArray{System.Byte})">
+            <summary>
+            Scopes of state machine hoisted local variables.
+            </summary>
+            <remarks>
+            Exposed for <see cref="T:Roslyn.Test.PdbUtilities.PdbToXmlConverter"/>.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.DecodeForwardIteratorRecord(System.Collections.Immutable.ImmutableArray{System.Byte})">
+            <summary>
+            Indicates that this method is the iterator state machine for the method named in the record.
+            </summary>
+            <remarks>
+            Appears when are iterator methods.
+            Exposed for <see cref="T:Roslyn.Test.PdbUtilities.PdbToXmlConverter"/>.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.DecodeDynamicLocalsRecord(System.Collections.Immutable.ImmutableArray{System.Byte})">
+            <summary>
+            Does for locals what <see cref="T:System.Runtime.CompilerServices.DynamicAttribute"/> does for parameters, return types, and fields.
+            In particular, indicates which occurrences of <see cref="T:System.Object"/> in the signature are really dynamic.
+            </summary>
+            <remarks>
+            Appears when there are dynamic locals.
+            Exposed for <see cref="T:Roslyn.Test.PdbUtilities.PdbToXmlConverter"/>.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">Bad data.</exception>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.ReadRawRecordBody(System.Byte[],System.Int32@,System.Int32,System.Collections.Immutable.ImmutableArray{System.Byte}@)">
+            <summary>
+            Returns the raw bytes of a record.
+            </summary>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.SkipRecord(System.Byte[],System.Int32@,System.Int32)">
+            <summary>
+            Skips past a record.
+            </summary>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.GetCSharpGroupedImportStrings(Microsoft.DiaSymReader.ISymUnmanagedReader,System.Int32,System.Int32,System.Collections.Immutable.ImmutableArray{System.String}@)">
+            <summary>
+            Get the import strings for a given method, following forward pointers as necessary.
+            </summary>
+            <returns>
+            For each namespace enclosing the method, a list of import strings, innermost to outermost.
+            There should always be at least one entry, for the global namespace.
+            </returns>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.GetVisualBasicImportStrings(Microsoft.DiaSymReader.ISymUnmanagedReader,System.Int32,System.Int32)">
+            <summary>
+            Get the import strings for a given method, following forward pointers as necessary.
+            </summary>
+            <returns>
+            A list of import strings.  There should always be at least one entry, for the global namespace.
+            </returns>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.GetCSharpDynamicLocalInfo(System.Byte[],System.Int32,System.Int32,System.String,System.Collections.Immutable.ImmutableDictionary{System.Int32,System.Collections.Immutable.ImmutableArray{System.Boolean}}@,System.Collections.Immutable.ImmutableDictionary{System.String,System.Collections.Immutable.ImmutableArray{System.Boolean}}@)">
+            <exception cref="T:System.InvalidOperationException">Bad data.</exception>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.TryParseCSharpImportString(System.String,System.String@,System.String@,System.String@,Microsoft.CodeAnalysis.ImportTargetKind@)">
+            <summary>
+            Parse a string representing a C# using (or extern alias) directive.
+            </summary>
+            <remarks>
+            <![CDATA[
+            For C#:
+             "USystem" -> <namespace name="System" />
+             "AS USystem" -> <alias name="S" target="System" kind="namespace" />
+             "AC TSystem.Console" -> <alias name="C" target="System.Console" kind="type" />
+             "AS ESystem alias" -> <alias name="S" qualifier="alias" target="System" kind="type" />
+             "XOldLib" -> <extern alias="OldLib" />
+             "ZOldLib assembly" -> <externinfo name="OldLib" assembly="assembly" />
+             "ESystem alias" -> <namespace qualifier="alias" name="System" />
+             "TSystem.Math" -> <type name="System.Math" />
+            ]]>
+            </remarks>
+        </member>
+        <member name="M:Microsoft.CodeAnalysis.CustomDebugInfoReader.TryParseVisualBasicImportString(System.String,System.String@,System.String@,Microsoft.CodeAnalysis.ImportTargetKind@,Microsoft.CodeAnalysis.ImportScope@)">
+            <summary>
+            Parse a string representing a VB import statement.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"><paramref name="import"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Format of <paramref name="import"/> is not valid.</exception>
+        </member>
+        <member name="T:Microsoft.CodeAnalysis.CustomDebugInfoRecord">
+            <remarks>
+            Exposed for <see cref="T:Roslyn.Test.PdbUtilities.PdbToXmlConverter"/>.
+            </remarks>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.Namespace">
+            <summary>
+            C# or VB namespace import.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.Type">
+            <summary>
+            C# or VB type import.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.NamespaceOrType">
+            <summary>
+            VB namespace or type alias target (not specified).
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.Assembly">
+            <summary>
+            C# extern alias.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.XmlNamespace">
+            <summary>
+            VB XML import.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.MethodToken">
+            <summary>
+            VB forwarding information (i.e. another method has the imports for this one).
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.CurrentNamespace">
+            <summary>
+            VB containing namespace (not an import).
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.DefaultNamespace">
+            <summary>
+            VB root namespace (not an import).
+            </summary>
+        </member>
+        <member name="F:Microsoft.CodeAnalysis.ImportTargetKind.Defunct">
+            <summary>
+            A kind that is no longer used.
+            </summary>
+        </member>
+        <member name="T:Microsoft.CodeAnalysis.CustomDebugInfoKind">
+            <summary>
+            The kinds of custom debug info that we know how to interpret.
+            The values correspond to possible values of the "kind" byte
+            in the record header.
+            </summary>
+        </member>
+        <member name="T:Microsoft.CodeAnalysis.WorkspaceBackgroundWork">
+            <summary>
+            Specifies the type of work that the workspace should automatically do in the background.
+            The workspace can automatically, asynchronously, parse documents in its solution, and can
+            also automatically, asynchronously, produce compilations from those syntax trees, including
+            any necessary metadata or compilation references.
+            </summary>
+        </member>
+        <member name="M:Microsoft.DiaSymReader.SymUnmanagedReaderExtensions.GetCustomDebugInfoBytes(Microsoft.DiaSymReader.ISymUnmanagedReader,System.Int32,System.Int32)">
+            <summary>
+            Get the blob of binary custom debug info for a given method.
+            </summary>
+        </member>
+        <member name="M:Microsoft.DiaSymReader.SymUnmanagedReaderExtensions.GetImportStrings(Microsoft.DiaSymReader.ISymUnmanagedMethod)">
+            <summary>
+            Get the (unprocessed) import strings for a given method.
+            </summary>
+            <remarks>
+            Doesn't consider forwarding.
+            
+            CONSIDER: Dev12 doesn't just check the root scope - it digs around to find the best
+            match based on the IL offset and then walks up to the root scope (see PdbUtil::GetScopeFromOffset).
+            However, it's not clear that this matters, since imports can't be scoped in VB.  This is probably
+            just based on the way they were extracting locals and constants based on a specific scope.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.Cci.CustomDebugInfoConstants">
+            <summary>
+            Constants for producing and consuming streams of binary custom debug info.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Internal.Performance.CodeMarkers.State.Enabled">
+            <summary>
+            The atom is present. CodeMarkers are enabled.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Internal.Performance.CodeMarkers.State.Disabled">
+            <summary>
+            The atom is not present, but InitPerformanceDll has not yet been called.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Internal.Performance.CodeMarkers.State.DisabledDueToDllImportException">
+            <summary>
+            Disabled because the CodeMarkers transport DLL could not be found or
+            an import failed to resolve.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Internal.Performance.CodeMarkers.IsEnabled">
+            <summary>
+            Are CodeMarkers enabled? Note that even if IsEnabled returns false, CodeMarkers
+            may still be enabled later in another component.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.CodeMarker(System.Int32)">
+            <summary>
+            Sends a code marker event
+            </summary>
+            <param name="nTimerID">The code marker event ID</param>
+            <returns>true if the code marker was successfully sent, false if code markers are
+            not enabled or an error occurred.</returns>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.CodeMarkerEx(System.Int32,System.Byte[])">
+            <summary>
+            Sends a code marker event with additional user data
+            </summary>
+            <param name="nTimerID">The code marker event ID</param>
+            <param name="aBuff">User data buffer. May not be null.</param>
+            <returns>true if the code marker was successfully sent, false if code markers are
+            not enabled or an error occurred.</returns>
+            <exception cref="T:System.ArgumentNullException">aBuff was null</exception>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.SetStateDLLException">
+            <summary>
+            Used by ManagedPerfTrack.cs to report errors accessing the DLL.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.CodeMarkerEx(System.Int32,System.Guid)">
+            <summary>
+            Sends a code marker event with additional Guid user data
+            </summary>
+            <param name="nTimerID">The code marker event ID</param>
+            <param name="guidData">The additional Guid to include with the event</param>
+            <returns>true if the code marker was successfully sent, false if code markers are
+            not enabled or an error occurred.</returns>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.CodeMarkerEx(System.Int32,System.String)">
+            <summary>
+            Sends a code marker event with additional String user data
+            </summary>
+            <param name="nTimerID">The code marker event ID</param>
+            <param name="stringData">The additional String to include with the event</param>
+            <returns>true if the code marker was successfully sent, false if code markers are
+            not enabled or an error occurred.</returns>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.StringToBytesZeroTerminated(System.String)">
+            <summary>
+            Converts a string into a byte buffer including a zero terminator (needed for proper ETW message formatting)
+            </summary>
+            <param name="stringData">String to be converted to bytes</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.CodeMarkerEx(System.Int32,System.UInt32)">
+            <summary>
+            Sends a code marker event with additional DWORD user data
+            </summary>
+            <param name="nTimerID">The code marker event ID</param>
+            <param name="uintData">The additional DWORD to include with the event</param>
+            <returns>true if the code marker was successfully sent, false if code markers are
+            not enabled or an error occurred.</returns>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.CodeMarkerEx(System.Int32,System.UInt64)">
+            <summary>
+            Sends a code marker event with additional QWORD user data
+            </summary>
+            <param name="nTimerID">The code marker event ID</param>
+            <param name="ulongData">The additional QWORD to include with the event</param>
+            <returns>true if the code marker was successfully sent, false if code markers are
+            not enabled or an error occurred.</returns>
+        </member>
+        <member name="M:Microsoft.Internal.Performance.CodeMarkers.UsePrivateCodeMarkers(System.String,Microsoft.Win32.RegistryView)">
+            <summary>
+            Checks the registry to see if code markers are enabled
+            </summary>
+            <param name="regRoot">The registry root</param>
+            <param name="registryView"></param>
+            <returns>Whether CodeMarkers are enabled in the registry</returns>
+        </member>
+        <member name="T:Microsoft.Internal.Performance.CodeMarkerStartEnd">
+            <summary>
+            Use CodeMarkerStartEnd in a using clause when you need to bracket an
+            operation with a start/end CodeMarker event pair.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Internal.Performance.CodeMarkerExStartEnd">
+            <summary>
+            Use CodeMarkerExStartEnd in a using clause when you need to bracket an
+            operation with a start/end CodeMarker event pair.
+            </summary>
+        </member>
+    </members>
+</doc>
