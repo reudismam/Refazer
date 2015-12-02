@@ -1,4 +1,5 @@
 using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactoring.Tok;
 
@@ -15,9 +16,10 @@ namespace Spg.LocationRefactor.Predicate
         /// <param name="input">Input</param>
         /// <param name="regex">Regex</param>
         /// <returns>True if input contains the regex</returns>
-        public override bool Evaluate(ListNode input, TokenSeq regex)
+        public override bool Evaluate(ListNode input, Pos regex)
         {
-            bool isMatch = ASTManager.IsMatch(input, regex);
+            int match = regex.GetPositionIndex(input);
+            bool isMatch = match != -1;
             return !isMatch;
         }
 
@@ -27,7 +29,7 @@ namespace Spg.LocationRefactor.Predicate
         /// <returns></returns>
         public override string ToString()
         {
-            return "Not Contains("+ base.r1 + base.r2 +", S), Split(R0, S)";
+            return "Not Contains("+ regex +", S), Split(R0, S)";
         }
     }
 }

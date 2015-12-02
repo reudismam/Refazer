@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Spg.LocationRefactoring.Tok;
 using Spg.LocationRefactor.Predicate;
+using Spg.ExampleRefactoring.Position;
 
 namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
 {
@@ -9,7 +10,7 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
     /// </summary>
     public class PositiveBooleanLearner :BooleanLearnerBase
     {
-        public PositiveBooleanLearner(Dictionary<TokenSeq, bool> calculated): base(calculated)
+        public PositiveBooleanLearner(Dictionary<Pos, bool> calculated): base(calculated)
         {
 
         }

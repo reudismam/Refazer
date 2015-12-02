@@ -16,13 +16,13 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
         /// <summary>
         /// Store the filters calculated
         /// </summary>
-        public readonly Dictionary<TokenSeq, bool> Calculated;
+        public readonly Dictionary<Pos, bool> Calculated;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="calculated">Calculated expressions</param>
-        protected BooleanLearnerBase(Dictionary<TokenSeq, bool> calculated)
+        protected BooleanLearnerBase(Dictionary<Pos, bool> calculated)
         {
             Calculated = calculated;
         }
@@ -34,20 +34,20 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
             IEnumerable<IPosition> positions = GetPositions(examples);
             foreach (IPosition position in positions)
             {
-                Pos positioncopy = (Pos)position;
-
-                TokenSeq r1 = GetTokenSeq(positioncopy.R1);
-                TokenSeq r2 = GetTokenSeq(positioncopy.R2);
-                TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
-                TokenSeq regex = merge;
+                Pos positioncopy = (Pos)position;  
 
                 IPredicate clone = GetPredicate();
-                clone.r1 = r1;
-                clone.r2 = r2;
+                clone.regex = positioncopy;
+                //clone.r1 = r1;
+                //clone.r2 = r2;
+                //TokenSeq r1 = GetTokenSeq(positioncopy.R1);
+                //TokenSeq r2 = GetTokenSeq(positioncopy.R2);
+                //TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
+                //TokenSeq regex = merge;
 
-                if (!Calculated.ContainsKey(regex))
+                if (!Calculated.ContainsKey(positioncopy))
                 {
-                    bool b = Indicator(clone, boolExamples, regex);
+                    bool b = Indicator(clone, boolExamples, positioncopy);
                     if (b)
                     {
                         predicates.Add(clone);
@@ -73,7 +73,7 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
                 ListNode input = example.Item2; //input and output are equal.
                 for (int k = 0; k < input.List.Count; k++)
                 {
-                    positions.AddRange(program.GeneratePos(input, k));
+                    positions.AddRange(program.GeneratePosition(input, k, false));
                 }
             }
             return positions;
@@ -86,7 +86,7 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
         /// <param name="examples">Examples</param>
         /// <param name="regex">Regular expression</param>
         /// <returns>True if regular expression matches the input</returns>
-        public bool Indicator(IPredicate predicate, List<Tuple<ListNode, bool>> examples, TokenSeq regex)
+        public bool Indicator(IPredicate predicate, List<Tuple<ListNode, bool>> examples, Pos regex)
         {
             bool entry;
             if (!Calculated.TryGetValue(regex, out entry))

@@ -11,6 +11,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Learn.Filter.BooleanLearner;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Position;
 
 namespace Spg.ExampleRefactoring.Partition
 {
@@ -198,7 +199,7 @@ namespace Spg.ExampleRefactoring.Partition
                 }
             }
 
-            Dictionary<TokenSeq, bool> calculated = new Dictionary<TokenSeq, bool>();
+            Dictionary<Pos, bool> calculated = new Dictionary<Pos, bool>();
             BooleanLearnerBase bbase = new PositiveBooleanLearner(calculated);
             var predicates = bbase.BooleanLearning(boolExamples, positivesExamples);
 

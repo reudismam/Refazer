@@ -1172,14 +1172,14 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="input">Input region</param>
         /// <param name="k">An index on input region</param>
         /// <returns>Position list</returns>
-        public List<IPosition> GeneratePosition(ListNode input, int k) {
+        public List<IPosition> GeneratePosition(ListNode input, int k, bool neg = true) {
             
             List<IPosition> positions = new List<IPosition>();
 
             for(int i = 1; i < 3; i++)
             {
                 Setting.Deviation = i;
-                List<IPosition> positionsi = GeneratePositionFlashFill(input, k);
+                List<IPosition> positionsi = GeneratePositionFlashFill(input, k, neg);
                 positions.AddRange(positionsi);
             }
 
@@ -1195,10 +1195,13 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="input">Input region</param>
         /// <param name="k">Index in which the position will be generated.</param>
         /// <returns></returns>
-        public List<IPosition> GeneratePositionFlashFill(ListNode input, int k)
+        public List<IPosition> GeneratePositionFlashFill(ListNode input, int k, bool neg = true)
         {
             List<IPosition> result = new List<IPosition>();
-            result.Add(CPos(k)); result.Add(CPos(-(input.Length() - k + 1)));
+            if (neg)
+            {
+                result.Add(CPos(k)); result.Add(CPos(-(input.Length() - k + 1)));
+            }
             //int deviation = 2;
 
             int k1 = Math.Max(k - Setting.Deviation, 0);
@@ -1230,52 +1233,58 @@ namespace Spg.ExampleRefactoring.Synthesis
                         TokenSeq r2Line = r22;
 
                         result.Add(Pos(r1Line, r2Line, c)); //This need to be refactored.
-                        result.Add(Pos(r1Line, r2Line, -(cline - c + 1)));
+
+                        if (neg)
+                        {
+                            result.Add(Pos(r1Line, r2Line, -(cline - c + 1)));
+                        }
                     }
                 }
             }
             return result;
         }
 
-        /// <summary>
-        /// Generate a set of Pos position expressions
-        /// </summary>
-        /// <param name="input">Input nodes</param>
-        /// <param name="k">Position k on the input to be analyzed</param>
-        /// <returns>Set of Pos expressions</returns>
-        public List<IPosition> GeneratePos(ListNode input, int k)
-        {
-            List<IPosition> result = new List<IPosition>();
 
-            int k1 = Math.Max(k - Setting.Deviation, 0);
-            int k2 = Math.Min(k + Setting.Deviation, input.Length());
 
-            int i = Math.Max(0, k1);
-            int j = Math.Max(0, (k - k1));
+        ///// <summary>
+        ///// Generate a set of Pos position expressions
+        ///// </summary>
+        ///// <param name="input">Input nodes</param>
+        ///// <param name="k">Position k on the input to be analyzed</param>
+        ///// <returns>Set of Pos expressions</returns>
+        //public List<IPosition> GeneratePos(ListNode input, int k)
+        //{
+        //    List<IPosition> result = new List<IPosition>();
 
-            ListNode subNodesLeft = ASTManager.SubNotes(input, i, j);
-            // Match string s[k1, k - 1] for some constant k1
-            List<TokenSeq> r1 = GenerateTokenSeq(subNodesLeft);
+        //    int k1 = Math.Max(k - Setting.Deviation, 0);
+        //    int k2 = Math.Min(k + Setting.Deviation, input.Length());
 
-            ListNode subNodesRight = ASTManager.SubNotes(input, Math.Max(0, k), Math.Min(k2 - k, input.Length()));
+        //    int i = Math.Max(0, k1);
+        //    int j = Math.Max(0, (k - k1));
 
-            //Match string s[k, k2] for some constant k2
-            List<TokenSeq> r2 = GenerateTokenSeq(subNodesRight);
-            foreach (TokenSeq r11 in r1)
-            {
-                foreach (TokenSeq r22 in r2)
-                {
-                    if (r11.Tokens.Any() || r22.Tokens.Any())
-                    {
-                        TokenSeq r1Line = r11; //maybe you will need the raw type to execute search on the tree.
-                        TokenSeq r2Line = r22;
+        //    ListNode subNodesLeft = ASTManager.SubNotes(input, i, j);
+        //    // Match string s[k1, k - 1] for some constant k1
+        //    List<TokenSeq> r1 = GenerateTokenSeq(subNodesLeft);
 
-                        result.Add(Pos(r1Line, r2Line, 0)); //This need to be refactored.
-                    }
-                }
-            }
-            return result;
-        }
+        //    ListNode subNodesRight = ASTManager.SubNotes(input, Math.Max(0, k), Math.Min(k2 - k, input.Length()));
+
+        //    //Match string s[k, k2] for some constant k2
+        //    List<TokenSeq> r2 = GenerateTokenSeq(subNodesRight);
+        //    foreach (TokenSeq r11 in r1)
+        //    {
+        //        foreach (TokenSeq r22 in r2)
+        //        {
+        //            if (r11.Tokens.Any() || r22.Tokens.Any())
+        //            {
+        //                TokenSeq r1Line = r11; //maybe you will need the raw type to execute search on the tree.
+        //                TokenSeq r2Line = r22;
+
+        //                result.Add(Pos(r1Line, r2Line, 0)); //This need to be refactored.
+        //            }
+        //        }
+        //    }
+        //    return result;
+        //}
 
         /// <summary>
         /// Index of matches

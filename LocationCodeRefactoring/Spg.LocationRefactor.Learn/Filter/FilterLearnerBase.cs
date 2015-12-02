@@ -10,6 +10,7 @@ using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Position;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -21,7 +22,7 @@ namespace Spg.LocationRefactor.Learn
         /// <summary>
         /// Store the filters calculated
         /// </summary>
-        private readonly Dictionary<TokenSeq, bool> _calculated;
+        private readonly Dictionary<Pos, bool> _calculated;
 
         /// <summary>
         /// Predicate of the filter
@@ -33,7 +34,7 @@ namespace Spg.LocationRefactor.Learn
         public FilterLearnerBase(List<TRegion> list)
         {
             this.List = list;
-            _calculated = new Dictionary<TokenSeq, bool>();
+            _calculated = new Dictionary<Pos, bool>();
         }
 
         /// <summary>
@@ -186,7 +187,7 @@ namespace Spg.LocationRefactor.Learn
         /// <param name="input">Input</param>
         /// <param name="regex">Regular expression</param>
         /// <returns>True if the regex match the input</returns>
-        public bool Indicator(IPredicate predicate, ListNode input, TokenSeq regex)
+        public bool Indicator(IPredicate predicate, ListNode input, Pos regex)
         {
             bool b = predicate.Evaluate(input, regex);
             return b;

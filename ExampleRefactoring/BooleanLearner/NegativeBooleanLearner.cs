@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.Position;
 
 namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
 {
@@ -13,7 +14,7 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
     public class NegativeBooleanLearner :BooleanLearnerBase
     {
 
-        public NegativeBooleanLearner(Dictionary<TokenSeq, bool> calculated) : base(calculated)
+        public NegativeBooleanLearner(Dictionary<Pos, bool> calculated) : base(calculated)
         {
         }
         /// <summary>

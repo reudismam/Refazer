@@ -18,6 +18,7 @@ using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.Util;
+using Spg.ExampleRefactoring.Position;
 
 namespace Spg.LocationRefactor.Operator.Filter
 {
@@ -65,12 +66,12 @@ namespace Spg.LocationRefactor.Operator.Filter
         public ListNode Execute(SyntaxNode syntaxNode)
         {
             FilterLearnerBase learn = GetFilterLearner(List);
-            TokenSeq regex = Predicate.r1;
+            //TokenSeq regex = Predicate.r1;
 
             Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(syntaxNode, syntaxNode);
             ListNode listNode = ASTProgram.Example(tuple).Item1;
 
-            bool indicator = learn.Indicator(Predicate, listNode, regex);
+            bool indicator = learn.Indicator(Predicate, listNode, Predicate.regex);
             if (indicator) return listNode;
 
             return null;
@@ -84,12 +85,12 @@ namespace Spg.LocationRefactor.Operator.Filter
         public bool IsMatch(SyntaxNode syntaxNode)
         {
             FilterLearnerBase learn = GetFilterLearner(List);
-            TokenSeq regex = new TokenSeq(Predicate.Regex());
+            //Pos regex = new TokenSeq(Predicate.Regex());
 
             Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(syntaxNode, syntaxNode);
             ListNode listNode = ASTProgram.Example(tuple).Item1;
 
-            bool indicator = learn.Indicator(Predicate, listNode, regex);
+            bool indicator = learn.Indicator(Predicate, listNode, Predicate.regex);
 
             return indicator;
         }
@@ -416,8 +417,8 @@ namespace Spg.LocationRefactor.Operator.Filter
             List<DymToken> nameList = new List<DymToken>();
             if (!(Predicate is NotContains))
             {
-                IEnumerable<DymToken> tokensR1 = LookUpForDymTokens(Predicate.r1);
-                IEnumerable<DymToken> tokensR2 = LookUpForDymTokens(Predicate.r2);
+                IEnumerable<DymToken> tokensR1 = LookUpForDymTokens(Predicate.regex.R1);
+                IEnumerable<DymToken> tokensR2 = LookUpForDymTokens(Predicate.regex.R2);
 
                 nameList.AddRange(tokensR1);
                 nameList.AddRange(tokensR2);
