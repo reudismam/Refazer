@@ -438,7 +438,10 @@ namespace Spg.LocationRefactor.Operator.Filter
             {
                 if (token is DymToken && token.token.IsKind(SyntaxKind.IdentifierToken))
                 {
-                    nameList.Add(token as DymToken);
+                    if (!(token is RawDymToken))
+                    {
+                        nameList.Add(token as DymToken);
+                    }
                 }
             }
             return nameList;
