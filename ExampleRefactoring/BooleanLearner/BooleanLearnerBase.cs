@@ -5,6 +5,9 @@ using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.AST;
+using System.Linq;
+using Spg.ExampleRefactoring.Comparator;
 
 namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
 {
@@ -40,9 +43,18 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
                 clone.regex = positioncopy;
                 //clone.r1 = r1;
                 //clone.r2 = r2;
-                //TokenSeq r1 = GetTokenSeq(positioncopy.R1);
-                //TokenSeq r2 = GetTokenSeq(positioncopy.R2);
-                //TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
+                TokenSeq r1 = GetTokenSeq(positioncopy.R1);
+                TokenSeq r2 = GetTokenSeq(positioncopy.R2);
+
+                positioncopy.R1 = r1;
+                positioncopy.R2 = r2;
+            
+                TokenSeq merge = ASTProgram.ConcatenateRegularExpression(r1, r2);
+
+                if (ContainsSubStrToken(merge))
+                {
+                    positioncopy.Position = ASTManager.Matches(examples.First().Item2, merge, new RegexComparer()).Count;
+                }
                 //TokenSeq regex = merge;
 
                 if (!Calculated.ContainsKey(positioncopy))
@@ -55,6 +67,18 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
                 }
             }
             return predicates;
+        }
+
+        private bool ContainsSubStrToken(TokenSeq merge)
+        {
+            foreach(var item in merge.Tokens)
+            {
+                if(item is SubStrToken)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>

@@ -149,73 +149,95 @@ namespace Spg.LocationRefactor.Learn.Map
             PairLearn F = new PairLearn();
             List<Prog> hypo = F.Learn(Q);
 
-            IPredicate pred = GetPredicate();
+            Pair pair = hypo.First().Ioperator as Pair;
 
-            FilterLearnerBase S = GetFilter(list);
-            S.Predicate = pred;
-
-            List<Prog> predicates = S.Learn(positiveExamples, negativeExamples);
-            if (hypo.Count == 1)
+            if (!(pair.Expression is Switch))
             {
-                foreach (Prog h in hypo)
-                {
-                    foreach (Prog predicate in predicates)
-                    {
-                        MapBase map = GetMap(list);
-                        map.ScalarExpression = h;
-                        map.SequenceExpression = predicate;
-                        Prog prog = new Prog();
-                        prog.Ioperator = map;
-                        programs.Add(prog);
-                    }
-                }
+                StatementMapLearner mapLearner = new StatementMapLearner();
+                List<Prog> progs = mapLearner.Learn(positiveExamples, negativeExamples);
+                return progs;
             }
-            else
+
+            Dictionary<IPredicate, List<Tuple<ListNode, ListNode>>> segExamples = GetExamples(pair.Expression as Switch, positiveExamples);
+            Dictionary<IPredicate, List<Tuple<ListNode, ListNode>>> segExamplesn = GetExamples(pair.Expression as Switch, negativeExamples);
+
+            List<List<Prog>> maps = new List<List<Prog>>();
+            foreach (var item in segExamples)
             {
-                bool firstSynthesizedProg = true;
-                List<Merge> merges = new List<Merge>();
-                foreach (Prog h in hypo)
-                {
-                    programs = new List<Prog>();
-                    foreach (Prog predicate in predicates)
-                    {
-                        MapBase map = GetMap(list);
-                        map.ScalarExpression = h;
-                        map.SequenceExpression = predicate;
-                        Prog prog = new Prog();
-                        prog.Ioperator = map;
-                        programs.Add(prog);
-                    }
-
-                    if (firstSynthesizedProg)
-                    {
-                        foreach (Prog prog in programs)
-                        {
-                            Merge merge = new Merge();
-                            merge.AddMap((MapBase)prog.Ioperator);
-                            merges.Add(merge);
-                        }
-                        firstSynthesizedProg = false;
-
-                    }
-                    else
-                    {
-                        for (int i = 0; i < merges.Count; i++)
-                        {
-                            merges[i].AddMap((MapBase)programs[i].Ioperator);
-                        }
-                    }
-                }
-
-                programs = new List<Prog>();
-                foreach (Merge merge in merges)
-                {
-                    Prog prog = new Prog();
-                    prog.Ioperator = merge;
-                    programs.Add(prog);
-                }
+                MapLearnerBase mapLearner = new StatementMapLearner();
+                List<Prog> progs = mapLearner.Learn(item.Value);
+                maps.Add(progs);
             }
+
+            programs = CombinePrograms(maps);
             return programs;
+            //IPredicate pred = GetPredicate();
+
+            //FilterLearnerBase S = GetFilter(list);
+            //S.Predicate = pred;
+
+            //List<Prog> predicates = S.Learn(positiveExamples, negativeExamples);
+            //if (hypo.Count == 1)
+            //{
+            //    foreach (Prog h in hypo)
+            //    {
+            //        foreach (Prog predicate in predicates)
+            //        {
+            //            MapBase map = GetMap(list);
+            //            map.ScalarExpression = h;
+            //            map.SequenceExpression = predicate;
+            //            Prog prog = new Prog();
+            //            prog.Ioperator = map;
+            //            programs.Add(prog);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    bool firstSynthesizedProg = true;
+            //    List<Merge> merges = new List<Merge>();
+            //    foreach (Prog h in hypo)
+            //    {
+            //        programs = new List<Prog>();
+            //        foreach (Prog predicate in predicates)
+            //        {
+            //            MapBase map = GetMap(list);
+            //            map.ScalarExpression = h;
+            //            map.SequenceExpression = predicate;
+            //            Prog prog = new Prog();
+            //            prog.Ioperator = map;
+            //            programs.Add(prog);
+            //        }
+
+            //        if (firstSynthesizedProg)
+            //        {
+            //            foreach (Prog prog in programs)
+            //            {
+            //                Merge merge = new Merge();
+            //                merge.AddMap((MapBase)prog.Ioperator);
+            //                merges.Add(merge);
+            //            }
+            //            firstSynthesizedProg = false;
+
+            //        }
+            //        else
+            //        {
+            //            for (int i = 0; i < merges.Count; i++)
+            //            {
+            //                merges[i].AddMap((MapBase)programs[i].Ioperator);
+            //            }
+            //        }
+            //    }
+
+            //    programs = new List<Prog>();
+            //    foreach (Merge merge in merges)
+            //    {
+            //        Prog prog = new Prog();
+            //        prog.Ioperator = merge;
+            //        programs.Add(prog);
+            //    }
+            //}
+            //return programs;
         }
 
         /// <summary>
