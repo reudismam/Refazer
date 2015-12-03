@@ -392,7 +392,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="examples">Examples</param>
         private void CreateDymTokens(List<Tuple<ListNode, ListNode>> examples, bool _getFullyQualifiedName)
         {
-            _getFullyQualifiedName = false;
+            //_getFullyQualifiedName = false;
             if (examples == null) { throw new ArgumentNullException("examples"); }
 
             foreach (Tuple<ListNode, ListNode> t in examples)

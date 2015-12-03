@@ -25,7 +25,7 @@ namespace Spg.LocationRefactoring.Tok
         /// <param name="getFullyQualifiedName">Indicate if fully qualified name have to be used</param>
         public DymToken(SyntaxNodeOrToken token, bool getFullyQualifiedName) : base(token)
         {
-            _getFullyQualifiedName = getFullyQualifiedName = false;
+            _getFullyQualifiedName = getFullyQualifiedName;
 
             ProjectInformation information = ProjectInformation.GetInstance();
 
