@@ -21,12 +21,15 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
         /// </summary>
         public readonly Dictionary<Pos, bool> Calculated;
 
+        public bool _getFullQualifiedName;
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="calculated">Calculated expressions</param>
-        protected BooleanLearnerBase(Dictionary<Pos, bool> calculated)
+        protected BooleanLearnerBase(Dictionary<Pos, bool> calculated, bool _getFullQualifiedName)
         {
+            this._getFullQualifiedName = _getFullQualifiedName;
             Calculated = calculated;
         }
 
@@ -88,7 +91,7 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
         /// <returns>Predicates set</returns>
         private IEnumerable<IPosition> GetPositions(List<Tuple<ListNode, ListNode>> examples)
         {
-            SynthesizerSetting setting = new SynthesizerSetting { DynamicTokens = true, Deviation = 2, _getFullyQualifiedName = true };
+            SynthesizerSetting setting = new SynthesizerSetting { DynamicTokens = true, Deviation = 2, _getFullyQualifiedName = this._getFullQualifiedName};
             ASTProgram program = new ASTProgram(setting, examples);
 
             List<IPosition> positions = new List<IPosition>();

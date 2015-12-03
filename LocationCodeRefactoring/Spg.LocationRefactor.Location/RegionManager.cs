@@ -85,6 +85,29 @@ namespace Spg.LocationRefactor.Location
         /// </summary>
         /// <param name="list">List of no grouped regions</param>
         /// <returns>Regions grouped by source file</returns>
+        public Dictionary<string, List<ListNode>> GroupRegionBySourceFile(List<ListNode> list)
+        {
+            Dictionary<string, List<ListNode>> dic = new Dictionary<string, List<ListNode>>();
+            foreach (var item in list)
+            {
+                List<ListNode> value;
+                if (!dic.TryGetValue(item.List.First().SyntaxTree.GetText().ToString(), out value))
+                {
+                    value = new List<ListNode>();
+                    dic[item.List.First().SyntaxTree.GetText().ToString()] = value;
+                }
+
+                dic[item.List.First().SyntaxTree.GetText().ToString()].Add(item);
+            }
+
+            return dic;
+        }
+
+        /// <summary>
+        /// Group region by source file
+        /// </summary>
+        /// <param name="list">List of no grouped regions</param>
+        /// <returns>Regions grouped by source file</returns>
         public Dictionary<string, List<TRegion>> GroupRegionBySourcePath(List<TRegion> list)
         {
             Dictionary<string, List<TRegion>> dic = new Dictionary<string, List<TRegion>>();
@@ -487,20 +510,34 @@ namespace Spg.LocationRefactor.Location
         }
 
         /// <summary>
-        /// Least common ancestors
+        /// Least common ancestor
         /// </summary>
         /// <param name="sourceCode">Source code</param>
-        /// <param name="regions">Region list</param>
-        /// <returns>Least common ancestor of each region</returns>
-        public static List<SyntaxNode> LeastCommonAncestors(string sourceCode, List<TRegion> regions)
-        {
-            List<SyntaxNode> slist = new List<SyntaxNode>();
-            foreach (var region in regions)
-            {
-                slist.Add(LeastCommonAncestor(sourceCode, region));
-            }
-            return slist;
+        /// <param name="region">Region</param>
+        /// <returns>Least common ancestor of region</returns>
+        private static SyntaxNode LeastCommonAncestor(ListNode lnode)
+        { 
+            SyntaxNodeOrToken lca = LCAManager.GetInstance().LeastCommonAncestor(lnode.List, lnode.List.First().SyntaxTree);
+            SyntaxNode snode = lca.AsNode();
+
+            return snode;
         }
+
+        ///// <summary>
+        ///// Least common ancestors
+        ///// </summary>
+        ///// <param name="sourceCode">Source code</param>
+        ///// <param name="regions">Region list</param>
+        ///// <returns>Least common ancestor of each region</returns>
+        //public static List<SyntaxNode> LeastCommonAncestors(string sourceCode, List<TRegion> regions)
+        //{
+        //    List<SyntaxNode> slist = new List<SyntaxNode>();
+        //    foreach (var region in regions)
+        //    {
+        //        slist.Add(LeastCommonAncestor(sourceCode, region));
+        //    }
+        //    return slist;
+        //}
 
         /// <summary>
         /// Least common ancestors
@@ -516,6 +553,24 @@ namespace Spg.LocationRefactor.Location
                 foreach (var region in sourceCode.Value)
                 {
                     slist.Add(LeastCommonAncestor(sourceCode.Key, region));
+                }
+            }
+            return slist;
+        }
+
+        /// Least common ancestors
+        /// </summary>
+        /// <param name="regions">Region list</param>
+        /// <returns>Least common ancestor of each region</returns>
+        public static List<SyntaxNode> LeastCommonAncestors(List<ListNode> regions)
+        {
+            var sourceFiles = GetInstance().GroupRegionBySourceFile(regions);
+            List<SyntaxNode> slist = new List<SyntaxNode>();
+            foreach (var sourceCode in sourceFiles)
+            {
+                foreach (var region in sourceCode.Value)
+                {
+                    slist.Add(LeastCommonAncestor(region));
                 }
             }
             return slist;

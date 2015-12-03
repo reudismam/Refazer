@@ -200,7 +200,7 @@ namespace Spg.ExampleRefactoring.Partition
             }
 
             Dictionary<Pos, bool> calculated = new Dictionary<Pos, bool>();
-            BooleanLearnerBase bbase = new PositiveBooleanLearner(calculated);
+            BooleanLearnerBase bbase = new PositiveBooleanLearner(calculated, false);
             var predicates = bbase.BooleanLearning(boolExamples, positivesExamples);
 
             if (!negativesExamples.Any())
@@ -208,7 +208,7 @@ namespace Spg.ExampleRefactoring.Partition
                 return predicates;
             }
 
-            BooleanLearnerBase nbase = new NegativeBooleanLearner(bbase.Calculated);
+            BooleanLearnerBase nbase = new NegativeBooleanLearner(bbase.Calculated, false);
             predicates.AddRange(nbase.BooleanLearning(boolExamples, negativesExamples));
 
             return predicates;

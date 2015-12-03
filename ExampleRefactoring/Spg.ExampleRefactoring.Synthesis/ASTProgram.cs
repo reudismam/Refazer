@@ -165,7 +165,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (Ts.Count == examples.Count && boundary)
             {
-                Setting.Deviation = 1;
+                //Setting.Deviation = 1;
                 return GenerateStringProgram(examples, false);
             }
 

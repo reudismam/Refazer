@@ -10,7 +10,7 @@ namespace Spg.LocationRefactor.Learn.Filter.BooleanLearner
     /// </summary>
     public class PositiveBooleanLearner :BooleanLearnerBase
     {
-        public PositiveBooleanLearner(Dictionary<Pos, bool> calculated): base(calculated)
+        public PositiveBooleanLearner(Dictionary<Pos, bool> calculated, bool _getFullQualifiedName = true): base(calculated, _getFullQualifiedName)
         {
 
         }
