@@ -251,7 +251,7 @@ namespace Spg.LocationRefactor.Node
         /// <returns>Syntax nodes to be used on filtering</returns>
         internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(DymToken name)
         {
-            return null;
+            //return null;
             if (name == null) return null;
      
             SelectionInfo info = new SelectionInfo(name.dynType.fullName, new List<TRegion>(Ctl.SelectedLocations));

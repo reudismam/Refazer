@@ -108,7 +108,7 @@ namespace Spg.LocationRefactor.Operator.Map
         /// </summary>
         /// <param name="filtereds">Filtered regions</param>
         /// <returns>Region list</returns>
-        private List<TRegion> RetrieveRegionBase(List<TRegion> filtereds)
+        public List<TRegion> RetrieveRegionBase(List<TRegion> filtereds)
         {
             List<TRegion> tRegions = new List<TRegion>();
             Pair pair = (Pair)ScalarExpression.Ioperator;
