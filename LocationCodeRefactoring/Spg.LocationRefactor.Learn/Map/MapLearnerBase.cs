@@ -11,6 +11,7 @@ using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Operator.Filter;
 
 namespace Spg.LocationRefactor.Learn.Map
 {
@@ -39,12 +40,12 @@ namespace Spg.LocationRefactor.Learn.Map
             S.Predicate = pred;
 
             //List<ListNode> llnode = new List<ListNode>();
-            //foreach(var item in examples)
+            //foreach (var item in examples)
             //{
             //    llnode.Add(item.Item2);
             //}
 
-            //contoller.Lcas = RegionManager.LeastCommonAncestors(llnode);
+            //List<SyntaxNode> Lcas = RegionManager.LeastCommonAncestors(llnode);
 
             List<Prog> predicates = S.Learn(examples);
             if (hypo.Count == 1)
@@ -53,6 +54,8 @@ namespace Spg.LocationRefactor.Learn.Map
                 {
                     foreach (Prog predicate in predicates)
                     {
+                        //FilterBase filter = predicate.Ioperator as FilterBase;
+                        //filter.Lcas
                         MapBase map = GetMap(list);
                         map.ScalarExpression = h;
                         map.SequenceExpression = predicate;

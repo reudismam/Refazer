@@ -117,10 +117,10 @@ namespace Spg.LocationRefactor.Controller
         /// <returns>Program learned for negative filtering</returns>
         public List<Prog> ProgramsWithNegatives { get; set; }
 
-        /// <summary>
-        /// Least Common ancestor of selected nodes
-        /// </summary>
-        public List<SyntaxNode> Lcas { get; set; }
+        ///// <summary>
+        ///// Least Common ancestor of selected nodes
+        ///// </summary>
+        //public List<SyntaxNode> Lcas { get; set; }
 
         /// <summary>
         /// Synthesized program
@@ -211,7 +211,7 @@ namespace Spg.LocationRefactor.Controller
         public void Extract()
         {
             Console.WriteLine("Synthesizing location programs...");
-            Lcas = RegionManager.LeastCommonAncestors(SelectedLocations);
+            //Lcas = RegionManager.LeastCommonAncestors(SelectedLocations);
             LocationExtractor extractor = new LocationExtractor();
             //remove
             JsonUtil<List<TRegion>>.Write(SelectedLocations, "input_selection.json");

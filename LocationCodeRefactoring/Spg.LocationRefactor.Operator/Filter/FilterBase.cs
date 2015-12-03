@@ -18,7 +18,6 @@ using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.Util;
-using Spg.ExampleRefactoring.Position;
 
 namespace Spg.LocationRefactor.Operator.Filter
 {
@@ -32,6 +31,11 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// </summary>
         /// <returns>Predicate</returns>
         public IPredicate Predicate { get; set; }
+
+        /// <summary>
+        /// Least Common ancestor of selected nodes
+        /// </summary>
+        public List<SyntaxNode> Lcas { get; set; }
 
         /// <summary>
         /// Region list
@@ -115,7 +119,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                     WorkspaceManager.GetInstance()
                         .GetSourcesFiles(controller.ProjectInformation.ProjectPath,
                             controller.ProjectInformation.SolutionPath);
-                nodesForFiltering = Decomposer.SyntaxNodesWithoutSemanticModel(files);
+                nodesForFiltering = Decomposer.SyntaxNodesWithoutSemanticModel(files, Lcas);
                 return RetrieveRegionsBase(nodesForFiltering);
             }
             List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
@@ -133,7 +137,7 @@ namespace Spg.LocationRefactor.Operator.Filter
             IEnumerable<SyntaxNode> nodesForFiltering = SyntaxNodesDymTokens();
             if (nodesForFiltering == null)
             {
-                nodesForFiltering = Decomposer.SyntaxNodesWithoutSemanticModel(syntaxNode);
+                nodesForFiltering = Decomposer.SyntaxNodesWithoutSemanticModel(syntaxNode, Lcas);
                 return RetrieveRegionsBase(nodesForFiltering);
             }
             nodesForFiltering = NodesForSingleFile(nodesForFiltering, syntaxNode);
@@ -152,7 +156,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                 var referenceDictionary = new Dictionary<string, IEnumerable<SyntaxNode>>();
                 foreach (DymToken nameDyn in nameList)
                 {
-                    IEnumerable<SyntaxNode> nodes = Decomposer.GetInstance().SyntaxNodesWithSemanticModel(nameDyn);
+                    IEnumerable<SyntaxNode> nodes = Decomposer.GetInstance().SyntaxNodesWithSemanticModel(nameDyn, Lcas);
                     if (nodes != null)
                     {
                         if (!referenceDictionary.ContainsKey(nameDyn.dynType.fullName))

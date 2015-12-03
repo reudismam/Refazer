@@ -14,7 +14,6 @@ using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
-using Spg.ExampleRefactoring.Intersect;
 
 namespace Spg.ExampleRefactoring.Synthesis
 {

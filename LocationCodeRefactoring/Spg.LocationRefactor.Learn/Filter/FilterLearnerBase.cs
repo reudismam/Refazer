@@ -11,6 +11,8 @@ using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.Position;
+using Microsoft.CodeAnalysis;
+using Spg.LocationRefactor.Location;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -52,7 +54,10 @@ namespace Spg.LocationRefactor.Learn
                 Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple.Item1, tuple.Item2, true);
                 QLine.Add(t);
             }
+
             List<Prog> programs = new List<Prog>();
+
+            List<SyntaxNode> Lcas = LearnLcas(examples);
 
             Console.WriteLine("Learning predicates for filter.");
             List<IPredicate> predicates = BooleanLearning(QLine);
@@ -68,6 +73,7 @@ namespace Spg.LocationRefactor.Learn
                 {
                     prog = new Prog();
                     FilterBase filter = GetFilter(List);
+                    filter.Lcas = Lcas;
                     filter.Predicate = ipredicate;
                     prog.Ioperator = filter;
                     dic.Add(ipredicate, prog);
@@ -76,6 +82,22 @@ namespace Spg.LocationRefactor.Learn
             }
             return programs;
         }
+
+        private List<SyntaxNode> LearnLcas(List<Tuple<ListNode, ListNode>> examples)
+        {
+            List<ListNode> llnode = new List<ListNode>();
+            foreach (var item in examples)
+            {
+                llnode.Add(item.Item2);
+            }
+
+            List<SyntaxNode> Lcas = RegionManager.LeastCommonAncestors(llnode);
+
+            return Lcas;
+        }
+
+
+
 
         /// <summary>
         /// Learn filter

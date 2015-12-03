@@ -249,7 +249,7 @@ namespace Spg.LocationRefactor.Node
         /// </summary>
         /// <param name="name">Identifier name</param>
         /// <returns>Syntax nodes to be used on filtering</returns>
-        internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(DymToken name)
+        internal IEnumerable<SyntaxNode> SyntaxNodesWithSemanticModel(DymToken name, List<SyntaxNode> Lcas)
         {
             //return null;
             if (name == null) return null;
@@ -294,7 +294,7 @@ namespace Spg.LocationRefactor.Node
 
                     var spans = fileSpans;
                     var nodes = from node in fileTree.GetRoot().DescendantNodesAndSelf()
-                                where WithinLcas(node) && WithinSpans(node, spans.Value)
+                                where WithinLcas(node, Lcas) && WithinSpans(node, spans.Value)
                                 select node;
                     nodesList.AddRange(nodes);
                 }
@@ -352,12 +352,12 @@ namespace Spg.LocationRefactor.Node
         /// </summary>
         /// <param name="tree">Syntax node root</param>
         /// <returns>Syntax nodes without semantical model</returns>
-        internal static IEnumerable<SyntaxNode> SyntaxNodesWithoutSemanticModel(SyntaxNode tree)
+        internal static IEnumerable<SyntaxNode> SyntaxNodesWithoutSemanticModel(SyntaxNode tree, List<SyntaxNode> Lcas)
         {
             if (tree == null) throw new ArgumentNullException("tree");
 
             var nodes = from node in tree.DescendantNodesAndSelf()
-                        where WithinLcas(node)
+                        where WithinLcas(node, Lcas)
                         select node;
             return nodes;
         }
@@ -367,7 +367,7 @@ namespace Spg.LocationRefactor.Node
         /// </summary>
         /// <param name="files">List of source files on the format (sourceCode, sourcePath)</param>
         /// <returns>Syntax nodes without semantical model</returns>
-        internal static IEnumerable<SyntaxNode> SyntaxNodesWithoutSemanticModel(List<Tuple<string, string>> files)
+        internal static IEnumerable<SyntaxNode> SyntaxNodesWithoutSemanticModel(List<Tuple<string, string>> files, List<SyntaxNode> Lcas)
         {
             if (files == null) throw new ArgumentNullException("files");
             if (!files.Any()) throw new ArgumentException("Source files cannot be empty.", "files");
@@ -379,7 +379,7 @@ namespace Spg.LocationRefactor.Node
                 SyntaxTree tree = CSharpSyntaxTree.ParseText(strTree, path: fileTuple.Item2);
 
                 var nodes = from node in tree.GetRoot().DescendantNodesAndSelf()
-                            where WithinLcas(node)
+                            where WithinLcas(node, Lcas)
                             select node;
                 listNodes.AddRange(nodes);
             }
@@ -410,11 +410,11 @@ namespace Spg.LocationRefactor.Node
         /// </summary>
         /// <param name="node">Syntax node to be analyzed</param>
         /// <returns>True if node is of the same type of one of the lca of the region selection by the user</returns>
-        internal static bool WithinLcas(SyntaxNode node)
+        internal static bool WithinLcas(SyntaxNode node, List<SyntaxNode> Lcas)
         {
             if (node == null) throw new ArgumentNullException("node");
 
-            foreach (var lca in EditorController.GetInstance().Lcas)
+            foreach (var lca in Lcas)
             {
                 if (node.IsKind(lca.Kind()))
                 {
