@@ -275,7 +275,11 @@ namespace Spg.ExampleRefactoring.Workspace
                 }
             }
 
-            SyntaxNode snode = smodel.SyntaxTree.GetRoot().FindNode(node.Span);
+            SyntaxNode snode = null;
+            if (smodel != null)
+            {
+                snode = smodel.SyntaxTree.GetRoot().FindNode(node.Span);
+            }
             if (snode != null && snode is IdentifierNameSyntax)
             {
                 SymbolInfo symbolInfo = smodel.GetSymbolInfo(snode);
@@ -292,7 +296,7 @@ namespace Spg.ExampleRefactoring.Workspace
             }
             else
             {
-                return snode.ToString();
+                return node.ToString();
             }
         }
 
@@ -336,7 +340,12 @@ namespace Spg.ExampleRefactoring.Workspace
                 }
             }
 
-            SyntaxNode snode = smodel.SyntaxTree.GetRoot().FindNode(node.Span);
+            SyntaxNode snode = null;
+            if (smodel != null)
+            {
+                snode = smodel.SyntaxTree.GetRoot().FindNode(node.Span);
+            }
+
             if (snode != null && snode is IdentifierNameSyntax)
             {
                 SymbolInfo symbolInfo = smodel.GetSymbolInfo(snode);
