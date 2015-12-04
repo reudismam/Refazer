@@ -184,6 +184,44 @@ namespace Spg.LocationRefactor.Operator.Filter
             return null;
         }
 
+        ///// <summary>
+        ///// Calculate the intersection of references and return it.
+        ///// </summary>
+        ///// <param name="referenceDictionary">Dictinary of references</param>
+        ///// <returns>Intersection of referenced elements on dictionary</returns>
+        //private List<SyntaxNode> GetIntersection(Dictionary<string, IEnumerable<SyntaxNode>> referenceDictionary)
+        //{
+        //    Dictionary<string, IEnumerable<Selection>> dicSelections = new Dictionary<string, IEnumerable<Selection>>();
+        //    foreach (KeyValuePair<string, IEnumerable<SyntaxNode>> keypPair in referenceDictionary)
+        //    {
+        //        List<Selection> selections = new List<Selection>();
+        //        foreach (SyntaxNode syntaxNode in keypPair.Value)
+        //        {
+        //            Selection selection = new Selection(syntaxNode.Span.Start, syntaxNode.Span.Length, syntaxNode.SyntaxTree.FilePath, syntaxNode.SyntaxTree.GetText().ToString(), syntaxNode.ToFullString());
+        //            selections.Add(selection);
+        //        }
+        //        dicSelections.Add(keypPair.Key, selections);
+        //    }
+
+        //    IEnumerable<Selection> intersection = dicSelections.Values.First();
+        //    for (int i = 1; i < dicSelections.Values.Count; i++)
+        //    {
+        //        intersection = intersection.Intersect(dicSelections.Values.ElementAt(i));
+        //    }
+
+        //    List<Selection> enumerable = intersection as List<Selection> ?? intersection.ToList();
+
+        //    List<SyntaxNode> nodes = new List<SyntaxNode>();
+
+        //    foreach (Selection selection in enumerable)
+        //    {
+        //        string strTree = FileUtil.ReadFile(selection.SourcePath);
+        //        SyntaxTree root = CSharpSyntaxTree.ParseText(strTree, path: selection.SourcePath);
+        //        nodes.Add(root.GetRoot().FindNode(new TextSpan(selection.Start, selection.Length)));
+        //    }
+        //    return nodes;
+        //}
+
         /// <summary>
         /// Calculate the intersection of references and return it.
         /// </summary>
@@ -192,6 +230,8 @@ namespace Spg.LocationRefactor.Operator.Filter
         private List<SyntaxNode> GetIntersection(Dictionary<string, IEnumerable<SyntaxNode>> referenceDictionary)
         {
             Dictionary<string, IEnumerable<Selection>> dicSelections = new Dictionary<string, IEnumerable<Selection>>();
+            Dictionary<Selection, SyntaxNode> dicIntersection = new Dictionary<Selection, SyntaxNode>();
+
             foreach (KeyValuePair<string, IEnumerable<SyntaxNode>> keypPair in referenceDictionary)
             {
                 List<Selection> selections = new List<Selection>();
@@ -199,9 +239,15 @@ namespace Spg.LocationRefactor.Operator.Filter
                 {
                     Selection selection = new Selection(syntaxNode.Span.Start, syntaxNode.Span.Length, syntaxNode.SyntaxTree.FilePath, syntaxNode.SyntaxTree.GetText().ToString(), syntaxNode.ToFullString());
                     selections.Add(selection);
+
+                    if (!dicIntersection.ContainsKey(selection))
+                    {
+                        dicIntersection.Add(selection, syntaxNode);
+                    }
                 }
                 dicSelections.Add(keypPair.Key, selections);
             }
+
 
             IEnumerable<Selection> intersection = dicSelections.Values.First();
             for (int i = 1; i < dicSelections.Values.Count; i++)
@@ -211,31 +257,14 @@ namespace Spg.LocationRefactor.Operator.Filter
 
             List<Selection> enumerable = intersection as List<Selection> ?? intersection.ToList();
 
-            //bool isIntersection = MatchesSelectedLocations(enumerable, EditorController.GetInstance().SelectedLocations);
             List<SyntaxNode> nodes = new List<SyntaxNode>();
-            //if (isIntersection)
-            //{
-            foreach (Selection selection in enumerable)
-            {
-                string strTree = FileUtil.ReadFile(selection.SourcePath);
-                SyntaxTree root = CSharpSyntaxTree.ParseText(strTree, path: selection.SourcePath);
-                nodes.Add(root.GetRoot().FindNode(new TextSpan(selection.Start, selection.Length)));
-            }
-            return nodes;
-            //}
-            //else
-            //{
-            //    foreach (KeyValuePair<string, IEnumerable<SyntaxNode>>  item in referenceDictionary)
-            //    {
-            //        nodes.AddRange(item.Value);
-            //    }
-            //}
 
-            //if (MatchesSelectedLocations(nodes, EditorController.GetInstance().SelectedLocations))
-            //{
-            //    return nodes;
-            //}
-            //return null;
+            foreach(var item in enumerable)
+            {
+                nodes.Add(dicIntersection[item]);
+            }
+            
+            return nodes;
         }
 
         ///// <summary>

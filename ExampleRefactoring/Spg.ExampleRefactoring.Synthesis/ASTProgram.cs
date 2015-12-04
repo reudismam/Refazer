@@ -456,7 +456,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             temp = new Dictionary<DymToken, List<DymToken>>();
             foreach (var entry in Dict)
             {
-                if (_getFullyQualifiedName)
+                if (_getFullyQualifiedName && !(entry.Key is RawDymToken))
                 {
                     bool isFullName = true;
                     string fullName = entry.Value.First().dynType.fullName;
