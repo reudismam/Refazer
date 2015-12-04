@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Spg.LocationRefactoring.Tok;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Spg.ExampleRefactoring.Workspace
 {
@@ -232,15 +233,15 @@ namespace Spg.ExampleRefactoring.Workspace
         /// <param name="solutionPath">Solution path</param>
         /// <param name="node">Node to be analyzed</param>
         /// <returns>Fully qualified name of the node</returns>
-        public string GetFullyQualifiedName(string solutionPath, SyntaxNodeOrToken node)
+        public DynType GetFullyQualifiedName(string solutionPath, SyntaxNodeOrToken token)
         {
             var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
             Solution solution = GetWorkSpace(solutionPath);
 
             SemanticModel smodel = null;
-            if (_dictionary.ContainsKey(node.SyntaxTree.FilePath.ToUpperInvariant()))
+            if (_dictionary.ContainsKey(token.SyntaxTree.FilePath.ToUpperInvariant()))
             {
-                smodel = _dictionary[node.SyntaxTree.FilePath.ToUpperInvariant()];
+                smodel = _dictionary[token.SyntaxTree.FilePath.ToUpperInvariant()];
             }
             else
             {
@@ -263,7 +264,7 @@ namespace Spg.ExampleRefactoring.Workspace
                         var document = solution.GetDocument(documentId);
                         SyntaxTree tree;
                         document.TryGetSyntaxTree(out tree);
-                        if (tree.FilePath.ToUpperInvariant().Equals(node.SyntaxTree.FilePath.ToUpperInvariant()))
+                        if (tree.FilePath.ToUpperInvariant().Equals(token.SyntaxTree.FilePath.ToUpperInvariant()))
                         {
                             document.TryGetSyntaxTree(out tree);
                             smodel = compilation.GetSemanticModel(tree);
@@ -275,28 +276,47 @@ namespace Spg.ExampleRefactoring.Workspace
                 }
             }
 
+            DynType dynType = null;
+            if (!token.IsKind(SyntaxKind.IdentifierToken))
+            { 
+                if (token.IsKind(SyntaxKind.StringLiteralToken))
+                {
+                    dynType = new DynType(token.ToFullString(), DynType.STRING);
+                }
+                else
+                {
+                    dynType = new DynType(token.ToFullString(), DynType.NUMBER);
+                }
+                return dynType;
+            }
+
             SyntaxNode snode = null;
             if (smodel != null)
             {
-                snode = smodel.SyntaxTree.GetRoot().FindNode(node.Span);
+                snode = smodel.SyntaxTree.GetRoot().FindNode(token.Parent.Span);
             }
-            if (snode != null && snode is IdentifierNameSyntax)
+            if (snode != null)
             {
                 SymbolInfo symbolInfo = smodel.GetSymbolInfo(snode);
                 if (symbolInfo.Symbol != null)
                 {
+
                     string toDisplayString = symbolInfo.Symbol.ToDisplayString();
-                    return toDisplayString;
+                    dynType = new DynType(toDisplayString, DynType.FULLNAME);
+                    dynType.symbol = symbolInfo.Symbol;
+                    return dynType;
                 }
                 else
                 {
                     Console.WriteLine("Symbol was not found for node: " + snode.ToString());
-                    return snode.ToString();
+                    dynType = new DynType(snode.ToString(), DynType.STRING);
+                    return dynType;
                 }
             }
             else
             {
-                return node.ToString();
+                dynType = new DynType(token.ToString(), DynType.STRING);
+                return dynType;
             }
         }
 

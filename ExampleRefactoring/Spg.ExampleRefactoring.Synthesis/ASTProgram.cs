@@ -472,6 +472,12 @@ namespace Spg.ExampleRefactoring.Synthesis
                             break;
                         }
                     }
+
+                    if (isFullName)
+                    {
+                        isFullName = IsSameDeclaraction(entry.Value);
+                    }
+
                     if (isFullName)
                     {
                         temp.Add(entry.Key, entry.Value);
@@ -489,6 +495,21 @@ namespace Spg.ExampleRefactoring.Synthesis
                 }
             }
             Dict = temp;
+        }
+
+        private bool IsSameDeclaraction(List<DymToken> value)
+        {
+            var sourceSpan = value.First().dynType.symbol.Locations.First().SourceSpan;
+            for(int i = 1; i < value.Count; i++){
+                var span = value[i].dynType.symbol.Locations.First().SourceSpan;
+
+                if(!(sourceSpan.Start == span.Start && sourceSpan.Length == span.Length))
+                {
+                    return false;
+                }
+
+            }
+            return true;
         }
 
         /// <summary>

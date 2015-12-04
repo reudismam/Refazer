@@ -32,23 +32,24 @@ namespace Spg.LocationRefactoring.Tok
             string fullName = null;
             if (_getFullyQualifiedName)
             {
-                if (token.IsKind(SyntaxKind.IdentifierToken))
-                {
-                    fullName = WorkspaceManager.GetInstance()
-                        .GetFullyQualifiedName(information.SolutionPath,
-                            this.token.Parent);
-                    dynType = new DynType(fullName, DynType.FULLNAME);
-                }
-                else if(token.IsKind(SyntaxKind.StringLiteralToken))
-                {
-                    dynType = new DynType(token.ToFullString(), DynType.STRING);
-                }
-                else
-                {
-                    dynType = new DynType(token.ToFullString(), DynType.NUMBER);
-                }
+                dynType = WorkspaceManager.GetInstance().GetFullyQualifiedName(information.SolutionPath, this.token);
+                //if (token.IsKind(SyntaxKind.IdentifierToken))
+                //{
+                //    fullName = WorkspaceManager.GetInstance()
+                //        .GetFullyQualifiedName(information.SolutionPath,
+                //            this.token);
+                //    dynType = new DynType(fullName, DynType.FULLNAME);
+                //}
+                //else if(token.IsKind(SyntaxKind.StringLiteralToken))
+                //{
+                //    dynType = new DynType(token.ToFullString(), DynType.STRING);
+                //}
+                //else
+                //{
+                //    dynType = new DynType(token.ToFullString(), DynType.NUMBER);
+                //}
             }
-            Console.WriteLine(fullName);
+            //Console.WriteLine(fullName);
         }
 
         /// <summary>

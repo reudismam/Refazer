@@ -1,4 +1,6 @@
-﻿namespace Spg.LocationRefactoring.Tok
+﻿using Microsoft.CodeAnalysis;
+
+namespace Spg.LocationRefactoring.Tok
 {
     public class DynType
     {
@@ -9,6 +11,8 @@
         public string fullName { get; set; }
 
         public string type { get; set; }
+
+        public ISymbol symbol { get; set; }
 
         public DynType(string fullName, string type)
         {
