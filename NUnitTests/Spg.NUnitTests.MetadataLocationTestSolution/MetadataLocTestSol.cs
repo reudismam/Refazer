@@ -769,6 +769,108 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         ////    Assert.IsTrue(isValid);
         ////}
 
+        ///// <summary>
+        ///// Locale test base method
+        ///// </summary>
+        ///// <param name="commit">commit id</param>
+        ///// <param name="solution">Solution</param>
+        ///// <param name="project">Project</param>
+        ///// <returns>True if locale passed</returns>
+        //public static bool LocaleTestSolution(string commit, string solution, List<string> project)
+        //{
+        //    long millBefore;// = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //    long totalTimeToExtract = 0;
+        //    EditorController.ReInit();
+        //    EditorController controller = EditorController.GetInstance();
+
+        //    string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+
+        //    List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
+
+        //    controller.SelectedLocations = selections;
+        //    controller.CurrentViewCodeBefore = FileUtil.ReadFile(selections.First().Path);
+        //    string exactPath = Path.GetFullPath(selections.First().Path);
+
+        //    controller.CurrentViewCodePath = exactPath;
+        //    controller.SetProject(project);
+        //    controller.SetSolution(expHome + solution);
+
+        //    List<TRegion> metadataLocations = new List<TRegion>();
+        //    metadataLocations.AddRange(selections.GetRange(0, 2));
+        //    while (true)
+        //    {
+        //        controller.SelectedLocations = metadataLocations;
+        //        millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //        controller.Extract();
+        //        controller.RetrieveLocations();
+
+        //        TRegion tregion = MatchesLocationsOnCommit(selections, controller.Locations);
+        //        if (tregion == null)
+        //        {
+        //            break;
+        //        }
+
+        //        if (ContainsTRegion(metadataLocations, tregion))
+        //        {
+        //            return false;
+        //        }
+        //        metadataLocations.Add(tregion);
+        //    }
+
+        //    List<TRegion> negativesRegions = new List<TRegion>();
+        //    if (File.Exists(expHome + @"commit\" + commit + @"\negatives.json"))
+        //    {
+        //        List<int> negatives = JsonUtil<List<int>>.Read(expHome + @"commit\" + commit + @"\negatives.json");
+        //        List<TRegion> positivesRegions = new List<TRegion>();
+        //        for (int i = 0; i < controller.Locations.Count; i++)
+        //        {
+        //            TRegion parent = new TRegion();
+        //            parent.Text = controller.Locations[i].SourceCode;
+        //            controller.Locations[i].Region.Parent = parent;
+        //            if (negatives.Contains(i))
+        //            {
+        //                negativesRegions.Add(controller.Locations[i].Region);
+        //            }
+        //            else
+        //            {
+        //                positivesRegions.Add(controller.Locations[i].Region);
+        //            }
+        //        }
+
+        //        millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //        controller.Extract(positivesRegions, negativesRegions);
+        //        long millAfterExtract = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //        totalTimeToExtract = (millAfterExtract - millBefore);
+        //        controller.RetrieveLocations();
+        //    }
+
+        //    long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //    long totalTime = (millAfer - millBefore);
+        //    Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count);
+        //    //remove
+        //    List<TRegion> nselections = new List<TRegion>();
+        //    foreach (CodeLocation location in controller.Locations)
+        //    {
+        //        TRegion selection = new TRegion();
+        //        selection.Start = location.Region.Start;
+        //        selection.Length = location.Region.Length;
+        //        selection.Parent = location.Region.Parent;
+        //        selection.Color = location.Region.Color;
+        //        selection.Path = location.SourceClass;
+        //        selection.Text = location.Region.Text;
+        //        nselections.Add(selection);
+        //    }
+
+        //    FileInfo file = new FileInfo(expHome + @"commit\" + commit + @"\metadata\");
+        //    file.Directory.Create();
+        //    file = new FileInfo(expHome + @"commit\" + commit + @"\metadata_tool\");
+        //    file.Directory.Create();
+
+        //    JsonUtil<List<TRegion>>.Write(nselections, expHome + @"commit\" + commit + @"\metadata_tool\locations_on_commit.json");
+        //    //remove
+        //    return true;
+        //}
+
         /// <summary>
         /// Locale test base method
         /// </summary>
@@ -820,20 +922,20 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             List<TRegion> negativesRegions = new List<TRegion>();
             if (File.Exists(expHome + @"commit\" + commit + @"\negatives.json"))
             {
-                List<int> negatives = JsonUtil<List<int>>.Read(expHome + @"commit\" + commit + @"\negatives.json");
+                List<TRegion> negatives = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\negatives.json");
                 List<TRegion> positivesRegions = new List<TRegion>();
-                for (int i = 0; i < controller.Locations.Count; i++)
+                foreach (var item in controller.Locations)
                 {
                     TRegion parent = new TRegion();
-                    parent.Text = controller.Locations[i].SourceCode;
-                    controller.Locations[i].Region.Parent = parent;
-                    if (negatives.Contains(i))
+                    parent.Text = item.SourceCode;
+                    item.Region.Parent = parent;
+                    if (negatives.Contains(item.Region))
                     {
-                        negativesRegions.Add(controller.Locations[i].Region);
+                        negativesRegions.Add(item.Region);
                     }
                     else
                     {
-                        positivesRegions.Add(controller.Locations[i].Region);
+                        positivesRegions.Add(item.Region);
                     }
                 }
 

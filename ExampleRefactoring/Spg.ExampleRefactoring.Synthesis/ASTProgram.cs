@@ -551,7 +551,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             //if (parent.IsKind(SyntaxKind.TypeArgumentList)) { return true; }
 
-            //if(parent.IsKind(SyntaxKind.VariableDeclarator)) { return true;  }
+            //if (parent.IsKind(SyntaxKind.VariableDeclarator)) { return true; }
 
             //if (parent.IsKind(SyntaxKind.Attribute)) { return true; }
 

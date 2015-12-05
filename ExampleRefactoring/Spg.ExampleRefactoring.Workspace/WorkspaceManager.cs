@@ -249,6 +249,9 @@ namespace Spg.ExampleRefactoring.Workspace
                 {
                     Project project = solution.GetProject(projectId);
                     Compilation compilation = null;
+
+                    if (!project.FilePath.EndsWith(".csproj")) { continue; } // execute only if the project if C#
+
                     try
                     {
                         compilation = project.GetCompilationAsync().Result;

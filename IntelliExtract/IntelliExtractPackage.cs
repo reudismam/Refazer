@@ -155,11 +155,30 @@ namespace SPG.IntelliExtract
             {
                 //controller.Extract(controller.SelectedLocations, negatives);
                 controller.Extract(positives, negatives);
-                JsonUtil<List<int>>.Write(indexNegatives, "negatives.json");
+                //JsonUtil<List<int>>.Write(indexNegatives, "negatives.json");
+                SaveNegatives(negatives);
             }
             MessageBox.Show(Resources.IntelliExtractPackage_NotifyLocationsSelected_Done_);
 
             controller.Done();
+        }
+
+        private void SaveNegatives(List<TRegion> negatives)
+        {
+            List<TRegion> tregions = new List<TRegion>();
+            foreach(var item in negatives)
+            {
+                TRegion region = new TRegion();
+                region.Start = item.Start;
+                region.Length = item.Length;
+                region.Path = item.Path;
+                //region.Parent = item.Parent;
+                region.Text = item.Text;
+                tregions.Add(region);
+            }
+
+            JsonUtil<List<TRegion>>.Write(tregions, "negatives.json");
+
         }
 
 
