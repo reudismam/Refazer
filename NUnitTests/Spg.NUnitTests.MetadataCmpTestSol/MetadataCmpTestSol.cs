@@ -961,7 +961,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                 foreach (KeyValuePair<string, List<TRegion>> entry in dicionarySelection)
                 {
                     string sourceCode = FileUtil.ReadFile(entry.Key);
-                    Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key], metadataRegions);
+                    Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
                     string sourceCodeAfter = tu.Item1;
                     List <Selection> selectionsList = new List<Selection>();
                     foreach (TRegion region in tu.Item2)

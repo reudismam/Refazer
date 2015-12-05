@@ -113,14 +113,15 @@ namespace Spg.LocationRefactor.Location
             Dictionary<string, List<TRegion>> dic = new Dictionary<string, List<TRegion>>();
             foreach (var item in list)
             {
+                string path = item.Path.ToUpperInvariant();
                 List<TRegion> value;
-                if (!dic.TryGetValue(item.Path, out value))
+                if (!dic.TryGetValue(path, out value))
                 {
                     value = new List<TRegion>();
-                    dic[item.Path] = value;
+                    dic[path] = value;
                 }
 
-                dic[item.Path].Add(item);
+                dic[path].Add(item);
             }
 
             return dic;
@@ -136,14 +137,15 @@ namespace Spg.LocationRefactor.Location
             Dictionary<string, List<CodeTransformation>> dic = new Dictionary<string, List<CodeTransformation>>();
             foreach (var item in list)
             {
+                string path = item.Location.SourceClass.ToUpperInvariant();
                 List<CodeTransformation> value;
-                if (!dic.TryGetValue(item.Location.SourceClass, out value))
+                if (!dic.TryGetValue(path, out value))
                 {
                     value = new List<CodeTransformation>();
-                    dic[item.Location.SourceClass] = value;
+                    dic[path] = value;
                 }
 
-                dic[item.Location.SourceClass].Add(item);
+                dic[path].Add(item);
             }
 
             return dic;
