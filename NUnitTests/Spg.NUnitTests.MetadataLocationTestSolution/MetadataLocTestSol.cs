@@ -906,16 +906,16 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 controller.Extract();
                 controller.RetrieveLocations();
 
-                TRegion tregion = MatchesLocationsOnCommit(selections, controller.Locations);
+                TRegion tregion = MatchesLocationsOnCommit(selections, controller.Locations, metadataLocations);
                 if (tregion == null)
                 {
-                    break;
-                }
-
-                if (ContainsTRegion(metadataLocations, tregion))
-                {
+                    if(MatchesLocationsOnCommit(selections, controller.Locations)) // all locations on selections are present on commits.
+                    {
+                        break;
+                    }
                     return false;
                 }
+
                 metadataLocations.Add(tregion);
             }
 
@@ -1053,7 +1053,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             return false;
         }
 
-        private static TRegion MatchesLocationsOnCommit(List<TRegion> metadatas, List<CodeLocation> locations)
+        private static TRegion MatchesLocationsOnCommit(List<TRegion> metadatas, List<CodeLocation> locations, List<TRegion> metadataLocations)
         {
             foreach (TRegion metadata in metadatas)
             {
@@ -1071,10 +1071,38 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
                 if (!isFound)
                 {
-                    return metadata;
+                    if (!ContainsTRegion(metadataLocations, metadata))
+                    {
+                        return metadata;
+                    }
+                   
                 }
             }
             return null;
+        }
+
+        private static bool MatchesLocationsOnCommit(List<TRegion> metadatas, List<CodeLocation> locations)
+        {
+            foreach (TRegion metadata in metadatas)
+            {
+                bool isFound = false;
+                foreach (var found in locations)
+                {
+                    if (metadata.Start == found.Region.Start &&
+                        metadata.Length == found.Region.Length &&
+                        metadata.Path.ToUpperInvariant().Equals(found.SourceClass.ToUpperInvariant()))
+                    {
+                        isFound = true;
+                        break;
+                    }
+                }
+
+                if (!isFound) // if the selection on metadata is not found on locations return false.
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

@@ -174,7 +174,7 @@ namespace Spg.LocationRefactor.Learn
             foreach (Tuple<ListNode, ListNode, bool> e in examples)
             {
                 boolExamples.Add(Tuple.Create(e.Item1, e.Item3));
-                if (e.Item3 && positivesExamples.Count < 2)
+                if (e.Item3 /*&& positivesExamples.Count < 2*/)
                 {
                     Tuple<ListNode, ListNode> tuple = Tuple.Create(e.Item1, e.Item2);
                     positivesExamples.Add(tuple);

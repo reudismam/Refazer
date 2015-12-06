@@ -525,7 +525,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             if (st.IsKind(SyntaxKind.NumericLiteralToken)) { return true; }
 
-            //if (st.IsKind(SyntaxKind.IdentifierToken)) { return true; }
+            if (st.IsKind(SyntaxKind.IdentifierToken)) { return true; }
 
             //if (!st.IsKind(SyntaxKind.IdentifierToken)) { return false; }
 
