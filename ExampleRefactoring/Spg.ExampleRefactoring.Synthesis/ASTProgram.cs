@@ -187,8 +187,15 @@ namespace Spg.ExampleRefactoring.Synthesis
                     return GenerateStringProgram(examples);
                 }
 
+
                 Tuple<IPredicate, SynthesizedProgram> tSol = Tuple.Create(predicates.First(), valid);
-                S.Add(tSol);
+                if (ln.Count.Equals(examples.Count))
+                {
+                    S.Insert(0, tSol); // if program diferentes between positive and negative examples.
+                }
+                else {
+                    S.Add(tSol);
+                }
             }
 
             Switch sSwitch = new Switch(S);

@@ -828,6 +828,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
 
         [Test]
+        public void Proj3_d9f64ea()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("Core");
+            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"NuGet\3_d9f64ea", @"NuGet\nuget7\NuGet.sln", projects);
+
+            bool passTransformation = CompleteTestBase(@"NuGet\3_d9f64ea");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
         public void Projdfc4e3d()
         {
             List<string> projects = new List<string>();

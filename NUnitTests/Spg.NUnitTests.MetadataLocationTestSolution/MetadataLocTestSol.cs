@@ -698,6 +698,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
 
         [Test]
+        public void Proj3_d9f64ea()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("Core");
+            bool isValid = LocaleTestSolution(@"NuGet\3_d9f64ea", @"NuGet\nuget7\NuGet.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
         public void Projdfc4e3d()
         {
             List<string> projects = new List<string>();

@@ -470,9 +470,9 @@ namespace Spg.LocationRefactor.Operator.Filter
             List<DymToken> nameList = new List<DymToken>();
             foreach (Token token in tokenSeq.Tokens)
             {
-                if (token is DymToken && token.token.IsKind(SyntaxKind.IdentifierToken) && (token as DymToken).dynType.type.Equals(DynType.FULLNAME))
+                if (token is DymToken && token.token.IsKind(SyntaxKind.IdentifierToken))
                 {
-                    if (!(token is RawDymToken))
+                    if (!(token is RawDymToken) && (token as DymToken).dynType.type.Equals(DynType.FULLNAME))
                     {
                         nameList.Add(token as DymToken);
                     }
