@@ -81,22 +81,28 @@ namespace Spg.ExampleRefactoring.Workspace
             foreach (ProjectId projectId in solution.ProjectIds)
             {
                 Project project = solution.GetProject(projectId);
+
+                if (!project.FilePath.ToUpperInvariant().EndsWith(".CSPROJ")) { continue; } // execute only if the project if C#
+
                 if (/*project.Name.Equals(projectName)projectName.Contains(project.Name)*/true)
                 {
                     foreach (DocumentId documentId in project.DocumentIds)
                     {
                         var document = solution.GetDocument(documentId);
-                        try
+                        if (document.FilePath.ToUpperInvariant().EndsWith(".CS"))
                         {
-                            StreamReader sr = new StreamReader(document.FilePath);
-                            string text = sr.ReadToEnd();
+                            try
+                            {
+                                StreamReader sr = new StreamReader(document.FilePath);
+                                string text = sr.ReadToEnd();
 
-                            Tuple<string, string> tuple = Tuple.Create(text, document.FilePath);
-                            sourceFiles.Add(tuple);
-                        }
-                        catch (Exception)
-                        {
-                            Console.WriteLine("Could not load document on the path: " + document.FilePath);
+                                Tuple<string, string> tuple = Tuple.Create(text, document.FilePath);
+                                sourceFiles.Add(tuple);
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("Could not load document on the path: " + document.FilePath);
+                            }
                         }
                     }
                 }
@@ -250,7 +256,7 @@ namespace Spg.ExampleRefactoring.Workspace
                     Project project = solution.GetProject(projectId);
                     Compilation compilation = null;
 
-                    if (!project.FilePath.EndsWith(".csproj")) { continue; } // execute only if the project if C#
+                    if (!project.FilePath.ToUpperInvariant().EndsWith(".CSPROJ")) { continue; } // execute only if the project if C#
 
                     try
                     {
