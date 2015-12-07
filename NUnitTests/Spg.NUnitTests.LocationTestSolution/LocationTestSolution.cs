@@ -37,7 +37,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         {
             List<string> projects = new List<string>();
             projects.Add("CodeAnalysis");
-            bool isValid = LocaleTestSolution(@"Roslyn\0086821", @"Roslyn\roslyn12\src\Roslyn.sln", projects);
+            bool isValid = LocaleTestSolution(@"Roslyn\0086821", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
         }
 

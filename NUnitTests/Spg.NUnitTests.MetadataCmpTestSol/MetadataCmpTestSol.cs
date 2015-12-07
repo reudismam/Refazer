@@ -25,7 +25,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         {
             List<string> projects = new List<string>();
             projects.Add("CodeAnalysis");
-            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"Roslyn\0086821", @"Roslyn\roslyn12\src\Roslyn.sln", projects);
+            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"Roslyn\0086821", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
 
             bool passTransformation = CompleteTestBase(@"Roslyn\0086821");
 
