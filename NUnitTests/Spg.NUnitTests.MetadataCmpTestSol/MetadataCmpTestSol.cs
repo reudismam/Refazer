@@ -1011,15 +1011,20 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
-            List<CodeTransformation> transformationsList = JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
+            List<CodeTransformation> transformationsList = controller.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
 
             Log(commit, totalTime, metadataRegions.Count, transformationsList.Count);
     
             FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
 
-            string transformations = FileUtil.ReadFile("transformed_locations.json");
-            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
-            FileUtil.DeleteFile("transformed_locations.json");
+            try{
+                string transformations = FileUtil.ReadFile("transformed_locations.json");
+                FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
+                FileUtil.DeleteFile("transformed_locations.json");
+            }catch(Exception e)
+            {
+                Console.WriteLine("Cold not log transformed_locations.json");
+            }
             return true;
         }
 
@@ -1149,7 +1154,8 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
         private static CodeTransformation MatchesLocationsOnCommit(List<CodeTransformation> codeTransformations)
         {
-            List<CodeTransformation> transformations = JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
+            EditorController controler = EditorController.GetInstance();
+            List<CodeTransformation> transformations = controler.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
 
             foreach (CodeTransformation metadata in codeTransformations)
             {
