@@ -93,6 +93,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
 
         [Test]
+        public void Proj7_673f18e()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CodeAnalysisTest");
+            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"Roslyn\7_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
+
+            bool passTransformation = CompleteTestBase(@"Roslyn\7_673f18e");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
         public void Proj3_673f18e()
         {
             List<string> projects = new List<string>();
@@ -394,7 +406,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             List<string> projects = new List<string>();
             projects.Add("CSharpCommandLineTest");
             projects.Add("CodeAnalysisTest");
-            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
+            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
 
             bool passTransformation = CompleteTestBase(@"Roslyn\7c885ca");
 
@@ -1013,7 +1025,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             long totalTime = (millAfer - millBefore);
             List<CodeTransformation> transformationsList = controller.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
 
-            Log(commit, totalTime, metadataRegions.Count, transformationsList.Count);
+            Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count);
     
             FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
 
@@ -1033,7 +1045,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         private static Worksheet mWSheet1;
         private static Application oXL;
 
-        public static void Log(string commit, double time, int exTransformations, int acTrasnformation)
+        public static void Log(string commit, double time, int exTransformations, int acTrasnformation, int documents)
         {
             string path = @"C:\Users\SPG-04\Documents\Research\Log2.xlsx";
             using (ExcelManager em = new ExcelManager())
@@ -1054,9 +1066,10 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
                 if (empty != -1)
                 {
-                    em.SetValue("H" + empty, time / 1000);
-                    em.SetValue("I" + empty, exTransformations);
-                    em.SetValue("J" + empty, acTrasnformation);
+                    em.SetValue("K" + empty, time / 1000);
+                    em.SetValue("L" + empty, exTransformations);
+                    em.SetValue("M" + empty, acTrasnformation);
+                    em.SetValue("N" + empty, documents);
                     em.Save();
                 }
                 else {

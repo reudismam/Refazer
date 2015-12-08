@@ -9,6 +9,7 @@ using Spg.LocationRefactor.Controller;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Taramon.Exceller;
+using Spg.ExampleRefactoring.Workspace;
 
 namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 {
@@ -96,6 +97,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             List<string> projects = new List<string>();
             projects.Add("CodeAnalysis");
             bool isValid = LocaleTestSolution(@"Roslyn\3_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
+        public void Proj7_673f18e()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CodeAnalysis");
+            bool isValid = LocaleTestSolution(@"Roslyn\7_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
         }
 
@@ -347,7 +357,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             List<string> projects = new List<string>();
             projects.Add("CSharpCommandLineTest");
             projects.Add("CodeAnalysisTest");
-            bool isValid = LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
+            bool isValid = LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
         }
 
@@ -908,12 +918,37 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
             List<TRegion> metadataLocations = new List<TRegion>();
             metadataLocations.AddRange(selections.GetRange(0, 2));
+
+            long timeToExtractBefore, timeToExtractAfter, tTimeToExtract;
+            long timeToLocateBefore, timeToLocateAfter, tTimeToLocate;
+            bool discountWorkspace = false;
             while (true)
             {
                 controller.SelectedLocations = metadataLocations;
                 millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+                timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.Extract();
+                timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+                if (!discountWorkspace)
+                {
+                    WorkspaceManager wmanager = WorkspaceManager.GetInstance();
+                    tTimeToExtract = (timeToExtractAfter - timeToExtractBefore) - wmanager.totalTime;
+                    discountWorkspace = true;
+                }
+                else
+                {
+                    tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);
+                }
+
+                timeToLocateBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.RetrieveLocations();
+                timeToLocateAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                tTimeToLocate = (timeToLocateAfter - timeToLocateBefore);
+
+                long millAfterExtract = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                totalTimeToExtract = (millAfterExtract - millBefore);
 
                 TRegion tregion = MatchesLocationsOnCommit(selections, controller.Locations, metadataLocations);
                 if (tregion == null)
@@ -933,31 +968,48 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             {
                 List<TRegion> negatives = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\negatives.json");
                 List<TRegion> positivesRegions = new List<TRegion>();
-                foreach (var item in controller.Locations)
-                {
-                    TRegion parent = new TRegion();
-                    parent.Text = item.SourceCode;
-                    item.Region.Parent = parent;
-                    if (negatives.Contains(item.Region))
-                    {
-                        negativesRegions.Add(item.Region);
-                    }
-                    else
-                    {
-                        positivesRegions.Add(item.Region);
-                    }
-                }
 
-                millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                controller.Extract(positivesRegions, negativesRegions);
-                long millAfterExtract = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                totalTimeToExtract = (millAfterExtract - millBefore);
-                controller.RetrieveLocations();
+                
+
+                    foreach (var item in controller.Locations)
+                    {
+                        TRegion parent = new TRegion();
+                        parent.Text = item.SourceCode;
+                        item.Region.Parent = parent;
+                        if (negatives.Contains(item.Region))
+                        {
+                            negativesRegions.Add(item.Region);
+                        }
+                        else
+                        {
+                            positivesRegions.Add(item.Region);
+                        }
+                    }
+
+                if (negativesRegions.Any())
+                {
+                    millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+                    timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    controller.Extract(positivesRegions, negativesRegions);
+                    timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    WorkspaceManager wmanager = WorkspaceManager.GetInstance();
+                    tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);// - wmanager.totalTime;
+
+
+                    long millAfterExtract = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    totalTimeToExtract = (millAfterExtract - millBefore);
+
+                    timeToLocateBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    controller.RetrieveLocations();
+                    timeToLocateAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    tTimeToLocate = (timeToLocateAfter - timeToLocateBefore);
+                }
             }
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
-            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count);
+            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count, tTimeToExtract, tTimeToLocate);
             //remove
             List<TRegion> nselections = new List<TRegion>();
             foreach (CodeLocation location in controller.Locations)
@@ -986,7 +1038,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         private static Sheets mWorkSheets;
         private static Worksheet mWSheet1;
         private static Application oXL;
-        public static void Log(string commit, double time, double timeToExtract, int exLocations, int negs, int acLocations, int locations)
+        public static void Log(string commit, double time, double timeToExtract, int exLocations, int negs, int acLocations, int locations, double tToExtract, double tToLocate)
         {
             using (ExcelManager em = new ExcelManager())
             {
@@ -1009,7 +1061,10 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 em.SetValue("E" + empty, exLocations + negs);
                 em.SetValue("F" + empty, acLocations);
                 em.SetValue("G" + empty, locations);
-                em.SetValue("H" + empty, timeToExtract);
+                em.SetValue("H" + empty, timeToExtract / 1000); //last round execution
+                em.SetValue("I" + empty, tToExtract / 1000); //time to extract on the last round
+                em.SetValue("J" + empty, tToLocate / 1000); //time to locate on the last round.
+
                 Console.WriteLine("" + empty);
                 em.Save();
             }

@@ -18,6 +18,7 @@ namespace Spg.ExampleRefactoring.Workspace
     /// </summary>
     public class WorkspaceManager
     {
+        public long totalTime { get; set; }
 
         private static WorkspaceManager _instance;
         private readonly Dictionary<string, SemanticModel> _dictionary;
@@ -42,8 +43,11 @@ namespace Spg.ExampleRefactoring.Workspace
             Console.WriteLine("Opening solution: " + solutionPath);
             if (solutionInstance == null)
             {
+                long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 MSBuildWorkspace workspace = MSBuildWorkspace.Create();
                 solutionInstance = workspace.OpenSolutionAsync(solutionPath).Result;
+                long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                totalTime = (millAfer - millBefore);
             }
             Console.WriteLine("Solution opened.");
             return solutionInstance;  

@@ -392,6 +392,118 @@ namespace Spg.ExampleRefactoring.Synthesis
         //    Dict = temp;
         //}
 
+        ///// <summary>
+        ///// Create dynamic tokens
+        ///// </summary>
+        ///// <param name="examples">Examples</param>
+        //private void CreateDymTokens(List<Tuple<ListNode, ListNode>> examples, bool _getFullyQualifiedName)
+        //{
+        //    //_getFullyQualifiedName = false;
+        //    if (examples == null) { throw new ArgumentNullException("examples"); }
+
+        //    foreach (Tuple<ListNode, ListNode> t in examples)
+        //    {
+        //        for (int i = 0; i < t.Item1.List.Count; i++)
+        //        {
+        //            SyntaxNodeOrToken st = t.Item1.List[i];
+        //            if (st.IsKind(SyntaxKind.IdentifierToken) || st.IsKind(SyntaxKind.StringLiteralToken) || st.IsKind(SyntaxKind.NumericLiteralToken))
+        //            {
+        //                bool dym = false;
+        //                if (i < t.Item1.Length())
+        //                {
+        //                    dym = IsDym(st);
+        //                }
+
+        //                if (!dym) continue;
+
+        //                DymToken dt = new DymToken(st, _getFullyQualifiedName);
+        //                List<DymToken> v;
+        //                if (!Dict.TryGetValue(dt, out v))
+        //                {
+        //                    Dict.Add(dt, new List<DymToken>());
+        //                }
+        //                Dict[dt].Add(dt);
+
+        //                RawDymToken rdt = new RawDymToken(st);
+        //                if (!Dict.TryGetValue(rdt, out v))
+        //                {
+        //                    Dict.Add(rdt, new List<DymToken>());
+        //                }
+        //                Dict[rdt].Add(dt);
+        //            }
+        //        }
+        //    }
+
+        //    Dictionary<DymToken, List<DymToken>> temp = new Dictionary<DymToken, List<DymToken>>();
+        //    foreach (DymToken dt in Dict.Keys)
+        //    {
+        //        if (Dict[dt].Count >= examples.Count())
+        //        {
+        //            temp.Add(dt, Dict[dt]);
+        //        }
+        //    }
+
+        //    temp = new Dictionary<DymToken, List<DymToken>>();
+        //    foreach (DymToken dt in Dict.Keys)
+        //    {
+        //        if (Dict[dt].Count == examples.Count())
+        //        {
+        //            if (!(dt is RawDymToken))
+        //            {
+        //                temp.Add(dt, Dict[dt]);
+        //            }
+        //            else if (Dict[(new DymToken(dt.token, false))].Count != examples.Count)
+        //            {
+        //                temp.Add(dt, Dict[dt]);
+        //            }
+        //        }
+        //    }
+
+        //    Dict = temp;
+        //    temp = new Dictionary<DymToken, List<DymToken>>();
+        //    foreach (var entry in Dict)
+        //    {
+        //        if (_getFullyQualifiedName && !(entry.Key is RawDymToken))
+        //        {
+        //            bool isFullName = true;
+        //            string fullName = entry.Value.First().dynType.fullName;
+        //            foreach (var dymToken in entry.Value)
+        //            {
+        //                if (dymToken.dynType.type.Equals(DynType.FULLNAME) && dymToken.dynType.fullName.Equals(fullName))
+        //                {
+        //                    continue;
+        //                }
+        //                else
+        //                {
+        //                    isFullName = false;
+        //                    break;
+        //                }
+        //            }
+
+        //            if (isFullName)
+        //            {
+        //                isFullName = IsSameDeclaraction(entry.Value);
+        //            }
+
+        //            if (isFullName)
+        //            {
+        //                temp.Add(entry.Key, entry.Value);
+        //            }
+        //            else
+        //            {
+        //                entry.Key.dynType.type = DynType.STRING;
+        //                entry.Key.dynType.fullName = entry.Key.token.ToString();
+        //                temp.Add(entry.Key, new List<DymToken> { entry.Key });
+        //            }
+        //        }
+        //        else
+        //        {
+        //            temp.Add(entry.Key, entry.Value);
+        //        }
+        //    }
+        //    Dict = temp;
+        //}
+
         /// <summary>
         /// Create dynamic tokens
         /// </summary>
@@ -437,7 +549,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             Dictionary<DymToken, List<DymToken>> temp = new Dictionary<DymToken, List<DymToken>>();
             foreach (DymToken dt in Dict.Keys)
             {
-                if (Dict[dt].Count >= examples.Count())
+                if (AllExampleContains(dt, examples))
                 {
                     temp.Add(dt, Dict[dt]);
                 }
@@ -446,13 +558,13 @@ namespace Spg.ExampleRefactoring.Synthesis
             temp = new Dictionary<DymToken, List<DymToken>>();
             foreach (DymToken dt in Dict.Keys)
             {
-                if (Dict[dt].Count == examples.Count())
+                if (AllExampleContains(dt, examples))
                 {
                     if (!(dt is RawDymToken))
                     {
                         temp.Add(dt, Dict[dt]);
                     }
-                    else if (Dict[(new DymToken(dt.token, true))].Count != examples.Count)
+                    else if (!AllExampleContains(new DymToken(dt.token, false), examples))
                     {
                         temp.Add(dt, Dict[dt]);
                     }
@@ -502,6 +614,20 @@ namespace Spg.ExampleRefactoring.Synthesis
                 }
             }
             Dict = temp;
+        }
+
+        private bool AllExampleContains(DymToken dt, List<Tuple<ListNode, ListNode>> examples)
+        {
+            List<Token> tokens = new List<Token>();
+            tokens.Add(dt);
+            TokenSeq tSeq = new TokenSeq(tokens);
+            foreach(var example in examples)
+            {
+                if (!ASTManager.IsMatch(example.Item1, tSeq)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private bool IsSameDeclaraction(List<DymToken> value)

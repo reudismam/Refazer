@@ -28,7 +28,8 @@ namespace Spg.ExampleRefactoring.Util
             }
             catch (OutOfMemoryException)
             {
-                MessageBox.Show("Exception");
+                //MessageBox.Show("Exception");
+                Console.WriteLine("Could not write to file: " + path);
             }
             finally
             {
@@ -43,8 +44,12 @@ namespace Spg.ExampleRefactoring.Util
         /// <returns>Object</returns>
         public static T Read(string path)
         {
+            //JsonSerializerSettings settings = new JsonSerializerSettings();
+            //settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+
             string json = FileUtil.ReadFile(path);
-            T obj = JsonConvert.DeserializeObject<T>(json);
+            T obj = JsonConvert.DeserializeObject<T>(json/*, settings*/);
             return obj;
         }
     }

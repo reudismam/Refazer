@@ -111,10 +111,11 @@ namespace Spg.LocationRefactor.Transform
         /// <returns>Transformation of each location of source code specified</returns>
         private string TransformEachLocation(string sourceCode, List<Tuple<SyntaxNode, CodeLocation>> update, SynthesizedProgram program, bool compact)
         {
+            List<Tuple<SyntaxNode, CodeLocation>> SortedList = update.OrderBy(o => o.Item2.Region.Start).ToList();
             string s = "";
             int i = 0;
             int nextStart = 0;
-            foreach (Tuple<SyntaxNode, CodeLocation> item in update)
+            foreach (Tuple<SyntaxNode, CodeLocation> item in SortedList)
             {
                 try
                 {

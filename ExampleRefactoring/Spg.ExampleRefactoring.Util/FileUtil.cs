@@ -12,9 +12,31 @@ namespace Spg.ExampleRefactoring.Util
         /// Read a file and return a string as its content.
         /// </summary>
         /// <returns>String representing the content of the file</returns>
-        public static String ReadFile(string path) {
-            string value = File.ReadAllText(path);
-            return value;
+        public static String ReadFile(string path)
+        {
+            //string value = File.ReadAllText(path);
+            //return value;
+            ////string s = "";
+
+            ////using (StreamReader sr = new StreamReader(path))
+            ////{
+            ////    string line;
+
+            ////    while ((line = sr.ReadLine()) != null)
+            ////    {
+            ////        s += line;
+            ////    }
+            ////}
+
+            ////return s;
+
+            // Open the text file using a stream reader.
+            using (StreamReader sr = new StreamReader(path))
+            {
+                // Read the stream to a string, and write the string to the console.
+                String line = sr.ReadToEnd();
+                return line;
+            }
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using Spg.ExampleRefactoring.Bean;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
+using Spg.LocationRefactor.Transform;
 
 namespace NUnitTests.Spg.NUnitTests.Util
 {
@@ -24,6 +25,39 @@ namespace NUnitTests.Spg.NUnitTests.Util
                     }
                 }
             }
+            return metaLocList;
+        }
+
+        public static List<CodeTransformation> GetAllTransformationsOnCommit(List<CodeTransformation> transformations, List<CodeLocation> locations)
+        {
+            List<CodeTransformation> metaLocList = new List<CodeTransformation>();
+
+            foreach(var transformation in transformations)
+            {
+                TRegion tregion = transformation.Location.Region;
+
+                foreach(var location in locations)
+                {
+                    TRegion lregion = location.Region;
+
+                    if (tregion.Start == lregion.Start && tregion.Length == lregion.Length && tregion.Path.ToUpperInvariant().Equals(lregion.Path.ToUpperInvariant()))
+                    {
+                        metaLocList.Add(transformation);
+                    }
+                }
+
+            }
+            //foreach (CodeTransformation metaLoc in locations)
+            //{
+            //    metaLoc.Region.Path = metaLoc.SourceClass;
+            //    foreach (TRegion metaSelec in selections)
+            //    {
+            //        if (metaLoc.Region.Equals(metaSelec))
+            //        {
+            //            metaLocList.Add(metaLoc);
+            //        }
+            //    }
+            //}
             return metaLocList;
         }
 

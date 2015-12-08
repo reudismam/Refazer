@@ -97,6 +97,15 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         }
 
         [Test]
+        public void Proj7_673f18e()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CodeAnalysis");
+            bool isValid = LocaleTestSolution(@"Roslyn\7_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
+            Assert.IsTrue(isValid);
+        }
+
+        [Test]
         public void Proj4_673f18e()
         {
             List<string> projects = new List<string>();
@@ -344,7 +353,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             List<string> projects = new List<string>();
             projects.Add("CSharpCommandLineTest");
             projects.Add("CodeAnalysisTest");
-            bool isValid = LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
+            bool isValid = LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
             Assert.IsTrue(isValid);
         }
 

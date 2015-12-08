@@ -125,6 +125,21 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         /// Test Method Call To Identifier transformation
         /// </summary>
         [Test]
+        public void Proj7_673f18e()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("CodeAnalysis");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"Roslyn\7_673f18e", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
+
+            bool passTransformation = CompleteTestBase(@"Roslyn\7_673f18e");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        /// <summary>
+        /// Test Method Call To Identifier transformation
+        /// </summary>
+        [Test]
         public void Proj5_673f18e()
         {
             List<string> projects = new List<string>();
@@ -539,7 +554,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             List<string> projects = new List<string>();
             projects.Add("CSharpCommandLineTest");
             projects.Add("CodeAnalysisTest");
-            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn14\src\Roslyn.sln", projects);
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"Roslyn\7c885ca", @"Roslyn\roslyn7\src\Roslyn.sln", projects);
 
             bool passTransformation = CompleteTestBase(@"Roslyn\7c885ca");
 
@@ -1078,6 +1093,96 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             Assert.IsTrue(passLocation && passTransformation);
         }
 
+        ///// <summary>
+        ///// Complete test
+        ///// </summary>
+        ///// <param name="editeds">Files edited</param>
+        ///// <param name="commit">Commit where the change occurs</param>
+        ///// <returns>True if pass test</returns>
+        //public static bool CompleteTestBase(string commit)
+        //{
+        //    long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //    EditorController controller = EditorController.GetInstance();
+
+        //    string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+
+        //    //remove
+        //    List<CodeLocation> controllerLocations = new List<CodeLocation>(controller.Locations);
+        //    List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
+        //    List<CodeLocation> locations = TestUtil.GetAllLocationsOnCommit(selections, controller.Locations);
+        //    controller.Locations = locations;
+
+
+        //    Dictionary<string, List<Selection>> dicionarySelection = JsonUtil<Dictionary<string, List<Selection>>>.Read(expHome + @"commit\" + commit + @"\edited_selections.json");
+        //    dicionarySelection = TestUtil.FilterLocationsNotPresentOnCommit(dicionarySelection, controllerLocations, locations);
+        //    ////remove
+
+        //    var dicionarySelectionFullpath = new Dictionary<string, List<Selection>>();
+        //    foreach (var entry in dicionarySelection)
+        //    {
+        //        dicionarySelectionFullpath.Add(Path.GetFullPath(entry.Key), entry.Value);
+        //    }
+
+        //    //            dicionarySelection = dicionarySelectionFullpath;
+        //    controller.EditedLocations = dicionarySelectionFullpath;
+
+        //    List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
+
+        //    foreach (KeyValuePair<string, List<Selection>> entry in dicionarySelection)
+        //    {
+        //        string classPath = entry.Key;
+        //        string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
+
+        //        string sourceCodeAfter = FileUtil.ReadFile(expHome + @"commit\" + commit + @"\" + className);
+        //        controller.CurrentViewCodeAfter = sourceCodeAfter;
+
+        //        string sourceCode = FileUtil.ReadFile(entry.Key);
+        //        Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
+        //        documents.Add(tuple);
+        //        controller.FilesOpened[entry.Key] = true;
+        //    }
+
+        //    controller.DocumentsBeforeAndAfter = documents;
+
+        //    controller.Refact();
+
+        //    FileInfo file = new FileInfo(expHome + @"commit\" + commit + @"\metadata\cs\");
+        //    file.Directory.Create();
+
+        //    bool passTransformation = true;
+        //    foreach (Transformation transformation in controller.SourceTransformations)
+        //    {
+        //        string classPath = transformation.SourcePath;
+        //        string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
+        //        //string classNamePath = expHome + @"commit\" + commit + @"\tool\" + className;
+        //        string classNamePath = expHome + @"commit\" + commit + @"\metadata\cs\" + className;
+        //        FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
+
+        //        Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(classNamePath), transformation.transformation.Item2);
+        //        Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);
+
+        //        NodeComparer comparator = new NodeComparer();
+        //        bool isEqual = comparator.SequenceEqual(lnode.Item1, lnode.Item2);
+        //        if (!isEqual)
+        //        {
+        //            passTransformation = false;
+        //            break;
+        //        }
+        //    }
+        //    controller.Undo();
+        //    long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //    long totalTime = (millAfer - millBefore);
+        //    FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
+
+        //    JsonUtil<List<CodeTransformation>>.Write(TransformationsSave(controller.CodeTransformations), "transformed_locations.json");
+
+        //    string transformations = FileUtil.ReadFile("transformed_locations.json");
+        //    FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
+        //    FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\metadata_tool\transformed_locations.json", transformations);
+        //    FileUtil.DeleteFile("transformed_locations.json");
+        //    return passTransformation;
+        //}
+
         /// <summary>
         /// Complete test
         /// </summary>
@@ -1086,7 +1191,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         /// <returns>True if pass test</returns>
         public static bool CompleteTestBase(string commit)
         {
-            long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            //long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             EditorController controller = EditorController.GetInstance();
 
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
@@ -1096,74 +1201,42 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
             List<CodeLocation> locations = TestUtil.GetAllLocationsOnCommit(selections, controller.Locations);
             controller.Locations = locations;
-            
 
-            Dictionary<string, List<Selection>> dicionarySelection = JsonUtil<Dictionary<string, List<Selection>>>.Read(expHome + @"commit\" + commit + @"\edited_selections.json");
-            dicionarySelection = TestUtil.FilterLocationsNotPresentOnCommit(dicionarySelection, controllerLocations, locations);
-            ////remove
+            List<CodeTransformation> allTransformations = JsonUtil<List<CodeTransformation>>.Read(expHome + @"commit\" + commit + @"\metadata_tool\transformed_locations.json");
 
-            var dicionarySelectionFullpath = new Dictionary<string, List<Selection>>();
-            foreach (var entry in dicionarySelection)
-            {
-                dicionarySelectionFullpath.Add(Path.GetFullPath(entry.Key), entry.Value);
-            }
+            List<CodeTransformation> transformationsOnCommit = TestUtil.GetAllTransformationsOnCommit(allTransformations, locations);
 
-//            dicionarySelection = dicionarySelectionFullpath;
-            controller.EditedLocations = dicionarySelectionFullpath;
-
-            List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
-
-            foreach (KeyValuePair<string, List<Selection>> entry in dicionarySelection)
-            {
-                string classPath = entry.Key;
-                string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
-
-                string sourceCodeAfter = FileUtil.ReadFile(expHome + @"commit\" + commit + @"\" + className);
-                controller.CurrentViewCodeAfter = sourceCodeAfter;
-
-                string sourceCode = FileUtil.ReadFile(entry.Key);
-                Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
-                documents.Add(tuple);
-                controller.FilesOpened[entry.Key] = true;
-            }
-
-            controller.DocumentsBeforeAndAfter = documents;
-
-            controller.Refact();
-
-            FileInfo file = new FileInfo(expHome + @"commit\" + commit + @"\metadata\cs\");
-            file.Directory.Create();
-
-            bool passTransformation = true;
-            foreach (Transformation transformation in controller.SourceTransformations)
-            {
-                string classPath = transformation.SourcePath;
-                string className = classPath.Substring(classPath.LastIndexOf(@"\") + 1, classPath.Length - (classPath.LastIndexOf(@"\") + 1));
-                //string classNamePath = expHome + @"commit\" + commit + @"\tool\" + className;
-                string classNamePath = expHome + @"commit\" + commit + @"\metadata\cs\" + className;
-                FileUtil.WriteToFile(classNamePath, transformation.transformation.Item2);
-
-                Tuple<string, string> example = Tuple.Create(FileUtil.ReadFile(classNamePath), transformation.transformation.Item2);
-                Tuple<ListNode, ListNode> lnode = ASTProgram.Example(example);
-
-                NodeComparer comparator = new NodeComparer();
-                bool isEqual = comparator.SequenceEqual(lnode.Item1, lnode.Item2);
-                if (!isEqual)
-                {
-                    passTransformation = false;
-                    break;
-                }
-            }
-            controller.Undo();
-            long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            long totalTime = (millAfer - millBefore);
-            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
+            JsonUtil<List<CodeTransformation>>.Write(transformationsOnCommit, "transformed_locations.json");
 
             string transformations = FileUtil.ReadFile("transformed_locations.json");
-            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
-            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\metadata_tool\transformed_locations.json", transformations);
+            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations2.json", transformations);
+            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\metadata_tool\transformed_locations2.json", transformations);
             FileUtil.DeleteFile("transformed_locations.json");
-            return passTransformation;
+            return true;
+        }
+
+        private static List<CodeTransformation> TransformationsSave(List<CodeTransformation> CodeTransformations)
+        {
+
+            List<CodeTransformation> transformations = new List<CodeTransformation>();
+            foreach (CodeTransformation codeTransformation in CodeTransformations)
+            {
+                CodeLocation location = new CodeLocation();
+                location.SourceClass = codeTransformation.Location.SourceClass;
+                location.SourceCode = codeTransformation.Location.SourceCode;
+                TRegion region = new TRegion();
+                region.Start = codeTransformation.Location.Region.Start;
+                region.Length = codeTransformation.Location.Region.Length;
+                region.Path = codeTransformation.Location.Region.Path;
+                region.Parent = codeTransformation.Location.Region.Parent;
+                region.Text = codeTransformation.Location.Region.Text;
+                location.Region = region;
+
+                CodeTransformation transformation = new CodeTransformation(location, codeTransformation.Trans, codeTransformation.Transformation);
+                transformations.Add(transformation);
+            }
+
+            return transformations;
         }
     }
 }
