@@ -1,32 +1,27 @@
-using System.Collections.Generic;
-using Spg.LocationRefactor.TextRegion;
+using Spg.ExampleRefactoring.Expression;
+using System.Linq;
+using System;
 
 namespace Spg.LocationRefactor.Operator.Map
 {
     /// <summary>
     /// Statement map
     /// </summary>
-    public class StatementMap : MapBase
+    public class NodeMap : MapBase
     {
-        /// <summary>
-        /// List of regions
-        /// </summary>
-        private List<TRegion> _list;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="list">List of regions</param>
-        public StatementMap(List<TRegion> list)
-        {
-            this._list = list;
-        }
         public override string ToString()
         {
-            return "NodeMap(λx: Pair(Pos(x, p1), Pos(x, p2)), SSeq)"
-                + "\n\tp1 = " + ((Pair)ScalarExpression.Ioperator).Expression
-                + "\n\tp2 = " + ((Pair)ScalarExpression.Ioperator).Expression
-                + "\n\tS=" + SequenceExpression;
+            Pair pair = (Pair) ScalarExpression.Ioperator;
+
+            if(pair.Expression.Solutions.Count > 1) { throw new Exception("Map can contains only an expression."); }
+
+            SubStr expression = (SubStr) pair.Expression.Solutions.First();
+
+            return "NodeMap(λx: Pair(Pos(x, p1), Pos(x, p2)), NSeq)"
+                + "\n\tp1 = " + expression.P1
+                + "\n\tp2 = " + expression.P2
+                + "\n\tNSeq=" + SequenceExpression;
         }
     }
 }

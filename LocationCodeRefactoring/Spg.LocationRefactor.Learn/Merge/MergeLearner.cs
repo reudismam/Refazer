@@ -16,7 +16,7 @@ namespace Spg.LocationRefactor.Learn.Map
     /// <summary>
     /// Map Learner base
     /// </summary>
-    public class MergeLearnerBase : ILearn
+    public class MergeLearner : ILearn
     {
         /// <summary>
         /// Learn for map
@@ -66,7 +66,7 @@ namespace Spg.LocationRefactor.Learn.Map
 
             foreach (var merge in merges)
             {
-                MergeBase mergebase = new MergeBase();
+                Merge mergebase = new Merge();
                 mergebase.maps = merge;
 
                 Prog prog = new Prog();
@@ -171,73 +171,6 @@ namespace Spg.LocationRefactor.Learn.Map
 
             programs = CombinePrograms(maps);
             return programs;
-            //IPredicate pred = GetPredicate();
-
-            //FilterLearnerBase S = GetFilter(list);
-            //S.Predicate = pred;
-
-            //List<Prog> predicates = S.Learn(positiveExamples, negativeExamples);
-            //if (hypo.Count == 1)
-            //{
-            //    foreach (Prog h in hypo)
-            //    {
-            //        foreach (Prog predicate in predicates)
-            //        {
-            //            MapBase map = GetMap(list);
-            //            map.ScalarExpression = h;
-            //            map.SequenceExpression = predicate;
-            //            Prog prog = new Prog();
-            //            prog.Ioperator = map;
-            //            programs.Add(prog);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    bool firstSynthesizedProg = true;
-            //    List<Merge> merges = new List<Merge>();
-            //    foreach (Prog h in hypo)
-            //    {
-            //        programs = new List<Prog>();
-            //        foreach (Prog predicate in predicates)
-            //        {
-            //            MapBase map = GetMap(list);
-            //            map.ScalarExpression = h;
-            //            map.SequenceExpression = predicate;
-            //            Prog prog = new Prog();
-            //            prog.Ioperator = map;
-            //            programs.Add(prog);
-            //        }
-
-            //        if (firstSynthesizedProg)
-            //        {
-            //            foreach (Prog prog in programs)
-            //            {
-            //                Merge merge = new Merge();
-            //                merge.AddMap((MapBase)prog.Ioperator);
-            //                merges.Add(merge);
-            //            }
-            //            firstSynthesizedProg = false;
-
-            //        }
-            //        else
-            //        {
-            //            for (int i = 0; i < merges.Count; i++)
-            //            {
-            //                merges[i].AddMap((MapBase)programs[i].Ioperator);
-            //            }
-            //        }
-            //    }
-
-            //    programs = new List<Prog>();
-            //    foreach (Merge merge in merges)
-            //    {
-            //        Prog prog = new Prog();
-            //        prog.Ioperator = merge;
-            //        programs.Add(prog);
-            //    }
-            //}
-            //return programs;
         }
 
         /// <summary>

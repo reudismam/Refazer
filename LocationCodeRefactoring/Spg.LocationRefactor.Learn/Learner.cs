@@ -17,7 +17,7 @@ namespace Spg.LocationRefactor.Learn
         /// Map
         /// </summary>
         /// <returns>map</returns>
-        public MergeLearnerBase root { get; set; }
+        public MergeLearner root { get; set; }
 
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Spg.LocationRefactor.Learn
         public Learner()
         {
 
-            root = new MergeLearnerBase();
+            root = new MergeLearner();
         }
 
         /// <summary>

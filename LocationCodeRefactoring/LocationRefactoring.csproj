@@ -139,14 +139,13 @@
     <Compile Include="Spg.LocationRefactor.Learn\Filter\FilterLearnerBase.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\MethodFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\StatementFilterLearner.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Merge\MergeLearnerBase.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Merge\MergeLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Location\SelectionInfo.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\ILocationsObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\LocationEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\ILocationsTransformedObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\LocationsTransformedEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\StatementMapLearner.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\MergeLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\MethodMapLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\EndPosMapLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\ILearn.cs" />
@@ -168,9 +167,8 @@
     <Compile Include="Spg.LocationRefactor.Operator\Filter\FilterBase.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\IOperator.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Map\MapBase.cs" />
-    <Compile Include="Spg.LocationRefactor.Operator\Map\StatementMap.cs" />
-    <Compile Include="Spg.LocationRefactor.Operator\Merge.cs" />
-    <Compile Include="Spg.LocationRefactor.Operator\Merge\MergeBase.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Map\NodeMap.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Merge\Merge.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Pair.cs" />
     <Compile Include="Spg.LocationRefactor.Program\Prog.cs" />
     <Compile Include="Spg.LocationRefactor.TextRegion\TRegion.cs" />

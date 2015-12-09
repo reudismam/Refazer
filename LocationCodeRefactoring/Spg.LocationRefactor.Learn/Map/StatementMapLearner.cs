@@ -32,7 +32,7 @@ namespace Spg.LocationRefactor.Learn.Map
         /// <returns>Map</returns>
         protected override MapBase GetMap(List<TRegion> list)
         {
-            return new StatementMap(list);
+            return new NodeMap();
         }
 
         /// <summary>

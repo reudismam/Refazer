@@ -10,7 +10,7 @@ namespace Spg.LocationRefactor.Operator.Map
     /// <summary>
     /// Map operator
     /// </summary>
-    public class MergeBase : IOperator
+    public class Merge : IOperator
     {
         public List<Prog> maps { get; set; }
 
