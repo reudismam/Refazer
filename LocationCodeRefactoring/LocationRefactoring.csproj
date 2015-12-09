@@ -138,14 +138,14 @@
     <Compile Include="Spg.LocationRefactor.Learn\Filter\EndPosFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\FilterLearnerBase.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\MethodFilterLearner.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\StatementFilterLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Filter\NodeFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Merge\MergeLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Location\SelectionInfo.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\ILocationsObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\LocationEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\ILocationsTransformedObserver.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\LocationsTransformedEvent.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Map\StatementMapLearner.cs" />
+    <Compile Include="Spg.LocationRefactor.Learn\Map\NodeMapLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\MethodMapLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Map\EndPosMapLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\ILearn.cs" />
