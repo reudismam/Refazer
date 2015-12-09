@@ -12,7 +12,7 @@ namespace Spg.ExampleRefactoring.Intersect
 
         public override IExpression GetExpression(IPosition p1, IPosition p2)
         {
-            return new SubStr(p1, p2);
+            return new SubTokens(p1, p2);
         }
     }
 }

@@ -1,13 +1,14 @@
 using System;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Comparator;
+using System.Linq;
 
 namespace Spg.ExampleRefactoring.Expression
 {
     /// <summary>
     /// ConstruStr expression
     /// </summary>
-    public class ConstruStr: IExpression
+    public class ConstTokens : IExpression
     {
         /// <summary>
         /// Word constructed by this expression
@@ -19,7 +20,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// Construct a string with the passed word.
         /// </summary>
         /// <param name="nodes">Nodes to represent the regular expression.</param>
-        public ConstruStr(ListNode nodes) {
+        public ConstTokens (ListNode nodes) {
             this.Nodes = nodes;
         }
 
@@ -55,7 +56,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            return "ConstructNodes(" + Nodes + ")";
+            return "ConstTokens(" + Nodes + ")";
         }
 
         /// <summary>
@@ -65,11 +66,11 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>True is obj is equals to this object</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is ConstruStr))
+            if (!(obj is ConstTokens ))
             {
                 return false;
             }
-            ConstruStr another = obj as ConstruStr;
+            ConstTokens  another = obj as ConstTokens ;
 
             NodeComparer compare = new NodeComparer();
             return compare.SequenceEqual(another.Nodes, this.Nodes);

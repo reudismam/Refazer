@@ -1025,7 +1025,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             long totalTime = (millAfer - millBefore);
             List<CodeTransformation> transformationsList = controller.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
 
-            Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count);
+            Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count, controller.Program.ToString());
     
             FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
 
@@ -1045,7 +1045,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         private static Worksheet mWSheet1;
         private static Application oXL;
 
-        public static void Log(string commit, double time, int exTransformations, int acTrasnformation, int documents)
+        public static void Log(string commit, double time, int exTransformations, int acTrasnformation, int documents, string program)
         {
             string path = @"C:\Users\SPG-04\Documents\Research\Log2.xlsx";
             using (ExcelManager em = new ExcelManager())
@@ -1066,10 +1066,11 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
                 if (empty != -1)
                 {
-                    em.SetValue("K" + empty, time / 1000);
-                    em.SetValue("L" + empty, exTransformations);
-                    em.SetValue("M" + empty, acTrasnformation);
-                    em.SetValue("N" + empty, documents);
+                    em.SetValue("L" + empty, time / 1000);
+                    em.SetValue("M" + empty, exTransformations);
+                    em.SetValue("N" + empty, acTrasnformation);
+                    em.SetValue("O" + empty, documents);
+                    em.SetValue("P" + empty, program);
                     em.Save();
                 }
                 else {

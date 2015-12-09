@@ -11,7 +11,7 @@ namespace Spg.ExampleRefactoring.Expression
     /// <summary>
     /// SubNode atomic expression
     /// </summary>
-    public class IdenToStr : SubStr
+    public class IdenToStr : SubTokens
     {
         /// <summary>
         /// Construct a SubStr expression.
@@ -73,7 +73,7 @@ namespace Spg.ExampleRefactoring.Expression
             {
                 return false;
             }
-            SubStr another = obj as IdenToStr;
+            SubTokens another = obj as IdenToStr;
             bool result = another.P1.Equals(this.P1) && another.P2.Equals(this.P2);
             return result;
         }

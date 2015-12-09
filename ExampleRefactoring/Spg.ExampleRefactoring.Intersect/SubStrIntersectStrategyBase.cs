@@ -71,7 +71,7 @@ namespace Spg.ExampleRefactoring.Intersect
             HashSet<IPosition> positions = new HashSet<IPosition>();
             foreach (IExpression expression in expressions)
             {
-                SubStr sbstr = expression as SubStr;
+                SubTokens sbstr = expression as SubTokens;
                 if (position == 1)
                 {
                     if (sbstr != null && !positions.Contains(sbstr.P1))

@@ -13,7 +13,7 @@ namespace Spg.ExampleRefactoring.Expression
     /// <summary>
     /// ConstruStr expression
     /// </summary>
-    public class FakeConstrStr : ConstruStr
+    public class FakeConstrStr : ConstTokens 
     {
         /// <summary>
         /// Construct a string with the passed word.

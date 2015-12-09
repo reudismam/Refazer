@@ -37,5 +37,26 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
             throw new ArgumentException("The given argument if not valid for this program");
         }
+
+        public override string ToString()
+        {
+            string s = "Switch(";
+
+            s += "(b1, e1)";
+
+            for (int i = 1; i < Gates.Count; i++)
+            {
+                s += ", SS" + (i + 1);
+            }
+
+            s += ")";
+
+            for (int i = 0; i < Gates.Count; i++)
+            {
+                s += "\n\tb" + (i + 1) + " = " + Gates[i].Item1
+                   + "\n\te" + (i + 1) + " = " + Gates[i].Item2;
+            }
+            return s;
+        }
     }
 }

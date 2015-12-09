@@ -1009,7 +1009,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
-            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count, tTimeToExtract, tTimeToLocate);
+            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count, tTimeToExtract, tTimeToLocate, controller.Progs.First().ToString());
             //remove
             List<TRegion> nselections = new List<TRegion>();
             foreach (CodeLocation location in controller.Locations)
@@ -1038,7 +1038,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         private static Sheets mWorkSheets;
         private static Worksheet mWSheet1;
         private static Application oXL;
-        public static void Log(string commit, double time, double timeToExtract, int exLocations, int negs, int acLocations, int locations, double tToExtract, double tToLocate)
+        public static void Log(string commit, double time, double timeToExtract, int exLocations, int negs, int acLocations, int locations, double tToExtract, double tToLocate, string program)
         {
             using (ExcelManager em = new ExcelManager())
             {
@@ -1064,6 +1064,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 em.SetValue("H" + empty, timeToExtract / 1000); //last round execution
                 em.SetValue("I" + empty, tToExtract / 1000); //time to extract on the last round
                 em.SetValue("J" + empty, tToLocate / 1000); //time to locate on the last round.
+                em.SetValue("K" + empty, program);
 
                 Console.WriteLine("" + empty);
                 em.Save();

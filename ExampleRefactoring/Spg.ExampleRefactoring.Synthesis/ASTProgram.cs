@@ -276,7 +276,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         public static List<SynthesizedProgram> GetEmptyProgram()
         {
             List<SynthesizedProgram> validated = new List<SynthesizedProgram>();
-            IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
+            IExpression expression = new ConstTokens (new ListNode(new List<SyntaxNodeOrToken>()));
             List<IExpression> expressions = new List<IExpression> { expression };
             SynthesizedProgram program = new SynthesizedProgram();
             validated.Add(program);
@@ -767,7 +767,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                     if (Setting.ConsiderConstrStr)
                     {
                         List<IExpression> subStrExpressions = new List<IExpression>();
-                        IExpression expression = new ConstruStr(subNodes);
+                        IExpression expression = new ConstTokens (subNodes);
                         subStrExpressions.Add(expression);
                         synthExpressions.Add(ExpressionKind.Consttrustr, subStrExpressions);
 
@@ -853,7 +853,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                     if (Setting.ConsiderConstrStr)
                     {
                         List<IExpression> constStrExprs = new List<IExpression>();
-                        IExpression expression = new ConstruStr(subNodes);
+                        IExpression expression = new ConstTokens (subNodes);
                         constStrExprs.Add(expression);
                         synthExpressions.Add(ExpressionKind.Consttrustr, constStrExprs);
 
@@ -1270,7 +1270,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                 foreach (Tuple<IPosition, IPosition> positions in ConstructCombinations(y1, y2))
                 {
-                    IExpression expression = new SubStr(positions.Item1, positions.Item2);
+                    IExpression expression = new SubTokens(positions.Item1, positions.Item2);
                     result.Add(expression);
                 }
             }

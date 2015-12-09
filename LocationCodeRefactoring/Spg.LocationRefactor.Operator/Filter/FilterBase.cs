@@ -493,7 +493,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         public override string ToString()
         {
             return "FilterBool(b, FilterNodeByType(R0, t))"
-            +"\n\t\tb=" + Predicate.ToString()
+            + "\n\t\tb=" + Predicate.ToString()
             + "\n\t\tt=[" + GetTypes(Names(Lcas)) + "]";
         }
 
@@ -516,26 +516,26 @@ namespace Spg.LocationRefactor.Operator.Filter
 
             foreach(var item in lcas)
             {
-                strs.Add(KindText(item.Kind()));
+                strs.Add(item.Kind().ToString());
             }
 
             HashSet<string> hash = new HashSet<string>(strs);
             return hash.ToList();
         }
 
-        private string KindText(SyntaxKind kind)
-        {
-            var values = Enum.GetValues(typeof(SyntaxKind)).Cast<SyntaxKind>();
+        //private string KindText(SyntaxKind kind)
+        //{
+        //    var values = Enum.GetValues(typeof(SyntaxKind)).Cast<SyntaxKind>();
 
-            foreach (SyntaxKind item in values)
-            {
-                if(item.Equals(kind))
-                {
-                    return Enum.GetName(typeof(SyntaxKind), item);
-                }
-            }
-            return null;
-        }
+        //    foreach (SyntaxKind item in values)
+        //    {
+        //        if(item.Equals(kind))
+        //        {
+        //            return Enum.GetName(typeof(SyntaxKind), item);
+        //        }
+        //    }
+        //    return null;
+        //}
     }
 }
 

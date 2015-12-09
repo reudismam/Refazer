@@ -8,7 +8,7 @@ namespace Spg.ExampleRefactoring.Expression
     /// <summary>
     /// SubNode atomic expression
     /// </summary>
-    public class SubStr : IExpression
+    public class SubTokens : IExpression
     {
         /// <summary>
         /// Position one on the expression.
@@ -26,7 +26,7 @@ namespace Spg.ExampleRefactoring.Expression
         /// </summary>
         /// <param name="p1">Position one on the string.</param>
         /// <param name="p2">Position two on the string.</param>
-        public SubStr(IPosition p1, IPosition p2)
+        public SubTokens(IPosition p1, IPosition p2)
         {
             this.P1 = p1;
             this.P2 = p2;
@@ -99,7 +99,9 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns>String representation of this expression</returns>
         public override string ToString()
         {
-            return "SubStr(vi, "+ P1 +", "+ P2 +")";
+            return "SubTokens(x, p1, p2)"
+                 + "\n\tp1 = " + P1
+                 + "\n\tp2 = " + P2;
         }
 
         /// <summary>
@@ -109,11 +111,11 @@ namespace Spg.ExampleRefactoring.Expression
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is SubStr))
+            if (!(obj is SubTokens))
             {
                 return false;
             }
-            SubStr another = obj as SubStr;
+            SubTokens another = obj as SubTokens;
             bool result = another.P1.Equals(this.P1) && another.P2.Equals(this.P2);
             return result;
         }

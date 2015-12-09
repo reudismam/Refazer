@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -6,6 +6,8 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
+using Spg.ExampleRefactoring.Expression;
+using System.Linq;
 
 //using Spg.LocationRefactor.Program;
 
@@ -206,6 +208,20 @@ namespace Spg.LocationRefactor.Operator.Map
         public static List<Tuple<ListNode, ListNode>> Decompose(List<Tuple<ListNode, ListNode>> examples)
         {
             return examples;
+        }
+
+        public override string ToString()
+        {
+            Pair pair = (Pair)ScalarExpression.Ioperator;
+
+            if (pair.Expression.Solutions.Count > 1) { throw new Exception("Map can contains only an expression."); }
+
+            SubTokens expression = (SubTokens)pair.Expression.Solutions.First();
+
+            return "NodeMap(λx: Pair(Pos(x, p1), Pos(x, p2)), NSeq)"
+                + "\n\tp1 = " + expression.P1
+                + "\n\tp2 = " + expression.P2
+                + "\n\tNSeq=" + SequenceExpression;
         }
     }
 }

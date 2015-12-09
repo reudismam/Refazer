@@ -219,7 +219,7 @@ namespace Spg.LocationRefactor.Controller
             //remove
             Progs = extractor.Extract(SelectedLocations);
 
-            FileUtil.AppendToFile("Log.lg", Progs.First().ToString());
+            //FileUtil.AppendToFile("Log.lg", Progs.First().ToString());
 
             var result = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
             if (result.Count == 1)

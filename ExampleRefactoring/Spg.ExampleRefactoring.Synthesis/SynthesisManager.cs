@@ -160,13 +160,13 @@ namespace Spg.ExampleRefactoring.Synthesis
             InitFeatures(features);
             foreach (IExpression expression in solution)
             {
-                if (expression is ConstruStr)
+                if (expression is ConstTokens )
                 {
                     Handle(features, FeatureType.CONSTSTR);
                 }
                 else
                 {
-                    SubStr subStr = (SubStr)expression;
+                    SubTokens subStr = (SubTokens)expression;
 
                     IPosition p1 = subStr.P1;
                     IPosition p2 = subStr.P2;

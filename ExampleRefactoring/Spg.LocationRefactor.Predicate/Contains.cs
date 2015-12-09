@@ -30,7 +30,7 @@ namespace Spg.LocationRefactor.Predicate
         public override string ToString()
         {
             TokenSeq comb = ASTProgram.ConcatenateRegularExpression(regex.R1, regex.R2);
-            return "Contains(x, " + comb +")";
+            return "Contains(x, " + comb +", " + regex.Position + ")";
         }
     }
 }

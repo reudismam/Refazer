@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Expression;
+using System.Linq;
 
 namespace Spg.ExampleRefactoring.Synthesis
 {
@@ -57,8 +58,26 @@ namespace Spg.ExampleRefactoring.Synthesis
         public override string ToString()
         {
             string s = "";
-            foreach(IExpression str in Solutions){
-                s += str + "\n\n";
+
+            if(Solutions.Count == 1)
+            {
+                s += Solutions.First() + "\n";
+                return s;
+            }
+
+            s += "Concatenate(f1";
+
+            for (int i = 1; i < Solutions.Count; i++)
+            {
+                s += ", f" + (i + 1);
+            }
+
+            s += ")";
+
+            for (int i = 0; i < Solutions.Count; i++)
+            {
+                s += "\n\tf" + (i + 1) + " = " + Solutions[i];
+                   
             }
 
             return s;

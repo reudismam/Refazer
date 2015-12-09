@@ -129,6 +129,26 @@ namespace Spg.LocationRefactor.Operator.Map
             return nonDup;
         }
 
+        public override string ToString()
+        {
+            string s = "Merge(";
+
+            s += "SS1";
+            
+            for(int i = 1; i < maps.Count; i++)
+            {
+                s += ", SS" + (i + 1);
+            }
+
+            s += ")";
+
+            for(int i = 0; i < maps.Count; i++)
+            {
+                s += "\n\tSS" + (i+1) + " = " + maps[i].ToString();
+            }
+            return s;  
+        }
+
     }
 }
 

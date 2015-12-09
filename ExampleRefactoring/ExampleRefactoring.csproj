@@ -196,12 +196,12 @@
     <Compile Include="Spg.ExampleRefactoring.Data\ExampleManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Data\FreeCommand.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\FakeConstrStr.cs" />
-    <Compile Include="Spg.ExampleRefactoring.Expression\ConstruStr.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Expression\ConstTokens.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\ExpressionKind.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\ExpressionManager.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\IExpression.cs" />
     <Compile Include="Spg.ExampleRefactoring.Expression\IdenToStr.cs" />
-    <Compile Include="Spg.ExampleRefactoring.Expression\SubStr.cs" />
+    <Compile Include="Spg.ExampleRefactoring.Expression\SubTokens.cs" />
     <Compile Include="Spg.ExampleRefactoring.Intersect\FakeConstIntersectStrategy.cs" />
     <Compile Include="Spg.ExampleRefactoring.Intersect\IIntersectStrategy.cs" />
     <Compile Include="Spg.ExampleRefactoring.Intersect\ConstIntersectStrategy.cs" />

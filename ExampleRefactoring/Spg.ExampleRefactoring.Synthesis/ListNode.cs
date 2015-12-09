@@ -4,6 +4,7 @@ using Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Linq;
 
 namespace Spg.ExampleRefactoring.Synthesis
 {
@@ -78,16 +79,28 @@ namespace Spg.ExampleRefactoring.Synthesis
         public override string ToString()
         {
             string s = "[";
-            for (int i = 0; i < List.Count - 1; i++)
-            {
-                SyntaxNodeOrToken st = List[i];
-                s += st.Kind() + ", "; 
-            }
 
-            if (List.Count > 0) {
-                s += List[List.Count - 1].Kind() + "]";
+            if (List.Any())
+            {
+                s += List.First();
+
+                for(int i = 1; i < List.Count; i++)
+                {
+                    s += ", " + List[i];
+                }
             }
+            //for (int i = 0; i < List.Count - 1; i++)
+            //{
+            //    SyntaxNodeOrToken st = List[i];
+            //    s += st + ", "; 
+            //}
+
+            //if (List.Count > 0) {
+            //    s += List[List.Count - 1] + "]";
+            //}
+            s += "]";
             return s;
+            //return s;
         }
 
         /// <summary>
