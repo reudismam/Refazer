@@ -20,6 +20,7 @@ using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Microsoft.CodeAnalysis.CSharp;
+using System.IO;
 
 namespace Spg.LocationRefactor.Controller
 {
@@ -217,6 +218,8 @@ namespace Spg.LocationRefactor.Controller
             JsonUtil<List<TRegion>>.Write(SelectedLocations, "input_selection.json");
             //remove
             Progs = extractor.Extract(SelectedLocations);
+
+            File.AppendAllText("Log.lg", Progs.First().ToString());
 
             var result = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
             if (result.Count == 1)

@@ -14,6 +14,7 @@ using Spg.ExampleRefactoring.Setting;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactoring.Tok;
+using System.IO;
 
 namespace Spg.ExampleRefactoring.Synthesis
 {
@@ -183,7 +184,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                 if (!predicates.Any())
                 {
-                    Setting.Deviation = 1;
+                    //Setting.Deviation = 1;
                     return GenerateStringProgram(examples);
                 }
 

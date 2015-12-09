@@ -17,7 +17,7 @@ namespace Spg.LocationRefactor.Learn
         /// Map
         /// </summary>
         /// <returns>map</returns>
-        public MergeLearnerBase map { get; set; }
+        public MergeLearnerBase root { get; set; }
 
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Spg.LocationRefactor.Learn
         public Learner()
         {
 
-            map = new MergeLearnerBase();
+            root = new MergeLearnerBase();
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Spg.LocationRefactor.Learn
             List<Prog> programs = new List<Prog>();
             List<ILearn> learns = new List<ILearn>();
 
-            learns.Add(map);
+            learns.Add(root);
             foreach (ILearn learn in learns)
             {
                 programs = learn.Learn(examples);
@@ -59,7 +59,7 @@ namespace Spg.LocationRefactor.Learn
             List<IOperator> operators = new List<IOperator>();
             List<ILearn> learns = new List<ILearn>();
 
-            learns.Add(map);
+            learns.Add(root);
             foreach (ILearn learn in learns)
             {
                 programs = learn.Learn(positiveExamples, negativeExamples);
@@ -74,7 +74,7 @@ namespace Spg.LocationRefactor.Learn
         /// <returns>Examples</returns>
         public List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
         {
-            List<Tuple<ListNode, ListNode>> decomposition = map.Decompose(list);
+            List<Tuple<ListNode, ListNode>> decomposition = root.Decompose(list);
             return decomposition;
         }
 

@@ -23,7 +23,7 @@ namespace Spg.LocationRefactor.Operator.Map
         }
         public override string ToString()
         {
-            return "StatementMap(λSyntaxNode: Pair(Pos(S, p1), Pos(S, p2)), S)"
+            return "NodeMap(λx: Pair(Pos(x, p1), Pos(x, p2)), SSeq)"
                 + "\n\tp1 = " + ((Pair)ScalarExpression.Ioperator).Expression
                 + "\n\tp2 = " + ((Pair)ScalarExpression.Ioperator).Expression
                 + "\n\tS=" + SequenceExpression;

@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
 using System;
@@ -38,61 +37,21 @@ namespace Spg.LocationRefactor.Operator
             return Execute(tree.GetRoot());
         }
 
+        /// <summary>
+        /// Executes the map operator
+        /// </summary>
+        /// <param name="input">Input</param>
+        /// <returns>Result of map execution</returns>
         public ListNode Execute(SyntaxNode input)
         {
-            //SynthesizedProgram sprogram = new SynthesizedProgram();
-            //List<IExpression> expressions = new List<IExpression>();
-            //expressions.Add(Expression);
-
-            //sprogram.Solutions = expressions;
-
             List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
             
             list = ASTManager.EnumerateSyntaxNodesAndTokens(input, list);
             ListNode lnode = new ListNode(list);
 
-            //SyntaxTree result = sprogram.TransformString(lnode).Tree;
-
-            //List<SyntaxNodeOrToken> nodes = new List<SyntaxNodeOrToken>();
-            //nodes = ASTManager.EnumerateSyntaxNodesAndTokens(result.GetRoot(), nodes);
-
-            //ListNode listNode = new ListNode(nodes);
             ListNode listNode = Expression.TransformInput(lnode);
             return listNode;
         }
-
-
-        ///// <summary>
-        ///// Retrieve region
-        ///// </summary>
-        ///// <param name="sourceCode">Source code</param>
-        ///// <returns>Execution result</returns>
-        //public List<TRegion> RetrieveRegion(string sourceCode) {
-        //    List<TRegion> tRegions = new List<TRegion>();
-
-        //    Tuple<string, string> t = Tuple.Create(sourceCode, sourceCode);
-        //    Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
-        //    ListNode input = lNode.Item1;
-
-        //    int pOfMatch1 = Expression.P1.GetPositionIndex(input);
-        //    int pOfMatch2 = Expression.P2.GetPositionIndex(input);
-
-        //    ListNode matchNodes = ASTManager.SubNotes(input, pOfMatch1, (pOfMatch2 - pOfMatch1));
-
-        //    int start = matchNodes.List[0].Span.Start;
-
-        //    TextSpan span = matchNodes.List[matchNodes.Length() - 1].Span;
-
-        //    int length = span.Start + span.Length - start;
-
-        //    TRegion tRegion = new TRegion();
-        //    tRegion.Start = start;
-        //    tRegion.Length = length;
-
-        //    tRegions.Add(tRegion);
-
-        //    return tRegions;
-        //}
 
         /// <summary>
         /// Retrieve region
@@ -117,10 +76,6 @@ namespace Spg.LocationRefactor.Operator
             Tuple<ListNode, ListNode> lNode = ASTProgram.Example(t);
             ListNode input = lNode.Item1;
 
-            //int pOfMatch1 = Expression.P1.GetPositionIndex(input);
-            //int pOfMatch2 = Expression.P2.GetPositionIndex(input);
-
-            //ListNode matchNodes = ASTManager.SubNotes(input, pOfMatch1, (pOfMatch2 - pOfMatch1));
             ListNode matchNodes = Expression.TransformInput(input);
 
             int start = matchNodes.List[0].Span.Start;

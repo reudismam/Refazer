@@ -12,6 +12,7 @@ using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.Operator.Filter;
+using System.IO;
 
 namespace Spg.LocationRefactor.Learn.Map
 {
@@ -145,51 +146,7 @@ namespace Spg.LocationRefactor.Learn.Map
                     }
                 }
             }
-            //else
-            //{
-            //    bool firstSynthesizedProg = true;
-            //    List<Merge> merges = new List<Merge>();
-            //    foreach (Prog h in hypo)
-            //    {
-            //        programs = new List<Prog>();
-            //        foreach (Prog predicate in predicates)
-            //        {
-            //            MapBase map = GetMap(list);
-            //            map.ScalarExpression = h;
-            //            map.SequenceExpression = predicate;
-            //            Prog prog = new Prog();
-            //            prog.Ioperator = map;
-            //            programs.Add(prog);
-            //        }
 
-            //        if (firstSynthesizedProg)
-            //        {
-            //            foreach (Prog prog in programs)
-            //            {
-            //                Merge merge = new Merge();
-            //                merge.AddMap((MapBase)prog.Ioperator);
-            //                merges.Add(merge);
-            //            }
-            //            firstSynthesizedProg = false;
-
-            //        }
-            //        else
-            //        {
-            //            for (int i = 0; i < merges.Count; i++)
-            //            {
-            //                merges[i].AddMap((MapBase)programs[i].Ioperator);
-            //            }
-            //        }
-            //    }
-
-            //    programs = new List<Prog>();
-            //    foreach (Merge merge in merges)
-            //    {
-            //        Prog prog = new Prog();
-            //        prog.Ioperator = merge;
-            //        programs.Add(prog);
-            //    }
-            //}
             return programs;
         }
 
