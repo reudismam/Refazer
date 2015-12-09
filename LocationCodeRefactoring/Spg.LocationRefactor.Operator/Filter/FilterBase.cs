@@ -17,7 +17,6 @@ using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
-using Spg.ExampleRefactoring.Util;
 
 namespace Spg.LocationRefactor.Operator.Filter
 {
@@ -493,9 +492,50 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// <returns>String representation for this object.</returns>
         public override string ToString()
         {
-            return Predicate.ToString();
+            return "FilterBool(b, FilterNodeByType(R0, t))"
+            +"\n\t\tb=" + Predicate.ToString()
+            + "\n\t\tt=[" + GetTypes(Names(Lcas)) + "]";
         }
 
+        private string GetTypes(List<string> lcas)
+        {
+            string s = "";
+            s += lcas.First();
+        
+            for(int index = 1; index < lcas.Count; index++)
+            {
+                s += ", " + lcas[index].ToString();
+            }
+
+            return s;
+        }
+
+        private List<string> Names(List<SyntaxNode> lcas)
+        {
+            List<string> strs = new List<string>();
+
+            foreach(var item in lcas)
+            {
+                strs.Add(KindText(item.Kind()));
+            }
+
+            HashSet<string> hash = new HashSet<string>(strs);
+            return hash.ToList();
+        }
+
+        private string KindText(SyntaxKind kind)
+        {
+            var values = Enum.GetValues(typeof(SyntaxKind)).Cast<SyntaxKind>();
+
+            foreach (SyntaxKind item in values)
+            {
+                if(item.Equals(kind))
+                {
+                    return Enum.GetName(typeof(SyntaxKind), item);
+                }
+            }
+            return null;
+        }
     }
 }
 

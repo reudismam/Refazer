@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.CodeAnalysis;
+using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactor.Learn.Filter.BooleanLearner;
+using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.Operator.Filter;
 using Spg.LocationRefactor.Operator.Map;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactoring.Tok;
-using Spg.ExampleRefactoring.Position;
-using Microsoft.CodeAnalysis;
-using Spg.LocationRefactor.Location;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -95,9 +95,6 @@ namespace Spg.LocationRefactor.Learn
 
             return Lcas;
         }
-
-
-
 
         /// <summary>
         /// Learn filter

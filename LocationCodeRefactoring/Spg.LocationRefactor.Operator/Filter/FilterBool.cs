@@ -10,13 +10,13 @@ namespace Spg.LocationRefactor.Operator
     /// <summary>
     /// Statement filter
     /// </summary>
-    public class StatementFilter : FilterBase
+    public class FilterBool : FilterBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="list">Region list</param>
-        public StatementFilter(List<TRegion> list): base(list)
+        public FilterBool(List<TRegion> list): base(list)
         {
             if (list == null)throw new ArgumentNullException("list");
         }
@@ -27,7 +27,7 @@ namespace Spg.LocationRefactor.Operator
         /// <returns>Filter learner</returns>
         protected override FilterLearnerBase GetFilterLearner(List<TRegion> list)
         {
-            return new StatementFilterLearner(list);
+            return new NodeFilterLearner(list);
         }
     }
 }

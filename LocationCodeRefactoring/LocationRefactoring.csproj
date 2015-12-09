@@ -161,7 +161,7 @@
     <Compile Include="Spg.LocationRefactor.Observer\ProgramRefactoredEvent.cs" />
     <Compile Include="Spg.LocationRefactor.Node\Decomposer.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\EndPosFilter.cs" />
-    <Compile Include="Spg.LocationRefactor.Operator\Filter\StatementFilter.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\Filter\FilterBool.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Map\MethodMap.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Map\EndPosMap.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Filter\FilterBase.cs" />

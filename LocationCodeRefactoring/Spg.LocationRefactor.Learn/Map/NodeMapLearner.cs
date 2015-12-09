@@ -14,7 +14,7 @@ namespace Spg.LocationRefactor.Learn.Map
     /// <summary>
     /// Statement map learner
     /// </summary>
-    public class StatementMapLearner : MapLearnerBase
+    public class NodeMapLearner : MapLearnerBase
     {
         Decomposer strategy = Decomposer.GetInstance();
         /// <summary>
@@ -23,7 +23,7 @@ namespace Spg.LocationRefactor.Learn.Map
         /// <returns>Filter</returns>
         protected override FilterLearnerBase GetFilter(List<TRegion> list)
         {
-            return new StatementFilterLearner(list);
+            return new NodeFilterLearner(list);
         }
 
         /// <summary>

@@ -35,7 +35,7 @@ namespace Spg.LocationRefactor.Learn.Map
 
             if (!(pair.Expression is Switch))
             {
-                StatementMapLearner mapLearner = new StatementMapLearner();
+                NodeMapLearner mapLearner = new NodeMapLearner();
                 List<Prog> progs = mapLearner.Learn(examples);
                 return progs;
             }
@@ -45,7 +45,7 @@ namespace Spg.LocationRefactor.Learn.Map
             List<List<Prog>> maps = new List<List<Prog>>();
             foreach (var item in segExamples)
             {
-                MapLearnerBase mapLearner = new StatementMapLearner();
+                MapLearnerBase mapLearner = new NodeMapLearner();
                 List<Prog> progs = mapLearner.Learn(item.Value);
                 maps.Add(progs);
             }
@@ -153,7 +153,7 @@ namespace Spg.LocationRefactor.Learn.Map
 
             if (!(pair.Expression is Switch))
             {
-                StatementMapLearner mapLearner = new StatementMapLearner();
+                NodeMapLearner mapLearner = new NodeMapLearner();
                 List<Prog> progs = mapLearner.Learn(positiveExamples, negativeExamples);
                 return progs;
             }
@@ -164,7 +164,7 @@ namespace Spg.LocationRefactor.Learn.Map
             List<List<Prog>> maps = new List<List<Prog>>();
             foreach (var item in segExamples)
             {
-                MapLearnerBase mapLearner = new StatementMapLearner();
+                MapLearnerBase mapLearner = new NodeMapLearner();
                 List<Prog> progs = mapLearner.Learn(item.Value);
                 maps.Add(progs);
             }
@@ -180,7 +180,7 @@ namespace Spg.LocationRefactor.Learn.Map
         /// <returns>Decomposition</returns>
         public List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
         {
-            StatementMapLearner mapLearner = new StatementMapLearner();
+            NodeMapLearner mapLearner = new NodeMapLearner();
             return mapLearner.Decompose(list);
         }
 

@@ -10,13 +10,13 @@ namespace Spg.LocationRefactor.Learn.Filter
     /// <summary>
     /// Filter statements
     /// </summary>
-    public class StatementFilterLearner : FilterLearnerBase
+    public class NodeFilterLearner : FilterLearnerBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="list">List of selected regions</param>
-        public StatementFilterLearner(List<TRegion> list) :base(list)
+        public NodeFilterLearner(List<TRegion> list) :base(list)
         {
         }
 
@@ -27,7 +27,7 @@ namespace Spg.LocationRefactor.Learn.Filter
         /// <returns>List of selected regions</returns>
         protected override FilterBase GetFilter(List<TRegion> list)
         {
-            return new StatementFilter(list);
+            return new FilterBool(list);
         }
     }
 }

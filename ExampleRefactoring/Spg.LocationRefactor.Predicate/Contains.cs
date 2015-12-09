@@ -23,9 +23,14 @@ namespace Spg.LocationRefactor.Predicate
             return isMatch;
         }
 
+        /// <summary>
+        /// String representation 
+        /// </summary>
+        /// <returns>String representation</returns>
         public override string ToString()
         {
-            return "Contains("+ regex +", S), Split(R0, S)";
+            TokenSeq comb = ASTProgram.ConcatenateRegularExpression(regex.R1, regex.R2);
+            return "Contains(x, " + comb +")";
         }
     }
 }

@@ -51,6 +51,11 @@ namespace Spg.ExampleRefactoring.Util
             file.Close();
         }
 
+        public static void AppendToFile(string path, string text)
+        {
+            File.AppendAllText(path, text);
+        }
+
         public static void DeleteFile(string path)
         {
             File.Delete(path);
