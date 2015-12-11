@@ -122,6 +122,8 @@ namespace Spg.LocationRefactor.Learn
 
             List<Prog> programs = new List<Prog>();
 
+            List<SyntaxNode> Lcas = LearnLcas(positiveExamples);
+
             List<IPredicate> predicates = BooleanLearning(QLine);
             var items = from pair in predicates
                         orderby pair.Regex().Count() descending, Order(pair) descending
@@ -135,6 +137,7 @@ namespace Spg.LocationRefactor.Learn
                 {
                     prog = new Prog();
                     FilterBase filter = GetFilter(List);
+                    filter.Lcas = Lcas;
                     filter.Predicate = ipredicate;
                     prog.Ioperator = filter;
                     dic.Add(ipredicate, prog);

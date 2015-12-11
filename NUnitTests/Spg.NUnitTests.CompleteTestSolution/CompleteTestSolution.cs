@@ -345,20 +345,20 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             Assert.IsTrue(passLocation && passTransformation);
         }
 
-        /// <summary>
-        /// Test Method Call To Identifier transformation
-        /// </summary>
-        [Test]
-        public void Proj8ecd05880b478e4ca997a4789b976ef73b070546()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766");
-            bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("8ecd05880b478e4ca997a4789b976ef73b070546", @"..\..\TestProjects\Projects\Portable7\Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", projects);
+        ///// <summary>
+        ///// Test Method Call To Identifier transformation
+        ///// </summary>
+        //[Test]
+        //public void Proj8ecd05880b478e4ca997a4789b976ef73b070546()
+        //{
+        //    List<string> projects = new List<string>();
+        //    projects.Add("Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766");
+        //    bool passLocation = LocationTestProject.LocationTestProject.LocaleTest("8ecd05880b478e4ca997a4789b976ef73b070546", @"..\..\TestProjects\Projects\Portable7\Proj4b402939708adf35a7a5e12ffc99dc14cc1f4766.sln", projects);
 
-            bool passTransformation = CompleteTestBase(@"8ecd05880b478e4ca997a4789b976ef73b070546");
+        //    bool passTransformation = CompleteTestBase(@"8ecd05880b478e4ca997a4789b976ef73b070546");
 
-            Assert.IsTrue(passLocation && passTransformation);
-        }
+        //    Assert.IsTrue(passLocation && passTransformation);
+        //}
 
         [Test]
         public void Proj04d0604()
@@ -993,6 +993,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"NuGet\2_d9f64ea", @"NuGet\nuget7\NuGet.sln", projects);
 
             bool passTransformation = CompleteTestBase(@"NuGet\2_d9f64ea");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
+        public void Proj3_d9f64ea()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("Core");
+            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"NuGet\3_d9f64ea", @"NuGet\nuget7\NuGet.sln", projects);
+
+            bool passTransformation = CompleteTestBase(@"NuGet\3_d9f64ea");
 
             Assert.IsTrue(passLocation && passTransformation);
         }

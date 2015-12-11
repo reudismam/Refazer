@@ -193,7 +193,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         {
             List<string> projects = new List<string>();
             projects.Add("CSharpCodeAnalysis");
-            bool passLocation = LocationTestSolution.LocationTestSolution.LocaleTestSolution(@"Roslyn\3_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", projects);
+            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"Roslyn\3_8c14644", @"Roslyn\roslyn\src\Roslyn.sln", projects);
 
             bool passTransformation = CompleteTestBase(@"Roslyn\3_8c14644");
 

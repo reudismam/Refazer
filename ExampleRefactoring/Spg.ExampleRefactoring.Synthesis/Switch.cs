@@ -5,15 +5,31 @@ using Spg.LocationRefactor.Predicate;
 
 namespace Spg.ExampleRefactoring.Synthesis
 {
+    /// <summary>
+    /// Switch expression
+    /// </summary>
     public class Switch: SynthesizedProgram
     {
-        public List<Tuple<IPredicate, SynthesizedProgram>> Gates;
+        /// <summary>
+        /// Gates
+        /// </summary>
+        public List<Tuple<IPredicate, SynthesizedProgram>> Gates { get; set; }
 
+        /// <summary>
+        /// Switch contructor
+        /// </summary>
+        /// <param name="gates"></param>
         public Switch(List<Tuple<IPredicate, SynthesizedProgram>> gates)
         { 
             this.Gates = gates;
         }
 
+
+        /// <summary>
+        /// Transform string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public override ASTTransformation TransformString(ListNode input)
         {
             foreach (Tuple<IPredicate, SynthesizedProgram> item in Gates)

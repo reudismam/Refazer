@@ -1009,7 +1009,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
-            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, negativesRegions.Count, controller.Locations.Count, selections.Count, tTimeToExtract, tTimeToLocate, controller.Progs.First().ToString());
+            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, Math.Min(2, negativesRegions.Count), controller.Locations.Count, selections.Count, tTimeToExtract, tTimeToLocate, controller.Progs.First().ToString());
             //remove
             List<TRegion> nselections = new List<TRegion>();
             foreach (CodeLocation location in controller.Locations)
@@ -1048,7 +1048,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 int empty;
                 for (int i = 1;; i++)
                 {
-                    if (em.GetValue("A" + i, Category.Formatted).ToString().Equals(""))
+                    if (em.GetValue("A" + i, Category.Formatted).ToString().Equals("") || em.GetValue("A" + i, Category.Formatted).ToString().Equals(commit))
                     {
                         empty = i;
                         break;
