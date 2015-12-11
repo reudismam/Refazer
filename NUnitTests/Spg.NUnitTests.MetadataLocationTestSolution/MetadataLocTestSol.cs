@@ -910,10 +910,13 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             long globalTimeLocationBefore;
             long timeToExtractBefore, timeToExtractAfter, tTimeToExtract;
             long timeToLocateBefore, timeToLocateAfter, tTimeToLocate;
-            bool discountWorkspace = false;
+            WorkspaceManager wmanager = WorkspaceManager.GetInstance();
+            wmanager.GetWorkSpace(expHome + solution);
+
+            //bool discountWorkspace = false;
             while (true)
             {
-                InitControllerInformations(selections, project, expHome + solution); //reinit controller to a new round.
+                InitControllerInformations(metadataLocations, project, expHome + solution); //reinit controller to a new round.
                 controller = EditorController.GetInstance();
 
                 controller.SelectedLocations = metadataLocations;
@@ -921,18 +924,8 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
                 timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.Extract();
-                timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-
-                if (!discountWorkspace)
-                {
-                    WorkspaceManager wmanager = WorkspaceManager.GetInstance();
-                    tTimeToExtract = (timeToExtractAfter - timeToExtractBefore) - wmanager.totalTime;
-                    discountWorkspace = true;
-                }
-                else
-                {
-                    tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);
-                }
+                timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; 
+                tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);
 
                 timeToLocateBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.RetrieveLocations();
@@ -980,8 +973,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                     timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                     controller.Extract(positivesRegions, negativesRegions);
                     timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                    WorkspaceManager wmanager = WorkspaceManager.GetInstance();
-                    tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);// - wmanager.totalTime;
+                    tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);
 
                     timeToLocateBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                     controller.RetrieveLocations();
@@ -990,9 +982,11 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 }
             }
 
-            long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            long totalTime = (millAfer - globalTimeLocationBefore);
-            Log(commit, totalTime, metadataLocations.Count, Math.Min(2, negativesRegions.Count), controller.Locations.Count, selections.Count, tTimeToExtract, tTimeToLocate, controller.Progs.First().ToString());
+            long ttimeLocateLearning = long.Parse(FileUtil.ReadFile("locate_learn.t"));
+
+            long globalTimeLocationAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTime = (globalTimeLocationAfter - globalTimeLocationBefore);
+            Log(commit, totalTime, metadataLocations.Count, Math.Min(2, negativesRegions.Count), controller.Locations.Count, selections.Count, ttimeLocateLearning, tTimeToLocate, controller.Progs.First().ToString());
             //remove
             List<TRegion> nselections = new List<TRegion>();
             foreach (CodeLocation location in controller.Locations)
@@ -1045,9 +1039,13 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         /// <param name="program">Program extracted</param>
         public static void Log(string commit, double time, int exLocations, int negs, int acLocations, int locations, double tToExtract, double tToLocate, string program)
         {
+            string commitFirstLetter = commit.ElementAt(0).ToString();
+            string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+
+            commit = commitFirstLetter + "-" + commitId;
+
             using (ExcelManager em = new ExcelManager())
             {
-
                 em.Open(TestUtil.LOG_PATH);
 
                 int empty;

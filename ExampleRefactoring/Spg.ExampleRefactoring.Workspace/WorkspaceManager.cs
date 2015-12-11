@@ -23,11 +23,14 @@ namespace Spg.ExampleRefactoring.Workspace
         private static WorkspaceManager _instance;
         private readonly Dictionary<string, SemanticModel> _dictionary;
 
+        private readonly Dictionary<string, Compilation> _dictionaryProjects;
+
         private Solution solutionInstance;
 
         private WorkspaceManager()
         {
             _dictionary = new Dictionary<string, SemanticModel>();
+            _dictionaryProjects = new Dictionary<string, Compilation>();
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace Spg.ExampleRefactoring.Workspace
             _instance = null;
         }
 
-        private Solution GetWorkSpace(string solutionPath)
+        public Solution GetWorkSpace(string solutionPath)
         {
             Console.WriteLine("Opening solution: " + solutionPath);
             if (solutionInstance == null)
@@ -237,13 +240,129 @@ namespace Spg.ExampleRefactoring.Workspace
         //    return null;
         //}
 
+        ///// <summary>
+        ///// Get fully qualified name of a node
+        ///// </summary>
+        ///// <param name="solutionPath">Solution path</param>
+        ///// <param name="token">Node to be analyzed</param>
+        ///// <returns>Fully qualified name of the node</returns>
+        //public DynType GetFullyQualifiedName(string solutionPath, List<string> projects, SyntaxNodeOrToken token)
+        //{
+        //    var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
+        //    Solution solution = GetWorkSpace(solutionPath);
+
+        //    SemanticModel smodel = null;
+        //    if (_dictionary.ContainsKey(token.SyntaxTree.FilePath.ToUpperInvariant()))
+        //    {
+        //        smodel = _dictionary[token.SyntaxTree.FilePath.ToUpperInvariant()];
+        //    }
+        //    else
+        //    {
+        //        foreach (ProjectId projectId in solution.ProjectIds)
+        //        {
+        //            Project project = solution.GetProject(projectId);
+        //            Compilation compilation = null;
+
+        //            if(projects.Contains(project.Name))
+
+        //            if (!project.FilePath.ToUpperInvariant().EndsWith(".CSPROJ")) { continue; } // execute only if the project if C#
+
+        //            //try
+        //            //{
+        //            //    if (!_dictionaryProjects.ContainsKey(project.FilePath))
+        //            //    {
+        //            //        compilation = project.GetCompilationAsync().Result;
+        //            //        _dictionaryProjects.Add(project.FilePath, compilation);
+        //            //    }
+        //            //    compilation = _dictionaryProjects[project.FilePath];
+        //            //}
+        //            //catch (Exception e)
+        //            //{
+        //            //    if (!_dictionaryProjects.ContainsKey(project.FilePath))
+        //            //    {
+        //            //        _dictionaryProjects.Add(project.FilePath, null);
+        //            //    }
+        //            //    Console.WriteLine("Could not load project: " + project.Name);
+        //            //    continue;
+        //            //}
+
+        //            //if (compilation == null) continue;
+
+        //            foreach (DocumentId documentId in project.DocumentIds)
+        //            {
+        //                var document = solution.GetDocument(documentId);
+        //                SyntaxTree tree;
+        //                document.TryGetSyntaxTree(out tree);
+        //                if (tree.FilePath.ToUpperInvariant().Equals(token.SyntaxTree.FilePath.ToUpperInvariant()))
+        //                {
+        //                    document.TryGetSyntaxTree(out tree);
+        //                    try {
+        //                        compilation = project.GetCompilationAsync().Result;
+        //                    }catch(Exception e)
+        //                    {
+        //                        Console.WriteLine("Could not load project: " + project.Name);
+        //                        break;
+        //                    }
+        //                    smodel = compilation.GetSemanticModel(tree);
+        //                    if (!_dictionary.ContainsKey((tree.FilePath.ToUpperInvariant()))){
+        //                        _dictionary.Add(tree.FilePath.ToUpperInvariant(), smodel);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    DynType dynType = null;
+        //    if (!token.IsKind(SyntaxKind.IdentifierToken))
+        //    { 
+        //        if (token.IsKind(SyntaxKind.StringLiteralToken))
+        //        {
+        //            dynType = new DynType(token.ToFullString(), DynType.STRING);
+        //        }
+        //        else
+        //        {
+        //            dynType = new DynType(token.ToFullString(), DynType.NUMBER);
+        //        }
+        //        return dynType;
+        //    }
+
+        //    SyntaxNode snode = null;
+        //    if (smodel != null)
+        //    {
+        //        snode = smodel.SyntaxTree.GetRoot().FindNode(token.Parent.Span);
+        //    }
+        //    if (snode != null)
+        //    {
+        //        SymbolInfo symbolInfo = smodel.GetSymbolInfo(snode);
+        //        if (symbolInfo.Symbol != null)
+        //        {
+
+        //            string toDisplayString = symbolInfo.Symbol.ToDisplayString();
+        //            dynType = new DynType(toDisplayString, DynType.FULLNAME);
+        //            dynType.symbol = symbolInfo.Symbol;
+        //            return dynType;
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Symbol was not found for node: " + snode.ToString());
+        //            dynType = new DynType(snode.ToString(), DynType.STRING);
+        //            return dynType;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        dynType = new DynType(token.ToString(), DynType.STRING);
+        //        return dynType;
+        //    }
+        //}
+
         /// <summary>
         /// Get fully qualified name of a node
         /// </summary>
         /// <param name="solutionPath">Solution path</param>
-        /// <param name="node">Node to be analyzed</param>
+        /// <param name="token">Node to be analyzed</param>
         /// <returns>Fully qualified name of the node</returns>
-        public DynType GetFullyQualifiedName(string solutionPath, SyntaxNodeOrToken token)
+        public DynType GetFullyQualifiedName(string solutionPath, List<string> projects, SyntaxNodeOrToken token)
         {
             var referenceDictionary = new Dictionary<string, Dictionary<string, List<TextSpan>>>();
             Solution solution = GetWorkSpace(solutionPath);
@@ -260,28 +379,30 @@ namespace Spg.ExampleRefactoring.Workspace
                     Project project = solution.GetProject(projectId);
                     Compilation compilation = null;
 
-                    if (!project.FilePath.ToUpperInvariant().EndsWith(".CSPROJ")) { continue; } // execute only if the project if C#
+                    if (projects.Contains(project.Name))
 
-                    try
-                    {
-                        compilation = project.GetCompilationAsync().Result;
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Could not load project: " + project.Name);
-                        continue;
-                    }
+                    if (!project.FilePath.ToUpperInvariant().EndsWith(".CSPROJ")) { continue; } // execute only if the project if C#
 
                     foreach (DocumentId documentId in project.DocumentIds)
                     {
                         var document = solution.GetDocument(documentId);
-                        SyntaxTree tree;
-                        document.TryGetSyntaxTree(out tree);
-                        if (tree.FilePath.ToUpperInvariant().Equals(token.SyntaxTree.FilePath.ToUpperInvariant()))
+                        
+                        if (document.FilePath.ToUpperInvariant().Equals(token.SyntaxTree.FilePath.ToUpperInvariant()))
                         {
-                            document.TryGetSyntaxTree(out tree);
+                            SyntaxTree tree; 
+                            try
+                            {
+                                compilation = project.GetCompilationAsync().Result;
+                                document.TryGetSyntaxTree(out tree);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Could not load project: " + project.Name);
+                                break;
+                            }
                             smodel = compilation.GetSemanticModel(tree);
-                            if (!_dictionary.ContainsKey((tree.FilePath.ToUpperInvariant()))){
+                            if (!_dictionary.ContainsKey((tree.FilePath.ToUpperInvariant())))
+                            {
                                 _dictionary.Add(tree.FilePath.ToUpperInvariant(), smodel);
                             }
                         }
@@ -291,7 +412,7 @@ namespace Spg.ExampleRefactoring.Workspace
 
             DynType dynType = null;
             if (!token.IsKind(SyntaxKind.IdentifierToken))
-            { 
+            {
                 if (token.IsKind(SyntaxKind.StringLiteralToken))
                 {
                     dynType = new DynType(token.ToFullString(), DynType.STRING);

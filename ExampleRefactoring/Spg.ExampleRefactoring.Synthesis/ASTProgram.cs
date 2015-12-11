@@ -175,7 +175,7 @@ namespace Spg.ExampleRefactoring.Synthesis
                 SynthesizedProgram valid = CreateSynthesizedProgram(T.Key, T.Value);
 
                 if (Ts.Count == 1) {
-                    Console.WriteLine("Generated program\n" + valid);
+                    //Console.WriteLine("Generated program\n" + valid);
                     return new List<SynthesizedProgram> { valid };
                 }
 
@@ -201,7 +201,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             Switch sSwitch = new Switch(S);
             validated.Add(sSwitch);
-            Console.WriteLine("Generated program\n" + sSwitch);
+            //Console.WriteLine("Generated program\n" + sSwitch);
             return validated;
         }
 

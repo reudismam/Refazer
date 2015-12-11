@@ -218,7 +218,13 @@ namespace Spg.LocationRefactor.Controller
             //remove
             JsonUtil<List<TRegion>>.Write(SelectedLocations, "input_selection.json");
             //remove
+
+            long timeToLearnBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             Progs = extractor.Extract(SelectedLocations);
+            long timeToLearnAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long tTimeToLearn = (timeToLearnAfter - timeToLearnBefore);
+
+            FileUtil.WriteToFile("locate_learn.t", tTimeToLearn + "");
 
             //FileUtil.AppendToFile("Log.lg", Progs.First().ToString());
 
@@ -241,7 +247,14 @@ namespace Spg.LocationRefactor.Controller
         {
             Console.WriteLine("Synthesizing location programs...");
             LocationExtractor extractor = new LocationExtractor();
+
+            long timeToLearnBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             ProgramsWithNegatives = extractor.Extract(positives, negatives);
+            long timeToLearnAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long tTimeToLearn = (timeToLearnAfter - timeToLearnBefore);
+
+            FileUtil.WriteToFile("locate_learn.t", tTimeToLearn + "");
+
             NotifyLocationProgramGeneratedObservers(ProgramsWithNegatives);
             Console.WriteLine("Program synthesis completed.");
         }

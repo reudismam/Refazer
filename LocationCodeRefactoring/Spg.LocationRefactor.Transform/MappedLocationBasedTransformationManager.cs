@@ -31,12 +31,19 @@ namespace Spg.LocationRefactor.Transform
             List<Tuple<ListNode, ListNode>> mappingSelections = rManager.ElementsSelectionBeforeAndAfterEditing(locations);
             List<Tuple<ListNode, ListNode>> examples = EditedSelectionLocations(mappingSelections);
 
+            long timeToLearnBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             SynthesizedProgram validated = LearnSynthesizerProgram(examples); //learn a synthesizer program
+            long timeToLearnAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long tTimeToLearn = (timeToLearnAfter - timeToLearnBefore);
+
+            FileUtil.WriteToFile("edit_learn.t", tTimeToLearn + "");
+
             EditorController.GetInstance().Program = validated;
 
             Dictionary<string, List<CodeLocation>> groupLocation = RegionManager.GetInstance().GroupLocationsBySourceFile(locations); //location for each file
 
             var transformations = new List<Transformation>();
+            long timeToTransformBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             foreach (KeyValuePair<string, List<CodeLocation>> item in groupLocation)
             {
                 string text = Transform(validated, item.Value, compact);
@@ -44,6 +51,9 @@ namespace Spg.LocationRefactor.Transform
                 Transformation transformation = new Transformation(beforeAfter, item.Key);
                 transformations.Add(transformation);
             }
+            long timeToTransformAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long tTimeToTransform = (timeToTransformAfter - timeToTransformBefore);
+            FileUtil.WriteToFile("edit_transform.t", tTimeToTransform + "");
             return transformations;
         }
 

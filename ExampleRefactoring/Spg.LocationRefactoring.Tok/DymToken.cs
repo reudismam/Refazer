@@ -32,7 +32,7 @@ namespace Spg.LocationRefactoring.Tok
             string fullName = null;
             if (_getFullyQualifiedName)
             {
-                dynType = WorkspaceManager.GetInstance().GetFullyQualifiedName(information.SolutionPath, this.token);
+                dynType = WorkspaceManager.GetInstance().GetFullyQualifiedName(information.SolutionPath, information.ProjectPath, this.token);
                 //if (token.IsKind(SyntaxKind.IdentifierToken))
                 //{
                 //    fullName = WorkspaceManager.GetInstance()

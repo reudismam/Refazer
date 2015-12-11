@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Office.Interop.Excel;
 using NUnit.Framework;
 using NUnitTests.Spg.NUnitTests.LocationTestSolution;
 using NUnitTests.Spg.NUnitTests.Util;
@@ -11,6 +10,7 @@ using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
+using System.Linq;
 
 namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 {
@@ -1025,7 +1025,10 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             long totalTime = (millAfer - millBefore);
             List<CodeTransformation> transformationsList = controller.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
 
-            Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count, controller.Program.ToString());
+            long timeToLearnEdit = long.Parse(FileUtil.ReadFile("edit_learn.t"));
+            long timeToTransformEdit = long.Parse(FileUtil.ReadFile("edit_transform.t"));
+
+            Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count, controller.Program.ToString(), timeToLearnEdit, timeToTransformEdit);
     
             FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
 
@@ -1040,13 +1043,13 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             return true;
         }
 
-        private static Workbook mWorkBook;
-        private static Sheets mWorkSheets;
-        private static Worksheet mWSheet1;
-        private static Application oXL;
-
-        public static void Log(string commit, double time, int exTransformations, int acTrasnformation, int documents, string program)
+        public static void Log(string commit, double time, int exTransformations, int acTrasnformation, int documents, string program, double timeToLearnEdit, double timeToTransformEdit)
         {
+            string commitFirstLetter = commit.ElementAt(0).ToString();
+            string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+
+            commit = commitFirstLetter + "-" + commitId;
+
             string path = TestUtil.LOG_PATH;
             using (ExcelManager em = new ExcelManager())
             {
@@ -1066,11 +1069,13 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
                 if (empty != -1)
                 {
-                    em.SetValue("L" + empty, time / 1000);
-                    em.SetValue("M" + empty, exTransformations);
-                    em.SetValue("N" + empty, acTrasnformation);
-                    em.SetValue("O" + empty, documents);
-                    em.SetValue("P" + empty, program);
+                    em.SetValue("K" + empty, time / 1000);
+                    em.SetValue("L" + empty, exTransformations);
+                    em.SetValue("M" + empty, acTrasnformation);
+                    em.SetValue("N" + empty, documents);
+                    em.SetValue("O" + empty, program);
+                    em.SetValue("P" + empty, timeToLearnEdit / 1000);
+                    em.SetValue("Q" + empty, timeToTransformEdit / 1000);
                     em.Save();
                 }
                 else {
