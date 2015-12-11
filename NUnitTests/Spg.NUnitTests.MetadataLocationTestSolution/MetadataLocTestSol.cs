@@ -10,6 +10,7 @@ using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Taramon.Exceller;
 using Spg.ExampleRefactoring.Workspace;
+using NUnitTests.Spg.NUnitTests.Util;
 
 namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 {
@@ -898,34 +899,25 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         /// <param name="project">Project</param>
         /// <returns>True if locale passed</returns>
         public static bool LocaleTestSolution(string commit, string solution, List<string> project)
-        {
-            long millBefore;// = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            long totalTimeToExtract = 0;
-            EditorController.ReInit();
-            EditorController controller = EditorController.GetInstance();
+        {           
+            EditorController controller = null;
 
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-
             List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
-
-            controller.SelectedLocations = selections;
-            controller.CurrentViewCodeBefore = FileUtil.ReadFile(selections.First().Path);
-            string exactPath = Path.GetFullPath(selections.First().Path);
-
-            controller.CurrentViewCodePath = exactPath;
-            controller.SetProject(project);
-            controller.SetSolution(expHome + solution);
-
             List<TRegion> metadataLocations = new List<TRegion>();
             metadataLocations.AddRange(selections.GetRange(0, 2));
 
+            long globalTimeLocationBefore;
             long timeToExtractBefore, timeToExtractAfter, tTimeToExtract;
             long timeToLocateBefore, timeToLocateAfter, tTimeToLocate;
             bool discountWorkspace = false;
             while (true)
             {
+                InitControllerInformations(selections, project, expHome + solution); //reinit controller to a new round.
+                controller = EditorController.GetInstance();
+
                 controller.SelectedLocations = metadataLocations;
-                millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                globalTimeLocationBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
                 timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.Extract();
@@ -945,10 +937,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 timeToLocateBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 controller.RetrieveLocations();
                 timeToLocateAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                tTimeToLocate = (timeToLocateAfter - timeToLocateBefore);
-
-                long millAfterExtract = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                totalTimeToExtract = (millAfterExtract - millBefore);
+                tTimeToLocate = (timeToLocateAfter - timeToLocateBefore);    
 
                 TRegion tregion = MatchesLocationsOnCommit(selections, controller.Locations, metadataLocations);
                 if (tregion == null)
@@ -963,14 +952,12 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 metadataLocations.Add(tregion);
             }
 
+            controller = EditorController.GetInstance();
             List<TRegion> negativesRegions = new List<TRegion>();
             if (File.Exists(expHome + @"commit\" + commit + @"\negatives.json"))
             {
                 List<TRegion> negatives = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\negatives.json");
                 List<TRegion> positivesRegions = new List<TRegion>();
-
-                
-
                     foreach (var item in controller.Locations)
                     {
                         TRegion parent = new TRegion();
@@ -988,17 +975,13 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 
                 if (negativesRegions.Any())
                 {
-                    millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    globalTimeLocationBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
                     timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                     controller.Extract(positivesRegions, negativesRegions);
                     timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                     WorkspaceManager wmanager = WorkspaceManager.GetInstance();
                     tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);// - wmanager.totalTime;
-
-
-                    long millAfterExtract = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                    totalTimeToExtract = (millAfterExtract - millBefore);
 
                     timeToLocateBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                     controller.RetrieveLocations();
@@ -1008,8 +991,8 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             }
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            long totalTime = (millAfer - millBefore);
-            Log(commit, totalTime, totalTimeToExtract, metadataLocations.Count, Math.Min(2, negativesRegions.Count), controller.Locations.Count, selections.Count, tTimeToExtract, tTimeToLocate, controller.Progs.First().ToString());
+            long totalTime = (millAfer - globalTimeLocationBefore);
+            Log(commit, totalTime, metadataLocations.Count, Math.Min(2, negativesRegions.Count), controller.Locations.Count, selections.Count, tTimeToExtract, tTimeToLocate, controller.Progs.First().ToString());
             //remove
             List<TRegion> nselections = new List<TRegion>();
             foreach (CodeLocation location in controller.Locations)
@@ -1034,16 +1017,38 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             return true;
         }
 
-        private static Workbook mWorkBook;
-        private static Sheets mWorkSheets;
-        private static Worksheet mWSheet1;
-        private static Application oXL;
-        public static void Log(string commit, double time, double timeToExtract, int exLocations, int negs, int acLocations, int locations, double tToExtract, double tToLocate, string program)
+        private static void InitControllerInformations(List<TRegion> selections, List<string> project, string solution)
+        {
+            EditorController.ReInit();
+            EditorController controller = EditorController.GetInstance();
+
+            controller.SelectedLocations = selections;
+            controller.CurrentViewCodeBefore = FileUtil.ReadFile(selections.First().Path);
+            string exactPath = Path.GetFullPath(selections.First().Path);
+
+            controller.CurrentViewCodePath = exactPath;
+            controller.SetProject(project);
+            controller.SetSolution(solution);
+        }
+
+        /// <summary>
+        /// Log information
+        /// </summary>
+        /// <param name="commit">Commit</param>
+        /// <param name="time">Global time including all rounds of the test.</param>
+        /// <param name="exLocations">Number of examples gives to locate</param>
+        /// <param name="negs">Number of negative examples given to locate</param>
+        /// <param name="acLocations">Number of locations found by the tool</param>
+        /// <param name="locations">Number of locations present on developer commit.</param>
+        /// <param name="tToExtract">Time to learn a program to locate the instances of the repetitive change.</param>
+        /// <param name="tToLocate">Time to run the program</param>
+        /// <param name="program">Program extracted</param>
+        public static void Log(string commit, double time, int exLocations, int negs, int acLocations, int locations, double tToExtract, double tToLocate, string program)
         {
             using (ExcelManager em = new ExcelManager())
             {
 
-                em.Open(@"C:\Users\SPG-04\Documents\Research\Log2.xlsx");
+                em.Open(TestUtil.LOG_PATH);
 
                 int empty;
                 for (int i = 1;; i++)
@@ -1061,10 +1066,9 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 em.SetValue("E" + empty, exLocations + negs);
                 em.SetValue("F" + empty, acLocations);
                 em.SetValue("G" + empty, locations);
-                em.SetValue("H" + empty, timeToExtract / 1000); //last round execution
-                em.SetValue("I" + empty, tToExtract / 1000); //time to extract on the last round
-                em.SetValue("J" + empty, tToLocate / 1000); //time to locate on the last round.
-                em.SetValue("K" + empty, program);
+                em.SetValue("H" + empty, tToExtract / 1000); //time to extract on the last round
+                em.SetValue("I" + empty, tToLocate / 1000); //time to locate on the last round.
+                em.SetValue("J" + empty, program);
 
                 Console.WriteLine("" + empty);
                 em.Save();

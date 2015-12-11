@@ -21,6 +21,7 @@ using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Microsoft.CodeAnalysis.CSharp;
 using System.IO;
+using Spg.LocationRefactor.Node;
 
 namespace Spg.LocationRefactor.Controller
 {
@@ -181,8 +182,8 @@ namespace Spg.LocationRefactor.Controller
             RegionManager.Init();
             BoundaryManager.Init();
             WorkspaceManager.Init();
-            //Decomposer.Init();
-            //LCAManager.Init();
+            Decomposer.Init();
+            LCAManager.Init();
         }
 
         /// <summary>

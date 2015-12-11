@@ -1047,11 +1047,11 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
         public static void Log(string commit, double time, int exTransformations, int acTrasnformation, int documents, string program)
         {
-            string path = @"C:\Users\SPG-04\Documents\Research\Log2.xlsx";
+            string path = TestUtil.LOG_PATH;
             using (ExcelManager em = new ExcelManager())
             {
 
-                em.Open(@"C:\Users\SPG-04\Documents\Research\Log2.xlsx");
+                em.Open(path);
 
                 int empty = -1;
                 for (int i = 1; i < 1000; i++)
