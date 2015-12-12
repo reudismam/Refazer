@@ -911,13 +911,12 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             long timeToExtractBefore, timeToExtractAfter, tTimeToExtract;
             long timeToLocateBefore, timeToLocateAfter, tTimeToLocate;
             WorkspaceManager wmanager = WorkspaceManager.GetInstance();
-            wmanager.GetWorkSpace(expHome + solution);
-
-            //bool discountWorkspace = false;
+            
             while (true)
             {
                 InitControllerInformations(metadataLocations, project, expHome + solution); //reinit controller to a new round.
                 controller = EditorController.GetInstance();
+                wmanager.GetWorkSpace(expHome + solution);
 
                 controller.SelectedLocations = metadataLocations;
                 globalTimeLocationBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;

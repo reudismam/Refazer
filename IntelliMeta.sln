@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refactor", "Refactor\Refact
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliUndo", "IntelliUndo\IntelliUndo.csproj", "{0850E0F0-9366-4E53-B817-DF0036BB4072}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompileChecker", "CompileChecker\CompileChecker.csproj", "{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,14 +95,6 @@ Global
 		{0850E0F0-9366-4E53-B817-DF0036BB4072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0850E0F0-9366-4E53-B817-DF0036BB4072}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0850E0F0-9366-4E53-B817-DF0036BB4072}.Release|x86.ActiveCfg = Release|Any CPU
-		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Debug|x86.Build.0 = Debug|Any CPU
-		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Release|x86.ActiveCfg = Release|Any CPU
-		{3E8ED8D8-C4DE-459E-86A1-6463E73B922C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
