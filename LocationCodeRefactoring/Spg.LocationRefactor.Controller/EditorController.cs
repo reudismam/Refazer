@@ -441,7 +441,7 @@ namespace Spg.LocationRefactor.Controller
             Prog prog = ProgramsWithNegatives.First();
             Locations = RetrieveLocationsPosNegative(prog);
 
-            //remove
+            ////remove
             List<Selection> selections = new List<Selection>();
             foreach (CodeLocation location in Locations)
             {
