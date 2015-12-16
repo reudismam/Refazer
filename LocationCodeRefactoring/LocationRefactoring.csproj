@@ -137,7 +137,6 @@
     <Compile Include="Spg.LocationRefactor.Controller\EditorController.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\EndPosFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\FilterLearnerBase.cs" />
-    <Compile Include="Spg.LocationRefactor.Learn\Filter\MethodFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Filter\NodeFilterLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Learn\Merge\MergeLearner.cs" />
     <Compile Include="Spg.LocationRefactor.Location\SelectionInfo.cs" />
@@ -170,6 +169,7 @@
     <Compile Include="Spg.LocationRefactor.Operator\Map\NodeMap.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Merge\Merge.cs" />
     <Compile Include="Spg.LocationRefactor.Operator\Pair.cs" />
+    <Compile Include="Spg.LocationRefactor.Operator\PredicateOperator.cs" />
     <Compile Include="Spg.LocationRefactor.Program\Prog.cs" />
     <Compile Include="Spg.LocationRefactor.TextRegion\TRegion.cs" />
     <Compile Include="Spg.LocationRefactor.Observer\HighlightEvent.cs" />

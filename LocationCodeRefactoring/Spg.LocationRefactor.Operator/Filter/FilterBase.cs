@@ -29,7 +29,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         /// Predicate
         /// </summary>
         /// <returns>Predicate</returns>
-        public IPredicate Predicate { get; set; }
+        public List<IPredicate> Predicates { get; set; }
 
         /// <summary>
         /// Least Common ancestor of selected nodes
@@ -48,6 +48,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         protected FilterBase(List<TRegion> list)
         {
             List = list;
+            Predicates = new List<IPredicate>();
         }
 
         /// <summary>
@@ -74,29 +75,55 @@ namespace Spg.LocationRefactor.Operator.Filter
             Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(syntaxNode, syntaxNode);
             ListNode listNode = ASTProgram.Example(tuple).Item1;
 
-            bool indicator = learn.Indicator(Predicate, listNode, Predicate.regex);
+            bool indicator = learn.Indicator(Predicates, listNode);
             if (indicator) return listNode;
 
             return null;
         }
 
-        /// <summary>
-        /// Evalute if node match predicate
-        /// </summary>
-        /// <param name="syntaxNode">Syntax node</param>
-        /// <returns>True, if node match predicate, false otherwise</returns>
-        public bool IsMatch(SyntaxNode syntaxNode)
-        {
-            FilterLearnerBase learn = GetFilterLearner(List);
-            //Pos regex = new TokenSeq(Predicate.Regex());
+        ///// <summary>
+        ///// Evalute if node match predicate
+        ///// </summary>
+        ///// <param name="syntaxNode">Syntax node</param>
+        ///// <returns>True, if node match predicate, false otherwise</returns>
+        //public bool IsMatch(SyntaxNode syntaxNode)
+        //{
+        //    FilterLearnerBase learn = GetFilterLearner(List);
+        //    //Pos regex = new TokenSeq(Predicate.Regex());
 
-            Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(syntaxNode, syntaxNode);
-            ListNode listNode = ASTProgram.Example(tuple).Item1;
+        //    Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(syntaxNode, syntaxNode);
+        //    ListNode listNode = ASTProgram.Example(tuple).Item1;
 
-            bool indicator = learn.Indicator(Predicate, listNode, Predicate.regex);
+        //    bool indicator = learn.Indicator(Predicates, listNode);
 
-            return indicator;
-        }
+        //    return indicator;
+        //}
+
+        ///// <summary>
+        ///// Evalute if node match predicate
+        ///// </summary>
+        ///// <param name="syntaxNode">Syntax node</param>
+        ///// <returns>True, if node match predicate, false otherwise</returns>
+        //public bool IsMatch(SyntaxNode syntaxNode, IPredicate predicate)
+        //{
+        //    FilterLearnerBase learn = GetFilterLearner(List);
+        //    //Pos regex = new TokenSeq(Predicate.Regex());
+
+        //    Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(syntaxNode, syntaxNode);
+        //    ListNode listNode = ASTProgram.Example(tuple).Item1;
+
+        //    var predicates = new List<IPredicate>();
+        //    predicates.Add(predicate);
+        //    bool indicator = learn.Indicator(predicates, listNode);
+
+        //    return indicator;
+        //}
+
+        //public List<TRegion> RetrieveRegion()
+        //{
+        //    List<TRegion> regions = RetrieveRegionFirstRound();
+        //    return regions;
+        //}
 
         /// <summary>
         /// Retrieve regions
@@ -124,6 +151,27 @@ namespace Spg.LocationRefactor.Operator.Filter
             List<TRegion> tregions = RetrieveRegionsBase(nodesForFiltering);
             return tregions;
         }
+
+        //public List<TRegion> RetrieveRegion(SyntaxNode syntaxNode, string sourceCode)
+        //{
+        //    List<TRegion> regions = RetrieveRegionFirstRound(syntaxNode, sourceCode);
+
+        //    for (int i = 1; i < Predicates.Count; i++)
+        //    {
+        //        List<TRegion> newRegions = new List<TRegion>();
+        //        foreach (var tregion in regions)
+        //        {
+        //            IPredicate predicate = Predicates[i];
+        //            bool isTruePositive = IsMatch(tregion.Node, predicate);
+        //            if (isTruePositive)
+        //            {
+        //                newRegions.Add(tregion);
+        //            }
+        //        }
+        //        regions = newRegions;
+        //    }
+        //    return regions;
+        //}
 
         /// <summary>
         /// Retrieve region given a syntax node
@@ -258,11 +306,11 @@ namespace Spg.LocationRefactor.Operator.Filter
 
             List<SyntaxNode> nodes = new List<SyntaxNode>();
 
-            foreach(var item in enumerable)
+            foreach (var item in enumerable)
             {
                 nodes.Add(dicIntersection[item]);
             }
-            
+
             return nodes;
         }
 
@@ -389,7 +437,7 @@ namespace Spg.LocationRefactor.Operator.Filter
                 tokens = ASTManager.EnumerateSyntaxNodesAndTokens(node, tokens);
                 ListNode lNode = new ListNode(tokens);
 
-                if (Predicate.Evaluate(lNode))
+                if (Evaluate(Predicates, lNode))
                 {
                     TRegion parent = new TRegion();
                     parent.Text = node.SyntaxTree.GetText().ToString();
@@ -407,6 +455,22 @@ namespace Spg.LocationRefactor.Operator.Filter
                 }
             }
             return tRegions;
+        }
+
+        /// <summary>
+        /// Evaluate predicates
+        /// </summary>
+        /// <param name="predicates">predicates</param>
+        /// <param name="lNode">Node to be evaluated</param>
+        /// <returns>Evaluate predicates</returns>
+        private bool Evaluate(List<IPredicate> predicates, ListNode lNode)
+        {
+            foreach (var predicate in predicates)
+            {
+                bool b = predicate.Evaluate(lNode);
+                if (!b) { return false; }
+            }
+            return true;
         }
 
         ///// <summary>
@@ -447,10 +511,11 @@ namespace Spg.LocationRefactor.Operator.Filter
         private IEnumerable<DymToken> GetIdentifierNames()
         {
             List<DymToken> nameList = new List<DymToken>();
-            if (!(Predicate is NotContains))
+            IPredicate predicate = Predicates.First();
+            if (!(Predicates.First() is NotContains)) // Only the first element of the conjunction is needed.
             {
-                IEnumerable<DymToken> tokensR1 = LookUpForDymTokens(Predicate.regex.R1);
-                IEnumerable<DymToken> tokensR2 = LookUpForDymTokens(Predicate.regex.R2);
+                IEnumerable<DymToken> tokensR1 = LookUpForDymTokens(predicate.regex.R1);
+                IEnumerable<DymToken> tokensR2 = LookUpForDymTokens(predicate.regex.R2);
 
                 nameList.AddRange(tokensR1);
                 nameList.AddRange(tokensR2);
@@ -493,16 +558,26 @@ namespace Spg.LocationRefactor.Operator.Filter
         public override string ToString()
         {
             return "FilterBool(b, FilterNodeByType(R0, t))"
-            + "\n\t\tb=" + Predicate.ToString()
+            + "\n\t\tb=" + PrintPredicates(Predicates)
             + "\n\t\tt=[" + GetTypes(Names(Lcas)) + "]";
+        }
+
+        private string PrintPredicates(List<IPredicate> predicates)
+        {
+            string s = predicates.First().ToString();
+            for (int i = 1; i < predicates.Count; i++)
+            {
+                s += " and " + predicates[i].ToString();
+            }
+            return s;
         }
 
         private string GetTypes(List<string> lcas)
         {
             string s = "";
             s += lcas.First();
-        
-            for(int index = 1; index < lcas.Count; index++)
+
+            for (int index = 1; index < lcas.Count; index++)
             {
                 s += ", " + lcas[index].ToString();
             }
@@ -514,7 +589,7 @@ namespace Spg.LocationRefactor.Operator.Filter
         {
             List<string> strs = new List<string>();
 
-            foreach(var item in lcas)
+            foreach (var item in lcas)
             {
                 strs.Add(item.Kind().ToString());
             }

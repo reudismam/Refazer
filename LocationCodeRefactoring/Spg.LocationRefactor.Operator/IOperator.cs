@@ -33,8 +33,6 @@ namespace Spg.LocationRefactor.Operator
         /// <param name="sourceCode">Source code in witch the source code was</param>
         /// <returns></returns>
         List<TRegion> RetrieveRegion(SyntaxNode input, string sourceCode);
-
-
     }
 }
 

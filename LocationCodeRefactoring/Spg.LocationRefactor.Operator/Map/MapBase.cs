@@ -16,7 +16,7 @@ namespace Spg.LocationRefactor.Operator.Map
     /// <summary>
     /// Map operator
     /// </summary>
-    public abstract class MapBase: IOperator
+    public abstract class MapBase: IPredicateOperator
     {
         /// <summary>
         /// Scalar operator
@@ -222,6 +222,11 @@ namespace Spg.LocationRefactor.Operator.Map
                 + "\n\tp1 = " + expression.P1
                 + "\n\tp2 = " + expression.P2
                 + "\n\tNSeq=" + SequenceExpression;
+        }
+
+        public void AddPredicate()
+        {
+
         }
     }
 }

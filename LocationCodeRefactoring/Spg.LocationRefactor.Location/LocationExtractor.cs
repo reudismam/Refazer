@@ -96,10 +96,10 @@ namespace Spg.LocationRefactor.Location
                 programs = _learn.LearnSeqRegion(positiveExamples, negativeExamples);
             }
 
-            if (programs.Any())
-            {
-                Console.WriteLine("Top ranked synthesized location program: " + programs.First());
-            }
+            //if (programs.Any())
+            //{
+            //    Console.WriteLine("Top ranked synthesized location program: " + programs.First());
+            //}
 
             return programs;
         }

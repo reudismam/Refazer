@@ -113,11 +113,11 @@ namespace Spg.LocationRefactor.Controller
         /// </summary>
         public Tuple<List<CodeLocation>, List<CodeLocation>> LocationsFoundSoFar;
 
-        /// <summary>
-        /// Program computed for negative filtering
-        /// </summary>
-        /// <returns>Program learned for negative filtering</returns>
-        public List<Prog> ProgramsWithNegatives { get; set; }
+        ///// <summary>
+        ///// Program computed for negative filtering
+        ///// </summary>
+        ///// <returns>Program learned for negative filtering</returns>
+        //public List<Prog> ProgramsWithNegatives { get; set; }
 
         ///// <summary>
         ///// Least Common ancestor of selected nodes
@@ -249,13 +249,15 @@ namespace Spg.LocationRefactor.Controller
             LocationExtractor extractor = new LocationExtractor();
 
             long timeToLearnBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            ProgramsWithNegatives = extractor.Extract(positives, negatives);
+            //ProgramsWithNegatives = extractor.Extract(positives, negatives);
+            Progs = extractor.Extract(positives, negatives);
             long timeToLearnAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long tTimeToLearn = (timeToLearnAfter - timeToLearnBefore);
 
             FileUtil.WriteToFile("locate_learn.t", tTimeToLearn + "");
 
-            NotifyLocationProgramGeneratedObservers(ProgramsWithNegatives);
+            //NotifyLocationProgramGeneratedObservers(ProgramsWithNegatives);
+            NotifyLocationProgramGeneratedObservers(Progs);
             Console.WriteLine("Program synthesis completed.");
         }
 
@@ -311,14 +313,20 @@ namespace Spg.LocationRefactor.Controller
             }
             LocationExtractor extrator = new LocationExtractor();
 
-            var withNegatives = extrator.Extract(SelectedLocations, negativesExamples);
+            //var withNegatives = extrator.Extract(SelectedLocations, negativesExamples);
+            Progs = extrator.Extract(SelectedLocations, negativesExamples);
 
-            if (withNegatives.Any())
-            {
-                Locations = RetrieveLocationsSingleSourceClass(Progs.First());
-                Progs = withNegatives;
-                ProgramsWithNegatives = withNegatives;
-            }
+            //if (withNegatives.Any())
+            //{
+            //    Locations = RetrieveLocationsSingleSourceClass(Progs.First());
+            //    foreach(var prog in Progs)
+            //    {
+
+            //    }
+
+            //Progs = withNegatives;
+            //ProgramsWithNegatives = withNegatives;
+            //}
 
             return Progs;
         }
@@ -394,11 +402,11 @@ namespace Spg.LocationRefactor.Controller
         public void RetrieveLocations()
         {
             Console.WriteLine("Searching for repetitive changes instances");
-            if (ProgramsWithNegatives != null)
-            {
-                RetrieveLocationsPosNegatives();
-                return;
-            }
+            //if (ProgramsWithNegatives != null)
+            //{
+            //    RetrieveLocationsPosNegatives();
+            //    return;
+            //}
 
             Prog prog = Progs.First();
             Dictionary<string, List<TRegion>> list = RegionManager.GetInstance().GroupRegionBySourceFile(SelectedLocations);
@@ -432,31 +440,31 @@ namespace Spg.LocationRefactor.Controller
             Console.WriteLine("Search completed: " + selections.Count + " instances found.");
         }
 
-        /// <summary>
-        /// Retrieve locations after developer indicate negative locations
-        /// </summary>
-        public void RetrieveLocationsPosNegatives()
-        {
-            Console.WriteLine("Searching for repetitive changes instances (negative examples configured.)");
-            Prog prog = ProgramsWithNegatives.First();
-            Locations = RetrieveLocationsPosNegative(prog);
+        ///// <summary>
+        ///// Retrieve locations after developer indicate negative locations
+        ///// </summary>
+        //public void RetrieveLocationsPosNegatives()
+        //{
+        //    Console.WriteLine("Searching for repetitive changes instances (negative examples configured.)");
+        //    Prog prog = ProgramsWithNegatives.First();
+        //    Locations = RetrieveLocationsPosNegative(prog);
 
-            ////remove
-            List<Selection> selections = new List<Selection>();
-            foreach (CodeLocation location in Locations)
-            {
-                Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode, location.Region.Text);
-                selections.Add(selection);
-            }
-            JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
-            //remove
-            Dictionary<string, List<CodeLocation>> codeLocs = RegionManager.GetInstance().GroupLocationsBySourceFile(Locations);
-            Tuple<List<CodeLocation>, List<CodeLocation>> tp = Tuple.Create(Locations, codeLocs[CurrentViewCodePath.ToUpperInvariant()]);
+        //    ////remove
+        //    List<Selection> selections = new List<Selection>();
+        //    foreach (CodeLocation location in Locations)
+        //    {
+        //        Selection selection = new Selection(location.Region.Start, location.Region.Length, location.SourceClass, location.SourceCode, location.Region.Text);
+        //        selections.Add(selection);
+        //    }
+        //    JsonUtil<List<Selection>>.Write(selections, "found_locations.json");
+        //    //remove
+        //    Dictionary<string, List<CodeLocation>> codeLocs = RegionManager.GetInstance().GroupLocationsBySourceFile(Locations);
+        //    Tuple<List<CodeLocation>, List<CodeLocation>> tp = Tuple.Create(Locations, codeLocs[CurrentViewCodePath.ToUpperInvariant()]);
 
-            LocationsFoundSoFar = tp;
-            NotifyLocationsObservers(Locations);
-            Console.WriteLine("Search completed: " + selections.Count + " instances found.");
-        }
+        //    LocationsFoundSoFar = tp;
+        //    NotifyLocationsObservers(Locations);
+        //    Console.WriteLine("Search completed: " + selections.Count + " instances found.");
+        //}
 
         /// <summary>
         /// Indicate that the location process ended
@@ -486,27 +494,27 @@ namespace Spg.LocationRefactor.Controller
             return sourceLocations;
         }
 
-        /// <summary>
-        /// Retrieve location single class after developer inform negative locations
-        /// </summary>
-        /// <param name="prog">Program</param>
-        /// <returns>Locations for single class considering negative posistions</returns>
-        private List<CodeLocation> RetrieveLocationsPosNegative(Prog prog)
-        {
-            List<CodeLocation> locations = new List<CodeLocation>();
-            foreach (CodeLocation location in Locations)
-            {
-                MapBase m = (MapBase)prog.Ioperator;
-                FilterBase filter = (FilterBase)m.SequenceExpression.Ioperator;
-                bool isTruePositive = filter.IsMatch(location.Region.Node);
-                if (isTruePositive)
-                {
-                    locations.Add(location);
-                }
-            }
+        ///// <summary>
+        ///// Retrieve location single class after developer inform negative locations
+        ///// </summary>
+        ///// <param name="prog">Program</param>
+        ///// <returns>Locations for single class considering negative posistions</returns>
+        //private List<CodeLocation> RetrieveLocationsPosNegative(Prog prog)
+        //{
+        //    List<CodeLocation> locations = new List<CodeLocation>();
+        //    foreach (CodeLocation location in Locations)
+        //    {
+        //        MapBase m = (MapBase)prog.Ioperator;
+        //        FilterBase filter = (FilterBase)m.SequenceExpression.Ioperator;
+        //        bool isTruePositive = filter.IsMatch(location.Region.Node);
+        //        if (isTruePositive)
+        //        {
+        //            locations.Add(location);
+        //        }
+        //    }
 
-            return locations;
-        }
+        //    return locations;
+        //}
 
         /// <summary>
         /// Retrieve regions for multiple classes

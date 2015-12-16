@@ -74,7 +74,7 @@ namespace Spg.LocationRefactor.Learn
                     prog = new Prog();
                     FilterBase filter = GetFilter(List);
                     filter.Lcas = Lcas;
-                    filter.Predicate = ipredicate;
+                    filter.Predicates.Add(ipredicate);
                     prog.Ioperator = filter;
                     dic.Add(ipredicate, prog);
                     programs.Add(prog);
@@ -107,30 +107,32 @@ namespace Spg.LocationRefactor.Learn
             List<Tuple<ListNode, ListNode>> S = MapBase.Decompose(positiveExamples);
             List<Tuple<ListNode, ListNode>> SN = MapBase.Decompose(negativeExamples);
 
+            List<Tuple<ListNode, ListNode, bool>> QLinePositives = new List<Tuple<ListNode, ListNode, bool>>();
+            List<Tuple<ListNode, ListNode, bool>> QLineNegatives = new List<Tuple<ListNode, ListNode, bool>>();
             List<Tuple<ListNode, ListNode, bool>> QLine = new List<Tuple<ListNode, ListNode, bool>>();
             foreach (Tuple<ListNode, ListNode> tuple in S)
             {
                 Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple.Item1, tuple.Item2, true);
-                QLine.Add(t);
+                QLinePositives.Add(t);
             }
 
             foreach (Tuple<ListNode, ListNode> tuple in SN)
             {
                 Tuple<ListNode, ListNode, bool> t = Tuple.Create(tuple.Item1, tuple.Item2, false);
-                QLine.Add(t);
+                QLineNegatives.Add(t);
             }
 
             List<Prog> programs = new List<Prog>();
 
             List<SyntaxNode> Lcas = LearnLcas(positiveExamples);
 
-            List<IPredicate> predicates = BooleanLearning(QLine);
-            var items = from pair in predicates
-                        orderby pair.Regex().Count() descending, Order(pair) descending
-                        select pair;
+            List<IPredicate> positivePredicates = BooleanLearning(QLinePositives);
+            var itemsPositives = from pair in positivePredicates
+                                 orderby pair.Regex().Count() descending, Order(pair) descending
+                                 select pair;
 
             Dictionary<IPredicate, Prog> dic = new Dictionary<IPredicate, Prog>();
-            foreach (IPredicate ipredicate in items)
+            foreach (IPredicate ipredicate in itemsPositives)
             {
                 Prog prog;
                 if (!dic.TryGetValue(ipredicate, out prog))
@@ -138,13 +140,43 @@ namespace Spg.LocationRefactor.Learn
                     prog = new Prog();
                     FilterBase filter = GetFilter(List);
                     filter.Lcas = Lcas;
-                    filter.Predicate = ipredicate;
+                    filter.Predicates.Add(ipredicate);
                     prog.Ioperator = filter;
                     dic.Add(ipredicate, prog);
                     programs.Add(prog);
                 }
             }
-            return programs;
+
+            QLine.AddRange(QLinePositives);
+            QLine.AddRange(QLineNegatives);
+            List<IPredicate> negativePredicates = BooleanLearning(QLine);
+
+            if (!negativePredicates.Any()) { return programs; }
+
+            var itemsNegatives = from pair in negativePredicates
+                                 orderby pair.Regex().Count() descending, Order(pair) descending
+                                 select pair;
+
+
+            List<Prog> finalProgs = new List<Prog>();
+            foreach (IPredicate ipredicate in itemsNegatives)
+            {
+                Prog prog;
+
+                foreach (var program in programs)
+                {
+                    prog = new Prog();
+                    FilterBase filter = GetFilter(List);
+                    filter.Lcas = (program.Ioperator as FilterBase).Lcas;
+                    filter.Predicates = new List<IPredicate>((program.Ioperator as FilterBase).Predicates);
+                    filter.Predicates.Add(ipredicate);
+                    prog.Ioperator = filter;
+                    finalProgs.Add(prog);
+                }
+
+            }
+
+            return finalProgs;
         }
 
         private object Order(IPredicate pair)
@@ -209,10 +241,14 @@ namespace Spg.LocationRefactor.Learn
         /// <param name="input">Input</param>
         /// <param name="regex">Regular expression</param>
         /// <returns>True if the regex match the input</returns>
-        public bool Indicator(IPredicate predicate, ListNode input, Pos regex)
+        public bool Indicator(List<IPredicate> predicates, ListNode input)
         {
-            bool b = predicate.Evaluate(input, regex);
-            return b;
+            foreach (var predicate in predicates)
+            {
+                bool b = predicate.Evaluate(input, predicate.regex);
+                if (!b) { return false; }
+            }
+            return true;
         }
 
         /// <summary>

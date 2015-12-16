@@ -18,7 +18,7 @@ namespace Spg.LocationRefactor.Operator
         /// <param name="list">Region list</param>
         public FilterBool(List<TRegion> list): base(list)
         {
-            if (list == null)throw new ArgumentNullException("list");
+            if (list == null) throw new ArgumentNullException("list");
         }
 
         /// <summary>
