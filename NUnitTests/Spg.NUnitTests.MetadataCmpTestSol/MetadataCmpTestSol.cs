@@ -15,6 +15,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Node;
+using System.Text.RegularExpressions;
 
 namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 {
@@ -1208,7 +1209,7 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             List<TRegion> codeTransformationsRegions = codeTransformations.Select(o => o. Trans).ToList();
             List<TRegion> transformationsRegions = transformations.Select(o => o.Trans).ToList();
 
-            var x = RegionManager.GetInstance().ElementsSelectionBeforeAndAfterEditing(controler.Locations);
+            //var x = RegionManager.GetInstance().ElementsSelectionBeforeAndAfterEditing(controler.Locations);
 
             foreach (CodeTransformation metadata in codeTransformations)
             {
@@ -1225,11 +1226,21 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 
                     //Tuple<ListNode, ListNode> lte = ASTProgram.Example(te);
                     //Tuple<ListNode, ListNode> ltme = ASTProgram.Example(tme); 
-                    
-                    int index = GetIndexLocation(controler.Locations, transformation.Location);
-                    Tuple<ListNode, ListNode> t = x[index];
 
-                    bool isEqual = t.Item2.OriginalText.Equals(metadata.Trans.Text);
+                    //int index = GetIndexLocation(controler.Locations, transformation.Location);
+                    //Tuple<ListNode, ListNode> t = x[index];
+                    List<TRegion> metadataRegion = new List<TRegion> { metadata.Trans };
+                    List<TRegion> transformationRegion = new List<TRegion> { transformation.Trans };
+
+                    //var x = Decomposer.GetInstance().DecomposeToOutput(metadataRegion);
+                    //var y = Decomposer.GetInstance().DecomposeToOutput(transformationRegion);
+
+                    string a = metadata.Trans.Text.Replace("\r\n", "").Trim();
+                    a = Regex.Replace(a, @"\s+", "");
+                    string b = transformation.Trans.Text.Replace("\r\n", "").Trim();
+                    b = Regex.Replace(b, @"\s+", "");
+
+                    bool isEqual = a.Equals(b);
 
                     if (metadata.Location.Region.Equals(transformation.Location.Region) && isEqual)
                     {                      

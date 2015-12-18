@@ -17,6 +17,8 @@ namespace Spg.ExampleRefactoring.Partition
 {
     internal class PartitionManager
     {
+
+        private Dictionary<Tuple<Dag, Dag>, Dag> computedIntersection = new Dictionary<Tuple<Dag, Dag>, Dag>();
         /// <summary>
         /// Generate partitions
         /// </summary>
@@ -43,7 +45,7 @@ namespace Spg.ExampleRefactoring.Partition
             return rt;
         }
 
-        private static bool ExistComp(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
+        private bool ExistComp(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
         {
             if (T.Count == 1) return false;
 
@@ -55,10 +57,17 @@ namespace Spg.ExampleRefactoring.Partition
                     List<Tuple<ListNode, ListNode>> examples =  new List<Tuple<ListNode, ListNode>>();
                     examples.AddRange(dags[T[i]]);
                     examples.AddRange(dags[T[j]]);
-                    List<Dag> comp = new List<Dag>();
-                    comp.Add(T[i]);
-                    comp.Add(T[j]);
-                    Dag inter = intersectManager.Intersect(comp);
+                    List<Dag> comp = new List<Dag> { T[i], T[j] };
+                    Dag inter = null;
+                    Tuple<Dag, Dag> t = Tuple.Create(T[i], T[j]);
+                    if (!computedIntersection.ContainsKey(t))
+                    {
+                        inter = intersectManager.Intersect(comp);
+                        computedIntersection.Add(t, inter);
+                    }
+
+                    inter = computedIntersection[t];
+
                     if (inter != null)
                     {
                         ExpressionManager expmanager = new ExpressionManager();
@@ -91,7 +100,16 @@ namespace Spg.ExampleRefactoring.Partition
                 for (int j = i + 1; j < T.Count; j++)
                 {
                     List<Dag> comp = new List<Dag> { T[i], T[j] };
-                    Dag inter = intersectManager.Intersect(comp);
+                    Dag inter = null;
+
+                    Tuple<Dag, Dag> t = Tuple.Create(T[i], T[j]);
+                    if (!computedIntersection.ContainsKey(t))
+                    {
+                        inter = intersectManager.Intersect(comp);
+                        computedIntersection.Add(t, inter);
+                    }
+
+                    inter = computedIntersection[t];
 
                     if (inter != null)
                     {
