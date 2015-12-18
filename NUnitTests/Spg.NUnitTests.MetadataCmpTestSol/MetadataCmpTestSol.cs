@@ -11,6 +11,10 @@ using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Node;
 
 namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
 {
@@ -1171,20 +1175,67 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             return false;
         }
 
+        //private static CodeTransformation MatchesLocationsOnCommit(List<CodeTransformation> codeTransformations)
+        //{
+        //    EditorController controler = EditorController.GetInstance();
+        //    List<CodeTransformation> transformations = controler.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
+
+        //    foreach (CodeTransformation metadata in codeTransformations)
+        //    {
+        //        bool isFound = false;
+        //        foreach (CodeTransformation transformation in transformations)
+        //        {
+        //            if (metadata.Location.Region.Equals(transformation.Location.Region))
+        //            {
+        //                isFound = true;
+        //                break;
+        //            }
+        //        }
+
+        //        if (!isFound)
+        //        {
+        //            return metadata;
+        //        }
+        //    }
+        //    return null;
+        //}
+
         private static CodeTransformation MatchesLocationsOnCommit(List<CodeTransformation> codeTransformations)
         {
             EditorController controler = EditorController.GetInstance();
             List<CodeTransformation> transformations = controler.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
 
+            List<TRegion> codeTransformationsRegions = codeTransformations.Select(o => o. Trans).ToList();
+            List<TRegion> transformationsRegions = transformations.Select(o => o.Trans).ToList();
+
+            var x = RegionManager.GetInstance().ElementsSelectionBeforeAndAfterEditing(controler.Locations);
+
             foreach (CodeTransformation metadata in codeTransformations)
             {
                 bool isFound = false;
+                CodeTransformation found = null;
                 foreach (CodeTransformation transformation in transformations)
                 {
-                    if (metadata.Location.Region.Equals(transformation.Location.Region))
-                    {
-                        isFound = true;
-                        break;
+                    //var expression = SyntaxFactory.ParseExpression(transformation.Trans.Text);
+                    //var metadataExpresssion = SyntaxFactory.ParseExpression(metadata.Trans.Text);
+                    //Tuple<SyntaxNode, SyntaxNode> te = Tuple.Create(expression.Parent, expression.Parent);
+                    //Tuple<SyntaxNode, SyntaxNode> tme = Tuple.Create(metadataExpresssion.Parent, metadataExpresssion.Parent);
+                    //Tuple<string, string> te = Tuple.Create(transformation.Trans.Text, transformation.Trans.Text);
+                    //Tuple<string, string> tme = Tuple.Create(metadata.Trans.Text, metadata.Trans.Text);
+
+                    //Tuple<ListNode, ListNode> lte = ASTProgram.Example(te);
+                    //Tuple<ListNode, ListNode> ltme = ASTProgram.Example(tme); 
+                    
+                    int index = GetIndexLocation(controler.Locations, transformation.Location);
+                    Tuple<ListNode, ListNode> t = x[index];
+
+                    bool isEqual = t.Item2.OriginalText.Equals(metadata.Trans.Text);
+
+                    if (metadata.Location.Region.Equals(transformation.Location.Region) && isEqual)
+                    {                      
+                            isFound = true;
+                            found = transformation;
+                            break;
                     }
                 }
 
@@ -1194,6 +1245,17 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
                 }
             }
             return null;
+        }
+
+        private static int GetIndexLocation(List<CodeLocation> locations, CodeLocation location)
+        {
+            for(int i = 0; i < locations.Count; i++)
+            {
+                CodeLocation current = locations[i];
+                if (current.Region.Equals(location.Region)) return i;
+            }
+
+            return -1;
         }
     }
 }
