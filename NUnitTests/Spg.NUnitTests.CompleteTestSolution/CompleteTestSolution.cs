@@ -1227,29 +1227,29 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
             return true;
         }
 
-        private static List<CodeTransformation> TransformationsSave(List<CodeTransformation> CodeTransformations)
-        {
+        //private static List<CodeTransformation> TransformationsSave(List<CodeTransformation> CodeTransformations)
+        //{
 
-            List<CodeTransformation> transformations = new List<CodeTransformation>();
-            foreach (CodeTransformation codeTransformation in CodeTransformations)
-            {
-                CodeLocation location = new CodeLocation();
-                location.SourceClass = codeTransformation.Location.SourceClass;
-                location.SourceCode = codeTransformation.Location.SourceCode;
-                TRegion region = new TRegion();
-                region.Start = codeTransformation.Location.Region.Start;
-                region.Length = codeTransformation.Location.Region.Length;
-                region.Path = codeTransformation.Location.Region.Path;
-                region.Parent = codeTransformation.Location.Region.Parent;
-                region.Text = codeTransformation.Location.Region.Text;
-                location.Region = region;
+        //    List<CodeTransformation> transformations = new List<CodeTransformation>();
+        //    foreach (CodeTransformation codeTransformation in CodeTransformations)
+        //    {
+        //        CodeLocation location = new CodeLocation();
+        //        location.SourceClass = codeTransformation.Location.SourceClass;
+        //        location.SourceCode = codeTransformation.Location.SourceCode;
+        //        TRegion region = new TRegion();
+        //        region.Start = codeTransformation.Location.Region.Start;
+        //        region.Length = codeTransformation.Location.Region.Length;
+        //        region.Path = codeTransformation.Location.Region.Path;
+        //        region.Parent = codeTransformation.Location.Region.Parent;
+        //        region.Text = codeTransformation.Location.Region.Text;
+        //        location.Region = region;
 
-                CodeTransformation transformation = new CodeTransformation(location, codeTransformation.Trans, codeTransformation.Transformation);
-                transformations.Add(transformation);
-            }
+        //        CodeTransformation transformation = new CodeTransformation(location, codeTransformation.Trans, codeTransformation.Transformation);
+        //        transformations.Add(transformation);
+        //    }
 
-            return transformations;
-        }
+        //    return transformations;
+        //}
     }
 }
 
