@@ -163,11 +163,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             PartitionManager pManager = new PartitionManager();
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts = pManager.GeneratePartition(dags);
 
-            if (Ts.Count == examples.Count && boundary)
-            {
-                //Setting.Deviation = 1;
-                return GenerateStringProgram(examples, false);
-            }
+            //if (Ts.Count == examples.Count && boundary)
+            //{
+            //    //Setting.Deviation = 1;
+            //    return GenerateStringProgram(examples, false);
+            //}
 
             List<Tuple<IPredicate, SynthesizedProgram>> S = new List<Tuple<IPredicate, SynthesizedProgram>>();
             foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T in Ts)
@@ -182,11 +182,11 @@ namespace Spg.ExampleRefactoring.Synthesis
                 List<Tuple<ListNode, ListNode, bool>> ln = CreateConditionalExamples(T.Key, T.Value, Ts, pManager);
                 List<IPredicate> predicates = pManager.LearnPredicates(ln);
 
-                if (!predicates.Any())
-                {
-                    //Setting.Deviation = 1;
-                    return GenerateStringProgram(examples);
-                }
+                //if (!predicates.Any())
+                //{
+                //    //Setting.Deviation = 1;
+                //    return GenerateStringProgram(examples);
+                //}
 
 
                 Tuple<IPredicate, SynthesizedProgram> tSol = Tuple.Create(predicates.First(), valid);

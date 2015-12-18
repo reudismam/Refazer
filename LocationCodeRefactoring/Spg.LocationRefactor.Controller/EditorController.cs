@@ -313,23 +313,62 @@ namespace Spg.LocationRefactor.Controller
             }
             LocationExtractor extrator = new LocationExtractor();
 
-            //var withNegatives = extrator.Extract(SelectedLocations, negativesExamples);
             Progs = extrator.Extract(SelectedLocations, negativesExamples);
-
-            //if (withNegatives.Any())
-            //{
-            //    Locations = RetrieveLocationsSingleSourceClass(Progs.First());
-            //    foreach(var prog in Progs)
-            //    {
-
-            //    }
-
-            //Progs = withNegatives;
-            //ProgramsWithNegatives = withNegatives;
-            //}
 
             return Progs;
         }
+
+        /// <summary>
+        /// Analize locations
+        /// </summary>
+        /// <returns>Location programs</returns>
+        //private List<Prog> RecomputeWithNegativeLocations()
+        //{
+        //    if (SelectedLocations == null || !SelectedLocations.Any()) { throw new Exception("Selected regions cannot be null or empty."); }
+
+        //    SyntaxNode lca = RegionManager.LeastCommonAncestor(CurrentViewCodeBefore, SelectedLocations);
+        //    List<TRegion> regions = RetrieveLocations(lca, CurrentViewCodeBefore, Progs.First());
+        //    regions = NonDuplicateLocations(regions);
+
+        //    var list = SelectedLocations.OrderBy(o => o.Start).ThenBy(o => o.Length);
+
+        //    TRegion deepestRegion = list.First();
+
+        //    List<TRegion> negativesExamples = new List<TRegion>();
+        //    foreach (TRegion region in regions)
+        //    {
+        //        if (region.Start > deepestRegion.Start) { break; } //after deepest region does not work as negative example.
+        //        bool negative = true;
+        //        foreach (TRegion selectedRegion in SelectedLocations)
+        //        {
+        //            if (selectedRegion.Start <= region.Start && region.Start <= selectedRegion.Start + selectedRegion.Length)
+        //            {
+        //                negative = false; break;
+        //            }
+
+        //            if (region.Start <= selectedRegion.Start && selectedRegion.Start <= region.Start + region.Length)
+        //            {
+        //                negative = false; break;
+        //            }
+        //        }
+
+        //        if (negative)
+        //        {
+        //            region.Parent = deepestRegion.Parent;
+        //            negativesExamples.Add(region);
+        //        }
+        //    }
+
+        //    if (!negativesExamples.Any())
+        //    {
+        //        return Progs;
+        //    }
+        //    LocationExtractor extrator = new LocationExtractor();
+
+        //    Progs = extrator.Extract(SelectedLocations, negativesExamples);
+
+        //    return Progs;
+        //}
 
         /// <summary>
         /// Undo systematic editing

@@ -414,6 +414,67 @@ namespace Spg.ExampleRefactoring.Synthesis
             return points;
         }
 
+        ///// <summary>
+        ///// Calculate the difference point between input and output
+        ///// </summary>
+        ///// <param name="input">Input</param>
+        ///// <param name="output">Output</param>
+        ///// <returns>Index of the difference</returns>
+        //public static List<int> Differ(ListNode input, ListNode output)
+        //{
+        //    List<int> indexes = new List<int>();
+        //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
+        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
+
+        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
+        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
+        //    List<ComparisonResult<ComparisonObject>> result2 = differ.FindDifference(touput, tinput);
+        //    List<ComparisonResult<ComparisonObject>> selecteds = new List<ComparisonResult<ComparisonObject>>();
+        //    for (int i = 0; i < result.Count; i++)
+        //    {
+        //        ComparisonResult<ComparisonObject> r = result[i];
+        //        if (!r.ModificationType.Equals(ModificationType.None))
+        //        {
+
+        //            //if (r.DataCompared.Index < output.Length())
+        //            //{
+        //                selecteds.Add(r);
+        //            //}
+        //        }
+        //    }
+
+        //    //List<ComparisonResult<ComparisonObject>> selecteds2 = new List<ComparisonResult<ComparisonObject>>();
+        //    //for (int i = 0; i < result2.Count; i++)
+        //    //{
+        //    //    ComparisonResult<ComparisonObject> r = result2[i];
+        //    //    if (r.ModificationType.Equals(ModificationType.None))
+        //    //    {
+
+        //    //        //if (r.DataCompared.Index < output.Length())
+        //    //        //{
+        //    //            selecteds2.Add(r);
+        //    //        //}
+        //    //    }
+        //    //}
+
+        //    indexes = FilterIndexes(selecteds, output);
+        //    indexes.AddRange(FilterIndexes(result2, output));
+
+        //    if (!indexes.Contains(0)) //insert first index if it was not found.
+        //    {
+        //        indexes.Insert(0, 0);
+        //    }
+
+        //    if (!indexes.Contains(output.Length())) //insert last index if it is not found.
+        //    {
+        //        indexes.Add(output.Length());
+        //    }
+
+        //    HashSet<int> nonDup = new HashSet<int>(indexes);
+
+        //    return nonDup.ToList();
+        //}
+
         /// <summary>
         /// Calculate the difference point between input and output
         /// </summary>
@@ -435,30 +496,12 @@ namespace Spg.ExampleRefactoring.Synthesis
                 ComparisonResult<ComparisonObject> r = result[i];
                 if (!r.ModificationType.Equals(ModificationType.None))
                 {
-                    
-                    //if (r.DataCompared.Index < output.Length())
-                    //{
-                        selecteds.Add(r);
-                    //}
+                    selecteds.Add(r);
                 }
             }
 
-            //List<ComparisonResult<ComparisonObject>> selecteds2 = new List<ComparisonResult<ComparisonObject>>();
-            //for (int i = 0; i < result2.Count; i++)
-            //{
-            //    ComparisonResult<ComparisonObject> r = result2[i];
-            //    if (r.ModificationType.Equals(ModificationType.None))
-            //    {
-
-            //        //if (r.DataCompared.Index < output.Length())
-            //        //{
-            //            selecteds2.Add(r);
-            //        //}
-            //    }
-            //}
-
             indexes = FilterIndexes(selecteds, output);
-            indexes.AddRange(FilterIndexes(result2, input));
+            indexes.AddRange(FilterIndexes(result2, output));
 
             if (!indexes.Contains(0)) //insert first index if it was not found.
             {
@@ -592,7 +635,6 @@ namespace Spg.ExampleRefactoring.Synthesis
 
         private static List<int> FilterIndexes(List<ComparisonResult<ComparisonObject>> selecteds, ListNode output)
         {
-
             List<List<ComparisonResult<ComparisonObject>>> sequences = GetSubSequences(selecteds);
 
             List<int> indexes = new List<int>();
@@ -613,7 +655,74 @@ namespace Spg.ExampleRefactoring.Synthesis
             return indexes;
         }
 
+        //private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequences(List<ComparisonResult<ComparisonObject>> selecteds)
+        //{
+        //    List<List<ComparisonResult<ComparisonObject>>> sequences = new List<List<ComparisonResult<ComparisonObject>>>();
+
+        //    if (!selecteds.Any()) return sequences;
+
+        //    List<ComparisonResult<ComparisonObject>> subSequence = new List<ComparisonResult<ComparisonObject>>();
+        //    subSequence.Add(selecteds.First());
+        //    for(int i = 1; i < selecteds.Count; i++)
+        //    {
+        //        var result = selecteds[i];
+        //        //if (result.DataCompared.Indicator.Equals(ComparisonObject.OUTPUT))
+        //        //{
+        //            if (result.ModificationType.Equals(subSequence.Last().ModificationType) /*&& result.DataCompared.Indicator.Equals(subSequence.Last().DataCompared.Indicator)*/)
+        //            {
+        //                if (subSequence.Last().DataCompared.Index == result.DataCompared.Index - 1)
+        //                {
+        //                    subSequence.Add(result);
+        //                }
+        //                else
+        //                {
+        //                    List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+        //                    sequences.Add(newList);
+        //                    subSequence = new List<ComparisonResult<ComparisonObject>>();
+        //                    subSequence.Add(result);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+        //                sequences.Add(newList);
+        //                subSequence = new List<ComparisonResult<ComparisonObject>>();
+        //                subSequence.Add(result);
+        //            }
+        //        }
+        //    //}
+
+        //    sequences.Add(subSequence);
+        //    return sequences;
+        //}
+
         private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequences(List<ComparisonResult<ComparisonObject>> selecteds)
+        {
+            List<ComparisonResult<ComparisonObject>> inserted = new List<ComparisonResult<ComparisonObject>>();
+            List<ComparisonResult<ComparisonObject>> removed = new List<ComparisonResult<ComparisonObject>>();
+
+            foreach(var item in selecteds)
+            {
+                if (item.ModificationType.Equals(ModificationType.Inserted))
+                {
+                    inserted.Add(item);
+                }
+
+                if (item.ModificationType.Equals(ModificationType.Deleted))
+                {
+                    removed.Add(item);
+                }
+            }
+
+            var subInserted = GetSubSequencesDataCompared(inserted);
+            var subRemoved = GetSubSequencesDataCompared(removed);
+            var result = new List<List<ComparisonResult<ComparisonObject>>>(subInserted);
+            result.AddRange(subRemoved);
+
+            return result;
+        }
+
+        private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequencesDataCompared(List<ComparisonResult<ComparisonObject>> selecteds)
         {
             List<List<ComparisonResult<ComparisonObject>>> sequences = new List<List<ComparisonResult<ComparisonObject>>>();
 
@@ -621,24 +730,15 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             List<ComparisonResult<ComparisonObject>> subSequence = new List<ComparisonResult<ComparisonObject>>();
             subSequence.Add(selecteds.First());
-            for(int i = 1; i < selecteds.Count; i++)
+            for (int i = 1; i < selecteds.Count; i++)
             {
                 var result = selecteds[i];
-                //if (result.DataCompared.Indicator.Equals(ComparisonObject.OUTPUT))
-                //{
-                    if (result.ModificationType.Equals(subSequence.Last().ModificationType) /*&& result.DataCompared.Indicator.Equals(subSequence.Last().DataCompared.Indicator)*/)
+
+                if (result.ModificationType.Equals(subSequence.Last().ModificationType))
+                {
+                    if (subSequence.Last().DataCompared.Index == result.DataCompared.Index - 1)
                     {
-                        if (subSequence.Last().DataCompared.Index == result.DataCompared.Index - 1)
-                        {
-                            subSequence.Add(result);
-                        }
-                        else
-                        {
-                            List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
-                            sequences.Add(newList);
-                            subSequence = new List<ComparisonResult<ComparisonObject>>();
-                            subSequence.Add(result);
-                        }
+                        subSequence.Add(result);
                     }
                     else
                     {
@@ -648,6 +748,14 @@ namespace Spg.ExampleRefactoring.Synthesis
                         subSequence.Add(result);
                     }
                 }
+                else
+                {
+                    List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+                    sequences.Add(newList);
+                    subSequence = new List<ComparisonResult<ComparisonObject>>();
+                    subSequence.Add(result);
+                }
+            }
             //}
 
             sequences.Add(subSequence);

@@ -92,7 +92,7 @@ namespace Spg.ExampleRefactoring.Partition
                 {
                     List<Dag> comp = new List<Dag> { T[i], T[j] };
                     Dag inter = intersectManager.Intersect(comp);
-                    
+
                     if (inter != null)
                     {
                         ASTProgram.Clear(inter);
@@ -170,7 +170,52 @@ namespace Spg.ExampleRefactoring.Partition
             }
 
             return max;
-        } 
+        }
+
+        ///// <summary>
+        ///// Computed score
+        ///// </summary>
+        ///// <param name="T">Partitions found so far</param>
+        ///// <param name="dictionary">Mapping of each partition to its examples</param>
+        ///// <returns></returns>
+        //private Tuple<Dag, Dag, Dag> CS(List<Dag> T, Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dictionary)
+        //{
+        //    IntersectManager intersectManager = new IntersectManager();
+        //    //first dag, second dag, intersection
+        //    List<Tuple<Dag, Dag, Dag>> dags = new List<Tuple<Dag, Dag, Dag>>();
+        //    for (int i = 0; i < T.Count; i++)
+        //    {
+        //        for (int j = i + 1; j < T.Count; j++)
+        //        {
+        //            List<Dag> comp = new List<Dag> { T[i], T[j] };
+        //            Dag inter = intersectManager.Intersect(comp);
+
+        //            if (inter != null)
+        //            {
+        //                ASTProgram.Clear(inter);
+        //                BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(inter.dag, inter.Init.Id);
+        //                if (bfs.HasPathTo(inter.End.Id))
+        //                {
+        //                    Tuple<Dag, Dag, Dag> tuple = Tuple.Create(T[i], T[j], inter);
+
+        //                    List<Tuple<ListNode, ListNode>> examples = new List<Tuple<ListNode, ListNode>>();
+        //                    examples.AddRange(dictionary[T[i]]);
+        //                    examples.AddRange(dictionary[T[j]]);
+
+        //                    if (!dictionary.ContainsKey(inter))
+        //                    {
+        //                        dictionary.Add(inter, new List<Tuple<ListNode, ListNode>>());
+        //                    }
+
+        //                    dictionary[inter] = examples;
+
+        //                    return tuple;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return null;
+        //}
 
         /// <summary>
         /// Learn boolean operators

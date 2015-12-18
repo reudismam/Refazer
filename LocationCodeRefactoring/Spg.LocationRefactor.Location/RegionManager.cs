@@ -417,7 +417,7 @@ namespace Spg.LocationRefactor.Location
         /// </summary>
         /// <param name="locations">Selected locations</param>
         /// <returns>Pair of syntax node before and after transformation</returns>
-        internal List<Tuple<ListNode, ListNode>> ElementsSelectionBeforeAndAfterEditing(List<CodeLocation> locations)
+        public List<Tuple<ListNode, ListNode>> ElementsSelectionBeforeAndAfterEditing(List<CodeLocation> locations)
         {
             if (locations == null) throw new ArgumentNullException("locations");
             if (!locations.Any()) throw new Exception("Locations cannot be empty.");
