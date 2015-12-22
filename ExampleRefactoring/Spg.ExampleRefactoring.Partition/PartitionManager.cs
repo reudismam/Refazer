@@ -26,6 +26,11 @@ namespace Spg.ExampleRefactoring.Partition
         /// <returns>Partitions</returns>
         public Dictionary<Dag, List<Tuple<ListNode, ListNode>>> GeneratePartition(Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags)
         {
+            if(dags.Count == 1)
+            {
+                return dags;
+            }
+
             List<Dag> T = new List<Dag>(dags.Keys);
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dictionary = new Dictionary<Dag, List<Tuple<ListNode, ListNode>>>(dags);
             while (ExistComp(T, dictionary))
