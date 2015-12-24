@@ -24,7 +24,7 @@ namespace Spg.LocationRefactor.Learn
         /// <summary>
         /// Store the filters calculated
         /// </summary>
-        private readonly Dictionary<Pos, bool> _calculated;
+        private Dictionary<Pos, bool> _calculated;
 
         /// <summary>
         /// Predicate of the filter
@@ -147,6 +147,7 @@ namespace Spg.LocationRefactor.Learn
                 }
             }
 
+            _calculated = new Dictionary<Pos, bool>();
             QLine.AddRange(QLinePositives);
             QLine.AddRange(QLineNegatives);
             List<IPredicate> negativePredicates = BooleanLearning(QLine);

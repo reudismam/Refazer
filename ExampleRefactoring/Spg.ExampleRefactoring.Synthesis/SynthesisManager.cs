@@ -696,33 +696,33 @@ namespace Spg.ExampleRefactoring.Synthesis
         //    return sequences;
         //}
 
+        //private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequences(List<ComparisonResult<ComparisonObject>> selecteds)
+        //{
+        //    List<ComparisonResult<ComparisonObject>> inserted = new List<ComparisonResult<ComparisonObject>>();
+        //    List<ComparisonResult<ComparisonObject>> removed = new List<ComparisonResult<ComparisonObject>>();
+
+        //    foreach(var item in selecteds)
+        //    {
+        //        if (item.ModificationType.Equals(ModificationType.Inserted))
+        //        {
+        //            inserted.Add(item);
+        //        }
+
+        //        if (item.ModificationType.Equals(ModificationType.Deleted))
+        //        {
+        //            removed.Add(item);
+        //        }
+        //    }
+
+        //    var subInserted = GetSubSequencesDataCompared(inserted);
+        //    var subRemoved = GetSubSequencesDataCompared(removed);
+        //    var result = new List<List<ComparisonResult<ComparisonObject>>>(subInserted);
+        //    result.AddRange(subRemoved);
+
+        //    return result;
+        //}
+
         private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequences(List<ComparisonResult<ComparisonObject>> selecteds)
-        {
-            List<ComparisonResult<ComparisonObject>> inserted = new List<ComparisonResult<ComparisonObject>>();
-            List<ComparisonResult<ComparisonObject>> removed = new List<ComparisonResult<ComparisonObject>>();
-
-            foreach(var item in selecteds)
-            {
-                if (item.ModificationType.Equals(ModificationType.Inserted))
-                {
-                    inserted.Add(item);
-                }
-
-                if (item.ModificationType.Equals(ModificationType.Deleted))
-                {
-                    removed.Add(item);
-                }
-            }
-
-            var subInserted = GetSubSequencesDataCompared(inserted);
-            var subRemoved = GetSubSequencesDataCompared(removed);
-            var result = new List<List<ComparisonResult<ComparisonObject>>>(subInserted);
-            result.AddRange(subRemoved);
-
-            return result;
-        }
-
-        private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequencesDataCompared(List<ComparisonResult<ComparisonObject>> selecteds)
         {
             List<List<ComparisonResult<ComparisonObject>>> sequences = new List<List<ComparisonResult<ComparisonObject>>>();
 

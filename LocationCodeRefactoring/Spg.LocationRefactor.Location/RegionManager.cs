@@ -464,6 +464,9 @@ namespace Spg.LocationRefactor.Location
                 }
             }
 
+            inputRegions = inputRegions.OrderBy(o => o.Start).ThenBy(o => o.Length).ToList();
+            outputRegions = outputRegions.OrderBy(o => o.Start).ThenBy(o => o.Length).ToList();
+
             List<Tuple<ListNode, ListNode>> inputSelection = Decomposer.GetInstance().DecomposeToOutput(inputRegions);
             List<Tuple<ListNode, ListNode>> ouputSelection = Decomposer.GetInstance().DecomposeToOutput(outputRegions);
 
