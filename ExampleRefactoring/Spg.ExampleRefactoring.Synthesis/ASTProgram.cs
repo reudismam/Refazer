@@ -164,7 +164,7 @@ namespace Spg.ExampleRefactoring.Synthesis
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts = pManager.GeneratePartition(dags);
 
 
-            if (examples.Count()  > 1  && Ts.Count == examples.Count && boundary)
+            if (examples.Count() > 1 && Ts.Count == examples.Count && boundary)
             {
                 //Setting.Deviation = 1;
                 return GenerateStringProgram(examples, false);
