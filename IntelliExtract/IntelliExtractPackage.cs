@@ -23,6 +23,7 @@ using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using Spg.LocationRefactor.Program;
 
 namespace SPG.IntelliExtract
 {
@@ -118,6 +119,7 @@ namespace SPG.IntelliExtract
             EditorController controller = EditorController.GetInstance();
 
             DialogResult inforNeg = MessageBox.Show(Resources.IntelliExtractPackage_NotifyLocationsSelected_Do_you_want_to_inform_negative_locations_, Resources.IntelliExtractPackage_NotifyLocationsSelected_Do_you_want_to_inform_negative_locations_, MessageBoxButtons.YesNo);
+            List<CodeLocation> previousLocations = null;
 
             for (int index = 0; index < locations.Count; index++)
             {
@@ -149,15 +151,56 @@ namespace SPG.IntelliExtract
                     positives.Add(location.Region);
                 }
                 //}
+
+                if (inforNeg == DialogResult.Yes)
+                {
+                    if (index % 10 == 0)
+                    {
+                        DialogResult contNeg = MessageBox.Show("Do you want to continue informing negative locations", Resources.IntelliExtractPackage_NotifyLocationsSelected_Do_you_want_to_inform_negative_locations_, MessageBoxButtons.YesNo);
+                        if (contNeg == DialogResult.No)
+                        {
+                            previousLocations = locations;
+                            break;
+                        }
+                    }
+                }
             }
 
             if (negatives.Any())
             {
                 //controller.Extract(controller.SelectedLocations, negatives);
-                controller.Extract(positives, negatives);
+                controller.Extract(controller.SelectedLocations, negatives);
                 //JsonUtil<List<int>>.Write(indexNegatives, "negatives.json");
                 SaveNegatives(negatives);
             }
+
+            if (previousLocations != null)
+            {
+                negatives = new List<TRegion>();
+                Prog prog = controller.Progs.First();
+                foreach (var pLoc in previousLocations)
+                {
+                    bool isPresent = false;
+                    foreach (var loc in controller.Locations)
+                    {
+                        if (pLoc.Region.Equals(loc.Region))
+                        {
+                            isPresent = true;
+                            break;
+                        }
+                    }
+
+                    if (!isPresent)
+                    {
+                        TRegion parent = new TRegion();
+                        parent.Text = pLoc.SourceCode;
+                        pLoc.Region.Parent = parent;
+                        negatives.Add(pLoc.Region);
+                    }
+                }
+                SaveNegatives(negatives);
+            }
+
             MessageBox.Show(Resources.IntelliExtractPackage_NotifyLocationsSelected_Done_);
 
             controller.Done();
@@ -166,7 +209,7 @@ namespace SPG.IntelliExtract
         private void SaveNegatives(List<TRegion> negatives)
         {
             List<TRegion> tregions = new List<TRegion>();
-            foreach(var item in negatives)
+            foreach (var item in negatives)
             {
                 TRegion region = new TRegion();
                 region.Start = item.Start;
