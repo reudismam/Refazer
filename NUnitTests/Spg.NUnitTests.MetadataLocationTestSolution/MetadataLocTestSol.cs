@@ -465,14 +465,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        //[Test]
-        //public void Proj2_8d452499b23e250232406fa9c875973a054b17f9Test()
-        //{
-        //    List<string> projects = new List<string>();
-        //    projects.Add("Proj2_8d452499b23e250232406fa9c875973a054b17f9");
-        //    bool isValid = LocaleTestSolution("2_8d452499b23e250232406fa9c875973a054b17f9", @"..\..\TestProjects\Projects\EntityFramework4\Proj2_8d452499b23e250232406fa9c875973a054b17f9.sln", projects);
-        //    Assert.IsTrue(isValid);
-        //}
+        [Test]
+        public void Proj2_8d45249()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("FunctionalTests");
+            bool isValid = LocaleTestSolution(@"EntityFramewok\2_8d45249", @"EntityFramework\entityframework4\EntityFramework.sln", projects);
+            Assert.IsTrue(isValid);
+        }
 
         [Test]
         public void Proj1571862()
@@ -735,14 +735,14 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
             Assert.IsTrue(isValid);
         }
 
-        [Test]
-        public void Proj7d11ddd()
-        {
-            List<string> projects = new List<string>();
-            projects.Add("NuGet.Client.CommandLine");
-            bool isValid = LocaleTestSolution(@"NuGet\7d11ddd", @"NuGet\nuget9\NuGet.sln", projects);
-            Assert.IsTrue(isValid);
-        }
+        //[Test]
+        //public void Proj7d11ddd()
+        //{
+        //    List<string> projects = new List<string>();
+        //    projects.Add("NuGet.Client.CommandLine");
+        //    bool isValid = LocaleTestSolution(@"NuGet\7d11ddd", @"NuGet\nuget9\NuGet.sln", projects);
+        //    Assert.IsTrue(isValid);
+        //}
 
         [Test]
         public void Proj2_7d11ddd()
@@ -965,6 +965,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                         }
                     }
 
+                negativesRegions = negativesRegions.GetRange(0, Math.Min(2, negativesRegions.Count));
                 if (negativesRegions.Any())
                 {
                     globalTimeLocationBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;

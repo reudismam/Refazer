@@ -942,7 +942,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                         positivesRegions.Add(item.Region);
                     }
                 }
-                negativesRegions = negativesRegions.GetRange(0, 2);
+                negativesRegions = negativesRegions.GetRange(0, Math.Min(2, negativesRegions.Count));
                 controller.Extract(controller.SelectedLocations, negativesRegions);
                 controller.RetrieveLocations();
             }
