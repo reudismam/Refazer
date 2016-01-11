@@ -971,7 +971,7 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                     globalTimeLocationBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
                     timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                    controller.Extract(positivesRegions, negativesRegions);
+                    controller.Extract(controller.SelectedLocations, negativesRegions);
                     timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                     tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);
 
