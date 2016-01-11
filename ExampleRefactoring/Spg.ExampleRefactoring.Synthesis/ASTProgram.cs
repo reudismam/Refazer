@@ -164,11 +164,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Ts = pManager.GeneratePartition(dags);
 
 
-            if (examples.Count() > 1 && Ts.Count == examples.Count && boundary)
-            {
-                //Setting.Deviation = 1;
-                return GenerateStringProgram(examples, false);
-            }
+            //if (examples.Count() > 1 && Ts.Count == examples.Count && boundary)
+            //{
+            //    //Setting.Deviation = 1;
+            //    return GenerateStringProgram(examples, false);
+            //}
 
             List<Tuple<IPredicate, SynthesizedProgram>> S = new List<Tuple<IPredicate, SynthesizedProgram>>();
             foreach (KeyValuePair<Dag, List<Tuple<ListNode, ListNode>>> T in Ts)
@@ -214,6 +214,11 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns></returns>
         private SynthesizedProgram CreateSynthesizedProgram(Dag dag, List<Tuple<ListNode, ListNode>> examples)
         {
+            if (OutputIsEmpty(examples))
+            {
+                return GetEmptyProgram().First();
+            }
+
             ExpressionManager expmanager = new ExpressionManager();
             expmanager.FilterExpressions(dag, examples);
             Clear(dag);
@@ -308,21 +313,55 @@ namespace Spg.ExampleRefactoring.Synthesis
         private Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Dags(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
         {
             Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags = new Dictionary<Dag, List<Tuple<ListNode, ListNode>>>();
+            List<Tuple<ListNode, ListNode>> emptyExamples = new List<Tuple<ListNode, ListNode>>();
             foreach (var example in examples)
             {
-                List<int> boundaryPoints = null;
+                if (example.Item2.List.Any())
+                {
+                    List<int> boundaryPoints = null;
 
-                if (boundary) { boundaryPoints = SynthesisManager.CreateBoundaryPoints(example); }
+                    if (boundary) { boundaryPoints = SynthesisManager.CreateBoundaryPoints(example); }
 
-                ListNode input = example.Item1;
-                ListNode output = example.Item2;
+                    ListNode input = example.Item1;
+                    ListNode output = example.Item2;
 
-                List<Tuple<ListNode, ListNode>> exs = new List<Tuple<ListNode, ListNode>> { example };
-                Dag d = GenerateStringBoundary(input, output, boundaryPoints);
-                dags.Add(d, exs);
+                    List<Tuple<ListNode, ListNode>> exs = new List<Tuple<ListNode, ListNode>> { example };
+                    Dag d = GenerateStringBoundary(input, output, boundaryPoints);
+                    dags.Add(d, exs);
+                }
+                else {
+                    emptyExamples.Add(example);
+                }
             }
+
+            if (emptyExamples.Any())
+            {
+                Dag da = GenerateStringBoundary(emptyExamples.First().Item1, emptyExamples.First().Item2, new List<int> { 0 });
+                dags.Add(da, emptyExamples);
+            }
+
             return dags;
         }
+
+        //private Dictionary<Dag, List<Tuple<ListNode, ListNode>>> Dags(List<Tuple<ListNode, ListNode>> examples, bool boundary = true)
+        //{
+        //    Dictionary<Dag, List<Tuple<ListNode, ListNode>>> dags = new Dictionary<Dag, List<Tuple<ListNode, ListNode>>>();
+        //    foreach (var example in examples)
+        //    {
+        //        List<int> boundaryPoints = null;
+
+        //        if (boundary) { boundaryPoints = SynthesisManager.CreateBoundaryPoints(example); }
+
+        //        ListNode input = example.Item1;
+        //        ListNode output = example.Item2;
+
+        //        List<Tuple<ListNode, ListNode>> exs = new List<Tuple<ListNode, ListNode>> { example };
+        //        Dag d = GenerateStringBoundary(input, output, boundaryPoints);
+        //        dags.Add(d, exs);
+        //    }
+        //    return dags;
+        //}
+
 
         ///// <summary>
         ///// Create dynamic tokens
@@ -886,13 +925,20 @@ namespace Spg.ExampleRefactoring.Synthesis
                     }
                 }
             }
-            /*Tuple<Vertex, Vertex> zero = Tuple.Create(vertexes["0"], vertexes["0"]);
-            if (!W.ContainsKey(zero))
+
+            if (!output.List.Any())
             {
-                IExpression expression = new ConstruStr(new ListNode(new List<SyntaxNodeOrToken>()));
-                List<IExpression> expressions = new List<IExpression> {expression};
-                W.Add(zero, expressions);
-            }*/
+                Tuple<Vertex, Vertex> zero = Tuple.Create(vertexes["0"], vertexes["0"]);
+                if (!W.ContainsKey(zero))
+                {
+                    IExpression expression = new ConstTokens(new ListNode(new List<SyntaxNodeOrToken>()));
+                    List<IExpression> expressions = new List<IExpression> { expression };
+                    Dictionary<ExpressionKind, List<IExpression>> synthExpressions = new Dictionary<ExpressionKind, List<IExpression>>();
+                    synthExpressions.Add(ExpressionKind.Consttrustr, expressions);
+
+                    W.Add(zero, synthExpressions);
+                }
+            }
 
             Dag digraph = new Dag(dag, vertexes["0"], vertexes[output.Length().ToString()], W, vertexes);
 

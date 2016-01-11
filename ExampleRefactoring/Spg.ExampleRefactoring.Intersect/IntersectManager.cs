@@ -51,11 +51,21 @@ namespace Spg.ExampleRefactoring.Intersect
             if (dag1 == null) throw new ArgumentNullException("dag1");
             if (dag2 == null) throw new ArgumentNullException("dag2");
 
-            Dag composition;
-            DirectedGraph graph = new DirectedGraph();
-            Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>>();
-
             Dictionary<string, Vertex> vertexes = new Dictionary<string, Vertex>();
+            DirectedGraph graph = new DirectedGraph();
+            Dag composition;
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> W = new Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>>();
+            
+            //if (dag1.Init.Equals(dag1.End) && dag2.Init.Equals(dag2.End)) //Empty Dags.
+            //{
+            //    Vertex vertex1 = new Vertex(dag1.Init + " : " + dag1.End, 0.0);
+            //    vertexes.Add(vertex1.Id, vertex1);
+            //    graph.AddVertex(vertex1);
+            //    Tuple<Vertex, Vertex> vertex = Tuple.Create(vertex1, vertex1);
+            //    W[vertex] = dag1.Mapping[ExpressionKind.Consttrustr]; 
+            //    return new Dag(graph, vertex1, vertex1, dag1.Mapping, vertexes);
+            //}
+
             foreach (Tuple<Vertex, Vertex> edge1 in dag1.Mapping.Keys)
             {
                 foreach (Tuple<Vertex, Vertex> edge2 in dag2.Mapping.Keys)
