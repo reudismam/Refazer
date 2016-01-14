@@ -556,6 +556,18 @@ namespace NUnitTests.Spg.NUnitTests.CompleteTestSolution
         }
 
         [Test]
+        public void Proj2_8d45249()
+        {
+            List<string> projects = new List<string>();
+            projects.Add("FunctionalTests");
+            bool passLocation = MetadataLocTestSol.LocaleTestSolution(@"EntityFramewok\2_8d45249", @"EntityFramework\entityframework4\EntityFramework.sln", projects);
+
+            bool passTransformation = CompleteTestBase(@"EntityFramewok\2_8d45249");
+
+            Assert.IsTrue(passLocation && passTransformation);
+        }
+
+        [Test]
         public void Proj1571862()
         {
             List<string> projects = new List<string>();
