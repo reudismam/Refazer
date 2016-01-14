@@ -155,7 +155,7 @@ namespace Spg.LocationRefactor.Learn
             if (!negativePredicates.Any()) { return programs; }
 
             var itemsNegatives = from pair in negativePredicates
-                                 orderby pair.Regex().Count() descending, Order(pair) descending
+                                 orderby pair.Regex().Count() descending, IsContains(pair) descending, Order(pair) descending
                                  select pair;
 
 
@@ -180,6 +180,13 @@ namespace Spg.LocationRefactor.Learn
             return finalProgs;
         }
 
+        private int IsContains(IPredicate pair)
+        {
+            if (pair is Contains) return 1;
+
+            return 0;
+        }
+
         private object Order(IPredicate pair)
         {
             int count = 0;
@@ -188,6 +195,11 @@ namespace Spg.LocationRefactor.Learn
                 if (t is DymToken)
                 {
                     count++;
+                }
+
+                if(t is SubStrToken)
+                {
+                    count += 2;
                 }
             }
             return count;
