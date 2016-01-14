@@ -968,17 +968,37 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
                 negativesRegions = negativesRegions.GetRange(0, Math.Min(2, negativesRegions.Count));
                 if (negativesRegions.Any())
                 {
-                    globalTimeLocationBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    while (true)
+                    {
+                        InitControllerInformations(metadataLocations, project, expHome + solution); //reinit controller to a new round.
+                        controller = EditorController.GetInstance();
+                        wmanager.GetWorkSpace(expHome + solution);
 
-                    timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                    controller.Extract(controller.SelectedLocations, negativesRegions);
-                    timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                    tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);
+                        controller.SelectedLocations = metadataLocations;
+                        globalTimeLocationBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
-                    timeToLocateBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                    controller.RetrieveLocations();
-                    timeToLocateAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                    tTimeToLocate = (timeToLocateAfter - timeToLocateBefore);
+                        timeToExtractBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                        controller.Extract(controller.SelectedLocations, negativesRegions);
+                        timeToExtractAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                        tTimeToExtract = (timeToExtractAfter - timeToExtractBefore);
+
+                        timeToLocateBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                        controller.RetrieveLocations();
+                        timeToLocateAfter = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                        tTimeToLocate = (timeToLocateAfter - timeToLocateBefore);
+
+                        TRegion tregion = MatchesLocationsOnCommit(selections, controller.Locations, metadataLocations);
+                        if (tregion == null)
+                        {
+                            if (MatchesLocationsOnCommit(selections, controller.Locations)) // all locations on selections are present on commits.
+                            {
+                                break;
+                            }
+                            return false;
+                        }
+                        metadataLocations.Add(tregion);
+                        //controller.Extract();
+                    }
                 }
             }
 
