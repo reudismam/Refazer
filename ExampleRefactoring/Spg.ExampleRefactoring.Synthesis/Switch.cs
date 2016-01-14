@@ -62,7 +62,7 @@ namespace Spg.ExampleRefactoring.Synthesis
 
             for (int i = 1; i < Gates.Count; i++)
             {
-                s += ", SS" + (i + 1);
+                s += ", (b" + (i + 1) +", e" + (i + 1) + ")";
             }
 
             s += ")";
