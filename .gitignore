@@ -38,6 +38,8 @@ IntelliUndo/obj/*
 CompileChecker/bin/*
 CompileChecker/obj/*
 
+TestResults/*
+
 DirectedGraph/DirectedGraph/bin/*
 DirectedGraph/DirectedGraph/obj/*
 
