@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Spg.ExampleRefactoring.Comparator
 {
@@ -18,34 +17,20 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>True if first and second syntax node or token nodes content are equal</returns>
         public override bool Match(SyntaxNodeOrToken first, SyntaxNodeOrToken second)
         {
-            if(first == null || second == null)
-            {
-                throw new Exception("Syntax nodes or token cannot be null");
-            }
+            if(first == null) throw new ArgumentNullException("first");
+            if (second == null) throw new ArgumentNullException("second");
 
             SyntaxNodeOrToken parent = second;
-            int nInners = 0;
-            while (parent.CSharpKind() != SyntaxKind.Block)
+            while (parent.Kind() != SyntaxKind.Block)
             {
-                if (parent.CSharpKind() == SyntaxKind.Argument)
-                {
-                    nInners ++;
-                    //InvocationExpressionSyntax invocation = (InvocationExpressionSyntax) parent.Parent.Parent;
-                    //IdentifierNameSyntax member = invocation.Expression as IdentifierNameSyntax;
-                    //if (member.GetText().ToString().Equals(first))
-                    //{
-                    //    return false;
-                    //}
-
+                if (parent.Kind() == SyntaxKind.Argument)
+                {                 
                     return true;
                 }
                 parent = parent.Parent; // up on the tree.
             }
-            //if (nInners == 1)
-            //{
-            //    return true; //the argument is the last argument or the tree hierarchy.
-            //}
             return false;
         }
     }
 }
+

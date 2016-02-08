@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\FunctionalTests\\FunctionalTests\\ProductivityApi\\SimpleScenariosForLocalDb.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\FunctionalTests\\FunctionalTests\\ProductivityApi\\SimpleScenariosForLocalDb.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\FunctionalTests\\FunctionalTests\\ProductivityApi\\SimpleScenariosForLocalDb.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\FunctionalTests\\FunctionalTests\\ProductivityApi\\SimpleScenariosForLocalDb.cs"
   },
   {
     "Text": "Assert.Equal(@\"(localdb)\\v11.0\", context.Database.Connection.DataSource);",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\FunctionalTests\\FunctionalTests\\ProductivityApi\\SimpleScenariosForLocalDb.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\FunctionalTests\\FunctionalTests\\ProductivityApi\\SimpleScenariosForLocalDb.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\FunctionalTests\\FunctionalTests\\ProductivityApi\\SimpleScenariosForLocalDb.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\FunctionalTests\\FunctionalTests\\ProductivityApi\\SimpleScenariosForLocalDb.cs"
   }
 ]

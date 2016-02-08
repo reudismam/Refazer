@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.Bean;
-using ExampleRefactoring.Spg.ExampleRefactoring.Util;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
+using Spg.ExampleRefactoring.Bean;
+using Spg.ExampleRefactoring.Util;
+using Spg.LocationRefactor.Controller;
 using NUnit.Framework;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.TextRegion;
@@ -140,7 +140,7 @@ namespace Spg.NUnitTests.Location
             controller.SetSolution(FilePath.SOLUTION_PATH);
             controller.Extract();
             
-            controller.RetrieveLocations(controller.CurrentViewCodeBefore);
+            controller.RetrieveLocations();
 
             List<Selection> locations = JsonUtil<List<Selection>>.Read(output);
             bool passed = true;
@@ -160,3 +160,6 @@ namespace Spg.NUnitTests.Location
         }
     }
 }
+
+
+

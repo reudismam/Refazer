@@ -1,10 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using NUnit.Framework;
 using Spg.ExampleRefactoring.Position;
 using Spg.ExampleRefactoring.Synthesis;
+using NUnit.Framework;
 
 namespace Spg.NUnitTests.ASTProgramTests
 {

@@ -1,14 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Operator;
-using Spg.LocationRefactor.TextRegion;
 using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn;
-using LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Learn.Map;
+using Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Program;
+using Spg.LocationRefactor.TextRegion;
 
 namespace Spg.LocationRefactor.Learn
 {
@@ -21,7 +17,7 @@ namespace Spg.LocationRefactor.Learn
         /// Map
         /// </summary>
         /// <returns>map</returns>
-        public MapLearnerBase map { get; set; }
+        public MergeLearner root { get; set; }
 
 
         /// <summary>
@@ -30,7 +26,7 @@ namespace Spg.LocationRefactor.Learn
         public Learner()
         {
 
-            map = new StatementMapLearner();
+            root = new MergeLearner();
         }
 
         /// <summary>
@@ -41,10 +37,9 @@ namespace Spg.LocationRefactor.Learn
         public List<Prog> LearnSeqRegion(List<Tuple<ListNode, ListNode>> examples)
         {
             List<Prog> programs = new List<Prog>();
-            List<IOperator> operators = new List<IOperator>();
             List<ILearn> learns = new List<ILearn>();
 
-            learns.Add(map);
+            learns.Add(root);
             foreach (ILearn learn in learns)
             {
                 programs = learn.Learn(examples);
@@ -64,7 +59,7 @@ namespace Spg.LocationRefactor.Learn
             List<IOperator> operators = new List<IOperator>();
             List<ILearn> learns = new List<ILearn>();
 
-            learns.Add(map);
+            learns.Add(root);
             foreach (ILearn learn in learns)
             {
                 programs = learn.Learn(positiveExamples, negativeExamples);
@@ -79,7 +74,7 @@ namespace Spg.LocationRefactor.Learn
         /// <returns>Examples</returns>
         public List<Tuple<ListNode, ListNode>> Decompose(List<TRegion> list)
         {
-            List<Tuple<ListNode, ListNode>> decomposition = map.Decompose(list);
+            List<Tuple<ListNode, ListNode>> decomposition = root.Decompose(list);
             return decomposition;
         }
 
@@ -94,3 +89,5 @@ namespace Spg.LocationRefactor.Learn
         }
     }
 }
+
+

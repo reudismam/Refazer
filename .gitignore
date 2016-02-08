@@ -35,12 +35,24 @@ Refactor/obj/*
 IntelliUndo/bin/*
 IntelliUndo/obj/*
 
+CompileChecker/bin/*
+CompileChecker/obj/*
+
+DirectedGraph/DirectedGraph/bin/*
+DirectedGraph/DirectedGraph/obj/*
+
 IntelliMeta.sln.ide/*
 
 *.chk
 *.log
 *.ide
 *.htm
-
+*.t
+*.cache
+*.suo
+*.coverage
+Backup[0-9]*/*
+Backup/*
+*/packages/*
 
 

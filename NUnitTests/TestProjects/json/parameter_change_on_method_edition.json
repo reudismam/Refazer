@@ -1,15 +1,15 @@
 {
-  "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs": [
+  "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs": [
     {
       "Start": 462,
       "Length": 112,
-      "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs",
+      "SourcePath": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs",
       "SourceCode": null
     },
     {
       "Start": 674,
       "Length": 108,
-      "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs",
+      "SourcePath": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ParameterChangeOnMethod\\SymbolDisplay.cs",
       "SourceCode": null
     }
   ]

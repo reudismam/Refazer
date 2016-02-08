@@ -57,10 +57,10 @@
 //        /// </summary>
 //        /// <param name="sourceCode">Source code</param>
 //        /// <returns>Syntax nodes</returns>
-//        public override List<SyntaxNode> SyntaxNodes(string sourceCode, List<TRegion> list)
+//        public override List<SyntaxNode> SyntaxNodesWithSemanticModel(string sourceCode, List<TRegion> list)
 //        {
 //            Strategy strategy = new MethodExtrategy();
-//            return strategy.SyntaxNodes(sourceCode, list);
+//            return strategy.SyntaxNodesWithSemanticModel(sourceCode, list);
 //        }
 //    }
 //}

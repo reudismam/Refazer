@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Operator.Map;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.Learn;
@@ -9,7 +9,7 @@ using Spg.LocationRefactor.Operator;
 using Spg.LocationRefactor.Predicate;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
+namespace Spg.LocationRefactor.Learn.Map
 {
     public class EndPosMapLearner: MapLearnerBase
     {
@@ -65,3 +65,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         }
     }
 }
+
+
+

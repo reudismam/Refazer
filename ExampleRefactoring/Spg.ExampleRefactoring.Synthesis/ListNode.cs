@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.AST;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Comparator;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Linq;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Representation of a list of nodes
@@ -57,7 +59,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
             ListNode lnode = (ListNode)obj;
             if (List.Count > 0)
             {
-                Boolean isEqual = (ASTManager.Matches(this, lnode, new NodeComparer()).Count > 0);
+                bool isEqual = (ASTManager.Matches(this, lnode, new NodeComparer()).Count > 0);
                 return isEqual;
             }else
             {
@@ -76,17 +78,29 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            String s = "[";
-            for (int i = 0; i < List.Count - 1; i++)
-            {
-                SyntaxNodeOrToken st = List[i];
-                s += st.CSharpKind() + ", "; 
-            }
+            string s = "[";
 
-            if (List.Count > 0) {
-                s += List[List.Count - 1].CSharpKind() + "]";
+            if (List.Any())
+            {
+                s += List.First();
+
+                for(int i = 1; i < List.Count; i++)
+                {
+                    s += ", " + List[i];
+                }
             }
+            //for (int i = 0; i < List.Count - 1; i++)
+            //{
+            //    SyntaxNodeOrToken st = List[i];
+            //    s += st + ", "; 
+            //}
+
+            //if (List.Count > 0) {
+            //    s += List[List.Count - 1] + "]";
+            //}
+            s += "]";
             return s;
+            //return s;
         }
 
         /// <summary>
@@ -99,3 +113,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
     }
 }
+
+
+
+

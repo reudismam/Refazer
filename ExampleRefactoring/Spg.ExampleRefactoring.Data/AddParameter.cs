@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Spg.ExampleRefactoring.Data
@@ -12,28 +12,28 @@ namespace Spg.ExampleRefactoring.Data
         /// Return the train data set.
         /// </summary>
         /// <returns>List of examples</returns>
-        public override List<Tuple<String, String>> Train()
+        public override List<Tuple<string, string>> Train()
         {
-            List<Tuple<String, String>> tuples = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> tuples = new List<Tuple<string, string>>();
 
-            String input01 =
+            string input01 =
 @"static void PrintData(String data)
   {
   }
 ";
 
 
-            String output01 =
+            string output01 =
 @"static void PrintData(String data, int i)
   {
   }
 ";
-            Tuple<String, String> tuple01 = Tuple.Create(input01, output01);
+            Tuple<string, string> tuple01 = Tuple.Create(input01, output01);
             Console.WriteLine(input01);
             Console.WriteLine(output01);
             tuples.Add(tuple01);
 
-            String input02 =
+            string input02 =
 @"static void PrintData2(String data)
   {
     int p = 0;
@@ -42,14 +42,14 @@ namespace Spg.ExampleRefactoring.Data
 ";
 
 
-            String output02 =
+            string output02 =
 @"static void PrintData2(String data, int i)
   {
     int p = 0;
     Console.WriteLine(data);
   }
 ";
-            Tuple<String, String> tuple02 = Tuple.Create(input02, output02);
+            Tuple<string, string> tuple02 = Tuple.Create(input02, output02);
             Console.WriteLine(input02);
             Console.WriteLine(output02);
             tuples.Add(tuple02);
@@ -60,9 +60,9 @@ namespace Spg.ExampleRefactoring.Data
         /// Return the test data.
         /// </summary>
         /// <returns>Return a string to be tested.</returns>
-        public override Tuple<String, String> Test()
+        public override Tuple<string, string> Test()
         {
-            String input01 =
+            string input01 =
 @"static void PrintData3(String data)
   {
     int p = 0;
@@ -71,7 +71,7 @@ namespace Spg.ExampleRefactoring.Data
  }
 ";
 
-            String output01 =
+            string output01 =
 @"static void PrintData3(String data, int i)
   {
     int p = 0;
@@ -79,8 +79,10 @@ namespace Spg.ExampleRefactoring.Data
     Console.WriteLine(data);
  }
 ";
-            Tuple<String, String> test = Tuple.Create(input01, output01);
+            Tuple<string, string> test = Tuple.Create(input01, output01);
             return test;
         }
     }
 }
+
+

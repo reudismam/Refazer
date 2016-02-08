@@ -1,0 +1,1 @@
+C:\Users\SPG-04\Documents\Visual Studio 2013\Projects\intellimeta\NUnitTests\TestProjects\Projects\EntityFramework7\bin\Debug\ConsoleApplication.exe.config

@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Tok;
 using Spg.LocationRefactoring.Tok;
+using System.Linq;
 
-namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
+namespace Spg.LocationRefactoring.Tok
 {
     /// <summary>
     /// Token sequence
@@ -67,16 +68,20 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
         /// <param name="nodes">Nodes</param>
         /// <param name="dict">Dictionary with previous dynamic tokens</param>
         /// <returns>Dynamic tokens</returns>
-        public static List<Token> DymTokens(ListNode nodes, Dictionary<DymToken, int> dict)
+        public static List<Token> DymTokens(ListNode nodes, Dictionary<DymToken, List<DymToken>> dict)
         {
             List<Token> tokens = new List<Token>();
-
             foreach (SyntaxNodeOrToken st in nodes.List)
             {
-                DymToken dtoken = new DymToken(st, true);
+                DymToken dtoken = new DymToken(st, false);
+                RawDymToken rdtoken = new RawDymToken(st);
                 if (dict.ContainsKey(dtoken))
                 {
-                    tokens.Add(dtoken);
+                    tokens.Add(dict[dtoken].First());
+                }
+                else if (dict.ContainsKey(rdtoken))
+                {
+                    tokens.Add(rdtoken);
                 }
                 else {
                     Token token = new Token(st);
@@ -87,13 +92,40 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
             return tokens;
         }
 
+        //public static List<List<Token>> DymTokens(ListNode nodes, Dictionary<DymToken, List<DymToken>> dict)
+        //{
+        //    List<Token> tokensDymToken = new List<Token>();
+        //    List<Token> tokensRawDymToken = new List<Token>();
+        //    foreach (SyntaxNodeOrToken st in nodes.List)
+        //    {
+        //        DymToken dtoken = new DymToken(st, false);
+        //        RawDymToken rdtoken = new RawDymToken(st);
+        //        if (dict.ContainsKey(dtoken))
+        //        {
+        //            tokensDymToken.Add(dict[dtoken].First());
+        //            if (dict.ContainsKey(rdtoken))
+        //            {
+        //                tokensRawDymToken.Add(dict[rdtoken].First());
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Token token = new Token(st);
+        //            tokensDymToken.Add(token);
+        //            tokensRawDymToken.Add(token);
+        //        }
+        //    }
+
+        //    return new List<List<Token>> { tokensDymToken, tokensRawDymToken };
+        //}
+
         /// <summary>
         /// String representation
         /// </summary>
         /// <returns>String representation</returns>
         public override string ToString()
         {
-            String str = "";
+            string str = "";
             if (Length() > 1)
             {
                 int i;
@@ -157,3 +189,6 @@ namespace ExampleRefactoring.Spg.LocationRefactoring.Tok
         }
     }
 }
+
+
+

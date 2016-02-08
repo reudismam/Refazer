@@ -1,17 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Operator.Map;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactor.Learn;
+using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Node;
 using Spg.LocationRefactor.Operator;
+using Spg.LocationRefactor.Operator.Map;
 using Spg.LocationRefactor.Predicate;
+using Spg.LocationRefactor.Program;
 using Spg.LocationRefactor.TextRegion;
+using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Operator.Filter;
+using System.IO;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
+namespace Spg.LocationRefactor.Learn.Map
 {
     /// <summary>
     /// Map Learner base
@@ -35,7 +38,15 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
             EditorController contoller = EditorController.GetInstance();
             List<TRegion> list = contoller.SelectedLocations;
             FilterLearnerBase S = GetFilter(list);
-            S.predicate = pred;
+            S.Predicate = pred;
+
+            //List<ListNode> llnode = new List<ListNode>();
+            //foreach (var item in examples)
+            //{
+            //    llnode.Add(item.Item2);
+            //}
+
+            //List<SyntaxNode> Lcas = RegionManager.LeastCommonAncestors(llnode);
 
             List<Prog> predicates = S.Learn(examples);
             if (hypo.Count == 1)
@@ -44,6 +55,8 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
                 {
                     foreach (Prog predicate in predicates)
                     {
+                        //FilterBase filter = predicate.Ioperator as FilterBase;
+                        //filter.Lcas
                         MapBase map = GetMap(list);
                         map.ScalarExpression = h;
                         map.SequenceExpression = predicate;
@@ -53,65 +66,69 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
                     }
                 }
             }
-            else {
-                Boolean firstSynthesizedProg = true;
-                List<Merge> merges = new List<Merge>();
-                foreach(Prog h in hypo)
-                {
-                    programs = new List<Prog>();
-                    foreach (Prog predicate in predicates)
-                    {
-                        MapBase map = GetMap(list);
-                        map.ScalarExpression = h;
-                        map.SequenceExpression = predicate;
-                        Prog prog = new Prog();
-                        prog.Ioperator = map;
-                        programs.Add(prog);
-                    }
+            //else {
+            //    bool firstSynthesizedProg = true;
+            //    List<Merge> merges = new List<Merge>();
+            //    foreach(Prog h in hypo)
+            //    {
+            //        programs = new List<Prog>();
+            //        foreach (Prog predicate in predicates)
+            //        {
+            //            MapBase map = GetMap(list);
+            //            map.ScalarExpression = h;
+            //            map.SequenceExpression = predicate;
+            //            Prog prog = new Prog();
+            //            prog.Ioperator = map;
+            //            programs.Add(prog);
+            //        }
 
-                    if (firstSynthesizedProg)
-                    {
-                        foreach (Prog prog in programs)
-                        {
-                            Merge merge = new Merge();
-                            merge.AddMap((MapBase) prog.Ioperator);
-                            merges.Add(merge);
-                        }
-                        firstSynthesizedProg = false;
+            //        if (firstSynthesizedProg)
+            //        {
+            //            foreach (Prog prog in programs)
+            //            {
+            //                Merge merge = new Merge();
+            //                merge.AddMap((MapBase) prog.Ioperator);
+            //                merges.Add(merge);
+            //            }
+            //            firstSynthesizedProg = false;
 
-                    }else
-                    {
-                        for (int i = 0; i < merges.Count; i++)
-                        {
-                            merges[i].AddMap((MapBase) programs[i].Ioperator);
-                        }
-                    }
-                }
+            //        }else
+            //        {
+            //            for (int i = 0; i < merges.Count; i++)
+            //            {
+            //                merges[i].AddMap((MapBase) programs[i].Ioperator);
+            //            }
+            //        }
+            //    }
 
-                programs = new List<Prog>();
-                foreach (Merge merge in merges)
-                {
-                    Prog prog = new Prog();
-                    prog.Ioperator = merge;
-                    programs.Add(prog);
-                }
-            }
+            //    programs = new List<Prog>();
+            //    foreach (Merge merge in merges)
+            //    {
+            //        Prog prog = new Prog();
+            //        prog.Ioperator = merge;
+            //        programs.Add(prog);
+            //    }
+            //}
             return programs;
         }
 
         public List<Prog> Learn(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples)
         {
             List<Prog> programs = new List<Prog>();
-            List<Tuple<ListNode, ListNode>> Q = MapBase.Decompose(positiveExamples);
+
+            EditorController contoller = EditorController.GetInstance();
+            List<TRegion> list = contoller.SelectedLocations;
+            Decomposer deco = Decomposer.GetInstance();
+            List<Tuple<ListNode, ListNode>> exampleList = deco.Decompose(list);
+            List<Tuple<ListNode, ListNode>> Q = MapBase.Decompose(exampleList);
 
             PairLearn F = new PairLearn();
             List<Prog> hypo = F.Learn(Q);
 
             IPredicate pred = GetPredicate();
-            EditorController contoller = EditorController.GetInstance();
-            List<TRegion> list = contoller.SelectedLocations;
+            
             FilterLearnerBase S = GetFilter(list);
-            S.predicate = pred;
+            S.Predicate = pred;
 
             List<Prog> predicates = S.Learn(positiveExamples, negativeExamples);
             if (hypo.Count == 1)
@@ -129,51 +146,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
                     }
                 }
             }
-            else
-            {
-                Boolean firstSynthesizedProg = true;
-                List<Merge> merges = new List<Merge>();
-                foreach (Prog h in hypo)
-                {
-                    programs = new List<Prog>();
-                    foreach (Prog predicate in predicates)
-                    {
-                        MapBase map = GetMap(list);
-                        map.ScalarExpression = h;
-                        map.SequenceExpression = predicate;
-                        Prog prog = new Prog();
-                        prog.Ioperator = map;
-                        programs.Add(prog);
-                    }
 
-                    if (firstSynthesizedProg)
-                    {
-                        foreach (Prog prog in programs)
-                        {
-                            Merge merge = new Merge();
-                            merge.AddMap((MapBase)prog.Ioperator);
-                            merges.Add(merge);
-                        }
-                        firstSynthesizedProg = false;
-
-                    }
-                    else
-                    {
-                        for (int i = 0; i < merges.Count; i++)
-                        {
-                            merges[i].AddMap((MapBase)programs[i].Ioperator);
-                        }
-                    }
-                }
-
-                programs = new List<Prog>();
-                foreach (Merge merge in merges)
-                {
-                    Prog prog = new Prog();
-                    prog.Ioperator = merge;
-                    programs.Add(prog);
-                }
-            }
             return programs;
         }
 
@@ -210,3 +183,8 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn.Map
         protected abstract FilterLearnerBase GetFilter(List<TRegion> list);
     }
 }
+
+
+
+
+

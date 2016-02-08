@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.RegularExpression;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Synthesis;
@@ -25,10 +25,8 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>true if first and second syntax node or token type are equal</returns>
         public override bool Match(SyntaxNodeOrToken first, SyntaxNodeOrToken second)
         {
-            if(first == null  || second == null)
-            {
-                throw new Exception("Syntax node or token cannot be null");
-            }
+            if(first == null)  throw new ArgumentNullException("first");
+            if (second == null) throw new ArgumentNullException("second");
 
             if (second.AsNode() == null && second.AsNode() != null)
             {
@@ -52,18 +50,16 @@ namespace Spg.ExampleRefactoring.Comparator
         /// <returns>Match starts</returns>
         public virtual List<Tuple<int, ListNode>> Matches(ListNode input, TokenSeq regex)
         {
-            if(input == null || regex == null)
-            {
-                throw new Exception("Input nodes and regular expression cannot be null");
-            }
+            if(input == null) throw new ArgumentNullException("input");
+            if (regex == null) throw new ArgumentNullException("regex");
 
             if (regex.Tokens == null)
             {
                 throw new Exception("Regular expression must have at least one token");
             }
 
-            List<Tuple<int, ListNode>> matches = new List<Tuple<int, ListNode>>();
-            /*if (regex.Length() == 0)
+            /*List<Tuple<int, ListNode>> matches = new List<Tuple<int, ListNode>>();
+            if (regex.Length() == 0)
             {
                 Tuple<int, ListNode> emptyTuple = Tuple.Create(0, input);
                 matches.Add(emptyTuple);
@@ -166,3 +162,5 @@ namespace Spg.ExampleRefactoring.Comparator
         }*/
     }
 }
+
+

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using LocationCodeRefactoring.Spg.LocationRefactor.Program;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactor.Program;
 using Spg.ExampleRefactoring.Synthesis;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
+namespace Spg.LocationRefactor.Learn
 {
     public interface ILearn
     {
@@ -24,3 +24,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Learn
         List<Prog> Learn(List<Tuple<ListNode, ListNode>> positiveExamples, List<Tuple<ListNode, ListNode>> negativeExamples);
     }
 }
+
+
+

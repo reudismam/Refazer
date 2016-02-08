@@ -7,26 +7,26 @@ namespace DiGraph
 {
     public class Vertex
     {
-        string id;
+        readonly string _id;
         public string Id
         {
-            get { return id; }
+            get { return _id; }
         }
 
-        double weight;
+        readonly double weight;
         public double Weight
         {
             get { return weight; }
         }
         public Vertex(string id, double weight)
         {
-            this.id = id;
+            this._id = id;
             this.weight = weight;
         }
 
         public override string ToString()
         {
-            return id.ToString();
+            return _id.ToString();
         }
 
         public override bool Equals(object obj)

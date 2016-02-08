@@ -1,8 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
+using Spg.ExampleRefactoring.AST;
+using Spg.ExampleRefactoring.Expression;
+using System.Linq;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
+namespace Spg.ExampleRefactoring.Synthesis
 {
     /// <summary>
     /// Synthesized program
@@ -31,17 +32,58 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Synthesis
         }
 
         /// <summary>
+        /// Retrieve the string corresponding to the hypothesis passed as parameter.
+        /// </summary>
+        /// <param name="input">Input syntax node</param>
+        /// <returns>AST transformation</returns>
+        public virtual ASTTransformation TransformString(ListNode input)
+        {
+            return UpdateASTManager.UpdateASTTree(input, this);
+        }
+
+        /// <summary>
+        /// Retrieve the string corresponding to the hypothesis passed as parameter.
+        /// </summary>
+        /// <param name="input">Input syntax node</param>
+        /// <returns>AST transformation</returns>
+        public virtual ListNode TransformInput(ListNode input)
+        {
+            return UpdateASTManager.UpdateInput(input, this);
+        }
+
+        /// <summary>
         /// To string method
         /// </summary>
         /// <returns>String representing this instance</returns>
         public override string ToString()
         {
-            String s = "";
-            foreach(IExpression str in Solutions){
-                s += str + "\n\n";
+            string s = "";
+
+            if(Solutions.Count == 1)
+            {
+                s += Solutions.First() + "\n";
+                return s;
+            }
+
+            s += "Concatenate(f1";
+
+            for (int i = 1; i < Solutions.Count; i++)
+            {
+                s += ", f" + (i + 1);
+            }
+
+            s += ")";
+
+            for (int i = 0; i < Solutions.Count; i++)
+            {
+                s += "\n\tf" + (i + 1) + " = " + Solutions[i];
+                   
             }
 
             return s;
         }
     }
 }
+
+
+

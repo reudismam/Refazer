@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.Boolean ParameterToConstantValue\\ParameterToConstantValue.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.Boolean ParameterToConstantValue\\ParameterToConstantValue.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.Boolean ParameterToConstantValue\\ParameterToConstantValue.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.Boolean ParameterToConstantValue\\ParameterToConstantValue.cs"
   },
   {
     "Text": "return Literal(ObjectDisplay.FormatLiteral(value, useHexadecimalNumbers: false) + \"L\", value);",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.Boolean ParameterToConstantValue\\ParameterToConstantValue.cs"
+      "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.Boolean ParameterToConstantValue\\ParameterToConstantValue.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.Boolean ParameterToConstantValue\\ParameterToConstantValue.cs"
+    "Path": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.Boolean ParameterToConstantValue\\ParameterToConstantValue.cs"
   }
 ]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -7,16 +7,16 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using LocateAdornment;
-using LocationCodeRefactoring.Spg.LocationCodeRefactoring.Controller;
-using LocationCodeRefactoring.Spg.LocationRefactor.Location;
-using LocationCodeRefactoring.Spg.LocationRefactor.Transformation;
+using Spg.LocationRefactor.Controller;
+using Spg.LocationRefactor.Location;
+using Spg.LocationRefactor.Transform;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Spg.LocationCodeRefactoring.Observer;
+using Spg.LocationRefactor.Observer;
 using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 
 namespace SPG.Refactor
@@ -214,3 +214,6 @@ namespace SPG.Refactor
         //}
     }
 }
+
+
+

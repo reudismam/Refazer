@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using DiGraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.AST;
-using ExampleRefactoring.Spg.ExampleRefactoring.Digraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.AST;
-using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Digraph;
+using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Synthesis;
+using LeastCommonAncestor;
+using Microsoft.CodeAnalysis;
+using Spg.ExampleRefactoring.Comparator;
 
 namespace Spg.ExampleRefactoring.Expression
 {
@@ -29,27 +29,55 @@ namespace Spg.ExampleRefactoring.Expression
             if (examples == null) throw new ArgumentNullException("examples");
             if(!examples.Any()) throw new ArgumentException("Examples cannot be null");
 
-            Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> expressions = dag.Mapping;
+            Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> expressions = dag.Mapping;
 
-            foreach (KeyValuePair<Tuple<Vertex, Vertex>, List<IExpression>> entry in expressions)
+            foreach (KeyValuePair<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> entry in expressions)
             {
-                List<IExpression> removes = new List<IExpression>();
+                Dictionary<ExpressionKind, List<IExpression>> removes = new Dictionary<ExpressionKind, List<IExpression>>();
                 int i = 0;
-                foreach (IExpression expression in entry.Value)
+                foreach (KeyValuePair<ExpressionKind, List<IExpression>> item in entry.Value)
                 {
-                    Boolean isValid = ValidateExpression(expression, examples);
-
-                    if (!isValid)
+                    foreach (IExpression expression in item.Value)
                     {
-                        removes.Add(expression);
+                        bool isValid = ValidateExpression(entry.Key, expression, examples);
+
+                        if (!isValid && !item.Key.Equals(ExpressionKind.FakeConstrStr))
+                        {
+                            List<IExpression> value;
+                            if (!removes.TryGetValue(item.Key, out value))
+                            {
+                                removes.Add(item.Key, new List<IExpression>());
+                            }
+                            removes[item.Key].Add(expression);
+                        }
+                        i++;
                     }
-                    i++;
                 }
 
-                foreach (IExpression expression in removes)
+                if (entry.Value.Count != 1)
                 {
-                    entry.Value.Remove(expression);
+                    if (entry.Value.ContainsKey(ExpressionKind.FakeConstrStr))
+                    {
+                        List<IExpression> value;
+                        if (!removes.TryGetValue(ExpressionKind.FakeConstrStr, out value))
+                        {
+                            removes.Add(ExpressionKind.FakeConstrStr, new List<IExpression>());
+                        }
+                        removes[ExpressionKind.FakeConstrStr].Add(entry.Value[ExpressionKind.FakeConstrStr].First());
+                    }
                 }
+
+                foreach (KeyValuePair<ExpressionKind, List<IExpression>> item in removes)
+                {
+                    foreach (IExpression expression in item.Value)
+                    {
+                        entry.Value[item.Key].Remove(expression);
+                        if (entry.Value[item.Key].Count == 0)
+                        {
+                            expressions[entry.Key].Remove(item.Key);
+                        }
+                    }
+                }               
             }
         }
 
@@ -59,12 +87,48 @@ namespace Spg.ExampleRefactoring.Expression
         /// <param name="expression">Expression to be tested</param>
         /// <param name="examples">Set of examples</param>
         /// <returns>True if expression match the examples, false otherwise</returns>
-        public Boolean ValidateExpression(IExpression expression, List<Tuple<ListNode, ListNode>> examples)
+        public bool ValidateExpression(Tuple<Vertex, Vertex> edge, IExpression expression, List<Tuple<ListNode, ListNode>> examples)
+        {
+//            if (expression is FakeConstrStr) return true;//FakeConstruStr is not present on al output entries
+            var firstVertex = edge.Item1.Id.Split(':');
+            var secondVertex = edge.Item2.Id.Split(':');
+
+            SynthesizedProgram syntheProg = new SynthesizedProgram();
+            syntheProg.Add(expression);
+
+            bool isValid = false;
+            for(int i = 0; i < examples.Count; i++)
+            {
+                Tuple<ListNode, ListNode> example = examples[i];
+                ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.Solutions);
+                int position1 = Convert.ToInt32(firstVertex[i]);
+                int position2 = Convert.ToInt32(secondVertex[i]);
+                ListNode sot = ASTManager.SubNotes(example.Item2, position1, (position2 - position1));
+
+                if (solution != null && new NodeComparer().SequenceEqual(sot, solution))
+                {
+                    isValid = true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return isValid;
+        }
+
+        /// <summary>
+        /// Validate an expression in function of the examples
+        /// </summary>
+        /// <param name="expression">Expression to be tested</param>
+        /// <param name="examples">Set of examples</param>
+        /// <returns>True if expression match the examples, false otherwise</returns>
+        public bool ValidateExpression(IExpression expression, List<Tuple<ListNode, ListNode>> examples)
         {
             SynthesizedProgram syntheProg = new SynthesizedProgram();
             syntheProg.Add(expression);
 
-            Boolean isValid = false;
+            bool isValid = false;
             foreach (Tuple<ListNode, ListNode> example in examples)
             {
                 ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.Solutions);
@@ -82,3 +146,7 @@ namespace Spg.ExampleRefactoring.Expression
         }
     }
 }
+
+
+
+

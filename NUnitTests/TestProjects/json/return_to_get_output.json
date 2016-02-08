@@ -2,19 +2,19 @@
   {
     "Start": 232,
     "Length": 192,
-    "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ReturnToGet\\ReturnToGet.cs",
+    "SourcePath": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ReturnToGet\\ReturnToGet.cs",
     "SourceCode": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\nnamespace ExampleProject.Company.ExampleProject.ReturnToGet\r\n{\r\n    public class ReturnToGet\r\n    {\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds1()\r\n        {\r\n           return ImmutableArray<string>.Create(StaticTypeRulesDiagnosticAnalyzer.CA1052RuleId);\r\n        }\r\n\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds2()\r\n        {\r\n            return ImmutableArray<string>.Create(CA1001DiagnosticAnalyzer.RuleId);\r\n        }\r\n\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds3()\r\n        {\r\n            return ImmutableArray<string>.Create(CA1008DiagnosticAnalyzer.RuleId);\r\n       }\r\n    }\r\n}\r\n"
   },
   {
     "Start": 436,
     "Length": 178,
-    "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ReturnToGet\\ReturnToGet.cs",
+    "SourcePath": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ReturnToGet\\ReturnToGet.cs",
     "SourceCode": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\nnamespace ExampleProject.Company.ExampleProject.ReturnToGet\r\n{\r\n    public class ReturnToGet\r\n    {\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds1()\r\n        {\r\n           return ImmutableArray<string>.Create(StaticTypeRulesDiagnosticAnalyzer.CA1052RuleId);\r\n        }\r\n\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds2()\r\n        {\r\n            return ImmutableArray<string>.Create(CA1001DiagnosticAnalyzer.RuleId);\r\n        }\r\n\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds3()\r\n        {\r\n            return ImmutableArray<string>.Create(CA1008DiagnosticAnalyzer.RuleId);\r\n       }\r\n    }\r\n}\r\n"
   },
   {
     "Start": 626,
     "Length": 177,
-    "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ReturnToGet\\ReturnToGet.cs",
+    "SourcePath": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.ReturnToGet\\ReturnToGet.cs",
     "SourceCode": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\n\r\nnamespace ExampleProject.Company.ExampleProject.ReturnToGet\r\n{\r\n    public class ReturnToGet\r\n    {\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds1()\r\n        {\r\n           return ImmutableArray<string>.Create(StaticTypeRulesDiagnosticAnalyzer.CA1052RuleId);\r\n        }\r\n\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds2()\r\n        {\r\n            return ImmutableArray<string>.Create(CA1001DiagnosticAnalyzer.RuleId);\r\n        }\r\n\r\n        public sealed override ImmutableArray<string> GetFixableDiagnosticIds3()\r\n        {\r\n            return ImmutableArray<string>.Create(CA1008DiagnosticAnalyzer.RuleId);\r\n       }\r\n    }\r\n}\r\n"
   }
 ]

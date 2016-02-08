@@ -1,59 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DiGraph
 {
     public class Edge
     {
-        string fromVertex;
+        readonly string _fromVertex;
         public string FromVertex
         {
-            get { return fromVertex; }
+            get { return _fromVertex; }
         }
 
-        string toVertex;
+        readonly string _toVertex;
         public string ToVertex
         {
-            get { return toVertex; }
+            get { return _toVertex; }
         }
 
-        double weight;
+        readonly double _weight;
         public double Weight
         {
-            get { return weight; }
+            get { return _weight; }
         }
 
         public Edge(Edge edge)
         {
-            fromVertex = edge.FromVertex;
-            toVertex = edge.ToVertex;
-            this.weight = edge.Weight;
+            _fromVertex = edge.FromVertex;
+            _toVertex = edge.ToVertex;
+            this._weight = edge.Weight;
         }
 
-        public Edge(string from_vertex, string to_vertex)
+        public Edge(string fromVertex, string toVertex)
         {
-            fromVertex = from_vertex;
-            toVertex = to_vertex;
-            this.weight = 0;
+            _fromVertex = fromVertex;
+            _toVertex = toVertex;
+            this._weight = 0;
         }
 
-        public Edge(string from_vertex, string to_vertex, double weight)
+        public Edge(string fromVertex, string toVertex, double weight)
         {
-            fromVertex = from_vertex;
-            toVertex = to_vertex;
-            this.weight = weight;
+            _fromVertex = fromVertex;
+            _toVertex = toVertex;
+            this._weight = weight;
         }
 
         public override string ToString()
         {
-            return fromVertex+"=>"+toVertex+":"+weight.ToString();
+            return _fromVertex+"=>"+_toVertex+":"+_weight.ToString();
         }
 
         public override int GetHashCode()
         {
-            return fromVertex.GetHashCode() ^ toVertex.GetHashCode() ^ weight.GetHashCode();
+            return _fromVertex.GetHashCode() ^ _toVertex.GetHashCode() ^ _weight.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -61,11 +58,11 @@ namespace DiGraph
             if (obj is Edge)
             {
                 var temp = (Edge)obj;
-                return fromVertex.Equals(temp.fromVertex) && toVertex.Equals(temp.toVertex) 
-                        && weight.Equals(temp.weight);
+                return _fromVertex.Equals(temp._fromVertex) && _toVertex.Equals(temp._toVertex) 
+                        && _weight.Equals(temp._weight);
             }
-            else
-                throw new ArgumentException("object is not of this type!");
+
+            throw new ArgumentException("object is not of this type!");
         }
     }
 }

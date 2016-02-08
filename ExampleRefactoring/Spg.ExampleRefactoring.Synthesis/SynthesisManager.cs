@@ -1,17 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
-using ExampleRefactoring.Spg.ExampleRefactoring.Comparator;
-using ExampleRefactoring.Spg.ExampleRefactoring.Expression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Position;
-using ExampleRefactoring.Spg.ExampleRefactoring.Setting;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using LCS2;
 using Microsoft.CodeAnalysis;
+using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;
 using Spg.ExampleRefactoring.Expression;
 using Spg.ExampleRefactoring.Position;
+using Spg.ExampleRefactoring.Setting;
 using Spg.LocationRefactoring.Tok;
 
 namespace Spg.ExampleRefactoring.Synthesis
@@ -25,14 +22,14 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// Settings
         /// </summary>
         /// <returns>Get or set synthesis setting</returns>
-        public SynthesizerSetting setting { get; set; }
+        public SynthesizerSetting Setting { get; set; }
 
         /// <summary>
         /// Default constructor
         /// </summary>
         public SynthesisManager()
         {
-            this.setting = new SynthesizerSetting();
+            this.Setting = new SynthesizerSetting();
         }
 
         /// <summary>
@@ -41,7 +38,7 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="setting">Setting</param>
         public SynthesisManager(SynthesizerSetting setting)
         {
-            this.setting = setting;
+            this.Setting = setting;
         }
 
         /// <summary>
@@ -49,21 +46,25 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// </summary>
         /// <param name="synthesizedProgramList">Synthesized programs list</param>
         /// <param name="expressionList">Expression list</param>
+        /// <param name="examples">Examples</param>
         /// <returns>Synthesized programs list</returns>
-        private static List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList)
+        private List<SynthesizedProgram> CombSynthProgramExp2(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
         {
             List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
+            var items = from expression in expressionList
+                        orderby new SelectorManager(Setting).Order(expression) descending
+                        select expression;
             if (synthesizedProgramList.Count > 0)
             {
                 foreach (SynthesizedProgram sd1 in synthesizedProgramList)
                 {
-                    foreach (IExpression e2 in expressionList)
+                    List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
+                    SynthesizedProgram sp = new SynthesizedProgram();
+                    sp.Solutions = solutions;
+                    sp.Add(items.First());
+                    bool isValid = ValidateSubExpression(sp.Solutions, examples);
+                    if (isValid)
                     {
-                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
-                        SynthesizedProgram sp = new SynthesizedProgram();
-                        sp.Solutions = solutions;
-                        sp.Add(e2);
-
                         synthesizedProgList.Add(sp);
                     }
                 }
@@ -80,47 +81,32 @@ namespace Spg.ExampleRefactoring.Synthesis
         }
 
         /// <summary>
-        /// Create new synthesized program combining current synthesized programs with expressions
+        /// Validate an expression in function of the examples
         /// </summary>
-        /// <param name="synthesizedProgramList">Synthesized programs list</param>
-        /// <param name="expressionList">Expression list</param>
-        /// <param name="examples">Examples</param>
-        /// <returns>Synthesized programs list</returns>
-        private List<SynthesizedProgram> CombSynthProgramExp(List<SynthesizedProgram> synthesizedProgramList, List<IExpression> expressionList, List<Tuple<ListNode, ListNode>> examples)
+        /// <param name="expressions">Expression to be tested</param>
+        /// <param name="examples">Set of examples</param>
+        /// <returns>True if expression match the examples, false otherwise</returns>
+        public bool ValidateSubExpression(List<IExpression> expressions, List<Tuple<ListNode, ListNode>> examples)
         {
-            List<SynthesizedProgram> synthesizedProgList = new List<SynthesizedProgram>();
-            if (synthesizedProgramList.Count > 0)
+            SynthesizedProgram syntheProg = new SynthesizedProgram();
+            syntheProg.Solutions = expressions; ;
+
+            bool isValid = false;
+            foreach (Tuple<ListNode, ListNode> example in examples)
             {
-                foreach (SynthesizedProgram sd1 in synthesizedProgramList)
+                ListNode solution = ASTProgram.RetrieveNodes(example, syntheProg.Solutions);
+
+                if (solution != null && ASTManager.Matches(example.Item2, solution, new NodeComparer()).Count > 0)
                 {
-                    foreach (IExpression e2 in expressionList)
-                    {
-                        List<IExpression> solutions = new List<IExpression>(sd1.Solutions);
-                        SynthesizedProgram sp = new SynthesizedProgram();
-                        sp.Solutions = solutions;
-                        sp.Add(e2);
-
-                        //ExpressionManager manager = new ExpressionManager();
-                        //bool isValid = manager.ValidateExpression(sp, examples);
-                        //if (isValid)
-                        //{
-                            synthesizedProgList.Add(sp);
-                        //}
-                    }
+                    isValid = true;
                 }
-                return synthesizedProgList;
+                else
+                {
+                    return false;
+                }
             }
-
-            foreach (IExpression expression in expressionList)
-            {
-                SynthesizedProgram sp = new SynthesizedProgram();
-                sp.Add(expression);
-                synthesizedProgList.Add(sp);
-            }
-            return synthesizedProgList;
+            return isValid;
         }
-
-      
 
         /// <summary>
         /// Expression list that forms the synthesized program
@@ -128,9 +114,9 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="mapping">Expressions mapping</param>
         /// <param name="indexs">Synthesized program sub parts</param>
         /// <returns>Expression list that forms the synthesized program</returns>
-        private static List<List<IExpression>> SynthesizedPrograms(Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping, List<Vertex> indexs)
+        private static List<Dictionary<ExpressionKind, List<IExpression>>> SynthesizedPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> mapping, List<Vertex> indexs)
         {
-            List<List<IExpression>> synthProgList = new List<List<IExpression>>();
+            List<Dictionary<ExpressionKind, List<IExpression>>> synthProgList = new List<Dictionary<ExpressionKind, List<IExpression>>>();
             for (int i = 1; i < indexs.Count; i++)
             {
                 Tuple<Vertex, Vertex> tuple = Tuple.Create(indexs[i - 1], indexs[i]);
@@ -147,11 +133,6 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <returns>True if valid</returns>
         private bool ValidateSynthesizedProgram(List<IExpression> solutions, List<Tuple<ListNode, ListNode>> examples/*, StreamWriter file*/)
         {
-            /*if (setting.considerConstrStr && solutions.Count == 1 && solutions[0] is ConstruStr)
-            {
-                return false;
-            }*/
-
             foreach (Tuple<ListNode, ListNode> example in examples)
             {
                 ListNode match = ASTProgram.RetrieveNodes(example, solutions);
@@ -179,16 +160,16 @@ namespace Spg.ExampleRefactoring.Synthesis
             InitFeatures(features);
             foreach (IExpression expression in solution)
             {
-                if (expression is ConstruStr)
+                if (expression is ConstTokens )
                 {
                     Handle(features, FeatureType.CONSTSTR);
                 }
                 else
                 {
-                    SubStr subStr = (SubStr)expression;
+                    SubTokens subStr = (SubTokens)expression;
 
-                    IPosition p1 = subStr.p1;
-                    IPosition p2 = subStr.p2;
+                    IPosition p1 = subStr.P1;
+                    IPosition p2 = subStr.P2;
 
                     EvaluatePos(p1, features);
                     EvaluatePos(p2, features);
@@ -217,6 +198,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             //features.Add(SIZE, 0);
         }
 
+        /// <summary>
+        /// Evalute positioning expressions
+        /// </summary>
+        /// <param name="p1">Posisition expression</param>
+        /// <param name="features">Features mapping</param>
         private static void EvaluatePos(IPosition p1, Dictionary<FeatureType, int> features)
         {
             if (p1 is Pos)
@@ -235,19 +221,24 @@ namespace Spg.ExampleRefactoring.Synthesis
 
                 switch (position)
                 {
-                    case 0:
-                        Handle(features, FeatureType.CPOSBEGIN);
-                        break;
-                    case -1:
-                        Handle(features, FeatureType.CPOSEND);
-                        break;
-                    default:
-                        Handle(features, FeatureType.CPOS);
-                        break;
+                case 0:
+                    Handle(features, FeatureType.CPOSBEGIN);
+                    break;
+                case -1:
+                    Handle(features, FeatureType.CPOSEND);
+                    break;
+                default:
+                    Handle(features, FeatureType.CPOS);
+                    break;
                 }
             }
         }
 
+        /// <summary>
+        /// Verify the presence of dynamic token on relative position
+        /// </summary>
+        /// <param name="features">Mapping of features</param>
+        /// <param name="pos">Relative position expression</param>
         private static void HandleDymToken(Dictionary<FeatureType, int> features, Pos pos)
         {
             int value;
@@ -260,17 +251,17 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
 
             int count = 0;
-            for (int i = 0; i < pos.r1.Tokens.Count; i++)
+            for (int i = 0; i < pos.R1.Tokens.Count; i++)
             {
-                if (pos.r1.Tokens[i] is DymToken)
+                if (pos.R1.Tokens[i] is DymToken)
                 {
                     count++;
                 }
             }
 
-            for (int i = 0; i < pos.r2.Tokens.Count; i++)
+            for (int i = 0; i < pos.R2.Tokens.Count; i++)
             {
-                if (pos.r2.Tokens[i] is DymToken)
+                if (pos.R2.Tokens[i] is DymToken)
                 {
                     count++;
                 }
@@ -278,6 +269,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             features[key] += count;
         }
 
+        /// <summary>
+        /// Verify the presence of syntax elements on relative position expression
+        /// </summary>
+        /// <param name="features">Features mapping</param>
+        /// <param name="pos">Relative position expression</param>
         private static void HandleSyntax(Dictionary<FeatureType, int> features, Pos pos)
         {
             int value;
@@ -286,21 +282,20 @@ namespace Spg.ExampleRefactoring.Synthesis
             if (!features.TryGetValue(key, out value))
             {
                 features.Add(key, 0);
-                value = 0;
             }
 
             int count = 0;
-            for (int i = 0; i < pos.r1.Tokens.Count; i++)
+            for (int i = 0; i < pos.R1.Tokens.Count; i++)
             {
-                if (pos.r1.Tokens[i].token.AsNode() != null)
+                if (pos.R1.Tokens[i].token.AsNode() != null)
                 {
                     count++;
                 }
             }
 
-            for (int i = 0; i < pos.r2.Tokens.Count; i++)
+            for (int i = 0; i < pos.R2.Tokens.Count; i++)
             {
-                if (pos.r2.Tokens[i].token.AsNode() != null)
+                if (pos.R2.Tokens[i].token.AsNode() != null)
                 {
                     count++;
                 }
@@ -308,6 +303,11 @@ namespace Spg.ExampleRefactoring.Synthesis
             features[key] += count;
         }
 
+        /// <summary>
+        /// Identify empty elements on relative position expression
+        /// </summary>
+        /// <param name="features">Features mapping</param>
+        /// <param name="p1">Relative position expression</param>
         private static void HandleEmpty(Dictionary<FeatureType, int> features, Pos p1)
         {
             int value;
@@ -320,18 +320,23 @@ namespace Spg.ExampleRefactoring.Synthesis
                 value = 0;
             }
 
-            if (p1.r1.Length() == 0)
+            if (p1.R1.Length() == 0)
             {
                 features[key] = value + 1;
             }
 
-            if (p1.r2.Length() == 0)
+            if (p1.R2.Length() == 0)
             {
                 features[key] = value + 1;
             }
 
         }
 
+        /// <summary>
+        /// Identify the number of times the feature appear on the synthesized program
+        /// </summary>
+        /// <param name="features">Dictionary of features</param>
+        /// <param name="key">Analyzed feature</param>
         private static void Handle(Dictionary<FeatureType, int> features, FeatureType key)
         {
             int value;
@@ -352,19 +357,19 @@ namespace Spg.ExampleRefactoring.Synthesis
         /// <param name="solutions">Solution</param>
         /// <param name="examples">Examples</param>
         /// <returns>A valid hypothesis, if it exits, null otherwise</returns>
-        public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, List<IExpression>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
+        public SynthesizedProgram FilterASTPrograms(Dictionary<Tuple<Vertex, Vertex>, Dictionary<ExpressionKind, List<IExpression>>> mapping, List<Vertex> solutions, List<Tuple<ListNode, ListNode>> examples)
         {
-            SynthesizedProgram selected = null;
-            List<List<IExpression>> expressions = SynthesizedPrograms(mapping, solutions);
+            List<Dictionary<ExpressionKind, List<IExpression>>> expressions = SynthesizedPrograms(mapping, solutions);
 
             List<SynthesizedProgram> hypotheses = new List<SynthesizedProgram>();
-            foreach (List<IExpression> l in expressions)
+            foreach (Dictionary<ExpressionKind, List<IExpression>> item in expressions)
             {
-                hypotheses = CombSynthProgramExp(hypotheses, l, examples);
+                List<IExpression> l = GetExpressions(item);         
+                hypotheses = CombSynthProgramExp2(hypotheses, l, examples);
             }
 
             var sorted = from hypothesis in hypotheses
-                         orderby (new SelectorManager(setting)).Order(hypothesis.Solutions) descending
+                         orderby (new SelectorManager(Setting)).Order(hypothesis.Solutions) descending
                          select hypothesis;
 
             int count = 0;
@@ -372,27 +377,29 @@ namespace Spg.ExampleRefactoring.Synthesis
             {
                 count++;
 
-                bool isValid = ValidateSynthesizedProgram(sp.Solutions, examples/*, file*/);
-                Console.WriteLine("Processing ....");
+                bool isValid = ValidateSynthesizedProgram(sp.Solutions, examples);
+                //Console.WriteLine("Processing ....");
                 if (isValid)
                 {
-                    //file.Write(1 + "\n");
-                    Console.WriteLine(count);
-                    if (selected == null)
-                    {
-                        selected = sp;
-                    }
-                    return sp;
-                }
-                else
-                {
-                    //file.Write(0 + "\n");
+                        return sp;         
                 }
             }
-            // }
+            return null;
+        }
 
-            //file.Close();
-            return selected;
+        /// <summary>
+        /// /Get expression list
+        /// </summary>
+        /// <param name="mapping">Mapping of expression each kind</param>
+        /// <returns>Expression list</returns>
+        public List<IExpression> GetExpressions(Dictionary<ExpressionKind, List<IExpression>> mapping)
+        {
+            List<IExpression> expressions = new List<IExpression>();
+            foreach (KeyValuePair<ExpressionKind, List<IExpression>> entry in mapping)
+            {
+                expressions.AddRange(entry.Value);
+            }
+            return expressions;
         }
 
         /// <summary>
@@ -407,6 +414,67 @@ namespace Spg.ExampleRefactoring.Synthesis
             return points;
         }
 
+        ///// <summary>
+        ///// Calculate the difference point between input and output
+        ///// </summary>
+        ///// <param name="input">Input</param>
+        ///// <param name="output">Output</param>
+        ///// <returns>Index of the difference</returns>
+        //public static List<int> Differ(ListNode input, ListNode output)
+        //{
+        //    List<int> indexes = new List<int>();
+        //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
+        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
+
+        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
+        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
+        //    List<ComparisonResult<ComparisonObject>> result2 = differ.FindDifference(touput, tinput);
+        //    List<ComparisonResult<ComparisonObject>> selecteds = new List<ComparisonResult<ComparisonObject>>();
+        //    for (int i = 0; i < result.Count; i++)
+        //    {
+        //        ComparisonResult<ComparisonObject> r = result[i];
+        //        if (!r.ModificationType.Equals(ModificationType.None))
+        //        {
+
+        //            //if (r.DataCompared.Index < output.Length())
+        //            //{
+        //                selecteds.Add(r);
+        //            //}
+        //        }
+        //    }
+
+        //    //List<ComparisonResult<ComparisonObject>> selecteds2 = new List<ComparisonResult<ComparisonObject>>();
+        //    //for (int i = 0; i < result2.Count; i++)
+        //    //{
+        //    //    ComparisonResult<ComparisonObject> r = result2[i];
+        //    //    if (r.ModificationType.Equals(ModificationType.None))
+        //    //    {
+
+        //    //        //if (r.DataCompared.Index < output.Length())
+        //    //        //{
+        //    //            selecteds2.Add(r);
+        //    //        //}
+        //    //    }
+        //    //}
+
+        //    indexes = FilterIndexes(selecteds, output);
+        //    indexes.AddRange(FilterIndexes(result2, output));
+
+        //    if (!indexes.Contains(0)) //insert first index if it was not found.
+        //    {
+        //        indexes.Insert(0, 0);
+        //    }
+
+        //    if (!indexes.Contains(output.Length())) //insert last index if it is not found.
+        //    {
+        //        indexes.Add(output.Length());
+        //    }
+
+        //    HashSet<int> nonDup = new HashSet<int>(indexes);
+
+        //    return nonDup.ToList();
+        //}
+
         /// <summary>
         /// Calculate the difference point between input and output
         /// </summary>
@@ -416,97 +484,73 @@ namespace Spg.ExampleRefactoring.Synthesis
         public static List<int> Differ(ListNode input, ListNode output)
         {
             List<int> indexes = new List<int>();
-            indexes.Add(0);
             List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
-            List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);//new List<ComparisonObject>();
-           
+            List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
+
             ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
             List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
+            List<ComparisonResult<ComparisonObject>> result2 = differ.FindDifference(touput, tinput);
+            List<ComparisonResult<ComparisonObject>> selecteds = new List<ComparisonResult<ComparisonObject>>();
             for (int i = 0; i < result.Count; i++)
             {
                 ComparisonResult<ComparisonObject> r = result[i];
                 if (!r.ModificationType.Equals(ModificationType.None))
                 {
-                    Console.WriteLine(r.DataCompared);
-                    if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
-                    {
-                        if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
-                        {
-                            continue;
-                        }
-                        indexes.Add(r.DataCompared.Index);
-                    }
-                }
-
-                if (r.ModificationType.Equals(ModificationType.Inserted))
-                {
-                    if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
-                    {
-                        indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
-                    }
+                    selecteds.Add(r);
                 }
             }
 
-            if (!indexes.Contains(output.Length()))
+            indexes = FilterIndexes(selecteds, output);
+            indexes.AddRange(FilterIndexes(result2, output));
+
+            if (!indexes.Contains(0)) //insert first index if it was not found.
+            {
+                indexes.Insert(0, 0);
+            }
+
+            if (!indexes.Contains(output.Length())) //insert last index if it is not found.
             {
                 indexes.Add(output.Length());
             }
 
-            return indexes;
+            HashSet<int> nonDup = new HashSet<int>(indexes);
+
+            return nonDup.ToList();
         }
-
-        //public static List<SyntaxNodeOrToken> DiffSN(ListNode input, ListNode output)
-        //{
-        //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
-        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);//new List<ComparisonObject>();
-        //    var listInput = Differ2(tinput, touput, ModificationType.Inserted); //node of output will appear as inserted
-        //    return listInput;
-        //}
-             
-        //public static List<SyntaxNodeOrToken> Differ2(List<ComparisonObject> input, List<ComparisonObject> output, ModificationType type)
-        //{
-        //    List<SyntaxNodeOrToken> lcomp = new List<SyntaxNodeOrToken>();
-
-        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
-        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(input, output);
-        //    for (int i = 0; i < result.Count; i++)
-        //    {
-        //        ComparisonResult<ComparisonObject> r = result[i];
-        //        if (r.ModificationType.Equals(type))
-        //        {
-        //              lcomp.Add(r.DataCompared.Token.token);
-        //        }
-        //    }
-        //    return lcomp;
-        //} 
 
         ///// <summary>
         ///// Calculate the difference point between input and output
         ///// </summary>
-        ///// <param name="input">Input</param>
-        ///// <param name="output">Output</param>
+        ///// <param name = "input" > Input </ param >
+        ///// < param name="output">Output</param>
         ///// <returns>Index of the difference</returns>
-        //public static List<int> Differ2(ListNode input, ListNode output)
+        //public static List<int> Differ(ListNode input, ListNode output)
         //{
-        //    List<int> indexes = new List<int>();
-        //    indexes.Add(0);
+        //    List<int> indexes = new List<int> { 0 };
         //    List<ComparisonObject> tinput = DynTokens(input, ComparisonObject.INPUT);
-        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);//new List<ComparisonObject>();
+        //    List<ComparisonObject> touput = DynTokens(output, ComparisonObject.OUTPUT);
 
         //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
-        //    List<ComparisonResult<ComparisonObject>> result1 = differ.FindDifference(tinput, touput);
-        //    List<ComparisonResult<ComparisonObject>> result2 = differ.FindDifference(touput, tinput);
-        //    List<ComparisonResult<ComparisonObject>> comparisonObjs = new List<ComparisonResult<ComparisonObject>>();
-        //    for (int i = 0; i < result1.Count; i++)
+        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, touput);
+        //    List<ComparisonResult<ComparisonObject>> selecteds = new List<ComparisonResult<ComparisonObject>>();
+        //    for (int i = 0; i < result.Count; i++)
         //    {
-        //        ComparisonResult<ComparisonObject> r = result1[i];
-
-        //        if (r.DataCompared.Indicator == ComparisonObject.OUTPUT && !r.ModificationType.Equals(ModificationType.None))
+        //        ComparisonResult<ComparisonObject> r = result[i];
+        //        if (!r.ModificationType.Equals(ModificationType.None))
         //        {
-        //            comparisonObjs.Add(r);
+        //            Console.WriteLine(r.DataCompared);
+        //            if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
+        //            {
+        //                if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
+        //                {
+        //                    continue;
+        //                }
+        //                indexes.Add(r.DataCompared.Index);
+        //                selecteds.Add(r);
+        //            }
         //        }
 
-        //        if (r.DataCompared.Indicator == ComparisonObject.INPUT && r.ModificationType.Equals(ModificationType.Inserted))
+        //        if (r.ModificationType.Equals(ModificationType.Inserted))
         //        {
         //            if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
         //            {
@@ -515,45 +559,6 @@ namespace Spg.ExampleRefactoring.Synthesis
         //        }
         //    }
 
-        //    //for (int i = 0; i < result2.Count; i++)
-        //    //{
-        //    //    ComparisonResult<ComparisonObject> r = result2[i];
-
-        //    //    if (r.DataCompared.Indicator == ComparisonObject.OUTPUT && !r.ModificationType.Equals(ModificationType.None))
-        //    //    {
-        //    //        comparisonObjs.Add(r);
-        //    //    }
-        //    //}
-
-        //    foreach (ComparisonResult<ComparisonObject> r in comparisonObjs)
-        //    {
-        //        if (!indexes.Contains(r.DataCompared.Index))
-        //        {
-        //            indexes.Add(r.DataCompared.Index);
-        //        }
-        //    }
-
-        //    //    if (!r.ModificationType.Equals(ModificationType.None))
-        //    //    {
-        //    //        Console.WriteLine(r.DataCompared);
-        //    //        if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
-        //    //        {
-        //    //            if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
-        //    //            {
-        //    //                continue;
-        //    //            }
-        //    //            indexes.Add(r.DataCompared.Index);
-        //    //        }
-        //    //    }
-
-        //    //    if (r.ModificationType.Equals(ModificationType.Inserted))
-        //    //    {
-        //    //        if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
-        //    //        {
-        //    //            indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
-        //    //        }
-        //    //    }
-        //    //}
 
         //    if (!indexes.Contains(output.Length()))
         //    {
@@ -562,6 +567,202 @@ namespace Spg.ExampleRefactoring.Synthesis
 
         //    return indexes;
         //}
+
+        //private static List<int> FilterIndexes(List<ComparisonResult<ComparisonObject>> selecteds, ListNode output)
+        //{
+        //    List<int> indexes = new List<int>();
+        //    ModificationType lastEvaluated = ModificationType.None;
+        //    int lastIndex = 0;
+        //    if (selecteds.Any())
+        //    {
+        //        var element = selecteds.First();
+        //        lastEvaluated = element.ModificationType;
+        //        lastIndex = element.DataCompared.Index;
+        //        indexes.Add(selecteds.First().DataCompared.Index);
+
+        //        if (selecteds.First().ModificationType.Equals(ModificationType.Inserted))
+        //        {
+        //            if (selecteds.First().DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), selecteds.First().DataCompared.Index + 1)))
+        //            {
+        //                indexes.Add(Math.Min(output.Length(), selecteds.First().DataCompared.Index + 1));
+        //            }
+        //        }
+        //    }
+
+        //    for(int i = 1; i < selecteds.Count - 1; i++)
+        //    {
+        //        var result = selecteds[i];
+
+        //        if (result.ModificationType.Equals(lastEvaluated) )
+        //        {
+        //            if (lastIndex != result.DataCompared.Index - 1) //sequence of evaluated elements.
+        //            {
+        //                indexes.Add(result.DataCompared.Index);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (!indexes.Contains(lastIndex))
+        //            {
+        //                indexes.Add(lastIndex);
+        //            }
+
+        //            lastEvaluated = result.ModificationType;
+        //            if (!indexes.Contains(lastIndex))
+        //            {
+        //                indexes.Add(result.DataCompared.Index);
+        //            }
+        //        }
+
+        //        if (result.ModificationType.Equals(ModificationType.Inserted))
+        //        {
+        //            if (result.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), result.DataCompared.Index + 1)))
+        //            {
+        //                indexes.Add(Math.Min(output.Length(), result.DataCompared.Index + 1));
+        //            }
+        //        }
+
+        //        lastIndex = result.DataCompared.Index; //Update last index
+        //    }
+
+        //    if (selecteds.Count() > 1 && !indexes.Contains(selecteds.Last().DataCompared.Index))
+        //    {
+        //        indexes.Add(selecteds.Last().DataCompared.Index); //last element must always be inserted.
+        //    }
+
+        //    return indexes;
+        //}
+
+        private static List<int> FilterIndexes(List<ComparisonResult<ComparisonObject>> selecteds, ListNode output)
+        {
+            List<List<ComparisonResult<ComparisonObject>>> sequences = GetSubSequences(selecteds);
+
+            List<int> indexes = new List<int>();
+
+            foreach(var sequence in sequences)
+            {
+                if (sequence.First().DataCompared.Indicator.Equals(ComparisonObject.OUTPUT)){
+                    indexes.Add(sequence.First().DataCompared.Index);
+
+                    if (sequence.First().ModificationType.Equals(ModificationType.Inserted))
+                    {
+                        indexes.Add(sequence.Last().DataCompared.Index);
+                        indexes.Add(sequence.Last().DataCompared.Index + 1);
+                    }
+                }
+            }
+            indexes.Except(indexes.Where(c => c > output.Length())).ToList();
+            return indexes;
+        }
+
+        //private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequences(List<ComparisonResult<ComparisonObject>> selecteds)
+        //{
+        //    List<List<ComparisonResult<ComparisonObject>>> sequences = new List<List<ComparisonResult<ComparisonObject>>>();
+
+        //    if (!selecteds.Any()) return sequences;
+
+        //    List<ComparisonResult<ComparisonObject>> subSequence = new List<ComparisonResult<ComparisonObject>>();
+        //    subSequence.Add(selecteds.First());
+        //    for(int i = 1; i < selecteds.Count; i++)
+        //    {
+        //        var result = selecteds[i];
+        //        //if (result.DataCompared.Indicator.Equals(ComparisonObject.OUTPUT))
+        //        //{
+        //            if (result.ModificationType.Equals(subSequence.Last().ModificationType) /*&& result.DataCompared.Indicator.Equals(subSequence.Last().DataCompared.Indicator)*/)
+        //            {
+        //                if (subSequence.Last().DataCompared.Index == result.DataCompared.Index - 1)
+        //                {
+        //                    subSequence.Add(result);
+        //                }
+        //                else
+        //                {
+        //                    List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+        //                    sequences.Add(newList);
+        //                    subSequence = new List<ComparisonResult<ComparisonObject>>();
+        //                    subSequence.Add(result);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+        //                sequences.Add(newList);
+        //                subSequence = new List<ComparisonResult<ComparisonObject>>();
+        //                subSequence.Add(result);
+        //            }
+        //        }
+        //    //}
+
+        //    sequences.Add(subSequence);
+        //    return sequences;
+        //}
+
+        //private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequences(List<ComparisonResult<ComparisonObject>> selecteds)
+        //{
+        //    List<ComparisonResult<ComparisonObject>> inserted = new List<ComparisonResult<ComparisonObject>>();
+        //    List<ComparisonResult<ComparisonObject>> removed = new List<ComparisonResult<ComparisonObject>>();
+
+        //    foreach(var item in selecteds)
+        //    {
+        //        if (item.ModificationType.Equals(ModificationType.Inserted))
+        //        {
+        //            inserted.Add(item);
+        //        }
+
+        //        if (item.ModificationType.Equals(ModificationType.Deleted))
+        //        {
+        //            removed.Add(item);
+        //        }
+        //    }
+
+        //    var subInserted = GetSubSequencesDataCompared(inserted);
+        //    var subRemoved = GetSubSequencesDataCompared(removed);
+        //    var result = new List<List<ComparisonResult<ComparisonObject>>>(subInserted);
+        //    result.AddRange(subRemoved);
+
+        //    return result;
+        //}
+
+        private static List<List<ComparisonResult<ComparisonObject>>> GetSubSequences(List<ComparisonResult<ComparisonObject>> selecteds)
+        {
+            List<List<ComparisonResult<ComparisonObject>>> sequences = new List<List<ComparisonResult<ComparisonObject>>>();
+
+            if (!selecteds.Any()) return sequences;
+
+            List<ComparisonResult<ComparisonObject>> subSequence = new List<ComparisonResult<ComparisonObject>>();
+            subSequence.Add(selecteds.First());
+            for (int i = 1; i < selecteds.Count; i++)
+            {
+                var result = selecteds[i];
+
+                if (result.ModificationType.Equals(subSequence.Last().ModificationType))
+                {
+                    if (subSequence.Last().DataCompared.Index == result.DataCompared.Index - 1)
+                    {
+                        subSequence.Add(result);
+                    }
+                    else
+                    {
+                        List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+                        sequences.Add(newList);
+                        subSequence = new List<ComparisonResult<ComparisonObject>>();
+                        subSequence.Add(result);
+                    }
+                }
+                else
+                {
+                    List<ComparisonResult<ComparisonObject>> newList = new List<ComparisonResult<ComparisonObject>>(subSequence);
+                    sequences.Add(newList);
+                    subSequence = new List<ComparisonResult<ComparisonObject>>();
+                    subSequence.Add(result);
+                }
+            }
+            //}
+
+            sequences.Add(subSequence);
+            return sequences;
+        }
+
+
 
         /// <summary>
         /// Create comparison objects
@@ -581,219 +782,5 @@ namespace Spg.ExampleRefactoring.Synthesis
             }
             return comparisonObjects;
         }
-
-        //public static List<int> Differ(ListNode input, ListNode output)
-        //{
-        //    List<int> indexes = new List<int>();
-        //    indexes.Add(0);
-        //    List<ComparisonObject> tinput = new List<ComparisonObject>();
-        //    for (int i = 0; i < input.List.Count; i++)
-        //    {
-        //        SyntaxNodeOrToken st = input.List[i];
-        //        DymToken token = new DymToken(st);
-        //        ComparisonObject obj = new ComparisonObject(token, i, ComparisonObject.OUTPUT);
-        //        tinput.Add(obj);
-        //    }
-
-        //    List<ComparisonObject> toutput = new List<ComparisonObject>();
-        //    for (int i = 0; i < output.List.Count; i++)
-        //    {
-        //        SyntaxNodeOrToken st = output.List[i];
-        //        DymToken token = new DymToken(st);
-        //        ComparisonObject obj = new ComparisonObject(token, i, ComparisonObject.OUTPUT);
-        //        toutput.Add(obj);
-        //    }
-
-        //    ListDiffer<ComparisonObject> differ = new ListDiffer<ComparisonObject>();
-        //    List<ComparisonResult<ComparisonObject>> result = differ.FindDifference(tinput, toutput);
-
-        //    ComparisonObject lastNode = null;
-        //    for (int i = 0; i < result.Count; i++)
-        //    {
-        //        ComparisonResult<ComparisonObject> r = result[i];
-        //        if (r.ModificationType.Equals(ModificationType.Deleted))
-        //        {
-        //            indexes.Add(r.DataCompared.Index);
-        //            //Console.WriteLine(r.DataCompared);
-        //            //if (r.DataCompared.Index < output.Length() && !indexes.Contains(r.DataCompared.Index))
-        //            //{
-        //            //    if (i - 1 >= 0 && (result[i - 1].DataCompared.Index == r.DataCompared.Index - 1 && result[i - 1].ModificationType.Equals(r.ModificationType)))
-        //            //    {
-        //            //        continue;
-        //            //    }
-        //            //    indexes.Add(r.DataCompared.Index);
-        //            //}
-        //        }
-        //        else if (r.ModificationType.Equals(ModificationType.Inserted))
-        //        {
-        //            if (lastNode != null && !indexes.Contains(lastNode.Index))
-        //            {
-        //                indexes.Add(lastNode.Index);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (lastNode == null || r.DataCompared.Index != lastNode.Index)
-        //            {
-        //                lastNode = r.DataCompared;
-        //            }
-        //        }
-
-        //        //if (r.ModificationType.Equals(ModificationType.Inserted))
-        //        //{
-        //        //    if (r.DataCompared.Index < output.Length() && !indexes.Contains(Math.Min(output.Length(), r.DataCompared.Index + 1)))
-        //        //    {
-        //        //        indexes.Add(Math.Min(output.Length(), r.DataCompared.Index + 1));
-        //        //    }
-        //        //}
-        //    }
-
-        //    if (!indexes.Contains(output.Length()))
-        //    {
-        //        indexes.Add(output.Length());
-        //    }
-
-        //    return indexes;
-        //}
     }
 }
-
-/* /// <summary>
-       /// Is a solution
-       /// </summary>
-       /// <param name="solutionCandidate">Solution candidate</param>
-       /// <param name="length">Output length</param>
-       /// <returns>True if candidate is a solution</returns>
-       private static bool IsASolution(List<Tuple<int, int>> solutionCandidate, int length)
-       {
-           if (solutionCandidate.Count > 0)
-           {
-               int i = solutionCandidate.Last().Item1;
-               int j = solutionCandidate.Last().Item2;
-
-               return (i + j == length);
-           }
-
-           return false;
-       }*/
-
-/*/// <summary>
-       /// Create boundary points
-       /// </summary>
-       /// <param name="input">Input data</param>
-       /// <param name="output">Output data</param>
-       /// <param name="original">Original data</param>
-       /// <param name="data">ListNode data</param>
-       /// <returns>Boundary points</returns>
-       public static List<int> CreateBoundaryPoints2(string input, string output, string original, Tuple<ListNode, ListNode> data)
-       {
-           SyntaxTree st1 = CSharpSyntaxTree.ParseText(input);
-           SyntaxTree st2 = CSharpSyntaxTree.ParseText(output);
-
-           var changestext = st2.GetChanges(st1);
-
-           String pattern = Regex.Escape(output);
-           int start = Regex.Match(original, pattern).Index;
-
-           List<int> boundary = new List<int>();
-           boundary.Add(0);
-           foreach (TextChange changed in changestext)
-           {
-               List<int> indexs = LookupIndex(changed, data.Item2);
-               foreach (int i in indexs)
-               {
-                   if (i > 0 && boundary.Contains(i))
-                   {
-                       boundary.Add(i);
-                   }
-               }
-           }
-
-           boundary.Add(data.Item2.Length());
-           return boundary;
-       }
-
-       /// <summary>
-       /// Index points
-       /// </summary>
-       /// <param name="re">Text changed</param>
-       /// <param name="listNode">ListNode</param>
-       /// <returns>Index Points</returns>
-       private static List<int> LookupIndex(TextChange re, ListNode listNode)
-       {
-           if (listNode == null)
-           {
-               throw new Exception("Changed text or list node cannot be null");
-           }
-
-           if (listNode.Length() == 0)
-           {
-               throw new Exception("List node must contains at least one element");
-           }
-
-           List<int> result = new List<int>();
-           SyntaxNodeOrToken firstNode = listNode.List[0];
-
-           List<SyntaxNodeOrToken> list = listNode.List;
-           int i = 0;
-           SyntaxNodeOrToken node = list[i];
-           TextSpan span = node.Span;
-           while ((firstNode.FullSpan.Start + re.Span.Start) > span.Start)
-           {
-               if (i >= list.Count())
-               {
-                   return result;
-               }
-               node = list[i++];
-               span = node.Span;
-           }
-
-           int j = i;
-           while ((firstNode.FullSpan.Start + re.Span.Start + re.NewText.Length) > span.Start)
-           {
-               if (j == list.Count)
-                   break;
-               node = list[Math.Max(j++, 0)];
-               span = node.Span;
-           }
-
-           if (i == 0 && j == 0)
-           {
-               j = list.Count;
-           }
-
-           for (int z = i - 1; z < j; z++)
-           {
-               result.Add(z);
-           }
-           return result;
-       }*/
-
-/*private static int LookupIndex(int start, ListNode data)
-{
-    for (int i = 0; i < data.Length(); i++)
-    {
-        SyntaxNodeOrToken node = data.List[i];
-        int spanStart = node.Span.Start;
-
-        if (spanStart >= start)
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}*/
-
-/*
-        private static int GetProduct(Dictionary<Tuple<int, int>, List<IExpression>> mapping, List<Tuple<int, int>> solution)
-        {
-            int sum = 1;
-            foreach (Tuple<int, int> entry in solution)
-            {
-                sum *= mapping[entry].Count();
-            }
-
-            return sum;
-        }
-        */

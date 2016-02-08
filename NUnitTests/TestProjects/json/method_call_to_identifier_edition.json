@@ -1,21 +1,21 @@
 {
-  "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs": [
+  "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs": [
     {
       "Start": 1184,
       "Length": 11,
-      "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs",
+      "SourcePath": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs",
       "SourceCode": null
     },
     {
       "Start": 1748,
       "Length": 11,
-      "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs",
+      "SourcePath": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs",
       "SourceCode": null
     },
     {
       "Start": 2318,
       "Length": 25,
-      "SourcePath": "C:\\Users\\SPG\\Documents\\Visual Studio 2013\\Projects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs",
+      "SourcePath": "..\\..\\TestProjects\\ExampleProject\\ExampleProject\\Company.ExampleProject.MethodCallToIdentifier\\LanguageParser.cs",
       "SourceCode": null
     }
   ]

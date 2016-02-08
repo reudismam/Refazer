@@ -1,11 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactor.TextRegion;
 
-namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
+namespace Spg.LocationRefactor.Operator
 {
     public interface IOperator
     {
@@ -13,7 +11,7 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
         /// Execute the operator
         /// </summary>
         /// <returns>Execution result</returns>
-        ListNode Execute(String input);
+        ListNode Execute(string input);
 
         /// <summary>
         /// Execute the operator
@@ -23,11 +21,10 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
         ListNode Execute(SyntaxNode input);
 
         /// <summary>
-        /// Retrieve region
+        /// Retrieve region on all files on program
         /// </summary>
-        /// <param name="input">Source code</param>
         /// <returns>Regions</returns>
-        List<TRegion> RetrieveRegion(String input);
+        List<TRegion> RetrieveRegion();
 
         /// <summary>
         /// Retrieve region of the source code
@@ -38,3 +35,6 @@ namespace LocationCodeRefactoring.Spg.LocationRefactor.Operator
         List<TRegion> RetrieveRegion(SyntaxNode input, string sourceCode);
     }
 }
+
+
+

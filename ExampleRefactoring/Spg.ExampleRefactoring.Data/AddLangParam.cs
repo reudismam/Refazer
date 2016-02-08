@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Spg.ExampleRefactoring.Data;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Data
+namespace Spg.ExampleRefactoring.Data
 {
     /// <summary>
     /// Add language parameter test
@@ -104,4 +104,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Data
         }
     }
 }
+
 

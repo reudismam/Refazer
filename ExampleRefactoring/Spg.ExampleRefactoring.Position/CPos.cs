@@ -1,7 +1,7 @@
-﻿using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
+using Spg.ExampleRefactoring.Synthesis;
 using Spg.ExampleRefactoring.Position;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Position
+namespace Spg.ExampleRefactoring.Position
 {
     /// <summary>
     /// CPos positioning element
@@ -84,3 +84,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Position
         }
     }
 }
+
+

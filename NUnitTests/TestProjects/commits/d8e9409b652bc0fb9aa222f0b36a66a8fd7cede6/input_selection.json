@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
   },
   {
     "Text": "public override void Run()",
@@ -27,11 +27,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
   },
   {
     "Text": "public override void Run()",
@@ -44,10 +44,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\EntityFramework\\EntityFramework\\Migrations\\Design\\ToolingFacade.cs"
   }
 ]

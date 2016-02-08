@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using Spg.ExampleRefactoring.Util;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.Util
+namespace Spg.ExampleRefactoring.Util
 {
     /// <summary>
     /// Json utility
@@ -17,10 +19,22 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Util
         public static void Write(T t, string path)
         {
             System.IO.StreamWriter file = new System.IO.StreamWriter(path);
-            string json = JsonConvert.SerializeObject(t, Formatting.Indented,
-                                 new JsonSerializerSettings() {ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
-            file.Write(json);
-            file.Close();
+            string json = "";
+            try
+            {
+                json = JsonConvert.SerializeObject(t, Formatting.Indented,
+                    new JsonSerializerSettings() {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+                file.Write(json);
+            }
+            catch (OutOfMemoryException)
+            {
+                //MessageBox.Show("Exception");
+                Console.WriteLine("Could not write to file: " + path);
+            }
+            finally
+            {
+                file.Close();
+            }
         }
 
         /// <summary>
@@ -30,9 +44,14 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.Util
         /// <returns>Object</returns>
         public static T Read(string path)
         {
+            //JsonSerializerSettings settings = new JsonSerializerSettings();
+            //settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+
             string json = FileUtil.ReadFile(path);
-            T obj = JsonConvert.DeserializeObject<T>(json);
+            T obj = JsonConvert.DeserializeObject<T>(json/*, settings*/);
             return obj;
         }
     }
 }
+

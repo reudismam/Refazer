@@ -126,4 +126,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IntelliExtractPackage_NotifyLocationsSelected_Do_you_want_to_inform_negative_locations_" xml:space="preserve">
+    <value>Do you want to inform negative locations?</value>
+  </data>
+  <data name="IntelliExtractPackage_NotifyLocationsSelected_Is_it_a_correct_location_" xml:space="preserve">
+    <value>Is it a correct location?</value>
+  </data>
+  <data name="IntelliExtractPackage_NotifyLocationsSelected_class__" xml:space="preserve">
+    <value>class: </value>
+  </data>
+  <data name="IntelliExtractPackage_NotifyLocationsSelected_" xml:space="preserve">
+    <value>
+</value>
+  </data>
+  <data name="IntelliExtractPackage_NotifyLocationsSelected_Done_" xml:space="preserve">
+    <value>Done!</value>
+  </data>
+  <data name="IntelliExtractPackage__CreateProjectionBuffer_Document_not_found_on_project__" xml:space="preserve">
+    <value>Document not found on project: </value>
+  </data>
+  <data name="IntelliExtractPackage_NotifyHilightChanged_No_text_view_is_currently_open" xml:space="preserve">
+    <value>No text view is currently open</value>
+  </data>
 </root>

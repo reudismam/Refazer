@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExampleRefactoring.Spg.ExampleRefactoring.RegularExpression;
-using ExampleRefactoring.Spg.ExampleRefactoring.Synthesis;
-using ExampleRefactoring.Spg.LocationRefactoring.Tok;
+using Spg.ExampleRefactoring.RegularExpression;
+using Spg.ExampleRefactoring.Synthesis;
+using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.ExampleRefactoring.Comparator;
 
-namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
+namespace Spg.ExampleRefactoring.AST
 {
     /// <summary>
     /// Abstract syntax tree (AST) operations
@@ -23,10 +23,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Syntax node list</returns>
         public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
         {
-            if (root == null || nodes == null)
-            {
-                throw new Exception("Root node and list cannot be null and list must not be empty.");
-            }
+            if (root == null) throw new ArgumentNullException("root");
+            if (nodes == null) throw new ArgumentNullException("nodes");
 
             if (!root.ChildNodesAndTokens().Any())
             {
@@ -52,10 +50,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Syntax node list</returns>
         public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens2(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
         {
-            if (root == null || nodes == null)
-            {
-                throw new Exception("Root node and list cannot be null and list must not be empty.");
-            }
+            if (root == null) throw new ArgumentNullException("root");
+            if (nodes == null) throw new ArgumentNullException("nodes");
 
             if (root.IsKind(SyntaxKind.InvocationExpression) && (root.Parent.IsKind(SyntaxKind.Argument) || root.Parent.IsKind(SyntaxKind.ParenthesizedLambdaExpression) || root.Parent.IsKind(SyntaxKind.ArrayInitializerExpression)))
             {
@@ -116,10 +112,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns></returns>
         public static ListNode SubNotes(ListNode nodes, int startPosition, int selectionLength)
         {
-            if (nodes == null)
-            {
-                throw new Exception("Nodes cannot be null");
-            }
+            if (nodes == null) throw new ArgumentNullException("nodes");
             return new ListNode(nodes.List.GetRange(startPosition, selectionLength));
         }
 
@@ -131,10 +124,8 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>True if a match exists</returns>
         public static bool IsMatch(ListNode input, TokenSeq regex)
         {
-            if (input == null || regex == null)
-            {
-                throw new Exception("Input or regular expression cannot be null");
-            }
+            if (input == null) throw new ArgumentNullException("input");
+            if (regex == null) throw new ArgumentNullException("regex");
 
             return Regex.IsMatch(input, regex); 
         }
@@ -148,12 +139,11 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Matches of start matches</returns>
         public static List<int> Matches(ListNode input, ListNode subNodes, ComparerBase comparer)
         {
-            if (input == null || subNodes == null || comparer == null)
-            {
-                throw new Exception("Input or SubNodes or Comparer cannot be null");
-            }
-            List<int> matches = new List<int>();
-            matches = comparer.Matches(input, subNodes);
+            if (input == null) throw new ArgumentNullException("input");
+            if (subNodes == null) throw new ArgumentNullException("subNodes");
+            if (comparer == null) throw new ArgumentNullException("comparer");
+
+            List<int> matches = comparer.Matches(input, subNodes);
 
             return matches;
         }
@@ -167,9 +157,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Matches start index</returns>
         public static List<Tuple<int, ListNode>> Matches(ListNode input, TokenSeq regex, RegexComparer comparer)
         {
-            List<Tuple<int, ListNode>> matches = new List<Tuple<int, ListNode>>();
-            matches = comparer.Matches(input, regex);
-
+            List<Tuple<int, ListNode>> matches = comparer.Matches(input, regex);
             return matches;
         }
 
@@ -180,10 +168,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         /// <returns>Fist parent of a token</returns>
         public static SyntaxNodeOrToken Parent(SyntaxNodeOrToken token)
         {
-            if(token == null)
-            {
-                throw new Exception("Token cannot be null");
-            }
+            if(token == null)throw new ArgumentNullException("token");
             SyntaxNodeOrToken parent = token;
             while (parent.Parent.ChildNodesAndTokens().Count() <= 1)
             {
@@ -221,7 +206,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
             SyntaxKind syntaxKind)
         {
             var decedents = from snode in tree.GetRoot().DescendantNodes()
-                            where snode.Span.Start == start && snode.Span.End == end && snode.CSharpKind() == syntaxKind
+                            where snode.Span.Start == start && snode.Span.End == end && snode.Kind() == syntaxKind
                             select snode;
             return decedents;
         }
@@ -235,7 +220,7 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
         public static IEnumerable<SyntaxNode> NodesWithTheSameSyntaxKind(SyntaxNode tree, SyntaxKind syntaxKind)
         {
             var treeDescendents = from snode in tree.DescendantNodes()
-                                  where snode.CSharpKind() == syntaxKind
+                                  where snode.Kind() == syntaxKind
                                   select snode;
             return treeDescendents;
         }
@@ -272,79 +257,5 @@ namespace ExampleRefactoring.Spg.ExampleRefactoring.AST
     }
 }
 
-///// <summary>
-///// Convert syntax node to a list
-///// </summary>
-///// <param name="root">Syntax node root</param>
-///// <param name="nodes">Syntax node or token list</param>
-///// <returns>Syntax node list</returns>
-//public static List<SyntaxNodeOrToken> EnumerateSyntaxNodesAndTokens2(SyntaxNodeOrToken root, List<SyntaxNodeOrToken> nodes)
-//{
-//    if (root == null || nodes == null)
-//    {
-//        throw new Exception("Root node and list cannot be null and list must not be empty.");
-//    }
-
-//    ASTSyntaxWalker walker = new ASTSyntaxWalker();
-//    walker.Visit(root.AsNode());
-//    List<SyntaxNodeOrToken> walkerNodes = walker.tokenList;
-
-//    return nodes;
-//}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*/// <summary>
-        /// Convert string to nodes
-        /// </summary>
-        /// <param name="examples">Examples</param>
-        /// <returns>Syntax nodes or tokens list</returns>
-        public static List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> ConvertToNodes(List<Tuple<String, String>> examples)
-        {
-            List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> transformed = new List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>>();
-
-            foreach (Tuple<String, String> example in examples)
-            {
-                SyntaxTree tree1 = CSharpSyntaxTree.ParseText(example.Item1);
-                SyntaxTree tree2 = CSharpSyntaxTree.ParseText(example.Item2);
-
-                Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> node = ChangeManager.MethodsChanged(tree1, tree2);
-
-                transformed.Add(node);
-            }
-
-            return transformed;
-        }*/
-/*//private static List<SyntaxNode> Nodes(SyntaxNode syntaxNode, List<SyntaxNode> nodes, SyntaxKind kind)
-       //{
-       //    /*if (nodes.Contains(syntaxNode))
-       //    {
-       //        return nodes;
-       //    }
-       //    if (syntaxNode.IsKind(kind))
-       //    {*/
-//        nodes.Add(syntaxNode);
-//    //    return nodes;
-//    //}
-
-//    foreach (SyntaxNode node in syntaxNode.DescendantNodes())
-//    {
-//        nodes = Nodes(node, nodes, kind);
-//    }
-
-//    return nodes;
-//}        */

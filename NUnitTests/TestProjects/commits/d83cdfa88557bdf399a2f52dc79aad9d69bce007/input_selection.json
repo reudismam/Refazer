@@ -10,11 +10,11 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\UnitTests\\UnitTests\\Infrastructure\\Transactions\\CommitFailureHandlerTests.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\UnitTests\\UnitTests\\Infrastructure\\Transactions\\CommitFailureHandlerTests.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\UnitTests\\UnitTests\\Infrastructure\\Transactions\\CommitFailureHandlerTests.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\UnitTests\\UnitTests\\Infrastructure\\Transactions\\CommitFailureHandlerTests.cs"
   },
   {
     "Text": "new CommitFailureHandler()",
@@ -27,10 +27,10 @@
       "Parent": null,
       "Node": null,
       "Color": "White",
-      "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\UnitTests\\UnitTests\\Infrastructure\\Transactions\\CommitFailureHandlerTests.cs"
+      "Path": "..\\..\\TestProjects\\Projects\\UnitTests\\UnitTests\\Infrastructure\\Transactions\\CommitFailureHandlerTests.cs"
     },
     "Node": null,
     "Color": "LightGreen",
-    "Path": "C:\\Users\\SPG-02\\Documents\\Visual Studio 2013\\Projects\\IntelliMeta\\intellimeta\\NUnitTests\\TestProjects\\Projects\\UnitTests\\UnitTests\\Infrastructure\\Transactions\\CommitFailureHandlerTests.cs"
+    "Path": "..\\..\\TestProjects\\Projects\\UnitTests\\UnitTests\\Infrastructure\\Transactions\\CommitFailureHandlerTests.cs"
   }
 ]
