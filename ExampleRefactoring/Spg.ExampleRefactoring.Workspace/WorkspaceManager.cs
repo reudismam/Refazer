@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Spg.LocationRefactoring.Tok;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Windows.Forms;
 
 namespace Spg.ExampleRefactoring.Workspace
 {
@@ -114,13 +115,15 @@ namespace Spg.ExampleRefactoring.Workspace
                     }
                 }
             }
+    
             //foreach (var file in sourceFiles)
             //{
-            //    if (file.Item2.ToUpperInvariant().Contains("FaultyAnalyzer.cs".ToUpperInvariant()))
+            //    if (file.Item2.ToUpperInvariant().Contains("AsyncLambdaVariableCodeFix.cs".ToUpperInvariant()))
             //    {
             //        MessageBox.Show("Reudismam");
             //    }
             //}
+            //sourceFiles = sourceFiles.OrderBy(o => o.Item2).ToList();
             return sourceFiles;
         }
 
