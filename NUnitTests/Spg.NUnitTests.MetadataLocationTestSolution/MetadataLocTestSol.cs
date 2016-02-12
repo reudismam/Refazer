@@ -11,6 +11,7 @@ using Spg.LocationRefactor.TextRegion;
 using Taramon.Exceller;
 using Spg.ExampleRefactoring.Workspace;
 using NUnitTests.Spg.NUnitTests.Util;
+using ASTBuilder;
 
 namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
 {
@@ -797,7 +798,8 @@ namespace NUnitTests.Spg.NUnitTests.LocationTestSolution
         /// <param name="project">Project</param>
         /// <returns>True if locale passed</returns>
         public static bool LocaleTestSolution(string commit, string solution, List<string> project)
-        {           
+        {
+            Class1.Main();
             EditorController controller = null;
 
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);

@@ -38,7 +38,22 @@ IntelliUndo/obj/*
 CompileChecker/bin/*
 CompileChecker/obj/*
 
+ASTBuilder/bin/*
+ASTBuilder/obj/*
+
+ProgramSynthesis/ProseSample.Substrings/bin/*
+ProgramSynthesis/ProseSample.Substrings/obj/*
+
+ProgramSynthesis/ProseSample/bin/*
+ProgramSynthesis/ProseSample/obj/*
+
+ProgramSynthesis/ProseSample.TextExtraction/bin/*
+ProgramSynthesis/ProseSample.TextExtraction/obj/*
+
+
 TestResults/*
+
+packages/*
 
 DirectedGraph/DirectedGraph/bin/*
 DirectedGraph/DirectedGraph/obj/*

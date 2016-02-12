@@ -1,0 +1,32 @@
+﻿reference 'Microsoft.ProgramSynthesis.Extraction.Text.Semantics.dll';
+reference 'ProseSample.Substrings.dll';
+reference 'Microsoft.CodeAnalysis.CSharp.dll';
+reference 'Microsoft.CodeAnalysis.dll';
+
+using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
+using ProseSample.Substrings;
+using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using System;
+
+using semantics ProseSample.Substrings.Semantics;
+using learners ProseSample.Substrings.WitnessFunctions;
+
+language ProseSample_Match;
+
+@vardefault[VariableScore]
+feature double Score = RankingScore;
+
+@start MatchResult sub := expression;
+MatchResult expression := C(n, kd, expression) | C(n, kd, expression, expression) | Literal(n, tree);
+
+string id;
+IEnumerable<MatchResult> children;
+string kd;
+SyntaxNode tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id);
+
+@feature[Score=RegexScore] RegularExpression r;
+
+@input SyntaxNode n;
+@feature[Score=KScore] int k;
