@@ -38,7 +38,7 @@ namespace ProseSample.Substrings
             return index < 0 || index >= ms.Count ? null : (uint?) ms[index].Right;
         }
 
-        public static MatchResult C(SyntaxNode n, string kind, MatchResult expression)
+        public static MatchResult C1(SyntaxNodeOrToken n, string kind, MatchResult expression)
         {
             SyntaxKind skind;
             if (Enum.TryParse(kind, out skind))
@@ -55,13 +55,13 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        public static MatchResult C(SyntaxNode n, string kind, MatchResult expression1, MatchResult expression2)
+        public static MatchResult C2(SyntaxNodeOrToken n, string kind, MatchResult expression1, MatchResult expression2)
         {
             SyntaxKind skind;
-            List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-            
+           
             if (Enum.TryParse(kind, out skind))
             {
+                List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
                 list.Add(expression1.match.Item1); list.Add(expression2.match.Item1);
                 SyntaxNode parent = LCAManager.GetInstance().LeastCommonAncestor(list, list.First().SyntaxTree).AsNode();
                 if (parent.IsKind(skind))
@@ -75,7 +75,7 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        public static SyntaxNode Identifier(string id)
+        public static SyntaxNodeOrToken Identifier(string id)
         {
             SyntaxNode n = SyntaxFactory.IdentifierName(id);
             return n;
@@ -95,9 +95,9 @@ namespace ProseSample.Substrings
             return numericLiteral;
         }
 
-        public static MatchResult Literal(SyntaxNode n, SyntaxNode node)
+        public static MatchResult Literal(SyntaxNodeOrToken n, SyntaxNodeOrToken node)
         {
-            Tuple<SyntaxNode, SyntaxNode> tuple = Tuple.Create(n, node);
+            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(n, (SyntaxNodeOrToken) node);
             Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
 
             TokenSeq seq = DymTokens(lnode.Item2.List);

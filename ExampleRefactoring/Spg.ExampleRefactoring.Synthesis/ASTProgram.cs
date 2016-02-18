@@ -1287,6 +1287,31 @@ namespace Spg.ExampleRefactoring.Synthesis
         }
 
         /// <summary>
+        /// Convert syntax node example to ListNode example
+        /// </summary>
+        /// <param name="example">Syntax nodes example</param>
+        /// <returns>ListNode example</returns>
+        public static Tuple<ListNode, ListNode> Example(Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> example)
+        {
+            SyntaxNodeOrToken inputRoot = example.Item1;
+            List<SyntaxNodeOrToken> inputList = new List<SyntaxNodeOrToken>();
+            inputList = ASTManager.EnumerateSyntaxNodesAndTokens(inputRoot, inputList);
+
+            ListNode input = new ListNode(inputList);
+            input.OriginalText = example.Item1.ToFullString();
+
+            SyntaxNodeOrToken outputRoot = example.Item2;
+            List<SyntaxNodeOrToken> outputList = new List<SyntaxNodeOrToken>();
+            outputList = ASTManager.EnumerateSyntaxNodesAndTokens(outputRoot, outputList);
+
+            ListNode output = new ListNode(outputList);
+            output.OriginalText = example.Item2.ToFullString();
+
+            Tuple<ListNode, ListNode> tuple = Tuple.Create(input, output);
+            return tuple;
+        }
+
+        /// <summary>
         /// Generate nodes
         /// </summary>
         /// <param name="inputTree">Input ListNode</param>

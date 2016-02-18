@@ -11,6 +11,8 @@ using Microsoft.ProgramSynthesis.Utils;
 using static ProseSample.Utils;
 using ProseSample.Substrings;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ProseSample
 {
@@ -22,21 +24,46 @@ namespace ProseSample
             LoadAndTestTextExtraction();
         }
 
+        //private static void LoadAndTestSubstrings()
+        //{
+        //    var grammar = LoadGrammar("ProseSample.Code.grammar");
+        //    if (grammar == null) return;
+
+        //    ProgramNode p = grammar.ParseAST(@"C(n, ""LocalDeclarationStatement"", 
+        //                                            C(n, ""VariableDeclaration"",
+        //                                                    Literal(n, PredefinedType(""int"")),
+        //                                                    C(n, ""VariableDeclarator"", 
+        //                                                        Literal(n, Identifier(""a"")),
+        //                                                        C(n, ""EqualsValueClause"",
+        //                                                            Literal(n, NumericLiteralExpression(""10""))))))",
+        //                                     ASTSerializationFormat.HumanReadable);
+
+        //    var inpTree = CSharpSyntaxTree.ParseText(
+        //    @"using System;
+
+        //    public class Test
+        //    {
+        //        public static void Main()
+        //        {
+        //            int a = 10;
+        //        }
+        //    }").GetRoot();
+
+        //    State input = State.Create(grammar.InputSymbol, inpTree);
+
+        //    var result = (MatchResult) p.Invoke(input);
+        //    Console.WriteLine(result);
+        //}
+
         private static void LoadAndTestSubstrings()
         {
             var grammar = LoadGrammar("ProseSample.Code.grammar");
             if (grammar == null) return;
 
-            ProgramNode p = grammar.ParseAST(@"C(n, ""LocalDeclarationStatement"", 
-                                                    C(n, ""VariableDeclaration"",
-                                                            Literal(n, PredefinedType(""int"")),
-                                                            C(n, ""VariableDeclarator"", 
-                                                                Literal(n, Identifier(""a"")),
-                                                                C(n, ""EqualsValueClause"",
-                                                                    Literal(n, NumericLiteralExpression(""10""))))))",
+            ProgramNode p = grammar.ParseAST(@"Literal(n, Identifier(""a""))",
                                              ASTSerializationFormat.HumanReadable);
 
-            var inpTree = CSharpSyntaxTree.ParseText(
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
             @"using System;
 
             public class Test
@@ -47,10 +74,24 @@ namespace ProseSample
                 }
             }").GetRoot();
 
-            State input = State.Create(grammar.InputSymbol, inpTree);
+            //SyntaxToken predType = SyntaxFactory.ParseToken("int");
+            //SyntaxNodeOrToken outTree = SyntaxFactory.PredefinedType(predType);
 
-            var result = (MatchResult) p.Invoke(input);
+            SyntaxNodeOrToken outTree = SyntaxFactory.ParseStatement("int a = 10;");
+
+            Bindings bs = null;
+            Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(outTree, bs);
+            MatchResult m = new MatchResult(t);
+
+            //SyntaxNodeOrToken outTree = SyntaxFactory.ParseExpression("10");
+
+
+            State input = State.Create(grammar.InputSymbol, inpTree);
+            var result = (MatchResult)p.Invoke(input);
             Console.WriteLine(result);
+
+            Spec spec = ShouldConvert.Given(grammar).To(inpTree, m);
+            Learn(grammar, spec);        
         }
 
         private static void TestFlashFillBenchmark(Grammar grammar, string benchmark, int exampleCount = 2)
