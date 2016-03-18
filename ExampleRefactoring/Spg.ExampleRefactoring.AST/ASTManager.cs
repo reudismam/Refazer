@@ -220,7 +220,7 @@ namespace Spg.ExampleRefactoring.AST
         public static IEnumerable<SyntaxNode> NodesWithTheSameSyntaxKind(SyntaxNode tree, SyntaxKind syntaxKind)
         {
             var treeDescendents = from snode in tree.DescendantNodes()
-                                  where snode.Kind() == syntaxKind
+                                  where snode.IsKind(syntaxKind)
                                   select snode;
             return treeDescendents;
         }

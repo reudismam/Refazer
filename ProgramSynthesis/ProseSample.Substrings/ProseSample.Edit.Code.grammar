@@ -18,11 +18,12 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
-@start MatchResult sub := expression;
-MatchResult expression := C1(n, kd, expression) | C2(n, kd, expression, expression) | Literal(n, tree);
-SyntaxNodeOrToken ast:= Node(kd, ast) | Const(tree);
+@start SyntaxNodeOrToken sub := edit;
 
-SyntaxNodeOrToken edit := InsertBefore(expression, ast);
+SyntaxNodeOrToken edit := InsertBefore(n, expression, ast);
+
+MatchResult expression := C1(n, kd, expression) | C2(n, kd, expression, expression) | Literal(n, tree);
+SyntaxNodeOrToken ast:= Node1(kd, ast) | Node2(kd, ast, ast) | Const(tree);
 
 @feature[Score=KDScore] string id;
 @feature[Score=KDScore] string kd;

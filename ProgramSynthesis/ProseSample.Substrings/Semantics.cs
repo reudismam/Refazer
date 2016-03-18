@@ -11,6 +11,7 @@ using Spg.ExampleRefactoring.Comparator;
 using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.RegularExpression;
 using Spg.ExampleRefactoring.LCS;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ProseSample.Substrings
 {
@@ -41,18 +42,58 @@ namespace ProseSample.Substrings
         public static MatchResult C1(SyntaxNodeOrToken n, string kind, MatchResult expression)
         {
             SyntaxKind skind;
-            if (Enum.TryParse(kind, out skind))
+            bool validKind = Enum.TryParse(kind, out skind);
+
+            var kinds = from k in n.AsNode().DescendantNodes()
+                        where k.IsKind(skind)
+                        select k;
+
+            var klist = kinds.ToList();
+ 
+            foreach(var kindMatch in klist)
             {
-                SyntaxNode parent = ASTManager.Parent(expression.match.Item1).AsNode();
-                if (parent.IsKind(skind))
+                if (MatchChildren(kindMatch, expression.match.Item1))
                 {
-                    Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(parent, null);
+                    Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(kindMatch, null);
                     MatchResult matchResult = new MatchResult(match);
                     return matchResult;
                 }
             }
-     
+
+            /* if (Enum.TryParse(kind, out skind))
+             {
+                 //SyntaxNode parent = ASTManager.Parent(expression.match.Item1).AsNode();
+                 if (parent.IsKind(skind))
+                 {
+                     Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(parent, null);
+                     MatchResult matchResult = new MatchResult(match);
+                     return matchResult;
+                 }
+             }*/
+
             return null;
+
+        }
+
+        private static bool MatchChildren(SyntaxNodeOrToken parent, SyntaxNodeOrToken child)
+        {
+            foreach(var item in parent.ChildNodesAndTokens())
+            {
+                if (item.IsKind(child.Kind()) && item.ToString().Equals(child.ToString()))
+                {
+                    return true;
+                }
+
+                if (child.IsKind(SyntaxKind.IdentifierToken) && item.IsKind(SyntaxKind.IdentifierName))
+                {
+                    string itemString = item.ToString();
+                    string childString = child.ToString();
+                    return itemString.Equals(childString);
+                }
+            }
+
+            return false;
+
         }
 
         public static MatchResult C2(SyntaxNodeOrToken n, string kind, MatchResult expression1, MatchResult expression2)
@@ -75,6 +116,7 @@ namespace ProseSample.Substrings
             return null;
         }
 
+
         public static SyntaxNodeOrToken Identifier(string id)
         {
             SyntaxNode n = SyntaxFactory.IdentifierName(id);
@@ -87,6 +129,7 @@ namespace ProseSample.Substrings
             SyntaxNode n = SyntaxFactory.PredefinedType(predType);
             return n;
         }
+
 
         public static SyntaxNode NumericLiteralExpression(string id)
         {
@@ -114,6 +157,45 @@ namespace ProseSample.Substrings
             return null;
         }
 
+        public static SyntaxNodeOrToken InsertBefore(SyntaxNodeOrToken n, MatchResult mresult, SyntaxNodeOrToken ast)
+        {
+            SyntaxNodeOrToken node = mresult.match.Item1;
+
+            List<SyntaxNode> nodes = new List<SyntaxNode>() { ast.AsNode() };
+
+            var root = n.AsNode();
+
+            root = root.InsertNodesBefore(root.FindNode(node.Span), nodes);
+
+            return root.NormalizeWhitespace();
+        }
+
+        public static SyntaxNodeOrToken Node1(string kind, SyntaxNodeOrToken child)
+        {
+            SyntaxKind skind;
+            bool validKind = Enum.TryParse(kind, out skind);
+            List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken>();
+            children.Add(child);
+            var node = GetSyntaxElement(skind, children);
+            return node;
+        }
+
+        public static SyntaxNodeOrToken Node2(string kind, SyntaxNodeOrToken child, SyntaxNodeOrToken child2)
+        {
+            SyntaxKind skind;
+            bool validKind = Enum.TryParse(kind, out skind);
+            List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken>();
+            children.Add(child);
+            children.Add(child2);
+            var node = GetSyntaxElement(skind, children);
+            return node;
+        }
+
+        public static SyntaxNodeOrToken Const(SyntaxNodeOrToken cst)
+        {
+            return cst;
+        }
+
         private static TokenSeq DymTokens(List<SyntaxNodeOrToken> list)
         {
             var tokens = new List<Spg.ExampleRefactoring.Tok.Token>();
@@ -125,6 +207,41 @@ namespace ProseSample.Substrings
 
             TokenSeq seq = new TokenSeq(tokens);
             return seq;
+        }
+
+        private static SyntaxNodeOrToken GetSyntaxElement(SyntaxKind kind, List<SyntaxNodeOrToken> children)
+        {
+            if(kind == SyntaxKind.ExpressionStatement)
+            {
+                ExpressionSyntax expression = (ExpressionSyntax) children.First();
+                ExpressionStatementSyntax expressionStatement = SyntaxFactory.ExpressionStatement(expression);
+                return expressionStatement;
+            }
+
+            if(kind == SyntaxKind.InvocationExpression)
+            {
+                IdentifierNameSyntax identifier = (IdentifierNameSyntax)children[0]; //identifier name
+                ArgumentListSyntax argumentList = (ArgumentListSyntax)children[1]; //argument list
+                var invocation = SyntaxFactory.InvocationExpression(identifier, argumentList);
+                return invocation;
+            }
+
+            if (kind == SyntaxKind.ArgumentList)
+            {
+                ArgumentSyntax argument = (ArgumentSyntax) children.First();
+                var spal = SyntaxFactory.SeparatedList(new[] { argument });
+                var argumentList = SyntaxFactory.ArgumentList(spal);
+                return argumentList;
+            }
+
+            if (kind == SyntaxKind.Argument)
+            {
+                IdentifierNameSyntax s = (IdentifierNameSyntax) children.First();
+                var argument = SyntaxFactory.Argument(s);
+                return argument;
+            }
+
+            return null;
         }
     }
 }

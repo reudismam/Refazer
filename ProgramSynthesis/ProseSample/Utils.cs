@@ -54,10 +54,10 @@ namespace ProseSample
             ProgramSet consistentPrograms = engine.LearnGrammar(spec);
             //engine.Configuration.LogListener.SaveLogToXML("learning.log.xml");
 
-            foreach (ProgramNode p in consistentPrograms.RealizedPrograms)
-            {
-                Console.WriteLine(p);
-            }
+            //foreach (ProgramNode p in consistentPrograms.RealizedPrograms)
+            //{
+            //    Console.WriteLine(p);
+            //}
 
             ProgramNode bestProgram = consistentPrograms.TopK("Score").FirstOrDefault();
             if (bestProgram == null)

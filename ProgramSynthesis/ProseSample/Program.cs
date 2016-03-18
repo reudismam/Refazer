@@ -12,7 +12,6 @@ using static ProseSample.Utils;
 using ProseSample.Substrings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ProseSample
 {
@@ -20,42 +19,123 @@ namespace ProseSample
     {
         private static void Main(string[] args)
         {
-            LoadAndTestSubstrings();
-            LoadAndTestTextExtraction();
+            //LoadAndTestSubstrings1();
+            //LoadAndTestSubstrings2();
+            LoadAndTestSubstrings3();
+
+            
+
         }
 
-        //private static void LoadAndTestSubstrings()
-        //{
-        //    var grammar = LoadGrammar("ProseSample.Code.grammar");
-        //    if (grammar == null) return;
+        static bool ma()
+        {
+            bool a = false;
+            if (a)
+            {
+                return a;
+            }
+            return false;
+        }
 
-        //    ProgramNode p = grammar.ParseAST(@"C(n, ""LocalDeclarationStatement"", 
-        //                                            C(n, ""VariableDeclaration"",
-        //                                                    Literal(n, PredefinedType(""int"")),
-        //                                                    C(n, ""VariableDeclarator"", 
-        //                                                        Literal(n, Identifier(""a"")),
-        //                                                        C(n, ""EqualsValueClause"",
-        //                                                            Literal(n, NumericLiteralExpression(""10""))))))",
-        //                                     ASTSerializationFormat.HumanReadable);
+        static bool mb()
+        {
+            bool a = false;
+            Validate(a);
+            if (a)
+            {
+                return a;
+            }
+            return false;
+        }
 
-        //    var inpTree = CSharpSyntaxTree.ParseText(
-        //    @"using System;
+        private static void Validate(bool a)
+        {
+            throw new NotImplementedException();
+        }
 
-        //    public class Test
-        //    {
-        //        public static void Main()
-        //        {
-        //            int a = 10;
-        //        }
-        //    }").GetRoot();
+        private static void LoadAndTestSubstrings3()
+        {
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            if (grammar == null) return;
 
-        //    State input = State.Create(grammar.InputSymbol, inpTree);
+            ProgramNode p = grammar.ParseAST(@"InsertBefore(n, C1(n, ""IfStatement"",
+                                                   Literal(n, Identifier(""a""))),
+                                                      Node1(""ExpressionStatement"", 
+                                                        Node2(""InvocationExpression"", 
+                                                            Const(Identifier(""Validate"")),
+                                                            Node1(""ArgumentList"", 
+                                                                    Node1(""Argument"", 
+                                                                        Const(Identifier(""a"")))))))",
+                                             ASTSerializationFormat.HumanReadable);
 
-        //    var result = (MatchResult) p.Invoke(input);
-        //    Console.WriteLine(result);
-        //}
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
+            @"using System;
 
-        private static void LoadAndTestSubstrings()
+            public class Test
+            {
+                static bool ma()
+                {
+                     bool a = false;
+                     if (a){
+                        return a;
+                     }
+                    return false;
+                }
+            }").GetRoot();
+
+            SyntaxNodeOrToken outTree = SyntaxFactory.ParseStatement("int a = 10;");
+
+            Bindings bs = null;
+            Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(outTree, bs);
+            MatchResult m = new MatchResult(t);
+
+
+            State input = State.Create(grammar.InputSymbol, inpTree);
+            var result = (SyntaxNodeOrToken) p.Invoke(input);
+            string r = result.ToFullString();
+            Console.WriteLine(r);
+        }
+
+        private static void LoadAndTestSubstrings1()
+        {
+            var grammar = LoadGrammar("ProseSample.Code.grammar");
+            if (grammar == null) return;
+
+            ProgramNode p = grammar.ParseAST(@"C(n, ""LocalDeclarationStatement"", 
+                                                    C(n, ""VariableDeclaration"",
+                                                            Literal(n, PredefinedType(""int"")),
+                                                            C(n, ""VariableDeclarator"", 
+                                                                Literal(n, Identifier(""a"")),
+                                                                C(n, ""EqualsValueClause"",
+                                                                    Literal(n, NumericLiteralExpression(""10""))))))",
+                                             ASTSerializationFormat.HumanReadable);
+
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
+            @"using System;
+
+            public class Test
+            {
+                public static void Main()
+                {
+                    int a = 10;
+                }
+            }").GetRoot();
+
+            SyntaxNodeOrToken outTree = SyntaxFactory.ParseStatement("int a = 10;");
+
+            Bindings bs = null;
+            Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(outTree, bs);
+            MatchResult m = new MatchResult(t);
+
+
+            State input = State.Create(grammar.InputSymbol, inpTree);
+            var result = (MatchResult)p.Invoke(input);
+            //Console.WriteLine(result);
+
+            Console.WriteLine(result);
+        }
+
+        private static void LoadAndTestSubstrings2()
         {
             var grammar = LoadGrammar("ProseSample.Code.grammar");
             if (grammar == null) return;
@@ -88,7 +168,7 @@ namespace ProseSample
 
             State input = State.Create(grammar.InputSymbol, inpTree);
             var result = (MatchResult)p.Invoke(input);
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
 
             Spec spec = ShouldConvert.Given(grammar).To(inpTree, m);
             Learn(grammar, spec);        
