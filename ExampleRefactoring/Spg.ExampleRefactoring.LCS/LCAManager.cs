@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Spg.ExampleRefactoring.AST;
 using LeastCommonAncestor;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Spg.ExampleRefactoring.AST;
 
 namespace Spg.ExampleRefactoring.LCS
 {
@@ -166,8 +166,8 @@ namespace Spg.ExampleRefactoring.LCS
         /// <returns>Least common ancestor of nodes in the tree</returns>
         public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNodeOrToken> nodes, SyntaxTree tree)
         {
-            if (nodes == null) throw new ArgumentNullException("nodes");
-            if (tree == null) throw new ArgumentNullException("tree");
+            if (nodes == null) throw new ArgumentNullException(nameof(nodes));
+            if (tree == null) throw new ArgumentNullException(nameof(tree));
             if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
 
             LCAManager lcaCalculator = GetInstance();
@@ -256,10 +256,10 @@ namespace Spg.ExampleRefactoring.LCS
             /// <param name="snt">Syntax node of token reference</param>
             public Node(int start, int end, SyntaxNodeOrToken snt)
             {
-                this.Start = start;
-                this.End = end;
-                this.SyntaxKind = snt.Kind();
-                this.Snt = snt;
+                Start = start;
+                End = end;
+                SyntaxKind = snt.Kind();
+                Snt = snt;
             }
             /// <summary>
             /// Determine if obj is equal to this.
@@ -273,7 +273,7 @@ namespace Spg.ExampleRefactoring.LCS
                     return false;
                 }
                 Node other = (Node) obj;
-                return other.Start == this.Start && other.End == this.End && other.SyntaxKind == this.SyntaxKind;
+                return other.Start == Start && other.End == End && other.SyntaxKind == SyntaxKind;
             }
 
             /// <summary>

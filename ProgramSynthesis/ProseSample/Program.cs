@@ -12,6 +12,7 @@ using static ProseSample.Utils;
 using ProseSample.Substrings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
+using TreeEdit;
 
 namespace ProseSample
 {
@@ -21,9 +22,11 @@ namespace ProseSample
         {
             //LoadAndTestSubstrings1();
             //LoadAndTestSubstrings2();
-            LoadAndTestSubstrings3();
+            //LoadAndTestSubstrings3();
 
-            
+            TreeEditMain main = new TreeEditMain();
+            main.main();
+
 
         }
 
