@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.TreeEdit.PQ;
 using Microsoft.CodeAnalysis.CSharp;
 using Tutor;
-using TreeEdit.Spg.TreeEdit.Script;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
 {
@@ -19,15 +18,13 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <returns>Mapping from the nodes from t1 and t2.</returns>
         public Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> TopDown(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)
         {
-            Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
-            Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> A = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
+            var M = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
+            var A = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
 
-            PriorityQueue l1 = new PriorityQueue();
-            PriorityQueue l2 = new PriorityQueue();
-
+            var l1 = new PriorityQueue();
+            var l2 = new PriorityQueue();
             l1.Push(t1);
             l2.Push(t2);
-
 
             int minH = 1;
 
@@ -58,8 +55,8 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     List<Tuple<int, SyntaxNodeOrToken>> h1 = l1.Pop();
                     List<Tuple<int, SyntaxNodeOrToken>> h2 = l2.Pop();
 
-                    Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> dict1 = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
-                    Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> dict2 = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
+                    var dict1 = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
+                    var dict2 = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
                     foreach (var item1 in h1)
                     {
                         if (!dict1.ContainsKey(item1.Item2)) dict1.Add(item1.Item2, new List<SyntaxNodeOrToken>());

@@ -41,7 +41,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
                     var v = w.Parent;
                     if (!w.AsNode().ChildNodes().Any() && !w.ToString().Equals(x.ToString()))
                     {
-                        Update update = new Update(w, x, z, -1);
+                        Update update = new Update(w, x, z);
                         editScript.Add(update);
                     }
 

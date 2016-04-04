@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace TreeEdit.Spg.TreeEdit.Script
 {
-    public class Move : Insert
+    public class Move : EditOperation
     {
-        /*internal int k;
+        /// <summary>
+        /// Create a move operation
+        /// </summary>
+        /// <param name="movedNode">Moved node</param>
+        /// <param name="parent">Parent where the node will go.</param>
+        /// <param name="k">Position of this node in the parent</param>
+        public Move(SyntaxNodeOrToken movedNode, SyntaxNodeOrToken parent, int k) : base(movedNode, parent, k)
+        {
+        }
 
-        public SyntaxNodeOrToken Node { get; internal set; }*/
-
+        /// <summary>
+        /// String represent on this object
+        /// </summary>
+        /// <returns>Strring representation</returns>
         public override string ToString()
         {
             return "Move(" + T1Node.Kind() + " to " + Parent.Kind() + ", " + K + ")";
         }
 
-        public Move(SyntaxNodeOrToken t1Node, SyntaxNodeOrToken parent, int k) : base(t1Node, parent, k)
-        {
-        }
     }
 
 }

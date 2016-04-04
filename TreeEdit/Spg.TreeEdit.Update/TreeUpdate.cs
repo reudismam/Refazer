@@ -28,6 +28,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <summary>
         /// Map element from T1 (before tree) to T2 (after tree) nodes
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         private Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> _M;
 
         /// <summary>
@@ -40,67 +41,66 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         private Dictionary<EditOperation, bool> _processed;
 
+
         /// <summary>
         /// Update the tree following the edit script
         /// </summary>
         /// <param name="script">Edit script</param>
         /// <param name="tree">Tree to be updated</param>
         /// <param name="M">Mapping from each element for the before and after tree.</param>
+        // ReSharper disable once InconsistentNaming
         public void UpdateTree(List<EditOperation> script, SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
         {
-            //Update attributes
-            _currentTree = tree;
-            _M = M;
-            _dict = new Dictionary<SyntaxNodeOrToken, List<EditOperation>>();
-            _ann = new Dictionary<EditOperation, SyntaxAnnotation>();
-            _annts = new Dictionary<SyntaxNode, List<SyntaxAnnotation>>();
-            _processed = new Dictionary<EditOperation, bool>();
-            //Update atrributes
-
+            InitializeAtributes(tree, M);
             CreateEditionDictionary(script);
-
-            foreach (var item in _annts)
-            {
-                var annVisitor = new AddAnnotationRewriter(item.Key, item.Value);
-                _currentTree = annVisitor.Visit(_currentTree.AsNode());
-            }
-
-            foreach (var item in _annts)
-            {
-                foreach (var s in script)
-                {
-                    if (s is Move)
-                    {
-                        Move mv = s as Move;
-                        if (item.Key.Span.Start == mv.T1Node.Span.Start && item.Key.Span.Length == mv.T1Node.Span.Length)
-                        {
-                            mv.T1Node = _currentTree.AsNode().FindNode(mv.T1Node.Span);
-                        }
-                    }
-
-                    if (s is Script.Update)
-                    {
-                        Script.Update up = s as Script.Update;
-                        if (item.Key.Span.Start == up.T1Node.Span.Start && item.Key.Span.Length == up.T1Node.Span.Length)
-                        {
-                            up.T1Node = _currentTree.AsNode().FindNode(up.T1Node.Span);
-                        }
-                    }
-                }
-            }
+            Annotate(script); //We also need to update the dict.
 
             foreach (var item in script)
             {
                 if (!_processed.ContainsKey(item))
                 {
-                    ProcessInsertOperation(item);
+                    ProcessEditOperation(item);
+                }
+            }
+        }
 
-                    foreach (var a in _ann.Values)
+        /// <summary>
+        /// Annotate the tree
+        /// </summary>
+        /// <param name="script">Edition script</param>
+        private void Annotate(List<EditOperation> script)
+        {
+            AnnotateTree();
+            AnnotateEditOperations(script);
+        }
+
+        /// <summary>
+        /// Annotate current tree
+        /// </summary>
+        private void AnnotateTree()
+        {
+            foreach (var item in _annts)
+            {
+                var annVisitor = new AddAnnotationRewriter(item.Key, item.Value);
+                _currentTree = annVisitor.Visit(_currentTree.AsNode());
+            }
+        }
+
+        /// <summary>
+        /// Annotate edit operations
+        /// </summary>
+        /// <param name="script">Edit script</param>
+        private void AnnotateEditOperations(List<EditOperation> script)
+        {
+            foreach (var item in _annts)
+            {
+                foreach (var s in script)
+                {
+                    if (s is Move || s is Script.Update)
                     {
-                        var moveL = _currentTree.AsNode().GetAnnotatedNodes(a).ToList();
-                        if (moveL.Any())
+                        if (item.Key.Span.Start == s.T1Node.Span.Start && item.Key.Span.Length == s.T1Node.Span.Length)
                         {
-                            var move = moveL.First();
+                            s.T1Node = _currentTree.AsNode().FindNode(s.T1Node.Span);
                         }
                     }
                 }
@@ -108,30 +108,43 @@ namespace TreeEdit.Spg.TreeEdit.Update
         }
 
         /// <summary>
-        /// Process insert operations
+        /// Intialize global attributes
         /// </summary>
-        /// <param name="eop"></param>
-        private void ProcessInsertOperation(EditOperation eop)
+        /// <param name="tree">Source tree</param>
+        /// <param name="M">Mapping</param>
+        // ReSharper disable once InconsistentNaming
+        private void InitializeAtributes(SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
         {
-            if (eop is Insert)
-            {
-                var x = UpdateTree(eop);
-
-                //Use the annotation on our original node to find the new class declaration
-                var changedNodeList = _currentTree.AsNode().GetAnnotatedNodes(_ann[eop]).ToList();
-
-                var oldNode = changedNodeList.First();
-                if (eop is Insert)
-                {
-                    Insert ins = eop as Insert;
-                    var newNode = Update(oldNode, x.AsNode(), ins.K);
-                    var visitor = new UpdateTreeRewriter(oldNode, newNode);
-                    _currentTree = visitor.Visit(_currentTree.AsNode());
-                    string text = _currentTree.AsNode().NormalizeWhitespace().GetText().ToString();
-                }
-            }
+            _currentTree = tree;
+            _M = M;
+            _dict = new Dictionary<SyntaxNodeOrToken, List<EditOperation>>();
+            _ann = new Dictionary<EditOperation, SyntaxAnnotation>();
+            _annts = new Dictionary<SyntaxNode, List<SyntaxAnnotation>>();
+            _processed = new Dictionary<EditOperation, bool>();
         }
 
+        /// <summary>
+        /// Process insert operations
+        /// </summary>
+        /// <param name="eop">Edit operation</param>
+        private void ProcessEditOperation(EditOperation eop)
+        {
+            var updated = UpdateTree(eop);
+
+            var changedNodeList = _currentTree.AsNode().GetAnnotatedNodes(_ann[eop]).ToList();
+            var oldNode = changedNodeList.First();
+
+            var newNode = Update(oldNode, updated.AsNode(), eop.K);
+
+            var visitor = new UpdateTreeRewriter(oldNode, newNode);
+            _currentTree = visitor.Visit(_currentTree.AsNode());
+        }
+
+        /// <summary>
+        /// Create edition dictionary. The key contains the updated node 
+        /// and the value, the list of operations in this node.
+        /// </summary>
+        /// <param name="script"></param>
         private void CreateEditionDictionary(List<EditOperation> script)
         {
             int id = 0;
@@ -160,15 +173,14 @@ namespace TreeEdit.Spg.TreeEdit.Update
         {
             if (eop is Move)
             {
-                Move mv = eop as Move;
                 SyntaxAnnotation sn = new SyntaxAnnotation("MV-" + id);
                 _ann.Add(eop, sn);
 
-                if (!_annts.ContainsKey(mv.T1Node.AsNode()))
+                if (!_annts.ContainsKey(eop.T1Node.AsNode()))
                 {
-                    _annts[mv.T1Node.AsNode()] = new List<SyntaxAnnotation>();
+                    _annts[eop.T1Node.AsNode()] = new List<SyntaxAnnotation>();
                 }
-                _annts[mv.T1Node.AsNode()].Add(sn);
+                _annts[eop.T1Node.AsNode()].Add(sn);
             }
         }
 
@@ -181,15 +193,14 @@ namespace TreeEdit.Spg.TreeEdit.Update
         {
             if (s is Script.Update)
             {
-                Script.Update update = s as Script.Update;
                 SyntaxAnnotation sn = new SyntaxAnnotation("UP-" + id);
                 _ann.Add(s, sn);
 
-                if (!_annts.ContainsKey(update.T1Node.AsNode()))
+                if (!_annts.ContainsKey(s.T1Node.AsNode()))
                 {
-                    _annts[update.T1Node.AsNode()] = new List<SyntaxAnnotation>();
+                    _annts[s.T1Node.AsNode()] = new List<SyntaxAnnotation>();
                 }
-                _annts[update.T1Node.AsNode()].Add(sn);
+                _annts[s.T1Node.AsNode()].Add(sn);
             }
         }
 
@@ -200,10 +211,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <param name="id">Unique id</param>
         private void AnnotateInsertOperation(EditOperation eop, int id)
         {
-            if (eop is Insert && !(eop is Move))
+            if (eop is Insert)
             {
-                var insert = eop as Insert;
-                var y = insert.T1Node.AsNode().Parent;
+                var y = eop.T1Node.AsNode().Parent;
                 var z = _M.ToList().Find(o => o.Value.Equals(y)).Key;
 
                 SyntaxAnnotation upAnn = new SyntaxAnnotation("IS-" + id);
@@ -217,111 +227,164 @@ namespace TreeEdit.Spg.TreeEdit.Update
             }
         }
 
-        private SyntaxNode Update(SyntaxNode node, SyntaxNode child, int k)
+        /// <summary>
+        /// Update a node
+        /// </summary>
+        /// <param name="parent">Parent node to be updated</param>
+        /// <param name="child">Child node to be updated</param>
+        /// <param name="k">Position of the child on node</param>
+        /// <returns>Updated node</returns>
+        private static SyntaxNode Update(SyntaxNode parent, SyntaxNode child, int k)
         {
-            if (node is BlockSyntax)
+            // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
+            if (parent is BlockSyntax)
             {
-                BlockSyntax b = node as BlockSyntax;
+                BlockSyntax b = (BlockSyntax) parent;
                 StatementSyntax st = child as StatementSyntax;
                 b = b.AddStatements(st);
-                node = b;
+                parent = b;
             }
             else
             {
-                if (node.ChildNodes().Count() > 1)
+                if (parent.ChildNodes().Count() > 1)
                 {
-                    node = node.ReplaceNode(node.ChildNodes().ElementAt(k - 1), child);
+                    parent = parent.ReplaceNode(parent.ChildNodes().ElementAt(k - 1), child);
                 }
             }
 
-            return node;
+            return parent;
         }
 
         public SyntaxNodeOrToken UpdateTree(EditOperation operation)
         {
             _processed.Add(operation, true);
 
-            if (operation is Insert)
-            {
-                Insert ins = operation as Insert;
-
-                if (!_dict.ContainsKey(ins.T1Node))
-                {
-                    return ins.T1Node;
-                }
-
-                SyntaxNodeOrToken snot = ins.T1Node;
-                SyntaxNode node = snot.AsNode();
-
-                SyntaxNode newNode = node;
-                foreach (EditOperation eop in _dict[ins.T1Node])
-                {
-                    if (eop is Insert)
-                    {
-                        Insert ies = eop as Insert;
-                        var uptNode = UpdateTree(eop).AsNode();
-                        var oldNode = newNode.ChildNodes().ElementAt(ies.K - 1);
-                        if (!(eop is Move))
-                        {          
-                            newNode = newNode.ReplaceNode(oldNode, uptNode);
-                        }else if (eop is Move)
-                        {
-                            var annotation = _ann[eop];
-                            var moveL = _currentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
-                            var uptNodeMove = moveL.First();
-                            newNode = newNode.ReplaceNode(oldNode, uptNodeMove);
-
-                            string Treetext = _currentTree.ToString();
-
-                            try
-                            {
-                                var visitor = new UpdateTreeRewriter(uptNode, null);
-                                _currentTree = visitor.Visit(_currentTree.AsNode());
-                            }
-                            catch (Exception e)
-                            {
-                            }
-                            string text = _currentTree.AsNode().NormalizeWhitespace().GetText().ToString();
-                        }
-                    }
-                    else if (eop is Script.Update)
-                    {
-                        var uptNode = UpdateTree(eop).AsNode();
-                        var oldNode = newNode.ChildNodes().First();
-                        newNode = newNode.ReplaceNode(oldNode, uptNode);
-                        var annotation = _ann[eop];
-                        var moveL = _currentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
-                        var move = moveL.First();
-
-                        var visitor = new UpdateTreeRewriter(move, uptNode);
-                        _currentTree = visitor.Visit(_currentTree.AsNode());
-
-                        TextSpan span = new TextSpan(move.Span.Start, uptNode.Span.Length);  
-                        var update = _currentTree.AsNode().FindNode(span);
-
-                        foreach (var item in _annts)
-                        {
-                            if (item.Value.Contains(annotation))
-                            {
-                                var annVisitor = new AddAnnotationRewriter(update, item.Value);
-                                _currentTree = annVisitor.Visit(_currentTree.AsNode());
-                            }
-                        }
-
-                        string text = _currentTree.AsNode().NormalizeWhitespace().GetText().ToString();
-                    }
-                }
-
-                return newNode;
-            }
-
+            //process update operation
+            // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
             if (operation is Script.Update)
             {
-                Script.Update update = operation as Script.Update;
+                Script.Update update = (Script.Update) operation;
                 return update.To;
             }
 
-            return null;
+            //process isolated operations
+            if (!_dict.ContainsKey(operation.T1Node))
+            {
+                return operation.T1Node;
+            }
+
+            SyntaxNodeOrToken snot = operation.T1Node;
+            SyntaxNode node = snot.AsNode();
+            SyntaxNode newNode = node;
+
+            foreach (EditOperation eop in _dict[operation.T1Node])
+            {
+                var uptNode = UpdateTree(eop).AsNode();
+                newNode = ProcessEditOperation(eop, newNode, uptNode);
+            }
+
+            return newNode;
+        }
+
+        /// <summary>
+        /// Process edit operation
+        /// </summary>
+        /// <param name="eop">Edit operation</param>
+        /// <param name="currentNode">Current node</param>
+        /// <param name="uptNode">Updated node</param>
+        /// <returns>Node after running edit operation</returns>
+        private SyntaxNode ProcessEditOperation(EditOperation eop, SyntaxNode currentNode, SyntaxNode uptNode)
+        {
+            if (eop is Insert)
+            {
+                currentNode = ProcessInsertOperation(eop, currentNode, uptNode);
+            }
+
+            if (eop is Move)
+            {
+                currentNode = ProcessMoveOperation(eop, currentNode, uptNode);
+            }
+
+            if (eop is Script.Update)
+            {
+                currentNode = ProcessUpdateOperation(eop, currentNode, uptNode);
+            }
+            return currentNode;
+        }
+
+        /// <summary>
+        /// Process insert operation
+        /// </summary>
+        /// <param name="eop">Insert operation</param>
+        /// <param name="currentNode">Current node</param>
+        /// <param name="uptNode">Update node</param>
+        /// <returns>Updated version of current node</returns>
+        private static SyntaxNode ProcessInsertOperation(EditOperation eop, SyntaxNode currentNode, SyntaxNode uptNode)
+        {
+            var oldNode = currentNode.ChildNodes().ElementAt(eop.K - 1);
+            currentNode = currentNode.ReplaceNode(oldNode, uptNode);
+            return currentNode;
+        }
+
+        /// <summary>
+        /// Process move operation
+        /// </summary>
+        /// <param name="eop">Move operation</param>
+        /// <param name="currentNode">Current node</param>
+        /// <param name="uptNode">New node</param>
+        /// <returns>Updated version of current node</returns>
+        private SyntaxNode ProcessMoveOperation(EditOperation eop, SyntaxNode currentNode, SyntaxNode uptNode)
+        {
+            var annotation = _ann[eop];
+            var moveL = _currentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
+            var uptNodeMove = moveL.First();
+            var oldNode = currentNode.ChildNodes().ElementAt(eop.K - 1);
+            currentNode = currentNode.ReplaceNode(oldNode, uptNodeMove);
+            //oldNode.Replace
+            try
+            {
+                var visitor = new UpdateTreeRewriter(uptNode, null);
+                _currentTree = visitor.Visit(_currentTree.AsNode());
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return currentNode;
+        }
+
+        /// <summary>
+        /// Process update operation
+        /// </summary>
+        /// <param name="eop">Update operation</param>
+        /// <param name="currentNode">Current node</param>
+        /// <param name="uptNode">Updated node</param>
+        /// <returns>Updated version of the current node</returns>
+        private SyntaxNode ProcessUpdateOperation(EditOperation eop, SyntaxNode currentNode, SyntaxNode uptNode)
+        {
+            var oldNode = currentNode.ChildNodes().First();
+            currentNode = currentNode.ReplaceNode(oldNode, uptNode);
+            var annotation = _ann[eop];
+            var moveL = _currentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
+            var move = moveL.First();
+
+            var visitor = new UpdateTreeRewriter(move, uptNode);
+            _currentTree = visitor.Visit(_currentTree.AsNode());
+
+            TextSpan span = new TextSpan(move.Span.Start, uptNode.Span.Length);
+            var update = _currentTree.AsNode().FindNode(span);
+
+            foreach (var item in _annts)
+            {
+                if (item.Value.Contains(annotation))
+                {
+                    var annVisitor = new AddAnnotationRewriter(update, item.Value);
+                    _currentTree = annVisitor.Visit(_currentTree.AsNode());
+                }
+            }
+
+            return currentNode;
         }
     }
 }
