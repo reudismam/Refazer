@@ -23,37 +23,132 @@ namespace ProseSample
             //LoadAndTestSubstrings1();
             //LoadAndTestSubstrings2();
             //LoadAndTestSubstrings3();
+            //LoadAndTestSubstrings4();
+            LoadAndTestSubstrings5();
 
-            TreeEditMain main = new TreeEditMain();
-            main.main();
-
-
+            //TreeEditMain main = new TreeEditMain();
+            //main.main();
         }
 
-        static bool ma()
+        //static bool ma()
+        //{
+        //    bool a = false;
+        //    if (a)
+        //    {
+        //        return a;
+        //    }
+        //    return false;
+        //}
+
+        //static bool mb()
+        //{
+        //    bool a = false;
+        //    Validate(a);
+        //    if (a)
+        //    {
+        //        return a;
+        //    }
+        //    return false;
+        //}
+
+        //private static void Validate(bool a)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
+        private static void LoadAndTestSubstrings5()
         {
-            bool a = false;
-            if (a)
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            if (grammar == null) return;
+
+            ProgramNode p = grammar.ParseAST(@"Insert(n, 1, C1(n, ""Block"", 
+                                                               C1(n, ""IfStatement"",
+                                                                    C1(n, ""EqualsExpression"",
+                                                                        Literal(n, Identifier(""i""))))),
+
+                                                                Node1(""IfStatement"",
+                                                                     Node2(""EqualsExpression"",
+                                                                            Const(Identifier(""i"")),
+                                                                            Const(NumericLiteralExpression(""0"")) ) ) )",
+                                             ASTSerializationFormat.HumanReadable);
+
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
+            @"using System;
+
+            public class Test
             {
-                return a;
-            }
-            return false;
-        }
+                public String foo(int i)
+                {
+                     if(i == 0) return ""Foo!"";
+                }
+            }").GetRoot();
 
-        static bool mb()
-        {
-            bool a = false;
-            Validate(a);
-            if (a)
+            var li = from nd in inpTree.AsNode().DescendantNodes()
+                where nd.IsKind(SyntaxKind.Block)
+                select nd;
+            SyntaxNodeOrToken x = li.ToList().First();
+
+                SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(
+            @"using System;
+
+            public class Test
             {
-                return a;
-            }
-            return false;
+                public String foo(int i)
+                {
+                     if(i == 0){}
+                     if(i == 0) return ""Foo!"";
+                }
+            }").GetRoot();
+
+            var lo = from nd in outTree.AsNode().DescendantNodes()
+                    where nd.IsKind(SyntaxKind.Block)
+                    select nd;
+
+            SyntaxNodeOrToken y = lo.ToList().First();
+
+            Spec spec = ShouldConvert.Given(grammar).To(x, y);
+            var program = Learn(grammar, spec);
         }
 
-        private static void Validate(bool a)
+        private static void LoadAndTestSubstrings4()
         {
-            throw new NotImplementedException();
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            if (grammar == null) return;
+
+            ProgramNode p = grammar.ParseAST(@"Insert(n, 1, C1(n, ""Block"", 
+                                                               C1(n, ""IfStatement"",
+                                                                    C1(n, ""EqualsExpression"",
+                                                                        Literal(n, Identifier(""i""))))),
+
+                                                                Node1(""IfStatement"",
+                                                                     Node2(""EqualsExpression"",
+                                                                            Const(Identifier(""i"")),
+                                                                            Const(NumericLiteralExpression(""0"")) ) ) )",
+                                             ASTSerializationFormat.HumanReadable);
+
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
+            @"using System;
+
+            public class Test
+            {
+                public String foo(int i)
+                {
+                     if(i == 0) return ""Foo!"";
+                }
+            }").GetRoot();
+
+            SyntaxNodeOrToken outTree = SyntaxFactory.ParseStatement("int a = 10;");
+
+            Bindings bs = null;
+            Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(outTree, bs);
+            MatchResult m = new MatchResult(t);
+
+
+            State input = State.Create(grammar.InputSymbol, inpTree);
+            var result = (SyntaxNodeOrToken)p.Invoke(input);
+            string r = result.ToFullString();
+            Console.WriteLine(r);
         }
 
         private static void LoadAndTestSubstrings3()
@@ -94,7 +189,7 @@ namespace ProseSample
 
 
             State input = State.Create(grammar.InputSymbol, inpTree);
-            var result = (SyntaxNodeOrToken) p.Invoke(input);
+            var result = (SyntaxNodeOrToken)p.Invoke(input);
             string r = result.ToFullString();
             Console.WriteLine(r);
         }
@@ -177,34 +272,34 @@ namespace ProseSample
             Learn(grammar, spec);        
         }
 
-        private static void TestFlashFillBenchmark(Grammar grammar, string benchmark, int exampleCount = 2)
-        {
-            string[] lines = File.ReadAllLines($"benchmarks/{benchmark}.tsv");
-            Tuple<string, string>[] data = lines.Select(l =>
-            {
-                var parts = l.Split(new[] { "\t" }, StringSplitOptions.RemoveEmptyEntries);
-                return Tuple.Create(parts[0], parts[1]);
-            }).ToArray();
-            var examples = data.Take(exampleCount)
-                               .ToDictionary(t => State.Create(grammar.InputSymbol, StringRegion.Create(t.Item1)),
-                                             t => (object) StringRegion.Create(t.Item2));
-            var spec = new ExampleSpec(examples);
-            ProgramNode program = Learn(grammar, spec);
-            foreach (Tuple<string, string> row in data.Skip(exampleCount))
-            {
-                State input = State.Create(grammar.InputSymbol, StringRegion.Create(row.Item1));
-                var output = (StringRegion) program.Invoke(input);
-                WriteColored(ConsoleColor.DarkCyan, $"{row.Item1} => {output.Value}");
-            }
-        }
+        //private static void TestFlashFillBenchmark(Grammar grammar, string benchmark, int exampleCount = 2)
+        //{
+        //    string[] lines = File.ReadAllLines($"benchmarks/{benchmark}.tsv");
+        //    Tuple<string, string>[] data = lines.Select(l =>
+        //    {
+        //        var parts = l.Split(new[] { "\t" }, StringSplitOptions.RemoveEmptyEntries);
+        //        return Tuple.Create(parts[0], parts[1]);
+        //    }).ToArray();
+        //    var examples = data.Take(exampleCount)
+        //                       .ToDictionary(t => State.Create(grammar.InputSymbol, StringRegion.Create(t.Item1)),
+        //                                     t => (object) StringRegion.Create(t.Item2));
+        //    var spec = new ExampleSpec(examples);
+        //    ProgramNode program = Learn(grammar, spec);
+        //    foreach (Tuple<string, string> row in data.Skip(exampleCount))
+        //    {
+        //        State input = State.Create(grammar.InputSymbol, StringRegion.Create(row.Item1));
+        //        var output = (StringRegion) program.Invoke(input);
+        //        WriteColored(ConsoleColor.DarkCyan, $"{row.Item1} => {output.Value}");
+        //    }
+        //}
 
-        private static void LoadAndTestTextExtraction()
-        {
-            var grammar = LoadGrammar("ProseSample.TextExtraction.grammar", "ProseSample.Substrings.grammar");
-            if (grammar == null) return;
+        //private static void LoadAndTestTextExtraction()
+        //{
+        //    var grammar = LoadGrammar("ProseSample.TextExtraction.grammar", "ProseSample.Substrings.grammar");
+        //    if (grammar == null) return;
 
-            TestExtractionBenchmark(grammar, "countries");
-        }
+        //    TestExtractionBenchmark(grammar, "countries");
+        //}
 
         private static void TestExtractionBenchmark(Grammar grammar, string benchmark)
         {

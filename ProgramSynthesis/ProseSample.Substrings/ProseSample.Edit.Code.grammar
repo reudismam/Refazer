@@ -20,14 +20,14 @@ feature double Score = RankingScore;
 
 @start SyntaxNodeOrToken sub := edit;
 
-SyntaxNodeOrToken edit := InsertBefore(n, expression, ast);
+SyntaxNodeOrToken edit := Insert(n, k, expression, ast);
 
 MatchResult expression := C1(n, kd, expression) | C2(n, kd, expression, expression) | Literal(n, tree);
 SyntaxNodeOrToken ast:= Node1(kd, ast) | Node2(kd, ast, ast) | Const(tree);
 
 @feature[Score=KDScore] string id;
 @feature[Score=KDScore] string kd;
-SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id);
+SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id) | StringLiteralExpression(id);
 
 @input SyntaxNodeOrToken n;
 @feature[Score=KScore] int k;

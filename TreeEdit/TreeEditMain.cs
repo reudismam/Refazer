@@ -66,6 +66,9 @@ namespace TreeEdit
                 }
             }").GetRoot();
 
+            //var comparer = new CSharpTreeComparer();
+            //var treeEdits = comparer.ComputeEditScript(inpTree.AsNode(), outTree.AsNode());
+
             ITreeMapping mapping = new GumTreeMapping();
             var M = mapping.Mapping(inpTree, outTree);
 

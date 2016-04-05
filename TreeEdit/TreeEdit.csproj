@@ -101,12 +101,14 @@
   <ItemGroup>
     <Compile Include="C5\IPriorityQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spg.TreeEdit.Isomorphic\IsomorphicManager.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\GumTreeMapping.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\IsomorphicPairs.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\ITreeMapping.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\TreeAlignment.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\TreeTraversal.cs" />
     <Compile Include="Spg.TreeEdit.PQ\PriotityQueue.cs" />
+    <Compile Include="Spg.TreeEdit.Script\CSharpTreeComparer.cs" />
     <Compile Include="Spg.TreeEdit.Script\Delete.cs" />
     <Compile Include="Spg.TreeEdit.Script\EditScriptGenerator.cs" />
     <Compile Include="Spg.TreeEdit.Script\EditOperation.cs" />

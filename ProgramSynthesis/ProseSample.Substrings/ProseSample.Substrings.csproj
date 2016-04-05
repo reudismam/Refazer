@@ -198,6 +198,10 @@
       <Project>{6060b3c1-8b16-47ae-a7a5-b34eb1c170ad}</Project>
       <Name>ExampleRefactoring</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TreeEdit\TreeEdit.csproj">
+      <Project>{4BF08076-5BA3-45B8-8DA9-BED3C4BCA9F7}</Project>
+      <Name>TreeEdit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.TreeEdit.PQ;
 using Microsoft.CodeAnalysis.CSharp;
+using TreeEdit.Spg.TreeEdit.Isomorphic;
 using Tutor;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
@@ -64,7 +65,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                         {
                             if (!dict2.ContainsKey(item2.Item2)) dict2.Add(item2.Item2, new List<SyntaxNodeOrToken>());
 
-                            if (isIsomorphic(item1.Item2, item2.Item2))
+                            if (IsomorphicManager.IsIsomorphic(item1.Item2, item2.Item2))
                             {
                                 dict1[item1.Item2].Add(item2.Item2);
                                 dict2[item2.Item2].Add(item1.Item2);
@@ -76,7 +77,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     {
                         foreach (var item2 in h2)
                         {
-                            if (isIsomorphic(item1.Item2, item2.Item2))
+                            if (IsomorphicManager.IsIsomorphic(item1.Item2, item2.Item2))
                             {
                                 if (dict1[item1.Item2].Count() > 1 || dict2[item2.Item2].Count() > 1)
                                 {
@@ -84,7 +85,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                                 }
                                 else
                                 {
-                                    var dict = allPairOfIsomorphic(item1.Item2, item2.Item2);
+                                    var dict = IsomorphicManager.AllPairOfIsomorphic(item1.Item2, item2.Item2);
                                     foreach (var v in dict)
                                     {
                                         M.Add(v.Key, v.Value);
@@ -187,7 +188,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 if(edit.Item1 != null && edit.Item2 != null)
                 {
                     dict.Add(edit.Item1.InternalNode, edit.Item2.InternalNode);
-                    var x = allPairOfIsomorphic(edit.Item1.InternalNode, edit.Item2.InternalNode);
+                    var x = IsomorphicManager.AllPairOfIsomorphic(edit.Item1.InternalNode, edit.Item2.InternalNode);
                     
                     foreach(var dici in x)
                     {
@@ -280,38 +281,6 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
             double dice = (2.0 * count) / den;
             return dice;
-        }
-
-        private bool isIsomorphic(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)
-        {
-            return AhuTreeIsomorphism(t1, t2);
-        }
-
-        private bool AhuTreeIsomorphism(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)
-        {
-            TreeAlignment talg = new TreeAlignment();
-            Dictionary<SyntaxNodeOrToken, string> dict1 = talg.align(t1);
-            Dictionary<SyntaxNodeOrToken, string> dict2 = talg.align(t2);
-
-            //foreach (var item in dict1)
-            //{
-            //    Console.WriteLine(item.Key + " : " + item.Value);
-            //}
-
-            if (dict1[t1].Equals(dict2[t2]))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> allPairOfIsomorphic(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)
-        {
-            IsomorphicPairs pairs = new IsomorphicPairs();
-            Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> ps = pairs.pairs(t1, t2);
-
-            return ps;
         }
 
         public Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> Mapping(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)

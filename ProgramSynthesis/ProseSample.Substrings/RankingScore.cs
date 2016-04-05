@@ -11,6 +11,18 @@ namespace ProseSample.Substrings
     {
         public const double VariableScore = 0;
 
+        [FeatureCalculator("Insert")]
+        public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;
+
+        [FeatureCalculator("Node1")]
+        public static double Score_Node1(double kScore, double astScore) => kScore +  astScore;
+
+        [FeatureCalculator("Node2")]
+        public static double Score_Node2(double kScore, double astScore) => kScore + astScore;
+
+        [FeatureCalculator("Const")]
+        public static double Score_Node1(double astScore) => astScore;
+
         [FeatureCalculator("Literal")]
         public static double Score_Literal(double inScore, double treeScore) => treeScore;
 
@@ -28,6 +40,9 @@ namespace ProseSample.Substrings
 
         [FeatureCalculator("NumericLiteralExpression")]
         public static double Score_NumericLiteralExpression(double inScore) => inScore;
+
+        [FeatureCalculator("StringLiteralExpression")]
+        public static double Score_StringLiteralExpression(double inScore) => inScore;
 
         [FeatureCalculator("SubStr")]
         public static double Score_SubStr(double x, double pp) => Math.Log(pp);
