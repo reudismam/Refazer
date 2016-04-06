@@ -241,43 +241,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("C1", 2, DependsOnParameters = new[]{1})]
         public static DisjunctiveExamplesSpec WitnessC1Expression1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
-            var eExamples = new Dictionary<State, IEnumerable<object>>();
-
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-
-                foreach (MatchResult ma in spec.DisjunctiveExamples[input])
-                {
-                    SyntaxNodeOrToken sot = ma.match.Item1;
-
-                    if (sot.IsToken) return null;
-
-                    Bindings bs = null;
-                    List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
-                    foreach (var item in sot.ChildNodesAndTokens())
-                    {
-                        SyntaxNodeOrToken st = item;
-                        if (st.IsNode)
-                        {
-                            lsot.Add(st);
-                        }else if (st.IsToken && st.IsKind(SyntaxKind.IdentifierToken))
-                        {
-                            lsot.Add(st);
-                        }
-                    }
-
-                    if (lsot.Count != 1) return null;
-
-                    Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(lsot.First(), bs); 
-                    MatchResult m = new MatchResult(t);
-
-                    matches.Add(m);
-                }
-                eExamples[input] = matches;
-            }
-
-            return DisjunctiveExamplesSpec.From(eExamples);
+            return ConcatenationBase(rule, parameter, spec, 1, 1);
         }
 
         /// <summary>
@@ -291,6 +255,18 @@ namespace ProseSample.Substrings
         [WitnessFunction("C2", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec WitnessC2Expression1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
+            return ConcatenationBase(rule, parameter, spec, 2, 1);
+        }
+
+
+        [WitnessFunction("C2", 3, DependsOnParameters = new[] { 1, 2 })]
+        public static DisjunctiveExamplesSpec WitnessC2Expression2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind, ExampleSpec expression1)
+        {
+            return ConcatenationBase(rule, parameter, spec, 2, 2);
+        }
+
+        private static DisjunctiveExamplesSpec ConcatenationBase(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, int desiredIndex, int returnIndex)
+        {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
 
             foreach (State input in spec.ProvidedInputs)
@@ -303,27 +279,11 @@ namespace ProseSample.Substrings
 
                     if (sot.IsToken) return null;
 
-                    Bindings bs = null;
+                    var lsot = ExtractChildren(sot);
 
-                    var l = sot.ChildNodesAndTokens();
+                    if (lsot.Count != desiredIndex) return null;
 
-                    List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
-                    foreach (var item in sot.ChildNodesAndTokens())
-                    {
-                        SyntaxNodeOrToken st = item;
-                        if (st.IsNode)
-                        {
-                            lsot.Add(st);
-                        }
-                        else if (st.IsToken && st.IsKind(SyntaxKind.IdentifierToken))
-                        {
-                            lsot.Add(st);
-                        }
-                    }
-
-                    if (lsot.Count != 2) return null;
-
-                    Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(lsot.First(), bs);
+                    Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(lsot[returnIndex - 1], new Bindings());
                     MatchResult m = new MatchResult(t);
 
                     matches.Add(m);
@@ -334,55 +294,27 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        [WitnessFunction("C2", 3, DependsOnParameters = new[] { 1, 2 })]
-        public static DisjunctiveExamplesSpec WitnessC2Expression2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind, ExampleSpec expression1)
+        /// <summary>
+        /// Extract relevant child
+        /// </summary>
+        /// <param name="parent">Parent</param>
+        /// <returns>Relevant child</returns>
+        private static List<SyntaxNodeOrToken> ExtractChildren(SyntaxNodeOrToken parent)
         {
-            var eExamples = new Dictionary<State, IEnumerable<object>>();
-
-            foreach (State input in spec.ProvidedInputs)
+            List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
+            foreach (var item in parent.ChildNodesAndTokens())
             {
-                var v = (SyntaxNodeOrToken)input[rule.Body[0]];
-
-                var skind = kind.Examples[input];
-                var exp1 = expression1.Examples[input];
-
-                var matches = new List<object>();
-
-                foreach (MatchResult ma in spec.DisjunctiveExamples[input])
+                SyntaxNodeOrToken st = item;
+                if (st.IsNode)
                 {
-                    SyntaxNodeOrToken sot = ma.match.Item1;
-
-                    if (sot.IsToken) return null;
-
-                    Bindings bs = null;
-
-                    var l = sot.ChildNodesAndTokens();
-
-                    List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
-                    foreach (var item in sot.ChildNodesAndTokens())
-                    {
-                        SyntaxNodeOrToken st = item;
-                        if (st.IsNode)
-                        {
-                            lsot.Add(st);
-                        }
-                        else if (st.IsToken && st.IsKind(SyntaxKind.IdentifierToken))
-                        {
-                            lsot.Add(st);
-                        }
-                    }
-
-                    if (lsot.Count != 2) return null;
-
-                    Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(lsot[1], bs);
-                    MatchResult m = new MatchResult(t);
-
-                    matches.Add(m);
+                    lsot.Add(st);
                 }
-                eExamples[input] = matches;
+                else if (st.IsToken && st.IsKind(SyntaxKind.IdentifierToken))
+                {
+                    lsot.Add(st);
+                }
             }
-
-            return DisjunctiveExamplesSpec.From(eExamples);
+            return lsot;
         }
 
         /// <summary>
