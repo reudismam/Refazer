@@ -271,7 +271,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             double count = 0.0;
             foreach (var item in s1.DescendantNodes())
             {
-                if (M.ContainsKey(item))
+                if (M.ContainsKey(item) && t2.Span.Contains(M[item].Span))
                 {
                     count++;
                 }

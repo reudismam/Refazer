@@ -11,6 +11,9 @@ namespace ProseSample.Substrings
     {
         public const double VariableScore = 0;
 
+        [FeatureCalculator("Script1")]
+        public static double Score_Script1(double inScore, double kdScore, double edit) => inScore + kdScore + edit;
+
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;
 
@@ -43,6 +46,9 @@ namespace ProseSample.Substrings
 
         [FeatureCalculator("StringLiteralExpression")]
         public static double Score_StringLiteralExpression(double inScore) => inScore;
+
+        [FeatureCalculator("Block")]
+        public static double Block(double inScore) => inScore;
 
         [FeatureCalculator("SubStr")]
         public static double Score_SubStr(double x, double pp) => Math.Log(pp);

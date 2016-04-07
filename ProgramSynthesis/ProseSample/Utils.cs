@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Compiler;
@@ -52,14 +50,15 @@ namespace ProseSample
                 LogListener = new LogListener(),
             });
             ProgramSet consistentPrograms = engine.LearnGrammar(spec);
+
             //engine.Configuration.LogListener.SaveLogToXML("learning.log.xml");
 
-            //foreach (ProgramNode p in consistentPrograms.RealizedPrograms)
-            //{
-            //    Console.WriteLine(p);
-            //}
+            foreach (ProgramNode p in consistentPrograms.RealizedPrograms)
+            {
+                Console.WriteLine(p + "\n");
+            }
 
-            ProgramNode bestProgram = consistentPrograms.TopK("Score").FirstOrDefault();
+            ProgramNode bestProgram = consistentPrograms.TopK("Score").Last();
             if (bestProgram == null)
             {
                 WriteColored(ConsoleColor.Red, "No program :(");

@@ -135,6 +135,17 @@ namespace ProseSample.Substrings
         }
 
         /// <summary>
+        /// Build a string literal expression
+        /// </summary>
+        /// <param name="s">Literal expression</param>
+        /// <returns>A new numeric literal expression</returns>
+        public static SyntaxNodeOrToken Block(string s)
+        {
+            var block = SyntaxFactory.Block();
+            return block;
+        }
+
+        /// <summary>
         /// Build a literal
         /// </summary>
         /// <param name="n">Input node</param>
@@ -175,6 +186,11 @@ namespace ProseSample.Substrings
             root = root.InsertNodesBefore(root.FindNode(node.Span), nodes);
 
             return root.NormalizeWhitespace();
+        }
+
+        public static SyntaxNodeOrToken Script1(SyntaxNodeOrToken n, string kind, SyntaxNodeOrToken edit)
+        {
+            return null;
         }
 
         /// <summary>

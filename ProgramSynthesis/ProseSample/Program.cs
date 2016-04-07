@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
@@ -12,7 +11,6 @@ using static ProseSample.Utils;
 using ProseSample.Substrings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
-using TreeEdit;
 
 namespace ProseSample
 {
@@ -24,7 +22,8 @@ namespace ProseSample
             //LoadAndTestSubstrings2();
             //LoadAndTestSubstrings3();
             //LoadAndTestSubstrings4();
-            LoadAndTestSubstrings5();
+            //LoadAndTestSubstrings5();
+            LoadAndTestSubstrings6();
 
             //TreeEditMain main = new TreeEditMain();
             //main.main();
@@ -56,6 +55,50 @@ namespace ProseSample
         //    throw new NotImplementedException();
         //}
 
+        private static void LoadAndTestSubstrings6()
+        {
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            if (grammar == null) return;
+
+            ProgramNode p = grammar.ParseAST(@"Insert(n, 1, C1(n, ""Block"", 
+                                                               C1(n, ""IfStatement"",
+                                                                    C1(n, ""EqualsExpression"",
+                                                                        Literal(n, Identifier(""i""))))),
+
+                                                                Node1(""IfStatement"",
+                                                                     Node2(""EqualsExpression"",
+                                                                            Const(Identifier(""i"")),
+                                                                            Const(NumericLiteralExpression(""0"")) ) ) )",
+                                             ASTSerializationFormat.HumanReadable);
+
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
+            @"using System;
+
+            public class Test
+            {
+                public String foo(int i)
+                {
+                     if(i == 0) return ""Foo!"";
+                }
+            }").GetRoot();
+
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(
+            @"using System;
+
+            public class Test
+            {
+                public String foo(int i)
+                {
+                     if(i == 2){}
+                     if(i == 0) return ""Foo!"";
+                }
+            }").GetRoot();
+
+            Spec spec = ShouldConvert.Given(grammar).To(inpTree, outTree);
+            var program = Learn(grammar, spec);
+
+
+        }
 
         private static void LoadAndTestSubstrings5()
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using TreeEdit.Spg.TreeEdit.Script;
@@ -18,12 +19,12 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <summary>
         /// Map to annotation to each edit operations
         /// </summary>
-        private Dictionary<EditOperation, SyntaxAnnotation> _ann;
+        public Dictionary<EditOperation, SyntaxAnnotation> _ann { get; set; }
 
         /// <summary>
         /// Newest updated tree
         /// </summary>
-        private SyntaxNodeOrToken _currentTree;
+        public SyntaxNodeOrToken CurrentTree { get; set; }
 
         /// <summary>
         /// Map element from T1 (before tree) to T2 (after tree) nodes
@@ -39,7 +40,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <summary>
         /// Indicate the edit operations that was processed.
         /// </summary>
-        private Dictionary<EditOperation, bool> _processed;
+        public Dictionary<EditOperation, bool> _processed;
 
 
         /// <summary>
@@ -51,9 +52,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         // ReSharper disable once InconsistentNaming
         public void UpdateTree(List<EditOperation> script, SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
         {
-            InitializeAtributes(tree, M);
-            CreateEditionDictionary(script);
-            Annotate(script); //We also need to update the dict.
+            PreProcessTree(script, tree, M);
 
             foreach (var item in script)
             {
@@ -62,6 +61,13 @@ namespace TreeEdit.Spg.TreeEdit.Update
                     ProcessEditOperation(item);
                 }
             }
+        }
+
+        public void PreProcessTree(List<EditOperation> script, SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
+        {
+            InitializeAtributes(tree, M);
+            CreateEditionDictionary(script);
+            Annotate(script); //We also need to update the dict.
         }
 
         /// <summary>
@@ -82,7 +88,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             foreach (var item in _annts)
             {
                 var annVisitor = new AddAnnotationRewriter(item.Key, item.Value);
-                _currentTree = annVisitor.Visit(_currentTree.AsNode());
+                CurrentTree = annVisitor.Visit(CurrentTree.AsNode());
             }
         }
 
@@ -100,7 +106,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
                     {
                         if (item.Key.Span.Start == s.T1Node.Span.Start && item.Key.Span.Length == s.T1Node.Span.Length)
                         {
-                            s.T1Node = _currentTree.AsNode().FindNode(s.T1Node.Span);
+                            s.T1Node = CurrentTree.AsNode().FindNode(s.T1Node.Span);
                         }
                     }
                 }
@@ -115,7 +121,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         // ReSharper disable once InconsistentNaming
         private void InitializeAtributes(SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
         {
-            _currentTree = tree;
+            CurrentTree = tree;
             _M = M;
             _dict = new Dictionary<SyntaxNodeOrToken, List<EditOperation>>();
             _ann = new Dictionary<EditOperation, SyntaxAnnotation>();
@@ -127,17 +133,17 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// Process insert operations
         /// </summary>
         /// <param name="eop">Edit operation</param>
-        private void ProcessEditOperation(EditOperation eop)
+        public void ProcessEditOperation(EditOperation eop)
         {
             var updated = UpdateTree(eop);
 
-            var changedNodeList = _currentTree.AsNode().GetAnnotatedNodes(_ann[eop]).ToList();
+            var changedNodeList = CurrentTree.AsNode().GetAnnotatedNodes(_ann[eop]).ToList();
             var oldNode = changedNodeList.First();
 
-            var newNode = Update(oldNode, updated.AsNode(), eop.K);
+            var newNode = Update(oldNode, updated.AsNode(), eop.K).AsNode();
 
             var visitor = new UpdateTreeRewriter(oldNode, newNode);
-            _currentTree = visitor.Visit(_currentTree.AsNode());
+            CurrentTree = visitor.Visit(CurrentTree.AsNode());
         }
 
         /// <summary>
@@ -234,14 +240,23 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <param name="child">Child node to be updated</param>
         /// <param name="k">Position of the child on node</param>
         /// <returns>Updated node</returns>
-        private static SyntaxNode Update(SyntaxNode parent, SyntaxNode child, int k)
+        private static SyntaxNodeOrToken Update(SyntaxNode parent, SyntaxNode child, int k)
         {
             // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
             if (parent is BlockSyntax)
             {
+                var statements = parent.ChildNodes().ToList();
+                parent = parent.RemoveNodes(parent.ChildNodes(), SyntaxRemoveOptions.KeepNoTrivia);
                 BlockSyntax b = (BlockSyntax) parent;
-                StatementSyntax st = child as StatementSyntax;
-                b = b.AddStatements(st);
+                
+                statements.Insert(k - 1, child);
+
+                foreach(var syntaxNode in statements)
+                {
+                    var stt = (StatementSyntax) syntaxNode;
+                    b = b.AddStatements(stt);
+                }
+
                 parent = b;
             }
             else
@@ -252,7 +267,8 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 }
             }
 
-            return parent;
+            SyntaxNodeOrToken returnSot = parent;
+            return returnSot;
         }
 
         public SyntaxNodeOrToken UpdateTree(EditOperation operation)
@@ -336,7 +352,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         private SyntaxNode ProcessMoveOperation(EditOperation eop, SyntaxNode currentNode, SyntaxNode uptNode)
         {
             var annotation = _ann[eop];
-            var moveL = _currentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
+            var moveL = CurrentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
             var uptNodeMove = moveL.First();
             var oldNode = currentNode.ChildNodes().ElementAt(eop.K - 1);
             currentNode = currentNode.ReplaceNode(oldNode, uptNodeMove);
@@ -344,7 +360,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             try
             {
                 var visitor = new UpdateTreeRewriter(uptNode, null);
-                _currentTree = visitor.Visit(_currentTree.AsNode());
+                CurrentTree = visitor.Visit(CurrentTree.AsNode());
             }
             catch (Exception)
             {
@@ -366,21 +382,21 @@ namespace TreeEdit.Spg.TreeEdit.Update
             var oldNode = currentNode.ChildNodes().First();
             currentNode = currentNode.ReplaceNode(oldNode, uptNode);
             var annotation = _ann[eop];
-            var moveL = _currentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
+            var moveL = CurrentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
             var move = moveL.First();
 
             var visitor = new UpdateTreeRewriter(move, uptNode);
-            _currentTree = visitor.Visit(_currentTree.AsNode());
+            CurrentTree = visitor.Visit(CurrentTree.AsNode());
 
             TextSpan span = new TextSpan(move.Span.Start, uptNode.Span.Length);
-            var update = _currentTree.AsNode().FindNode(span);
+            var update = CurrentTree.AsNode().FindNode(span);
 
             foreach (var item in _annts)
             {
                 if (item.Value.Contains(annotation))
                 {
                     var annVisitor = new AddAnnotationRewriter(update, item.Value);
-                    _currentTree = annVisitor.Visit(_currentTree.AsNode());
+                    CurrentTree = annVisitor.Visit(CurrentTree.AsNode());
                 }
             }
 

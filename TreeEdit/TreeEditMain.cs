@@ -61,8 +61,8 @@ namespace TreeEdit
 
                 public String foo(int i)
                 {
-                     if(i == 0) return ""Bar"";
-                     else if(i == -1) return ""Foo!"";
+                     if(i == 2){}
+                     if(i == 0) return ""Foo!"";
                 }
             }").GetRoot();
 

@@ -18,7 +18,7 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
-@start SyntaxNodeOrToken sub := edit;
+@start SyntaxNodeOrToken script := Script1(n, kd, edit);
 
 SyntaxNodeOrToken edit := Insert(n, k, expression, ast);
 
@@ -27,7 +27,7 @@ SyntaxNodeOrToken ast:= Node1(kd, ast) | Node2(kd, ast, ast) | Const(tree);
 
 @feature[Score=KDScore] string id;
 @feature[Score=KDScore] string kd;
-SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id) | StringLiteralExpression(id);
+SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id) | StringLiteralExpression(id) | Block(id);
 
 @input SyntaxNodeOrToken n;
 @feature[Score=KScore] int k;
