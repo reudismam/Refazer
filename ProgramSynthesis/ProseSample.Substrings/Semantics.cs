@@ -14,12 +14,12 @@ namespace ProseSample.Substrings
     public static class Semantics
     {
         #region Concatenation Operators
-        public static MatchResult C1(SyntaxNodeOrToken n, string kind, MatchResult expression)
+        public static MatchResult C1(Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n, string kind, MatchResult expression)
         {
             SyntaxKind skind;
             Enum.TryParse(kind, out skind);
 
-            var kinds = from k in n.AsNode().DescendantNodes()
+            var kinds = from k in n.Item1.AsNode().DescendantNodes()
                         where k.IsKind(skind)
                         select k;
 
@@ -37,12 +37,12 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        public static MatchResult C2(SyntaxNodeOrToken n, string kind, MatchResult expression1, MatchResult expression2)
+        public static MatchResult C2(Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n, string kind, MatchResult expression1, MatchResult expression2)
         {
             SyntaxKind skind;
             Enum.TryParse(kind, out skind);
 
-            var kinds = from k in n.AsNode().DescendantNodes()
+            var kinds = from k in n.Item1.AsNode().DescendantNodes()
                         where k.IsKind(skind)
                         select k;
 
@@ -176,9 +176,9 @@ namespace ProseSample.Substrings
         /// <param name="n">Input node</param>
         /// <param name="node">Literal itself.</param>
         /// <returns>Match of parameter literal in the source code.</returns>
-        public static MatchResult Literal(SyntaxNodeOrToken n, SyntaxNodeOrToken node)
+        public static MatchResult Literal(Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n, SyntaxNodeOrToken node)
         {
-            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(n, node);
+            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(n.Item1, node);
             Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
 
             TokenSeq seq = DymTokens(lnode.Item2.List);
@@ -204,12 +204,12 @@ namespace ProseSample.Substrings
         /// <param name="mresult">The result of a matching</param>
         /// <param name="ast">Node that will be inserted</param>
         /// <returns>New node with the ast node inserted before the matching</returns>
-        public static SyntaxNodeOrToken InsertBefore(SyntaxNodeOrToken n, MatchResult mresult, SyntaxNodeOrToken ast)
+        public static SyntaxNodeOrToken InsertBefore(Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n, MatchResult mresult, SyntaxNodeOrToken ast)
         {
             List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
 
             SyntaxNodeOrToken node = mresult.match.Item1;
-            var root = n.AsNode();
+            var root = n.Item1.AsNode();
             root = root.InsertNodesBefore(root.FindNode(node.Span), nodes);
 
             return root.NormalizeWhitespace();
@@ -223,7 +223,7 @@ namespace ProseSample.Substrings
         /// <param name="mresult">Matching result</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken n, int k, MatchResult mresult, SyntaxNodeOrToken ast)
+        public static SyntaxNodeOrToken Insert(Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n, int k, MatchResult mresult, SyntaxNodeOrToken ast)
         {
             SyntaxNodeOrToken node = mresult.match.Item1;
 
@@ -248,17 +248,9 @@ namespace ProseSample.Substrings
 
         #region Script Operators
 
-        public static SyntaxNodeOrToken Script1(SyntaxNodeOrToken n, string kind, SyntaxNodeOrToken edit)
+        public static SyntaxNodeOrToken Script1(Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n, string kind, SyntaxNodeOrToken edit)
         {
-            SyntaxKind skind;
-            Enum.TryParse(kind, out skind);
-
-            var li = from nd in n.AsNode().DescendantNodes()
-                     where nd.IsKind(SyntaxKind.Block)
-                     select nd;
-
-
-            return null;
+            return edit;
         }
 
         #endregion
@@ -311,11 +303,11 @@ namespace ProseSample.Substrings
         #endregion
 
         #region SplitNodes
-        public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken source)
+        public static IEnumerable<SyntaxNodeOrToken> SplitNodes(Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n)
         {
             SyntaxKind targetKind = SyntaxKind.MethodDeclaration;
             
-            SyntaxNode node = source.AsNode();
+            SyntaxNode node = n.Item1.AsNode();
 
             var nodes = from snode in node.DescendantNodes()
                         where snode.IsKind(targetKind)

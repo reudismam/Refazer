@@ -20,6 +20,8 @@ namespace TreeEdit.Spg.TreeEdit.PQ
 
         public int PeekMax()
         {
+            if (pq.IsEmpty) return -1;
+
             return pq.FindMax().Item1;
         }
 

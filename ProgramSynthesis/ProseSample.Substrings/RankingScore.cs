@@ -11,6 +11,12 @@ namespace ProseSample.Substrings
     {
         public const double VariableScore = 0;
 
+        [FeatureCalculator("NodesMap")]
+        public static double Score_NodesMap( double scriptScore, double editScore) =>  scriptScore + editScore;
+
+        [FeatureCalculator("SplitNodes")]
+        public static double Score_SplitNodes(double inScore) => inScore;
+
         [FeatureCalculator("Script1")]
         public static double Score_Script1(double inScore, double kdScore, double edit) => inScore + kdScore + edit;
 

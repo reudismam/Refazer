@@ -34,5 +34,5 @@ SyntaxNodeOrToken ast:= Node1(kd, ast) | Node2(kd, ast, ast) | Const(tree);
 @feature[Score=KDScore] string kd;
 SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id) | StringLiteralExpression(id) | Block(id);
 
-@input SyntaxNodeOrToken n;
+@input Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n;
 @feature[Score=KScore] int k;

@@ -83,36 +83,48 @@ namespace ProseSample
                 {
                      if(i == 0) return ""Foo!"";
                 }
+
+                public String bar(int i)
+                {
+                     if(i == 0) return ""Foo!"";
+                }
             }").GetRoot();
 
-            //SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(
-            //@"using System;
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(
+            @"using System;
 
-            //public class Test
-            //{
-            //    public String foo(int i)
-            //    {
-            //         if(i == 2){}
-            //         if(i == 0) return ""Foo!"";
-            //    }
-            //}").GetRoot();
+            public class Test
+            {
+                public String foo(int i)
+                {
+                     if(i == 2){}
+                     if(i == 0) return ""Foo!"";
+                }
+
+                public String bar(int i)
+                {
+                     if(i == 0) return ""Foo!"";
+                }
+            }").GetRoot();
+
+            var tuple = Tuple.Create(inpTree, outTree);
 
 
-            var examplesNodes = from inode in inpTree.AsNode().DescendantNodes()
+            var examplesNodes = from inode in outTree.AsNode().DescendantNodes()
                 where inode.IsKind(SyntaxKind.MethodDeclaration)
                            select inode;
 
-            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken) sot).ToList();
+            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken) sot).ToList().GetRange(0, 1);
 
             var examples = examplesSot.Select(o => (object) o).ToList();
 
-            var input = State.Create(grammar.InputSymbol, inpTree);
+            var input = State.Create(grammar.InputSymbol, tuple);
             var spec = new PrefixSpec(input, examples);
             ProgramNode program = Learn(grammar, spec);
 
 
-            //string[] output = program.Invoke(input).ToEnumerable().Select(s => ((StringRegion)s).Value).ToArray();
-            //WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            SyntaxNodeOrToken [] output = program.Invoke(input).ToEnumerable().Select(s => (SyntaxNodeOrToken)s).ToArray();
+            WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
 
 
             //Spec spec = ShouldConvert.Given(grammar).To(inpTree, outTree);
