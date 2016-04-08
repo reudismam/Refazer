@@ -6,7 +6,6 @@ using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 
 namespace ProseSample.Substrings
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public static class RankingScore
     {
         public const double VariableScore = 0;
@@ -18,7 +17,7 @@ namespace ProseSample.Substrings
         public static double Score_SplitNodes(double inScore) => inScore;
 
         [FeatureCalculator("Script1")]
-        public static double Score_Script1(double inScore, double kdScore, double edit) => inScore + kdScore + edit;
+        public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;

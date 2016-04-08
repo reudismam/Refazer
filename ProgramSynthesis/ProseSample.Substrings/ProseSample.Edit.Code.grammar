@@ -23,16 +23,16 @@ feature double Score = RankingScore;
 
 IEnumerable<SyntaxNodeOrToken> nodes := SplitNodes(n);
 
-SyntaxNodeOrToken script := Script1(n, kd, edit);
+SyntaxNodeOrToken script := Script1(n, edit);
 
-SyntaxNodeOrToken edit := Insert(n, k, expression, ast);
+SyntaxNodeOrToken edit := Insert(n, k, match, ast);
 
-MatchResult expression := C1(n, kd, expression) | C2(n, kd, expression, expression) | Literal(n, tree);
+MatchResult match := C1(n, kd, match) | C2(n, kd, match, match) | Literal(n, tree);
 SyntaxNodeOrToken ast:= Node1(kd, ast) | Node2(kd, ast, ast) | Const(tree);
 
 @feature[Score=KDScore] string id;
 @feature[Score=KDScore] string kd;
 SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id) | StringLiteralExpression(id) | Block(id);
 
-@input Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> n;
+@input SyntaxNodeOrToken n;
 @feature[Score=KScore] int k;

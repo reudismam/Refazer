@@ -107,9 +107,6 @@ namespace ProseSample
                 }
             }").GetRoot();
 
-            var tuple = Tuple.Create(inpTree, outTree);
-
-
             var examplesNodes = from inode in outTree.AsNode().DescendantNodes()
                 where inode.IsKind(SyntaxKind.MethodDeclaration)
                            select inode;
@@ -118,7 +115,7 @@ namespace ProseSample
 
             var examples = examplesSot.Select(o => (object) o).ToList();
 
-            var input = State.Create(grammar.InputSymbol, tuple);
+            var input = State.Create(grammar.InputSymbol, inpTree);
             var spec = new PrefixSpec(input, examples);
             ProgramNode program = Learn(grammar, spec);
 
