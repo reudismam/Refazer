@@ -18,7 +18,12 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
-@start SyntaxNodeOrToken script := Script1(n, kd, edit);
+
+@start IEnumerable<SyntaxNodeOrToken> spans := NodesMap(script, nodes) = Map(\node: SyntaxNodeOrToken => script, nodes);
+
+IEnumerable<SyntaxNodeOrToken> nodes := SplitNodes(n);
+
+SyntaxNodeOrToken script := Script1(n, kd, edit);
 
 SyntaxNodeOrToken edit := Insert(n, k, expression, ast);
 

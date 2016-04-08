@@ -837,6 +837,25 @@ namespace ProseSample.Substrings
 
         #endregion
 
+        [WitnessFunction("NodesMap", 1)]
+        public static PrefixSpec WitnessLinesMap(GrammarRule rule, int parameter,
+                                                 PrefixSpec spec)
+        {
+            var linesExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                //var source = ((SyntaxNodeOrToken)input[rule.Grammar.InputSymbol]);
+                var nodePrefix = spec.Examples[input].Cast<SyntaxNodeOrToken>();
+
+                var linesContainingSelection = nodePrefix.Cast<object>().ToList();
+
+                linesExamples[input] = linesContainingSelection;
+            }
+            return new PrefixSpec(linesExamples);
+        }
+
+        #region Utilities
+
         //TODO remove dynamic token method
         /// <summary>
         /// Convert list in dynamic tokens
@@ -855,6 +874,8 @@ namespace ProseSample.Substrings
             TokenSeq seq = new TokenSeq(tokens);
             return seq;
         }
+
+        #endregion
     }
 }
 

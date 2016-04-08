@@ -49,6 +49,7 @@ namespace ProseSample
                 UseThreads = false,
                 LogListener = new LogListener(),
             });
+
             ProgramSet consistentPrograms = engine.LearnGrammar(spec);
 
             //engine.Configuration.LogListener.SaveLogToXML("learning.log.xml");
@@ -58,7 +59,7 @@ namespace ProseSample
                 Console.WriteLine(p + "\n");
             }
 
-            ProgramNode bestProgram = consistentPrograms.TopK("Score").Last();
+            ProgramNode bestProgram = consistentPrograms.RealizedPrograms.Last();
             if (bestProgram == null)
             {
                 WriteColored(ConsoleColor.Red, "No program :(");

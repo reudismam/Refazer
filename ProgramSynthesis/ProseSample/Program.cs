@@ -16,6 +16,7 @@ namespace ProseSample
 {
     internal static class Program
     {
+        //TODO refactor this class
         private static void Main(string[] args)
         {
             //LoadAndTestSubstrings1();
@@ -23,7 +24,8 @@ namespace ProseSample
             //LoadAndTestSubstrings3();
             //LoadAndTestSubstrings4();
             //LoadAndTestSubstrings5();
-            LoadAndTestSubstrings6();
+            //LoadAndTestSubstrings6();
+            LoadAndTestSubstrings7();
 
             //TreeEditMain main = new TreeEditMain();
             //main.main();
@@ -54,6 +56,73 @@ namespace ProseSample
         //{
         //    throw new NotImplementedException();
         //}
+
+
+        private static void LoadAndTestSubstrings7()
+        {
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            if (grammar == null) return;
+
+            ProgramNode p = grammar.ParseAST(@"Insert(n, 1, C1(n, ""Block"", 
+                                                               C1(n, ""IfStatement"",
+                                                                    C1(n, ""EqualsExpression"",
+                                                                        Literal(n, Identifier(""i""))))),
+
+                                                                Node1(""IfStatement"",
+                                                                     Node2(""EqualsExpression"",
+                                                                            Const(Identifier(""i"")),
+                                                                            Const(NumericLiteralExpression(""0"")) ) ) )",
+                                             ASTSerializationFormat.HumanReadable);
+
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
+            @"using System;
+
+            public class Test
+            {
+                public String foo(int i)
+                {
+                     if(i == 0) return ""Foo!"";
+                }
+            }").GetRoot();
+
+            //SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(
+            //@"using System;
+
+            //public class Test
+            //{
+            //    public String foo(int i)
+            //    {
+            //         if(i == 2){}
+            //         if(i == 0) return ""Foo!"";
+            //    }
+            //}").GetRoot();
+
+
+            var examplesNodes = from inode in inpTree.AsNode().DescendantNodes()
+                where inode.IsKind(SyntaxKind.MethodDeclaration)
+                           select inode;
+
+            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken) sot).ToList();
+
+            var examples = examplesSot.Select(o => (object) o).ToList();
+
+            var input = State.Create(grammar.InputSymbol, inpTree);
+            var spec = new PrefixSpec(input, examples);
+            ProgramNode program = Learn(grammar, spec);
+
+
+            //string[] output = program.Invoke(input).ToEnumerable().Select(s => ((StringRegion)s).Value).ToArray();
+            //WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+
+
+            //Spec spec = ShouldConvert.Given(grammar).To(inpTree, outTree);
+            //var program = Learn(grammar, spec);
+
+            //State input = State.Create(grammar.InputSymbol, inpTree);
+            //var result = (SyntaxNodeOrToken)program.Invoke(input);
+            //string r = result.ToFullString();
+            //Console.WriteLine(r);
+        }
 
         private static void LoadAndTestSubstrings6()
         {
@@ -97,15 +166,18 @@ namespace ProseSample
             Spec spec = ShouldConvert.Given(grammar).To(inpTree, outTree);
             var program = Learn(grammar, spec);
 
-
+            State input = State.Create(grammar.InputSymbol, inpTree);
+            var result = (SyntaxNodeOrToken)program.Invoke(input);
+            string r = result.ToFullString();
+            Console.WriteLine(r);
         }
 
         private static void LoadAndTestSubstrings5()
         {
             var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
             if (grammar == null) return;
-
-            ProgramNode p = grammar.ParseAST(@"Insert(n, 1, C1(n, ""Block"", 
+            ProgramNode p = grammar.ParseAST(@"Script1(n, ""Block"",
+                                                    Insert(n, 1, C1(n, ""Block"", 
                                                                C1(n, ""IfStatement"",
                                                                     C1(n, ""EqualsExpression"",
                                                                         Literal(n, Identifier(""i""))))),
@@ -113,8 +185,8 @@ namespace ProseSample
                                                                 Node1(""IfStatement"",
                                                                      Node2(""EqualsExpression"",
                                                                             Const(Identifier(""i"")),
-                                                                            Const(NumericLiteralExpression(""0"")) ) ) )",
-                                             ASTSerializationFormat.HumanReadable);
+                                                                            Const(NumericLiteralExpression(""0"")) ) ) ) )",
+                                            ASTSerializationFormat.HumanReadable);
 
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
             @"using System;
@@ -159,17 +231,21 @@ namespace ProseSample
             var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
             if (grammar == null) return;
 
-            ProgramNode p = grammar.ParseAST(@"Insert(n, 1, C1(n, ""Block"", 
+            ProgramNode p = grammar.ParseAST(@"Script1(n, ""Block"",
+                                                    Insert(n, 1, C1(n, ""Block"", 
                                                                C1(n, ""IfStatement"",
-                                                                    C1(n, ""EqualsExpression"",
-                                                                        Literal(n, Identifier(""i""))))),
+                                                                    C2(n, ""EqualsExpression"",
+                                                                        Literal(n, Identifier(""i"")),
+                                                                        Literal(n, NumericLiteralExpression(""0"")))
+                                                                    )),
 
                                                                 Node1(""IfStatement"",
                                                                      Node2(""EqualsExpression"",
                                                                             Const(Identifier(""i"")),
-                                                                            Const(NumericLiteralExpression(""0"")) ) ) )",
-                                             ASTSerializationFormat.HumanReadable);
+                                                                            Const(NumericLiteralExpression(""0"")) ) ) ) )",
+                                            ASTSerializationFormat.HumanReadable);
 
+            //Script1(n, "Block", Insert(n, 1, C1(n, "Block", C2(n, "IfStatement", C2(n, "EqualsExpression", Literal(n, Identifier("i")), Literal(n, NumericLiteralExpression("0"))), C1(n, "ReturnStatement", Literal(n, StringLiteralExpression("\"Foo!\""))))), Node2("IfStatement", Node2("EqualsExpression", Const(Identifier("i")), Const(NumericLiteralExpression("2"))), Const(Block("{}")))))
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
             @"using System;
 

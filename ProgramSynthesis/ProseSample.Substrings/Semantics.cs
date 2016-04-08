@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -12,9 +11,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ProseSample.Substrings
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public static class Semantics
     {
+        #region Concatenation Operators
         public static MatchResult C1(SyntaxNodeOrToken n, string kind, MatchResult expression)
         {
             SyntaxKind skind;
@@ -62,6 +61,7 @@ namespace ProseSample.Substrings
             return null;
         }
 
+        //TODO refactor this method
         /// <summary>
         /// Verify if the parent contains the parameter child
         /// </summary>
@@ -77,16 +77,42 @@ namespace ProseSample.Substrings
                     return true;
                 }
 
-                if (child.IsKind(SyntaxKind.IdentifierToken) && item.IsKind(SyntaxKind.IdentifierName))
+                if (child.IsKind(SyntaxKind.IdentifierToken) || child.IsKind(SyntaxKind.IdentifierName))
                 {
                     string itemString = item.ToString();
                     string childString = child.ToString();
-                    return itemString.Equals(childString);
+                    if (itemString.Equals(childString))
+                    {
+                        return true;
+                    }
+                }
+
+                if (child.IsKind(SyntaxKind.NumericLiteralToken) || child.IsKind(SyntaxKind.NumericLiteralExpression))
+                {
+                    string itemString = item.ToString();
+                    string childString = child.ToString();
+                    if (itemString.Equals(childString))
+                    {
+                        return true;
+                    }
+                }
+
+                if (child.IsKind(SyntaxKind.StringLiteralToken) || child.IsKind(SyntaxKind.StringLiteralExpression))
+                {
+                    string itemString = item.ToString();
+                    string childString = child.ToString();
+                    if (itemString.Equals(childString))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
         }
 
+        #endregion
+
+        #region Literal Operator
         /// <summary>
         /// Build a indentifier
         /// </summary>
@@ -129,8 +155,7 @@ namespace ProseSample.Substrings
         /// <returns>A new numeric literal expression</returns>
         public static SyntaxNodeOrToken StringLiteralExpression(string s)
         {
-            double d = double.Parse(s);
-            SyntaxNode stringLiteralExpression = SyntaxFactory.ParseExpression(d.ToString(CultureInfo.InvariantCulture));
+            SyntaxNode stringLiteralExpression = SyntaxFactory.ParseExpression(s.ToString(CultureInfo.InvariantCulture));
             return stringLiteralExpression;
         }
 
@@ -169,7 +194,9 @@ namespace ProseSample.Substrings
 
             return null;
         }
+        #endregion
 
+        #region Edit Operators       
         /// <summary>
         /// Insert the ast node before the matching
         /// </summary>
@@ -186,11 +213,6 @@ namespace ProseSample.Substrings
             root = root.InsertNodesBefore(root.FindNode(node.Span), nodes);
 
             return root.NormalizeWhitespace();
-        }
-
-        public static SyntaxNodeOrToken Script1(SyntaxNodeOrToken n, string kind, SyntaxNodeOrToken edit)
-        {
-            return null;
         }
 
         /// <summary>
@@ -222,6 +244,26 @@ namespace ProseSample.Substrings
             return root.NormalizeWhitespace();
         }
 
+        #endregion
+
+        #region Script Operators
+
+        public static SyntaxNodeOrToken Script1(SyntaxNodeOrToken n, string kind, SyntaxNodeOrToken edit)
+        {
+            SyntaxKind skind;
+            Enum.TryParse(kind, out skind);
+
+            var li = from nd in n.AsNode().DescendantNodes()
+                     where nd.IsKind(SyntaxKind.Block)
+                     select nd;
+
+
+            return null;
+        }
+
+        #endregion
+
+        #region Node Operators
         /// <summary>
         /// Return a new node
         /// </summary>
@@ -232,7 +274,7 @@ namespace ProseSample.Substrings
         {
             SyntaxKind skind;
             Enum.TryParse(kind, out skind);
-            List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> {child};
+            List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> { child };
             var node = GetSyntaxElement(skind, children);
             return node;
         }
@@ -248,11 +290,14 @@ namespace ProseSample.Substrings
         {
             SyntaxKind skind;
             Enum.TryParse(kind, out skind);
-            List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> {child, child2};
+            List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> { child, child2 };
             var node = GetSyntaxElement(skind, children);
             return node;
         }
 
+        #endregion
+
+        #region Constant Operators
         /// <summary>
         /// Create a constant node
         /// </summary>
@@ -263,6 +308,25 @@ namespace ProseSample.Substrings
             return cst;
         }
 
+        #endregion
+
+        #region SplitNodes
+        public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken source)
+        {
+            SyntaxKind targetKind = SyntaxKind.MethodDeclaration;
+            
+            SyntaxNode node = source.AsNode();
+
+            var nodes = from snode in node.DescendantNodes()
+                        where snode.IsKind(targetKind)
+                        select snode;
+
+
+            return nodes.Select(snot => (SyntaxNodeOrToken) snot).ToList();
+        }
+        #endregion
+
+        #region Utilities       
         /// <summary>
         /// Return a list of dynamic tokens. This method will be removed in future.
         /// </summary>
@@ -329,7 +393,7 @@ namespace ProseSample.Substrings
 
             if (kind == SyntaxKind.IfStatement)
             {
-                var condition = (ExpressionSyntax) children[0];
+                var condition = (ExpressionSyntax)children[0];
                 var block = SyntaxFactory.Block();
                 var ifStatement = SyntaxFactory.IfStatement(condition, block);
                 return ifStatement;
@@ -337,5 +401,6 @@ namespace ProseSample.Substrings
 
             return null;
         }
+        #endregion
     }
 }
