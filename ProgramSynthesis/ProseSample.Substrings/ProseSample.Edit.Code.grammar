@@ -25,11 +25,14 @@ IEnumerable<SyntaxNodeOrToken> nodes := SplitNodes(n);
 
 SyntaxNodeOrToken script := Script1(n, edit);
 
-SyntaxNodeOrToken edit := Insert(n, k, match, ast);
+SyntaxNodeOrToken edit := Insert(n, k, parent, ast);
 
-MatchResult match := C1(n, kd, match) | C2(n, kd, match, match) | Literal(n, tree);
+MatchResult parent := match;
+
+MatchResult match := C1(n, kd, match) | C2(n, kd, match, match) | Literal(n, tree) | Abstract(n, kind);
 SyntaxNodeOrToken ast:= Node1(kd, ast) | Node2(kd, ast, ast) | Const(tree);
 
+@feature[Score=KDScore] SyntaxNode;
 @feature[Score=KDScore] string id;
 @feature[Score=KDScore] string kd;
 SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id) | StringLiteralExpression(id) | Block(id);

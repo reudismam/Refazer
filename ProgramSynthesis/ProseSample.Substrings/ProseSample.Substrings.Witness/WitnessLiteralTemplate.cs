@@ -27,19 +27,23 @@ namespace ProseSample.Substrings.ProseSample.Substrings.Witness
 
             foreach (State input in spec.ProvidedInputs)
             {
-                var strings = new List<object>();
+                var list = new List<object>();
                 foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
                 {
                     if (IsKind(sot, Kinds))
                     {
-                        strings.Add(sot.ToString());
+                        list.Add(sot.ToString());
+                        if (!sot.ToString().Equals(list.First().ToString()))
+                        {
+                            return null;
+                        }
                     }
                     else
                     {
                         return null;
                     }
                 }
-                idExamples[input] = strings;
+                idExamples[input] = list;
             }
 
             return DisjunctiveExamplesSpec.From(idExamples);

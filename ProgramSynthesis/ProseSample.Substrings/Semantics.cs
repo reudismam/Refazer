@@ -246,6 +246,12 @@ namespace ProseSample.Substrings
 
         #endregion
 
+
+        public static MatchResult Abstract(SyntaxNodeOrToken n, SyntaxKind kind)
+        {
+            return null;
+        }
+
         #region Script Operators
 
         public static SyntaxNodeOrToken Script1(SyntaxNodeOrToken n, SyntaxNodeOrToken edit)

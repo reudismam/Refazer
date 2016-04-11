@@ -86,7 +86,7 @@ namespace ProseSample
 
                 public String bar(int i)
                 {
-                     if(i == 0) return ""Foo!"";
+                     if(i == 3) return ""Foo!"";
                 }
             }").GetRoot();
 
@@ -103,7 +103,8 @@ namespace ProseSample
 
                 public String bar(int i)
                 {
-                     if(i == 0) return ""Foo!"";
+                     if(i == 2){}
+                     if(i == 3) return ""Foo!"";
                 }
             }").GetRoot();
 
@@ -111,7 +112,7 @@ namespace ProseSample
                 where inode.IsKind(SyntaxKind.MethodDeclaration)
                            select inode;
 
-            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken) sot).ToList().GetRange(0, 1);
+            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken) sot).ToList().GetRange(0, 2);
 
             var examples = examplesSot.Select(o => (object) o).ToList();
 

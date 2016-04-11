@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using TreeEdit.Spg.TreeEdit.Script;
@@ -19,7 +18,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <summary>
         /// Map to annotation to each edit operations
         /// </summary>
-        public Dictionary<EditOperation, SyntaxAnnotation> _ann { get; set; }
+        public Dictionary<EditOperation, SyntaxAnnotation> Ann { get; set; }
 
         /// <summary>
         /// Newest updated tree
@@ -40,7 +39,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <summary>
         /// Indicate the edit operations that was processed.
         /// </summary>
-        public Dictionary<EditOperation, bool> _processed;
+        public Dictionary<EditOperation, bool> Processed;
 
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             foreach (var item in script)
             {
-                if (!_processed.ContainsKey(item))
+                if (!Processed.ContainsKey(item))
                 {
                     ProcessEditOperation(item);
                 }
@@ -124,9 +123,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
             CurrentTree = tree;
             _M = M;
             _dict = new Dictionary<SyntaxNodeOrToken, List<EditOperation>>();
-            _ann = new Dictionary<EditOperation, SyntaxAnnotation>();
+            Ann = new Dictionary<EditOperation, SyntaxAnnotation>();
             _annts = new Dictionary<SyntaxNode, List<SyntaxAnnotation>>();
-            _processed = new Dictionary<EditOperation, bool>();
+            Processed = new Dictionary<EditOperation, bool>();
         }
 
         /// <summary>
@@ -137,7 +136,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         {
             var updated = UpdateTree(eop);
 
-            var changedNodeList = CurrentTree.AsNode().GetAnnotatedNodes(_ann[eop]).ToList();
+            var changedNodeList = CurrentTree.AsNode().GetAnnotatedNodes(Ann[eop]).ToList();
             var oldNode = changedNodeList.First();
 
             var newNode = Update(oldNode, updated.AsNode(), eop.K).AsNode();
@@ -180,7 +179,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             if (eop is Move)
             {
                 SyntaxAnnotation sn = new SyntaxAnnotation("MV-" + id);
-                _ann.Add(eop, sn);
+                Ann.Add(eop, sn);
 
                 if (!_annts.ContainsKey(eop.T1Node.AsNode()))
                 {
@@ -200,7 +199,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             if (s is Script.Update)
             {
                 SyntaxAnnotation sn = new SyntaxAnnotation("UP-" + id);
-                _ann.Add(s, sn);
+                Ann.Add(s, sn);
 
                 if (!_annts.ContainsKey(s.T1Node.AsNode()))
                 {
@@ -223,7 +222,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 var z = _M.ToList().Find(o => o.Value.Equals(y)).Key;
 
                 SyntaxAnnotation upAnn = new SyntaxAnnotation("IS-" + id);
-                _ann[eop] = upAnn;
+                Ann[eop] = upAnn;
 
                 if (!_annts.ContainsKey(z.AsNode()))
                 {
@@ -273,7 +272,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         public SyntaxNodeOrToken UpdateTree(EditOperation operation)
         {
-            _processed.Add(operation, true);
+            Processed.Add(operation, true);
 
             //process update operation
             // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
@@ -351,7 +350,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <returns>Updated version of current node</returns>
         private SyntaxNode ProcessMoveOperation(EditOperation eop, SyntaxNode currentNode, SyntaxNode uptNode)
         {
-            var annotation = _ann[eop];
+            var annotation = Ann[eop];
             var moveL = CurrentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
             var uptNodeMove = moveL.First();
             var oldNode = currentNode.ChildNodes().ElementAt(eop.K - 1);
@@ -381,7 +380,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         {
             var oldNode = currentNode.ChildNodes().First();
             currentNode = currentNode.ReplaceNode(oldNode, uptNode);
-            var annotation = _ann[eop];
+            var annotation = Ann[eop];
             var moveL = CurrentTree.AsNode().GetAnnotatedNodes(annotation).ToList();
             var move = moveL.First();
 

@@ -41,30 +41,77 @@ namespace ProseSample.Substrings
             var mats = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = (SyntaxNodeOrToken) input[rule.Body[0]];
-                var matchResult = (MatchResult)spec.Examples[input];
-
-                Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(inpTree, matchResult.match.Item1);
-                Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
-
-                TokenSeq seq = DymTokens(lnode.Item2.List);
-                var matches = Regex.Matches(lnode.Item1, seq);
-
-                foreach (var item in matches)
+                foreach (MatchResult ma in spec.DisjunctiveExamples[input])
                 {
-                    if (item.Item2.Length() == 1)
+                    var inpTree = (SyntaxNodeOrToken) input[rule.Body[0]];
+                    var matchResult = (MatchResult) spec.Examples[input];
+
+                    Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(inpTree, matchResult.match.Item1);
+                    Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
+
+                    TokenSeq seq = DymTokens(lnode.Item2.List);
+                    var matches = Regex.Matches(lnode.Item1, seq);
+
+                    foreach (var item in matches)
                     {
-                        mats.Add(item.Item2.List.Single());
-                    }
-                    else
-                    {
-                        SyntaxNodeOrToken parent = LCAManager.GetInstance().LeastCommonAncestor(item.Item2.List, item.Item2.List.First().SyntaxTree).AsNode();
-                        mats.Add(parent);
+                        if (item.Item2.Length() == 1)
+                        {
+                            mats.Add(item.Item2.List.Single());
+                        }
+                        else
+                        {
+                            SyntaxNodeOrToken parent =
+                                LCAManager.GetInstance()
+                                    .LeastCommonAncestor(item.Item2.List, item.Item2.List.First().SyntaxTree)
+                                    .AsNode();
+                            mats.Add(parent);
+                        }
                     }
                 }
 
                 treeExamples[input] = mats;
             }
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+        /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Abstract", 1)]
+        public static DisjunctiveExamplesSpec WitnessAbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                foreach (MatchResult ma in spec.DisjunctiveExamples[input])
+                {
+                    //Todo refactor this method
+                    var mats = new List<object>();
+                    var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                    var matchResult = (MatchResult)spec.Examples[input];
+
+                    Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(inpTree, matchResult.match.Item1);
+                    Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
+
+                    TokenSeq seq = DymTokens(lnode.Item2.List);
+                    var matches = Regex.Matches(lnode.Item1, seq);
+
+                    foreach (var item in matches)
+                    {
+                        if (item.Item2.Length() == 1)
+                        {
+                            mats.Add(item.Item2.List.Single().Kind());
+                        }
+                    }
+                    treeExamples[input] = mats;
+                }
+            }
+
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
@@ -291,20 +338,11 @@ namespace ProseSample.Substrings
             SyntaxNode node = item1.AsNode();
 
             var l = from nm in node.DescendantNodes()
-                where nm.IsKind(outTree.Kind())
-                select nm;
+                    where nm.IsKind(outTree.Kind())
+                    select nm;
 
-            MethodDeclarationSyntax m = (MethodDeclarationSyntax) outTree;
-            foreach (var item in l)
-            {
-                MethodDeclarationSyntax mItem = (MethodDeclarationSyntax) item;
-                if (m.Identifier.ToString().Equals(mItem.Identifier.ToString()))
-                {
-                    return mItem;
-                }
-            }
-
-            return null;
+            MethodDeclarationSyntax m = (MethodDeclarationSyntax)outTree;
+            return l.Cast<MethodDeclarationSyntax>().FirstOrDefault(mItem => m.Identifier.ToString().Equals(mItem.Identifier.ToString()));
         }
 
         /// <summary>
@@ -318,45 +356,60 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessFunctionScript1Edit(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var kMatches = new List<object>();
+
             foreach (State input in spec.ProvidedInputs)
             {
+                var kMatches = new List<object>();
                 //Todo refactor
-                var inp = (SyntaxNodeOrToken) input[rule.Body[0]];
+                var inp = (SyntaxNodeOrToken)input[rule.Body[0]];
                 var outTree = (SyntaxNodeOrToken)spec.Examples[input];
-
                 var inpTree = GetPair(inp, outTree);
 
-                ITreeMapping mapping = new GumTreeMapping();
-                var M = mapping.Mapping(inpTree, outTree);
-
-                var generator = new EditScriptGenerator();
-                var script = generator.EditScript(inpTree, outTree, M);
+                Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
+                var script = Script(inpTree, outTree, out M);
 
                 TreeUpdate treeUp = new TreeUpdate();
                 treeUp.PreProcessTree(script, inpTree, M);
 
                 foreach (var item in script)
                 {
-                    if (!treeUp._processed.ContainsKey(item))
+                    if (!treeUp.Processed.ContainsKey(item))
                     {
-                        var changedNodeList = treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp._ann[item]).ToList();
+                        var changedNodeList = treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp.Ann[item]).ToList();
                         var oldNode = changedNodeList.First();
                         treeUp.ProcessEditOperation(item);
-                        changedNodeList = treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp._ann[item]).ToList();
+                        changedNodeList = treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp.Ann[item]).ToList();
                         var newNode = changedNodeList.First();
                         kMatches.Add(newNode);
                         Edits.Add(newNode, oldNode);
                     }
                 }
 
-                if (kMatches.Count() == 1)
+                if (kMatches.Count == 1)
                 {
                     kExamples[input] = kMatches;
                 }
             }
             return DisjunctiveExamplesSpec.From(kExamples);
         }
+
+        /// <summary>
+        /// Compute the edition script
+        /// </summary>
+        /// <param name="inpTree">Input tree</param>
+        /// <param name="outTree">Output tree</param>
+        /// <param name="M">out Mapping</param>
+        /// <returns>Computed edit script</returns>
+        private static List<EditOperation> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree, out Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
+        {
+            ITreeMapping mapping = new GumTreeMapping();
+            M = mapping.Mapping(inpTree, outTree);
+
+            var generator = new EditScriptGenerator();
+            var script = generator.EditScript(inpTree, outTree, M);
+            return script;
+        }
+
         #endregion
 
         #region insert
@@ -373,89 +426,35 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessFunctionInsertK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var kMatches = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //TODO refactor this consider more examples
- //               var inp = (Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>)input[rule.Body[0]];
+                var kMatches = new List<object>();
                 var outTree = (SyntaxNode)spec.DisjunctiveExamples[input].First();
                 var inpTree = Edits[outTree];
 
-                ITreeMapping mapping = new GumTreeMapping();
-                var M = mapping.Mapping(inpTree, outTree);
-
-                var generator = new EditScriptGenerator();
-                var script = generator.EditScript(inpTree, outTree, M);
+                Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
+                var script = Script(inpTree, outTree, out M);
 
                 TreeUpdate treeUp = new TreeUpdate();
                 treeUp.PreProcessTree(script, inpTree, M);
 
                 foreach (var item in script)
                 {
-                    if (!treeUp._processed.ContainsKey(item))
+                    if (!treeUp.Processed.ContainsKey(item))
                     {
                         treeUp.ProcessEditOperation(item);
                         kMatches.Add(item.K);
                     }
                 }
 
-                if (kMatches.Count == 1)
-                {
-                    kExamples[input] = kMatches;
-                }
+                if (kMatches.Count != 1) return null; //more than an edit operation
+
+                kExamples[input] = kMatches;
             }
+
+            if (kExamples.Values.Any(o => !o.SequenceEqual(kExamples.Values.First()))) return null; //Unable to generate programs (distinct ks).
+
             return DisjunctiveExamplesSpec.From(kExamples);
-            //var kExamples = new Dictionary<State, IEnumerable<object>>();
-
-            //foreach (State input in spec.ProvidedInputs)
-            //{
-            //    var kMatches = new List<object>();
-            //    foreach (var item in spec.DisjunctiveExamples[input])
-            //    {
-            //        string type = item.GetType().ToString();
-            //        SyntaxNode sot = (SyntaxNode) item;
-            //        //if (sot.IsToken) return null;
-
-            //        SyntaxNodeOrToken inp = (SyntaxNodeOrToken)input[rule.Body[0]];
-
-            //        SyntaxNode nodeIn = inp.AsNode();
-            //        SyntaxNode nodeOut = sot;//.AsNode();
-
-            //        var childrenIn = nodeIn.ChildNodes().ToList();
-            //        var childrenOut = nodeOut.ChildNodes().ToList();
-
-            //        var dic = new List<List<int>>();
-
-            //        for (int i = 0; i < childrenOut.Count(); i++)
-            //        {
-            //            dic.Add(new List<int>());
-            //            var outi = childrenOut.ElementAt(i);
-
-            //            for (int j = 0; j < childrenIn.Count(); j++)
-            //            {
-            //                var inj = childrenIn.ElementAt(j);
-            //                if (IsomorphicManager.IsIsomorphic(outi, inj))
-            //                {
-            //                    dic[i].Add(j);
-            //                }
-            //            }
-            //        }
-
-            //        int cco = 1;
-            //        foreach (var i in dic)
-            //        {
-            //            if (!i.Any())
-            //            {
-            //                kMatches.Add(cco);
-            //            }
-            //            //TODO: what happens a single element from the output matches more than one element in the input.
-            //            cco++;
-            //        }
-            //    }
-            //    kExamples[input] = kMatches;
-            //}
-
-            //return DisjunctiveExamplesSpec.From(kExamples);
         }
 
 
@@ -471,27 +470,23 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessFunctionInsertParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBiding)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var kMatches = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //TODO refactor this consider more examples
+                var kMatches = new List<object>();
                 var outTree = (SyntaxNode)spec.DisjunctiveExamples[input].First();
                 var inpTree = Edits[outTree];
 
-                ITreeMapping mapping = new GumTreeMapping();
-                var M = mapping.Mapping(inpTree, outTree);
-
-                var generator = new EditScriptGenerator();
-                var script = generator.EditScript(inpTree, outTree, M);
+                Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
+                var script = Script(inpTree, outTree, out M);
 
                 TreeUpdate treeUp = new TreeUpdate();
                 treeUp.PreProcessTree(script, inpTree, M);
 
                 foreach (var item in script)
                 {
-                    if (!treeUp._processed.ContainsKey(item))
+                    if (!treeUp.Processed.ContainsKey(item))
                     {
-                        var changedNodeList = treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp._ann[item]).ToList();
+                        var changedNodeList = treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp.Ann[item]).ToList();
                         SyntaxNodeOrToken oldNode = changedNodeList.First();
                         treeUp.ProcessEditOperation(item);
                         MatchResult result = new MatchResult(Tuple.Create(oldNode, new Bindings()));
@@ -499,33 +494,12 @@ namespace ProseSample.Substrings
                     }
                 }
 
-                if (kMatches.Count() == 1)
-                {
-                    kExamples[input] = kMatches;
-                }
+                if (kMatches.Count != 1) return null; //More than an edit operation
+
+                kExamples[input] = kMatches; 
             }
+
             return DisjunctiveExamplesSpec.From(kExamples);
-            //var kExamples = new Dictionary<State, IEnumerable<object>>();
-
-            //foreach (State input in spec.ProvidedInputs)
-            //{
-            //    var kMatches = new List<object>();
-            //    foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
-            //    {
-
-            //        if (sot.IsToken) return null;
-
-            //        SyntaxNodeOrToken inp = (SyntaxNodeOrToken)input[rule.Body[0]];
-
-            //        Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(inp, new Bindings());
-            //        MatchResult match = new MatchResult(t);
-            //        kMatches.Add(match);
-            //    }
-
-            //    kExamples[input] = kMatches;
-            //}
-
-            //return DisjunctiveExamplesSpec.From(kExamples);
         }
 
         /// <summary>
@@ -542,59 +516,35 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessFunctionInsertAST(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding, ExampleSpec parentBinding)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var kMatches = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //TODO refactor this consider more examples
+                var kMatches = new List<object>();
                 var outTree = (SyntaxNode)spec.DisjunctiveExamples[input].First();
                 var inpTree = Edits[outTree];
 
-                ITreeMapping mapping = new GumTreeMapping();
-                var M = mapping.Mapping(inpTree, outTree);
-
-                var generator = new EditScriptGenerator();
-                var script = generator.EditScript(inpTree, outTree, M);
+                Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
+                var script = Script(inpTree, outTree, out M);
 
                 TreeUpdate treeUp = new TreeUpdate();
                 treeUp.PreProcessTree(script, inpTree, M);
 
                 foreach (var item in script)
                 {
-                    if (!treeUp._processed.ContainsKey(item))
+                    if (!treeUp.Processed.ContainsKey(item))
                     {
                         treeUp.ProcessEditOperation(item);
-                        var changedNodeList = treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp._ann[item]).ToList();
+                        var changedNodeList = treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp.Ann[item]).ToList();
                         var newNode = changedNodeList.First();
                         SyntaxNodeOrToken result = newNode.ChildNodes().ElementAt(item.K - 1);
                         kMatches.Add(result);
                     }
                 }
 
-                if (kMatches.Count() == 1)
-                {
-                    kExamples[input] = kMatches;
-                }
+                if (kMatches.Count != 1) return null; //More than an edit operation
+
+                kExamples[input] = kMatches;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
-            //var kExamples = new Dictionary<State, IEnumerable<object>>();
-
-            //foreach (State input in spec.ProvidedInputs)
-            //{
-            //    var kMatches = new List<object>();
-            //    var k = (int)kBinding.Examples[input];
-
-            //    var mat = (MatchResult)parentBinding.Examples[input];
-
-            //    var parent = mat.match.Item1;
-
-            //    SyntaxNodeOrToken match = parent.AsNode().ChildNodes().ElementAt(k - 1);
-
-            //    kMatches.Add(match);
-
-            //    kExamples[input] = kMatches;
-            //}
-
-            //return DisjunctiveExamplesSpec.From(kExamples);
         }
         #endregion
 
@@ -764,7 +714,7 @@ namespace ProseSample.Substrings
             {
                 //Todo refactor
                 var nodePrefix = spec.Examples[input].Cast<SyntaxNodeOrToken>();
-                var tuple = (SyntaxNodeOrToken) input.Bindings.First().Value;
+                var tuple = (SyntaxNodeOrToken)input.Bindings.First().Value;
 
                 var inpMapping = GetPair(tuple, nodePrefix);
 
