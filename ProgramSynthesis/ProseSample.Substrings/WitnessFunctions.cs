@@ -38,19 +38,14 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
 
             //Todo refactor this method
-            var mats = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                foreach (MatchResult ma in spec.DisjunctiveExamples[input])
+                var mats = new List<object>();
+                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
-                    var inpTree = (SyntaxNodeOrToken) input[rule.Body[0]];
-                    var matchResult = (MatchResult) spec.Examples[input];
+                    var inpTree = Input(rule, input);
 
-                    Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(inpTree, matchResult.match.Item1);
-                    Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
-
-                    TokenSeq seq = DymTokens(lnode.Item2.List);
-                    var matches = Regex.Matches(lnode.Item1, seq);
+                    var matches = Matches(inpTree, matchResult);
 
                     foreach (var item in matches)
                     {
@@ -60,18 +55,53 @@ namespace ProseSample.Substrings
                         }
                         else
                         {
-                            SyntaxNodeOrToken parent =
-                                LCAManager.GetInstance()
-                                    .LeastCommonAncestor(item.Item2.List, item.Item2.List.First().SyntaxTree)
-                                    .AsNode();
+                            var parent = LCA(item.Item2);
                             mats.Add(parent);
                         }
                     }
+                    treeExamples[input] = mats;
                 }
-
-                treeExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+        private static List<Tuple<int, ListNode>> Matches(SyntaxNodeOrToken inpTree, MatchResult matchResult)
+        {
+            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(inpTree, matchResult.match.Item1);
+            Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
+
+            TokenSeq seq = DymTokens(lnode.Item2.List);
+            var matches = Regex.Matches(lnode.Item1, seq);
+            return matches;
+        }
+
+        /// <summary>
+        /// Compute the input
+        /// </summary>
+        /// <param name="rule">Rule</param>
+        /// <param name="input">Input</param>
+        /// <returns>Input</returns>
+        private static SyntaxNodeOrToken Input(GrammarRule rule, State input)
+        {
+            var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+
+            foreach (var item in input.Bindings.Where(item => item.Key.Name.Equals("node")))
+            {
+                inpTree = (SyntaxNodeOrToken)item.Value;
+            }
+
+            return inpTree;
+        }
+
+        /// <summary>
+        /// Compute the least common ancestor from nodes
+        /// </summary>
+        /// <param name="lnode">Nodes</param>
+        /// <returns>Least common ancestor</returns>
+        private static SyntaxNodeOrToken LCA(ListNode lnode)
+        {
+            var parent = LCAManager.GetInstance().LeastCommonAncestor(lnode.List, lnode.List.First().SyntaxTree).AsNode();
+            return parent;
         }
 
         /// <summary>
@@ -94,6 +124,45 @@ namespace ProseSample.Substrings
                     var mats = new List<object>();
                     var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
                     var matchResult = (MatchResult)spec.Examples[input];
+
+                    Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(inpTree, matchResult.match.Item1);
+                    Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
+
+                    TokenSeq seq = DymTokens(lnode.Item2.List);
+                    var matches = Regex.Matches(lnode.Item1, seq);
+
+                    foreach (var item in matches)
+                    {
+                        if (item.Item2.Length() == 1)
+                        {
+                            mats.Add(item.Item2.List.Single().Kind());
+                        }
+                    }
+                    treeExamples[input] = mats;
+                }
+            }
+
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+        /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Abstract", 2, DependsOnParameters = new[] {1})]
+        public static DisjunctiveExamplesSpec WitnessAbstractK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        {
+
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+                {
+                    var mats = new List<object>();
+                    var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
 
                     Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(inpTree, matchResult.match.Item1);
                     Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
@@ -206,7 +275,7 @@ namespace ProseSample.Substrings
 
                     if (sot.IsToken) return null;
 
-                    strings.Add(sot.Kind().ToString());
+                    strings.Add(sot.Kind());
                 }
                 kdExamples[input] = strings;
             }
@@ -496,7 +565,7 @@ namespace ProseSample.Substrings
 
                 if (kMatches.Count != 1) return null; //More than an edit operation
 
-                kExamples[input] = kMatches; 
+                kExamples[input] = kMatches;
             }
 
             return DisjunctiveExamplesSpec.From(kExamples);
@@ -568,10 +637,7 @@ namespace ProseSample.Substrings
                 {
                     if (sot.IsToken) return null;
 
-                    SyntaxKind kind = sot.Kind();
-                    var match = kind.ToString();
-
-                    kMatches.Add(match);
+                    kMatches.Add(sot.Kind());
                 }
 
                 kExamples[input] = kMatches;

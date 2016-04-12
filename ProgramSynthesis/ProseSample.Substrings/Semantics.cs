@@ -14,13 +14,10 @@ namespace ProseSample.Substrings
     public static class Semantics
     {
         #region Concatenation Operators
-        public static MatchResult C1(SyntaxNodeOrToken n, string kind, MatchResult expression)
+        public static MatchResult C1(SyntaxNodeOrToken n, SyntaxKind kind, MatchResult expression)
         {
-            SyntaxKind skind;
-            Enum.TryParse(kind, out skind);
-
             var kinds = from k in n.AsNode().DescendantNodes()
-                        where k.IsKind(skind)
+                        where k.IsKind(kind)
                         select k;
 
             var klist = kinds.ToList();
@@ -37,13 +34,10 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        public static MatchResult C2(SyntaxNodeOrToken n, string kind, MatchResult expression1, MatchResult expression2)
+        public static MatchResult C2(SyntaxNodeOrToken n, SyntaxKind kind, MatchResult expression1, MatchResult expression2)
         {
-            SyntaxKind skind;
-            Enum.TryParse(kind, out skind);
-
             var kinds = from k in n.AsNode().DescendantNodes()
-                        where k.IsKind(skind)
+                        where k.IsKind(kind)
                         select k;
 
             var klist = kinds.ToList();
@@ -246,9 +240,20 @@ namespace ProseSample.Substrings
 
         #endregion
 
-
-        public static MatchResult Abstract(SyntaxNodeOrToken n, SyntaxKind kind)
+        public static MatchResult Abstract(SyntaxNodeOrToken n, SyntaxKind kind, int k)
         {
+            SyntaxNode node = n.AsNode();
+            var matches = from item in node.DescendantNodesAndTokens()
+                       where item.IsKind(kind)
+                       select item;
+
+            bool m = matches.Any();
+            if (m)
+            {
+                Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(matches.ElementAt(k - 1), null);
+                MatchResult matchResult = new MatchResult(match);
+                return matchResult;
+            }
             return null;
         }
 
@@ -268,12 +273,10 @@ namespace ProseSample.Substrings
         /// <param name="kind">Returned node SyntaxKind</param>
         /// <param name="child">Child of the returned SyntaxNode</param>
         /// <returns>A new node with kind and child</returns>
-        public static SyntaxNodeOrToken Node1(string kind, SyntaxNodeOrToken child)
+        public static SyntaxNodeOrToken Node1(SyntaxKind kind, SyntaxNodeOrToken child)
         {
-            SyntaxKind skind;
-            Enum.TryParse(kind, out skind);
             List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> { child };
-            var node = GetSyntaxElement(skind, children);
+            var node = GetSyntaxElement(kind, children);
             return node;
         }
 
@@ -284,12 +287,10 @@ namespace ProseSample.Substrings
         /// <param name="child">First child of the node</param>
         /// <param name="child2">Second child of the node</param>
         /// <returns>A node with two child and SyntaxKind passed as parameter</returns>
-        public static SyntaxNodeOrToken Node2(string kind, SyntaxNodeOrToken child, SyntaxNodeOrToken child2)
+        public static SyntaxNodeOrToken Node2(SyntaxKind kind, SyntaxNodeOrToken child, SyntaxNodeOrToken child2)
         {
-            SyntaxKind skind;
-            Enum.TryParse(kind, out skind);
             List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> { child, child2 };
-            var node = GetSyntaxElement(skind, children);
+            var node = GetSyntaxElement(kind, children);
             return node;
         }
 
@@ -312,15 +313,14 @@ namespace ProseSample.Substrings
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
         {
             SyntaxKind targetKind = SyntaxKind.MethodDeclaration;
-            
+
             SyntaxNode node = n.AsNode();
 
             var nodes = from snode in node.DescendantNodes()
                         where snode.IsKind(targetKind)
                         select snode;
 
-
-            return nodes.Select(snot => (SyntaxNodeOrToken) snot).ToList();
+            return nodes.Select(snot => (SyntaxNodeOrToken)snot).ToList();
         }
         #endregion
 

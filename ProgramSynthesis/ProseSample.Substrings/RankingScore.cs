@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 
@@ -32,7 +33,7 @@ namespace ProseSample.Substrings
         public static double Score_Node1(double astScore) => astScore;
 
         [FeatureCalculator("Abstract")]
-        public static double Score_Abstract(double inScore, double treeScore) => treeScore;
+        public static double Score_Abstract(double inScore, double treeScore, double kScore) => treeScore;
 
         [FeatureCalculator("Literal")]
         public static double Score_Literal(double inScore, double treeScore) => treeScore;
@@ -77,6 +78,9 @@ namespace ProseSample.Substrings
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KDScore(string kd) => 1.1;
+
+        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+        public static double KindScore(SyntaxKind kd) => 1.1;
 
         [FeatureCalculator("BoundaryPair")]
         public static double Score_BoundaryPair(double r1, double r2) => r1 + r2;
