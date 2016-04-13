@@ -309,6 +309,11 @@ namespace ProseSample.Substrings
 
         #endregion
 
+        public static SyntaxNodeOrToken Children(SyntaxNodeOrToken n, int j)
+        {
+            return null;
+        }
+
         #region SplitNodes
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
         {

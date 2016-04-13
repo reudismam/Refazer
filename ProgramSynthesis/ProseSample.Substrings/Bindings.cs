@@ -5,6 +5,11 @@ namespace ProseSample.Substrings
 {
     public class Bindings
     {
-        Dictionary<int, SyntaxNode> bindings;
+        public List<SyntaxNodeOrToken> bindings { get; set; }
+
+        public Bindings(List<SyntaxNodeOrToken> bindings)
+        {
+            this.bindings = bindings;
+        }
     }
 }

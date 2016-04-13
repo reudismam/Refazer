@@ -29,7 +29,11 @@ SyntaxNodeOrToken edit := Insert(node, k, parent, ast);
 
 MatchResult parent := match;
 
-MatchResult match := C1(node, kind, match) | C2(node, kind, match, match) | Literal(node, tree) | Abstract(node, kind, k);
+MatchResult match := C1(node, kind, child) | C2(node, kind, child, child) | Literal(node, tree) | Abstract(node, kind, k);
+
+MatchResult child := match;
+
+
 SyntaxNodeOrToken ast:= Node1(kind, ast) | Node2(kind, ast, ast) | Const(tree);
 
 @feature[Score=KindScore] SyntaxKind kind;
@@ -38,3 +42,4 @@ SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralEx
 
 @input SyntaxNodeOrToken n;
 @feature[Score=KScore] int k;
+@feature[Score=KScore] int j;
