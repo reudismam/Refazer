@@ -156,11 +156,10 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Build a string literal expression
         /// </summary>
-        /// <param name="s">Literal expression</param>
+        /// <param name="block">Block</param>
         /// <returns>A new numeric literal expression</returns>
-        public static SyntaxNodeOrToken Block(string s)
+        public static SyntaxNodeOrToken Block(SyntaxNodeOrToken block)
         {
-            var block = SyntaxFactory.Block();
             return block;
         }
 
@@ -262,6 +261,11 @@ namespace ProseSample.Substrings
         public static SyntaxNodeOrToken Script1(SyntaxNodeOrToken n, SyntaxNodeOrToken edit)
         {
             return edit;
+        }
+
+        public static SyntaxNodeOrToken Script2(SyntaxNodeOrToken n, SyntaxNodeOrToken edit, SyntaxNodeOrToken edit2)
+        {
+            return edit2;
         }
 
         #endregion
@@ -397,7 +401,7 @@ namespace ProseSample.Substrings
             if (kind == SyntaxKind.IfStatement)
             {
                 var condition = (ExpressionSyntax)children[0];
-                var block = SyntaxFactory.Block();
+                var block = (BlockSyntax) children[1];
                 var ifStatement = SyntaxFactory.IfStatement(condition, block);
                 return ifStatement;
             }

@@ -32,7 +32,7 @@ namespace ProseSample.Substrings.ProseSample.Substrings.Witness
                 {
                     if (IsKind(sot, Kinds))
                     {
-                        list.Add(sot.ToString());
+                        list.Add(ToBeAdded(sot));
                         if (!sot.ToString().Equals(list.First().ToString()))
                         {
                             return null;
@@ -49,6 +49,10 @@ namespace ProseSample.Substrings.ProseSample.Substrings.Witness
             return DisjunctiveExamplesSpec.From(idExamples);
         }
 
+        public virtual object ToBeAdded(SyntaxNodeOrToken sot)
+        {
+            return sot.ToString();
+        }
         public abstract bool Match(SyntaxNodeOrToken toCompare, List<SyntaxKind> kinds);
 
         public abstract void InitializeKinds();

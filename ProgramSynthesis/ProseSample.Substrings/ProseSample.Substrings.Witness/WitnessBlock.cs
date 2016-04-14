@@ -20,5 +20,10 @@ namespace ProseSample.Substrings.ProseSample.Substrings.Witness
         {
             Kinds = new List<SyntaxKind> { SyntaxKind.Block };
         }
+
+        public override object ToBeAdded(SyntaxNodeOrToken sot)
+        {
+            return sot;
+        }
     }   
 }

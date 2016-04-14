@@ -241,7 +241,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <returns>Updated node</returns>
         private static SyntaxNodeOrToken Update(SyntaxNode parent, SyntaxNode child, int k)
         {
-            // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
             if (parent is BlockSyntax)
             {
                 var statements = parent.ChildNodes().ToList();
@@ -257,12 +256,27 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 }
 
                 parent = b;
+            }else if (parent is IfStatementSyntax && child is ElseClauseSyntax)
+            {
+                var ifStatement = (IfStatementSyntax) parent;
+                var elseClase = (ElseClauseSyntax) child;
+
+                parent = ifStatement.WithElse(elseClase);
             }
             else
             {
                 if (parent.ChildNodes().Count() > 1)
                 {
-                    parent = parent.ReplaceNode(parent.ChildNodes().ElementAt(k - 1), child);
+                    if (parent.ChildNodes().Count() >= k)
+                    {
+                        parent = parent.ReplaceNode(parent.ChildNodes().ElementAt(k - 1), child);
+                    }
+                    else
+                    {
+                        var schild = parent.ChildNodes().ElementAt(k - 2);
+                        schild = parent.FindNode(schild.Span);
+                        parent = parent.InsertNodesAfter(schild, new List<SyntaxNode>() { child });
+                    }
                 }
             }
 
@@ -275,7 +289,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
             Processed.Add(operation, true);
 
             //process update operation
-            // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
             if (operation is Script.Update)
             {
                 Script.Update update = (Script.Update) operation;

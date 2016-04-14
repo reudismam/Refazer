@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
@@ -81,6 +82,9 @@ namespace ProseSample.Substrings
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KindScore(SyntaxKind kd) => 1.1;
+
+        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+        public static double NodeScore(SyntaxNodeOrToken kd) => 1.1;
 
         [FeatureCalculator("BoundaryPair")]
         public static double Score_BoundaryPair(double r1, double r2) => r1 + r2;
