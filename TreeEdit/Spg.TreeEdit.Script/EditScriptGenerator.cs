@@ -25,7 +25,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
             {
                 //Combines the update, insert, align, and move phases
                 var y = x.Parent;
-                var z = M.Values.ToList().Find(o => o.Equals(y));
+                var z = M.ToList().Find(o => o.Value.Equals(y)).Key;
                 var w = M.ToList().Find(o => o.Value.Equals(x)).Key;
 
                 if (w.IsKind(SyntaxKind.None))

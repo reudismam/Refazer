@@ -8,6 +8,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.RegularExpression;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
 
 namespace ProseSample.Substrings
 {
@@ -227,7 +228,16 @@ namespace ProseSample.Substrings
             if (root.ChildNodes().Count() >= k)
             {
                 var select = root.ChildNodes().ElementAt(k - 1);
-                root = root.InsertNodesBefore(root.FindNode(select.Span), nodes);
+                try
+                {
+                    root = root.InsertNodesBefore(root.FindNode(select.Span), nodes);
+                }
+                catch (Exception e)
+                {
+                    root = root.ReplaceNode(root.FindNode(select.Span), nodes.First());
+                }
+
+
             }
             else
             {
@@ -235,6 +245,19 @@ namespace ProseSample.Substrings
             }
 
             return root.NormalizeWhitespace();
+        }
+
+        private static DocumentEditor GetDocumentEditor(SyntaxNode root)
+        {
+            var mscorlib = MetadataReference.CreateFromFile(typeof (object).Assembly.Location);
+            var workspace = new AdhocWorkspace();
+            var projectId = ProjectId.CreateNewId();
+            var versionStamp = VersionStamp.Create();
+            var projectInfo = ProjectInfo.Create(projectId, versionStamp, "NewProject", "projName", LanguageNames.CSharp);
+            var newProject = workspace.AddProject(projectInfo);
+            var document = newProject.AddDocument("doc.cs", root);
+            var documentEditor = DocumentEditor.CreateAsync(document);
+            return documentEditor.Result;
         }
 
         #endregion
@@ -401,11 +424,31 @@ namespace ProseSample.Substrings
             if (kind == SyntaxKind.IfStatement)
             {
                 var condition = (ExpressionSyntax)children[0];
-                var block = (BlockSyntax) children[1];
-                var ifStatement = SyntaxFactory.IfStatement(condition, block);
+                var statementSyntax = (StatementSyntax) children[1];
+                var ifStatement = SyntaxFactory.IfStatement(condition, statementSyntax);
                 return ifStatement;
             }
 
+            if (kind == SyntaxKind.UnaryMinusExpression)
+            {
+                ExpressionSyntax expression = (ExpressionSyntax) children[0];
+                var unary = SyntaxFactory.PrefixUnaryExpression(kind, expression);
+                return unary;
+            }
+
+            if (kind == SyntaxKind.ReturnStatement)
+            {
+                ExpressionSyntax expression = (ExpressionSyntax) children[0];
+                var returnStatement = SyntaxFactory.ReturnStatement(expression);
+                return returnStatement;
+            }
+
+            if (kind == SyntaxKind.ElseClause)
+            {
+                var statatementSyntax = (StatementSyntax) children[0];
+                var elseClause = SyntaxFactory.ElseClause(statatementSyntax);
+                return elseClause;
+            }
             return null;
         }
         #endregion

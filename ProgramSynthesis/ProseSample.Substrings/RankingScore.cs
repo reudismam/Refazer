@@ -21,6 +21,9 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Script1")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
+        [FeatureCalculator("Script2")]
+        public static double Score_Script2(double inScore, double edit, double edit2) => inScore + edit + edit2;
+
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;
 

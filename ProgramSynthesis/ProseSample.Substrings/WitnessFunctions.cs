@@ -19,6 +19,8 @@ namespace ProseSample.Substrings
     {
 
         private static Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> _edits = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
+
+        private static Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> _currentTrees = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
         /// <summary>
         /// Literal witness function for parameter tree.
         /// </summary>
@@ -32,7 +34,7 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                var inpTree = _currentTrees[(SyntaxNodeOrToken)input[rule.Body[0]]];//(SyntaxNodeOrToken)input[rule.Body[0]];
                 var literalExamples = new List<object>();
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
@@ -61,7 +63,7 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
-                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                var inpTree = _currentTrees[(SyntaxNodeOrToken)input[rule.Body[0]]];//(SyntaxNodeOrToken)input[rule.Body[0]];
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
                     SyntaxNodeOrToken sot = matchResult.match.Item1;
@@ -94,7 +96,7 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
-                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                var inpTree = _currentTrees[(SyntaxNodeOrToken)input[rule.Body[0]]];//(SyntaxNodeOrToken)input[rule.Body[0]];
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
                     SyntaxNodeOrToken sot = matchResult.match.Item1;
@@ -410,6 +412,7 @@ namespace ProseSample.Substrings
             {
                 var kMatches = new List<object>();
                 var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                _currentTrees[inpTree] = inpTree;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
@@ -424,7 +427,7 @@ namespace ProseSample.Substrings
                         {
                             //var oldTree = (SyntaxNode)outTree;
                             treeUp.ProcessEditOperation(item);
-                            var newTree = (SyntaxNode)treeUp.CurrentTree;
+                            var newTree = (SyntaxNodeOrToken)treeUp.CurrentTree;
                             kMatches.Add(newTree);
                         }
                     }
@@ -433,6 +436,7 @@ namespace ProseSample.Substrings
 
                     _edits[inpTree] = outTree;
 
+                    //_currentTrees[outTree] = (SyntaxNodeOrToken)kMatches.First();
                     //kMatches = kMatches.GetRange(0, 1);
                     kMatches = new List<object> { inpTree.AsNode() };
                     kExamples[input] = kMatches;
@@ -456,10 +460,12 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                //var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
                 //var outTree = (SyntaxNodeOrToken)spec.Examples[input];
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
+                    var key = (SyntaxNodeOrToken) input[rule.Body[0]];
+                    var inpTree = _currentTrees[key];
                     Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
                     var script = Script(inpTree, outTree, out M);
 
@@ -470,16 +476,18 @@ namespace ProseSample.Substrings
                     {
                         if (!treeUp.Processed.ContainsKey(item))
                         {
-                            var oldTree =  (SyntaxNode) treeUp.CurrentTree;
+                            //var oldTree =  (SyntaxNode) treeUp.CurrentTree;
                             treeUp.ProcessEditOperation(item);
                             var newNode = (SyntaxNode) treeUp.CurrentTree;
                             kMatches.Add(newNode);
                         }
                     }
 
-                    if (kMatches.Count != 2) return null;
+                    if (kMatches.Count != 1) return null;
 
-                    kMatches = kMatches.GetRange(1, 2);
+                    _edits[inpTree] = outTree;
+
+                    kMatches = new List<object> { inpTree.AsNode() };
                     kExamples[input] = kMatches;
                 }
             }
@@ -520,6 +528,7 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
+                var matches = new List<object>();
                 //var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
 
                 foreach (SyntaxNode inpTree in spec.DisjunctiveExamples[input])
@@ -541,9 +550,9 @@ namespace ProseSample.Substrings
                     }
 
                     //if (kMatches.Count != 1) return null; //more than an edit operation
+                    matches.AddRange(kMatches.GetRange(0, 1));
                 }
-
-                kExamples[input] = kMatches.GetRange(0, 1);
+                kExamples[input] = matches;
             }
 
             if (kExamples.Values.Any(o => !o.SequenceEqual(kExamples.Values.First()))) return null; //Unable to generate programs (distinct ks).
@@ -567,18 +576,37 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-                foreach (SyntaxNode outTree in spec.DisjunctiveExamples[input])
+                var matches = new List<object>();
+                foreach (SyntaxNode inpTree in spec.DisjunctiveExamples[input])
                 {
-                    var k = (int) kBinding.Examples[input];
+                    /*var k = (int) kBinding.Examples[input];
 
                     var child = outTree.ChildNodes().ElementAt(k - 1);
                     var parent = (SyntaxNodeOrToken) outTree.RemoveNode(outTree.FindNode(child.Span), SyntaxRemoveOptions.KeepNoTrivia);
 
                     var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent })));
-                    kMatches.Add(result);
+                    kMatches.Add(result);*/
+                    var outTree = _edits[inpTree];
+                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
+                    var script = Script(inpTree, outTree, out M);
+
+                    TreeUpdate treeUp = new TreeUpdate();
+                    treeUp.PreProcessTree(script, inpTree, M);
+
+                    foreach (var item in script)
+                    {
+                        if (!treeUp.Processed.ContainsKey(item))
+                        {
+                            treeUp.ProcessEditOperation(item);
+                            var parent = item.Parent;//(SyntaxNodeOrToken) treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp.Ann[item]).First();  
+                            var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent })));
+                            kMatches.Add(result);
+                        }
+                    }
+                    matches.AddRange(kMatches.GetRange(0, 1));
                 }
 
-                kExamples[input] = kMatches;
+                kExamples[input] = matches;
             }
 
             return DisjunctiveExamplesSpec.From(kExamples);
@@ -601,14 +629,38 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-
-                foreach (SyntaxNode outTree in spec.DisjunctiveExamples[input])
+                var matches = new List<object>();
+                foreach (SyntaxNode inpTree in spec.DisjunctiveExamples[input])
                 {
                     var k = (int)kBinding.Examples[input];
-                    var child = (SyntaxNodeOrToken) outTree.ChildNodes().ElementAt(k - 1);
-                    kMatches.Add(child);
+                    /*var child = (SyntaxNodeOrToken) outTree.ChildNodes().ElementAt(k - 1);
+                    kMatches.Add(child);*/
+                    var outTree = _edits[inpTree];
+                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
+                    var script = Script(inpTree, outTree, out M);
+
+                    TreeUpdate treeUp = new TreeUpdate();
+                    treeUp.PreProcessTree(script, inpTree, M);
+
+                    var current = new List<SyntaxNodeOrToken>();
+                    foreach (var item in script)
+                    {
+                        if (!treeUp.Processed.ContainsKey(item))
+                        {
+                            treeUp.ProcessEditOperation(item);
+                            var parent = (SyntaxNodeOrToken)treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp.Ann[item]).First();
+                            var el = (SyntaxNodeOrToken) parent.AsNode().ChildNodes().ElementAt(k - 1);
+                            //var result = new MatchResult(Tuple.Create(el, new Bindings(new List<SyntaxNodeOrToken> { el })));
+                            kMatches.Add(el);
+                            current.Add(treeUp.CurrentTree);
+                        }
+                    }
+
+                    var key = (SyntaxNodeOrToken) input[rule.Body[0]];
+                    _currentTrees[key] = (SyntaxNodeOrToken) current.First();
+                    matches.AddRange(kMatches.GetRange(0, 1));
                 }
-                kExamples[input] = kMatches;
+                kExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
         }
