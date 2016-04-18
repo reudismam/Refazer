@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -8,17 +7,15 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.RegularExpression;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Editing;
 using TreeEdit.Spg.TreeEdit.Update;
 
 namespace ProseSample.Substrings
 {
     public static class Semantics
     {
-        private static Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> _currentTrees = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
+        private static readonly Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> CurrentTrees = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
 
-        #region Concatenation Operators
-        public static MatchResult C1(SyntaxNodeOrToken n, SyntaxKind kind, MatchResult expression)
+        public static MatchResult C(SyntaxNodeOrToken n, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
             var node = GetNode(n).AsNode();
             var kinds = from k in node.DescendantNodes()
@@ -27,8 +24,10 @@ namespace ProseSample.Substrings
 
             var klist = kinds.ToList();
 
-            foreach (var kindMatch in klist)
+            for (int i = 0; i < klist.Count; i++)
             {
+                var kindMatch = klist[i];
+                var expression = children.ElementAt(i);
                 if (MatchChildren(kindMatch, expression.match.Item1))
                 {
                     Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(kindMatch, null);
@@ -36,28 +35,6 @@ namespace ProseSample.Substrings
                     return matchResult;
                 }
             }
-            return null;
-        }
-
-        public static MatchResult C2(SyntaxNodeOrToken n, SyntaxKind kind, MatchResult expression1, MatchResult expression2)
-        {
-            var node = GetNode(n).AsNode();
-            var kinds = from k in node.DescendantNodes()
-                        where k.IsKind(kind)
-                        select k;
-
-            var klist = kinds.ToList();
-
-            foreach (var kindMatch in klist)
-            {
-                if (MatchChildren(kindMatch, expression1.match.Item1) && MatchChildren(kindMatch, expression2.match.Item1))
-                {
-                    Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(kindMatch, null);
-                    MatchResult matchResult = new MatchResult(match);
-                    return matchResult;
-                }
-            }
-
             return null;
         }
 
@@ -110,65 +87,6 @@ namespace ProseSample.Substrings
             return false;
         }
 
-        #endregion
-
-        #region Literal Operator
-        /// <summary>
-        /// Build a indentifier
-        /// </summary>
-        /// <param name="name">Identifier name</param>
-        /// <returns>A new identifier</returns>
-        public static SyntaxNodeOrToken Identifier(string name)
-        {
-            SyntaxNode n = SyntaxFactory.IdentifierName(name);
-            return n;
-        }
-
-        /// <summary>
-        /// Build a prededefined type
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns>A new predefined type</returns>
-        public static SyntaxNodeOrToken PredefinedType(string type)
-        {
-            SyntaxToken predType = SyntaxFactory.ParseToken(type);
-            SyntaxNode n = SyntaxFactory.PredefinedType(predType);
-            return n;
-        }
-
-        /// <summary>
-        /// Build a numeric literal expression
-        /// </summary>
-        /// <param name="number">Literal expression</param>
-        /// <returns>A new numeric literal expression</returns>
-        public static SyntaxNodeOrToken NumericLiteralExpression(string number)
-        {
-            double d = double.Parse(number);
-            SyntaxNode numericLiteral = SyntaxFactory.ParseExpression(d.ToString(CultureInfo.InvariantCulture));
-            return numericLiteral;
-        }
-
-        /// <summary>
-        /// Build a string literal expression
-        /// </summary>
-        /// <param name="s">Literal expression</param>
-        /// <returns>A new numeric literal expression</returns>
-        public static SyntaxNodeOrToken StringLiteralExpression(string s)
-        {
-            SyntaxNode stringLiteralExpression = SyntaxFactory.ParseExpression(s.ToString(CultureInfo.InvariantCulture));
-            return stringLiteralExpression;
-        }
-
-        /// <summary>
-        /// Build a string literal expression
-        /// </summary>
-        /// <param name="block">Block</param>
-        /// <returns>A new numeric literal expression</returns>
-        public static SyntaxNodeOrToken Block(SyntaxNodeOrToken block)
-        {
-            return block;
-        }
-
         /// <summary>
         /// Build a literal
         /// </summary>
@@ -193,29 +111,7 @@ namespace ProseSample.Substrings
             }
 
             return null;
-        }
-        #endregion
-
-        #region Edit Operators       
-        /// <summary>
-        /// Insert the ast node before the matching
-        /// </summary>
-        /// <param name="n">Input tree node</param>
-        /// <param name="mresult">The result of a matching</param>
-        /// <param name="ast">Node that will be inserted</param>
-        /// <returns>New node with the ast node inserted before the matching</returns>
-        public static SyntaxNodeOrToken InsertBefore(SyntaxNodeOrToken n, MatchResult mresult, SyntaxNodeOrToken ast)
-        {
-            var snode = GetNode(n);
-
-            List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
-
-            SyntaxNodeOrToken node = mresult.match.Item1;
-            var root = snode.AsNode();
-            root = root.InsertNodesBefore(root.FindNode(node.Span), nodes);
-
-            return root.NormalizeWhitespace();
-        }
+        }      
 
         /// <summary>
         /// Insert the ast node as in the k position of the node in the matching result 
@@ -266,27 +162,11 @@ namespace ProseSample.Substrings
                 
             }
 
-            //CSharpSyntaxRewriter rewriter = new CSharpSyntaxRewriter();
             CSharpSyntaxRewriter rewriter = new UpdateTreeRewriter(node.AsNode(), root.NormalizeWhitespace());
             root = rewriter.Visit(snode.AsNode());
-            _currentTrees[n] = root;
+            CurrentTrees[n] = root;
             return root.NormalizeWhitespace();
         }
-
-        private static DocumentEditor GetDocumentEditor(SyntaxNode root)
-        {
-            var mscorlib = MetadataReference.CreateFromFile(typeof (object).Assembly.Location);
-            var workspace = new AdhocWorkspace();
-            var projectId = ProjectId.CreateNewId();
-            var versionStamp = VersionStamp.Create();
-            var projectInfo = ProjectInfo.Create(projectId, versionStamp, "NewProject", "projName", LanguageNames.CSharp);
-            var newProject = workspace.AddProject(projectInfo);
-            var document = newProject.AddDocument("doc.cs", root);
-            var documentEditor = DocumentEditor.CreateAsync(document);
-            return documentEditor.Result;
-        }
-
-        #endregion
 
         public static MatchResult Abstract(SyntaxNodeOrToken n, SyntaxKind kind, int k)
         {
@@ -307,12 +187,12 @@ namespace ProseSample.Substrings
 
         private static SyntaxNodeOrToken GetNode(SyntaxNodeOrToken n)
         {
-            if (!_currentTrees.ContainsKey(n))
+            if (!CurrentTrees.ContainsKey(n))
             {
-                _currentTrees[n] = n; 
+                CurrentTrees[n] = n; 
             }
 
-            SyntaxNodeOrToken node = _currentTrees[n];
+            SyntaxNodeOrToken node = CurrentTrees[n];
             
             return node;
         }
@@ -374,16 +254,16 @@ namespace ProseSample.Substrings
 
         #endregion
 
-        public static SyntaxNodeOrToken Children(SyntaxNodeOrToken n, int j)
-        {
-            return null;
-        }
-        public static SyntaxNodeOrToken Children(MatchResult n, int j)
+        public static IEnumerable<MatchResult> CList(MatchResult child1, IEnumerable<MatchResult> cList)
         {
             return null;
         }
 
-        #region SplitNodes
+        public static IEnumerable<MatchResult> CS(MatchResult child)
+        {
+            return null;
+        }
+
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
         {
             SyntaxKind targetKind = SyntaxKind.MethodDeclaration;
@@ -396,9 +276,8 @@ namespace ProseSample.Substrings
 
             return nodes.Select(snot => (SyntaxNodeOrToken)snot).ToList();
         }
-        #endregion
-
-        #region Utilities       
+        
+             
         /// <summary>
         /// Return a list of dynamic tokens. This method will be removed in future.
         /// </summary>
@@ -493,6 +372,5 @@ namespace ProseSample.Substrings
             }
             return null;
         }
-        #endregion
     }
 }

@@ -18,6 +18,7 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
+
 @start IEnumerable<SyntaxNodeOrToken> spans := NodesMap(script, nodes) = Map(\node: SyntaxNodeOrToken => script, nodes);
 
 IEnumerable<SyntaxNodeOrToken> nodes := SplitNodes(n);
@@ -28,15 +29,16 @@ SyntaxNodeOrToken edit := Insert(node, k, parent, ast);
 
 MatchResult parent := match;
 
-MatchResult match := C1(node, kind, child) | C2(node, kind, child, child) | Literal(node, tree) | Abstract(node, kind, k);
+MatchResult match := C(node, kind, children) | Literal(node, tree) | Abstract(node, kind, k);
 
 MatchResult child := match;
+IEnumerable<MatchResult> children := CS(child) | CList(child, children);
 
 SyntaxNodeOrToken ast:= Node1(kind, ast) | Node2(kind, ast, ast) | Const(tree);
 
 @feature[Score=KindScore] SyntaxKind kind;
 @feature[Score=KDScore] string id;
-SyntaxNodeOrToken tree := Identifier(id) | PredefinedType(id) | NumericLiteralExpression(id) | StringLiteralExpression(id) | Block(snode);
+@feature[Score=NodeScore] SyntaxNodeOrToken tree;
 
 @input SyntaxNodeOrToken n;
 @feature[Score=KScore] int k;

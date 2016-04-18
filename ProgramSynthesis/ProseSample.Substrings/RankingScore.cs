@@ -15,6 +15,12 @@ namespace ProseSample.Substrings
         [FeatureCalculator("NodesMap")]
         public static double Score_NodesMap( double scriptScore, double editScore) =>  scriptScore + editScore;
 
+        [FeatureCalculator("CS")]
+        public static double Score_CS(double childScore) => childScore;
+
+        [FeatureCalculator("CList")]
+        public static double Score_CList(double childScore, double childrenScore) => childScore + childrenScore;
+
         [FeatureCalculator("SplitNodes")]
         public static double Score_SplitNodes(double inScore) => inScore;
 
