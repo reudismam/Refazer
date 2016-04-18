@@ -65,6 +65,7 @@ namespace ProseSample
                 WriteColored(ConsoleColor.Red, "No program :(");
                 return null;
             }
+            string stringprogram = bestProgram.ToString();
             var score = bestProgram["Score"];
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
             return bestProgram;

@@ -56,6 +56,19 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Children", 1)]
+        public static DisjunctiveExamplesSpec WitnessChildren(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Abstract", 1)]
         public static DisjunctiveExamplesSpec WitnessAbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
@@ -74,10 +87,12 @@ namespace ProseSample.Substrings
                         if (item.ToString().Equals(sot.ToString()))
                         {
                             mats.Add(item.Kind());
+                            if (!mats.First().Equals(item.Kind())) return null;
                         }
                     }
                 }
-                treeExamples[input] = mats;
+                treeExamples[input] = mats.GetRange(0, 1);
+
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
@@ -378,6 +393,7 @@ namespace ProseSample.Substrings
                 TreeUpdate treeUp = new TreeUpdate();
                 treeUp.PreProcessTree(script, inpTree, M);
 
+                //string text = script.Aggregate("", (current, item) => current + item.ToString());
                 foreach (var item in script)
                 {
                     if (!treeUp.Processed.ContainsKey(item))

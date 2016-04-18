@@ -54,7 +54,7 @@ namespace ProseSample
                 public String foo(int i)
                 {
                      if(i == 0){
-                        return ""Bar!""
+                        return ""Bar!"";
                      }
                      else if(i == -1) return ""Foo!"";
                 }
@@ -62,7 +62,7 @@ namespace ProseSample
                 public String bar(int i)
                 {
                      if(i == 3){
-                        return ""Bar!""
+                        return ""Bar!"";
                      }
                      else if(i == -1) return ""Foo!"";
                 }
@@ -88,7 +88,7 @@ namespace ProseSample
             ProgramNode program = Learn(grammar, spec);
 
             //Run program
-            SyntaxNodeOrToken[] output = program.Invoke(input).ToEnumerable().Select(s => (SyntaxNodeOrToken)s).ToArray();
+            object[] output = program.Invoke(input).ToEnumerable().ToArray();
             WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
         }
 

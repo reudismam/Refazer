@@ -9,15 +9,19 @@ using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.RegularExpression;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using TreeEdit.Spg.TreeEdit.Update;
 
 namespace ProseSample.Substrings
 {
     public static class Semantics
     {
+        private static Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> _currentTrees = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
+
         #region Concatenation Operators
         public static MatchResult C1(SyntaxNodeOrToken n, SyntaxKind kind, MatchResult expression)
         {
-            var kinds = from k in n.AsNode().DescendantNodes()
+            var node = GetNode(n).AsNode();
+            var kinds = from k in node.DescendantNodes()
                         where k.IsKind(kind)
                         select k;
 
@@ -37,7 +41,8 @@ namespace ProseSample.Substrings
 
         public static MatchResult C2(SyntaxNodeOrToken n, SyntaxKind kind, MatchResult expression1, MatchResult expression2)
         {
-            var kinds = from k in n.AsNode().DescendantNodes()
+            var node = GetNode(n).AsNode();
+            var kinds = from k in node.DescendantNodes()
                         where k.IsKind(kind)
                         select k;
 
@@ -172,7 +177,8 @@ namespace ProseSample.Substrings
         /// <returns>Match of parameter literal in the source code.</returns>
         public static MatchResult Literal(SyntaxNodeOrToken n, SyntaxNodeOrToken node)
         {
-            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(n, node);
+            var snode = GetNode(n);
+            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(snode, node);
             Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
 
             TokenSeq seq = DymTokens(lnode.Item2.List);
@@ -200,10 +206,12 @@ namespace ProseSample.Substrings
         /// <returns>New node with the ast node inserted before the matching</returns>
         public static SyntaxNodeOrToken InsertBefore(SyntaxNodeOrToken n, MatchResult mresult, SyntaxNodeOrToken ast)
         {
+            var snode = GetNode(n);
+
             List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
 
             SyntaxNodeOrToken node = mresult.match.Item1;
-            var root = n.AsNode();
+            var root = snode.AsNode();
             root = root.InsertNodesBefore(root.FindNode(node.Span), nodes);
 
             return root.NormalizeWhitespace();
@@ -219,6 +227,7 @@ namespace ProseSample.Substrings
         /// <returns>New node with the ast node inserted as the k child</returns>
         public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken n, int k, MatchResult mresult, SyntaxNodeOrToken ast)
         {
+            var snode = GetNode(n);
             SyntaxNodeOrToken node = mresult.match.Item1;
 
             List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
@@ -236,14 +245,31 @@ namespace ProseSample.Substrings
                 {
                     root = root.ReplaceNode(root.FindNode(select.Span), nodes.First());
                 }
-
-
+            }
+            else if (root.ChildNodes().Count() + 1 == k)
+            {
+                if (root.IsKind(SyntaxKind.IfStatement) && ast.IsKind(SyntaxKind.ElseClause))
+                {
+                    var ifStatementSyntax = (IfStatementSyntax) root;
+                    var elseClause = (ElseClauseSyntax) ast;
+                    root = ifStatementSyntax.WithElse(elseClause);
+                } 
+                else
+                {
+                    var select = root.ChildNodes().Last();
+                    root = root.InsertNodesAfter(root.FindNode(select.Span), nodes);
+                    //TODO decide what to do what the children are empty.
+                }
             }
             else
             {
-                //TODO decide what to do what the children are empty.
+                
             }
 
+            //CSharpSyntaxRewriter rewriter = new CSharpSyntaxRewriter();
+            CSharpSyntaxRewriter rewriter = new UpdateTreeRewriter(node.AsNode(), root.NormalizeWhitespace());
+            root = rewriter.Visit(snode.AsNode());
+            _currentTrees[n] = root;
             return root.NormalizeWhitespace();
         }
 
@@ -264,8 +290,8 @@ namespace ProseSample.Substrings
 
         public static MatchResult Abstract(SyntaxNodeOrToken n, SyntaxKind kind, int k)
         {
-            SyntaxNode node = n.AsNode();
-            var matches = from item in node.DescendantNodesAndTokens()
+            var node = GetNode(n).AsNode();
+            var matches = from item in node.DescendantNodesAndTokensAndSelf()
                        where item.IsKind(kind)
                        select item;
 
@@ -277,6 +303,18 @@ namespace ProseSample.Substrings
                 return matchResult;
             }
             return null;
+        }
+
+        private static SyntaxNodeOrToken GetNode(SyntaxNodeOrToken n)
+        {
+            if (!_currentTrees.ContainsKey(n))
+            {
+                _currentTrees[n] = n; 
+            }
+
+            SyntaxNodeOrToken node = _currentTrees[n];
+            
+            return node;
         }
 
         #region Script Operators
@@ -337,6 +375,10 @@ namespace ProseSample.Substrings
         #endregion
 
         public static SyntaxNodeOrToken Children(SyntaxNodeOrToken n, int j)
+        {
+            return null;
+        }
+        public static SyntaxNodeOrToken Children(MatchResult n, int j)
         {
             return null;
         }
