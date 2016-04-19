@@ -64,5 +64,18 @@ namespace ProseSample.Substrings.List
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
+
+        public static IEnumerable<T> List(T child, IEnumerable<T> clist)
+        {
+            var list = clist.ToList();
+            list.Insert(0, child);
+            return list;
+        }
+
+        public static IEnumerable<T> Single(T child)
+        {
+            var list = new List<T> { child };
+            return list;
+        }
     }
 }

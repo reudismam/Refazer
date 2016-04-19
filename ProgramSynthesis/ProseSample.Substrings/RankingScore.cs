@@ -1,10 +1,6 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
-using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 
 namespace ProseSample.Substrings
 {
@@ -62,6 +58,7 @@ namespace ProseSample.Substrings
         public static double KScore(int k) => k >= 0 ? 1.0 / (k + 1.0) : 1.0 / (-k + 1.1);
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+
         public static double KDScore(string kd) => 1.1;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]

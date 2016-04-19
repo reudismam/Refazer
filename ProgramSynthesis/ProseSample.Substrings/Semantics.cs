@@ -7,6 +7,7 @@ using Spg.ExampleRefactoring.Synthesis;
 using Spg.LocationRefactoring.Tok;
 using Spg.ExampleRefactoring.RegularExpression;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ProseSample.Substrings.List;
 using TreeEdit.Spg.TreeEdit.Update;
 
 namespace ProseSample.Substrings
@@ -209,12 +210,6 @@ namespace ProseSample.Substrings
             return edit.Last();
         }
 
-        public static SyntaxNodeOrToken Script2(SyntaxNodeOrToken n, SyntaxNodeOrToken edit, SyntaxNodeOrToken edit2)
-        {
-            return edit2;
-        }
-
-
         /// <summary>
         /// Return a new node
         /// </summary>
@@ -243,32 +238,32 @@ namespace ProseSample.Substrings
 
         public static IEnumerable<MatchResult> CList(MatchResult child1, IEnumerable<MatchResult> cList)
         {
-            return null;
+            return GList<MatchResult>.List(child1, cList);
         }
 
         public static IEnumerable<MatchResult> SC(MatchResult child)
         {
-            return null;
+            return GList<MatchResult>.Single(child);
         }
 
         public static IEnumerable<SyntaxNodeOrToken> NList(SyntaxNodeOrToken child1, IEnumerable<SyntaxNodeOrToken> cList)
         {
-            return null;
+            return GList<SyntaxNodeOrToken>.List(child1, cList);
         }
 
         public static IEnumerable<SyntaxNodeOrToken> SN(SyntaxNodeOrToken child)
         {
-            return null;
+            return GList<SyntaxNodeOrToken>.Single(child);
         }
 
         public static IEnumerable<SyntaxNodeOrToken> EList(SyntaxNodeOrToken child1, IEnumerable<SyntaxNodeOrToken> cList)
         {
-            return null;
+            return GList<SyntaxNodeOrToken>.List(child1, cList);
         }
 
         public static IEnumerable<SyntaxNodeOrToken> SE(SyntaxNodeOrToken child)
         {
-            return null;
+            return GList<SyntaxNodeOrToken>.Single(child);
         }
 
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
