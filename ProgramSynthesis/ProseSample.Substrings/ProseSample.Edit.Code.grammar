@@ -22,9 +22,10 @@ feature double Score = RankingScore;
 
 IEnumerable<SyntaxNodeOrToken> nodes := SplitNodes(n);
 
-SyntaxNodeOrToken script := Script1(node, edit) | Script2(node, edit, edit);
+SyntaxNodeOrToken script := Script(node, trans);
 
 SyntaxNodeOrToken edit := Insert(node, k, parent, ast);
+IEnumerable<SyntaxNodeOrToken> trans := SE(edit) | EList(edit, trans);
 
 MatchResult parent := match;
 

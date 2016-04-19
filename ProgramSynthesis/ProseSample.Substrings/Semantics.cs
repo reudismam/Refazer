@@ -36,7 +36,7 @@ namespace ProseSample.Substrings
 
         private static List<SyntaxNode> SplitToNodes(SyntaxNodeOrToken n, SyntaxKind kind)
         {
-            var node = GetNode(n).AsNode();
+            var node = GetCurrentTree(n).AsNode();
             var kinds = from k in node.DescendantNodes()
                 where k.IsKind(kind)
                 select k;
@@ -101,7 +101,7 @@ namespace ProseSample.Substrings
         /// <returns>Match of parameter literal in the source code.</returns>
         public static MatchResult Literal(SyntaxNodeOrToken n, SyntaxNodeOrToken node)
         {
-            var snode = GetNode(n);
+            var snode = GetCurrentTree(n);
             Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(snode, node);
             Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
 
@@ -129,7 +129,7 @@ namespace ProseSample.Substrings
         /// <returns>New node with the ast node inserted as the k child</returns>
         public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken n, int k, MatchResult mresult, SyntaxNodeOrToken ast)
         {
-            var snode = GetNode(n);
+            var snode = GetCurrentTree(n);
             SyntaxNodeOrToken node = mresult.match.Item1;
 
             List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
@@ -176,7 +176,7 @@ namespace ProseSample.Substrings
 
         public static MatchResult Abstract(SyntaxNodeOrToken n, SyntaxKind kind, int k)
         {
-            var node = GetNode(n).AsNode();
+            var node = GetCurrentTree(n).AsNode();
             var matches = from item in node.DescendantNodesAndTokensAndSelf()
                        where item.IsKind(kind)
                        select item;
@@ -191,7 +191,7 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        private static SyntaxNodeOrToken GetNode(SyntaxNodeOrToken n)
+        private static SyntaxNodeOrToken GetCurrentTree(SyntaxNodeOrToken n)
         {
             if (!CurrentTrees.ContainsKey(n))
             {
@@ -259,6 +259,16 @@ namespace ProseSample.Substrings
         }
 
         public static IEnumerable<SyntaxNodeOrToken> SN(SyntaxNodeOrToken child)
+        {
+            return null;
+        }
+
+        public static IEnumerable<SyntaxNodeOrToken> EList(SyntaxNodeOrToken child1, IEnumerable<SyntaxNodeOrToken> cList)
+        {
+            return null;
+        }
+
+        public static IEnumerable<SyntaxNodeOrToken> SE(SyntaxNodeOrToken child)
         {
             return null;
         }
