@@ -211,35 +211,18 @@ namespace ProseSample.Substrings
 
         #endregion
 
-        #region Node Operators
         /// <summary>
         /// Return a new node
         /// </summary>
         /// <param name="kind">Returned node SyntaxKind</param>
         /// <param name="child">Child of the returned SyntaxNode</param>
         /// <returns>A new node with kind and child</returns>
-        public static SyntaxNodeOrToken Node1(SyntaxKind kind, SyntaxNodeOrToken child)
+        public static SyntaxNodeOrToken Node1(SyntaxKind kind, IEnumerable<SyntaxNodeOrToken> childrenNodes)
         {
-            List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> { child };
-            var node = GetSyntaxElement(kind, children);
+            //List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> {child};
+            var node = GetSyntaxElement(kind, childrenNodes.ToList());
             return node;
         }
-
-        /// <summary>
-        /// Return a new node
-        /// </summary>
-        /// <param name="kind">SyntaxKind of the node that will be returned</param>
-        /// <param name="child">First child of the node</param>
-        /// <param name="child2">Second child of the node</param>
-        /// <returns>A node with two child and SyntaxKind passed as parameter</returns>
-        public static SyntaxNodeOrToken Node2(SyntaxKind kind, SyntaxNodeOrToken child, SyntaxNodeOrToken child2)
-        {
-            List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> { child, child2 };
-            var node = GetSyntaxElement(kind, children);
-            return node;
-        }
-
-        #endregion
 
         #region Constant Operators
         /// <summary>
@@ -259,7 +242,17 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        public static IEnumerable<MatchResult> CS(MatchResult child)
+        public static IEnumerable<MatchResult> SC(MatchResult child)
+        {
+            return null;
+        }
+
+        public static IEnumerable<SyntaxNodeOrToken> NList(SyntaxNodeOrToken child1, IEnumerable<SyntaxNodeOrToken> cList)
+        {
+            return null;
+        }
+
+        public static IEnumerable<SyntaxNodeOrToken> SN(SyntaxNodeOrToken child)
         {
             return null;
         }

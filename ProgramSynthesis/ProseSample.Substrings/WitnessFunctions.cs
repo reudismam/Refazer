@@ -82,7 +82,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("CList", 1)]
-        public static DisjunctiveExamplesSpec WitnessCList2(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -108,8 +108,8 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("CS", 0)]
-        public static DisjunctiveExamplesSpec WitnessCSChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        [WitnessFunction("SC", 0)]
+        public static DisjunctiveExamplesSpec WitnessSNChild1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -121,6 +121,85 @@ namespace ProseSample.Substrings
                     if (matchResult.Count != 1) return null;
 
                     matches.Add(matchResult.First());
+                }
+                treeExamples[input] = matches;
+            }
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+        /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("NList", 0)]
+        public static DisjunctiveExamplesSpec WitnessNList1(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (List<SyntaxNodeOrToken> syntaxNodeOrTokens in spec.DisjunctiveExamples[input])
+                {
+                    if (!syntaxNodeOrTokens.Any()) return null;
+                    if (syntaxNodeOrTokens.Count == 1) return null;
+
+                    matches.Add(syntaxNodeOrTokens.First());
+                }
+                treeExamples[input] = matches;
+            }
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+        /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("NList", 1)]
+        public static DisjunctiveExamplesSpec WitnessCList2(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (List<SyntaxNodeOrToken> syntaxNodeOrTokens in spec.DisjunctiveExamples[input])
+                {
+                    if (!syntaxNodeOrTokens.Any()) return null;
+                    if (syntaxNodeOrTokens.Count == 1) return null;
+
+                    syntaxNodeOrTokens.RemoveAt(0);
+                    matches.Add(syntaxNodeOrTokens);
+                }
+                treeExamples[input] = matches;
+            }
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+        /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("SN", 0)]
+        public static DisjunctiveExamplesSpec WitnessCSChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (List<SyntaxNodeOrToken> syntaxNodeOrTokens in spec.DisjunctiveExamples[input])
+                {
+                    if (!syntaxNodeOrTokens.Any()) return null;
+                    if (syntaxNodeOrTokens.Count != 1) return null;
+
+                    matches.Add(syntaxNodeOrTokens.First());
                 }
                 treeExamples[input] = matches;
             }
@@ -620,9 +699,8 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
-        #region Node
         /// <summary>
-        /// C witness function for expression parameter with one child
+        /// Node witness function for expression parameter with one child
         /// </summary>
         /// <param name="rule">C rule</param>
         /// <param name="parameter">Parameter</param>
@@ -667,7 +745,7 @@ namespace ProseSample.Substrings
         // ReSharper disable once InconsistentNaming
         public static DisjunctiveExamplesSpec WitnessNode1AST1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
-            return NodeBase(spec, 1, 1);
+            return NodeBase(spec);
         }
 
         /// <summary>
@@ -682,7 +760,7 @@ namespace ProseSample.Substrings
         // ReSharper disable once InconsistentNaming
         public static DisjunctiveExamplesSpec WitnessNode2AST1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
-            return NodeBase(spec, 2, 1);
+            return NodeBase(spec);
         }
 
         /// <summary>
@@ -698,7 +776,7 @@ namespace ProseSample.Substrings
         // ReSharper disable once InconsistentNaming
         public static DisjunctiveExamplesSpec WitnessNode2AST2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind, ExampleSpec ast1)
         {
-            return NodeBase(spec, 2, 2);
+            return NodeBase(spec);
         }
 
 
@@ -706,10 +784,8 @@ namespace ProseSample.Substrings
         /// C witness functino for expression parameter with two child
         /// </summary>
         /// <param name="spec">Example specification</param>
-        /// <param name="desiredIndex">Max children number</param>
-        /// <param name="returnIndex">ChildNumber learned in this expression</param>
         /// <returns>Disjuntive examples specification</returns>
-        private static DisjunctiveExamplesSpec NodeBase(DisjunctiveExamplesSpec spec, int desiredIndex, int returnIndex)
+        private static DisjunctiveExamplesSpec NodeBase(DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -720,31 +796,14 @@ namespace ProseSample.Substrings
                 {
                     if (sot.IsToken) return null;
 
-                    List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
-                    foreach (var item in sot.AsNode().ChildNodesAndTokens())
-                    {
-                        SyntaxNodeOrToken st = item;
-                        if (st.IsNode)
-                        {
-                            lsot.Add(st);
-                        }
-                        else if (st.IsToken && st.IsKind(SyntaxKind.IdentifierToken))
-                        {
-                            lsot.Add(st);
-                        }
-                    }
+                    var lsot = ExtractChildren(sot);
 
-                    if (lsot.Count != desiredIndex) return null;
-
-                    matches.Add(lsot[returnIndex - 1]);
+                    matches.Add(lsot);
                 }
                 eExamples[input] = matches;
             }
-
             return DisjunctiveExamplesSpec.From(eExamples);
         }
-
-        #endregion
 
         #region const
         /// <summary>
