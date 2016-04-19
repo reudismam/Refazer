@@ -8,6 +8,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using ProseSample.Substrings.List;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -49,7 +50,7 @@ namespace ProseSample.Substrings
         }
 
         /// <summary>
-        /// Literal witness function for parameter tree.
+        /// CList witness function for parameter 0
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
@@ -58,24 +59,11 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 0)]
         public static DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (List<MatchResult> matchResult in spec.DisjunctiveExamples[input])
-                {
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count == 1) return null;
-
-                    matches.Add(matchResult.First());
-                }
-                treeExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return GList<MatchResult>.List0(rule, parameter, spec);
         }
 
         /// <summary>
-        /// Literal witness function for parameter tree.
+        /// CList witness function for parameter 1
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
@@ -84,51 +72,24 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 1)]
         public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (List<MatchResult> matchResult in spec.DisjunctiveExamples[input])
-                {
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count == 1) return null;
-
-                    matchResult.RemoveAt(0);
-                    matches.Add(matchResult);
-                }
-                treeExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return GList<MatchResult>.List1(rule, parameter, spec);
         }
 
         /// <summary>
-        /// Literal witness function for parameter tree.
+        /// SC witness function for parameter 0
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("SC", 0)]
-        public static DisjunctiveExamplesSpec WitnessSNChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (List<MatchResult> matchResult in spec.DisjunctiveExamples[input])
-                {
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count != 1) return null;
-
-                    matches.Add(matchResult.First());
-                }
-                treeExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return GList<MatchResult>.Single(rule, parameter, spec);
         }
 
         /// <summary>
-        /// Literal witness function for parameter tree.
+        /// NList witness function for parameter 0
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
@@ -137,24 +98,11 @@ namespace ProseSample.Substrings
         [WitnessFunction("NList", 0)]
         public static DisjunctiveExamplesSpec WitnessNList1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (List<SyntaxNodeOrToken> syntaxNodeOrTokens in spec.DisjunctiveExamples[input])
-                {
-                    if (!syntaxNodeOrTokens.Any()) return null;
-                    if (syntaxNodeOrTokens.Count == 1) return null;
-
-                    matches.Add(syntaxNodeOrTokens.First());
-                }
-                treeExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return GList<SyntaxNodeOrToken>.List0(rule, parameter, spec);
         }
 
         /// <summary>
-        /// Literal witness function for parameter tree.
+        /// NList witness function for parameter 1
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
@@ -163,47 +111,20 @@ namespace ProseSample.Substrings
         [WitnessFunction("NList", 1)]
         public static DisjunctiveExamplesSpec WitnessCList2(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (List<SyntaxNodeOrToken> syntaxNodeOrTokens in spec.DisjunctiveExamples[input])
-                {
-                    if (!syntaxNodeOrTokens.Any()) return null;
-                    if (syntaxNodeOrTokens.Count == 1) return null;
-
-                    syntaxNodeOrTokens.RemoveAt(0);
-                    matches.Add(syntaxNodeOrTokens);
-                }
-                treeExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return GList<SyntaxNodeOrToken>.List1(rule, parameter, spec);
         }
 
         /// <summary>
-        /// Literal witness function for parameter tree.
+        /// SN witness function for parameter 0
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("SN", 0)]
-        public static DisjunctiveExamplesSpec WitnessCSChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessCnChild1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (List<SyntaxNodeOrToken> syntaxNodeOrTokens in spec.DisjunctiveExamples[input])
-                {
-                    if (!syntaxNodeOrTokens.Any()) return null;
-                    if (syntaxNodeOrTokens.Count != 1) return null;
-
-                    matches.Add(syntaxNodeOrTokens.First());
-                }
-                treeExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return GList<SyntaxNodeOrToken>.Single(rule, parameter, spec);
         }
 
         /// <summary>
@@ -247,6 +168,7 @@ namespace ProseSample.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
+        /// <param name="kindBinding">kind binding</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Abstract", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec WitnessAbstractK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
@@ -422,13 +344,12 @@ namespace ProseSample.Substrings
                 var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
                 var outTree = (SyntaxNodeOrToken)spec.Examples[input];
 
-                Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
-                var script = Script(inpTree, outTree, out M);
+                Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m;
+                var script = Script(inpTree, outTree, out m);
 
                 TreeUpdate treeUp = new TreeUpdate();
-                treeUp.PreProcessTree(script, inpTree, M);
+                treeUp.PreProcessTree(script, inpTree, m);
 
-                //string text = script.Aggregate("", (current, item) => current + item.ToString());
                 foreach (var item in script)
                 {
                     if (!treeUp.Processed.ContainsKey(item))
@@ -466,11 +387,11 @@ namespace ProseSample.Substrings
                 CurrentTrees[inpTree] = inpTree;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
-                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
-                    var script = Script(inpTree, outTree, out M);
+                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m;
+                    var script = Script(inpTree, outTree, out m);
 
                     TreeUpdate treeUp = new TreeUpdate();
-                    treeUp.PreProcessTree(script, inpTree, M);
+                    treeUp.PreProcessTree(script, inpTree, m);
 
                     foreach (var item in script)
                     {
@@ -513,11 +434,11 @@ namespace ProseSample.Substrings
                 {
                     var key = (SyntaxNodeOrToken) input[rule.Body[0]];
                     var inpTree = CurrentTrees[key];
-                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
-                    var script = Script(inpTree, outTree, out M);
+                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m;
+                    var script = Script(inpTree, outTree, out m);
 
                     TreeUpdate treeUp = new TreeUpdate();
-                    treeUp.PreProcessTree(script, inpTree, M);
+                    treeUp.PreProcessTree(script, inpTree, m);
 
                     foreach (var item in script)
                     {
@@ -546,15 +467,15 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="inpTree">Input tree</param>
         /// <param name="outTree">Output tree</param>
-        /// <param name="M">out Mapping</param>
+        /// <param name="m">out Mapping</param>
         /// <returns>Computed edit script</returns>
-        private static List<EditOperation> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree, out Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
+        private static List<EditOperation> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree, out Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m)
         {
             ITreeMapping mapping = new GumTreeMapping();
-            M = mapping.Mapping(inpTree, outTree);
+            m = mapping.Mapping(inpTree, outTree);
 
             var generator = new EditScriptGenerator();
-            var script = generator.EditScript(inpTree, outTree, M);
+            var script = generator.EditScript(inpTree, outTree, m);
             return script;
         }
 
@@ -578,11 +499,11 @@ namespace ProseSample.Substrings
                 foreach (SyntaxNode inpTree in spec.DisjunctiveExamples[input])
                 {
                     var outTree = Edits[inpTree];
-                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
-                    var script = Script(inpTree, outTree, out M);
+                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m;
+                    var script = Script(inpTree, outTree, out m);
 
                     TreeUpdate treeUp = new TreeUpdate();
-                    treeUp.PreProcessTree(script, inpTree, M);
+                    treeUp.PreProcessTree(script, inpTree, m);
 
                     foreach (var item in script)
                     {
@@ -624,11 +545,11 @@ namespace ProseSample.Substrings
                 foreach (SyntaxNode inpTree in spec.DisjunctiveExamples[input])
                 {
                     var outTree = Edits[inpTree];
-                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
-                    var script = Script(inpTree, outTree, out M);
+                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m;
+                    var script = Script(inpTree, outTree, out m);
 
                     TreeUpdate treeUp = new TreeUpdate();
-                    treeUp.PreProcessTree(script, inpTree, M);
+                    treeUp.PreProcessTree(script, inpTree, m);
 
                     foreach (var item in script)
                     {
@@ -671,11 +592,11 @@ namespace ProseSample.Substrings
                 {
                     var k = (int)kBinding.Examples[input];
                     var outTree = Edits[inpTree];
-                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M;
-                    var script = Script(inpTree, outTree, out M);
+                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m;
+                    var script = Script(inpTree, outTree, out m);
 
                     TreeUpdate treeUp = new TreeUpdate();
-                    treeUp.PreProcessTree(script, inpTree, M);
+                    treeUp.PreProcessTree(script, inpTree, m);
 
                     var current = new List<SyntaxNodeOrToken>();
                     foreach (var item in script)
@@ -741,8 +662,6 @@ namespace ProseSample.Substrings
         {
             return NodeBase(spec);
         }
-
-
 
         /// <summary>
         /// C witness functino for expression parameter with two child

@@ -17,12 +17,7 @@ namespace ProseSample.Substrings
 
         public static MatchResult C(SyntaxNodeOrToken n, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
-            var node = GetNode(n).AsNode();
-            var kinds = from k in node.DescendantNodes()
-                        where k.IsKind(kind)
-                        select k;
-
-            var klist = kinds.ToList();
+            var klist = SplitToNodes(n, kind);
 
             for (int i = 0; i < klist.Count; i++)
             {
@@ -35,7 +30,18 @@ namespace ProseSample.Substrings
                     return matchResult;
                 }
             }
+
             return null;
+        }
+
+        private static List<SyntaxNode> SplitToNodes(SyntaxNodeOrToken n, SyntaxKind kind)
+        {
+            var node = GetNode(n).AsNode();
+            var kinds = from k in node.DescendantNodes()
+                where k.IsKind(kind)
+                select k;
+
+            return kinds.ToList();
         }
 
         //TODO refactor this method
@@ -215,7 +221,6 @@ namespace ProseSample.Substrings
         /// Return a new node
         /// </summary>
         /// <param name="kind">Returned node SyntaxKind</param>
-        /// <param name="child">Child of the returned SyntaxNode</param>
         /// <param name="childrenNodes">Children nodes</param>
         /// <returns>A new node with kind and child</returns>
         public static SyntaxNodeOrToken Node(SyntaxKind kind, IEnumerable<SyntaxNodeOrToken> childrenNodes)
