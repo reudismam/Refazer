@@ -706,7 +706,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjuntive examples specification</returns>
-        [WitnessFunction("Node1", 0)]
+        [WitnessFunction("Node", 0)]
         public static DisjunctiveExamplesSpec WitnessFunctionNode1Kd(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
@@ -726,13 +726,7 @@ namespace ProseSample.Substrings
 
             return DisjunctiveExamplesSpec.From(kExamples);
         }
-
-        [WitnessFunction("Node2", 0)]
-        public static DisjunctiveExamplesSpec WitnessFunctionNode2Kd(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return WitnessFunctionNode1Kd(rule, parameter, spec);
-        }
-
+        
         /// <summary>
         /// C witness function for expression parameter with one child
         /// </summary>
@@ -741,43 +735,13 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Learned kind</param>
         /// <returns>Disjuntive examples specification</returns>
-        [WitnessFunction("Node1", 1, DependsOnParameters = new[] { 0 })]
+        [WitnessFunction("Node", 1, DependsOnParameters = new[] { 0 })]
         // ReSharper disable once InconsistentNaming
         public static DisjunctiveExamplesSpec WitnessNode1AST1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             return NodeBase(spec);
         }
 
-        /// <summary>
-        /// C witness functino for expression parameter with two child
-        /// </summary>
-        /// <param name="rule">C rule</param>
-        /// <param name="parameter">Parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <param name="kind">Learned kind</param>
-        /// <returns>Disjuntive examples specification</returns>
-        [WitnessFunction("Node2", 1, DependsOnParameters = new[] { 0 })]
-        // ReSharper disable once InconsistentNaming
-        public static DisjunctiveExamplesSpec WitnessNode2AST1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
-        {
-            return NodeBase(spec);
-        }
-
-        /// <summary>
-        /// C witness function for expression parameter with two child
-        /// </summary>
-        /// <param name="rule">C rule</param>
-        /// <param name="parameter">Parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <param name="kind">Learned kind</param>
-        /// <param name="ast1">Learned examples for ast1</param>
-        /// <returns>Disjuntive examples specification</returns>
-        [WitnessFunction("Node2", 2, DependsOnParameters = new[] { 0, 1 })]
-        // ReSharper disable once InconsistentNaming
-        public static DisjunctiveExamplesSpec WitnessNode2AST2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind, ExampleSpec ast1)
-        {
-            return NodeBase(spec);
-        }
 
 
         /// <summary>

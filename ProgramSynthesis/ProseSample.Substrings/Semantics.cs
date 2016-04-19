@@ -216,8 +216,9 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="kind">Returned node SyntaxKind</param>
         /// <param name="child">Child of the returned SyntaxNode</param>
+        /// <param name="childrenNodes">Children nodes</param>
         /// <returns>A new node with kind and child</returns>
-        public static SyntaxNodeOrToken Node1(SyntaxKind kind, IEnumerable<SyntaxNodeOrToken> childrenNodes)
+        public static SyntaxNodeOrToken Node(SyntaxKind kind, IEnumerable<SyntaxNodeOrToken> childrenNodes)
         {
             //List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> {child};
             var node = GetSyntaxElement(kind, childrenNodes.ToList());

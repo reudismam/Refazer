@@ -39,11 +39,8 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;
 
-        [FeatureCalculator("Node1")]
+        [FeatureCalculator("Node")]
         public static double Score_Node1(double kScore, double astScore) => kScore +  astScore;
-
-        [FeatureCalculator("Node2")]
-        public static double Score_Node2(double kScore, double astScore) => kScore + astScore;
 
         [FeatureCalculator("Const")]
         public static double Score_Node1(double astScore) => astScore;
@@ -54,11 +51,8 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Literal")]
         public static double Score_Literal(double inScore, double treeScore) => treeScore;
 
-        [FeatureCalculator("C1")]
+        [FeatureCalculator("C")]
         public static double Score_C1(double inScore, double kindScore, double expression1Score) => kindScore + expression1Score;
-
-        [FeatureCalculator("C2")]
-        public static double Score_C2(double inScore, double kindScore, double expression1Score, double expression2Score) => kindScore + expression1Score + expression2Score;
 
         [FeatureCalculator("Identifier")]
         public static double Score_Identifier(double inScore) => inScore;

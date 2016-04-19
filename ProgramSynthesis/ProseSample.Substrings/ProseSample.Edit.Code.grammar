@@ -33,7 +33,7 @@ MatchResult match := C(node, kind, children) | Literal(node, tree) | Abstract(no
 MatchResult child := match;
 IEnumerable<MatchResult> children := SC(child) | CList(child, children);
 
-SyntaxNodeOrToken ast:= Node1(kind, childrenNodes) | Const(tree);
+SyntaxNodeOrToken ast:= Node(kind, childrenNodes) | Const(tree);
 IEnumerable<SyntaxNodeOrToken> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 
 @feature[Score=KindScore] SyntaxKind kind;                     @input SyntaxNodeOrToken n;
