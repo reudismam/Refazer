@@ -16,9 +16,11 @@ namespace ProseSample.Substrings
     {
         private static readonly Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> CurrentTrees = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
 
-        public static MatchResult C(SyntaxNodeOrToken n, SyntaxKind kind, IEnumerable<MatchResult> children)
+        public static MatchResult C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
-            var klist = SplitToNodes(n, kind);
+            var currentTree = GetCurrentTree(node).AsNode();
+
+            var klist = SplitToNodes(currentTree, kind);
 
             for (int i = 0; i < klist.Count; i++)
             {
@@ -35,10 +37,9 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        private static List<SyntaxNode> SplitToNodes(SyntaxNodeOrToken n, SyntaxKind kind)
+        private static List<SyntaxNode> SplitToNodes(SyntaxNodeOrToken node, SyntaxKind kind)
         {
-            var node = GetCurrentTree(n).AsNode();
-            var kinds = from k in node.DescendantNodes()
+            var kinds = from k in node.AsNode().DescendantNodes()
                 where k.IsKind(kind)
                 select k;
 
@@ -97,13 +98,13 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Build a literal
         /// </summary>
-        /// <param name="n">Input node</param>
-        /// <param name="node">Literal itself.</param>
+        /// <param name="node">Input node</param>
+        /// <param name="lookFor">Literal itself.</param>
         /// <returns>Match of parameter literal in the source code.</returns>
-        public static MatchResult Literal(SyntaxNodeOrToken n, SyntaxNodeOrToken node)
+        public static MatchResult Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor)
         {
-            var snode = GetCurrentTree(n);
-            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(snode, node);
+            var currentTree = GetCurrentTree(node);
+            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(currentTree, lookFor);
             Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
 
             TokenSeq seq = DymTokens(lnode.Item2.List);
@@ -123,19 +124,19 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Insert the ast node as in the k position of the node in the matching result 
         /// </summary>
-        /// <param name="n">Input data</param>
+        /// <param name="node">Input data</param>
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="mresult">Matching result</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken n, int k, MatchResult mresult, SyntaxNodeOrToken ast)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, int k, MatchResult mresult, SyntaxNodeOrToken ast)
         {
-            var snode = GetCurrentTree(n);
-            SyntaxNodeOrToken node = mresult.match.Item1;
+            var currentTree = GetCurrentTree(node);
+            SyntaxNodeOrToken syntaxNodeOrToken = mresult.match.Item1;
 
             List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
 
-            var root = node.AsNode();
+            var root = syntaxNodeOrToken.AsNode();
 
             if (root.ChildNodes().Count() >= k)
             {
@@ -169,21 +170,19 @@ namespace ProseSample.Substrings
                 
             }
 
-            CSharpSyntaxRewriter rewriter = new UpdateTreeRewriter(node.AsNode(), root.NormalizeWhitespace());
-            root = rewriter.Visit(snode.AsNode());
-            CurrentTrees[n] = root;
+            CSharpSyntaxRewriter rewriter = new UpdateTreeRewriter(syntaxNodeOrToken.AsNode(), root.NormalizeWhitespace());
+            root = rewriter.Visit(currentTree.AsNode());
+            CurrentTrees[node] = root;
             return root.NormalizeWhitespace();
         }
 
-        public static MatchResult Abstract(SyntaxNodeOrToken n, SyntaxKind kind, int k)
+        public static MatchResult Abstract(SyntaxNodeOrToken node, SyntaxKind kind, int k)
         {
-            var node = GetCurrentTree(n).AsNode();
-            var matches = from item in node.DescendantNodesAndTokensAndSelf()
-                       where item.IsKind(kind)
-                       select item;
+            var currentTree = GetCurrentTree(node).AsNode();
 
-            bool m = matches.Any();
-            if (m)
+            var matches = SplitToNodes(currentTree, kind);
+
+            if (matches.Any())
             {
                 Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(matches.ElementAt(k - 1), null);
                 MatchResult matchResult = new MatchResult(match);
@@ -205,7 +204,7 @@ namespace ProseSample.Substrings
         }
 
 
-        public static SyntaxNodeOrToken Script(SyntaxNodeOrToken n, IEnumerable<SyntaxNodeOrToken> edit)
+        public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> edit)
         {
             return edit.Last();
         }
@@ -218,7 +217,6 @@ namespace ProseSample.Substrings
         /// <returns>A new node with kind and child</returns>
         public static SyntaxNodeOrToken Node(SyntaxKind kind, IEnumerable<SyntaxNodeOrToken> childrenNodes)
         {
-            //List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken> {child};
             var node = GetSyntaxElement(kind, childrenNodes.ToList());
             return node;
         }

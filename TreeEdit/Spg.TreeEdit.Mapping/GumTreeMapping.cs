@@ -127,7 +127,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             var list = traversal.PostOrderTraversal(t1);
 
             int maxSize = 100;
-            double minDice = 0.3;
+            double minDice = 0.25;
 
             var MT = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
             foreach (var i in list)

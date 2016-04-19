@@ -54,11 +54,14 @@ namespace ProseSample
 
             //engine.Configuration.LogListener.SaveLogToXML("learning.log.xml");
 
-            foreach (ProgramNode p in consistentPrograms.RealizedPrograms)
+            string programs = "";
+            foreach (ProgramNode p in consistentPrograms.RealizedPrograms.ToList().GetRange(consistentPrograms.RealizedPrograms.Count() - 1000, 1000))
             {
+                programs += p.ToString() + "\n\n";
                 Console.WriteLine(p + "\n");
             }
 
+            File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
             ProgramNode bestProgram = consistentPrograms.RealizedPrograms.Last();
             if (bestProgram == null)
             {

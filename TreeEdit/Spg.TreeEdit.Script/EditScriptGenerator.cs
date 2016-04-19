@@ -30,11 +30,14 @@ namespace TreeEdit.Spg.TreeEdit.Script
 
                 if (w.IsKind(SyntaxKind.None))
                 {
-                    Console.WriteLine();
-                    int k = FindPos(x, M);
-                    Insert insert = new Insert(x, z, k);
-                    M.Add(x, x);
-                    editScript.Add(insert);
+                    //if (y.IsKind(z.Parent.Kind()))
+                    //{
+                        Console.WriteLine();
+                        int k = FindPos(x, M);
+                        Insert insert = new Insert(x, z, k);
+                        M.Add(x, x);
+                        editScript.Add(insert);
+                    //}
                 }
                 else //x has a partner in M
                 {
@@ -45,8 +48,8 @@ namespace TreeEdit.Spg.TreeEdit.Script
                         editScript.Add(update);
                     }
 
-                    var vmap = M.ToList().Find(o => o.Value.Equals(y)).Key;
-                    if (vmap.IsKind(SyntaxKind.None) || !vmap.Equals(v))
+                    //var vmap = M.ToList().Find(o => o.Value.Equals(y)).Key;
+                    if ((z.IsKind(SyntaxKind.None) || !z.Equals(v)) && y.IsKind(z.Parent.Kind()))
                     {
                         Console.WriteLine();
 
@@ -66,6 +69,8 @@ namespace TreeEdit.Spg.TreeEdit.Script
             {
                 if (!M.ContainsKey(w))
                 {
+                    Delete delete = new Delete(w);
+                    editScript.Add(delete);
                 }
             }
             return editScript;
