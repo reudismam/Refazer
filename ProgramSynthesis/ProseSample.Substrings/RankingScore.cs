@@ -27,14 +27,17 @@ namespace ProseSample.Substrings
         [FeatureCalculator("NList")]
         public static double Score_NList(double childScore, double childrenScore) => childScore + childrenScore;
 
+        [FeatureCalculator("SE")]
+        public static double Score_SE(double childScore) => childScore;
+
+        [FeatureCalculator("EList")]
+        public static double Score_EList(double childScore, double childrenScore) => childScore + childrenScore;
+
         [FeatureCalculator("SplitNodes")]
         public static double Score_SplitNodes(double inScore) => inScore;
 
-        [FeatureCalculator("Script1")]
+        [FeatureCalculator("Script")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
-
-        [FeatureCalculator("Script2")]
-        public static double Score_Script2(double inScore, double edit, double edit2) => inScore + edit + edit2;
 
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;
@@ -54,34 +57,6 @@ namespace ProseSample.Substrings
         [FeatureCalculator("C")]
         public static double Score_C1(double inScore, double kindScore, double expression1Score) => kindScore + expression1Score;
 
-        [FeatureCalculator("Identifier")]
-        public static double Score_Identifier(double inScore) => inScore;
-
-        [FeatureCalculator("PredefinedType")]
-        public static double Score_PredefinedType(double inScore) => inScore;
-
-        [FeatureCalculator("NumericLiteralExpression")]
-        public static double Score_NumericLiteralExpression(double inScore) => inScore;
-
-        [FeatureCalculator("StringLiteralExpression")]
-        public static double Score_StringLiteralExpression(double inScore) => inScore;
-
-        [FeatureCalculator("Block")]
-        public static double Block(double inScore) => inScore;
-
-        [FeatureCalculator("SubStr")]
-        public static double Score_SubStr(double x, double pp) => Math.Log(pp);
-
-        [FeatureCalculator("PosPair")]
-        public static double Score_PosPair(double pp1, double pp2) => pp1 * pp2;
-
-        [FeatureCalculator("AbsPos")]
-        public static double Score_AbsPos(double x, double k)
-        {
-            k = 1 / k - 1;
-            // Prefer absolute positions to regex positions if k is small
-            return Math.Max(10 * Token.MinScore - (k - 1) * 3 * Token.MinScore, 1 / k);
-        }
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KScore(int k) => k >= 0 ? 1.0 / (k + 1.0) : 1.0 / (-k + 1.1);
@@ -94,14 +69,5 @@ namespace ProseSample.Substrings
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double NodeScore(SyntaxNodeOrToken kd) => 1.1;
-
-        [FeatureCalculator("BoundaryPair")]
-        public static double Score_BoundaryPair(double r1, double r2) => r1 + r2;
-
-        [FeatureCalculator("RegPos")]
-        public static double Score_RegPos(double x, double rr, double k) => rr * k;
-
-        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
-        public static double RegexScore(RegularExpression r) => r.Score;
     }
 }

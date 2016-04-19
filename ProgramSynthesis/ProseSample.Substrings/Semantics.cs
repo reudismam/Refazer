@@ -203,11 +203,10 @@ namespace ProseSample.Substrings
             return node;
         }
 
-        #region Script Operators
 
-        public static SyntaxNodeOrToken Script1(SyntaxNodeOrToken n, SyntaxNodeOrToken edit)
+        public static SyntaxNodeOrToken Script(SyntaxNodeOrToken n, IEnumerable<SyntaxNodeOrToken> edit)
         {
-            return edit;
+            return edit.Last();
         }
 
         public static SyntaxNodeOrToken Script2(SyntaxNodeOrToken n, SyntaxNodeOrToken edit, SyntaxNodeOrToken edit2)
@@ -215,7 +214,6 @@ namespace ProseSample.Substrings
             return edit2;
         }
 
-        #endregion
 
         /// <summary>
         /// Return a new node
