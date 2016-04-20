@@ -154,8 +154,11 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                             {
                                 if (!M.ContainsKey(edt.Key))
                                 {
-                                    M.Add(edt.Key, edt.Value);
-                                    MT.Add(edt.Key, edt.Value);
+                                    if (edt.Key.IsKind(edt.Value.Kind()))
+                                    {
+                                        M.Add(edt.Key, edt.Value);
+                                        MT.Add(edt.Key, edt.Value);
+                                    }
                                 }
                             }                                   
                         }

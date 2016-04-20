@@ -49,7 +49,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
                     }
 
                     //var vmap = M.ToList().Find(o => o.Value.Equals(y)).Key;
-                    if ((z.IsKind(SyntaxKind.None) || !z.Equals(v)) && y.IsKind(z.Parent.Kind()))
+                    if (z.IsKind(SyntaxKind.None) || !z.Equals(v))
                     {
                         Console.WriteLine();
 
