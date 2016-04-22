@@ -206,19 +206,17 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <returns>Node after running edit operation</returns>
         private void ProcessEditOperation(EditOperation eop)
         {
-            if (eop is Insert)
-            {
-                ProcessInsertOperation(eop);
-            }
-
-            if (eop is Move)
-            {
-                ProcessMoveOperation(eop);
-            }
-
             if (eop is Script.Update)
             {
                 ProcessUpdateOperation(eop);
+            }
+            else if (eop is Delete)
+            {
+                //TODO decide what to do whant operation is a delete operation
+            }
+            else
+            {
+                ProcessOperation(eop);
             }
 
         }
@@ -226,73 +224,28 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <summary>
         /// Process insert operation
         /// </summary>
-        /// <param name="eop">Insert operation</param>
+        /// <param name="editOperation">Edit operation</param>
         /// <returns>Updated version of current node</returns>
-        private void ProcessInsertOperation(EditOperation eop)
+        private void ProcessOperation(EditOperation editOperation)
         {
             SyntaxNode anchorParentNode;
-            var anchorNodeKChild = ToBeReplacedNode(eop, out anchorParentNode);
+            var anchorNodeKChild = ToBeReplacedNode(editOperation, out anchorParentNode);
             SyntaxNode replacement = anchorParentNode;
 
-            bool b = ScriptContains(anchorNodeKChild) || IsomorphicManager.IsIsomorphic(anchorNodeKChild, eop.T1Node);
-
             SyntaxAnnotation parentAnnotation;
-            replacement = AnnotateParentNode(out parentAnnotation, eop, anchorParentNode, replacement);
+            replacement = AnnotateParentNode(out parentAnnotation, editOperation, anchorParentNode, replacement);
 
-            var childAnnotation = new SyntaxAnnotation(Ann[eop].Kind + "Child");
-            var childAnnotation1 = GetChildAnnotation(eop);
-
-            AddAnnotationRewriter childAnn;
-            if (childAnnotation1 != null)
-            {
-                childAnn = new AddAnnotationRewriter(eop.T1Node.AsNode(), new List<SyntaxAnnotation> { childAnnotation, childAnnotation1 });
-            }
-            else
-            {
-                childAnn = new AddAnnotationRewriter(eop.T1Node.AsNode(), new List<SyntaxAnnotation> { childAnnotation });
-            }
-
-            var newNode = childAnn.Visit(eop.T1Node.AsNode());
+            SyntaxAnnotation childAnnotation;
+            var newNode = AnnotateNewKChildNode(out childAnnotation, editOperation);
 
             var children = replacement.ChildNodes();
+            var child = children.ElementAt(editOperation.K - 1);
 
-            var child = children.ElementAt(eop.K - 1);
+            replacement = PerformEditOperationAnchorNode(anchorNodeKChild, replacement, child, newNode, editOperation);
 
-            if (b)
-            {
-                replacement = replacement.ReplaceNode(replacement.FindNode(child.Span), newNode);
-            }
-            else
-            {
-                replacement = replacement.InsertNodesBefore(replacement.FindNode(child.Span), new List<SyntaxNode> { newNode });
-            }
+            UpdateCurrentTree(anchorParentNode, replacement);
 
-            UpdateTreeRewriter reTree = new UpdateTreeRewriter(anchorParentNode, replacement);
-            CurrentTree = reTree.Visit(CurrentTree.AsNode());
-
-            var replacementChild = CurrentTree.AsNode().GetAnnotatedNodes(childAnnotation).First();
-            replacement = CurrentTree.AsNode().GetAnnotatedNodes(parentAnnotation).First();
-
-            var oldList = new List<SyntaxNodeOrToken> { eop.T1Node, eop.Parent };
-            var replacementList = new List<SyntaxNodeOrToken> { replacementChild, replacement };
-
-            for (int i = 0; i < replacementList.Count; i++)
-            {
-                var replacementNode = replacementList[i];
-                var oldNodeEop = oldList[i];
-                foreach (var editOperation in _script)
-                {
-                    if (editOperation.T1Node != null && editOperation.T1Node.Equals(oldNodeEop))
-                    {
-                        editOperation.T1Node = replacementNode;
-                    }
-
-                    if (editOperation.Parent != null && editOperation.Parent.Equals(oldNodeEop))
-                    {
-                        editOperation.Parent = replacementNode;
-                    }
-                }
-            }
+            UpdateScript(editOperation, childAnnotation, parentAnnotation);
         }
 
         private SyntaxNode AnnotateParentNode(out SyntaxAnnotation parentAnnotation, EditOperation eop, SyntaxNode anchorParentNode, SyntaxNode replacement)
@@ -333,34 +286,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
             return null;
         }
 
-
-        /// <summary>
-        /// Process move operation
-        /// </summary>
-        /// <param name="eop">Move operation</param>
-        /// <returns>Updated version of current node</returns>
-        private void ProcessMoveOperation(EditOperation eop)
-        {
-            SyntaxNode anchorParentNode;
-            var anchorNodeKChild = ToBeReplacedNode(eop, out anchorParentNode);
-            SyntaxNode replacement = anchorParentNode;
-
-            SyntaxAnnotation parentAnnotation;
-            replacement = AnnotateParentNode(out parentAnnotation, eop, anchorParentNode, replacement);
-
-            SyntaxAnnotation childAnnotation;
-            var newNode = AnnotateNewKChildNode(out childAnnotation, eop);
-
-            var children = replacement.ChildNodes();
-            var child = children.ElementAt(eop.K - 1);
-
-            replacement = PerformEditOperationAnchorNode(anchorNodeKChild, replacement, child, newNode);
-
-            UpdateCurrentTree(anchorParentNode, replacement);
-
-            UpdateScript(eop, childAnnotation, parentAnnotation);
-        }
-
         private void UpdateScript(EditOperation eop, SyntaxAnnotation childAnnotation, SyntaxAnnotation parentAnnotation)
         {
             SyntaxNode replacement;
@@ -396,9 +321,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
         }
 
         private SyntaxNode PerformEditOperationAnchorNode(SyntaxNodeOrToken anchorNodeKChild, SyntaxNode replacement, SyntaxNode child,
-            SyntaxNode newNode)
+            SyntaxNode newNode, EditOperation eop)
         {
-            bool b = ScriptContains(anchorNodeKChild);
+            bool b = ScriptContains(anchorNodeKChild) || IsomorphicManager.IsIsomorphic(anchorNodeKChild, eop.T1Node); ;
             if (b)
             {
                 replacement = replacement.ReplaceNode(replacement.FindNode(child.Span), newNode);
