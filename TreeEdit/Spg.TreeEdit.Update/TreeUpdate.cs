@@ -11,11 +11,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
     public class TreeUpdate
     {
         /// <summary>
-        /// Map to operations in each syntax tree
-        /// </summary>
-        private Dictionary<SyntaxNodeOrToken, List<EditOperation>> _dict;
-
-        /// <summary>
         /// Map to annotation to each edit operations
         /// </summary>
         public Dictionary<EditOperation, SyntaxAnnotation> Ann { get; set; }
@@ -118,7 +113,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
         {
             CurrentTree = tree;
             _M = M;
-            _dict = new Dictionary<SyntaxNodeOrToken, List<EditOperation>>();
             Ann = new Dictionary<EditOperation, SyntaxAnnotation>();
             _annts = new Dictionary<SyntaxNode, List<SyntaxAnnotation>>();
             Processed = new Dictionary<EditOperation, bool>();
@@ -158,12 +152,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 AnnotateDeleteOperation(s);
 
                 id++;
-                if (!_dict.ContainsKey(s.Parent))
-                {
-                    _dict[s.Parent] = new List<EditOperation>();
-                }
-
-                _dict[s.Parent].Add(s);
             }
         }
 
