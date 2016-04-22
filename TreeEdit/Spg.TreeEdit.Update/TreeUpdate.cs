@@ -118,23 +118,14 @@ namespace TreeEdit.Spg.TreeEdit.Update
             Processed = new Dictionary<EditOperation, bool>();
         }
 
-        /// <summary>
-        /// Process insert operations
-        /// </summary>
-        /// <param name="eop">Edit operation</param>
-        public void ProcessEditOperation(EditOperation eop)
-        {
-            //var updated = UpdateTree(eop);
-            UpdateTree(eop);
-
-            //var changedNodeList = CurrentTree.AsNode().GetAnnotatedNodes(Ann[eop]).ToList();
-            //var oldNode = changedNodeList.First();
-
-            //var newNode = Update(oldNode, updated.AsNode(), eop.K).AsNode();
-
-            //var visitor = new UpdateTreeRewriter(oldNode, newNode);
-            //CurrentTree = visitor.Visit(CurrentTree.AsNode());
-        }
+        ///// <summary>
+        ///// Process insert operations
+        ///// </summary>
+        ///// <param name="eop">Edit operation</param>
+        //public void ProcessEditOperation(EditOperation eop)
+        //{
+        //    UpdateTree(eop);
+        //}
 
         /// <summary>
         /// Create edition dictionary. The key contains the updated node 
@@ -285,7 +276,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             return returnSot;
         }
 
-        public SyntaxNodeOrToken UpdateTree(EditOperation operation)
+        public SyntaxNodeOrToken ProcessEditOperation(EditOperation operation)
         {
             foreach (var editOperation in _script)
             {
