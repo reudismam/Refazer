@@ -118,15 +118,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
             Processed = new Dictionary<EditOperation, bool>();
         }
 
-        ///// <summary>
-        ///// Process insert operations
-        ///// </summary>
-        ///// <param name="eop">Edit operation</param>
-        //public void ProcessEditOperation(EditOperation eop)
-        //{
-        //    UpdateTree(eop);
-        //}
-
         /// <summary>
         /// Create edition dictionary. The key contains the updated node 
         /// and the value, the list of operations in this node.
@@ -221,59 +212,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 }
                 Ann[eop] = _annts[z.AsNode()].First();
             }
-        }
-
-        /// <summary>
-        /// Update a node
-        /// </summary>
-        /// <param name="parent">Parent node to be updated</param>
-        /// <param name="child">Child node to be updated</param>
-        /// <param name="k">Position of the child on node</param>
-        /// <returns>Updated node</returns>
-        private static SyntaxNodeOrToken Update(SyntaxNode parent, SyntaxNode child, int k)
-        {
-            if (parent is BlockSyntax)
-            {
-                var statements = parent.ChildNodes().ToList();
-                parent = parent.RemoveNodes(parent.ChildNodes(), SyntaxRemoveOptions.KeepNoTrivia);
-                BlockSyntax b = (BlockSyntax)parent;
-
-                statements.Insert(k - 1, child);
-
-                foreach (var syntaxNode in statements)
-                {
-                    var stt = (StatementSyntax)syntaxNode;
-                    b = b.AddStatements(stt);
-                }
-
-                parent = b;
-            }
-            else if (parent is IfStatementSyntax && child is ElseClauseSyntax)
-            {
-                var ifStatement = (IfStatementSyntax)parent;
-                var elseClase = (ElseClauseSyntax)child;
-
-                parent = ifStatement.WithElse(elseClase);
-            }
-            else
-            {
-                if (parent.ChildNodes().Count() > 1)
-                {
-                    if (parent.ChildNodes().Count() >= k)
-                    {
-                        parent = parent.ReplaceNode(parent.ChildNodes().ElementAt(k - 1), child);
-                    }
-                    else
-                    {
-                        var schild = parent.ChildNodes().ElementAt(k - 2);
-                        schild = parent.FindNode(schild.Span);
-                        parent = parent.InsertNodesAfter(schild, new List<SyntaxNode>() { child });
-                    }
-                }
-            }
-
-            SyntaxNodeOrToken returnSot = parent;
-            return returnSot;
         }
 
         public SyntaxNodeOrToken ProcessEditOperation(EditOperation operation)
