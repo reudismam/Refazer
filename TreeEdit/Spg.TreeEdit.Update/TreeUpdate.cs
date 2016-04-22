@@ -47,7 +47,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
         // ReSharper disable once InconsistentNaming
         public void UpdateTree(List<EditOperation> script, SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
         {
-            _script = script;
             PreProcessTree(script, tree, M);
 
             foreach (var item in script)
@@ -231,18 +230,15 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <returns>Updated version of current node</returns>
         private void ProcessInsertOperation(EditOperation eop)
         {
-            var oldNode = OldAnchor(eop);
-            var replacement = oldNode;
+            SyntaxNode toBeReplaced;
+            var oldChild = ToBeReplacedNode(eop, out toBeReplaced);
+            SyntaxNode replacement = toBeReplaced;
 
-            int k = eop.K - 1;
-
-            //TODO refactor this code: rush
-            var oldChild = eop.Parent.AsNode().ChildNodes().ElementAt(k);
             bool b = ScriptContains(oldChild) || IsomorphicManager.IsIsomorphic(oldChild, eop.T1Node);
 
             var parentAnnotation = new SyntaxAnnotation(Ann[eop].Kind + "Parent");
 
-            AddAnnotationRewriter addAnn = new AddAnnotationRewriter(oldNode, new List<SyntaxAnnotation> { parentAnnotation, Ann[eop] });
+            AddAnnotationRewriter addAnn = new AddAnnotationRewriter(toBeReplaced, new List<SyntaxAnnotation> { parentAnnotation, Ann[eop] });
 
             replacement = addAnn.Visit(replacement);
 
@@ -263,7 +259,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             var children = replacement.ChildNodes();
 
-            var child = children.ElementAt(k);
+            var child = children.ElementAt(eop.K - 1);
 
             if (b)
             {
@@ -274,7 +270,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 replacement = replacement.InsertNodesBefore(replacement.FindNode(child.Span), new List<SyntaxNode> { newNode });
             }
 
-            UpdateTreeRewriter reTree = new UpdateTreeRewriter(oldNode, replacement);
+            UpdateTreeRewriter reTree = new UpdateTreeRewriter(toBeReplaced, replacement);
             CurrentTree = reTree.Visit(CurrentTree.AsNode());
 
             var replacementChild = CurrentTree.AsNode().GetAnnotatedNodes(childAnnotation).First();
@@ -302,6 +298,19 @@ namespace TreeEdit.Spg.TreeEdit.Update
             }
         }
 
+        private SyntaxNodeOrToken ToBeReplacedNode(EditOperation eop, out SyntaxNode oldNode)
+        {
+            oldNode = OldAnchor(eop);
+            SyntaxNodeOrToken oldChild;
+            if (eop is Insert)
+            {
+                oldChild = eop.Parent.AsNode().ChildNodes().ElementAt(eop.K - 1);
+                return oldChild;
+            }
+            oldChild = eop.T1Node; // eop is a Move
+            return oldChild;
+        }
+
         private SyntaxAnnotation GetChildAnnotation(EditOperation eop)
         {
             var sot = eop.T1Node;
@@ -325,20 +334,15 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <returns>Updated version of current node</returns>
         private void ProcessMoveOperation(EditOperation eop)
         {
-            var oldNode = OldAnchor(eop);
+            SyntaxNode toBeReplaced;
+            var oldChild = ToBeReplacedNode(eop, out toBeReplaced);
+            SyntaxNode replacement = toBeReplaced;
 
-            var replacement = oldNode;
-
-            int k = eop.K - 1;
-
-            //TODO refactor this code: rush
-            //var oldChild = oldNode.ChildNodes().ElementAt(k);
-
-            bool b = ScriptContains(eop.T1Node);
+            bool b = ScriptContains(oldChild);
 
             var parentAnnotation = new SyntaxAnnotation(Ann[eop].Kind + "Parent");
 
-            AddAnnotationRewriter addAnn = new AddAnnotationRewriter(oldNode, new List<SyntaxAnnotation> { parentAnnotation, Ann[eop] });
+            AddAnnotationRewriter addAnn = new AddAnnotationRewriter(toBeReplaced, new List<SyntaxAnnotation> { parentAnnotation, Ann[eop] });
 
             replacement = addAnn.Visit(replacement);
 
@@ -359,7 +363,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             var children = replacement.ChildNodes();
 
-            var child = children.ElementAt(k);
+            var child = children.ElementAt(eop.K - 1);
 
             if (b)
             {
@@ -370,7 +374,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 replacement = replacement.InsertNodesBefore(replacement.FindNode(child.Span), new List<SyntaxNode> { newNode });
             }
 
-            UpdateTreeRewriter reTree = new UpdateTreeRewriter(oldNode, replacement);
+            UpdateTreeRewriter reTree = new UpdateTreeRewriter(toBeReplaced, replacement);
             CurrentTree = reTree.Visit(CurrentTree.AsNode());
 
             var replacementChild = CurrentTree.AsNode().GetAnnotatedNodes(childAnnotation).First();
