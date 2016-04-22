@@ -205,12 +205,8 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <param name="eop">Edit operation</param>
         /// <returns>Node after running edit operation</returns>
         private void ProcessEditOperation(EditOperation eop)
-        {
-            if (eop is Script.Update)
-            {
-                ProcessUpdateOperation(eop);
-            }
-            else if (eop is Delete)
+        {          
+            if (eop is Delete)
             {
                 //TODO decide what to do whant operation is a delete operation
             }
@@ -232,14 +228,15 @@ namespace TreeEdit.Spg.TreeEdit.Update
             var anchorNodeKChild = ToBeReplacedNode(editOperation, out anchorParentNode);
             SyntaxNode replacement = anchorParentNode;
 
+            var kChildNode = GetKChildNode(editOperation);
+
             SyntaxAnnotation parentAnnotation;
             replacement = AnnotateParentNode(out parentAnnotation, editOperation, anchorParentNode, replacement);
 
             SyntaxAnnotation childAnnotation;
-            var newNode = AnnotateNewKChildNode(out childAnnotation, editOperation);
+            var newNode = AnnotateNewKChildNode(out childAnnotation, editOperation, kChildNode);
 
-            var children = replacement.ChildNodes();
-            var child = children.ElementAt(editOperation.K - 1);
+            var child = GetTargetChild(editOperation, replacement);
 
             replacement = PerformEditOperationAnchorNode(anchorNodeKChild, replacement, child, newNode, editOperation);
 
@@ -247,6 +244,71 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             UpdateScript(editOperation, childAnnotation, parentAnnotation);
         }
+
+        private static SyntaxNode GetKChildNode(EditOperation editOperation)
+        {
+            if (editOperation is Script.Update)
+            {
+                return ((Script.Update) editOperation).To.AsNode();
+            }
+
+            var kChildNode = editOperation.T1Node.AsNode();
+            return kChildNode;
+        }
+
+        private static SyntaxNode GetTargetChild(EditOperation editOperation, SyntaxNode replacement)
+        {
+            if (editOperation is Script.Update)
+            {
+                var children = replacement.ChildNodes();
+
+                var child = children.First(); // refactor this. Create a None node.
+                foreach (var childItem in children)
+                {
+                    if (IsomorphicManager.IsIsomorphic(childItem, editOperation.T1Node))
+                    {
+                        child = childItem;
+                    }
+                }
+                return child;
+            }
+            else
+            {
+                var children = replacement.ChildNodes();
+                var child = children.ElementAt(editOperation.K - 1);
+                return child;
+            }
+        }
+
+
+        ///// <summary>
+        ///// Process update operation
+        ///// </summary>
+        ///// <returns>Updated version of the current node</returns>
+        //private void ProcessUpdateOperation(EditOperation editOperation)
+        //{
+        //    //TODO correct the update anchor
+        //    var anchorParentNode = OldAnchor(editOperation);
+
+        //    var replacement = anchorParentNode;
+        //    //TODO refactor this code: rush
+
+        //    var kChildNode = GetKChildNode(editOperation);
+
+        //    SyntaxAnnotation parentAnnotation;
+        //    replacement = AnnotateParentNode(out parentAnnotation, editOperation, anchorParentNode, replacement);
+
+        //    SyntaxAnnotation childAnnotation;
+        //    var newNode = AnnotateNewKChildNode(out childAnnotation, editOperation, kChildNode);
+
+        //    var child = GetTargetChild(editOperation, replacement);
+
+        //    replacement = PerformEditOperationAnchorNode(null, replacement, child, newNode, editOperation);
+
+        //    UpdateCurrentTree(anchorParentNode, replacement);
+
+        //    UpdateScript(editOperation, childAnnotation, parentAnnotation);
+        //}
 
         private SyntaxNode AnnotateParentNode(out SyntaxAnnotation parentAnnotation, EditOperation eop, SyntaxNode anchorParentNode, SyntaxNode replacement)
         {
@@ -320,9 +382,14 @@ namespace TreeEdit.Spg.TreeEdit.Update
             CurrentTree = reTree.Visit(CurrentTree.AsNode());
         }
 
-        private SyntaxNode PerformEditOperationAnchorNode(SyntaxNodeOrToken anchorNodeKChild, SyntaxNode replacement, SyntaxNode child,
-            SyntaxNode newNode, EditOperation eop)
+        private SyntaxNode PerformEditOperationAnchorNode(SyntaxNodeOrToken anchorNodeKChild, SyntaxNode replacement, SyntaxNode child, SyntaxNode newNode, EditOperation eop)
         {
+            if (eop is Script.Update)
+            {
+                replacement = replacement.ReplaceNode(replacement.FindNode(child.Span), newNode);
+                return replacement;
+            }
+
             bool b = ScriptContains(anchorNodeKChild) || IsomorphicManager.IsIsomorphic(anchorNodeKChild, eop.T1Node); ;
             if (b)
             {
@@ -335,7 +402,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             return replacement;
         }
 
-        private SyntaxNode AnnotateNewKChildNode(out SyntaxAnnotation childAnnotation, EditOperation eop)
+        private SyntaxNode AnnotateNewKChildNode(out SyntaxAnnotation childAnnotation, EditOperation eop, SyntaxNode kchildNode)
         {
             childAnnotation = new SyntaxAnnotation(Ann[eop].Kind + "Child");
             var childAnnotation1 = GetChildAnnotation(eop);
@@ -343,8 +410,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             AddAnnotationRewriter childAnn;
             if (childAnnotation1 != null)
             {
-                childAnn = new AddAnnotationRewriter(eop.T1Node.AsNode(),
-                    new List<SyntaxAnnotation> {childAnnotation, childAnnotation1});
+                childAnn = new AddAnnotationRewriter(eop.T1Node.AsNode(), new List<SyntaxAnnotation> {childAnnotation, childAnnotation1});
             }
             else
             {
@@ -357,6 +423,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         private SyntaxNode OldAnchor(EditOperation eop)
         {
+            //TODO correct the update anchor
             var annotation = Ann[eop];
             //TODO refactor annotation
             var moveL = CurrentTree.AsNode().GetAnnotatedNodes(annotation.Kind).ToList();
@@ -390,69 +457,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 }
             }
             return false;
-        }
-
-        /// <summary>
-        /// Process update operation
-        /// </summary>
-        /// <param name="eop">Update operation</param>
-        /// <returns>Updated version of the current node</returns>
-        private void ProcessUpdateOperation(EditOperation eop)
-        {
-            //TODO correct the update anchor
-            var oldNode = OldAnchor(eop);
-
-            var replacement = oldNode;
-            //TODO refactor this code: rush
-
-            var parentAnnotation = new SyntaxAnnotation(Ann[eop].Kind + "Parent");
-            AddAnnotationRewriter addAnn = new AddAnnotationRewriter(oldNode, new List<SyntaxAnnotation> { parentAnnotation, Ann[eop] });
-            replacement = addAnn.Visit(replacement);
-
-            var toNode = ((Script.Update)eop).To.AsNode();
-            var childAnnotation = new SyntaxAnnotation(Ann[eop] + "Child");
-            AddAnnotationRewriter childAnn = new AddAnnotationRewriter(toNode, new List<SyntaxAnnotation> { childAnnotation, Ann[eop] });
-            var newNode = childAnn.Visit(toNode);
-
-            var children = replacement.ChildNodes();
-
-            var child = children.First(); // refactor this. Create a None node.
-            foreach (var childItem in children)
-            {
-                if (IsomorphicManager.IsIsomorphic(childItem, eop.T1Node))
-                {
-                    child = childItem;
-                }
-            }
-
-            replacement = replacement.ReplaceNode(replacement.FindNode(child.Span), newNode);
-
-            UpdateTreeRewriter reTree = new UpdateTreeRewriter(oldNode, replacement);
-            CurrentTree = reTree.Visit(CurrentTree.AsNode());
-
-            var replacementChild = CurrentTree.AsNode().GetAnnotatedNodes(childAnnotation).First();
-            replacement = CurrentTree.AsNode().GetAnnotatedNodes(parentAnnotation).First();
-
-            var oldList = new List<SyntaxNodeOrToken> { eop.T1Node, eop.Parent };
-            var replacementList = new List<SyntaxNodeOrToken> { replacementChild, replacement };
-
-            for (int i = 0; i < replacementList.Count; i++)
-            {
-                var replacementNode = replacementList[i];
-                var oldNodeEop = oldList[i];
-                foreach (var editOperation in _script)
-                {
-                    if (editOperation.T1Node != null && editOperation.T1Node.Equals(oldNodeEop))
-                    {
-                        editOperation.T1Node = replacementNode;
-                    }
-
-                    if (editOperation.Parent != null && editOperation.Parent.Equals(oldNodeEop))
-                    {
-                        editOperation.Parent = replacementNode;
-                    }
-                }
-            }
         }
     }
 }
