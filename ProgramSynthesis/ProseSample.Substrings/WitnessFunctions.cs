@@ -384,7 +384,7 @@ namespace ProseSample.Substrings
                     {
                         if (!treeUp.Processed.ContainsKey(item))
                         {
-                            treeUp.ProcessEditOperation(item);
+                            treeUp.ProcessScript(item);
                             var newTree = treeUp.CurrentTree;
                             subtrees.Add(newTree);
                         }
@@ -432,7 +432,7 @@ namespace ProseSample.Substrings
                     {
                         if (!treeUp.Processed.ContainsKey(item))
                         {
-                            treeUp.ProcessEditOperation(item);
+                            treeUp.ProcessScript(item);
                             kMatches.Add(item.K);
                         }
                     }
@@ -477,7 +477,7 @@ namespace ProseSample.Substrings
                     {
                         if (!treeUp.Processed.ContainsKey(item))
                         {
-                            treeUp.ProcessEditOperation(item);
+                            treeUp.ProcessScript(item);
                             var parent = item.Parent;  
                             var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent })));
                             kMatches.Add(result);
@@ -525,7 +525,7 @@ namespace ProseSample.Substrings
                     {
                         if (!treeUp.Processed.ContainsKey(item))
                         {
-                            treeUp.ProcessEditOperation(item);
+                            treeUp.ProcessScript(item);
                             var parent = (SyntaxNodeOrToken)treeUp.CurrentTree.AsNode().GetAnnotatedNodes(treeUp.Ann[item]).First();
                             var el = (SyntaxNodeOrToken) parent.AsNode().ChildNodes().ElementAt(k - 1);
                             kMatches.Add(el);

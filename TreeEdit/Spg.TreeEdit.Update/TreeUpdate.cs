@@ -54,7 +54,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 if (!Processed.ContainsKey(item))
                 {
-                    ProcessEditOperation(item);
+                    ProcessScript(item);
                 }
             }
         }
@@ -191,13 +191,12 @@ namespace TreeEdit.Spg.TreeEdit.Update
             }
         }
 
-        public SyntaxNodeOrToken ProcessEditOperation(EditOperation operation)
+        public void ProcessScript(EditOperation operation)
         {
             foreach (var editOperation in _script)
             {
-                ProcessEditOperation(editOperation, null, null);
+                ProcessEditOperation(editOperation);
             }
-            return null;
         }
 
 
@@ -205,26 +204,24 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// Process edit operation
         /// </summary>
         /// <param name="eop">Edit operation</param>
-        /// <param name="currentNode">Current node</param>
-        /// <param name="uptNode">Updated node</param>
         /// <returns>Node after running edit operation</returns>
-        private SyntaxNode ProcessEditOperation(EditOperation eop, SyntaxNode currentNode, SyntaxNode uptNode)
+        private void ProcessEditOperation(EditOperation eop)
         {
             if (eop is Insert)
             {
-                currentNode = ProcessInsertOperation(eop);
+                ProcessInsertOperation(eop);
             }
 
             if (eop is Move)
             {
-                currentNode = ProcessMoveOperation(eop);
+                ProcessMoveOperation(eop);
             }
 
             if (eop is Script.Update)
             {
-                currentNode = ProcessUpdateOperation(eop);
+                ProcessUpdateOperation(eop);
             }
-            return currentNode;
+
         }
 
         /// <summary>
@@ -232,7 +229,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         /// <param name="eop">Insert operation</param>
         /// <returns>Updated version of current node</returns>
-        private SyntaxNode ProcessInsertOperation(EditOperation eop)
+        private void ProcessInsertOperation(EditOperation eop)
         {
             var oldNode = OldAnchor(eop);
             var replacement = oldNode;
@@ -303,7 +300,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                     }
                 }
             }
-            return replacement;
         }
 
         private SyntaxAnnotation GetChildAnnotation(EditOperation eop)
@@ -327,7 +323,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         /// <param name="eop">Move operation</param>
         /// <returns>Updated version of current node</returns>
-        private SyntaxNode ProcessMoveOperation(EditOperation eop)
+        private void ProcessMoveOperation(EditOperation eop)
         {
             var oldNode = OldAnchor(eop);
 
@@ -400,56 +396,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                     }
                 }
             }
-            return replacement;
-            //var parentAnnotation = new SyntaxAnnotation(Ann[eop].Kind + "Parent");
-            //AddAnnotationRewriter addAnn = new AddAnnotationRewriter(oldNode, new List<SyntaxAnnotation> { parentAnnotation, Ann[eop] });
-            //replacement = addAnn.Visit(replacement);
-
-            //var childAnnotation = new SyntaxAnnotation(Ann[eop] + "Child");
-            //AddAnnotationRewriter childAnn = new AddAnnotationRewriter(eop.T1Node.AsNode(), new List<SyntaxAnnotation> { childAnnotation, Ann[eop] });
-            //var newNode = childAnn.Visit(eop.T1Node.AsNode());
-
-            //var children = replacement.ChildNodes();
-
-            //var child = children.ElementAt(k);
-
-            //if (b)
-            //{
-            //    replacement = replacement.ReplaceNode(replacement.FindNode(child.Span), newNode);
-            //}
-            //else
-            //{
-            //    replacement = replacement.InsertNodesBefore(replacement.FindNode(child.Span), new List<SyntaxNode> { newNode });
-            //}
-
-            //UpdateTreeRewriter reTree = new UpdateTreeRewriter(oldNode, replacement);
-            //CurrentTree = reTree.Visit(CurrentTree.AsNode());
-
-            //var replacementChild = CurrentTree.AsNode().GetAnnotatedNodes(childAnnotation).First();
-            //replacement = CurrentTree.AsNode().GetAnnotatedNodes(parentAnnotation).First();
-
-            //var oldList = new List<SyntaxNodeOrToken> { eop.T1Node, eop.Parent };
-            //var replacementList = new List<SyntaxNodeOrToken> { replacementChild, replacement };
-
-            //for (int i = 0; i < replacementList.Count; i++)
-            //{
-            //    var replacementNode = replacementList[i];
-            //    var oldNodeEop = oldList[i];
-            //    foreach (var editOperation in _script)
-            //    {
-            //        if (editOperation.T1Node != null && editOperation.T1Node.Equals(oldNodeEop))
-            //        {
-            //            editOperation.T1Node = replacementNode;
-            //        }
-
-            //        if (editOperation.Parent != null && editOperation.Parent.Equals(oldNodeEop))
-            //        {
-            //            editOperation.Parent = replacementNode;
-            //        }
-            //    }
-            //}
-
-            //return replacement;
         }
 
         private SyntaxNode OldAnchor(EditOperation eop)
@@ -494,7 +440,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         /// <param name="eop">Update operation</param>
         /// <returns>Updated version of the current node</returns>
-        private SyntaxNode ProcessUpdateOperation(EditOperation eop)
+        private void ProcessUpdateOperation(EditOperation eop)
         {
             //TODO correct the update anchor
             var oldNode = OldAnchor(eop);
@@ -550,8 +496,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                     }
                 }
             }
-
-            return replacement;
         }
     }
 }
