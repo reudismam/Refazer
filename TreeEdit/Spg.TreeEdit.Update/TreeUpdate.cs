@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using TreeEdit.Spg.TreeEdit.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
@@ -65,14 +64,13 @@ namespace TreeEdit.Spg.TreeEdit.Update
             _script = script;
             InitializeAtributes(tree, M);
             CreateEditionDictionary(script);
-            Annotate(script); //We also need to update the dict.
+            Annotate();
         }
 
         /// <summary>
         /// Annotate the tree
         /// </summary>
-        /// <param name="script">Edition script</param>
-        private void Annotate(List<EditOperation> script)
+        private void Annotate()
         {
             var traversalIndex = new Dictionary<SyntaxNodeOrToken, int>();
 
@@ -128,10 +126,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
             int id = 0;
             foreach (var s in script)
             {
-                AnnotateMoveOperation(s, id);
-                AnnotateInsertOperation(s, id);
-                AnnotateUpdateOperation(s, id);
-                AnnotateDeleteOperation(s);
+                Annotate(s, id);                //Anotate common cases
+                AnnotateInsertOperation(s, id); //Annotate insert
+                AnnotateDeleteOperation(s);     //Anotate delete
 
                 id++;
             }
@@ -157,9 +154,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         /// <param name="eop">Edition operation</param>
         /// <param name="id">Unique Id</param>
-        private void AnnotateMoveOperation(EditOperation eop, int id)
+        private void Annotate(EditOperation eop, int id)
         {
-            if (eop is Move)
+            if (eop is Move || eop is Script.Update)
             {
                 if (!_annts.ContainsKey(eop.Parent.AsNode()))
                 {
@@ -168,26 +165,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                     _annts[eop.Parent.AsNode()].Add(sn);
                 }
                 Ann.Add(eop, _annts[eop.Parent.AsNode()].First());
-            }
-        }
-
-        /// <summary>
-        /// Annotate update operations
-        /// </summary>
-        /// <param name="s">Edit operation</param>
-        /// <param name="id">Unique id</param>
-        private void AnnotateUpdateOperation(EditOperation s, int id)
-        {
-            if (s is Script.Update)
-            {
-                if (!_annts.ContainsKey(s.Parent.AsNode()))
-                {
-                    _annts[s.Parent.AsNode()] = new List<SyntaxAnnotation>();
-                    SyntaxAnnotation sn = new SyntaxAnnotation("ANC" + id);
-                    _annts[s.Parent.AsNode()].Add(sn);
-                }
-
-                Ann.Add(s, _annts[s.Parent.AsNode()].First());
             }
         }
 
