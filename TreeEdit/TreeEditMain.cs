@@ -76,7 +76,7 @@ namespace TreeEdit
             var script = generator.EditScript(inpTree, outTree, M);
 
             TreeUpdate update = new TreeUpdate();
-            update.UpdateTree(script, inpTree, M);
+            update.UpdateTree(script, inpTree/*, M*/);
             Console.WriteLine();
         }
     }

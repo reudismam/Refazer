@@ -176,6 +176,11 @@ namespace ProseSample.Substrings
             return root.NormalizeWhitespace();
         }
 
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, int k, MatchResult from, SyntaxNodeOrToken to)
+        {
+            return null;
+        }
+
         public static MatchResult Abstract(SyntaxNodeOrToken node, SyntaxKind kind, int k)
         {
             var currentTree = GetCurrentTree(node).AsNode();

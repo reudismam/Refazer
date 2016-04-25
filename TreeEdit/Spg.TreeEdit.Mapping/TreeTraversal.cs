@@ -9,21 +9,17 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 {
     public class TreeTraversal
     {
-        public List<SyntaxNodeOrToken> list;
+        public List<SyntaxNodeOrToken> List;
 
-        public SyntaxNodeOrToken root;
-
-        public TreeTraversal()
-        {
-        }
+        public SyntaxNodeOrToken Root;
 
         public List<SyntaxNodeOrToken> PostOrderTraversal(SyntaxNodeOrToken t)
         {
-            list = new List<SyntaxNodeOrToken>();
+            List = new List<SyntaxNodeOrToken>();
 
             PostOrder(t);
 
-            return list;
+            return List;
         }
 
         private void PostOrder(SyntaxNodeOrToken t)
@@ -37,21 +33,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 PostOrder(ch);
             }
 
-            list.Add(sn);
+            List.Add(sn);
         }
-
-        /*private void InOrder(SyntaxNodeOrToken t)
-        {
-            SyntaxNode sn = t.AsNode();
-
-            if (sn == null) return;
-
-            foreach (var ch in sn.ChildNodes())
-            {
-                PostOrder(ch);
-            }
-
-            list.Add(sn);
-        }*/
     }
 }

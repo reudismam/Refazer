@@ -20,12 +20,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
         public SyntaxNodeOrToken CurrentTree { get; set; }
 
         /// <summary>
-        /// Map element from T1 (before tree) to T2 (after tree) nodes
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        private Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> _M;
-
-        /// <summary>
         /// Map each annoted node
         /// </summary>
         private Dictionary<SyntaxNode, List<SyntaxAnnotation>> _annts;
@@ -43,11 +37,11 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         /// <param name="script">Edit script</param>
         /// <param name="tree">Tree to be updated</param>
-        /// <param name="M">Mapping from each element for the before and after tree.</param>
+        ///// <param name="M">Mapping from each element for the before and after tree.</param>
         // ReSharper disable once InconsistentNaming
-        public void UpdateTree(List<EditOperation> script, SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
+        public void UpdateTree(List<EditOperation> script, SyntaxNodeOrToken tree/*, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M*/)
         {
-            PreProcessTree(script, tree, M);
+            PreProcessTree(script, tree/*, M*/);
 
             foreach (var item in script)
             {
@@ -58,10 +52,10 @@ namespace TreeEdit.Spg.TreeEdit.Update
             }
         }
 
-        public void PreProcessTree(List<EditOperation> script, SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
+        public void PreProcessTree(List<EditOperation> script, SyntaxNodeOrToken tree/*, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M*/)
         {
             _script = script;
-            InitializeAtributes(tree, M);
+            InitializeAtributes(tree/*, M*/);
             CreateEditionDictionary(script);
             Annotate();
         }
@@ -106,10 +100,10 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <param name="tree">Source tree</param>
         /// <param name="M">Mapping</param>
         // ReSharper disable once InconsistentNaming
-        private void InitializeAtributes(SyntaxNodeOrToken tree, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
+        private void InitializeAtributes(SyntaxNodeOrToken tree/*, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M*/)
         {
             CurrentTree = tree;
-            _M = M;
+            //_M = M;
             Ann = new Dictionary<EditOperation, SyntaxAnnotation>();
             _annts = new Dictionary<SyntaxNode, List<SyntaxAnnotation>>();
             Processed = new Dictionary<EditOperation, bool>();
@@ -148,7 +142,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         }
 
         /// <summary>
-        /// Annotate move operations
+        /// Annotate operations, except delete.
         /// </summary>
         /// <param name="eop">Edition operation</param>
         /// <param name="id">Unique Id</param>
@@ -168,18 +162,18 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         }
 
-        private SyntaxNode GetT1Parent(EditOperation eop)
-        {
-            if (eop is Insert)
-            {
-                var y = eop.T1Node.Parent;
-                var z = _M.ToList().Find(o => o.Value.Equals(y)).Key;
-                return z.AsNode();
-            }
+        //private SyntaxNode GetT1Parent(EditOperation eop)
+        //{
+        //    if (eop is Insert)
+        //    {
+        //        var y = eop.T1Node.Parent;
+        //        var z = _M.ToList().Find(o => o.Value.Equals(y)).Key;
+        //        return z.AsNode();
+        //    }
 
-            return eop.Parent.AsNode();
+        //    return eop.Parent.AsNode();
 
-        }
+        //}
 
         public void ProcessScript(EditOperation operation)
         {
@@ -195,7 +189,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         /// <param name="eop">Edit operation</param>
         /// <returns>Node after running edit operation</returns>
-        private void ProcessEditOperation(EditOperation eop)
+        public void ProcessEditOperation(EditOperation eop)
         {
             if (eop is Delete)
             {
