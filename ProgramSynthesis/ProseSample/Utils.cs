@@ -52,13 +52,11 @@ namespace ProseSample
 
             ProgramSet consistentPrograms = engine.LearnGrammar(spec);
 
-            //engine.Configuration.LogListener.SaveLogToXML("learning.log.xml");
-
             var topK = consistentPrograms.TopK("Score").ToList().GetRange(0, 10);
             string programs = "";
             foreach (ProgramNode p in topK)
             {
-                programs += p.ToString() + "\n\n";
+                programs += p + "\n\n";
                 Console.WriteLine(p + "\n");
             }
 

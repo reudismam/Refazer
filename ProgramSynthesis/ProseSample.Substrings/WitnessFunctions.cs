@@ -17,9 +17,7 @@ using TreeEdit.Spg.TreeEdit.Update;
 namespace ProseSample.Substrings
 {
     public static class WitnessFunctions
-    {
-        private static readonly Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> Edits = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
-
+    { 
         private static readonly Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
         private static readonly Dictionary<State, TreeUpdate> TreeUpdateDictionary = new Dictionary<State, TreeUpdate>(); 
@@ -389,8 +387,6 @@ namespace ProseSample.Substrings
 
                     TreeUpdateDictionary.Add(input, treeUp);
 
-                    Edits[inpTree] = outTree;
-
                     kMatches.Add(script);    
                 }
 
@@ -426,7 +422,7 @@ namespace ProseSample.Substrings
                     var treeUp = TreeUpdateDictionary[input];
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = previousTree; //treeUp.CurrentTree;
+                    CurrentTrees[key] = previousTree; 
                 }
 
                 kExamples[input] = matches;
@@ -491,7 +487,7 @@ namespace ProseSample.Substrings
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = previousTree; //treeUp.CurrentTree;
+                    CurrentTrees[key] = previousTree; 
                 }
                 kExamples[input] = matches;
             }
@@ -553,7 +549,7 @@ namespace ProseSample.Substrings
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = previousTree; //treeUp.CurrentTree;
+                    CurrentTrees[key] = previousTree; 
                 }
                 kExamples[input] = matches;
             }
@@ -686,7 +682,7 @@ namespace ProseSample.Substrings
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = previousTree; //treeUp.CurrentTree;
+                    CurrentTrees[key] = previousTree; 
                 }
                 kExamples[input] = matches;
             }

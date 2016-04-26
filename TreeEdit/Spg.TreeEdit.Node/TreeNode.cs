@@ -9,6 +9,9 @@ namespace Spg.TreeEdit.Node
     /// <typeparam name="T">Node type</typeparam>
     public class TreeNode<T> : ITreeNode<T>
     {
+        /// <summary>
+        /// Children nodes
+        /// </summary>
         private List<ITreeNode<T>> _children;
 
         /// <summary>
@@ -22,6 +25,10 @@ namespace Spg.TreeEdit.Node
             _children = children;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the class
+        /// </summary>
+        /// <param name="value">value</param>
         public TreeNode(T value)
         {
             Value = value;
@@ -35,13 +42,26 @@ namespace Spg.TreeEdit.Node
         public T Value { get; set; }
 
 
+        /// <summary>
+        /// Children get and set method
+        /// </summary>
         List<ITreeNode<T>> ITreeNode<T>.Children
         {
-            get { return _children; }
+            get
+            {
+                return _children;
+            }
 
-            set { _children = value; }
+            set
+            {
+                _children = value;
+            }
         }
 
+        /// <summary>
+        /// Get descendants nodes
+        /// </summary>
+        /// <returns></returns>
         public List<ITreeNode<T>> GetDescendantsNodes()
         {
             var list = new List<ITreeNode<T>>();
@@ -60,33 +80,24 @@ namespace Spg.TreeEdit.Node
             return list;
         }
 
+        /// <summary>
+        /// Add a child at k position
+        /// </summary>
+        /// <param name="child">Child</param>
+        /// <param name="k">Position</param>
         public void AddChild(ITreeNode<T> child, int k)
         {
             _children.Insert(k, child);
         }
 
-
+        /// <summary>
+        /// Remove node from k position
+        /// </summary>
+        /// <param name="k">position</param>
         public void RemoveNode(int k)
         {
             _children.RemoveAt(k);
         }
-
-        ///// <summary>
-        ///// Gets the children.
-        ///// </summary>
-        ///// <value>The children.</value>
-        //List<ITreeNode<T>> ITreeNode<T>.Children
-        //{
-        //    get
-        //    {
-        //        return _children;
-        //    }
-
-        //    set
-        //    {
-        //        _children = value;
-        //    }
-        //}
 
         /// <summary>
         /// String representation of this object
@@ -109,7 +120,7 @@ namespace Spg.TreeEdit.Node
                 return false;
             }
             TreeNode<T> compare = obj as TreeNode<T>;
-            return this.Value.Equals(compare.Value);
+            return Value.Equals(compare.Value);
         }
 
         /// <summary>
@@ -120,6 +131,5 @@ namespace Spg.TreeEdit.Node
         {
             return ToString().GetHashCode();
         }
-
     }
 }
