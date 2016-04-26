@@ -18,7 +18,17 @@ namespace Spg.TreeEdit.Node
         /// Gets the children.
         /// </summary>
         /// <value>The children.</value>
-        IEnumerable<ITreeNode<T>> Children { get; }
+        List<ITreeNode<T>> Children { get; set; }
+
+        /// <summary>
+        /// Gets the children.
+        /// </summary>
+        /// <value>The children.</value>
+        List<ITreeNode<T>> GetDescendantsNodes();
+
+        void AddChild(ITreeNode<T> child, int k);
+
+        void RemoveNode(int k);
 
     }
 }

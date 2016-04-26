@@ -181,6 +181,16 @@ namespace ProseSample.Substrings
             return null;
         }
 
+        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, SyntaxNodeOrToken to)
+        {
+            return null;
+        }
+
+        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, MatchResult from)
+        {
+            return null;
+        }
+
         public static MatchResult Abstract(SyntaxNodeOrToken node, SyntaxKind kind, int k)
         {
             var currentTree = GetCurrentTree(node).AsNode();

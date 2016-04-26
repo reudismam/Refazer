@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Spg.TreeEdit.Node
 {
@@ -8,17 +9,23 @@ namespace Spg.TreeEdit.Node
     /// <typeparam name="T">Node type</typeparam>
     public class TreeNode<T> : ITreeNode<T>
     {
-        private readonly ITreeNode<T>[] _children;
+        private List<ITreeNode<T>> _children;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TreeNode&lt;T&gt;"/> class.
+        /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="children">The children.</param>
-        public TreeNode(T value, params ITreeNode<T>[] children)
+        public TreeNode(T value, List<ITreeNode<T>> children)
         {
             Value = value;
-            _children = children ?? new ITreeNode<T>[0];
+            _children = children;
+        }
+
+        public TreeNode(T value)
+        {
+            Value = value;
+            _children = new List<ITreeNode<T>>();
         }
 
         /// <summary>
@@ -27,29 +34,59 @@ namespace Spg.TreeEdit.Node
         /// <value>The value.</value>
         public T Value { get; set; }
 
-        /// <summary>
-        /// Gets the children.
-        /// </summary>
-        /// <value>The children.</value>
-        public IList<ITreeNode<T>> Children
+
+        List<ITreeNode<T>> ITreeNode<T>.Children
         {
-            get
-            {
-                return _children;
-            }
+            get { return _children; }
+
+            set { _children = value; }
         }
 
-        /// <summary>
-        /// Gets the children.
-        /// </summary>
-        /// <value>The children.</value>
-        IEnumerable<ITreeNode<T>> ITreeNode<T>.Children
+        public List<ITreeNode<T>> GetDescendantsNodes()
         {
-            get
+            var list = new List<ITreeNode<T>>();
+
+            if (!_children.Any())
             {
-                return _children;
+                return list;
             }
+
+            foreach (var item in _children)
+            {
+                list.Add(item);
+                list.AddRange(item.GetDescendantsNodes());
+            }
+
+            return list;
         }
+
+        public void AddChild(ITreeNode<T> child, int k)
+        {
+            _children.Insert(k, child);
+        }
+
+
+        public void RemoveNode(int k)
+        {
+            _children.RemoveAt(k);
+        }
+
+        ///// <summary>
+        ///// Gets the children.
+        ///// </summary>
+        ///// <value>The children.</value>
+        //List<ITreeNode<T>> ITreeNode<T>.Children
+        //{
+        //    get
+        //    {
+        //        return _children;
+        //    }
+
+        //    set
+        //    {
+        //        _children = value;
+        //    }
+        //}
 
         /// <summary>
         /// String representation of this object

@@ -1,33 +1,58 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.CodeAnalysis;
 
-//namespace Spg.TreeEdit.Node
-//{
-//    class ConverterHelper
-//    {
+namespace Spg.TreeEdit.Node
+{
+    public class ConverterHelper
+    {
 
-//        /// <summary>
-//        /// Convert a syntax tree to a TreeNode
-//        /// </summary>
-//        /// <param name="st">Syntax tree root</param>
-//        /// <returns>TreeNode</returns>
-//        private TreeNode<SyntaxNodeOrToken> _ConvertToTreeNode(SyntaxNodeOrToken st)
-//        {
-//            if (st.AsNode() == null st == 0)
-//            {
-//                return new TreeNode<SyntaxNodeOrToken>(st);
-//            }
+        /// <summary>
+        /// Convert a syntax tree to a TreeNode
+        /// </summary>
+        /// <param name="st">Syntax tree root</param>
+        /// <returns>TreeNode</returns>
+        public static ITreeNode<SyntaxNodeOrToken> ConvertCSharpToTreeNode(SyntaxNodeOrToken st)
+        {
+            var list = st.AsNode().ChildNodes();
+            if (!list.Any())
+            {
+                return new TreeNode<SyntaxNodeOrToken>(st);
+            }
 
-//            List<TreeNode<SyntaxNodeOrToken>> children = new List<TreeNode<SyntaxNodeOrToken>>();
-//            foreach (SyntaxNodeOrToken sot in st.ChildNodesAndTokens())
-//            {
-//                TreeNode<SyntaxNodeOrToken> node = _ConvertToTreeNode(sot);
-//                children.Add(node);
-//            }
+            List<ITreeNode<SyntaxNodeOrToken>> children = new List<ITreeNode<SyntaxNodeOrToken>>();
+            foreach (SyntaxNodeOrToken sot in st.AsNode().ChildNodes())
+            {
+                ITreeNode<SyntaxNodeOrToken> node = ConvertCSharpToTreeNode(sot);
+                children.Add(node);
+            }
 
-//           TreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st, children.ToArray());
-//            return tree;
-//        }
-//    }
-//}
+            ITreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st, children);
+            return tree;
+        }
+
+        public static SyntaxNodeOrToken ConvertTreeNodeToCSsharp(ITreeNode<SyntaxNodeOrToken> treeNode)
+        {
+            return null;
+        }
+
+        public static ITreeNode<SyntaxNodeOrToken> MakeACopy(ITreeNode<SyntaxNodeOrToken> st)
+        {
+            var list = st.Children;
+            if (!list.Any())
+            {
+                return new TreeNode<SyntaxNodeOrToken>(st.Value);
+            }
+
+            List<ITreeNode<SyntaxNodeOrToken>> children = new List<ITreeNode<SyntaxNodeOrToken>>();
+            foreach (ITreeNode<SyntaxNodeOrToken> sot in st.Children)
+            {
+                ITreeNode<SyntaxNodeOrToken> node = MakeACopy(sot);
+                children.Add(node);
+            }
+
+            ITreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st.Value, children);
+            return tree;
+        }
+    }
+}

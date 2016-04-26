@@ -54,15 +54,16 @@ namespace ProseSample
 
             //engine.Configuration.LogListener.SaveLogToXML("learning.log.xml");
 
+            var topK = consistentPrograms.TopK("Score").ToList().GetRange(0, 10);
             string programs = "";
-            foreach (ProgramNode p in consistentPrograms.RealizedPrograms.ToList().GetRange(consistentPrograms.RealizedPrograms.Count() - 1000, 1000))
+            foreach (ProgramNode p in topK)
             {
                 programs += p.ToString() + "\n\n";
                 Console.WriteLine(p + "\n");
             }
 
             File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
-            ProgramNode bestProgram = consistentPrograms.RealizedPrograms.Last();
+            ProgramNode bestProgram = topK.Last();
             if (bestProgram == null)
             {
                 WriteColored(ConsoleColor.Red, "No program :(");
@@ -73,6 +74,8 @@ namespace ProseSample
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
             return bestProgram;
         }
+
+        
 
         #region Auxiliary methods
 
