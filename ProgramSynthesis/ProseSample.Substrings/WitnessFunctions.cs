@@ -383,7 +383,6 @@ namespace ProseSample.Substrings
                 {
                     Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m;
                     var script = Script(inpTree, outTree, out m);
-                    //script = script.GetRange(0, 9);
 
                     TreeUpdate treeUp = new TreeUpdate();
                     treeUp.PreProcessTree(script, inpTree);
@@ -490,8 +489,9 @@ namespace ProseSample.Substrings
                     var treeUp = TreeUpdateDictionary[input];
                     matches.Add(update.To);
 
+                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = treeUp.CurrentTree;
+                    CurrentTrees[key] = previousTree; //treeUp.CurrentTree;
                 }
                 kExamples[input] = matches;
             }
@@ -551,8 +551,9 @@ namespace ProseSample.Substrings
                     var treeUp = TreeUpdateDictionary[input];
                     matches.Add(editOperation.T1Node);
 
+                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = treeUp.CurrentTree;
+                    CurrentTrees[key] = previousTree; //treeUp.CurrentTree;
                 }
                 kExamples[input] = matches;
             }
@@ -683,8 +684,9 @@ namespace ProseSample.Substrings
                     var treeUp = TreeUpdateDictionary[input];             
                     matches.Add(editOperation.T1Node);
 
+                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = treeUp.CurrentTree;
+                    CurrentTrees[key] = previousTree; //treeUp.CurrentTree;
                 }
                 kExamples[input] = matches;
             }
