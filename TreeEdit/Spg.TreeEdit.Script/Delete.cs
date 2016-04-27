@@ -1,10 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Script
 {
-    public class Delete: EditOperation
+    public class Delete<T>: EditOperation<T>
     {
-        public Delete(SyntaxNodeOrToken deletedNode) : base(deletedNode, null, -1)
+        public Delete(ITreeNode<T> deletedNode) : base(deletedNode, null, -1)
         {
         }
 

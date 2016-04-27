@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using Spg.TreeEdit.Node;
 using TreeEdit.Spg.TreeEdit.Mapping;
 
 namespace TreeEdit.Spg.TreeEdit.Isomorphic
 {
-    public class IsomorphicManager
+    public class IsomorphicManager<T>
     {
 
-        public static bool IsIsomorphic(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)
+        public static bool IsIsomorphic(ITreeNode<T> t1, ITreeNode<T> t2)
         {
             return AhuTreeIsomorphism(t1, t2);
         }
 
-        public static bool AhuTreeIsomorphism(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)
+        public static bool AhuTreeIsomorphism(ITreeNode<T> t1, ITreeNode<T> t2)
         {
-            TreeAlignment talg = new TreeAlignment();
-            Dictionary<SyntaxNodeOrToken, string> dict1 = talg.align(t1);
-            Dictionary<SyntaxNodeOrToken, string> dict2 = talg.align(t2);
+            var talg = new TreeAlignment<T>();
+            Dictionary<ITreeNode<T>, string> dict1 = talg.align(t1);
+            Dictionary<ITreeNode<T>, string> dict2 = talg.align(t2);
 
             if (dict1[t1].Equals(dict2[t2]))
             {
@@ -30,10 +26,10 @@ namespace TreeEdit.Spg.TreeEdit.Isomorphic
             return false;
         }
 
-        public static Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> AllPairOfIsomorphic(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)
+        public static Dictionary<ITreeNode<T>, ITreeNode<T>> AllPairOfIsomorphic(ITreeNode<T> t1, ITreeNode<T> t2)
         {
-            IsomorphicPairs pairs = new IsomorphicPairs();
-            Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> ps = pairs.pairs(t1, t2);
+            var pairs = new IsomorphicPairs<T>();
+            Dictionary<ITreeNode<T>, ITreeNode<T>> ps = pairs.Pairs(t1, t2);
 
             return ps;
         }

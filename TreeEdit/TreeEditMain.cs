@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System;
+using Spg.TreeEdit.Node;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -69,11 +70,14 @@ namespace TreeEdit
             //var comparer = new CSharpTreeComparer();
             //var treeEdits = comparer.ComputeEditScript(inpTree.AsNode(), outTree.AsNode());
 
-            ITreeMapping mapping = new GumTreeMapping();
-            var M = mapping.Mapping(inpTree, outTree);
+            var inpNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
+            var outNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
+            var mapping = new GumTreeMapping<SyntaxNodeOrToken>();
+            var M = mapping.Mapping(inpNode, outNode);
 
-            var generator = new EditScriptGenerator();
-            var script = generator.EditScript(inpTree, outTree, M);
+            var generator = new EditScriptGenerator<SyntaxNodeOrToken>();
+            
+            var script = generator.EditScript(inpNode, outNode, M);
 
             TreeUpdate update = new TreeUpdate();
             update.UpdateTree(script, inpTree/*, M*/);

@@ -1,21 +1,19 @@
 ﻿using C5;
-using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.PQ
 {
-    public class PriorityQueue
+    public class PriorityQueue<T>
     {
-        public IPriorityQueue<Tuple<int, SyntaxNodeOrToken>> pq { get; set; }
+        public IPriorityQueue<Tuple<int, ITreeNode<T>>> pq { get; set; }
 
         public PriorityQueue()
         {
             var comp = new ComparerHeap();
-            pq = new IntervalHeap<Tuple<int, SyntaxNodeOrToken>>(comp);
+            pq = new IntervalHeap<Tuple<int, ITreeNode<T>>>(comp);
         }
 
         public int PeekMax()
@@ -25,27 +23,19 @@ namespace TreeEdit.Spg.TreeEdit.PQ
             return pq.FindMax().Item1;
         }
 
-        public void Push(SyntaxNodeOrToken t)
+        public void Push(ITreeNode<T> t)
         {
-            SyntaxNode sn = t.AsNode();
-
-            if (sn == null) return;
-
             int h = Height(t);
-            Tuple<int, SyntaxNodeOrToken> tuple = Tuple.Create(h, t);
+            Tuple<int, ITreeNode<T>> tuple = Tuple.Create(h, t);
             pq.Add(tuple);
         }
 
-        public int Height(SyntaxNodeOrToken t)
+        public int Height(ITreeNode<T> t)
         {
-            SyntaxNode sn = t.AsNode();
-
-            //if (sn == null) return 0;
-
-            if (!sn.ChildNodes().Any()) return 1;
+            if (!t.Children.Any()) return 1;
 
             int max = 0;
-            foreach(var i in sn.ChildNodes())
+            foreach (var i in t.Children)
             {
                 max = Math.Max(max, Height(i));
             }
@@ -53,28 +43,21 @@ namespace TreeEdit.Spg.TreeEdit.PQ
             return 1 + max;
         }
 
-        public void Open(SyntaxNodeOrToken t1)
+        public void Open(ITreeNode<T> t1)
         {
-            foreach (var item in t1.ChildNodesAndTokens())
+            foreach (var item in t1.Children)
             {
-                if (item.AsNode() != null)
-                {
-                    SyntaxNode sn = item.AsNode();
-                    Push(item);
-                    //int dsc = sn.DescendantNodes().Count();
-                    //Tuple<int, SyntaxNodeOrToken> t = Tuple.Create(dsc, item);
-                    //pq.Add(t);
-                }
+                Push(item);
             }
         }
 
-        public List<Tuple<int, SyntaxNodeOrToken>> Pop()
+        public List<Tuple<int, ITreeNode<T>>> Pop()
         {
-            Tuple<int, SyntaxNodeOrToken> t = pq.FindMax();
+            Tuple<int, ITreeNode<T>> t = pq.FindMax();
             int top = t.Item1;
 
-            List<Tuple<int, SyntaxNodeOrToken>> l = new List<Tuple<int, SyntaxNodeOrToken>>();
-            while(t.Item1 == top)
+            List<Tuple<int, ITreeNode<T>>> l = new List<Tuple<int, ITreeNode<T>>>();
+            while (t.Item1 == top)
             {
                 l.Add(t);
                 pq.DeleteMax();
@@ -92,9 +75,9 @@ namespace TreeEdit.Spg.TreeEdit.PQ
             return l;
         }
 
-        class ComparerHeap : IComparer<Tuple<int, SyntaxNodeOrToken>>
+        class ComparerHeap : IComparer<Tuple<int, ITreeNode<T>>>
         {
-            public int Compare(Tuple<int, SyntaxNodeOrToken> x, Tuple<int, SyntaxNodeOrToken> y)
+            public int Compare(Tuple<int, ITreeNode<T>> x, Tuple<int, ITreeNode<T>> y)
             {
                 if (x.Item1 > y.Item1) return 1;
 

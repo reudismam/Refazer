@@ -214,7 +214,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("EList", 0)]
         public static DisjunctiveExamplesSpec WitnessEList1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<EditOperation>.List0(rule, parameter, spec);
+            return GList<EditOperation<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("EList", 1)]
         public static DisjunctiveExamplesSpec WitnessEList2(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<EditOperation>.List1(rule, parameter, spec);
+            return GList<EditOperation<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("SE", 0)]
         public static DisjunctiveExamplesSpec WitnessSeChild1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<EditOperation>.Single(rule, parameter, spec);
+            return GList<EditOperation<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace ProseSample.Substrings
         /// <returns>Matched nodes</returns>
         private static List<SyntaxNodeOrToken> Matches(ITreeNode<SyntaxNodeOrToken> inpTree, MatchResult matchResult)
         {
-            var descendants = inpTree.GetDescendantsNodes();
+            var descendants = inpTree.DescendantNodes();
             var sot = matchResult.match.Item1;
             var matches = from item in descendants
                           where item.Value.IsKind(sot.Kind()) && item.ToString().Equals(sot.ToString())
@@ -267,7 +267,7 @@ namespace ProseSample.Substrings
         /// <returns>Abstract match</returns>
         private static List<SyntaxNodeOrToken> MatchesAbstract(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
         {
-            var matches = from item in inpTree.GetDescendantsNodes()
+            var matches = from item in inpTree.DescendantNodes()
                           where item.Value.IsKind(kind)
                           select item.Value;
             return matches.ToList();
@@ -379,7 +379,7 @@ namespace ProseSample.Substrings
                 var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
-                    Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m;
+                    Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
                     var script = Script(inpTree, outTree, out m);
 
                     TreeUpdate treeUp = new TreeUpdate();
@@ -410,12 +410,12 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation editOperation in spec.DisjunctiveExamples[input])
+                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
-                    if (!(editOperation is Delete)) return null;
+                    if (!(editOperation is Delete<SyntaxNodeOrToken>)) return null;
 
                     var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from })));
+                    var result = new MatchResult(Tuple.Create(from.Value, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
                     matches.Add(result);
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
@@ -445,12 +445,12 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation editOperation in spec.DisjunctiveExamples[input])
+                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
-                    if (!(editOperation is Update)) return null;
+                    if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
 
                     var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from })));
+                    var result = new MatchResult(Tuple.Create(from.Value, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
                     matches.Add(result);
                 }
 
@@ -476,11 +476,11 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation editOperation in spec.DisjunctiveExamples[input])
+                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
-                    if (!(editOperation is Update)) return null;
+                    if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
 
-                    var update = (Update)editOperation;
+                    var update = (Update<SyntaxNodeOrToken>)editOperation;
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
                     var treeUp = TreeUpdateDictionary[input];
                     matches.Add(update.To);
@@ -539,9 +539,9 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation editOperation in spec.DisjunctiveExamples[input])
+                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
-                    if (!(editOperation is Move)) return null;
+                    if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
                     var treeUp = TreeUpdateDictionary[input];
@@ -562,9 +562,9 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation editOperation in spec.DisjunctiveExamples[input])
+                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
-                    if (!(editOperation is Move)) return null;
+                    if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                     AddMatchesMove(matches, parameter, editOperation);
                 }
@@ -575,7 +575,7 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
-        private static void AddMatchesMove(List<object> matches, int parameter, EditOperation editOperation)
+        private static void AddMatchesMove(List<object> matches, int parameter, EditOperation<SyntaxNodeOrToken> editOperation)
         {
             if (parameter == 1)
             {
@@ -584,9 +584,9 @@ namespace ProseSample.Substrings
 
             if (parameter == 2)
             {
-                Move move = (Move) editOperation;
+                var move = (Move<SyntaxNodeOrToken>) editOperation;
                 var from = move.T1Node;
-                var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from })));
+                var result = new MatchResult(Tuple.Create(from.Value, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
 
                 matches.Add(result);
             }
@@ -626,9 +626,9 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation editOperation in spec.DisjunctiveExamples[input])
+                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
-                    if (!(editOperation is Insert)) return null;
+                    if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                     AddMatchesInsert(matches, parameter, editOperation);
                 }
@@ -639,7 +639,7 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
-        private static void AddMatchesInsert(List<object> matches, int parameter, EditOperation editOperation)
+        private static void AddMatchesInsert(List<object> matches, int parameter, EditOperation<SyntaxNodeOrToken> editOperation)
         {
             if (parameter == 1)
             {
@@ -649,7 +649,7 @@ namespace ProseSample.Substrings
             if (parameter == 2)
             {
                 var parent = editOperation.Parent;
-                var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent })));
+                var result = new MatchResult(Tuple.Create(parent.Value, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
 
                 matches.Add(result);
             }
@@ -672,9 +672,9 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation editOperation in spec.DisjunctiveExamples[input])
+                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
-                    if (!(editOperation is Insert)) return null;
+                    if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
                     var treeUp = TreeUpdateDictionary[input];             
@@ -841,13 +841,16 @@ namespace ProseSample.Substrings
         /// <param name="outTree">Output tree</param>
         /// <param name="m">out Mapping</param>
         /// <returns>Computed edit script</returns>
-        private static List<EditOperation> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree, out Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> m)
+        private static List<EditOperation<SyntaxNodeOrToken>> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree, out Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m)
         {
-            ITreeMapping mapping = new GumTreeMapping();
-            m = mapping.Mapping(inpTree, outTree);
+            var mapping = new GumTreeMapping<SyntaxNodeOrToken>();
 
-            var generator = new EditScriptGenerator();
-            var script = generator.EditScript(inpTree, outTree, m);
+            var inpNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
+            var outNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
+            m = mapping.Mapping(inpNode, outNode);
+
+            var generator = new EditScriptGenerator<SyntaxNodeOrToken>();
+            var script = generator.EditScript(inpNode, outNode, m);
             return script;
         }
 

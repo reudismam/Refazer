@@ -1,39 +1,32 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System.Collections.Generic;
+//using Spg.TreeEdit.Node;
 
-namespace TreeEdit.Spg.TreeEdit.Mapping
-{
-    public class TreeTraversal
-    {
-        public List<SyntaxNodeOrToken> List;
+//namespace TreeEdit.Spg.TreeEdit.Mapping
+//{
+//    public class TreeTraversal<T>
+//    {
+//        public List<ITreeNode<T>> List;
 
-        public SyntaxNodeOrToken Root;
+//        public ITreeNode<T> Root;
 
-        public List<SyntaxNodeOrToken> PostOrderTraversal(SyntaxNodeOrToken t)
-        {
-            List = new List<SyntaxNodeOrToken>();
+//        public List<ITreeNode<T>> PostOrderTraversal(ITreeNode<T> t)
+//        {
+//            List = new List<ITreeNode<T>>();
 
-            PostOrder(t);
+//            PostOrder(t);
 
-            return List;
-        }
+//            return List;
+//        }
 
-        private void PostOrder(SyntaxNodeOrToken t)
-        {
-            SyntaxNode sn = t.AsNode();
+//        private void PostOrder(ITreeNode<T> t)
+//        {
 
-            if (sn == null) return;
+//            foreach(var ch in t.Children)
+//            {
+//                PostOrder(ch);
+//            }
 
-            foreach(var ch in sn.ChildNodes())
-            {
-                PostOrder(ch);
-            }
-
-            List.Add(sn);
-        }
-    }
-}
+//            List.Add(t);
+//        }
+//    }
+//}

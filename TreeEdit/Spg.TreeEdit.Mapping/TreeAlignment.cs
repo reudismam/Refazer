@@ -1,63 +1,55 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
 {
-    class TreeAlignment
+    class TreeAlignment<T>
     {
-        Dictionary<SyntaxNodeOrToken, string> dict;
+        Dictionary<ITreeNode<T>, string> _dict;
 
-        public TreeAlignment()
+        private void KnuthAssignCanonicalName(ITreeNode<T> t1)
         {
-        }
-
-        private void KnuthAssignCanonicalName(SyntaxNodeOrToken t1)
-        {
-            SyntaxNode root = t1.AsNode();
+            var root = t1;
             if (root == null) return;
-            if (!dict.ContainsKey(root)) dict.Add(root, "");
+            if (!_dict.ContainsKey(root)) _dict.Add(root, "");
 
-            if (!root.ChildNodes().Any())
+            if (!root.Children.Any())
             {
-                dict[root] = "1" + root.ToString() + "0";
+                _dict[root] = "1" + root + "0";
                 return;
             }
             else
             {
-                foreach (var child in root.ChildNodes())
+                foreach (var child in root.Children)
                 {
                     KnuthAssignCanonicalName(child);
                 }
             }
 
             List<string> children = new List<string>();
-            foreach (var child in root.ChildNodes())
+            foreach (var child in root.Children)
             {
-                children.Add(dict[child]);
+                children.Add(_dict[child]);
             }
 
             children = children.OrderBy(o => o).ToList();
 
-            string label = "1" + root.Kind();
+            string label = "1" + root.Label;
             foreach (var child in children)
             {
                 label += child;
             }
-            label += "0" + root.Kind();
+            label += "0" + root.Label;
 
-            dict[root] = label;
+            _dict[root] = label;
         }
 
-        public Dictionary<SyntaxNodeOrToken, string> align(SyntaxNodeOrToken t)
+        public Dictionary<ITreeNode<T>, string> align(ITreeNode<T> t)
         {
-            dict = new Dictionary<SyntaxNodeOrToken, string>();
+            _dict = new Dictionary<ITreeNode<T>, string>();
             KnuthAssignCanonicalName(t);
-            return dict;
+            return _dict;
         }
     }
 }

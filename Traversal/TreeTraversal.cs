@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.CodeAnalysis;
+using System.Collections.Generic;
 using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
@@ -7,7 +8,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
     {
         public List<ITreeNode<T>> List;
 
-        public ITreeNode<T> Root;
+        public SyntaxNodeOrToken Root;
 
         public List<ITreeNode<T>> PostOrderTraversal(ITreeNode<T> t)
         {
@@ -21,7 +22,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         private void PostOrder(ITreeNode<T> t)
         {
 
-            foreach (var ch in t.Children)
+            foreach(var ch in t.Children)
             {
                 PostOrder(ch);
             }

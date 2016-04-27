@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.CodeAnalysis.Text;
+using Spg.TreeEdit.Node;
 using TreeEdit.Spg.TreeEdit.Isomorphic;
+using Tutor.Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Script
 {
@@ -56,7 +59,9 @@ namespace TreeEdit.Spg.TreeEdit.Script
 
         protected override bool TreesEqual(SyntaxNode oldNode, SyntaxNode newNode)
         {
-            return IsomorphicManager.AhuTreeIsomorphism(oldNode, newNode);
+            var oldTree = new TreeNode<SyntaxNodeOrToken>(oldNode, new TLabel(oldNode.Kind()));
+            var newTree = new TreeNode<SyntaxNodeOrToken>(newNode, new TLabel(newNode.Kind()));
+            return IsomorphicManager<SyntaxNodeOrToken>.AhuTreeIsomorphism(oldTree, newTree);
         }
 
         protected override TextSpan GetSpan(SyntaxNode node)

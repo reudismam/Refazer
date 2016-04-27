@@ -1,18 +1,18 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Script
 {
-    public abstract class EditOperation
+    public abstract class EditOperation<T>
     {
         /// <summary>
         /// Parent node associated to this edit operation
         /// </summary>
-        public SyntaxNodeOrToken Parent { get; set; }
+        public ITreeNode<T> Parent { get; set; }
 
         /// <summary>
         /// Node in the source tree associated to this edit operation
         /// </summary>
-        public SyntaxNodeOrToken T1Node { get; set; }
+        public ITreeNode<T> T1Node { get; set; }
 
         /// <summary>
         /// index associated to this edit operation
@@ -25,7 +25,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <param name="movedNode">Node in source (t1) tree</param>
         /// <param name="parent">Parent of t1 node</param>
         /// <param name="k">Position associated to this edit operation</param>
-        protected EditOperation(SyntaxNodeOrToken movedNode, SyntaxNodeOrToken parent, int k)
+        protected EditOperation(ITreeNode<T> movedNode, ITreeNode<T> parent, int k)
         {
             Parent = parent;
             T1Node = movedNode;

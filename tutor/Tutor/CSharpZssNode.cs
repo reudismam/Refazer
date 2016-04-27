@@ -2,31 +2,33 @@
 using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Linq;
+using Spg.TreeEdit.Node;
+using TreeEdit.Spg.TreeEdit.Mapping;
 
 namespace Tutor
 {
-    public class CSharpZssNode : ZssNode<SyntaxNodeOrToken>
+    public class CSharpZssNode<T> : ZssNode<ITreeNode<T>>
     {
 
-        public CSharpZssNode(SyntaxNodeOrToken inode)
+        public CSharpZssNode(ITreeNode<T> inode)
         {
             InternalNode = inode;
-            Label = inode.Kind().ToString();
+            Label = inode.ToString();
         }
 
-        public override ZssNode<SyntaxNodeOrToken> GetLeftMostDescendant()
+        public override ZssNode<ITreeNode<T>> GetLeftMostDescendant()
         {
-            TreeTraversal traversal = new TreeTraversal();
+            var traversal = new TreeTraversal<T>();
             var list = traversal.PostOrderTraversal(InternalNode);
 
             if (!list.Any()) throw new Exception("tree must have a left most descendant");
 
-            return new CSharpZssNode(list.First());
+            return new CSharpZssNode<T>(list.First());
         }
 
-        public override bool Similar(ZssNode<SyntaxNodeOrToken> other)
+        public override bool Similar(ZssNode<ITreeNode<T>> other)
         {
-            bool isEqual = InternalNode.IsKind(other.InternalNode.Kind()) && InternalNode.ToString().Equals(other.InternalNode.ToString());
+            bool isEqual = InternalNode.IsLabel(other.InternalNode.Label) && InternalNode.ToString().Equals(other.InternalNode.ToString());
             return isEqual;
         }
 
@@ -35,7 +37,7 @@ namespace Tutor
             return Label + "- (" + InternalNode + ")";
         }
 
-        protected bool Equals(CSharpZssNode other)
+        protected bool Equals(CSharpZssNode<T> other)
         {
             return string.Equals(Label, other.Label) && Equals(InternalNode, other.InternalNode);
         }
@@ -45,7 +47,7 @@ namespace Tutor
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((CSharpZssNode)obj);
+            return Equals((CSharpZssNode<T>)obj);
         }
 
         public override int GetHashCode()

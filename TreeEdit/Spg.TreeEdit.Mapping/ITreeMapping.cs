@@ -1,14 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
 {
-    public interface ITreeMapping
+    public interface ITreeMapping<T>
     {
-        Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> Mapping(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2);
+        Dictionary<ITreeNode<T>, ITreeNode<T>> Mapping(ITreeNode<T> t1, ITreeNode<T> t2);
     }
 }

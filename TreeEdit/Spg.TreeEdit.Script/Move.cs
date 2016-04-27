@@ -1,9 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Script
 {
-    public class Move : EditOperation
+    public class Move<T> : EditOperation<T>
     {
         /// <summary>
         /// Create a move operation
@@ -11,7 +12,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <param name="movedNode">Moved node</param>
         /// <param name="parent">Parent where the node will go.</param>
         /// <param name="k">Position of this node in the parent</param>
-        public Move(SyntaxNodeOrToken movedNode, SyntaxNodeOrToken parent, int k) : base(movedNode, parent, k)
+        public Move(ITreeNode<T> movedNode, ITreeNode<T> parent, int k) : base(movedNode, parent, k)
         {
         }
 
@@ -21,7 +22,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <returns>Strring representation</returns>
         public override string ToString()
         {
-            return "Move(" + T1Node.Kind() + " to " + Parent.Kind() + ", " + K + ")";
+            return "Move(" + T1Node.Label + " to " + Parent.Label + ", " + K + ")";
         }
 
     }

@@ -1,9 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Script
 {
-    public class Insert : EditOperation
+    public class Insert<T>: EditOperation<T>
     {
         /// <summary>
         /// Construct a new insert object
@@ -11,7 +12,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <param name="insertedNode">Node that will be inserted</param>
         /// <param name="parent">Parent of the node that will be inserted</param>
         /// <param name="k">Position where the node will be inserted</param>
-        public Insert(SyntaxNodeOrToken insertedNode, SyntaxNodeOrToken parent, int k) : base(insertedNode, parent, k)
+        public Insert(ITreeNode<T> insertedNode, ITreeNode<T> parent, int k) : base(insertedNode, parent, k)
         {
         }
 
@@ -21,7 +22,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <returns></returns>
         public override string ToString()
         {
-            return "Insert(" + T1Node.Kind() + ", " + Parent.Kind() + ", " + K + ")";
+            return "Insert(" + T1Node.Label + ", " + Parent.Label + ", " + K + ")";
         }
     }
 }

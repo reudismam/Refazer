@@ -1,13 +1,11 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Spg.TreeEdit.Node;
 using TreeEdit.Spg.TreeEdit.Mapping;
 
 namespace TreeEdit.Spg.TreeEdit.Script
 {
-    public class EditScriptGenerator
+    public class EditScriptGenerator<T>
     {
         /// <summary>
         /// Create an edit script
@@ -16,11 +14,12 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <param name="t2">Target tree</param>
         /// <param name="M">Mapping between source and target tree nodes</param>
         /// <returns></returns>
-        public List<EditOperation> EditScript(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
+        public List<EditOperation<T>> EditScript(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
-            var editScript = new List<EditOperation>();
-            var bfs = BreadFirstSearch(t2.AsNode());
-
+            var editScript = new List<EditOperation<T>>();
+            var bfs = BreadFirstSearch(t2);
+            //Obs: we do not need to apply transformation as described in the paper because
+            //we don't use t1 in the process.
             foreach (var x in bfs)
             {
                 //Combines the update, insert, align, and move phases
@@ -28,33 +27,27 @@ namespace TreeEdit.Spg.TreeEdit.Script
                 var z = M.ToList().Find(o => o.Value.Equals(y)).Key;
                 var w = M.ToList().Find(o => o.Value.Equals(x)).Key;
 
-                if (w.IsKind(SyntaxKind.None))
+                if (w == null)
                 {
-                    //if (y.IsKind(z.Parent.Kind()))
-                    //{
-                        Console.WriteLine();
-                        int k = FindPos(x, M);
-                        Insert insert = new Insert(x, z, k);
-                        M.Add(x, x);
-                        editScript.Add(insert);
-                    //}
+                    int k = FindPos(x, M);
+                    var insert = new Insert<T>(x, z, k);
+                    M.Add(x, x);
+                    editScript.Add(insert);
                 }
                 else //x has a partner in M
                 {
                     var v = w.Parent;
-                    if (!w.AsNode().ChildNodes().Any() && !w.ToString().Equals(x.ToString()))
+                    if (!w.Children.Any() && !w.ToString().Equals(x.ToString()))
                     {
-                        Update update = new Update(w, x, z);
+                        var update = new Update<T>(w, x, z);
                         editScript.Add(update);
                     }
 
-                    //var vmap = M.ToList().Find(o => o.Value.Equals(y)).Key;
-                    if (z.IsKind(SyntaxKind.None) || !z.Equals(v))
-                    {
-                        Console.WriteLine();
 
+                    if (z == null || !z.Equals(v))
+                    {
                         int k = FindPos(x, M);
-                        Move move = new Move(w, z, k);
+                        var move = new Move<T>(w, z, k);
                         editScript.Add(move);
                     }
                 }
@@ -62,14 +55,14 @@ namespace TreeEdit.Spg.TreeEdit.Script
                 //AlignChildren(x, w);   
             }
 
-            var traversal = new TreeTraversal();
+            var traversal = new TreeTraversal<T>();
             var nodes = traversal.PostOrderTraversal(t1); //the delete phase
 
             foreach (var w in nodes)
             {
                 if (!M.ContainsKey(w))
                 {
-                    Delete delete = new Delete(w);
+                    var delete = new Delete<T>(w);
                     editScript.Add(delete);
                 }
             }
@@ -82,31 +75,29 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <param name="w">w is the patner of x (w in T1)</param>
         /// <param name="x">Node in t2</param>
         /// <returns>Index to be updated</returns>
-        private int FindPos(SyntaxNodeOrToken x, Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> M)
+        private int FindPos(ITreeNode<T> x, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
-            SyntaxNode y = x.Parent; SyntaxNodeOrToken w = M.ToList().Find(o => o.Value.Equals(x)).Key;
+            ITreeNode<T> y = x.Parent; ITreeNode<T> w = M.ToList().Find(o => o.Value.Equals(x)).Key;
 
-            SyntaxNodeOrToken firstChild = y.ChildNodes().ElementAt(0);
+            ITreeNode<T> firstChild = y.Children.ElementAt(0);
 
             if (firstChild.Equals(x)) return 1;
 
-            SyntaxNodeOrToken v = null;
-            foreach (SyntaxNodeOrToken c in y.ChildNodes())
+            ITreeNode<T> v = null;
+            foreach (ITreeNode<T> c in y.Children)
             {
                 if (c.Equals(x))
                 {
                     break;
                 }
-                else
-                {
-                    v = c;
-                }
+
+                v = c;
             }
 
-            SyntaxNodeOrToken u = M.ToList().Find(o => o.Value.Equals(v)).Key;//Mline.Values.ToList().Find(o => o.Equals(x));
+            ITreeNode<T> u = M.ToList().Find(o => o.Value.Equals(v)).Key;//Mline.Values.ToList().Find(o => o.Equals(x));
 
             int count = 1;
-            foreach (SyntaxNodeOrToken c in u.Parent.ChildNodes())
+            foreach (ITreeNode<T> c in u.Parent.Children)
             {
                 if (c.Equals(u)) return count + 1;
 
@@ -121,18 +112,18 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// </summary>
         /// <param name="u">Node to be traversed</param>
         /// <returns></returns>
-        private List<SyntaxNodeOrToken> BreadFirstSearch(SyntaxNode u)
+        private List<ITreeNode<T>> BreadFirstSearch(ITreeNode<T> u)
         {
-            var result = new List<SyntaxNodeOrToken>();
-            var dist = new Dictionary<SyntaxNode, int>(); dist[u] = 0;
-            var q = new Queue<SyntaxNode>();
+            var result = new List<ITreeNode<T>>();
+            var dist = new Dictionary<ITreeNode<T>, int> { [u] = 0 };
+            var q = new Queue<ITreeNode<T>>();
             q.Enqueue(u);
 
             while (q.Any())
             {
-                SyntaxNode v = q.Dequeue();
+                ITreeNode<T> v = q.Dequeue();
 
-                foreach (var c in v.ChildNodes())
+                foreach (var c in v.Children)
                 {
                     if (!dist.ContainsKey(c))
                     {

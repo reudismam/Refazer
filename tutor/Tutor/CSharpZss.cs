@@ -1,23 +1,20 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tutor;
+using Spg.TreeEdit.Node;
+using TreeEdit.Spg.TreeEdit.Mapping;
 
 namespace Tutor
 {
-    public class CSharpZss : Zss<SyntaxNodeOrToken>
+    public class CSharpZss<T> : Zss<ITreeNode<T>>
     {
         
-        public CSharpZss(SyntaxNodeOrToken previousTree, SyntaxNodeOrToken currentTree) : base(previousTree,currentTree)
+        public CSharpZss(ITreeNode<T> previousTree, ITreeNode<T> currentTree) : base(previousTree,currentTree)
         {
         }
 
-        protected override void GenerateNodes(SyntaxNodeOrToken t1, SyntaxNodeOrToken t2)
+        protected override void GenerateNodes(ITreeNode<T> t1, ITreeNode<T> t2)
         {
-            TreeTraversal traversal = new TreeTraversal();
+            TreeTraversal<T> traversal = new TreeTraversal<T>();
             var l1 = traversal.PostOrderTraversal(t1);
             var l2 = traversal.PostOrderTraversal(t2);
 
@@ -30,12 +27,12 @@ namespace Tutor
             return;
         }
 
-        private List<ZssNode<SyntaxNodeOrToken>> ConvertToZZ(List<SyntaxNodeOrToken> list)
+        private List<ZssNode<ITreeNode<T>>> ConvertToZZ(List<ITreeNode<T>> list)
         {
-            var zzlist = new List<ZssNode<SyntaxNodeOrToken>>();
+            var zzlist = new List<ZssNode<ITreeNode<T>>>();
             foreach (var i in list)
             {
-                var node = new CSharpZssNode(i);
+                var node = new CSharpZssNode<T>(i);
                 zzlist.Add(node);
             }
 

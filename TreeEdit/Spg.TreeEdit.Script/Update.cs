@@ -1,11 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Script
 {
-    public class Update : EditOperation
+    public class Update<T> : EditOperation<T>
     {
-        public SyntaxNodeOrToken To { get; internal set; }
+        public ITreeNode<T> To { get; internal set; }
 
         /// <summary>
         /// Construct a update object
@@ -13,7 +12,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <param name="from">Node that will be moved</param>
         /// <param name="to">Update node</param>
         /// <param name="parent">Where the node will go</param>
-        public Update(SyntaxNodeOrToken from, SyntaxNodeOrToken to, SyntaxNodeOrToken parent) : base(from, parent, -1)
+        public Update(ITreeNode<T> from, ITreeNode<T> to, ITreeNode<T> parent) : base(from, parent, -1)
         {
             To = to;
         }
@@ -24,7 +23,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <returns></returns>
         public override string ToString()
         {
-            return "Update(" + T1Node.Kind() + "- (" + T1Node + ")" + " to " + To.Kind() + "- (" + To + "))";
+            return "Update(" + T1Node.Label + "- (" + T1Node + ")" + " to " + To.Label + "- (" + To + "))";
         }
     }
 }
