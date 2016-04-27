@@ -107,10 +107,6 @@
     <Compile Include="Spg.TreeEdit.Mapping\ITreeMapping.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\TreeAlignment.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\TreeTraversal.cs" />
-    <Compile Include="Spg.TreeEdit.Node\ConverterHelper.cs" />
-    <Compile Include="Spg.TreeEdit.Node\CSharpTreeNode.cs" />
-    <Compile Include="Spg.TreeEdit.Node\ITreeNode.cs" />
-    <Compile Include="Spg.TreeEdit.Node\TreeNode.cs" />
     <Compile Include="Spg.TreeEdit.PQ\PriotityQueue.cs" />
     <Compile Include="Spg.TreeEdit.Script\CSharpTreeComparer.cs" />
     <Compile Include="Spg.TreeEdit.Script\Delete.cs" />

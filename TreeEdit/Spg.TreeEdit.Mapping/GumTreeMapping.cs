@@ -30,9 +30,6 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
             while (l1.PeekMax() > minH && l2.PeekMax() > minH)
             {
-                PrintPQ(l1);
-                PrintPQ(l2);
-
                 if (l1.PeekMax() != l2.PeekMax())
                 {
                     if (l1.PeekMax() > l2.PeekMax())
@@ -239,18 +236,6 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
             return smax;
         }
-
-        private void PrintPQ(PriorityQueue<T> pq)
-        {
-            Console.WriteLine("===================== Begin PQ ========================");
-            var list = pq.pq.ToList();
-            foreach (var x in list)
-            {
-                Console.WriteLine(x);
-            }
-            Console.WriteLine("===================== End PQ ==========================");
-        }
-
 
         private double Dice(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
