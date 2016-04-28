@@ -199,9 +199,9 @@
       <Project>{6060b3c1-8b16-47ae-a7a5-b34eb1c170ad}</Project>
       <Name>ExampleRefactoring</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\LongestCommonAncestor\LongestCommonAncestor.csproj">
+    <ProjectReference Include="..\..\LongestCommonAncestor\LongestCommonSubsequence.csproj">
       <Project>{b66821a8-75db-4165-83b7-91a8b5df8eb0}</Project>
-      <Name>LongestCommonAncestor</Name>
+      <Name>LongestCommonSubsequence</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TreeEdit\TreeEdit.csproj">
       <Project>{4BF08076-5BA3-45B8-8DA9-BED3C4BCA9F7}</Project>

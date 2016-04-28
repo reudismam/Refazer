@@ -1,9 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Spg.TreeEdit.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
@@ -24,15 +19,16 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 _alg.Add(t1, t2);
             }
 
-            foreach (var ci in t1.Children)
+            foreach (var ci in t1.DescendantNodes())
             {
-                foreach (var cj in t2.Children)
+                foreach (var cj in t2.DescendantNodes())
                 {
                     string ciValue = _dict1[ci];
                     string cjValue = _dict2[cj];
                     if(ciValue.Equals(cjValue))
                     {
-                        AllPairOfIsomorphic(ci, cj);
+                        //AllPairOfIsomorphic(ci, cj);
+                        _alg.Add(ci, cj);
                     }
                 }
             }

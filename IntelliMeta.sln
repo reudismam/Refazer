@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeEdit", "TreeEdit\TreeEd
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutor", "tutor\Tutor\Tutor.csproj", "{A56C13E4-5C55-4372-813F-AF5611425EC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LongestCommonAncestor", "LongestCommonAncestor\LongestCommonAncestor.csproj", "{B66821A8-75DB-4165-83B7-91A8B5DF8EB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LongestCommonSubsequence", "LongestCommonAncestor\LongestCommonSubsequence.csproj", "{B66821A8-75DB-4165-83B7-91A8B5DF8EB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

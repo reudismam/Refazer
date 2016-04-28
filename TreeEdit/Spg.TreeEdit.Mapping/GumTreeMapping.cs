@@ -191,7 +191,10 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     
                     foreach(var dici in x)
                     {
-                        dict.Add(dici.Key, dici.Value);
+                        if(!dict.ContainsKey(dici.Key))
+                        {
+                            dict.Add(dici.Key, dici.Value);
+                        }
                     }
 
                     Console.WriteLine();
