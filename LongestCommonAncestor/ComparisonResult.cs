@@ -1,7 +1,4 @@
-﻿using Spg.ExampleRefactoring.LCS;
-using LongestCommonAncestor;
-
-namespace Spg.ExampleRefactoring.LCS
+﻿namespace LongestCommonAncestor
 {
     /// <summary>
     /// Comparison result
@@ -13,7 +10,7 @@ namespace Spg.ExampleRefactoring.LCS
         /// Modification type
         /// </summary>
         /// <returns>Modification type</returns>
-        public ModificationType ModificationType { get; set; }
+        public EditionType EditionType { get; set; }
 
         /// <summary>
         /// Data compared

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Spg.ExampleRefactoring.LCS
+namespace LongestCommonAncestor
 {
     /// <summary>
     /// Find the difference between two list using longest common sequences
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ListDiffer<T>
+    public class LongestCommonAncestorManager<T>
     {
         /// <summary>
         /// Find the difference between two arrays
@@ -43,7 +43,7 @@ namespace Spg.ExampleRefactoring.LCS
                 results.Add(new ComparisonResult<T>
                 {
                     DataCompared = baseline[baselineIndex - 1],
-                    ModificationType = ModificationType.None
+                    EditionType = EditionType.None
                 });
             }
             else if (revisionIndex > 0 && (baselineIndex == 0 || matrix[baselineIndex, revisionIndex - 1] >= matrix[baselineIndex - 1, revisionIndex]))
@@ -53,7 +53,7 @@ namespace Spg.ExampleRefactoring.LCS
                 results.Add(new ComparisonResult<T>
                 {
                     DataCompared = revision[revisionIndex - 1],
-                    ModificationType = ModificationType.Inserted
+                    EditionType = EditionType.Inserted
                 });
             }
             else if (baselineIndex > 0 && (revisionIndex == 0 || matrix[baselineIndex, revisionIndex - 1] < matrix[baselineIndex - 1, revisionIndex]))
@@ -63,7 +63,7 @@ namespace Spg.ExampleRefactoring.LCS
                 results.Add(new ComparisonResult<T>
                 {
                     DataCompared = baseline[baselineIndex - 1],
-                    ModificationType = ModificationType.Deleted
+                    EditionType = EditionType.Deleted
                 });
             }
 

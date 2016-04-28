@@ -1,6 +1,6 @@
 ﻿using Spg.ExampleRefactoring.Tok;
 
-namespace LCS2
+namespace LongestCommonAncestor
 {
     /// <summary>
     /// Comparison object

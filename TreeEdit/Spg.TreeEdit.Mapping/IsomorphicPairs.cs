@@ -28,7 +28,9 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             {
                 foreach (var cj in t2.Children)
                 {
-                    if (_dict1[ci].Equals(_dict2[cj]))
+                    string ciValue = _dict1[ci];
+                    string cjValue = _dict2[cj];
+                    if(ciValue.Equals(cjValue))
                     {
                         AllPairOfIsomorphic(ci, cj);
                     }
@@ -39,8 +41,8 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         public Dictionary<ITreeNode<T>, ITreeNode<T>> Pairs(ITreeNode<T> t1, ITreeNode<T> t2)
         {
             var talg = new TreeAlignment<T>();
-            _dict1 = talg.align(t1);
-            _dict2 = talg.align(t2);
+            _dict1 = talg.Align(t1);
+            _dict2 = talg.Align(t2);
 
             _alg = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
 

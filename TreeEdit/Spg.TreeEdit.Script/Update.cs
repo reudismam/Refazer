@@ -25,5 +25,28 @@ namespace TreeEdit.Spg.TreeEdit.Script
         {
             return "Update(" + T1Node.Label + "- (" + T1Node + ")" + " to " + To.Label + "- (" + To + "))";
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Update<T>)) return false;
+
+            return Equals(obj as Update<T>);
+        }
+
+        public bool Equals(Update<T> other)
+        {
+            bool isParentLabel = false;
+
+            if (Parent != null && other.Parent != null)
+            {
+                isParentLabel = other.Parent.IsLabel(Parent.Label);
+            }
+            else if (Parent == null && other.Parent == null)
+            {
+                isParentLabel = true;
+            }
+
+            return other.T1Node.IsLabel(T1Node.Label) && other.To.IsLabel(To.Label) && isParentLabel;
+        }
     }
 }

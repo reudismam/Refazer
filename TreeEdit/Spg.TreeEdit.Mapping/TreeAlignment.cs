@@ -8,10 +8,10 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
     {
         Dictionary<ITreeNode<T>, string> _dict;
 
-        private void KnuthAssignCanonicalName(ITreeNode<T> t1)
+        private void KnuthAssignCanonicalName(ITreeNode<T> root)
         {
-            var root = t1;
             if (root == null) return;
+
             if (!_dict.ContainsKey(root)) _dict.Add(root, "");
 
             if (!root.Children.Any())
@@ -19,15 +19,14 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 _dict[root] = "1" + root + "0";
                 return;
             }
-            else
+
+            foreach (var child in root.Children)
             {
-                foreach (var child in root.Children)
-                {
-                    KnuthAssignCanonicalName(child);
-                }
+                KnuthAssignCanonicalName(child);
             }
 
             List<string> children = new List<string>();
+
             foreach (var child in root.Children)
             {
                 children.Add(_dict[child]);
@@ -35,7 +34,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
             children = children.OrderBy(o => o).ToList();
 
-            string label = "1" + root.Label;
+            string label = root.Label + "1";
             foreach (var child in children)
             {
                 label += child;
@@ -45,7 +44,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             _dict[root] = label;
         }
 
-        public Dictionary<ITreeNode<T>, string> align(ITreeNode<T> t)
+        public Dictionary<ITreeNode<T>, string> Align(ITreeNode<T> t)
         {
             _dict = new Dictionary<ITreeNode<T>, string>();
             KnuthAssignCanonicalName(t);

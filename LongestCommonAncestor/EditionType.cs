@@ -1,9 +1,9 @@
-﻿namespace Spg.ExampleRefactoring.LCS
+﻿namespace LongestCommonAncestor
 {
     /// <summary>
     /// Modification type
     /// </summary>
-    public enum ModificationType
+    public enum EditionType
     {
         /// <summary>
         /// None

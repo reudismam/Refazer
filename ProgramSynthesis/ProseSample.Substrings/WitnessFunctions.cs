@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LongestCommonAncestor;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -372,6 +373,7 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessFunctionScript2Edit(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
+            var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
 
             foreach (State input in spec.ProvidedInputs)
             {
@@ -381,6 +383,7 @@ namespace ProseSample.Substrings
                 {
                     Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
                     var script = Script(inpTree, outTree, out m);
+                    scrips.Add(script);
 
                     TreeUpdate treeUp = new TreeUpdate();
                     treeUp.PreProcessTree(script, inpTree);
@@ -389,9 +392,10 @@ namespace ProseSample.Substrings
 
                     kMatches.Add(script);    
                 }
-
                 kExamples[input] = kMatches;
             }
+            var lcs = new LongestCommonAncestorManager<EditOperation<SyntaxNodeOrToken>>();
+            var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
@@ -483,7 +487,7 @@ namespace ProseSample.Substrings
                     var update = (Update<SyntaxNodeOrToken>)editOperation;
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
                     var treeUp = TreeUpdateDictionary[input];
-                    matches.Add(update.To);
+                    matches.Add(update.To.Value);
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
@@ -545,7 +549,7 @@ namespace ProseSample.Substrings
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
                     var treeUp = TreeUpdateDictionary[input];
-                    matches.Add(editOperation.T1Node);
+                    matches.Add(editOperation.T1Node.Value);
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
@@ -678,7 +682,7 @@ namespace ProseSample.Substrings
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
                     var treeUp = TreeUpdateDictionary[input];             
-                    matches.Add(editOperation.T1Node);
+                    matches.Add(editOperation.T1Node.Value);
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
@@ -757,7 +761,6 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        #region const
         /// <summary>
         /// Learn a constant node
         /// </summary>
@@ -783,16 +786,14 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        #endregion
 
         [WitnessFunction("NodesMap", 1)]
-        public static PrefixSpec WitnessNodesMap(GrammarRule rule, int parameter,
-                                                 PrefixSpec spec)
+        public static SubsequenceSpec WitnessNodesMap(GrammarRule rule, int parameter,
+                                                 SubsequenceSpec spec)
         {
             var linesExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //Todo refactor
                 var nodePrefix = spec.Examples[input].Cast<SyntaxNodeOrToken>();
                 var tuple = (SyntaxNodeOrToken)input.Bindings.First().Value;
 
@@ -802,7 +803,7 @@ namespace ProseSample.Substrings
 
                 linesExamples[input] = linesContainingSelection;
             }
-            return new PrefixSpec(linesExamples);
+            return new SubsequenceSpec(linesExamples);
         }
 
         /// <summary>
@@ -867,93 +868,3 @@ namespace ProseSample.Substrings
         }
     }
 }
-
-
-//[WitnessFunction("SubStr", 1)]
-//public static DisjunctiveExamplesSpec WitnessPositionPair(GrammarRule rule, int parameter,
-//                                                          ExampleSpec spec)
-//{
-//    var ppExamples = new Dictionary<State, IEnumerable<object>>();
-//    foreach (State input in spec.ProvidedInputs)
-//    {
-//        var v = (StringRegion) input[rule.Body[0]];
-//        var desiredOutput = (StringRegion) spec.Examples[input];
-//        var occurrences = new List<object>();
-//        for (int i = v.Value.IndexOf(desiredOutput.Value, StringComparison.Ordinal);
-//             i >= 0;
-//             i = v.Value.IndexOf(desiredOutput.Value, i + 1, StringComparison.Ordinal))
-//        {
-//            occurrences.Add(Tuple.Create(v.Start + (uint?) i, v.Start + (uint?) i + desiredOutput.Length));
-//        }
-//        ppExamples[input] = occurrences;
-//    }
-//    return DisjunctiveExamplesSpec.From(ppExamples);
-//}
-
-//[WitnessFunction("AbsPos", 1)]
-//public static DisjunctiveExamplesSpec WitnessK(GrammarRule rule, int parameter,
-//                                               DisjunctiveExamplesSpec spec)
-//{
-//    var kExamples = new Dictionary<State, IEnumerable<object>>();
-//    foreach (State input in spec.ProvidedInputs)
-//    {
-//        var v = (StringRegion) input[rule.Body[0]];
-//        var positions = new List<object>();
-//        foreach (uint pos in spec.DisjunctiveExamples[input])
-//        {
-//            positions.Add((int) pos + 1 - (int) v.Start);
-//            positions.Add((int) pos - (int) v.End - 1);
-//        }
-//        kExamples[input] = positions;
-//    }
-//    return DisjunctiveExamplesSpec.From(kExamples);
-//}
-
-//[WitnessFunction("RegPos", 1)]
-//public static DisjunctiveExamplesSpec WitnessRegexPair(GrammarRule rule, int parameter,
-//                                                       DisjunctiveExamplesSpec spec)
-//{
-//    var rrExamples = new Dictionary<State, IEnumerable<object>>();
-//    foreach (State input in spec.ProvidedInputs)
-//    {
-//        var v = (StringRegion) input[rule.Body[0]];
-//        var regexes = new List<Tuple<RegularExpression, RegularExpression>>();
-//        foreach (uint pos in spec.DisjunctiveExamples[input])
-//        {
-//            Dictionary<Token, TokenMatch> rightMatches;
-//            if (!v.Cache.TryGetAllMatchesStartingAt(pos, out rightMatches)) continue;
-//            Dictionary<Token, TokenMatch> leftMatches;
-//            if (!v.Cache.TryGetAllMatchesEndingAt(pos, out leftMatches)) continue;
-//            var leftRegexes = leftMatches.Keys.Select(RegularExpression.Create).Append(Epsilon);
-//            var rightRegexes = rightMatches.Keys.Select(RegularExpression.Create).Append(Epsilon);
-//            var regexPairs = from l in leftRegexes from r in rightRegexes select Tuple.Create(l, r);
-//            regexes.AddRange(regexPairs);
-//        }
-//        rrExamples[input] = regexes;
-//    }
-//    return DisjunctiveExamplesSpec.From(rrExamples);
-//}
-
-//[WitnessFunction("RegPos", 2, DependsOnParameters = new[] { 1 })]
-//public static DisjunctiveExamplesSpec WitnessRegexCount(GrammarRule rule, int parameter,
-//                                                        DisjunctiveExamplesSpec spec,
-//                                                        ExampleSpec regexBinding)
-//{
-//    var kExamples = new Dictionary<State, IEnumerable<object>>();
-//    foreach (State input in spec.ProvidedInputs)
-//    {
-//        var v = (StringRegion)input[rule.Body[0]];
-//        var rr = (Tuple<RegularExpression, RegularExpression>)regexBinding.Examples[input];
-//        var ks = new List<object>();
-//        foreach (uint pos in spec.DisjunctiveExamples[input])
-//        {
-//            var ms = rr.Item1.Run(v).Where(m => rr.Item2.MatchesAt(v, m.Right)).ToArray();
-//            int index = ms.BinarySearchBy(m => m.Right.CompareTo(pos));
-//            if (index < 0) return null;
-//            ks.Add(index + 1);
-//            ks.Add(index - ms.Length);
-//        }
-//        kExamples[input] = ks;
-//    }
-//    return DisjunctiveExamplesSpec.From(kExamples);
-//}

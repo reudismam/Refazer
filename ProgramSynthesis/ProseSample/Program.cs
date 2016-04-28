@@ -93,7 +93,7 @@ namespace ProseSample
                                 where inode.IsKind(SyntaxKind.MethodDeclaration)
                                 select inode;
             //Select two examples
-            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 1);
+            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 2);
             var examples = examplesSot.Select(o => (object)o).ToList();
 
             //Learn program

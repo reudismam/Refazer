@@ -19,6 +19,7 @@ namespace Spg.TreeEdit.Node
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="value">The value.</param>
+        /// <param name="label">Label</param>
         /// <param name="children">The children.</param>
         public TreeNode(T value, TLabel label, List<ITreeNode<T>> children)
         {
@@ -35,6 +36,7 @@ namespace Spg.TreeEdit.Node
         /// Initializes a new instance of the class
         /// </summary>
         /// <param name="value">value</param>
+        /// <param name="label">Label</param>
         public TreeNode(T value, TLabel label)
         {
             Value = value;

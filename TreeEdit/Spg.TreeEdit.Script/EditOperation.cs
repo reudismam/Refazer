@@ -31,5 +31,10 @@ namespace TreeEdit.Spg.TreeEdit.Script
             T1Node = movedNode;
             K = k;
         }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
     }
 }

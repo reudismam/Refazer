@@ -15,8 +15,8 @@ namespace TreeEdit.Spg.TreeEdit.Isomorphic
         public static bool AhuTreeIsomorphism(ITreeNode<T> t1, ITreeNode<T> t2)
         {
             var talg = new TreeAlignment<T>();
-            Dictionary<ITreeNode<T>, string> dict1 = talg.align(t1);
-            Dictionary<ITreeNode<T>, string> dict2 = talg.align(t2);
+            Dictionary<ITreeNode<T>, string> dict1 = talg.Align(t1);
+            Dictionary<ITreeNode<T>, string> dict2 = talg.Align(t2);
 
             if (dict1[t1].Equals(dict2[t2]))
             {
