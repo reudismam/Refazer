@@ -176,9 +176,10 @@ namespace ProseSample.Substrings
             return root.NormalizeWhitespace();
         }
 
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, int k, MatchResult from, SyntaxNodeOrToken to)
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, int k, MatchResult parent, SyntaxNodeOrToken ast)
         {
-            return null;
+            var root = Insert(node, k, parent, ast);
+            return root;
         }
 
         public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, SyntaxNodeOrToken to)

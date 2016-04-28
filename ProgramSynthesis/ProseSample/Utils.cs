@@ -61,7 +61,7 @@ namespace ProseSample
             }
 
             File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
-            ProgramNode bestProgram = topK.Last();
+            ProgramNode bestProgram = topK.First();
             if (bestProgram == null)
             {
                 WriteColored(ConsoleColor.Red, "No program :(");

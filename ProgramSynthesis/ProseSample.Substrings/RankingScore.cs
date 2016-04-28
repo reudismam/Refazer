@@ -15,13 +15,13 @@ namespace ProseSample.Substrings
         public static double Score_CS(double childScore) => childScore;
 
         [FeatureCalculator("CList")]
-        public static double Score_CList(double childScore, double childrenScore) => childScore + childrenScore;
+        public static double Score_CList(double childScore, double childrenScore) => (childScore + childrenScore) > 0 ? -(childScore + childrenScore) : (childScore + childrenScore);
 
         [FeatureCalculator("SN")]
         public static double Score_SN(double childScore) => childScore;
 
         [FeatureCalculator("NList")]
-        public static double Score_NList(double childScore, double childrenScore) => childScore + childrenScore;
+        public static double Score_NList(double childScore, double childrenScore) => (childScore + childrenScore) > 0 ? -(childScore + childrenScore) : (childScore + childrenScore);
 
         [FeatureCalculator("SE")]
         public static double Score_SE(double childScore) => childScore;
