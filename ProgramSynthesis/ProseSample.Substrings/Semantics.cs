@@ -40,10 +40,16 @@ namespace ProseSample.Substrings
             return null;
         }
 
+        /// <summary>
+        /// Splits the source node in the elements of type kind.
+        /// </summary>
+        /// <param name="node">Source node</param>
+        /// <param name="kind">Syntax kind</param>
+        /// <returns></returns>
         private static List<ITreeNode<SyntaxNodeOrToken>> SplitToNodes(ITreeNode<SyntaxNodeOrToken> node, SyntaxKind kind)
         {
             TLabel label= new TLabel(kind);
-            var descendantNodes = node.DescendantNodes().ToList();
+            var descendantNodes = node.DescendantNodes();
             var kinds = from k in descendantNodes
                 where k.IsLabel(label)
                 select k;
@@ -121,6 +127,12 @@ namespace ProseSample.Substrings
         }
 
 
+        /// <summary>
+        /// Concrete matches
+        /// </summary>
+        /// <param name="inpTree">Source node</param>
+        /// <param name="sot">Concrete node to look for.</param>
+        /// <returns>Concrete matches</returns>
         private static List<SyntaxNodeOrToken> Matches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxNodeOrToken sot)
         {
             var descendants = inpTree.DescendantNodes();
@@ -150,61 +162,25 @@ namespace ProseSample.Substrings
             update.ProcessEditOperation(insert);
 
             return update.CurrentTree.Value;
-
-            //var currentTree = GetCurrentTree(node);
-            //SyntaxNodeOrToken syntaxNodeOrToken = mresult.match.Item1;
-
-            //List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
-
-            //var root = syntaxNodeOrToken.AsNode();
-
-            //if (root.ChildNodes().Count() >= k)
-            //{
-            //    var select = root.ChildNodes().ElementAt(k - 1);
-            //    try
-            //    {
-            //        root = root.InsertNodesBefore(root.FindNode(select.Span), nodes);
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        root = root.ReplaceNode(root.FindNode(select.Span), nodes.First());
-            //    }
-            //}
-            //else if (root.ChildNodes().Count() + 1 == k)
-            //{
-            //    if (root.IsKind(SyntaxKind.IfStatement) && ast.IsKind(SyntaxKind.ElseClause))
-            //    {
-            //        var ifStatementSyntax = (IfStatementSyntax) root;
-            //        var elseClause = (ElseClauseSyntax) ast;
-            //        root = ifStatementSyntax.WithElse(elseClause);
-            //    } 
-            //    else
-            //    {
-            //        var select = root.ChildNodes().Last();
-            //        root = root.InsertNodesAfter(root.FindNode(select.Span), nodes);
-            //        //TODO decide what to do what the children are empty.
-            //    }
-            //}
-            //else
-            //{
-
-            //}
-
-            //CSharpSyntaxRewriter rewriter = new UpdateTreeRewriter(syntaxNodeOrToken.AsNode(), root.NormalizeWhitespace());
-            //root = rewriter.Visit(currentTree.AsNode());
-            //CurrentTrees[node] = root;
-            //return root.NormalizeWhitespace();
         }
 
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, int k, MatchResult mresult, SyntaxNodeOrToken ast)
+        /// <summary>
+        /// Move the from node such that it is the k child of the node
+        /// </summary>
+        /// <param name="node">Source node</param>
+        /// <param name="k">Child index</param>
+        /// <param name="parent">Parent</param>
+        /// <param name="from">Moved node</param>
+        /// <returns></returns>
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, int k, MatchResult parent, MatchResult from)
         {
             TreeUpdate update = TreeUpdateDictionary[node];
 
-            var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.match.Item1);
-            var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
+            var parentNode = ConverterHelper.ConvertCSharpToTreeNode(parent.match.Item1);
+            var child = ConverterHelper.ConvertCSharpToTreeNode(from.match.Item1);
 
 
-            var move = new Move<SyntaxNodeOrToken>(child, parent, k);
+            var move = new Move<SyntaxNodeOrToken>(child, parentNode, k);
             update.ProcessEditOperation(move);
 
             return update.CurrentTree.Value;
@@ -475,7 +451,7 @@ namespace ProseSample.Substrings
                 method = method.WithReturnType((TypeSyntax)children[0]);
                 method = method.WithParameterList((ParameterListSyntax) children[1]);
                 method = method.WithBody((BlockSyntax) children[2]);
-                return method;
+                return method.NormalizeWhitespace();
             }
 
             var node = GetSyntaxElement(tree.Value.Kind(), children);

@@ -391,7 +391,7 @@ namespace ProseSample.Substrings
                     TreeUpdate treeUp = new TreeUpdate();
                     treeUp.PreProcessTree(script, inpTree);
 
-                    TreeUpdateDictionary.Add(input, treeUp);
+                    TreeUpdateDictionary.Add(input, treeUp);    
 
                     kMatches.Add(script);    
                 }
@@ -495,13 +495,7 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
 
                     var update = (Update<SyntaxNodeOrToken>)editOperation;
-                    //var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    //var treeUp = TreeUpdateDictionary[input];
                     matches.Add(update.To.Value);
-
-                    //var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    //treeUp.ProcessEditOperation(editOperation);
-                    //CurrentTrees[key] = previousTree; 
                 }
                 kExamples[input] = matches;
             }
@@ -577,13 +571,9 @@ namespace ProseSample.Substrings
                 {
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
-                    //var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    //var treeUp = TreeUpdateDictionary[input];
-                    matches.Add(editOperation.T1Node.Value);
-
-                    //var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    //treeUp.ProcessEditOperation(editOperation);
-                    //CurrentTrees[key] = previousTree; 
+                    var from = editOperation.T1Node;
+                    var result = new MatchResult(Tuple.Create(from.Value, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
+                    matches.Add(result);
                 }
                 kExamples[input] = matches;
             }
@@ -659,7 +649,6 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
-
         /// <summary>
         /// Witness function for parater k in the insert operator
         /// </summary>
@@ -729,14 +718,8 @@ namespace ProseSample.Substrings
                 foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-
-                    //var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    //var treeUp = TreeUpdateDictionary[input];             
+            
                     matches.Add(editOperation.T1Node.Value);
-
-                    //var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    //treeUp.ProcessEditOperation(editOperation);
-                    //CurrentTrees[key] = previousTree;
                 }
                 kExamples[input] = matches;
             }
