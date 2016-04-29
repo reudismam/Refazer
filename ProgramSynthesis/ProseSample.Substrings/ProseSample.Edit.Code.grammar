@@ -24,7 +24,7 @@ IEnumerable<SyntaxNodeOrToken> nodes := SplitNodes(n);
 
 SyntaxNodeOrToken script := Script(node, trans);
 
-SyntaxNodeOrToken edit := Insert(node, k, parent, ast) | Update(node, from, to) | Move(node, k, parent, ast) | Delete(node, from);
+SyntaxNodeOrToken edit := Insert(node, k, parent, ast) | Update(node, from, to) | Move(node, k, parent, from) | Delete(node, from);
 MatchResult parent := match;
 MatchResult from := match;
 SyntaxNodeOrToken to := ast;

@@ -14,6 +14,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         public ITreeNode<SyntaxNodeOrToken> CurrentTree { get; set; }
 
+
         /// <summary>
         /// Indicate the edit operations that was processed.
         /// </summary>
@@ -23,6 +24,17 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// Edit script
         /// </summary>
         private List<EditOperation<SyntaxNodeOrToken>> _script;
+
+
+        public TreeUpdate(SyntaxNodeOrToken tree)
+        {
+            CurrentTree = ConverterHelper.ConvertCSharpToTreeNode(tree);
+        }
+
+        public TreeUpdate()
+        {
+
+        }
 
 
         /// <summary>
@@ -70,13 +82,14 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 var parent = FindNode(editOperation.Parent.Value);
                 var treeNode = ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
+
                 treeNode.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
                 parent.AddChild(treeNode, editOperation.K - 1);
             }
 
             if (editOperation is Update<SyntaxNodeOrToken>)
             {
-                var update = (Update<SyntaxNodeOrToken>) editOperation;
+                var update = (Update<SyntaxNodeOrToken>)editOperation;
                 var treeNode = ConverterHelper.ConvertCSharpToTreeNode(update.To.Value);
                 ReplaceNode(CurrentTree, editOperation.T1Node.Value, treeNode);
             }
@@ -148,6 +161,18 @@ namespace TreeEdit.Spg.TreeEdit.Update
         private ITreeNode<SyntaxNodeOrToken> FindNode(SyntaxNodeOrToken node)
         {
             foreach (var item in CurrentTree.DescendantNodes())
+            {
+                if (node.IsKind(item.Value.Kind()) && item.Value.Span.Contains(node.Span) && node.Span.Contains(item.Value.Span))
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree,  SyntaxNodeOrToken node)
+        {
+            foreach (var item in tree.DescendantNodes())
             {
                 if (node.IsKind(item.Value.Kind()) && item.Value.Span.Contains(node.Span) && node.Span.Contains(item.Value.Span))
                 {

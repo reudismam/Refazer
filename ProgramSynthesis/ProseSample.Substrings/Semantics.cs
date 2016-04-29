@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Spg.ExampleRefactoring.Synthesis;
-using Spg.LocationRefactoring.Tok;
-using Spg.ExampleRefactoring.RegularExpression;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseSample.Substrings.List;
+using Spg.TreeEdit.Node;
+using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.TreeEdit.Update;
+using Tutor.Spg.TreeEdit.Node;
 
 namespace ProseSample.Substrings
 {
     public static class Semantics
     {
-        private static readonly Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken> CurrentTrees = new Dictionary<SyntaxNodeOrToken, SyntaxNodeOrToken>();
+        private static readonly Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+
+
+        private static readonly Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
 
         public static MatchResult C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
-            var currentTree = GetCurrentTree(node).AsNode();
+            var currentTree = GetCurrentTree(node);
 
             var klist = SplitToNodes(currentTree, kind);
 
@@ -26,9 +29,9 @@ namespace ProseSample.Substrings
             {
                 var kindMatch = klist[i];
                 var expression = children.ElementAt(i);
-                if (MatchChildren(kindMatch, expression.match.Item1))
+                if (MatchChildren(kindMatch.Value, expression.match.Item1))
                 {
-                    Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(kindMatch, null);
+                    Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(kindMatch.Value, null);
                     MatchResult matchResult = new MatchResult(match);
                     return matchResult;
                 }
@@ -37,10 +40,12 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        private static List<SyntaxNode> SplitToNodes(SyntaxNodeOrToken node, SyntaxKind kind)
+        private static List<ITreeNode<SyntaxNodeOrToken>> SplitToNodes(ITreeNode<SyntaxNodeOrToken> node, SyntaxKind kind)
         {
-            var kinds = from k in node.AsNode().DescendantNodes()
-                where k.IsKind(kind)
+            TLabel label= new TLabel(kind);
+            var descendantNodes = node.DescendantNodes().ToList();
+            var kinds = from k in descendantNodes
+                where k.IsLabel(label)
                 select k;
 
             return kinds.ToList();
@@ -104,22 +109,26 @@ namespace ProseSample.Substrings
         public static MatchResult Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor)
         {
             var currentTree = GetCurrentTree(node);
-            Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken> tuple = Tuple.Create(currentTree, lookFor);
-            Tuple<ListNode, ListNode> lnode = ASTProgram.Example(tuple);
-
-            TokenSeq seq = DymTokens(lnode.Item2.List);
-            var matches = Regex.Matches(lnode.Item1, seq);
-
-            bool m = matches.Any();
-            if (m)
+            var matches = Matches(currentTree, lookFor);
+            if (matches.Any())
             {
-                Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(matches.First().Item2.List.First(), null);
+                Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(matches.First(), null);
                 MatchResult matchResult = new MatchResult(match);
                 return matchResult;
             }
 
             return null;
-        }      
+        }
+
+
+        private static List<SyntaxNodeOrToken> Matches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxNodeOrToken sot)
+        {
+            var descendants = inpTree.DescendantNodes();
+            var matches = from item in descendants
+                          where item.Value.IsKind(sot.Kind()) && item.ToString().Equals(sot.ToString())
+                          select item.Value;
+            return matches.ToList();
+        }
 
         /// <summary>
         /// Insert the ast node as in the k position of the node in the matching result 
@@ -131,98 +140,136 @@ namespace ProseSample.Substrings
         /// <returns>New node with the ast node inserted as the k child</returns>
         public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, int k, MatchResult mresult, SyntaxNodeOrToken ast)
         {
-            var currentTree = GetCurrentTree(node);
-            SyntaxNodeOrToken syntaxNodeOrToken = mresult.match.Item1;
+            TreeUpdate update = TreeUpdateDictionary[node];
 
-            List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
+            var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.match.Item1);
+            var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
 
-            var root = syntaxNodeOrToken.AsNode();
 
-            if (root.ChildNodes().Count() >= k)
-            {
-                var select = root.ChildNodes().ElementAt(k - 1);
-                try
-                {
-                    root = root.InsertNodesBefore(root.FindNode(select.Span), nodes);
-                }
-                catch (Exception e)
-                {
-                    root = root.ReplaceNode(root.FindNode(select.Span), nodes.First());
-                }
-            }
-            else if (root.ChildNodes().Count() + 1 == k)
-            {
-                if (root.IsKind(SyntaxKind.IfStatement) && ast.IsKind(SyntaxKind.ElseClause))
-                {
-                    var ifStatementSyntax = (IfStatementSyntax) root;
-                    var elseClause = (ElseClauseSyntax) ast;
-                    root = ifStatementSyntax.WithElse(elseClause);
-                } 
-                else
-                {
-                    var select = root.ChildNodes().Last();
-                    root = root.InsertNodesAfter(root.FindNode(select.Span), nodes);
-                    //TODO decide what to do what the children are empty.
-                }
-            }
-            else
-            {
-                
-            }
+            var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
+            update.ProcessEditOperation(insert);
 
-            CSharpSyntaxRewriter rewriter = new UpdateTreeRewriter(syntaxNodeOrToken.AsNode(), root.NormalizeWhitespace());
-            root = rewriter.Visit(currentTree.AsNode());
-            CurrentTrees[node] = root;
-            return root.NormalizeWhitespace();
+            return update.CurrentTree.Value;
+
+            //var currentTree = GetCurrentTree(node);
+            //SyntaxNodeOrToken syntaxNodeOrToken = mresult.match.Item1;
+
+            //List<SyntaxNode> nodes = new List<SyntaxNode> { ast.AsNode() };
+
+            //var root = syntaxNodeOrToken.AsNode();
+
+            //if (root.ChildNodes().Count() >= k)
+            //{
+            //    var select = root.ChildNodes().ElementAt(k - 1);
+            //    try
+            //    {
+            //        root = root.InsertNodesBefore(root.FindNode(select.Span), nodes);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        root = root.ReplaceNode(root.FindNode(select.Span), nodes.First());
+            //    }
+            //}
+            //else if (root.ChildNodes().Count() + 1 == k)
+            //{
+            //    if (root.IsKind(SyntaxKind.IfStatement) && ast.IsKind(SyntaxKind.ElseClause))
+            //    {
+            //        var ifStatementSyntax = (IfStatementSyntax) root;
+            //        var elseClause = (ElseClauseSyntax) ast;
+            //        root = ifStatementSyntax.WithElse(elseClause);
+            //    } 
+            //    else
+            //    {
+            //        var select = root.ChildNodes().Last();
+            //        root = root.InsertNodesAfter(root.FindNode(select.Span), nodes);
+            //        //TODO decide what to do what the children are empty.
+            //    }
+            //}
+            //else
+            //{
+
+            //}
+
+            //CSharpSyntaxRewriter rewriter = new UpdateTreeRewriter(syntaxNodeOrToken.AsNode(), root.NormalizeWhitespace());
+            //root = rewriter.Visit(currentTree.AsNode());
+            //CurrentTrees[node] = root;
+            //return root.NormalizeWhitespace();
         }
 
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, int k, MatchResult parent, SyntaxNodeOrToken ast)
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, int k, MatchResult mresult, SyntaxNodeOrToken ast)
         {
-            var root = Insert(node, k, parent, ast);
-            return root;
+            TreeUpdate update = TreeUpdateDictionary[node];
+
+            var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.match.Item1);
+            var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
+
+
+            var move = new Move<SyntaxNodeOrToken>(child, parent, k);
+            update.ProcessEditOperation(move);
+
+            return update.CurrentTree.Value;
         }
 
         public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, SyntaxNodeOrToken to)
         {
-            return null;
+            TreeUpdate update = TreeUpdateDictionary[node];
+
+            var fromTreeNode = ConverterHelper.ConvertCSharpToTreeNode(from.match.Item1);
+            var toTreeNode = ConverterHelper.ConvertCSharpToTreeNode(to);
+
+            var updateEdit = new Update<SyntaxNodeOrToken>(fromTreeNode, toTreeNode, null);
+            update.ProcessEditOperation(updateEdit);
+
+            return update.CurrentTree.Value;
         }
 
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, MatchResult from)
+        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, MatchResult delete)
         {
-            return null;
+            TreeUpdate update = TreeUpdateDictionary[node];
+
+            var t1Node = ConverterHelper.ConvertCSharpToTreeNode(delete.match.Item1);
+
+            var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
+            update.ProcessEditOperation(updateEdit);
+
+            return update.CurrentTree.Value;
         }
 
         public static MatchResult Abstract(SyntaxNodeOrToken node, SyntaxKind kind, int k)
         {
-            var currentTree = GetCurrentTree(node).AsNode();
+            var currentTree = GetCurrentTree(node);
 
             var matches = SplitToNodes(currentTree, kind);
 
             if (matches.Any())
             {
-                Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(matches.ElementAt(k - 1), null);
+                Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(matches.ElementAt(k - 1).Value, null);
                 MatchResult matchResult = new MatchResult(match);
                 return matchResult;
             }
             return null;
         }
 
-        private static SyntaxNodeOrToken GetCurrentTree(SyntaxNodeOrToken n)
+        private static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
         {
             if (!CurrentTrees.ContainsKey(n))
             {
-                CurrentTrees[n] = n; 
+                CurrentTrees[n] = ConverterHelper.ConvertCSharpToTreeNode(n);
+                TreeUpdate update = new TreeUpdate(n);
+                TreeUpdateDictionary[n] = update;
             }
 
-            SyntaxNodeOrToken node = CurrentTrees[n];
-            
+            //ITreeNode<SyntaxNodeOrToken> node = CurrentTrees[n];
+            var node = TreeUpdateDictionary[n].CurrentTree;
+
             return node;
         }
 
 
         public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> edit)
         {
-            return edit.Last();
+            var tree = ReconstructTree(GetCurrentTree(node));
+            return tree;
         }
 
         /// <summary>
@@ -237,7 +284,7 @@ namespace ProseSample.Substrings
             return node;
         }
 
-        #region Constant Operators
+
         /// <summary>
         /// Create a constant node
         /// </summary>
@@ -248,7 +295,6 @@ namespace ProseSample.Substrings
             return cst;
         }
 
-        #endregion
 
         public static IEnumerable<MatchResult> CList(MatchResult child1, IEnumerable<MatchResult> cList)
         {
@@ -292,25 +338,6 @@ namespace ProseSample.Substrings
 
             return nodes.Select(snot => (SyntaxNodeOrToken)snot).ToList();
         }
-        
-             
-        /// <summary>
-        /// Return a list of dynamic tokens. This method will be removed in future.
-        /// </summary>
-        /// <param name="list">List of node</param>
-        /// <returns>List of dynamic tokens</returns>
-        private static TokenSeq DymTokens(List<SyntaxNodeOrToken> list)
-        {
-            var tokens = new List<Spg.ExampleRefactoring.Tok.Token>();
-            foreach (var item in list)
-            {
-                RawDymToken t = new RawDymToken(item);
-                tokens.Add(t);
-            }
-
-            TokenSeq seq = new TokenSeq(tokens);
-            return seq;
-        }
 
         /// <summary>
         /// Syntax node factory. This method will be removed in future
@@ -327,12 +354,41 @@ namespace ProseSample.Substrings
                 return expressionStatement;
             }
 
+            if (kind == SyntaxKind.Block)
+            {
+                var statetements = children.Select(child => (StatementSyntax) child).ToList();
+
+                var block = SyntaxFactory.Block(statetements);
+                return block;
+            }
+
             if (kind == SyntaxKind.InvocationExpression)
             {
-                IdentifierNameSyntax identifier = (IdentifierNameSyntax)children[0]; //identifier name
+                var expressionSyntax = (ExpressionSyntax)children[0]; //expression syntax
                 ArgumentListSyntax argumentList = (ArgumentListSyntax)children[1]; //argument list
-                var invocation = SyntaxFactory.InvocationExpression(identifier, argumentList);
+                var invocation = SyntaxFactory.InvocationExpression(expressionSyntax, argumentList);
                 return invocation;
+            }
+
+            if (kind == SyntaxKind.SimpleMemberAccessExpression)
+            {
+                var expressionSyntax = (ExpressionSyntax) children[0];
+                var syntaxName = (SimpleNameSyntax) children[1];
+                var simpleMemberExpression = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expressionSyntax, syntaxName);
+                return simpleMemberExpression;
+            }
+
+            if (kind == SyntaxKind.ParameterList)
+            {
+                var parameter = (ParameterSyntax) children[0];
+                var spal = SyntaxFactory.SeparatedList(new[] { parameter });
+                var parameterList = SyntaxFactory.ParameterList(spal);
+                return parameterList;
+            }
+
+            if (kind == SyntaxKind.Parameter)
+            {
+                return children.First().Parent;
             }
 
             if (kind == SyntaxKind.ArgumentList)
@@ -345,7 +401,7 @@ namespace ProseSample.Substrings
 
             if (kind == SyntaxKind.Argument)
             {
-                IdentifierNameSyntax s = (IdentifierNameSyntax)children.First();
+                ExpressionSyntax s = (ExpressionSyntax)children.First();
                 var argument = SyntaxFactory.Argument(s);
                 return argument;
             }
@@ -386,7 +442,44 @@ namespace ProseSample.Substrings
                 var elseClause = SyntaxFactory.ElseClause(statatementSyntax);
                 return elseClause;
             }
+
+            if (kind == SyntaxKind.IdentifierName)
+            {
+                SyntaxToken stoken = (SyntaxToken) children.First();
+                var identifierName = SyntaxFactory.IdentifierName(stoken);
+                return identifierName;
+            }
+
             return null;
+        }
+
+
+        public static SyntaxNodeOrToken ReconstructTree(ITreeNode<SyntaxNodeOrToken> tree)
+        {
+            
+            if (!tree.Children.Any())
+            {
+                return tree.Value;
+            }
+
+
+            var children = new List<SyntaxNodeOrToken>();
+            foreach (var child in tree.Children)
+            {
+                children.Add(ReconstructTree(child));
+            }
+
+            if (tree.Value.IsKind(SyntaxKind.MethodDeclaration))
+            {
+                var method = (MethodDeclarationSyntax)tree.Value;
+                method = method.WithReturnType((TypeSyntax)children[0]);
+                method = method.WithParameterList((ParameterListSyntax) children[1]);
+                method = method.WithBody((BlockSyntax) children[2]);
+                return method;
+            }
+
+            var node = GetSyntaxElement(tree.Value.Kind(), children);
+            return node;
         }
     }
 }

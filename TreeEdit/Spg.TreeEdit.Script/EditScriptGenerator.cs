@@ -30,6 +30,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
                 if (w == null)
                 {
                     int k = FindPos(x, M);
+                    //x.Children = new List<ITreeNode<T>>();
                     var insert = new Insert<T>(x, z, k);
                     M.Add(x, x);
                     editScript.Add(insert);
@@ -82,6 +83,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
             ITreeNode<T> firstChild = y.Children.ElementAt(0);
 
             if (firstChild.Equals(x)) return 1;
+            //if (!y.Children.Any()) return 1;
 
             ITreeNode<T> v = null;
             foreach (ITreeNode<T> c in y.Children)

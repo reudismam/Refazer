@@ -322,6 +322,9 @@ namespace ProseSample.Substrings
 
                     var lsot = ExtractChildren(sot);
 
+                    var currentTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
+                    if (TreeUpdate.FindNode(currentTree, sot) == null) return null;
+
                     var childList = new List<MatchResult>();
                     foreach (var item in lsot)
                     {
@@ -492,13 +495,13 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
 
                     var update = (Update<SyntaxNodeOrToken>)editOperation;
-                    var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    var treeUp = TreeUpdateDictionary[input];
+                    //var key = (SyntaxNodeOrToken)input[rule.Body[0]];
+                    //var treeUp = TreeUpdateDictionary[input];
                     matches.Add(update.To.Value);
 
-                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = previousTree; 
+                    //var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
+                    //treeUp.ProcessEditOperation(editOperation);
+                    //CurrentTrees[key] = previousTree; 
                 }
                 kExamples[input] = matches;
             }
@@ -574,13 +577,13 @@ namespace ProseSample.Substrings
                 {
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
-                    var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    var treeUp = TreeUpdateDictionary[input];
+                    //var key = (SyntaxNodeOrToken)input[rule.Body[0]];
+                    //var treeUp = TreeUpdateDictionary[input];
                     matches.Add(editOperation.T1Node.Value);
 
-                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    treeUp.ProcessEditOperation(editOperation);
-                    CurrentTrees[key] = previousTree; 
+                    //var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
+                    //treeUp.ProcessEditOperation(editOperation);
+                    //CurrentTrees[key] = previousTree; 
                 }
                 kExamples[input] = matches;
             }
