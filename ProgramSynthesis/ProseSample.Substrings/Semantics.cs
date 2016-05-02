@@ -230,7 +230,7 @@ namespace ProseSample.Substrings
         }
 
         //TODO rename to child
-        public static MatchResult Parent(SyntaxNodeOrToken kindRef, int k)
+        public static MatchResult Parent(MatchResult kindRef, int k)
         {
             return null;
         }

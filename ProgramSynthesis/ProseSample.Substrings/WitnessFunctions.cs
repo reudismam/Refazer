@@ -170,7 +170,8 @@ namespace ProseSample.Substrings
                 {
                     SyntaxNodeOrToken sot = matchResult.match.Item1;
                     SyntaxNodeOrToken parent = sot.Parent;
-                    mats.Add(parent);
+                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent })));
+                    mats.Add(result);
                 }
                 treeExamples[input] = mats.GetRange(0, 1);
             }
@@ -473,7 +474,7 @@ namespace ProseSample.Substrings
 
                     TreeUpdateDictionary.Add(input, treeUp);
 
-                    kMatches.Add(script);
+                    kMatches.Add(script.GetRange(0, 1));
                 }
                 kExamples[input] = kMatches;
             }
