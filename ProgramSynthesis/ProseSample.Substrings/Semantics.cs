@@ -211,23 +211,26 @@ namespace ProseSample.Substrings
             return update.CurrentTree.Value;
         }
 
-        public static MatchResult Abstract(SyntaxNodeOrToken node, SyntaxKind kind, int k)
+        public static MatchResult Abstract(MatchResult kindRef)
         {
-            var currentTree = GetCurrentTree(node);
+            return kindRef;
+        }
 
-            var matches = SplitToNodes(currentTree, kind);
+        public static MatchResult KindRef(SyntaxNodeOrToken node, SyntaxKind kind, int k)
+        {
+            //var currentTree = GetCurrentTree(node);
 
-            if (matches.Any())
-            {
-                Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(matches.ElementAt(k - 1).Value, null);
-                MatchResult matchResult = new MatchResult(match);
-                return matchResult;
-            }
+            //var matches = SplitToNodes(currentTree, kind);
+
+            //if (matches.Any())
+            //{
+            //    return matches.ElementAt(k - 1);
+            //}
             return null;
         }
 
-
-        public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult parent, int k)
+        //TODO rename to child
+        public static MatchResult Parent(SyntaxNodeOrToken kindRef, int k)
         {
             return null;
         }
