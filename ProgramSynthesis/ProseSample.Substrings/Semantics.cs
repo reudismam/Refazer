@@ -226,6 +226,12 @@ namespace ProseSample.Substrings
             return null;
         }
 
+
+        public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult parent, int k)
+        {
+            return null;
+        }
+
         private static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
         {
             if (!CurrentTrees.ContainsKey(n))
@@ -269,6 +275,11 @@ namespace ProseSample.Substrings
         public static SyntaxNodeOrToken Const(SyntaxNodeOrToken cst)
         {
             return cst;
+        }
+
+        public static SyntaxNodeOrToken Ref(SyntaxNodeOrToken node, MatchResult result)
+        {
+            return result.match.Item1;
         }
 
 

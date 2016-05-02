@@ -11,6 +11,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.List;
 using Spg.TreeEdit.Node;
+using TreeEdit.Spg.TreeEdit.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -397,7 +398,7 @@ namespace ProseSample.Substrings
                 }
                 kExamples[input] = kMatches;
             }
-            var lcs = new LongestCommonAncestorManager<EditOperation<SyntaxNodeOrToken>>();
+            var lcs = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
             var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
             return DisjunctiveExamplesSpec.From(kExamples);
         }
@@ -812,6 +813,35 @@ namespace ProseSample.Substrings
                 foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
                 {
                     mats.Add(sot);
+                }
+
+                treeExamples[input] = mats;
+            }
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+
+        [WitnessFunction("Ref", 1)]
+        public static DisjunctiveExamplesSpec WitnessFunctionRef(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+                
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var inpTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
+                var mats = new List<object>();
+                foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
+                {
+                    if (!sot.IsNode) return null;
+
+                    var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot);
+                    var node = IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree, subTree);
+
+                    if (node == null) return null;
+
+                    var result = new MatchResult(Tuple.Create(sot, new Bindings(new List<SyntaxNodeOrToken> { sot })));
+
+                    mats.Add(result);
                 }
 
                 treeExamples[input] = mats;

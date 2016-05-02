@@ -7,7 +7,7 @@ namespace LongestCommonAncestor
     /// Find the difference between two list using longest common sequences
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class LongestCommonAncestorManager<T>
+    public class LongestCommonSubsequenceManager<T>
     {
         /// <summary>
         /// Find the difference between two arrays

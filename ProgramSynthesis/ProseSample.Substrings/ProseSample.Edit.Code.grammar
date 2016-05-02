@@ -24,17 +24,15 @@ IEnumerable<SyntaxNodeOrToken> nodes := SplitNodes(n);
 
 SyntaxNodeOrToken script := Script(node, trans);
 
-SyntaxNodeOrToken edit := Insert(node, k, parent, ast) | Update(node, from, to) | Move(node, k, parent, from) | Delete(node, from);
-MatchResult parent := match;
-MatchResult from := match;
-SyntaxNodeOrToken to := ast;
+SyntaxNodeOrToken edit := Insert(node, k, match, ast) | Update(node, match, ast) | Move(node, k, match, match) | Delete(node, match);
+
 IEnumerable<SyntaxNodeOrToken> trans := SE(edit) | EList(edit, trans);
 
-MatchResult match := C(node, kind, children) | Literal(node, tree) | Abstract(node, kind, k);
-MatchResult child := match;
-IEnumerable<MatchResult> children := SC(child) | CList(child, children);
+MatchResult match := C(node, kind, children) | Literal(node, tree) | Abstract(node, kind, k) | Parent(node, match, k);
 
-SyntaxNodeOrToken ast:= Node(kind, childrenNodes) | Const(tree);
+IEnumerable<MatchResult> children := SC(match) | CList(match, children);
+
+SyntaxNodeOrToken ast:= Node(kind, childrenNodes) | Const(tree) | Ref(node, match);
 IEnumerable<SyntaxNodeOrToken> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 
 @feature[Score=KindScore] SyntaxKind kind;                     @input SyntaxNodeOrToken n;

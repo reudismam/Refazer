@@ -196,8 +196,6 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                             dict.Add(dici.Key, dici.Value);
                         }
                     }
-
-                    Console.WriteLine();
                 }
             }
 

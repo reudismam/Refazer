@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComparisonResult.cs" />
-    <Compile Include="LongestCommonAncestorManager.cs" />
+    <Compile Include="LongestCommonSubsequenceManager.cs" />
     <Compile Include="EditionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -12,6 +12,19 @@ namespace TreeEdit.Spg.TreeEdit.Isomorphic
             return AhuTreeIsomorphism(t1, t2);
         }
 
+        public static ITreeNode<T> FindIsomorphicSubTree(ITreeNode<T> tree, ITreeNode<T> subtree)
+        {
+            if (IsIsomorphic(tree, subtree)) return tree;
+
+            foreach (var child in tree.Children)
+            {
+                var result = FindIsomorphicSubTree(child, subtree);
+                if (result != null) return result;
+            }
+
+            return null;
+        }
+
         public static bool AhuTreeIsomorphism(ITreeNode<T> t1, ITreeNode<T> t2)
         {
             var talg = new TreeAlignment<T>();

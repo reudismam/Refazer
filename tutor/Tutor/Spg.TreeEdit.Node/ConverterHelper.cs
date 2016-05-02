@@ -16,6 +16,8 @@ namespace Spg.TreeEdit.Node
         /// <returns>TreeNode</returns>
         public static ITreeNode<SyntaxNodeOrToken> ConvertCSharpToTreeNode(SyntaxNodeOrToken st)
         {
+            if (!st.IsNode) return null;
+
             var list = st.AsNode().ChildNodes();
             if (!list.Any())
             {
