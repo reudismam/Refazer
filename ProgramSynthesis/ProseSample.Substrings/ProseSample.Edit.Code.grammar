@@ -28,7 +28,7 @@ SyntaxNodeOrToken edit := Insert(node, k, match, ast) | Update(node, match, ast)
 
 IEnumerable<SyntaxNodeOrToken> trans := SE(edit) | EList(edit, trans);
 
-MatchResult match := C(node, kind, children) | Abstract(kindRef) | Parent(node, kindRef, k);
+MatchResult match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
 
 MatchResult kindRef := KindRef(node, kind, k) | Literal(node, tree);
 

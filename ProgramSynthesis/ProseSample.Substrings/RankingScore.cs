@@ -53,7 +53,7 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Const")]
         public static double Score_Node1(double astScore) => astScore;
 
-        [FeatureCalculator("Abstract")]
+        [FeatureCalculator("Tree")]
         public static double Score_Abstract(double kindScore) => kindScore;
 
         [FeatureCalculator("Ref")]

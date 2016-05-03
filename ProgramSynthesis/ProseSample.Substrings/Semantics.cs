@@ -211,7 +211,7 @@ namespace ProseSample.Substrings
             return update.CurrentTree.Value;
         }
 
-        public static MatchResult Abstract(MatchResult kindRef)
+        public static MatchResult Tree(MatchResult kindRef)
         {
             return kindRef;
         }

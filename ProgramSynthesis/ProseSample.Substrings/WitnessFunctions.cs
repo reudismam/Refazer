@@ -59,7 +59,7 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        [WitnessFunction("Abstract", 0)]
+        [WitnessFunction("Tree", 0)]
         public static DisjunctiveExamplesSpec WitnessAbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
