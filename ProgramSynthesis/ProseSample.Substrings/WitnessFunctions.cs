@@ -170,7 +170,7 @@ namespace ProseSample.Substrings
 
                     if (sot.IsToken) return null;
 
-                    ITreeNode<SyntaxNodeOrToken> parent = FindParent(input, sot);
+                    ITreeNode<SyntaxNodeOrToken> parent = FindParent((SyntaxNodeOrToken)input[rule.Body[0]], sot);
 
                     if (parent == null) return null;
 
@@ -182,15 +182,13 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> FindParent(State input, SyntaxNodeOrToken sot)
+        private static ITreeNode<SyntaxNodeOrToken> FindParent(SyntaxNodeOrToken node, SyntaxNodeOrToken sot)
         {
-            var currentTree = TreeUpdateDictionary[input];
-            var nde = TreeUpdate.FindNode(currentTree.CurrentTree, sot);
-
+            var currentTree = CurrentTrees[node];
+            var nde = TreeUpdate.FindNode(currentTree, sot);
 
             return nde?.Parent != null ? nde.Parent : null;
         }
-
 
         [WitnessFunction("Parent", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
@@ -206,7 +204,7 @@ namespace ProseSample.Substrings
                     //TODO Refactor to use kindBinding
                     SyntaxNode sot = matchResult.match.Item1.AsNode();
 
-                    ITreeNode<SyntaxNodeOrToken> parent = FindParent(input, sot);
+                    ITreeNode<SyntaxNodeOrToken> parent = FindParent((SyntaxNodeOrToken)input[rule.Body[0]], sot);
 
                     if (parent == null) return null;
 
@@ -222,11 +220,12 @@ namespace ProseSample.Substrings
                     }
                 }
 
+                treeExamples[input] = mats;
+
                 var value = treeExamples.Values;
 
                 if (value.Any(sequence => !sequence.SequenceEqual(value.First()))) return null; //k must be equals
-
-                treeExamples[input] = mats;
+                          
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
@@ -497,7 +496,7 @@ namespace ProseSample.Substrings
 
                     TreeUpdateDictionary.Add(input, treeUp);
 
-                    kMatches.Add(script.GetRange(0, 4));
+                    kMatches.Add(script);
                 }
                 kExamples[input] = kMatches;
             }

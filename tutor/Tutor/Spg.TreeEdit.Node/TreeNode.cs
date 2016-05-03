@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TreeEdit.Spg.Walker;
 using Tutor.Spg.TreeEdit.Node;
 
 namespace Spg.TreeEdit.Node
@@ -77,20 +78,21 @@ namespace Spg.TreeEdit.Node
         /// <returns></returns>
         public List<ITreeNode<T>> DescendantNodes()
         {
-            var list = new List<ITreeNode<T>>();
+            //var list = new List<ITreeNode<T>>();
 
-            if (!_children.Any())
-            {
-                return list;
-            }
+            //if (!_children.Any())
+            //{
+            //    return list;
+            //}
 
-            foreach (var item in _children)
-            {
-                list.Add(item);
-                list.AddRange(item.DescendantNodes());
-            }
+            //foreach (var item in _children)
+            //{
+            //    list.Add(item);
+            //    list.AddRange(item.DescendantNodes());
+            //}
 
-            return list;
+            //return list;
+            return BFSWalker<T>.BreadFirstSearch(this);
         }
 
         /// <summary>

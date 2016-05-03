@@ -85,6 +85,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
                 treeNode.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
                 parent.AddChild(treeNode, editOperation.K - 1);
+                treeNode.Parent = parent;
             }
 
             if (editOperation is Update<SyntaxNodeOrToken>)
@@ -101,6 +102,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
                 ITreeNode<SyntaxNodeOrToken> treeNode = ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
                 parent.AddChild(treeNode, editOperation.K - 1);
+                treeNode.Parent = parent;
             }
 
             if (editOperation is Delete<SyntaxNodeOrToken>)

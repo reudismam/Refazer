@@ -140,6 +140,7 @@
     <Compile Include="Spg.TreeEdit.Node\ITreeNode.cs" />
     <Compile Include="Spg.TreeEdit.Node\TLabel.cs" />
     <Compile Include="Spg.TreeEdit.Node\TreeNode.cs" />
+    <Compile Include="Spg.Walker\BFSWalker.cs" />
     <Compile Include="TreeTraversal.cs" />
     <Compile Include="Zss.cs" />
   </ItemGroup>

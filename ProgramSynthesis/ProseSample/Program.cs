@@ -18,6 +18,19 @@ namespace ProseSample
             LoadAndRunRepetitiveChangeMultipleEditions2();
         }
 
+        //public String bar(int i)
+        //{
+        //    if (M(receiver).CSharpKind() == kind)
+        //    {
+        //    }
+        //}
+
+        //public String bar(int i)
+        //{
+        //    if (M(receiver).IsKind(kind))
+        //    {
+        //    }
+        //}
         //public String foo(int i)
         //{
         //    if (receiver.IsKind(SyntaxKind.ParenthesizedExpression))
