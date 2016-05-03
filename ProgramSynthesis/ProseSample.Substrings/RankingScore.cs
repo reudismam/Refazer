@@ -60,7 +60,7 @@ namespace ProseSample.Substrings
         public static double Score_Ref(double inScore, double matchScore) => matchScore;
 
         [FeatureCalculator("KindRef")]
-        public static double Score_Abstract(double inScore, double kindScore, double kScore) => kindScore;
+        public static double Score_KindRef(double inScore, double kindScore, double kScore) => kindScore;
 
         [FeatureCalculator("Parent")]
         public static double Score_Parent(double inScore, double matchScore, double kScore) => matchScore;

@@ -35,22 +35,27 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessTree(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            var literalExamples = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
-                var literalExamples = new List<object>();
+                var inpTree = GetCurrentTree((SyntaxNodeOrToken) input[rule.Body[0]]);
+
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
-                    //compute the occurrences of matchResult on the input tree.
-                    var matchedSyntaxNodeOrTokens = Matches(inpTree, matchResult);
-                    var lobject = matchedSyntaxNodeOrTokens.Select(o => (object)o);
+                    var matches = Matches(inpTree, matchResult);
 
-                    if (!lobject.Any()) return null;
+                    if (!matches.Any()) return null;
 
-                    literalExamples.AddRange(lobject);
+                    literalExamples.Add(matches.First());
+
+                    var currentTree = ConverterHelper.ConvertCSharpToTreeNode(matches.First());
+                    var first = ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken) literalExamples.First());
+                    if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(currentTree, first)) return null;
                 }
-                treeExamples[input] = literalExamples;
+
+                treeExamples[input] = literalExamples.GetRange(0, 1);
             }
+
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
@@ -62,7 +67,7 @@ namespace ProseSample.Substrings
             {
                 var mats = new List<object>();
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
-                {  
+                {
                     mats.Add(matchResult);
                 }
                 treeExamples[input] = mats;
@@ -106,10 +111,8 @@ namespace ProseSample.Substrings
             }
 
             var values = treeExamples.Values;
-            if (values.Any(sequence => !sequence.SequenceEqual(values.First())))
-            {
-                return null;
-            }
+            if (values.Any(sequence => !sequence.SequenceEqual(values.First()))) return null;
+
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
@@ -147,6 +150,10 @@ namespace ProseSample.Substrings
                 }
                 treeExamples[input] = mats;
             }
+
+            var values = treeExamples.Values;
+            if (values.Any(sequence => !sequence.SequenceEqual(values.First()))) return null;
+
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
@@ -180,7 +187,7 @@ namespace ProseSample.Substrings
             var currentTree = TreeUpdateDictionary[input];
             var nde = TreeUpdate.FindNode(currentTree.CurrentTree, sot);
 
-            
+
             return nde?.Parent != null ? nde.Parent : null;
         }
 
@@ -205,7 +212,7 @@ namespace ProseSample.Substrings
 
                     var children = parent.Children;
 
-                    for (int i =0; i < children.Count(); i++)
+                    for (int i = 0; i < children.Count(); i++)
                     {
                         var item = children.ElementAt(i).Value;
                         if (item.Equals(sot))
@@ -495,7 +502,7 @@ namespace ProseSample.Substrings
                 kExamples[input] = kMatches;
             }
             var lcs = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
-            var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
+            //var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
