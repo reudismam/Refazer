@@ -52,8 +52,8 @@ namespace ProseSample
 
             ProgramSet consistentPrograms = engine.LearnGrammar(spec);
 
-            //var topK = consistentPrograms.TopK("Score").ToList();//.GetRange(0, 10);
-            var topK = consistentPrograms.RealizedPrograms.ToList();//.GetRange(0, 10);
+            var topK = consistentPrograms.TopK("Score").ToList().GetRange(0, 10);
+            //var topK = consistentPrograms.RealizedPrograms.ToList();//.GetRange(0, 10);
             string programs = "";
             foreach (ProgramNode p in topK)
             {
