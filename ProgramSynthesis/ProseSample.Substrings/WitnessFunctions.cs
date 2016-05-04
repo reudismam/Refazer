@@ -21,9 +21,9 @@ namespace ProseSample.Substrings
 {
     public static class WitnessFunctions
     {
-        private static readonly Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+        private static Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
-        private static readonly Dictionary<State, TreeUpdate> TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
+        private static Dictionary<State, TreeUpdate> TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
 
         /// <summary>
         /// Literal witness function for parameter tree.
@@ -482,6 +482,9 @@ namespace ProseSample.Substrings
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
 
+            TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
+            CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
@@ -507,6 +510,41 @@ namespace ProseSample.Substrings
             //var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
             return DisjunctiveExamplesSpec.From(kExamples);
         }
+
+        
+        [WitnessFunction("OneTrans", 1)]
+        public static DisjunctiveExamplesSpec WitnessFunctionOneTransScript(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var kMatches = new List<object>();
+                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
+                {
+                    Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
+                    var script = Script(inpTree, outTree, out m);
+                    scrips.Add(script);
+
+                    TreeUpdate treeUp = new TreeUpdate();
+                    treeUp.PreProcessTree(script, inpTree);
+
+                    TreeUpdateDictionary.Add(input, treeUp);
+
+                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+
+                    kMatches.Add(script);
+                }
+                kExamples[input] = kMatches;
+            }
+            var lcs = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
+            //var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
+            return spec;
+            //return DisjunctiveExamplesSpec.From(kExamples);
+        }
+
 
         /// <summary>
         /// Witness function for parater k in the insert operator

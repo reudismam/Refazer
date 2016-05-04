@@ -11,8 +11,14 @@ namespace ProseSample.Substrings
         [FeatureCalculator("NodesMap")]
         public static double Score_NodesMap( double scriptScore, double editScore) =>  scriptScore + editScore;
 
+        [FeatureCalculator("Stts")]
+        public static double Score_Stts(double predScore, double splitScore) => predScore + splitScore;
+
         [FeatureCalculator("SC")]
         public static double Score_CS(double childScore) => childScore;
+
+        [FeatureCalculator("FTrue")]
+        public static double Score_FTrue() => 1.1;
 
         [FeatureCalculator("CList")]
         public static double Score_CList(double childScore, double childrenScore) => (childScore + childrenScore) > 0 ? -(childScore + childrenScore) : (childScore + childrenScore);
@@ -34,6 +40,9 @@ namespace ProseSample.Substrings
 
         [FeatureCalculator("Script")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
+
+        [FeatureCalculator("OneTrans")]
+        public static double Score_OneTrans(double inScore, double script) => inScore + script;
 
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;

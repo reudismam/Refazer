@@ -329,6 +329,26 @@ namespace ProseSample.Substrings
             return nodes.Select(snot => (SyntaxNodeOrToken)snot).ToList();
         }
 
+        public static Boolean FTrue()
+        {
+            return true;
+        }
+
+        public static SyntaxNodeOrToken OneTrans(SyntaxNodeOrToken node, SyntaxNodeOrToken script)
+        {
+            return null;
+        }
+
+        public static SyntaxNodeOrToken ManyTrans(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
+        {
+            return null;
+        }
+
+        public static IEnumerable<SyntaxNodeOrToken> BreakByKind(SyntaxNodeOrToken node, SyntaxKind kind)
+        {
+            return null;
+        }
+
         /// <summary>
         /// Syntax node factory. This method will be removed in future
         /// </summary>

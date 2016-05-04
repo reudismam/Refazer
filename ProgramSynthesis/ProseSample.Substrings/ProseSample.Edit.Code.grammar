@@ -18,15 +18,24 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
-@start IEnumerable<SyntaxNodeOrToken> spans := NodesMap(script, nodes) = Map(\node: SyntaxNodeOrToken => script, nodes);
+@start IEnumerable<SyntaxNodeOrToken> spans := NodesMap(trans, nodes) = Map(\node: SyntaxNodeOrToken => trans, nodes);
 
-IEnumerable<SyntaxNodeOrToken> nodes := SplitNodes(n);
+IEnumerable<SyntaxNodeOrToken> nodes := Stts(pred, splits) = Filter(\x: SyntaxNodeOrToken => pred, splits);
+IEnumerable<SyntaxNodeOrToken> splits := SplitNodes(n);
 
-SyntaxNodeOrToken script := Script(node, trans);
+SyntaxNodeOrToken trans := OneTrans(node, script);
+
+IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\x: SyntaxNodeOrToken => script, breaks);
+
+IEnumerable<SyntaxNodeOrToken> breaks := BreakByKind(node, kind);
+
+Boolean pred := FTrue();
+
+SyntaxNodeOrToken script := Script(node, edits);
+
+IEnumerable<SyntaxNodeOrToken> edits := SE(edit) | EList(edit, edits);
 
 SyntaxNodeOrToken edit := Insert(node, k, match, ast) | Update(node, match, ast) | Move(node, k, match, match) | Delete(node, match);
-
-IEnumerable<SyntaxNodeOrToken> trans := SE(edit) | EList(edit, trans);
 
 MatchResult match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
 

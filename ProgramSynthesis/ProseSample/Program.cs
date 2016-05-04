@@ -60,10 +60,6 @@ namespace ProseSample
                 {
                      if(receiver.CSharpKind() == SyntaxKind.ParenthesizedExpression){
                      }
-
-                     kind = SyntaxKind.ParenthesizedExpression;
-                     if(M(receiver).CSharpKind() == kind){
-                     }
                 }
 
                 public String bar(int i)
@@ -89,10 +85,6 @@ namespace ProseSample
                 public String foo(int i)
                 {
                      if(receiver.IsKind(SyntaxKind.ParenthesizedExpression)){
-                     }
-
-                     kind = SyntaxKind.ParenthesizedExpression;
-                     if(M(receiver).IsKind(kind)){
                      }
                 }
 
