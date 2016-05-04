@@ -23,7 +23,7 @@ feature double Score = RankingScore;
 IEnumerable<SyntaxNodeOrToken> nodes := Stts(pred, splits) = Filter(\x: SyntaxNodeOrToken => pred, splits);
 IEnumerable<SyntaxNodeOrToken> splits := SplitNodes(n);
 
-SyntaxNodeOrToken trans := OneTrans(node, script);
+SyntaxNodeOrToken trans := OneTrans(node, script) | ManyTrans(node, loop);
 
 IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\x: SyntaxNodeOrToken => script, breaks);
 

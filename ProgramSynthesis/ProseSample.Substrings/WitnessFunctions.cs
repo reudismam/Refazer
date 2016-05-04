@@ -518,6 +518,9 @@ namespace ProseSample.Substrings
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
 
+            TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
+            CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
@@ -534,6 +537,43 @@ namespace ProseSample.Substrings
                     TreeUpdateDictionary.Add(input, treeUp);
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+
+                    kMatches.Add(script);
+                }
+                kExamples[input] = kMatches;
+            }
+            var lcs = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
+            //var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
+            return spec;
+            //return DisjunctiveExamplesSpec.From(kExamples);
+        }
+
+        [WitnessFunction("ManyTrans", 1)]
+        public static DisjunctiveExamplesSpec WitnessFunctionManyTransLoop(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+
+            TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
+            CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var kMatches = new List<object>();
+                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
+                {
+                    Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
+                    var script = Script(inpTree, outTree, out m);
+                    scrips.Add(script);
+
+                    TreeUpdate treeUp = new TreeUpdate();
+                    treeUp.PreProcessTree(script, inpTree);
+
+                    TreeUpdateDictionary.Add(input, treeUp);
+
+                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+
+                    if (ccs.Count > 1) return null;
 
                     kMatches.Add(script);
                 }
