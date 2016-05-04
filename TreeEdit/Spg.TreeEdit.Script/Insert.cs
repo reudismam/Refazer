@@ -25,26 +25,26 @@ namespace TreeEdit.Spg.TreeEdit.Script
             return "Insert(" + T1Node.Label + ", " + Parent.Label + ", " + K + ")";
         }
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Insert<T>)) return false;
+        //public override bool Equals(object obj)
+        //{
+        //    if (!(obj is Insert<T>)) return false;
 
-            return Equals(obj as Insert<T>);
-        }
+        //    return Equals(obj as Insert<T>);
+        //}
 
-        public bool Equals(Insert<T> other)
-        {
-            bool isParentLabel = false;
+        //public bool Equals(Insert<T> other)
+        //{
+        //    bool isParentLabel = false;
 
-            if (Parent != null && other.Parent != null)
-            {
-                isParentLabel = other.Parent.IsLabel(Parent.Label);
-            }else if (Parent == null && other.Parent == null)
-            {
-                isParentLabel = true;
-            }
+        //    if (Parent != null && other.Parent != null)
+        //    {
+        //        isParentLabel = other.Parent.IsLabel(Parent.Label);
+        //    }else if (Parent == null && other.Parent == null)
+        //    {
+        //        isParentLabel = true;
+        //    }
 
-            return K == other.K && other.T1Node.IsLabel(T1Node.Label) && isParentLabel;
-        }
+        //    return K == other.K && other.T1Node.IsLabel(T1Node.Label) && isParentLabel;
+        //}
     }
 }

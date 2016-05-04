@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="C5\IPriorityQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spg.ConnectedComponents\TreeConnectedComponents.cs" />
     <Compile Include="Spg.TreeEdit.Isomorphic\IsomorphicManager.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\GumTreeMapping.cs" />
     <Compile Include="Spg.TreeEdit.Isomorphic\IsomorphicPairs.cs" />

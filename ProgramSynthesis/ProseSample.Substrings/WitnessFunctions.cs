@@ -11,6 +11,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.List;
 using Spg.TreeEdit.Node;
+using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.TreeEdit.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
@@ -496,6 +497,8 @@ namespace ProseSample.Substrings
 
                     TreeUpdateDictionary.Add(input, treeUp);
 
+                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+
                     kMatches.Add(script);
                 }
                 kExamples[input] = kMatches;
@@ -504,7 +507,6 @@ namespace ProseSample.Substrings
             //var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
             return DisjunctiveExamplesSpec.From(kExamples);
         }
-
 
         /// <summary>
         /// Witness function for parater k in the insert operator
