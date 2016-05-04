@@ -64,6 +64,7 @@ namespace ProseSample
 
                 public String bar(int i)
                 {
+                     kind = SyntaxKind.ParenthesizedExpression;
                      if(M(receiver).CSharpKind() == kind){
                      }
                 }
@@ -89,6 +90,7 @@ namespace ProseSample
 
                 public String bar(int i)
                 {
+                     kind = SyntaxKind.ParenthesizedExpression;
                      if(M(receiver).IsKind(kind)){
                      }
                 }

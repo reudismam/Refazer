@@ -28,7 +28,10 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     if(ciValue.Equals(cjValue))
                     {
                         //AllPairOfIsomorphic(ci, cj);
-                        _alg.Add(ci, cj);
+                        if (!_alg.ContainsKey(ci))
+                        {
+                            _alg.Add(ci, cj);
+                        }
                     }
                 }
             }

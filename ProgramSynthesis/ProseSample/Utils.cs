@@ -52,8 +52,8 @@ namespace ProseSample
 
             ProgramSet consistentPrograms = engine.LearnGrammar(spec);
 
-            //var topK = consistentPrograms.TopK("Score").ToList().GetRange(0, 10);
-            var topK = consistentPrograms.RealizedPrograms.ToList().GetRange(0, 10);
+            var topK = consistentPrograms.TopK("Score").ToList().GetRange(0, 10);
+            //var topK = consistentPrograms.RealizedPrograms.ToList().GetRange(0, 10);
             string programs = "";
             foreach (ProgramNode p in topK)
             {
@@ -69,7 +69,7 @@ namespace ProseSample
                 return null;
             }
             string stringprogram = bestProgram.ToString();
-            var score = 10.0;//bestProgram["Score"];
+            var score = bestProgram["Score"];
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
             return bestProgram;
         }
