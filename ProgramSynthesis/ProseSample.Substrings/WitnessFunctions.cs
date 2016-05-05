@@ -538,6 +538,8 @@ namespace ProseSample.Substrings
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
+                    if (ccs.Count != 1) return null;
+
                     kMatches.Add(script);
                 }
                 kExamples[input] = kMatches;
@@ -573,7 +575,7 @@ namespace ProseSample.Substrings
                         TreeUpdateDictionary.Add(tree, treeUp);                      
                     }
 
-                    //if (ccs.Count > 1) return null;
+                    if (ccs.Count <= 1) return null;
 
                     kMatches.Add(script);
                 }
