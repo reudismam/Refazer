@@ -162,7 +162,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         private ITreeNode<SyntaxNodeOrToken> FindNode(SyntaxNodeOrToken node)
         {
-            foreach (var item in CurrentTree.DescendantNodes())
+            foreach (var item in CurrentTree.DescendantNodesAndSelf())
             {
                 if (node.IsKind(item.Value.Kind()) && item.Value.Span.Contains(node.Span) && node.Span.Contains(item.Value.Span))
                 {
@@ -174,7 +174,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree,  SyntaxNodeOrToken node)
         {
-            foreach (var item in tree.DescendantNodes())
+            foreach (var item in tree.DescendantNodesAndSelf())
             {
                 if (node.IsKind(item.Value.Kind()) && item.Value.Span.Contains(node.Span) && node.Span.Contains(item.Value.Span))
                 {

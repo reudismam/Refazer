@@ -23,7 +23,7 @@ namespace ProseSample.Substrings
     {
         private static Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
-        private static Dictionary<State, TreeUpdate> TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
+        private static Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
 
         /// <summary>
         /// Literal witness function for parameter tree.
@@ -518,7 +518,7 @@ namespace ProseSample.Substrings
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
 
-            TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
+            TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
             CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
             foreach (State input in spec.ProvidedInputs)
@@ -534,7 +534,7 @@ namespace ProseSample.Substrings
                     TreeUpdate treeUp = new TreeUpdate();
                     treeUp.PreProcessTree(script, inpTree);
 
-                    TreeUpdateDictionary.Add(input, treeUp);
+                    TreeUpdateDictionary.Add(inpTree, treeUp);
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
@@ -551,7 +551,7 @@ namespace ProseSample.Substrings
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
 
-            TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
+            TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
             CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -563,12 +563,15 @@ namespace ProseSample.Substrings
                     var script = Script(inpTree, outTree, out m);
                     scrips.Add(script);
 
-                    TreeUpdate treeUp = new TreeUpdate();
-                    treeUp.PreProcessTree(script, inpTree);
-
-                    TreeUpdateDictionary.Add(input, treeUp);
-
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+
+                    foreach (var cc in ccs)
+                    {
+                        TreeUpdate treeUp = new TreeUpdate();
+                        var tree = cc.First().Parent.Value;
+                        treeUp.PreProcessTree(script, tree);
+                        TreeUpdateDictionary.Add(tree, treeUp);                      
+                    }
 
                     //if (ccs.Count > 1) return null;
 
@@ -576,7 +579,9 @@ namespace ProseSample.Substrings
                 }
                 kExamples[input] = kMatches;
             }
-            return new SubsequenceSpec(kExamples);
+
+            var subsequenceSpec = new SubsequenceSpec(kExamples);
+            return subsequenceSpec;
         }
 
 
@@ -639,7 +644,7 @@ namespace ProseSample.Substrings
                     matches.Add(result);
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    var treeUp = TreeUpdateDictionary[input];
+                    var treeUp = TreeUpdateDictionary[key];
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
                     CurrentTrees[key] = previousTree;
@@ -674,7 +679,7 @@ namespace ProseSample.Substrings
                     matches.Add(result);
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    var treeUp = TreeUpdateDictionary[input];
+                    var treeUp = TreeUpdateDictionary[key];
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
@@ -735,7 +740,7 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    var treeUp = TreeUpdateDictionary[input];
+                    var treeUp = TreeUpdateDictionary[key];
                     matches.Add(editOperation.K);
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
@@ -848,7 +853,7 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
-                    var treeUp = TreeUpdateDictionary[input];
+                    var treeUp = TreeUpdateDictionary[key];
                     matches.Add(editOperation.K);
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);

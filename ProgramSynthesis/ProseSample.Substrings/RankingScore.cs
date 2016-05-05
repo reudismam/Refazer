@@ -38,11 +38,20 @@ namespace ProseSample.Substrings
         [FeatureCalculator("SplitNodes")]
         public static double Score_SplitNodes(double inScore) => inScore;
 
+        [FeatureCalculator("BreakByKind")]
+        public static double Score_BreakByKind(double inScore, double kind) => inScore + kind;
+
         [FeatureCalculator("Script")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
         [FeatureCalculator("OneTrans")]
         public static double Score_OneTrans(double inScore, double script) => inScore + script;
+
+        [FeatureCalculator("ManyTrans")]
+        public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;
+
+        [FeatureCalculator("Loop")]
+        public static double Score_Breaks(double inScore, double breaks) => inScore + breaks;
 
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;
