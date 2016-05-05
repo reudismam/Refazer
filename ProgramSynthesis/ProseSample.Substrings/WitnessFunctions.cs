@@ -555,6 +555,7 @@ namespace ProseSample.Substrings
 
             TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
             CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+            bool hasMany = false;
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
@@ -575,12 +576,17 @@ namespace ProseSample.Substrings
                         TreeUpdateDictionary.Add(tree, treeUp);                      
                     }
 
-                    if (ccs.Count <= 1) return null;
+                    if (ccs.Count > 1)
+                    {
+                        hasMany = true;
+                    }
 
                     kMatches.Add(script);
                 }
                 kExamples[input] = kMatches;
             }
+
+            if (hasMany) return null;
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
             return subsequenceSpec;
