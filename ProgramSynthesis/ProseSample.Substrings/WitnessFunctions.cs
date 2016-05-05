@@ -480,27 +480,27 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessFunctionScript2Edit(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+            //var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
 
-            TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
-            CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+            //TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
+            //CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
-                foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
+                //var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                foreach (List<EditOperation<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
-                    Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
-                    var script = Script(inpTree, outTree, out m);
-                    scrips.Add(script);
+                    //Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
+                    //var script = Script(inpTree, outTree, out m);
+                    //scrips.Add(script);
 
-                    TreeUpdate treeUp = new TreeUpdate();
-                    treeUp.PreProcessTree(script, inpTree);
+                    //TreeUpdate treeUp = new TreeUpdate();
+                    //treeUp.PreProcessTree(script, inpTree);
 
-                    TreeUpdateDictionary.Add(input, treeUp);
+                    //TreeUpdateDictionary.Add(input, treeUp);
 
-                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+                    //var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
                     kMatches.Add(script);
                 }
@@ -542,14 +542,11 @@ namespace ProseSample.Substrings
                 }
                 kExamples[input] = kMatches;
             }
-            var lcs = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
-            //var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
-            return spec;
-            //return DisjunctiveExamplesSpec.From(kExamples);
+            return DisjunctiveExamplesSpec.From(kExamples);
         }
 
         [WitnessFunction("ManyTrans", 1)]
-        public static DisjunctiveExamplesSpec WitnessFunctionManyTransLoop(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec WitnessFunctionManyTransLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
@@ -573,16 +570,49 @@ namespace ProseSample.Substrings
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
-                    if (ccs.Count > 1) return null;
+                    //if (ccs.Count > 1) return null;
 
                     kMatches.Add(script);
                 }
                 kExamples[input] = kMatches;
             }
-            var lcs = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
-            //var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
-            return spec;
-            //return DisjunctiveExamplesSpec.From(kExamples);
+            return new SubsequenceSpec(kExamples);
+        }
+
+
+        [WitnessFunction("Loop", 1)]
+        public static SubsequenceSpec WitnessFunctionLoop(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        {
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var kMatches = new List<object>();
+                foreach (List<EditOperation<SyntaxNodeOrToken>> script in spec.Examples[input])
+                {
+                    kMatches.Add(script.First().Parent.Value);
+                }
+                kExamples[input] = kMatches;
+            }
+            return new SubsequenceSpec(kExamples);
+        }
+
+
+        [WitnessFunction("BreakByKind", 1)]
+        public static DisjunctiveExamplesSpec WitnessFunctionBreakByKind(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        {
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+  
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var kMatches = new List<object>();
+                foreach (SyntaxNodeOrToken outTree in spec.Examples[input])
+                {
+                    kMatches.Add(outTree.Kind());
+                }
+                kExamples[input] = kMatches;
+            }
+            return DisjunctiveExamplesSpec.From(kExamples);
         }
 
 
