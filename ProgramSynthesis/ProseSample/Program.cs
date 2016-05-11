@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
@@ -15,7 +16,38 @@ namespace ProseSample
     {
         private static void Main(string[] args)
         {
-            LoadAndRunRepetitiveChangeMultipleEditions2();
+            LoadAndRunRepetitiveChangeMultipleEditions3();
+        }
+
+        private static void LoadAndRunRepetitiveChangeMultipleEditions3()
+        {
+            //Load grammar
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+
+            //input data
+            string inputText = File.ReadAllText(@"SyntaxTreeExtensionsB.cs");
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = File.ReadAllText(@"SyntaxTreeExtensionsA.cs");
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //Examples
+            var examplesNodes = from inode in outTree.AsNode().DescendantNodes()
+                                where inode.IsKind(SyntaxKind.MethodDeclaration)
+                                select inode;
+            //Select two examples
+            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 2);
+            var examples = examplesSot.Select(o => (object)o).ToList();
+
+            //Learn program
+            var input = State.Create(grammar.InputSymbol, inpTree);
+            var spec = new SubsequenceSpec(input, examples);
+            ProgramNode program = Learn(grammar, spec);
+
+            //Run program
+            object[] output = program.Invoke(input).ToEnumerable().ToArray();
+            WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
         }
 
         //public String bar(int i)
@@ -121,7 +153,7 @@ namespace ProseSample
 
             //Learn program
             var input = State.Create(grammar.InputSymbol, inpTree);
-            var spec = new PrefixSpec(input, examples);
+            var spec = new SubsequenceSpec(input, examples);
             ProgramNode program = Learn(grammar, spec);
 
             //Run program

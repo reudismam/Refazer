@@ -6,8 +6,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
 {
     public class AddAnnotationRewriter : CSharpSyntaxRewriter
     {
-        //private readonly Dictionary<SyntaxNode, SyntaxAnnotation> _annotation;
-
         private readonly SyntaxNode _snode;
         private readonly List<SyntaxAnnotation> _annotations;
 
@@ -16,11 +14,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
             _annotations = annotations;
             _snode = snode;
         }
-
-        //public AddAnnotationRewriter(Dictionary<SyntaxNode, SyntaxAnnotation> annotation)
-        //{
-        //    _annotation = annotation;
-        //}
 
         public override SyntaxNode Visit(SyntaxNode node)
         {

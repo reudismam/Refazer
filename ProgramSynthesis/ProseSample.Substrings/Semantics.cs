@@ -14,11 +14,23 @@ namespace ProseSample.Substrings
 {
     public static class Semantics
     {
+        /// <summary>
+        /// Store the current trees.
+        /// </summary>
         private static readonly Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
-
+        /// <summary>
+        /// Store the tree update associate to each node
+        /// </summary>
         private static readonly Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
 
+        /// <summary>
+        /// Match function. This function matches the first element on the tree that has the specified kind and child nodes.
+        /// </summary>
+        /// <param name="node">Node</param>
+        /// <param name="kind">Syntax kind</param>
+        /// <param name="children">Children nodes</param>
+        /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
         public static MatchResult C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
             var currentTree = GetCurrentTree(node);
@@ -49,7 +61,7 @@ namespace ProseSample.Substrings
         private static List<ITreeNode<SyntaxNodeOrToken>> SplitToNodes(ITreeNode<SyntaxNodeOrToken> node, SyntaxKind kind)
         {
             TLabel label= new TLabel(kind);
-            var descendantNodes = node.DescendantNodes();
+            var descendantNodes = node.DescendantNodesAndSelf();
             var kinds = from k in descendantNodes
                 where k.IsLabel(label)
                 select k;
@@ -218,21 +230,24 @@ namespace ProseSample.Substrings
 
         public static MatchResult KindRef(SyntaxNodeOrToken node, SyntaxKind kind, int k)
         {
-            //var currentTree = GetCurrentTree(node);
+            var currentTree = GetCurrentTree(node);
 
-            //var matches = SplitToNodes(currentTree, kind);
+            var matches = SplitToNodes(currentTree, kind);
 
-            //if (matches.Any())
-            //{
-            //    return matches.ElementAt(k - 1);
-            //}
+            if (matches.Any())
+            {
+                var result = new MatchResult(Tuple.Create(matches.ElementAt(k - 1).Value, new Bindings(new List<SyntaxNodeOrToken> { matches.ElementAt(k - 1).Value })));
+                return result;
+            }
             return null;
         }
 
         //TODO rename to child
         public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult kindRef, int k)
         {
-            return null;
+            SyntaxNodeOrToken child = kindRef.match.Item1.AsNode().ChildNodes().ElementAt(k - 1);
+            var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child })));
+            return result;
         }
 
         private static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
@@ -243,8 +258,6 @@ namespace ProseSample.Substrings
                 TreeUpdate update = new TreeUpdate(n);
                 TreeUpdateDictionary[n] = update;
             }
-
-            //ITreeNode<SyntaxNodeOrToken> node = CurrentTrees[n];
             var node = TreeUpdateDictionary[n].CurrentTree;
 
             return node;
@@ -269,7 +282,6 @@ namespace ProseSample.Substrings
             return node;
         }
 
-
         /// <summary>
         /// Create a constant node
         /// </summary>
@@ -284,7 +296,6 @@ namespace ProseSample.Substrings
         {
             return result.match.Item1;
         }
-
 
         public static IEnumerable<MatchResult> CList(MatchResult child1, IEnumerable<MatchResult> cList)
         {
@@ -329,7 +340,7 @@ namespace ProseSample.Substrings
             return nodes.Select(snot => (SyntaxNodeOrToken)snot).ToList();
         }
 
-        public static Boolean FTrue()
+        public static bool FTrue()
         {
             return true;
         }
@@ -341,12 +352,33 @@ namespace ProseSample.Substrings
 
         public static SyntaxNodeOrToken ManyTrans(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
         {
-            return null;
+            var list = loop.ToList();
+            var nodeElements = from snode in node.AsNode().DescendantNodesAndSelf()
+                where snode.IsKind(list.First().Kind())
+                select snode;
+
+            for(int i = 0; i < nodeElements.Count(); i++)
+            {
+                var kinds = from snode in node.AsNode().DescendantNodesAndSelf()
+                                   where snode.IsKind(list.First().Kind())
+                                   select snode;
+
+                var item = kinds.ElementAt(i);
+                var rewriter = new UpdateTreeRewriter(item, list.ElementAt(i).AsNode());
+                node = rewriter.Visit(node.AsNode());
+            }
+
+            return node;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> BreakByKind(SyntaxNodeOrToken node, SyntaxKind kind)
         {
-            return null;
+            var currentTree = GetCurrentTree(node);
+            var nodeList = SplitToNodes(currentTree, kind);
+
+            var kList = nodeList.Select(o => o.Value);
+
+            return kList;
         }
 
         /// <summary>
@@ -463,21 +495,19 @@ namespace ProseSample.Substrings
             return null;
         }
 
-
+        /// <summary>
+        /// Reconstruct the tree
+        /// </summary>
+        /// <param name="tree">Tree in another format</param>
+        /// <returns>Reconstructed tree</returns>
         public static SyntaxNodeOrToken ReconstructTree(ITreeNode<SyntaxNodeOrToken> tree)
-        {
-            
+        {         
             if (!tree.Children.Any())
             {
                 return tree.Value;
             }
 
-
-            var children = new List<SyntaxNodeOrToken>();
-            foreach (var child in tree.Children)
-            {
-                children.Add(ReconstructTree(child));
-            }
+            var children = tree.Children.Select(ReconstructTree).ToList();
 
             if (tree.Value.IsKind(SyntaxKind.MethodDeclaration))
             {

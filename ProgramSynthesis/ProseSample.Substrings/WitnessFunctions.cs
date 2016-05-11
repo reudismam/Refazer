@@ -566,6 +566,8 @@ namespace ProseSample.Substrings
                     var script = Script(inpTree, outTree, out m);
                     scrips.Add(script);
 
+                    printScript(script);
+
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
                     foreach (var cc in ccs)
@@ -573,7 +575,8 @@ namespace ProseSample.Substrings
                         TreeUpdate treeUp = new TreeUpdate();
                         var tree = cc.First().Parent.Value;
                         treeUp.PreProcessTree(script, tree);
-                        TreeUpdateDictionary.Add(tree, treeUp);                      
+                        TreeUpdateDictionary.Add(tree, treeUp);
+                        printScript(cc);
                     }
 
                     if (ccs.Count > 1)
@@ -581,15 +584,25 @@ namespace ProseSample.Substrings
                         hasMany = true;
                     }
 
-                    kMatches.Add(script);
+                    kMatches.AddRange(ccs);
                 }
                 kExamples[input] = kMatches;
             }
 
-            if (hasMany) return null;
+            if (!hasMany) return null;
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
             return subsequenceSpec;
+        }
+
+        static void printScript(List<EditOperation<SyntaxNodeOrToken>> script)
+        {
+            string s = "";
+
+            foreach (var v in script)
+            {
+                s += v + "\n";
+            }
         }
 
 
@@ -609,7 +622,6 @@ namespace ProseSample.Substrings
             }
             return new SubsequenceSpec(kExamples);
         }
-
 
         [WitnessFunction("BreakByKind", 1)]
         public static DisjunctiveExamplesSpec WitnessFunctionBreakByKind(GrammarRule rule, int parameter, SubsequenceSpec spec)
