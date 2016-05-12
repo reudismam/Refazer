@@ -33,23 +33,24 @@ namespace TreeEdit.Spg.TreeEdit.Script
                     int k = FindPos(x, M);
                     //x.Children = new List<ITreeNode<T>>();
                     var insert = new Insert<T>(x, z, k);
+                    //z.AddChild(x, k - 1);
                     M.Add(x, x);
                     editScript.Add(insert);
                 }
                 else //x has a partner in M
                 {
-                    var v = w.Parent;
                     if (!w.Children.Any() && !w.ToString().Equals(x.ToString()))
                     {
                         var update = new Update<T>(w, x, z);
                         editScript.Add(update);
                     }
 
-
+                    var v =w.Parent;
                     if (z == null || !z.Equals(v))
                     {
                         int k = FindPos(x, M);
                         var move = new Move<T>(w, z, k);
+                        //z.AddChild(w, k - 1);
                         editScript.Add(move);
                     }
                 }

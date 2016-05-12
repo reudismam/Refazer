@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using TreeEdit.Spg.Walker;
 using Tutor.Spg.TreeEdit.Node;
 
@@ -102,6 +101,7 @@ namespace Spg.TreeEdit.Node
         /// <param name="k">Position</param>
         public void AddChild(ITreeNode<T> child, int k)
         {
+            child.Parent = this;
             _children.Insert(k, child);
         }
 

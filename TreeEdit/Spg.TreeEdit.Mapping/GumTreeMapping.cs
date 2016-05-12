@@ -19,7 +19,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         public Dictionary<ITreeNode<T>, ITreeNode<T>> TopDown(ITreeNode<T> t1, ITreeNode<T> t2)
         {
             var M = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
-            var A = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
+            var A = new List<Tuple<ITreeNode<T>, ITreeNode<T>>>();
 
             var l1 = new PriorityQueue<T>();
             var l2 = new PriorityQueue<T>();
@@ -77,7 +77,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                             {
                                 if (dict1[item1.Item2].Count > 1 || dict2[item2.Item2].Count > 1)
                                 {
-                                    A.Add(item1.Item2, item2.Item2);
+                                    A.Add(Tuple.Create(item1.Item2, item2.Item2));
                                 }
                                 else
                                 {
@@ -109,54 +109,50 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 }
             }
 
-            var sortList = A.ToList();
-            sortList = sortList.OrderByDescending(o => Dice(o.Key, o.Value, M)).ToList();
+            var list = A.ToList();
+            var sortList = list.OrderByDescending(o => Dice(o.Item1, o.Item2, M)).ToList();
 
-            //Insert code the remaiding implementation.
+            while (sortList.Any())
+            {
+                var item = sortList.First();
+                var dict = IsomorphicManager<T>.AllPairOfIsomorphic(item.Item1, item.Item2);
+                foreach (var v in dict)
+                {
+                    M.Add(v.Key, v.Value);
+                }
+
+                var removes = sortList.Where(elm => elm.Item1.Equals(item.Item1) || elm.Item2.Equals(item.Item2)).ToList();
+
+                sortList = sortList.Except(removes).ToList();
+            }
 
             return M;
         }
 
-        public Dictionary<ITreeNode<T>, ITreeNode<T>> BottomUP(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        public Dictionary<ITreeNode<T>, ITreeNode<T>> BottomUp(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
             var traversal = new TreeTraversal<T>();
-            var list = traversal.PostOrderTraversal(t1);
-
-            int maxSize = 100;
-            double minDice = 0.25;
-
+            var t1Nodes = traversal.PostOrderTraversal(t1);
             var MT = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
-            foreach (var i in list)
+            foreach (var t1Node in t1Nodes)
             {
-                if (!M.ContainsKey(i) && HasMatchedChildren(i, M))
+                if (!M.ContainsKey(t1Node) && HasMatchedChildren(t1Node, M))
                 {
-                    ITreeNode<T> snt2 = Candidate(i, t2, M);
+                    ITreeNode<T> t2Node = Candidate(t1Node, t2, M);
+                    double dice = Dice(t1Node, t2Node, M);
 
-                    double dice = Dice(i, snt2, M);
-
-                    if (snt2 != null && dice > minDice)
+                    if (t2Node != null && dice > 0.25)
                     {
-                        if (Math.Max(i.DescendantNodes().Count(), t2.DescendantNodes().Count()) < maxSize)
+                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 100)
                         {
-                            var zss = new CSharpZss<T>(i, snt2);
+                            RemoveFromM(t1Node, M, MT);
+                            var R = Opt(t1Node, t2Node);
 
-                            var result = zss.Compute();
-                            var edits = result.Item2;
-
-                            RemoveFromM(i, M, MT);
-                            var R = Opt(edits, i, snt2);
-
-                            foreach (var edt in R)
+                            foreach (var edt in R.Where(edt => !M.ContainsKey(edt.Key)).Where(edt => edt.Key.IsLabel(edt.Value.Label)))
                             {
-                                if (!M.ContainsKey(edt.Key))
-                                {
-                                    if (edt.Key.IsLabel(edt.Value.Label))
-                                    {
-                                        M.Add(edt.Key, edt.Value);
-                                        MT.Add(edt.Key, edt.Value);
-                                    }
-                                }
-                            }                                   
+                                M.Add(edt.Key, edt.Value);
+                                MT.Add(edt.Key, edt.Value);
+                            }
                         }
                     }
                 }
@@ -178,22 +174,27 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             }
         }
 
-        private Dictionary<ITreeNode<T>, ITreeNode<T>> Opt(List<Tuple<ZssNode<ITreeNode<T>>, ZssNode<ITreeNode<T>>>> edits, ITreeNode<T> t1, ITreeNode<T> t2)
+        private Dictionary<ITreeNode<T>, ITreeNode<T>> Opt(ITreeNode<T> t1, ITreeNode<T> t2)
         {
-            Dictionary<ITreeNode<T>, ITreeNode<T>> dict = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
+            var zss = new CSharpZss<T>(t1, t2);
 
-            foreach (var edit in edits)
+            var result = zss.Compute();
+            var script = result.Item2;
+
+            var dict = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
+
+            foreach (var editOperation in script)
             {
-                if(edit.Item1 != null && edit.Item2 != null)
+                if(editOperation.Item1 != null && editOperation.Item2 != null)
                 {
-                    dict.Add(edit.Item1.InternalNode, edit.Item2.InternalNode);
-                    var x = IsomorphicManager<T>.AllPairOfIsomorphic(edit.Item1.InternalNode, edit.Item2.InternalNode);
+                    dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
+                    var isomorphicPairs = IsomorphicManager<T>.AllPairOfIsomorphic(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
                     
-                    foreach(var dici in x)
+                    foreach(var pair in isomorphicPairs)
                     {
-                        if(!dict.ContainsKey(dici.Key))
+                        if(!dict.ContainsKey(pair.Key))
                         {
-                            dict.Add(dici.Key, dici.Value);
+                            dict.Add(pair.Key, pair.Value);
                         }
                     }
                 }
@@ -260,7 +261,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         public Dictionary<ITreeNode<T>, ITreeNode<T>> Mapping(ITreeNode<T> t1, ITreeNode<T> t2)
         {
             Dictionary<ITreeNode<T>, ITreeNode<T>> M = TopDown(t1, t2);
-            M = BottomUP(t1, t2, M);
+            M = BottomUp(t1, t2, M);
             return M;
         }
     }
