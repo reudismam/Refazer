@@ -151,7 +151,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                             foreach (var edt in R.Where(edt => !M.ContainsKey(edt.Key)).Where(edt => edt.Key.IsLabel(edt.Value.Label)))
                             {
                                 M.Add(edt.Key, edt.Value);
-                                MT.Add(edt.Key, edt.Value);
+                                //MT.Add(edt.Key, edt.Value);
                             }
                         }
                     }
@@ -167,7 +167,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
             foreach(var i in elements)
             {
-                if (M.ContainsKey(i) && !MT.ContainsKey(i))
+                if (M.ContainsKey(i) /*&& !MT.ContainsKey(i)*/)
                 {
                     M.Remove(i);
                 }
