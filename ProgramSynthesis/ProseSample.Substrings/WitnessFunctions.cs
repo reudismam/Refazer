@@ -605,7 +605,6 @@ namespace ProseSample.Substrings
             }
         }
 
-
         [WitnessFunction("Loop", 1)]
         public static SubsequenceSpec WitnessFunctionLoop(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {

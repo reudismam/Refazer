@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Spg.TreeEdit.Node;
 using TreeEdit.Spg.TreeEdit.Mapping;
@@ -17,6 +18,8 @@ namespace TreeEdit.Spg.TreeEdit.Script
         /// <returns></returns>
         public List<EditOperation<T>> EditScript(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
+            PrintPretty(t1, "", true);
+            
             var editScript = new List<EditOperation<T>>();
             var bfs = BFSWalker<T>.BreadFirstSearch(t2);
             //Obs: we do not need to apply transformation as described in the paper because
@@ -33,24 +36,23 @@ namespace TreeEdit.Spg.TreeEdit.Script
                     int k = FindPos(x, M);
                     //x.Children = new List<ITreeNode<T>>();
                     var insert = new Insert<T>(x, z, k);
-                    //z.AddChild(x, k - 1);
                     M.Add(x, x);
                     editScript.Add(insert);
                 }
                 else //x has a partner in M
                 {
+                    var v = w.Parent;
                     if (!w.Children.Any() && !w.ToString().Equals(x.ToString()))
                     {
                         var update = new Update<T>(w, x, z);
                         editScript.Add(update);
                     }
 
-                    var v =w.Parent;
+
                     if (z == null || !z.Equals(v))
                     {
                         int k = FindPos(x, M);
                         var move = new Move<T>(w, z, k);
-                        //z.AddChild(w, k - 1);
                         editScript.Add(move);
                     }
                 }
@@ -70,6 +72,27 @@ namespace TreeEdit.Spg.TreeEdit.Script
                 }
             }
             return editScript;
+        }
+
+        public void PrintPretty(ITreeNode<T> tree, string indent, bool last)
+        {
+            Console.Write(indent);
+            if (last)
+            {
+                Console.Write("\\-");
+                //indent += "\\-";
+                indent += "  ";
+            }
+            else
+            {
+                Console.Write("|-");
+                //indent += "|-";
+                indent += "| ";
+            }
+            Console.WriteLine(tree.Label);
+
+            for (int i = 0; i < tree.Children.Count; i++)
+                PrintPretty(tree.Children[i], indent, i == tree.Children.Count - 1);
         }
 
         /// <summary>
