@@ -22,8 +22,14 @@ namespace ProseSample.Substrings
 {
     public static class WitnessFunctions
     {
+        /// <summary>
+        /// Current trees.
+        /// </summary>
         private static Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> _currentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
+        /// <summary>
+        /// TreeUpdate mapping.
+        /// </summary>
         private static Dictionary<SyntaxNodeOrToken, TreeUpdate> _treeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
 
         /// <summary>
@@ -34,7 +40,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Literal", 1)]
-        public static DisjunctiveExamplesSpec WitnessTree(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             var literalExamples = new List<object>();
@@ -44,11 +50,13 @@ namespace ProseSample.Substrings
 
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
+                    //Only apliable for nodes
                     if (matchResult.match.Item1.IsToken) return null;
 
+                    //Only appliable for leaf nodes
                     if (matchResult.match.Item1.AsNode().ChildNodes().Any()) return null;
 
-                    var matches = Matches(inpTree, matchResult);
+                    var matches = ConcreteTreeMatches(inpTree, matchResult);
                     if (!matches.Any()) return null;
 
                     literalExamples.Add(matches.First());
@@ -57,7 +65,6 @@ namespace ProseSample.Substrings
                     var first = ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken) literalExamples.First());
                     if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(currentTree, first)) return null;
                 }
-
                 treeExamples[input] = literalExamples.GetRange(0, 1);
             }
 
@@ -359,7 +366,7 @@ namespace ProseSample.Substrings
         /// <param name="inpTree">Input tree</param>
         /// <param name="matchResult">Match on code</param>
         /// <returns>Matched nodes</returns>
-        private static List<SyntaxNodeOrToken> Matches(ITreeNode<SyntaxNodeOrToken> inpTree, MatchResult matchResult)
+        private static List<SyntaxNodeOrToken> ConcreteTreeMatches(ITreeNode<SyntaxNodeOrToken> inpTree, MatchResult matchResult)
         {
             var descendants = inpTree.DescendantNodes();
             var sot = matchResult.match.Item1;
@@ -479,41 +486,20 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Script", 1)]
-        public static DisjunctiveExamplesSpec WitnessFunctionScript2Edit(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-
+            var editsExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-                //var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
                 foreach (List<EditOperation<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
-                    //Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
-                    //var script = Script(inpTree, outTree, out m);
-                    //scrips.Add(script);
-
-                    //TreeUpdate treeUp = new TreeUpdate();
-                    //treeUp.PreProcessTree(script, inpTree);
-
-                    //TreeUpdateDictionary.Add(input, treeUp);
-
-                    //var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
-
-                    //foreach (var operation in script.GetRange(0, 4))
-                    //{
-                    //    TreeUpdate treeUp = TreeUpdateDictionary[(SyntaxNodeOrToken) input[rule.Body[0]]];
-                    //    treeUp.ProcessEditOperation(operation);
-                    //}
-
-                    //kMatches.Add(script.GetRange(4, 1));
                     kMatches.Add(script);
                 }
-                kExamples[input] = kMatches;
+
+                editsExamples[input] = kMatches;
             }
-            var lcs = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
-            //var lcsrresult = lcs.FindDifference(scrips[0], scrips[1]);
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return DisjunctiveExamplesSpec.From(editsExamples);
         }
 
         
