@@ -6,6 +6,13 @@ namespace TreeEdit.Spg.TreeEdit.Script
 {
     public class Move<T> : EditOperation<T>
     {
+        private ITreeNode<T> _previousParent;
+
+        public ITreeNode<T> PreviousParent 
+        {
+            get{ return _previousParent; }
+            set { _previousParent = value; }
+        }
         /// <summary>
         /// Create a move operation
         /// </summary>

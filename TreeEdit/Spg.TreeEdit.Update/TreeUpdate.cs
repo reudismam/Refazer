@@ -20,10 +20,10 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         public Dictionary<EditOperation<SyntaxNodeOrToken>, bool> Processed;
 
-        /// <summary>
-        /// Edit script
-        /// </summary>
-        private List<EditOperation<SyntaxNodeOrToken>> _script;
+        ///// <summary>
+        ///// Edit script
+        ///// </summary>
+        //private List<EditOperation<SyntaxNodeOrToken>> _script;
 
 
         public TreeUpdate(SyntaxNodeOrToken tree)
@@ -36,39 +36,38 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         }
 
+        ///// <summary>
+        ///// Update the tree following the edit script
+        ///// </summary>
+        ///// <param name="script">Edit script</param>
+        ///// <param name="tree">Tree to be updated</param>
+        //public void UpdateTree(List<EditOperation<SyntaxNodeOrToken>> script, SyntaxNodeOrToken tree)
+        //{
+        //    PreProcessTree(script, tree);
 
-        /// <summary>
-        /// Update the tree following the edit script
-        /// </summary>
-        /// <param name="script">Edit script</param>
-        /// <param name="tree">Tree to be updated</param>
-        public void UpdateTree(List<EditOperation<SyntaxNodeOrToken>> script, SyntaxNodeOrToken tree)
-        {
-            PreProcessTree(script, tree);
-
-            foreach (var item in script)
-            {
-                if (!Processed.ContainsKey(item))
-                {
-                    ProcessScript(item);
-                }
-            }
-        }
+        //    foreach (var item in script)
+        //    {
+        //        if (!Processed.ContainsKey(item))
+        //        {
+        //            ProcessScript(item);
+        //        }
+        //    }
+        //}
 
         public void PreProcessTree(List<EditOperation<SyntaxNodeOrToken>> script, SyntaxNodeOrToken tree)
         {
-            _script = script;
+            //_script = script;
             CurrentTree = ConverterHelper.ConvertCSharpToTreeNode(tree);
         }
 
 
-        public void ProcessScript(EditOperation<SyntaxNodeOrToken> operation)
-        {
-            foreach (var editOperation in _script)
-            {
-                ProcessEditOperation(editOperation);
-            }
-        }
+        //public void ProcessScript(EditOperation<SyntaxNodeOrToken> operation)
+        //{
+        //    foreach (var editOperation in _script)
+        //    {
+        //        ProcessEditOperation(editOperation);
+        //    }
+        //}
 
         /// <summary>
         /// Process insert operation

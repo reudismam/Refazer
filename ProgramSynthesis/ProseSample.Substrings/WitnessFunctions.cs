@@ -639,7 +639,6 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
-
         /// <summary>
         /// Witness function for parater k in the insert operator
         /// </summary>

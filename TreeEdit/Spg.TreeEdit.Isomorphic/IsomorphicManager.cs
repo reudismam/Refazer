@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Spg.TreeEdit.Node;
 using TreeEdit.Spg.TreeEdit.Mapping;
 
@@ -39,10 +40,10 @@ namespace TreeEdit.Spg.TreeEdit.Isomorphic
             return false;
         }
 
-        public static Dictionary<ITreeNode<T>, ITreeNode<T>> AllPairOfIsomorphic(ITreeNode<T> t1, ITreeNode<T> t2)
+        public static List<Tuple<ITreeNode<T>, ITreeNode<T>>> AllPairOfIsomorphic(ITreeNode<T> t1, ITreeNode<T> t2)
         {
             var pairs = new IsomorphicPairs<T>();
-            Dictionary<ITreeNode<T>, ITreeNode<T>> ps = pairs.Pairs(t1, t2);
+            var ps = pairs.Pairs(t1, t2);
 
             return ps;
         }

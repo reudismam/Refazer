@@ -138,7 +138,6 @@ namespace ProseSample.Substrings
             return null;
         }
 
-
         /// <summary>
         /// Concrete matches
         /// </summary>

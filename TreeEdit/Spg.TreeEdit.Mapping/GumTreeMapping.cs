@@ -68,7 +68,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                             }
                         }
                     }
-
+                    int i = 0;
                     foreach (var item1 in h1)
                     {
                         foreach (var item2 in h2)
@@ -84,7 +84,10 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                                     var dict = IsomorphicManager<T>.AllPairOfIsomorphic(item1.Item2, item2.Item2);
                                     foreach (var v in dict)
                                     {
-                                        M.Add(v.Key, v.Value);
+                                        if (!M.ContainsKey(v.Item1))
+                                        {
+                                            M.Add(v.Item1, v.Item2);
+                                        }
                                     }
                                 }
                             }
@@ -118,7 +121,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 var dict = IsomorphicManager<T>.AllPairOfIsomorphic(item.Item1, item.Item2);
                 foreach (var v in dict)
                 {
-                    M.Add(v.Key, v.Value);
+                    M.Add(v.Item1, v.Item2);
                 }
 
                 var removes = sortList.Where(elm => elm.Item1.Equals(item.Item1) || elm.Item2.Equals(item.Item2)).ToList();
@@ -147,7 +150,6 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                         {
                             RemoveFromM(t1Node, M, MT);
                             var R = Opt(t1Node, t2Node);
-
                             foreach (var edt in R.Where(edt => !M.ContainsKey(edt.Key)).Where(edt => edt.Key.IsLabel(edt.Value.Label)))
                             {
                                 M.Add(edt.Key, edt.Value);
@@ -189,12 +191,17 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 {
                     dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
                     var isomorphicPairs = IsomorphicManager<T>.AllPairOfIsomorphic(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-                    
+                    if (IsomorphicManager<T>.IsIsomorphic(editOperation.Item1.InternalNode,
+                        editOperation.Item2.InternalNode))
+                    {
+                        dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
+                    }
+
                     foreach(var pair in isomorphicPairs)
                     {
-                        if(!dict.ContainsKey(pair.Key))
+                        if(!dict.ContainsKey(pair.Item1) && !dict.ContainsValue(pair.Item2))
                         {
-                            dict.Add(pair.Key, pair.Value);
+                            dict.Add(pair.Item1, pair.Item2);
                         }
                     }
                 }

@@ -95,10 +95,14 @@ namespace TreeEdit.Spg.ConnectedComponents
                         Graph[edit_i].Add(edit_j);
                     }
 
-                    //Specific case for deleted nodes
-                    if (edit_i.T1Node.Parent.Equals(edit_j.Parent))
+                    if (edit_i is Move<T>)
                     {
-                        Graph[edit_i].Add(edit_j);
+                        var move = edit_i as Move<T>;
+                        //Specific case for deleted nodes
+                        if (move.PreviousParent.Equals(edit_j.Parent))
+                        {
+                            Graph[edit_i].Add(edit_j);
+                        }
                     }
                 }
             }

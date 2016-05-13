@@ -19,7 +19,7 @@ namespace TreeEdit.Spg.TreeEdit.Script
         public List<EditOperation<T>> EditScript(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
             PrintPretty(t1, "", true);
-            
+
             var editScript = new List<EditOperation<T>>();
             var bfs = BFSWalker<T>.BreadFirstSearch(t2);
             //Obs: we do not need to apply transformation as described in the paper because
@@ -34,9 +34,13 @@ namespace TreeEdit.Spg.TreeEdit.Script
                 if (w == null)
                 {
                     int k = FindPos(x, M);
-                    //x.Children = new List<ITreeNode<T>>();
-                    var insert = new Insert<T>(x, z, k);
-                    M.Add(x, x);
+
+                    var xnode = new TreeNode<T>(x.Value, x.Label);
+                    var insert = new Insert<T>(xnode, z, k);
+                    z.AddChild(xnode, k - 1);
+                    M.Add(xnode, x);
+
+                    PrintPretty(t1, "", true);
                     editScript.Add(insert);
                 }
                 else //x has a partner in M
@@ -45,6 +49,12 @@ namespace TreeEdit.Spg.TreeEdit.Script
                     if (!w.Children.Any() && !w.ToString().Equals(x.ToString()))
                     {
                         var update = new Update<T>(w, x, z);
+                        int index = z.Children.TakeWhile(item => !item.Equals(w)).Count();
+                        z.RemoveNode(index);
+                        var xnode = new TreeNode<T>(x.Value, x.Label);
+                        z.AddChild(xnode, index);
+                        M.Add(xnode, x);
+                        PrintPretty(t1, "", true);
                         editScript.Add(update);
                     }
 
@@ -53,6 +63,11 @@ namespace TreeEdit.Spg.TreeEdit.Script
                     {
                         int k = FindPos(x, M);
                         var move = new Move<T>(w, z, k);
+                        move.PreviousParent = w.Parent;
+                        z.AddChild(w, k - 1);
+                        int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
+                        v.RemoveNode(index);
+                        PrintPretty(t1, "", true);
                         editScript.Add(move);
                     }
                 }
@@ -68,6 +83,10 @@ namespace TreeEdit.Spg.TreeEdit.Script
                 if (!M.ContainsKey(w))
                 {
                     var delete = new Delete<T>(w);
+                    var v = delete.Parent;
+                    int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
+                    v.RemoveNode(index);
+                    PrintPretty(t1, "", true);
                     editScript.Add(delete);
                 }
             }
@@ -80,16 +99,21 @@ namespace TreeEdit.Spg.TreeEdit.Script
             if (last)
             {
                 Console.Write("\\-");
-                //indent += "\\-";
                 indent += "  ";
             }
             else
             {
                 Console.Write("|-");
-                //indent += "|-";
                 indent += "| ";
             }
-            Console.WriteLine(tree.Label);
+            if (!tree.Children.Any())
+            {
+                Console.WriteLine(tree.Label + "(\""+ tree + "\")");
+            }
+            else
+            {
+                Console.WriteLine(tree.Label);
+            }
 
             for (int i = 0; i < tree.Children.Count; i++)
                 PrintPretty(tree.Children[i], indent, i == tree.Children.Count - 1);
