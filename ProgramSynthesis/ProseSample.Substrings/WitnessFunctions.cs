@@ -733,7 +733,7 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
 
                     var update = (Update<SyntaxNodeOrToken>)editOperation;
-                    matches.Add(update.To.Value);
+                    matches.Add(update.To);
                 }
                 kExamples[input] = matches;
             }
@@ -961,7 +961,8 @@ namespace ProseSample.Substrings
                 {
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
-                    matches.Add(editOperation.T1Node.Value);
+                    editOperation.T1Node.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
+                    matches.Add(editOperation.T1Node);
                 }
                 kExamples[input] = matches;
             }
@@ -983,13 +984,13 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-                foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
+                foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
-                    if (sot.IsToken) return null;
+                    if (sot.Value.IsToken) return null;
+                    if (!sot.Children.Any()) return null;
 
-                    kMatches.Add(sot.Kind());
+                    kMatches.Add(sot.Value.Kind());
                 }
-
                 kExamples[input] = kMatches;
             }
 
@@ -1051,9 +1052,9 @@ namespace ProseSample.Substrings
             var mats = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
+                foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
-                    mats.Add(sot);
+                    mats.Add(sot.Value);
                 }
 
                 treeExamples[input] = mats.GetRange(0, 1); //We do not need to pass more than a constant.
@@ -1071,16 +1072,16 @@ namespace ProseSample.Substrings
             {
                 var inpTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
                 var mats = new List<object>();
-                foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
+                foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
-                    if (!sot.IsNode) return null;
+                    if (!sot.Value.IsNode) return null;
 
-                    var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot);
+                    var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);
                     var node = IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree, subTree);
 
                     if (node == null) return null;
 
-                    var result = new MatchResult(Tuple.Create(sot, new Bindings(new List<SyntaxNodeOrToken> { sot })));
+                    var result = new MatchResult(Tuple.Create(sot.Value, new Bindings(new List<SyntaxNodeOrToken> { sot.Value })));
 
                     mats.Add(result);
                 }

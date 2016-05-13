@@ -38,15 +38,21 @@ namespace ProseSample.Substrings
 
             var klist = SplitToNodes(currentTree, kind);
 
-            for (int i = 0; i < klist.Count; i++)
+            foreach (var item in klist)
             {
-                var kindMatch = klist[i];
-                var expression = children.ElementAt(i);
-                if (MatchChildren(kindMatch.Value, expression.match.Item1))
+                //if(item.Children.Count != children.Count()) continue;
+
+                for (int i = 0; i < children.Count(); i++)
                 {
-                    Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(kindMatch.Value, null);
-                    MatchResult matchResult = new MatchResult(match);
-                    return matchResult;
+                    //var kindMatch = item.Children[i];
+                    var expression = children.ElementAt(i);
+                    if (MatchChildren(item.Value, expression.match.Item1))
+                    {
+                        Tuple<SyntaxNodeOrToken, Bindings> match =
+                            Tuple.Create<SyntaxNodeOrToken, Bindings>(item.Value, null);
+                        MatchResult matchResult = new MatchResult(match);
+                        return matchResult;
+                    }
                 }
             }
 
@@ -81,7 +87,7 @@ namespace ProseSample.Substrings
         {
             foreach (var item in parent.ChildNodesAndTokens())
             {
-                if (item.IsKind(child.Kind()) && item.ToString().Equals(child.ToString()))
+                if (item.IsKind(child.Kind()) /*&& item.ToString().Equals(child.ToString())*/)
                 {
                     return true;
                 }
@@ -248,7 +254,8 @@ namespace ProseSample.Substrings
         //TODO rename to child
         public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult kindRef, int k)
         {
-            SyntaxNodeOrToken child = kindRef.match.Item1.AsNode().ChildNodes().ElementAt(k - 1);
+            //SyntaxNodeOrToken child = kindRef.match.Item1.AsNode().ChildNodes().ElementAt(k - 1);
+            SyntaxNodeOrToken child = TreeUpdate.FindNode(GetCurrentTree(node), kindRef.match.Item1).Children.ElementAt(k - 1).Value;
             var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child })));
             return result;
         }
@@ -392,6 +399,14 @@ namespace ProseSample.Substrings
         /// <returns>A SyntaxNode with specific king and children</returns>
         private static SyntaxNodeOrToken GetSyntaxElement(SyntaxKind kind, List<SyntaxNodeOrToken> children)
         {
+            if (kind == SyntaxKind.LogicalAndExpression)
+            {
+                var leftExpression = (ExpressionSyntax) children[0];
+                var rightExpresssion = (ExpressionSyntax) children[1];
+                var logicalAndExpression = SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression, leftExpression, rightExpresssion);
+                return logicalAndExpression;
+            }
+
             if (kind == SyntaxKind.ExpressionStatement)
             {
                 ExpressionSyntax expression = (ExpressionSyntax)children.First();
