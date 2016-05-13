@@ -12,6 +12,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.List;
 using Spg.TreeEdit.Node;
 using TreeEdit.Spg.ConnectedComponents;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.TreeEdit.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
@@ -133,6 +134,7 @@ namespace ProseSample.Substrings
             {
                 var mats = new List<object>();
                 var inpTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
+                PrintUtil<SyntaxNodeOrToken>.PrintPretty(inpTree, "", true);
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
                     SyntaxNodeOrToken sot = matchResult.match.Item1;
@@ -372,10 +374,7 @@ namespace ProseSample.Substrings
         /// <returns>Abstract match</returns>
         private static List<SyntaxNodeOrToken> MatchesAbstract(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
         {
-            var matches = from item in inpTree.DescendantNodes()
-                          where item.Value.IsKind(kind)
-                          select item.Value;
-            return matches.ToList();
+            return (from item in inpTree.DescendantNodes() where item.Value.IsKind(kind) select item.Value).ToList();
         }
 
         /// <summary>
@@ -480,10 +479,6 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessFunctionScript2Edit(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            //var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
-
-            //TreeUpdateDictionary = new Dictionary<State, TreeUpdate>();
-            //CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
             foreach (State input in spec.ProvidedInputs)
             {
@@ -502,6 +497,13 @@ namespace ProseSample.Substrings
 
                     //var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
+                    //foreach (var operation in script.GetRange(0, 4))
+                    //{
+                    //    TreeUpdate treeUp = TreeUpdateDictionary[(SyntaxNodeOrToken) input[rule.Body[0]]];
+                    //    treeUp.ProcessEditOperation(operation);
+                    //}
+
+                    //kMatches.Add(script.GetRange(4, 1));
                     kMatches.Add(script);
                 }
                 kExamples[input] = kMatches;
@@ -877,6 +879,10 @@ namespace ProseSample.Substrings
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
                     CurrentTrees[key] = previousTree;
+                    Console.WriteLine("PREVIOUS TREE\n\n");
+                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
+                    Console.WriteLine("UPDATED TREE\n\n");
+                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
                 }
 
                 kExamples[input] = matches;
@@ -1160,7 +1166,7 @@ namespace ProseSample.Substrings
                 CurrentTrees[n] = ConverterHelper.ConvertCSharpToTreeNode(n);
             }
 
-            ITreeNode<SyntaxNodeOrToken> node = CurrentTrees[n];
+            ITreeNode<SyntaxNodeOrToken> node = CurrentTrees[n]; //CurrentTrees[n];
 
             return node;
         }

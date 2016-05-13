@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseSample.Substrings.List;
 using Spg.TreeEdit.Node;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using Tutor.Spg.TreeEdit.Node;
@@ -172,6 +173,7 @@ namespace ProseSample.Substrings
             var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
             update.ProcessEditOperation(insert);
 
+            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
             return update.CurrentTree.Value;
         }
 
@@ -190,10 +192,10 @@ namespace ProseSample.Substrings
             var parentNode = ConverterHelper.ConvertCSharpToTreeNode(parent.match.Item1);
             var child = ConverterHelper.ConvertCSharpToTreeNode(from.match.Item1);
 
-
             var move = new Move<SyntaxNodeOrToken>(child, parentNode, k);
             update.ProcessEditOperation(move);
 
+            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
             return update.CurrentTree.Value;
         }
 
@@ -207,6 +209,7 @@ namespace ProseSample.Substrings
             var updateEdit = new Update<SyntaxNodeOrToken>(fromTreeNode, toTreeNode, null);
             update.ProcessEditOperation(updateEdit);
 
+            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
             return update.CurrentTree.Value;
         }
 
@@ -219,6 +222,7 @@ namespace ProseSample.Substrings
             var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
             update.ProcessEditOperation(updateEdit);
 
+            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
             return update.CurrentTree.Value;
         }
 
