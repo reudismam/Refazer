@@ -1054,6 +1054,7 @@ namespace ProseSample.Substrings
             {
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
+                    if (sot.Children.Any()) return null;
                     mats.Add(sot.Value);
                 }
 
