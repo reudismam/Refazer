@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TreeEdit.Spg.TreeEdit.PQ;
 using Spg.TreeEdit.Node;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.TreeEdit.Isomorphic;
 using Tutor;
 
@@ -84,9 +85,13 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                                     var dict = IsomorphicManager<T>.AllPairOfIsomorphic(item1.Item2, item2.Item2);
                                     foreach (var v in dict)
                                     {
-                                        if (!M.ContainsKey(v.Item1))
+                                        if (!M.ContainsKey(v.Item1) && !M.ContainsValue(v.Item2))
                                         {
                                             M.Add(v.Item1, v.Item2);
+                                        }
+                                        else
+                                        {
+                                            A.Add(v);
                                         }
                                     }
                                 }
@@ -121,7 +126,10 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 var dict = IsomorphicManager<T>.AllPairOfIsomorphic(item.Item1, item.Item2);
                 foreach (var v in dict)
                 {
-                    M.Add(v.Item1, v.Item2);
+                    if(!M.ContainsKey(v.Item1))
+                    {
+                        M.Add(v.Item1, v.Item2);
+                    }
                 }
 
                 var removes = sortList.Where(elm => elm.Item1.Equals(item.Item1) || elm.Item2.Equals(item.Item2)).ToList();
@@ -148,28 +156,28 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     {
                         if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 1000)
                         {
-                            RemoveFromM(t1Node, M, MT);
+                            RemoveFromM(t1Node, M);
                             var R = Opt(t1Node, t2Node);
                             foreach (var edt in R.Where(edt => !M.ContainsKey(edt.Key)).Where(edt => edt.Key.IsLabel(edt.Value.Label)))
                             {
                                 M.Add(edt.Key, edt.Value);
-                                //MT.Add(edt.Key, edt.Value);
                             }
                         }
                     }
                 }
             }
+            PrintUtil<T>.PrettyPrintString(t1, t2, M);
             return M;
         }
 
-        private void RemoveFromM(ITreeNode<T> t, Dictionary<ITreeNode<T>, ITreeNode<T>> M, Dictionary<ITreeNode<T>, ITreeNode<T>> MT)
+        private void RemoveFromM(ITreeNode<T> t, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
             var traversal = new TreeTraversal<T>();
             var elements = traversal.PostOrderTraversal(t);
 
             foreach(var i in elements)
             {
-                if (M.ContainsKey(i) /*&& !MT.ContainsKey(i)*/)
+                if (M.ContainsKey(i))
                 {
                     M.Remove(i);
                 }

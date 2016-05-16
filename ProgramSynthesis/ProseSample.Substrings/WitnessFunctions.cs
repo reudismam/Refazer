@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LongestCommonAncestor;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -433,10 +432,13 @@ namespace ProseSample.Substrings
                     var sot = matchResult.match.Item1;
                     if (sot.IsToken) return null;
 
-                    var lsot = ExtractChildren(sot);
+                    
 
                     var currentTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
-                    if (TreeUpdate.FindNode(currentTree, sot) == null) return null;
+                    var snode = TreeUpdate.FindNode(currentTree, sot);
+                    if (snode == null || !snode.Children.Any()) return null;
+
+                    var lsot = ExtractChildren(snode);
 
                     var childList = new List<MatchResult>();
                     foreach (var item in lsot)
@@ -460,19 +462,42 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="parent">Parent</param>
         /// <returns>Relevant child</returns>
+        private static List<SyntaxNodeOrToken> ExtractChildren(ITreeNode<SyntaxNodeOrToken> parent)
+        {
+            List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
+            foreach (var item in parent.Children)
+            {
+                ITreeNode<SyntaxNodeOrToken> st = item;
+                if (st.Value.IsNode)
+                {
+                    lsot.Add(st.Value);
+                }
+                else if (st.Value.IsToken && st.Value.IsKind(SyntaxKind.IdentifierToken))
+                {
+                    lsot.Add(st.Value);
+                }
+            }
+            return lsot;
+        }
+
+
+        /// <summary>
+        /// Extract relevant child
+        /// </summary>
+        /// <param name="parent">Parent</param>
+        /// <returns>Relevant child</returns>
         private static List<SyntaxNodeOrToken> ExtractChildren(SyntaxNodeOrToken parent)
         {
             List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
-            foreach (var item in parent.ChildNodesAndTokens())
-            {
-                SyntaxNodeOrToken st = item;
-                if (st.IsNode)
+            foreach (var child in parent.ChildNodesAndTokens())
+            { 
+                if (child.IsNode)
                 {
-                    lsot.Add(st);
+                    lsot.Add(child);
                 }
-                else if (st.IsToken && st.IsKind(SyntaxKind.IdentifierToken))
+                else if (child.IsToken && child.IsKind(SyntaxKind.IdentifierToken))
                 {
-                    lsot.Add(st);
+                    lsot.Add(child);
                 }
             }
             return lsot;
@@ -1015,7 +1040,7 @@ namespace ProseSample.Substrings
 
                 foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
                 {
-                    if (sot.IsToken) return null;
+                    if (sot.IsToken) return null;     
 
                     var lsot = ExtractChildren(sot);
 

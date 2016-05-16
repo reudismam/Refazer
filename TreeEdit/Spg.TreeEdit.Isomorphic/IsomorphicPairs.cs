@@ -13,14 +13,14 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         Dictionary<ITreeNode<T>, string> _dict1;
         Dictionary<ITreeNode<T>, string> _dict2;
 
-        List<Tuple<ITreeNode<T>, ITreeNode<T>>> _alg;
+        Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int> _alg;
 
 
         private void AllPairOfIsomorphic(ITreeNode<T> t1, ITreeNode<T> t2)
         {      
             if (_dict1[t1].Equals(_dict2[t2]))
             {
-                _alg.Add(Tuple.Create(t1, t2));
+                _alg.Add(Tuple.Create(t1, t2), -1);
             }
 
             foreach (var ci in t1.DescendantNodes())
@@ -32,11 +32,11 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     string cjValue = _dict2[cj];
                     if(ciValue.Equals(cjValue))
                     {
-                        var tuple = _alg.Find(o => o.Item1.Equals(ci) && o.Item2.Equals(cj));
-                        if (tuple == null)
-                        {
-                            _alg.Add(Tuple.Create(ci, cj));
-                        }
+                        //var tuple = _alg.Find(o => o.Item1.Equals(ci) && o.Item2.Equals(cj));
+                        //if (tuple == null)
+                        //{
+                            _alg.Add(Tuple.Create(ci, cj), -1);
+                       //}
                     }
                 }
             }
@@ -46,7 +46,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// Splits the source node in the elements of type kind.
         /// </summary>
         /// <param name="node">Source node</param>
-        /// <param name="kind">Syntax kind</param>
+        /// <param name="label">Syntax kind</param>
         /// <returns></returns>
         private static List<ITreeNode<T>> SplitToNodes(ITreeNode<T> node, TLabel label)
         {
@@ -64,10 +64,11 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             _dict1 = talg.Align(t1);
             _dict2 = talg.Align(t2);
 
-            _alg = new List<Tuple<ITreeNode<T>, ITreeNode<T>>>();
+            _alg = new Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int>();
 
             AllPairOfIsomorphic(t1, t2);
-            return _alg;
+
+            return _alg.Keys.ToList();
         }
     }
 }
