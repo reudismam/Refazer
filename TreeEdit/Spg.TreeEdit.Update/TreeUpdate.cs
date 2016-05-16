@@ -14,60 +14,22 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// </summary>
         public ITreeNode<SyntaxNodeOrToken> CurrentTree { get; set; }
 
-
         /// <summary>
         /// Indicate the edit operations that was processed.
         /// </summary>
         public Dictionary<EditOperation<SyntaxNodeOrToken>, bool> Processed;
-
-        ///// <summary>
-        ///// Edit script
-        ///// </summary>
-        //private List<EditOperation<SyntaxNodeOrToken>> _script;
-
 
         public TreeUpdate(SyntaxNodeOrToken tree)
         {
             CurrentTree = ConverterHelper.ConvertCSharpToTreeNode(tree);
         }
 
-        public TreeUpdate()
-        {
-
-        }
-
-        ///// <summary>
-        ///// Update the tree following the edit script
-        ///// </summary>
-        ///// <param name="script">Edit script</param>
-        ///// <param name="tree">Tree to be updated</param>
-        //public void UpdateTree(List<EditOperation<SyntaxNodeOrToken>> script, SyntaxNodeOrToken tree)
-        //{
-        //    PreProcessTree(script, tree);
-
-        //    foreach (var item in script)
-        //    {
-        //        if (!Processed.ContainsKey(item))
-        //        {
-        //            ProcessScript(item);
-        //        }
-        //    }
-        //}
+        public TreeUpdate(){}
 
         public void PreProcessTree(List<EditOperation<SyntaxNodeOrToken>> script, SyntaxNodeOrToken tree)
         {
-            //_script = script;
             CurrentTree = ConverterHelper.ConvertCSharpToTreeNode(tree);
         }
-
-
-        //public void ProcessScript(EditOperation<SyntaxNodeOrToken> operation)
-        //{
-        //    foreach (var editOperation in _script)
-        //    {
-        //        ProcessEditOperation(editOperation);
-        //    }
-        //}
 
         /// <summary>
         /// Process insert operation
@@ -161,26 +123,14 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         private ITreeNode<SyntaxNodeOrToken> FindNode(SyntaxNodeOrToken node)
         {
-            foreach (var item in CurrentTree.DescendantNodesAndSelf())
-            {
-                if (node.IsKind(item.Value.Kind()) && item.Value.Span.Contains(node.Span) && node.Span.Contains(item.Value.Span))
-                {
-                    return item;
-                }
-            }
-            return null;
+            return CurrentTree.DescendantNodesAndSelf().FirstOrDefault(item => node.IsKind(item.Value.Kind()) && item.Value.Span.Contains(node.Span) && node.Span.Contains(item.Value.Span));
         }
 
         public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree,  SyntaxNodeOrToken node)
         {
-            foreach (var item in tree.DescendantNodesAndSelf())
-            {
-                if (node.IsKind(item.Value.Kind()) && item.Value.Span.Contains(node.Span) && node.Span.Contains(item.Value.Span))
-                {
-                    return item;
-                }
-            }
-            return null;
+            return tree.DescendantNodesAndSelf().FirstOrDefault(item => node.IsKind(item.Value.Kind()) 
+                                                                        && item.Value.Span.Contains(node.Span) 
+                                                                        && node.Span.Contains(item.Value.Span));
         }
     }
 }
