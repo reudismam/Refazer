@@ -69,7 +69,6 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                             }
                         }
                     }
-                    int i = 0;
                     foreach (var item1 in h1)
                     {
                         foreach (var item2 in h2)
@@ -140,11 +139,17 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             return M;
         }
 
+        /// <summary>
+        /// GumTree bottom up approach
+        /// </summary>
+        /// <param name="t1">First tree</param>
+        /// <param name="t2">Second tree</param>
+        /// <param name="M">Previous mapping</param>
+        /// <returns></returns>
         public Dictionary<ITreeNode<T>, ITreeNode<T>> BottomUp(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
             var traversal = new TreeTraversal<T>();
             var t1Nodes = traversal.PostOrderTraversal(t1);
-            var MT = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
             foreach (var t1Node in t1Nodes)
             {
                 if (!M.ContainsKey(t1Node) && HasMatchedChildren(t1Node, M))
@@ -170,51 +175,51 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             return M;
         }
 
+        /// <summary>
+        /// Remove previous mapped nodes.
+        /// </summary>
+        /// <param name="t">Tree</param>
+        /// <param name="M">Mapping</param>
         private void RemoveFromM(ITreeNode<T> t, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
             var traversal = new TreeTraversal<T>();
             var elements = traversal.PostOrderTraversal(t);
 
-            foreach(var i in elements)
+            foreach (var snode in elements.Where(M.ContainsKey))
             {
-                if (M.ContainsKey(i))
-                {
-                    M.Remove(i);
-                }
+                M.Remove(snode);
             }
         }
 
+        /// <summary>
+        /// Mapping between nodes without move operation
+        /// </summary>
+        /// <param name="t1">T1 tree</param>
+        /// <param name="t2">T2 tree</param>
+        /// <returns></returns>
         private Dictionary<ITreeNode<T>, ITreeNode<T>> Opt(ITreeNode<T> t1, ITreeNode<T> t2)
         {
             var zss = new CSharpZss<T>(t1, t2);
-
             var result = zss.Compute();
             var script = result.Item2;
-
             var dict = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
 
-            foreach (var editOperation in script)
+            foreach (var editOperation in script.Where(editOperation => editOperation.Item1 != null && editOperation.Item2 != null))
             {
-                if(editOperation.Item1 != null && editOperation.Item2 != null)
+                dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
+                var isomorphicPairs = IsomorphicManager<T>.AllPairOfIsomorphic(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
+
+                if (IsomorphicManager<T>.IsIsomorphic(editOperation.Item1.InternalNode,
+                    editOperation.Item2.InternalNode))
                 {
                     dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-                    var isomorphicPairs = IsomorphicManager<T>.AllPairOfIsomorphic(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-                    if (IsomorphicManager<T>.IsIsomorphic(editOperation.Item1.InternalNode,
-                        editOperation.Item2.InternalNode))
-                    {
-                        dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-                    }
+                }
 
-                    foreach(var pair in isomorphicPairs)
-                    {
-                        if(!dict.ContainsKey(pair.Item1) && !dict.ContainsValue(pair.Item2))
-                        {
-                            dict.Add(pair.Item1, pair.Item2);
-                        }
-                    }
+                foreach (var pair in isomorphicPairs.Where(pair => !dict.ContainsKey(pair.Item1) && !dict.ContainsValue(pair.Item2)))
+                {
+                    dict.Add(pair.Item1, pair.Item2);
                 }
             }
-
             return dict;
         }
 
@@ -225,9 +230,9 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <param name="t">Tree t to be analyzed</param>
         /// <param name="M">Computed mapping</param>
         /// <returns>Tree t2 with the disired characteristic.</returns>
-        private bool HasMatchedChildren(ITreeNode<T> t, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        private static bool HasMatchedChildren(ITreeNode<T> t, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
-            return t.DescendantNodes().Any(ch => M.ContainsKey(ch));
+            return t.DescendantNodes().Any(M.ContainsKey);
         }
 
         private ITreeNode<T> Candidate(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
@@ -254,7 +259,14 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             return smax;
         }
 
-        private double Dice(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        /// <summary>
+        /// Compute the dice function between two trees.
+        /// </summary>
+        /// <param name="t1">First tree</param>
+        /// <param name="t2">Second tree</param>
+        /// <param name="M">Mapping</param>
+        /// <returns></returns>
+        private static double Dice(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
             if (t2 == null) return 0.0;
 
@@ -269,13 +281,19 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
             double den = t1.DescendantNodes().Count + t2.DescendantNodes().Count();
 
-            double dice = (2.0 * count) / den;
+            double dice = 2.0 * count / den;
             return dice;
         }
 
+        /// <summary>
+        /// Compute the mapping between two trees.
+        /// </summary>
+        /// <param name="t1">First tree.</param>
+        /// <param name="t2">Second tree</param>
+        /// <returns>Mapping between two trees.</returns>
         public Dictionary<ITreeNode<T>, ITreeNode<T>> Mapping(ITreeNode<T> t1, ITreeNode<T> t2)
         {
-            Dictionary<ITreeNode<T>, ITreeNode<T>> M = TopDown(t1, t2);
+            var M = TopDown(t1, t2);
             M = BottomUp(t1, t2, M);
             return M;
         }
