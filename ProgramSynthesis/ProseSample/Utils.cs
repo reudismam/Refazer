@@ -72,9 +72,7 @@ namespace ProseSample
             var score = bestProgram["Score"];
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
             return bestProgram;
-        }
-
-        
+        }   
 
         #region Auxiliary methods
 
