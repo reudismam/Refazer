@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.TreeEdit.Node;
+using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Script;
 
 namespace TreeEdit.Spg.TreeEdit.Update
@@ -41,7 +42,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             if (editOperation is Insert<SyntaxNodeOrToken>)
             {
-                var parent = FindNode(editOperation.Parent.Value);
+                var parent = FindNode(CurrentTree, editOperation.Parent.Value);
                 var treeNode = ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
 
                 treeNode.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
@@ -58,7 +59,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             if (editOperation is Move<SyntaxNodeOrToken>)
             {
-                var parent = FindNode(editOperation.Parent.Value);
+                var parent = FindNode(CurrentTree, editOperation.Parent.Value);
                 RemoveNode(CurrentTree, editOperation.T1Node.Value);
 
                 ITreeNode<SyntaxNodeOrToken> treeNode = ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
@@ -119,11 +120,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 iTree.RemoveNode(count);
                 iTree.AddChild(newNode, count);
             }
-        }
-
-        private ITreeNode<SyntaxNodeOrToken> FindNode(SyntaxNodeOrToken node)
-        {
-            return CurrentTree.DescendantNodesAndSelf().FirstOrDefault(item => node.IsKind(item.Value.Kind()) && item.Value.Span.Contains(node.Span) && node.Span.Contains(item.Value.Span));
         }
 
         public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree,  SyntaxNodeOrToken node)

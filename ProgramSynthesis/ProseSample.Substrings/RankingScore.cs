@@ -14,6 +14,9 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Stts")]
         public static double Score_Stts(double predScore, double splitScore) => predScore + splitScore;
 
+        [FeatureCalculator("Breaks")]
+        public static double Score_Breaks(double predScore, double splitScore) => predScore + splitScore;
+
         [FeatureCalculator("SC")]
         public static double Score_CS(double childScore) => childScore;
 
@@ -51,7 +54,7 @@ namespace ProseSample.Substrings
         public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;
 
         [FeatureCalculator("Loop")]
-        public static double Score_Breaks(double inScore, double breaks) => inScore + breaks;
+        public static double Score_Loop(double inScore, double breaks) => inScore + breaks;
 
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;

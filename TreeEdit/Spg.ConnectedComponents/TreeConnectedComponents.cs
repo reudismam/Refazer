@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using C5;
 using Spg.TreeEdit.Node;
+using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Script;
 
 namespace TreeEdit.Spg.ConnectedComponents

@@ -2,6 +2,7 @@
 using System.Linq;
 using Spg.TreeEdit.Node;
 using TreeEdit.Spg.Print;
+using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.Walker;
 

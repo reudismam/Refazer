@@ -28,7 +28,9 @@ SyntaxNodeOrToken trans := OneTrans(node, script) | ManyTrans(node, loop);
 
 IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
 
-IEnumerable<SyntaxNodeOrToken> breaks := BreakByKind(node, kind);
+IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions);
+
+IEnumerable<SyntaxNodeOrToken> regions := BreakByKind(node, kind);
 
 SyntaxNodeOrToken script := Script(node, edits);
 

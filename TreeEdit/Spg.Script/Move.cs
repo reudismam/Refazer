@@ -1,8 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Spg.TreeEdit.Node;
+﻿using Spg.TreeEdit.Node;
+using TreeEdit.Spg.TreeEdit.Script;
 
-namespace TreeEdit.Spg.TreeEdit.Script
+namespace TreeEdit.Spg.Script
 {
     public class Move<T> : EditOperation<T>
     {
@@ -13,15 +12,14 @@ namespace TreeEdit.Spg.TreeEdit.Script
             get{ return _previousParent; }
             set { _previousParent = value; }
         }
+
         /// <summary>
         /// Create a move operation
         /// </summary>
         /// <param name="movedNode">Moved node</param>
         /// <param name="parent">Parent where the node will go.</param>
         /// <param name="k">Position of this node in the parent</param>
-        public Move(ITreeNode<T> movedNode, ITreeNode<T> parent, int k) : base(movedNode, parent, k)
-        {
-        }
+        public Move(ITreeNode<T> movedNode, ITreeNode<T> parent, int k) : base(movedNode, parent, k){}
 
         /// <summary>
         /// String represent on this object

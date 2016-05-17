@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Spg.TreeEdit.Node;
 using TreeEdit.Spg.TreeEdit.Mapping;
 
-namespace TreeEdit.Spg.TreeEdit.Isomorphic
+namespace TreeEdit.Spg.Isomorphic
 {
     public class IsomorphicManager<T>
     {

@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Spg.TreeEdit.Node;
+using TreeEdit.Spg.TreeEdit.Mapping;
 using Tutor.Spg.TreeEdit.Node;
 
-namespace TreeEdit.Spg.TreeEdit.Mapping
+namespace TreeEdit.Spg.Isomorphic
 {
     public class IsomorphicPairs<T>
     {
-        Dictionary<ITreeNode<T>, string> _dict1;
-        Dictionary<ITreeNode<T>, string> _dict2;
+        private Dictionary<ITreeNode<T>, string> _dict1;
+        private Dictionary<ITreeNode<T>, string> _dict2;
 
-        Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int> _alg;
+        private Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int> _alg;
 
 
         private void AllPairOfIsomorphic(ITreeNode<T> t1, ITreeNode<T> t2)
-        {      
+        {
             if (_dict1[t1].Equals(_dict2[t2]))
             {
                 _alg.Add(Tuple.Create(t1, t2), -1);
@@ -30,13 +29,9 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 {
                     string ciValue = _dict1[ci];
                     string cjValue = _dict2[cj];
-                    if(ciValue.Equals(cjValue))
+                    if (ciValue.Equals(cjValue))
                     {
-                        //var tuple = _alg.Find(o => o.Item1.Equals(ci) && o.Item2.Equals(cj));
-                        //if (tuple == null)
-                        //{
-                            _alg.Add(Tuple.Create(ci, cj), -1);
-                       //}
+                        _alg.Add(Tuple.Create(ci, cj), -1);
                     }
                 }
             }
