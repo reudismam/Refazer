@@ -529,40 +529,40 @@ namespace ProseSample.Substrings
         }
 
         
-        [WitnessFunction("OneTrans", 1)]
-        public static DisjunctiveExamplesSpec WitnessFunctionOneTransScript(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+        //[WitnessFunction("OneTrans", 1)]
+        //public static DisjunctiveExamplesSpec WitnessFunctionOneTransScript(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    var kExamples = new Dictionary<State, IEnumerable<object>>();
+        //    var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
 
-            _treeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
-            _currentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+        //    _treeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
+        //    _currentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var kMatches = new List<object>();
-                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
-                foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
-                {
-                    Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
-                    var script = Script(inpTree, outTree, out m);
-                    scrips.Add(script);
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var kMatches = new List<object>();
+        //        var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+        //        foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
+        //        {
+        //            Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
+        //            var script = Script(inpTree, outTree, out m);
+        //            scrips.Add(script);
 
-                    TreeUpdate treeUp = new TreeUpdate();
-                    treeUp.PreProcessTree(script, inpTree);
+        //            TreeUpdate treeUp = new TreeUpdate();
+        //            treeUp.PreProcessTree(script, inpTree);
 
-                    _treeUpdateDictionary.Add(inpTree, treeUp);
+        //            _treeUpdateDictionary.Add(inpTree, treeUp);
 
-                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+        //            var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
-                    if (ccs.Count != 1) return null;
+        //            if (ccs.Count != 1) return null;
 
-                    kMatches.Add(script);
-                }
-                kExamples[input] = kMatches;
-            }
-            return DisjunctiveExamplesSpec.From(kExamples);
-        }
+        //            kMatches.Add(script);
+        //        }
+        //        kExamples[input] = kMatches;
+        //    }
+        //    return DisjunctiveExamplesSpec.From(kExamples);
+        //}
 
         [WitnessFunction("ManyTrans", 1)]
         public static SubsequenceSpec WitnessFunctionManyTransLoop(GrammarRule rule, int parameter, ExampleSpec spec)
@@ -572,7 +572,7 @@ namespace ProseSample.Substrings
 
             _treeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
             _currentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
-            bool hasMany = false;
+            //bool hasMany = false;
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
@@ -596,17 +596,17 @@ namespace ProseSample.Substrings
                         printScript(cc);
                     }
 
-                    if (ccs.Count > 1)
-                    {
-                        hasMany = true;
-                    }
+                    //if (ccs.Count > 1)
+                    //{
+                    //    hasMany = true;
+                    //}
 
                     kMatches.AddRange(ccs);
                 }
                 kExamples[input] = kMatches;
             }
 
-            if (!hasMany) return null;
+            //if (!hasMany) return null;
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
             return subsequenceSpec;

@@ -24,7 +24,7 @@ IEnumerable<SyntaxNodeOrToken> nodes := Stts(pred, splits) = Filter(\x: SyntaxNo
 Boolean pred := FTrue();
 IEnumerable<SyntaxNodeOrToken> splits := SplitNodes(n);
 
-SyntaxNodeOrToken trans := OneTrans(node, script) | ManyTrans(node, loop);
+SyntaxNodeOrToken trans := ManyTrans(node, loop);
 
 IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
 
