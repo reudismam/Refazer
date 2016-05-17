@@ -1,5 +1,5 @@
 ﻿using Spg.ExampleRefactoring.LCS;
-using LongestCommonAncestor;
+using LongestCommonSubsequence;
 
 namespace Spg.ExampleRefactoring.LCS
 {

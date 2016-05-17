@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DiGraph;
 using Spg.ExampleRefactoring.LCS;
-using LongestCommonAncestor;
+using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
 using Spg.ExampleRefactoring.AST;
 using Spg.ExampleRefactoring.Comparator;

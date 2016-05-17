@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace LongestCommonAncestor
+namespace LongestCommonSubsequence
 {
     /// <summary>
     /// Find the difference between two list using longest common sequences
@@ -20,6 +21,38 @@ namespace LongestCommonAncestor
             int[,] differenceMatrix = Matrix(baseline, revision);
 
             return FindDifference(differenceMatrix, baseline, revision, baseline.Count, revision.Count);
+        }
+
+        /// <summary>
+        /// Find the difference between two arrays
+        /// </summary>
+        /// <param name="baseline">Baseline</param>
+        /// <param name="revision">Baseline</param>
+        /// <returns></returns>
+        public virtual List<T> FindDifference(List<List<T>> baselines)
+        {
+            if (baselines.Count < 2) throw new ArgumentException("baselines must contains at least two elements.");
+
+            var baseline = baselines.First();
+            foreach (var revision in baselines)
+            {
+                int[,] differenceMatrix = Matrix(baseline, revision);
+
+                var diffs =  FindDifference(differenceMatrix, baseline, revision, baseline.Count, revision.Count);
+
+                var lcs = new List<T>();
+
+                foreach (var diff in diffs)
+                {
+                    if (diff.EditionType.Equals(EditionType.None))
+                    {
+                        lcs.Add(diff.DataCompared);
+                    }
+                }
+
+                baseline = lcs;
+            }
+            return baseline;
         }
 
 

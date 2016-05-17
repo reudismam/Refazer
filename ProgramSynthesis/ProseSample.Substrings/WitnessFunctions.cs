@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -583,7 +584,7 @@ namespace ProseSample.Substrings
                     var script = Script(inpTree, outTree, out m);
                     scrips.Add(script);
 
-                    printScript(script);
+                    PrintScript(script);
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
@@ -593,13 +594,8 @@ namespace ProseSample.Substrings
                         var tree = cc.First().Parent.Value;
                         treeUp.PreProcessTree(script, tree);
                         _treeUpdateDictionary.Add(tree, treeUp);
-                        printScript(cc);
+                        PrintScript(cc);
                     }
-
-                    //if (ccs.Count > 1)
-                    //{
-                    //    hasMany = true;
-                    //}
 
                     kMatches.AddRange(ccs);
                 }
@@ -610,16 +606,6 @@ namespace ProseSample.Substrings
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
             return subsequenceSpec;
-        }
-
-        static void printScript(List<EditOperation<SyntaxNodeOrToken>> script)
-        {
-            string s = "";
-
-            foreach (var v in script)
-            {
-                s += v + "\n";
-            }
         }
 
         [WitnessFunction("Loop", 1)]
@@ -1186,6 +1172,12 @@ namespace ProseSample.Substrings
             ITreeNode<SyntaxNodeOrToken> node = _currentTrees[n]; //CurrentTrees[n];
 
             return node;
+        }
+
+
+        private static void PrintScript(List<EditOperation<SyntaxNodeOrToken>> script)
+        {
+            string s = script.Aggregate("", (current, v) => current + (v + "\n"));
         }
     }
 }

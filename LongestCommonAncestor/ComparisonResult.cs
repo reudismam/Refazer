@@ -1,4 +1,4 @@
-﻿namespace LongestCommonAncestor
+﻿namespace LongestCommonSubsequence
 {
     /// <summary>
     /// Comparison result

@@ -1,6 +1,6 @@
 ﻿using Spg.TreeEdit.Node;
 
-namespace TreeEdit.Spg.TreeEdit.Script
+namespace TreeEdit.Spg.Script
 {
     public abstract class EditOperation<T>
     {

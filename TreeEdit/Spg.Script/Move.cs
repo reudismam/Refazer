@@ -1,5 +1,4 @@
 ﻿using Spg.TreeEdit.Node;
-using TreeEdit.Spg.TreeEdit.Script;
 
 namespace TreeEdit.Spg.Script
 {
@@ -30,28 +29,28 @@ namespace TreeEdit.Spg.Script
             return "Move(" + T1Node.Label + " to " + Parent.Label + ", " + K + ")";
         }
 
-        //public override bool Equals(object obj)
-        //{
-        //    if (!(obj is Move<T>)) return false;
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Move<T>)) return false;
 
-        //    return Equals(obj as Move<T>);
-        //}
+            return Equals(obj as Move<T>);
+        }
 
-        //public bool Equals(Move<T> other)
-        //{
-        //    bool isParentLabel = false;
+        public bool Equals(Move<T> other)
+        {
+            bool isParentLabel = false;
 
-        //    if (Parent != null && other.Parent != null)
-        //    {
-        //        isParentLabel = other.Parent.IsLabel(Parent.Label);
-        //    }
-        //    else if (Parent == null && other.Parent == null)
-        //    {
-        //        isParentLabel = true;
-        //    }
+            if (Parent != null && other.Parent != null)
+            {
+                isParentLabel = other.Parent.IsLabel(Parent.Label);
+            }
+            else if (Parent == null && other.Parent == null)
+            {
+                isParentLabel = true;
+            }
 
-        //    return K == other.K && other.T1Node.IsLabel(T1Node.Label) && isParentLabel;
-        //}
+            return K == other.K && other.T1Node.IsLabel(T1Node.Label) && isParentLabel;
+        }
     }
 
 }

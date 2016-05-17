@@ -2,11 +2,11 @@
 using System.Linq;
 using Spg.TreeEdit.Node;
 using TreeEdit.Spg.Print;
-using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
+using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.Walker;
 
-namespace TreeEdit.Spg.TreeEdit.Script
+namespace TreeEdit.Spg.Script
 {
     public class EditScriptGenerator<T>
     {

@@ -1,50 +1,44 @@
-﻿using System.Collections.Generic;
-using C5;
-using Spg.TreeEdit.Node;
+﻿using System;
+using System.Collections.Generic;
 using TreeEdit.Spg.Script;
-using TreeEdit.Spg.TreeEdit.Script;
 
 namespace TreeEdit.Spg.ConnectedComponents
 {
     public class TreeConnectedComponents<T>
     {
-        private static Dictionary<EditOperation<T>, List<EditOperation<T>>> _graph;
+        private static Dictionary<Tuple<T, T, int>, List<EditOperation<T>>> _graph;
 
-        private static Dictionary<EditOperation<T>, int> visited;
+        private static Dictionary<Tuple<T, T, int>, int> _visited;
 
 
-        private static Dictionary<EditOperation<T>, List<EditOperation<T>>> Graph
+        private static Dictionary<Tuple<T, T, int>, List<EditOperation<T>>> Graph
         {
-            get
-            {
-                return _graph;
-            }
-            set
-            {
-                _graph = value;
-            }
+            get { return _graph; }
+            set { _graph = value; }
         }
 
         public static List<List<EditOperation<T>>> ConnectedComponents(List<EditOperation<T>> script)
         {
             BuildGraph(script);
 
-            visited = new Dictionary<EditOperation<T>, int>();
+            _visited = new Dictionary<Tuple<T, T, int>, int>();
 
             int i = 0;
             var dic = new Dictionary<int, List<EditOperation<T>>>();
             foreach (var edit in script)
             {
-                if (!visited.ContainsKey(edit))
+                var t = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
+                if (!_visited.ContainsKey(t))
                 {
                     dic.Add(i, new List<EditOperation<T>>());
-                    DFS(edit, i++);
+                    DepthFirstSearch(edit, i++);
                 }
             }
             
             foreach (var edit in script)
             {
-                int cc = visited[edit];
+                var t = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
+                int cc = _visited[t];
 
                 dic[cc].Add(edit);
             }
@@ -54,55 +48,59 @@ namespace TreeEdit.Spg.ConnectedComponents
             return ccs;
         }
 
-        private static void DFS(EditOperation<T> editOperation, int i)
+        private static void DepthFirstSearch(EditOperation<T> editOperation, int i)
         {
-            visited.Add(editOperation, i);
+            var t = Tuple.Create(editOperation.T1Node.Value, editOperation.Parent.Value, editOperation.K);
+            _visited.Add(t, i);
 
-            foreach (var edit in Graph[editOperation])
+            foreach (var edit in Graph[t])
             {
-                if (!visited.ContainsKey(edit))
+                var te = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
+                if (!_visited.ContainsKey(te))
                 {
-                    DFS(edit, i);
+                    DepthFirstSearch(edit, i);
                 }
             }
         }
 
         private static void BuildGraph(List<EditOperation<T>> script)
         {
-            Graph = new Dictionary<EditOperation<T>, List<EditOperation<T>>>();
+            
+            Graph = new Dictionary<Tuple<T, T, int>, List<EditOperation<T>>>();
 
             for (int i = 0; i < script.Count; i++)
             {
-                var edit_i = script[i];
+                var editI = script[i];
+                var ti = Tuple.Create(editI.T1Node.Value, editI.Parent.Value, editI.K);
 
-                if (!Graph.ContainsKey(edit_i))
+                if (!Graph.ContainsKey(ti))
                 {
-                    Graph.Add(edit_i, new List<EditOperation<T>>());
+                    Graph.Add(ti, new List<EditOperation<T>>());
                 }
 
                 for (int j = i + 1; j < script.Count; j++)
                 {
-                    var edit_j = script[j];
+                    var editJ = script[j];
 
                     //Two nodes have the same parent
-                    if (edit_i.Parent.Equals(edit_j.Parent))
+                    if (editI.Parent.Equals(editJ.Parent))
                     {
-                        Graph[edit_i].Add(edit_j);
+                        Graph[ti].Add(editJ);
                     }
 
                     //T1Node from an operation is the parent in another edit operation 
-                    if (edit_i.T1Node.Equals(edit_j.Parent))
+                    if (editI.T1Node.Equals(editJ.Parent))
                     {
-                        Graph[edit_i].Add(edit_j);
+                        Graph[ti].Add(editJ);
                     }
 
-                    if (edit_i is Move<T>)
+                    if (editI is Move<T>)
                     {
-                        var move = edit_i as Move<T>;
+                        var move = editI as Move<T>;
                         //Specific case for deleted nodes
-                        if (move.PreviousParent.Equals(edit_j.Parent))
+                        if (move.PreviousParent.Equals(editJ.Parent))
                         {
-                            Graph[edit_i].Add(edit_j);
+                            Graph[ti].Add(editJ);
                         }
                     }
                 }

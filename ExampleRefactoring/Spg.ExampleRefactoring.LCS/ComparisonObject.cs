@@ -1,6 +1,6 @@
 ﻿using Spg.ExampleRefactoring.Tok;
 
-namespace LongestCommonAncestor
+namespace LongestCommonSubsequence
 {
     /// <summary>
     /// Comparison object
