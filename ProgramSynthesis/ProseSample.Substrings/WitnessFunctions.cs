@@ -18,6 +18,7 @@ using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.TreeEdit.Update;
+using TreeEdit.Spg.Walker;
 
 namespace ProseSample.Substrings
 {
@@ -595,6 +596,8 @@ namespace ProseSample.Substrings
                         treeUp.PreProcessTree(script, tree);
                         _treeUpdateDictionary.Add(tree, treeUp);
                         PrintScript(cc);
+
+                        PrintTemplate(cc, inpTree);
                     }
 
                     kMatches.AddRange(ccs);
@@ -604,6 +607,31 @@ namespace ProseSample.Substrings
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
             return subsequenceSpec;
+        }
+
+        private static void PrintTemplate(List<EditOperation<SyntaxNodeOrToken>> cc, SyntaxNodeOrToken inpTree)
+        {
+            var input = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
+            var nodes = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(input);
+
+            var list = new List<ITreeNode<SyntaxNodeOrToken>>();
+
+            foreach (var node in nodes)
+            {
+                foreach (var edit in cc)
+                {
+                    if (node.Equals(edit.T1Node) || node.Equals(edit.T1Node.Parent))
+                    {
+                        if (!list.Contains(node))
+                        {
+                            list.Add(node);
+                        }
+                    }
+                }
+            }
+
+            var tcc = new TemplateConnectedComponents<SyntaxNodeOrToken>();
+            var cnodes = tcc.ConnectedNodes(list);
         }
 
         [WitnessFunction("Loop", 1)]
