@@ -75,15 +75,10 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec WitnessAbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
+            foreach (var input in spec.ProvidedInputs)
             {
-                var mats = new List<object>();
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
-                {
-                    mats.Add(matchResult);
-                }
+                var mats = spec.DisjunctiveExamples[input].Cast<MatchResult>().Cast<object>().ToList();
                 treeExamples[input] = mats;
-
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
@@ -108,13 +103,10 @@ namespace ProseSample.Substrings
                     var sot = matchResult.Match.Item1;
                     var matches = MatchesAbstract(inpTree, sot.Value.Kind());
 
-                    foreach (var item in matches)
+                    foreach (var item in matches.Where(item => item.ToString().Equals(sot.ToString())))
                     {
-                        if (item.ToString().Equals(sot.ToString()))
-                        {
-                            mats.Add(item.Kind());
-                            if (!mats.First().Equals(item.Kind())) return null;
-                        }
+                        mats.Add(item.Kind());
+                        if (!mats.First().Equals(item.Kind())) return null;
                     }
 
                     if (!mats.Any()) return null;
@@ -123,9 +115,7 @@ namespace ProseSample.Substrings
             }
 
             var values = treeExamples.Values;
-            if (values.Any(sequence => !sequence.SequenceEqual(values.First()))) return null;
-
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
         }
 
         /// <summary>
@@ -165,9 +155,7 @@ namespace ProseSample.Substrings
             }
 
             var values = treeExamples.Values;
-            if (values.Any(sequence => !sequence.SequenceEqual(values.First()))) return null;
-
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
         }
 
         [WitnessFunction("Parent", 1)]
@@ -183,7 +171,7 @@ namespace ProseSample.Substrings
 
                     if (sot.Value.IsToken) return null;
 
-                    ITreeNode<SyntaxNodeOrToken> parent = FindParent((SyntaxNodeOrToken)input[rule.Body[0]], sot.Value);
+                    var parent = sot.Parent;
 
                     if (parent == null) return null;
 
@@ -215,17 +203,17 @@ namespace ProseSample.Substrings
                     if (matchResult.Match.Item1.Value.IsToken) return null;
 
                     //TODO Refactor to use kindBinding
-                    SyntaxNode sot = matchResult.Match.Item1.Value.AsNode();
+                    var sot = matchResult.Match.Item1;
 
-                    ITreeNode<SyntaxNodeOrToken> parent = FindParent((SyntaxNodeOrToken)input[rule.Body[0]], sot);
+                    var parent = sot.Parent;
 
                     if (parent == null) return null;
 
                     var children = parent.Children;
 
-                    for (int i = 0; i < children.Count(); i++)
+                    for (int i = 0; i < children.Count; i++)
                     {
-                        var item = children.ElementAt(i).Value;
+                        var item = children.ElementAt(i);
                         if (item.Equals(sot))
                         {
                             mats.Add(i + 1);
