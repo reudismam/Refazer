@@ -25,12 +25,12 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Current trees.
         /// </summary>
-        private static Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> _currentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+        private static Dictionary<object, ITreeNode<SyntaxNodeOrToken>> _currentTrees = new Dictionary<object, ITreeNode<SyntaxNodeOrToken>>();
 
         /// <summary>
         /// TreeUpdate mapping.
         /// </summary>
-        private static Dictionary<SyntaxNodeOrToken, TreeUpdate> _treeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
+        private static Dictionary<object, TreeUpdate> _treeUpdateDictionary = new Dictionary<object, TreeUpdate>();
 
         /// <summary>
         /// Literal witness function for parameter tree.
@@ -48,7 +48,8 @@ namespace ProseSample.Substrings
             var literalExamples = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = GetCurrentTree((SyntaxNodeOrToken) input[rule.Body[0]]);
+                var key = input[rule.Body[0]];
+                var inpTree = GetCurrentTree(key);
 
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
@@ -116,7 +117,7 @@ namespace ProseSample.Substrings
                 foreach (List<MatchResult> matchResultList in spec.DisjunctiveExamples[input])
                 {
                     var kind = matchResultList.First().Match.Item1.Value.Kind();
-                    if (matchResultList.Any(matchResult => !matchResult.Match.Item1.Value.IsKind(kind))) return null;
+                    if (matchResultList.Any(matchResult => !matchResult.Match.Item1.Value.IsKind(kind) || matchResult.Match.Item1.Children.Any())) return null;
                     
                     mats.Add(kind);
                 }
@@ -151,7 +152,8 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
-                var inpTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
+                var key = input[rule.Body[0]];
+                var inpTree = GetCurrentTree(key);
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
                     var sot = matchResult.Match.Item1;
@@ -187,7 +189,8 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
-                var inpTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
+                var key = input[rule.Body[0]];
+                var inpTree = GetCurrentTree(key);
                 PrintUtil<SyntaxNodeOrToken>.PrintPretty(inpTree, "", true);
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
@@ -575,7 +578,8 @@ namespace ProseSample.Substrings
                     var sot = matchResult.Match.Item1;
                     if (sot.Value.IsToken) return null;
 
-                    var currentTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
+                    var key = input[rule.Body[0]];
+                    var currentTree = GetCurrentTree(key);
                     var snode = TreeUpdate.FindNode(currentTree, sot.Value);
                     if (snode == null || !snode.Children.Any()) return null;
 
@@ -673,8 +677,8 @@ namespace ProseSample.Substrings
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
 
-            _treeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
-            _currentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+            _treeUpdateDictionary = new Dictionary<object, TreeUpdate>();
+            _currentTrees = new Dictionary<object, ITreeNode<SyntaxNodeOrToken>>();
 
             foreach (State input in spec.ProvidedInputs)
             {
@@ -690,14 +694,14 @@ namespace ProseSample.Substrings
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
-                    foreach (var cc in ccs)
-                    {
-                        TreeUpdate treeUp = new TreeUpdate();
-                        var tree = cc.First().Parent.Value;
-                        treeUp.PreProcessTree(script, tree);
-                        _treeUpdateDictionary.Add(tree, treeUp);
-                        PrintScript(cc);
-                    }
+                    //foreach (var cc in ccs)
+                    //{
+                    //    TreeUpdate treeUp = new TreeUpdate();
+                    //    var tree = cc.First().Parent.Value;
+                    //    treeUp.PreProcessTree(script, tree);
+                    //    _treeUpdateDictionary.Add(tree, treeUp);
+                    //    PrintScript(cc);
+                    //}
 
                     kMatches.AddRange(ccs);
                 }
@@ -763,6 +767,13 @@ namespace ProseSample.Substrings
                     var result = new MatchResult(Tuple.Create(template, new Bindings(new List<SyntaxNodeOrToken> { template.Value })));
                     //kMatches.Add(result);
                     ocurrences.Add(result);
+                    //TODO refactor this.
+                    TreeUpdate treeUp = new TreeUpdate();
+                    var tree = cc.First().Parent.Value;
+                    treeUp.PreProcessTree(tree);
+                    _treeUpdateDictionary.Add(cc, treeUp);
+                    _currentTrees[cc] = cc.First().Parent;
+                    PrintScript(cc);
                 }
                 kMatches.Add(ocurrences);
                 kExamples[input] = kMatches;
@@ -793,7 +804,7 @@ namespace ProseSample.Substrings
                     var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
                     matches.Add(result);
 
-                    var key = (SyntaxNodeOrToken)input[rule.Body[0]];
+                    var key = input[rule.Body[0]];
                     var treeUp = _treeUpdateDictionary[key];
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
@@ -828,7 +839,7 @@ namespace ProseSample.Substrings
                     var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
                     matches.Add(result);
 
-                    var key = (SyntaxNodeOrToken)input[rule.Body[0]];
+                    var key = input[rule.Body[0]];
                     var treeUp = _treeUpdateDictionary[key];
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
@@ -888,7 +899,7 @@ namespace ProseSample.Substrings
                 {
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
-                    var key = (SyntaxNodeOrToken)input[rule.Body[0]];
+                    var key = input[rule.Body[0]];
                     var treeUp = _treeUpdateDictionary[key];
                     matches.Add(editOperation.K);
 
@@ -999,7 +1010,7 @@ namespace ProseSample.Substrings
                 {
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
-                    var key = (SyntaxNodeOrToken)input[rule.Body[0]];
+                    var key = input[rule.Body[0]];
                     var treeUp = _treeUpdateDictionary[key];
                     matches.Add(editOperation.K);
 
@@ -1180,7 +1191,8 @@ namespace ProseSample.Substrings
 
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
+                var key = input[rule.Body[0]];
+                var inpTree = GetCurrentTree(key);
                 var mats = new List<object>();
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
@@ -1270,14 +1282,14 @@ namespace ProseSample.Substrings
             return script;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
+        private static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
         {
-            if (!_currentTrees.ContainsKey(n))
-            {
-                _currentTrees[n] = ConverterHelper.ConvertCSharpToTreeNode(n);
-            }
+            //if (!_currentTrees.ContainsKey(n))
+            //{
+            //    _currentTrees[n] = ConverterHelper.ConvertCSharpToTreeNode(n);
+            //}
 
-            ITreeNode<SyntaxNodeOrToken> node = _currentTrees[n]; //CurrentTrees[n];
+            ITreeNode<SyntaxNodeOrToken> node = _currentTrees[n];
 
             return node;
         }

@@ -27,7 +27,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         public TreeUpdate(){}
 
-        public void PreProcessTree(List<EditOperation<SyntaxNodeOrToken>> script, SyntaxNodeOrToken tree)
+        public void PreProcessTree(SyntaxNodeOrToken tree)
         {
             CurrentTree = ConverterHelper.ConvertCSharpToTreeNode(tree);
         }
