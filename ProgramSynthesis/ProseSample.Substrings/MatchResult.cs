@@ -1,15 +1,22 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
+using Spg.TreeEdit.Node;
 
 namespace ProseSample.Substrings
 {
     public class MatchResult
     {
-        public Tuple<SyntaxNodeOrToken, Bindings> match { get; set; }
+        private Tuple<ITreeNode<SyntaxNodeOrToken>, Bindings> _match { get; set; }
 
-        public MatchResult(Tuple<SyntaxNodeOrToken, Bindings> match)
+        public Tuple<ITreeNode<SyntaxNodeOrToken>, Bindings> Match
         {
-            this.match = match;
+            get { return _match; }
+            set { _match = value; }
+        }
+
+        public MatchResult(Tuple<ITreeNode<SyntaxNodeOrToken>, Bindings> match)
+        {
+            Match = match;
         }
     }
 }

@@ -47,10 +47,9 @@ namespace ProseSample.Substrings
                 {
                     //var kindMatch = item.Children[i];
                     var expression = children.ElementAt(i);
-                    if (MatchChildren(item.Value, expression.match.Item1))
+                    if (MatchChildren(item.Value, expression.Match.Item1.Value))
                     {
-                        Tuple<SyntaxNodeOrToken, Bindings> match =
-                            Tuple.Create<SyntaxNodeOrToken, Bindings>(item.Value, null);
+                        var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
                         MatchResult matchResult = new MatchResult(match);
                         return matchResult;
                     }
@@ -138,7 +137,7 @@ namespace ProseSample.Substrings
             var matches = Matches(currentTree, lookFor);
             if (matches.Any())
             {
-                Tuple<SyntaxNodeOrToken, Bindings> match = Tuple.Create<SyntaxNodeOrToken, Bindings>(matches.First(), null);
+                var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(ConverterHelper.ConvertCSharpToTreeNode(matches.First()), null);
                 MatchResult matchResult = new MatchResult(match);
                 return matchResult;
             }
@@ -173,7 +172,7 @@ namespace ProseSample.Substrings
         {
             TreeUpdate update = TreeUpdateDictionary[node];
 
-            var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.match.Item1);
+            var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
             var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
 
 
@@ -196,8 +195,8 @@ namespace ProseSample.Substrings
         {
             TreeUpdate update = TreeUpdateDictionary[node];
 
-            var parentNode = ConverterHelper.ConvertCSharpToTreeNode(parent.match.Item1);
-            var child = ConverterHelper.ConvertCSharpToTreeNode(from.match.Item1);
+            var parentNode = ConverterHelper.ConvertCSharpToTreeNode(parent.Match.Item1.Value);
+            var child = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
 
             var move = new Move<SyntaxNodeOrToken>(child, parentNode, k);
             update.ProcessEditOperation(move);
@@ -210,7 +209,7 @@ namespace ProseSample.Substrings
         {
             TreeUpdate update = TreeUpdateDictionary[node];
 
-            var fromTreeNode = ConverterHelper.ConvertCSharpToTreeNode(from.match.Item1);
+            var fromTreeNode = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
             var toTreeNode = ConverterHelper.ConvertCSharpToTreeNode(to);
 
             var updateEdit = new Update<SyntaxNodeOrToken>(fromTreeNode, toTreeNode, null);
@@ -224,7 +223,7 @@ namespace ProseSample.Substrings
         {
             TreeUpdate update = TreeUpdateDictionary[node];
 
-            var t1Node = ConverterHelper.ConvertCSharpToTreeNode(delete.match.Item1);
+            var t1Node = ConverterHelper.ConvertCSharpToTreeNode(delete.Match.Item1.Value);
 
             var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
             update.ProcessEditOperation(updateEdit);
@@ -246,7 +245,7 @@ namespace ProseSample.Substrings
 
             if (matches.Any())
             {
-                var result = new MatchResult(Tuple.Create(matches.ElementAt(k - 1).Value, new Bindings(new List<SyntaxNodeOrToken> { matches.ElementAt(k - 1).Value })));
+                var result = new MatchResult(Tuple.Create(matches.ElementAt(k - 1), new Bindings(new List<SyntaxNodeOrToken> { matches.ElementAt(k - 1).Value })));
                 return result;
             }
             return null;
@@ -256,8 +255,8 @@ namespace ProseSample.Substrings
         public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult kindRef, int k)
         {
             //SyntaxNodeOrToken child = kindRef.match.Item1.AsNode().ChildNodes().ElementAt(k - 1);
-            SyntaxNodeOrToken child = TreeUpdate.FindNode(GetCurrentTree(node), kindRef.match.Item1).Children.ElementAt(k - 1).Value;
-            var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child })));
+            var child = TreeUpdate.FindNode(GetCurrentTree(node), kindRef.Match.Item1.Value).Children.ElementAt(k - 1);
+            var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
             return result;
         }
 
@@ -305,7 +304,7 @@ namespace ProseSample.Substrings
 
         public static SyntaxNodeOrToken Ref(SyntaxNodeOrToken node, MatchResult result)
         {
-            return result.match.Item1;
+            return result.Match.Item1.Value;
         }
 
         public static IEnumerable<MatchResult> CList(MatchResult child1, IEnumerable<MatchResult> cList)

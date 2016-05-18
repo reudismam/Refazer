@@ -53,10 +53,10 @@ namespace ProseSample.Substrings
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
                     //Only apliable for nodes
-                    if (matchResult.match.Item1.IsToken) return null;
+                    if (matchResult.Match.Item1.Value.IsToken) return null;
 
                     //Only appliable for leaf nodes
-                    if (matchResult.match.Item1.AsNode().ChildNodes().Any()) return null;
+                    if (matchResult.Match.Item1.Children.Any()) return null;
 
                     var matches = ConcreteTreeMatches(inpTree, matchResult);
                     if (!matches.Any()) return null;
@@ -107,8 +107,8 @@ namespace ProseSample.Substrings
                 var inpTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
-                    SyntaxNodeOrToken sot = matchResult.match.Item1;
-                    var matches = MatchesAbstract(inpTree, sot.Kind());
+                    var sot = matchResult.Match.Item1;
+                    var matches = MatchesAbstract(inpTree, sot.Value.Kind());
 
                     foreach (var item in matches)
                     {
@@ -149,7 +149,7 @@ namespace ProseSample.Substrings
                 PrintUtil<SyntaxNodeOrToken>.PrintPretty(inpTree, "", true);
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
-                    SyntaxNodeOrToken sot = matchResult.match.Item1;
+                    var sot = matchResult.Match.Item1;
 
                     var kind = (SyntaxKind)kindBinding.Examples[input];
                     var matches = MatchesAbstract(inpTree, kind);
@@ -181,15 +181,15 @@ namespace ProseSample.Substrings
                 var mats = new List<object>();
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
-                    SyntaxNodeOrToken sot = matchResult.match.Item1;
+                    var sot = matchResult.Match.Item1;
 
-                    if (sot.IsToken) return null;
+                    if (sot.Value.IsToken) return null;
 
-                    ITreeNode<SyntaxNodeOrToken> parent = FindParent((SyntaxNodeOrToken)input[rule.Body[0]], sot);
+                    ITreeNode<SyntaxNodeOrToken> parent = FindParent((SyntaxNodeOrToken)input[rule.Body[0]], sot.Value);
 
                     if (parent == null) return null;
 
-                    var result = new MatchResult(Tuple.Create(parent.Value, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
+                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
                     mats.Add(result);
                 }
                 treeExamples[input] = mats.GetRange(0, 1);
@@ -214,10 +214,10 @@ namespace ProseSample.Substrings
                 var mats = new List<object>();
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
-                    if (matchResult.match.Item1.IsToken) return null;
+                    if (matchResult.Match.Item1.Value.IsToken) return null;
 
                     //TODO Refactor to use kindBinding
-                    SyntaxNode sot = matchResult.match.Item1.AsNode();
+                    SyntaxNode sot = matchResult.Match.Item1.Value.AsNode();
 
                     ITreeNode<SyntaxNodeOrToken> parent = FindParent((SyntaxNodeOrToken)input[rule.Body[0]], sot);
 
@@ -371,9 +371,9 @@ namespace ProseSample.Substrings
         private static List<SyntaxNodeOrToken> ConcreteTreeMatches(ITreeNode<SyntaxNodeOrToken> inpTree, MatchResult matchResult)
         {
             var descendants = inpTree.DescendantNodes();
-            var sot = matchResult.match.Item1;
+            var sot = matchResult.Match.Item1;
             var matches = from item in descendants
-                          where item.Value.IsKind(sot.Kind()) && item.ToString().Equals(sot.ToString())
+                          where item.Value.IsKind(sot.Value.Kind()) && item.ToString().Equals(sot.ToString())
                           select item.Value;
             return matches.ToList();
         }
@@ -405,10 +405,10 @@ namespace ProseSample.Substrings
                 var syntaxKinds = new List<object>();
                 foreach (MatchResult mt in spec.DisjunctiveExamples[input])
                 {
-                    SyntaxNodeOrToken sot = mt.match.Item1;
-                    if (sot.IsToken) return null;
+                    var sot = mt.Match.Item1;
+                    if (sot.Value.IsToken) return null;
 
-                    syntaxKinds.Add(sot.Kind());
+                    syntaxKinds.Add(sot.Value.Kind());
                 }
                 kdExamples[input] = syntaxKinds;
             }
@@ -432,13 +432,13 @@ namespace ProseSample.Substrings
                 var matches = new List<object>();
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
-                    var sot = matchResult.match.Item1;
-                    if (sot.IsToken) return null;
+                    var sot = matchResult.Match.Item1;
+                    if (sot.Value.IsToken) return null;
 
                     
 
                     var currentTree = GetCurrentTree((SyntaxNodeOrToken)input[rule.Body[0]]);
-                    var snode = TreeUpdate.FindNode(currentTree, sot);
+                    var snode = TreeUpdate.FindNode(currentTree, sot.Value);
                     if (snode == null || !snode.Children.Any()) return null;
 
                     var lsot = ExtractChildren(snode);
@@ -446,9 +446,9 @@ namespace ProseSample.Substrings
                     var childList = new List<MatchResult>();
                     foreach (var item in lsot)
                     {
-                        var binding = matchResult.match.Item2;
+                        var binding = matchResult.Match.Item2;
                         binding.bindings.Add(item);
-                        Tuple<SyntaxNodeOrToken, Bindings> t = Tuple.Create(item, binding);
+                        var t = Tuple.Create(ConverterHelper.ConvertCSharpToTreeNode(item), binding);
                         MatchResult m = new MatchResult(t);
                         childList.Add(m);
                     }
@@ -687,7 +687,7 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Delete<SyntaxNodeOrToken>)) return null;
 
                     var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from.Value, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
+                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
                     matches.Add(result);
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
@@ -722,7 +722,7 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
 
                     var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from.Value, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
+                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
                     matches.Add(result);
 
                     var key = (SyntaxNodeOrToken)input[rule.Body[0]];
@@ -835,7 +835,7 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                     var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from.Value, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
+                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
                     matches.Add(result);
                 }
                 kExamples[input] = matches;
@@ -873,7 +873,7 @@ namespace ProseSample.Substrings
             {
                 var move = (Move<SyntaxNodeOrToken>)editOperation;
                 var parent = move.Parent;
-                var result = new MatchResult(Tuple.Create(parent.Value, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
+                var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
 
                 matches.Add(result);
             }
@@ -936,7 +936,7 @@ namespace ProseSample.Substrings
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                     var parent = editOperation.Parent;
-                    var result = new MatchResult(Tuple.Create(parent.Value, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
+                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
 
                     matches.Add(result);
                 }
@@ -1089,7 +1089,7 @@ namespace ProseSample.Substrings
 
                     if (node == null) return null;
 
-                    var result = new MatchResult(Tuple.Create(sot.Value, new Bindings(new List<SyntaxNodeOrToken> { sot.Value })));
+                    var result = new MatchResult(Tuple.Create(sot, new Bindings(new List<SyntaxNodeOrToken> { sot.Value })));
 
                     mats.Add(result);
                 }
