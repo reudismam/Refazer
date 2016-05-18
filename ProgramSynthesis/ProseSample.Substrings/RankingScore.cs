@@ -17,14 +17,20 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Breaks")]
         public static double Score_Breaks(double predScore, double splitScore) => predScore + splitScore;
 
-        [FeatureCalculator("SC")]
-        public static double Score_CS(double childScore) => childScore;
-
         [FeatureCalculator("FTrue")]
         public static double Score_FTrue() => 1.1;
 
+        [FeatureCalculator("SC")]
+        public static double Score_CS(double childScore) => childScore;
+
         [FeatureCalculator("CList")]
         public static double Score_CList(double childScore, double childrenScore) => (childScore + childrenScore) > 0 ? -(childScore + childrenScore) : (childScore + childrenScore);
+
+        [FeatureCalculator("PC")]
+        public static double Score_PS(double childScore) => childScore;
+
+        [FeatureCalculator("PList")]
+        public static double Score_PList(double childScore, double childrenScore) => (childScore + childrenScore) > 0 ? -(childScore + childrenScore) : (childScore + childrenScore);
 
         [FeatureCalculator("SN")]
         public static double Score_SN(double childScore) => childScore;
@@ -83,15 +89,23 @@ namespace ProseSample.Substrings
         [FeatureCalculator("KindRef")]
         public static double Score_KindRef(double inScore, double kindScore, double kScore) => kindScore;
 
+        [FeatureCalculator("Abstract")]
+        public static double Score_Abstract(double kindScore, double kScore) => kindScore;
+
+        [FeatureCalculator("Concrete")]
+        public static double Score_Concrete(double treeScore) => treeScore;
+
         [FeatureCalculator("Parent")]
         public static double Score_Parent(double inScore, double matchScore, double kScore) => matchScore;
+
+        [FeatureCalculator("P")]
+        public static double Score_P(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Literal")]
         public static double Score_Literal(double inScore, double treeScore) => treeScore;
 
         [FeatureCalculator("C")]
         public static double Score_C1(double inScore, double kindScore, double expression1Score) => kindScore + expression1Score;
-
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KScore(int k) => k >= 0 ? 1.0 / (k + 1.0) : 1.0 / (-k + 1.1);

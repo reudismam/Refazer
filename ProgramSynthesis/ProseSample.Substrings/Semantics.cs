@@ -8,7 +8,6 @@ using ProseSample.Substrings.List;
 using Spg.TreeEdit.Node;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
-using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using Tutor.Spg.TreeEdit.Node;
 
@@ -34,6 +33,40 @@ namespace ProseSample.Substrings
         /// <param name="children">Children nodes</param>
         /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
         public static MatchResult C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
+        {
+            var currentTree = GetCurrentTree(node);
+
+            var klist = SplitToNodes(currentTree, kind);
+
+            foreach (var item in klist)
+            {
+                //if(item.Children.Count != children.Count()) continue;
+
+                for (int i = 0; i < children.Count(); i++)
+                {
+                    //var kindMatch = item.Children[i];
+                    var expression = children.ElementAt(i);
+                    if (MatchChildren(item.Value, expression.Match.Item1.Value))
+                    {
+                        var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
+                        MatchResult matchResult = new MatchResult(match);
+                        return matchResult;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
+        /// <summary>
+        /// Match function. This function matches the first element on the tree that has the specified kind and child nodes.
+        /// </summary>
+        /// <param name="node">Node</param>
+        /// <param name="kind">Syntax kind</param>
+        /// <param name="children">Children nodes</param>
+        /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
+        public static MatchResult P(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
             var currentTree = GetCurrentTree(node);
 
@@ -123,6 +156,40 @@ namespace ProseSample.Substrings
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Build a literal
+        /// </summary>
+        /// <param name="node">Input node</param>
+        /// <param name="lookFor">Literal itself.</param>
+        /// <returns>Match of parameter literal in the source code.</returns>
+        public static MatchResult Concrete(SyntaxNodeOrToken lookFor)
+        {
+            var currentTree = GetCurrentTree(lookFor);
+            var matches = Matches(currentTree, lookFor);
+            if (matches.Any())
+            {
+                var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(ConverterHelper.ConvertCSharpToTreeNode(matches.First()), null);
+                MatchResult matchResult = new MatchResult(match);
+                return matchResult;
+            }
+
+            return null;
+        }
+
+        public static MatchResult Abstract(SyntaxKind kind)
+        {
+            //var currentTree = GetCurrentTree(node);
+
+            //var matches = SplitToNodes(currentTree, kind);
+
+            //if (matches.Any())
+            //{
+            //    var result = new MatchResult(Tuple.Create(matches.ElementAt(k - 1), new Bindings(new List<SyntaxNodeOrToken> { matches.ElementAt(k - 1).Value })));
+            //    return result;
+            //}
+            return null;
         }
 
         /// <summary>
@@ -317,6 +384,16 @@ namespace ProseSample.Substrings
             return GList<MatchResult>.Single(child);
         }
 
+        public static IEnumerable<MatchResult> PList(MatchResult child1, IEnumerable<MatchResult> cList)
+        {
+            return GList<MatchResult>.List(child1, cList);
+        }
+
+        public static IEnumerable<MatchResult> PC(MatchResult child)
+        {
+            return GList<MatchResult>.Single(child);
+        }
+
         public static IEnumerable<SyntaxNodeOrToken> NList(SyntaxNodeOrToken child1, IEnumerable<SyntaxNodeOrToken> cList)
         {
             return GList<SyntaxNodeOrToken>.List(child1, cList);
@@ -381,14 +458,15 @@ namespace ProseSample.Substrings
             return node;
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> BreakByKind(SyntaxNodeOrToken node, SyntaxKind kind)
+        public static IEnumerable<SyntaxNodeOrToken> BreakByKind(SyntaxNodeOrToken node, MatchResult match)
         {
-            var currentTree = GetCurrentTree(node);
-            var nodeList = SplitToNodes(currentTree, kind);
+            //var currentTree = GetCurrentTree(node);
+            //var nodeList = SplitToNodes(currentTree, kind);
 
-            var kList = nodeList.Select(o => o.Value);
+            //var kList = nodeList.Select(o => o.Value);
 
-            return kList;
+            //return kList;
+            return null;
         }
 
         /// <summary>

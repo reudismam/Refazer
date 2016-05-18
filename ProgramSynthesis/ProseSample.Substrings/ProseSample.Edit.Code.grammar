@@ -30,7 +30,10 @@ IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxN
 
 IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions);
 
-IEnumerable<SyntaxNodeOrToken> regions := BreakByKind(node, kind);
+IEnumerable<SyntaxNodeOrToken> regions := BreakByKind(node, template);
+
+MatchResult template:= P(node, kind, pchildren) | Abstract(kind);
+IEnumerable<MatchResult> pchildren := PC(template) | PList(template, pchildren);
 
 SyntaxNodeOrToken script := Script(node, edits);
 
