@@ -304,7 +304,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("PList", 0)]
-        public static DisjunctiveExamplesSpec WitnessPList1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec PListTemplate(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return GList<List<ITreeNode<SyntaxNodeOrToken>>>.List0(rule, parameter, spec);
         }
@@ -317,20 +317,20 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("PList", 1)]
-        public static DisjunctiveExamplesSpec WitnessPList2(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec PListChildren(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return GList<List<ITreeNode<SyntaxNodeOrToken>>>.List1(rule, parameter, spec);
         }
 
         /// <summary>
-        /// SC witness function for parameter 0
+        /// SP witness function for parameter 0
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("SP", 0)]
-        public static DisjunctiveExamplesSpec WitnessSnChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec SpTemplate(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return GList<List<ITreeNode<SyntaxNodeOrToken>>>.Single(rule, parameter, spec);
         }
@@ -532,10 +532,6 @@ namespace ProseSample.Substrings
                         for (int i = 0; i < sot.Children.Count; i++)
                         {
                             var item = sot.Children[i];
-                            //var binding = matchResult.Match.Item2;
-                            //binding.bindings.Add(item.Value);
-
-                            //MatchResult m = new MatchResult(Tuple.Create(item, binding));
                             var m = item;
                             children.ElementAt(i).Add(m);
                         }
