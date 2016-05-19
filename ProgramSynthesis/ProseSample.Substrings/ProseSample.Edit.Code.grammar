@@ -44,7 +44,7 @@ IEnumerable<SyntaxNodeOrToken> edits := SE(edit) | EList(edit, edits);
 SyntaxNodeOrToken edit := Insert(node, k, match, ast) | Update(node, match, ast) | Move(node, k, match, match) | Delete(node, match);
 
 MatchResult match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
-MatchResult kindRef := KindRef(node, kind, k) | Literal(node, tree);
+MatchResult kindRef := Variable(node, kind, k) | Literal(node, tree);
 
 IEnumerable<MatchResult> children := SC(match) | CList(match, children);
 

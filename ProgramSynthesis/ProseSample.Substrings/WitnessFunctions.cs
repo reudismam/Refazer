@@ -157,7 +157,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("KindRef", 1)]
+        [WitnessFunction("Variable", 1)]
         public static DisjunctiveExamplesSpec KindRefKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
@@ -194,7 +194,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kindBinding">kind binding</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("KindRef", 2, DependsOnParameters = new[] { 1 })]
+        [WitnessFunction("Variable", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec KindRefK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
@@ -779,8 +779,12 @@ namespace ProseSample.Substrings
                     _currentTrees[cc] = cc.First().Parent;
                     PrintScript(cc);
                 }
-                kMatches.Add(ocurrences);
-                kExamples[input] = kMatches;
+
+                if (ocurrences.Any())
+                {
+                    kMatches.Add(ocurrences);
+                    kExamples[input] = kMatches;
+                }
             }
 
             return DisjunctiveExamplesSpec.From(kExamples);

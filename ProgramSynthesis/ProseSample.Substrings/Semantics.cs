@@ -249,12 +249,12 @@ namespace ProseSample.Substrings
             return update.CurrentTree.Value;
         }
 
-        public static MatchResult Tree(MatchResult kindRef)
+        public static MatchResult Tree(MatchResult variable)
         {
-            return kindRef;
+            return variable;
         }
 
-        public static MatchResult KindRef(SyntaxNodeOrToken node, SyntaxKind kind, int k)
+        public static MatchResult Variable(SyntaxNodeOrToken node, SyntaxKind kind, int k)
         {
             var currentTree = GetCurrentTree(node);
 
@@ -268,9 +268,9 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult kindRef, int k)
+        public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult variable, int k)
         {
-            var child = TreeUpdate.FindNode(GetCurrentTree(node), kindRef.Match.Item1.Value).Children.ElementAt(k - 1);
+            var child = TreeUpdate.FindNode(GetCurrentTree(node), variable.Match.Item1.Value).Children.ElementAt(k - 1);
             var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
             return result;
         }
@@ -388,7 +388,8 @@ namespace ProseSample.Substrings
         public static SyntaxNodeOrToken ManyTrans(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
         {       
             var list = loop.ToList();
-            throw new Exception("Non implemented yet.");
+            return null;
+            //throw new Exception("Non implemented yet.");
             //var nodeElements = from snode in node.AsNode().DescendantNodesAndSelf()
             //    where snode.IsKind(list.First().Kind())
             //    select snode;

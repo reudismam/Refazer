@@ -48,13 +48,10 @@ namespace ProseSample.Substrings
         public static double Score_SplitNodes(double inScore) => inScore;
 
         [FeatureCalculator("Florest")]
-        public static double Score_BreakByKind(double inScore, double kind) => inScore + kind;
+        public static double Score_Florest(double inScore, double kind) => inScore + kind;
 
         [FeatureCalculator("Script")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
-
-        [FeatureCalculator("OneTrans")]
-        public static double Score_OneTrans(double inScore, double script) => inScore + script;
 
         [FeatureCalculator("ManyTrans")]
         public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;
@@ -86,8 +83,8 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Ref")]
         public static double Score_Ref(double inScore, double matchScore) => matchScore;
 
-        [FeatureCalculator("KindRef")]
-        public static double Score_KindRef(double inScore, double kindScore, double kScore) => kindScore;
+        [FeatureCalculator("Variable")]
+        public static double Score_Variable(double inScore, double kindScore, double kScore) => kindScore;
 
         [FeatureCalculator("Abstract")]
         public static double Score_Abstract(double kindScore) => kindScore;
