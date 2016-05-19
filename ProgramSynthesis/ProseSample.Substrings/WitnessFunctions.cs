@@ -42,35 +42,28 @@ namespace ProseSample.Substrings
         [WitnessFunction("Literal", 1)]
         public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-
-            //TODO refactor the witness function literal
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             var literalExamples = new List<object>();
-            foreach (State input in spec.ProvidedInputs)
+            foreach (var input in spec.ProvidedInputs)
             {
                 var key = input[rule.Body[0]];
                 var inpTree = GetCurrentTree(key);
 
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
-                    //Only apliable for nodes
-                    if (matchResult.Match.Item1.Value.IsToken) return null;
-
-                    //Only appliable for leaf nodes
-                    if (matchResult.Match.Item1.Children.Any()) return null;
+                    var sot = matchResult.Match.Item1;
+                    if (sot.Value.IsToken || sot.Children.Any()) return null;
 
                     var matches = ConcreteTreeMatches(inpTree, matchResult);
                     if (!matches.Any()) return null;
 
                     literalExamples.Add(matches.First());
 
-                    var currentTree = ConverterHelper.ConvertCSharpToTreeNode(matches.First());
                     var first = ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken) literalExamples.First());
-                    if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(currentTree, first)) return null;
+                    if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(matches.First(), first)) return null;
                 }
                 treeExamples[input] = literalExamples.GetRange(0, 1);
             }
-
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
@@ -86,7 +79,7 @@ namespace ProseSample.Substrings
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             
-            foreach (State input in spec.ProvidedInputs)
+            foreach (var input in spec.ProvidedInputs)
             {
                 var literalExamples = new List<object>();
                 foreach (List<MatchResult> matchResultList in spec.DisjunctiveExamples[input])
@@ -103,69 +96,56 @@ namespace ProseSample.Substrings
                 }
                 treeExamples[input] = literalExamples;
             }
-
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
         [WitnessFunction("Abstract", 0)]
-        public static DisjunctiveExamplesSpec WitnessAbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec AbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            var kindExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (var input in spec.ProvidedInputs)
             {
-                var mats = new List<object>();
+                var matches = new List<object>();
                 foreach (List<MatchResult> matchResultList in spec.DisjunctiveExamples[input])
                 {
                     var kind = matchResultList.First().Match.Item1.Value.Kind();
                     if (matchResultList.Any(matchResult => !matchResult.Match.Item1.Value.IsKind(kind) || matchResult.Match.Item1.Children.Any())) return null;
                     
-                    mats.Add(kind);
+                    matches.Add(kind);
                 }
-                treeExamples[input] = mats;
+                kindExamples[input] = matches;
             }
-            return DisjunctiveExamplesSpec.From(treeExamples);
-        }
+            return DisjunctiveExamplesSpec.From(kindExamples);
+        } 
 
-        //[WitnessFunction("FTrue", 0)]
-        //public static DisjunctiveExamplesSpec WitnessFTrueKind(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    var treeExamples = new Dictionary<State, IEnumerable<object>>();
-        //    foreach (var input in spec.ProvidedInputs)
-        //    {
-        //        var mats = new List<object>();
-        //        foreach (List<MatchResult> matchResultList in spec.DisjunctiveExamples[input])
-        //        {
-        //            var kind = matchResultList.First().Match.Item1.Value.Kind();
-        //            if (matchResultList.Any(matchResult => !matchResult.Match.Item1.Value.IsKind(kind) || matchResult.Match.Item1.Children.Any())) return null;
-
-        //            mats.Add(kind);
-        //        }
-        //        treeExamples[input] = mats;
-        //    }
-        //    return DisjunctiveExamplesSpec.From(treeExamples);
-        //}
-
+        /// <summary>
+        /// Tree witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Example specificaiton</param>
+        /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Tree", 0)]
-        public static DisjunctiveExamplesSpec WitnessTreeKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec TreeKindRef(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (var input in spec.ProvidedInputs)
             {
-                var mats = spec.DisjunctiveExamples[input].Cast<MatchResult>().Cast<object>().ToList();
-                treeExamples[input] = mats;
+                var matches = spec.DisjunctiveExamples[input].Cast<MatchResult>().Cast<object>().ToList();
+                treeExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
         /// <summary>
-        /// Literal witness function for parameter tree.
+        /// KindRef witness function for parameter kind.
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("KindRef", 1)]
-        public static DisjunctiveExamplesSpec WitnessKindRefKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec KindRefKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -194,7 +174,7 @@ namespace ProseSample.Substrings
         }
 
         /// <summary>
-        /// Literal witness function for parameter tree.
+        /// KindRef witness function for parameter k.
         /// </summary>
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
@@ -202,7 +182,7 @@ namespace ProseSample.Substrings
         /// <param name="kindBinding">kind binding</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("KindRef", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec WitnessKindRefK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        public static DisjunctiveExamplesSpec KindRefK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -229,7 +209,6 @@ namespace ProseSample.Substrings
                 }
                 treeExamples[input] = mats;
             }
-
             var values = treeExamples.Values;
             return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
         }
@@ -461,13 +440,13 @@ namespace ProseSample.Substrings
         /// <param name="inpTree">Input tree</param>
         /// <param name="matchResult">Match on code</param>
         /// <returns>Matched nodes</returns>
-        private static List<SyntaxNodeOrToken> ConcreteTreeMatches(ITreeNode<SyntaxNodeOrToken> inpTree, MatchResult matchResult)
+        private static List<ITreeNode<SyntaxNodeOrToken>> ConcreteTreeMatches(ITreeNode<SyntaxNodeOrToken> inpTree, MatchResult matchResult)
         {
             var descendants = inpTree.DescendantNodes();
             var sot = matchResult.Match.Item1;
             var matches = from item in descendants
                           where item.Value.IsKind(sot.Value.Kind()) && item.ToString().Equals(sot.ToString())
-                          select item.Value;
+                          select item;
             return matches.ToList();
         }
 
