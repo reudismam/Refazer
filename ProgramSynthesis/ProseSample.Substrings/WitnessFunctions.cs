@@ -486,7 +486,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter associated to C rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive examples specification with the kind of the nodes in the examples</returns>
-        [WitnessFunction("P", 1)]
+        [WitnessFunction("P", 0)]
         public static DisjunctiveExamplesSpec WitnessPKd(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var kdExamples = new Dictionary<State, IEnumerable<object>>();
@@ -510,7 +510,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Learned kind</param>
         /// <returns>Disjuntive examples specification</returns>
-        [WitnessFunction("P", 2, DependsOnParameters = new[] { 1 })]
+        [WitnessFunction("P", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec WitnessPExpression1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();

@@ -96,7 +96,7 @@ namespace ProseSample.Substrings
         public static double Score_Parent(double inScore, double matchScore, double kScore) => matchScore;
 
         [FeatureCalculator("P")]
-        public static double Score_P(double inScore, double kindScore, double expression1Score) => kindScore + expression1Score;
+        public static double Score_P(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Literal")]
         public static double Score_Literal(double inScore, double treeScore) => treeScore;

@@ -62,7 +62,7 @@ namespace ProseSample.Substrings
         /// <param name="kind">Syntax kind</param>
         /// <param name="children">Children nodes</param>
         /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
-        public static Pattern P(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<Pattern> children)
+        public static Pattern P(SyntaxKind kind, IEnumerable<Pattern> children)
         {
             var pchildren = children.Select(child => child.Tree).ToList();
 
