@@ -9,7 +9,6 @@ using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.List;
-using Spg.TreeEdit.Node;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Isomorphic;
@@ -17,6 +16,7 @@ using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeEdit.Spg.Walker;
+using Tutor.Spg.Node;
 
 namespace ProseSample.Substrings
 {
@@ -59,10 +59,13 @@ namespace ProseSample.Substrings
 
                     literalExamples.Add(matches.First());
 
-                    var first = ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken) literalExamples.First());
+                    var first = (ITreeNode<SyntaxNodeOrToken>) literalExamples.First();
                     if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(matches.First(), first)) return null;
                 }
-                treeExamples[input] = literalExamples.GetRange(0, 1);
+
+                var examples = (from ITreeNode<SyntaxNodeOrToken> v in literalExamples.GetRange(0, 1) select v.Value).Cast<object>().ToList();
+
+                treeExamples[input] = examples;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
@@ -82,11 +85,11 @@ namespace ProseSample.Substrings
             foreach (var input in spec.ProvidedInputs)
             {
                 var literalExamples = new List<object>();
-                foreach (List<MatchResult> matchResultList in spec.DisjunctiveExamples[input])
+                foreach (List<Pattern> matchResultList in spec.DisjunctiveExamples[input])
                 {
-                    var tree = matchResultList.First().Match.Item1;
+                    var tree = matchResultList.First().Tree;
 
-                    foreach (var sot in matchResultList.Select(matchResult => matchResult.Match.Item1))
+                    foreach (var sot in matchResultList.Select(matchResult => matchResult.Tree))
                     {
                         if (sot.Value.IsToken || sot.Children.Any()) return null;
 
@@ -106,10 +109,10 @@ namespace ProseSample.Substrings
             foreach (var input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (List<MatchResult> matchResultList in spec.DisjunctiveExamples[input])
+                foreach (List<Pattern> matchResultList in spec.DisjunctiveExamples[input])
                 {
-                    var kind = matchResultList.First().Match.Item1.Value.Kind();
-                    if (matchResultList.Any(matchResult => !matchResult.Match.Item1.Value.IsKind(kind) || matchResult.Match.Item1.Children.Any())) return null;
+                    var kind = matchResultList.First().Tree.Value.Kind();
+                    if (matchResultList.Any(matchResult => !matchResult.Tree.Value.IsKind(kind) || matchResult.Tree.Children.Any())) return null;
                     
                     matches.Add(kind);
                 }
@@ -288,7 +291,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("PList", 0)]
         public static DisjunctiveExamplesSpec WitnessPList1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<List<MatchResult>>.List0(rule, parameter, spec);
+            return GList<List<Pattern>>.List0(rule, parameter, spec);
         }
 
         /// <summary>
@@ -301,7 +304,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("PList", 1)]
         public static DisjunctiveExamplesSpec WitnessPList2(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<List<MatchResult>>.List1(rule, parameter, spec);
+            return GList<List<Pattern>>.List1(rule, parameter, spec);
         }
 
         /// <summary>
@@ -314,7 +317,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("PC", 0)]
         public static DisjunctiveExamplesSpec WitnessSnChild1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<List<MatchResult>>.Single(rule, parameter, spec);
+            return GList<List<Pattern>>.Single(rule, parameter, spec);
         }
 
         /// <summary>
@@ -475,9 +478,9 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var syntaxKinds = new List<object>();
-                foreach (List<MatchResult> mt in spec.DisjunctiveExamples[input])
+                foreach (List<Pattern> mt in spec.DisjunctiveExamples[input])
                 { 
-                    syntaxKinds.Add(mt.First().Match.Item1.Value.Kind());
+                    syntaxKinds.Add(mt.First().Tree.Value.Kind());
                 }
                 kdExamples[input] = syntaxKinds.GetRange(0, 1);
             }
@@ -500,24 +503,25 @@ namespace ProseSample.Substrings
             {
                 var matches = new List<object>();
                 
-                foreach (List<MatchResult> matchResultList in spec.DisjunctiveExamples[input])
+                foreach (List<Pattern> matchResultList in spec.DisjunctiveExamples[input])
                 {
                     var firstExample = matchResultList.First();
 
-                    var children = firstExample.Match.Item1.Children.Select(v => new List<MatchResult>()).ToList();
+                    var children = firstExample.Tree.Children.Select(v => new List<Pattern>()).ToList();
 
                     foreach (var matchResult in matchResultList)
                     {
-                        var sot = matchResult.Match.Item1;
+                        var sot = matchResult.Tree;
                         if (sot.Value.IsToken || !sot.Children.Any()) return null;
 
                         for (int i = 0; i < sot.Children.Count; i++)
                         {
                             var item = sot.Children[i];
-                            var binding = matchResult.Match.Item2;
-                            binding.bindings.Add(item.Value);
+                            //var binding = matchResult.Match.Item2;
+                            //binding.bindings.Add(item.Value);
 
-                            MatchResult m = new MatchResult(Tuple.Create(item, binding));
+                            //MatchResult m = new MatchResult(Tuple.Create(item, binding));
+                            Pattern m = new Pattern(item);
                             children.ElementAt(i).Add(m);
                         }
                     }
@@ -758,11 +762,11 @@ namespace ProseSample.Substrings
             {
                 var kMatches = new List<object>();
                 var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
-                var ocurrences = new List<MatchResult>();
+                var ocurrences = new List<Pattern>();
                 foreach (List<EditOperation<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
                     var template = BuildTemplate(cc, inpTree).First();
-                    var result = new MatchResult(Tuple.Create(template, new Bindings(new List<SyntaxNodeOrToken> { template.Value })));
+                    var result = new Pattern(template);
                     //kMatches.Add(result);
                     ocurrences.Add(result);
                     //TODO refactor this.

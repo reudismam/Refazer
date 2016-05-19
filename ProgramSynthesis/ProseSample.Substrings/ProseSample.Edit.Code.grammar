@@ -2,12 +2,14 @@
 reference 'ProseSample.Substrings.dll';
 reference 'Microsoft.CodeAnalysis.CSharp.dll';
 reference 'Microsoft.CodeAnalysis.dll';
+reference 'Tutor.exe';
 
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using ProseSample.Substrings;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
+using Tutor.Spg.Node;
 using System;
 
 using semantics ProseSample.Substrings.Semantics;
@@ -32,8 +34,8 @@ IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: Synt
 
 IEnumerable<SyntaxNodeOrToken> regions := Florest(node, template);
 
-MatchResult template:= P(node, kind, pchildren) | Abstract(kind) | Concrete(tree);
-IEnumerable<MatchResult> pchildren := PC(template) | PList(template, pchildren);
+Pattern template:= P(node, kind, pchildren) | Abstract(kind) | Concrete(tree);
+IEnumerable<Pattern> pchildren := PC(template) | PList(template, pchildren);
 
 SyntaxNodeOrToken script := Script(node, edits);
 
@@ -42,7 +44,6 @@ IEnumerable<SyntaxNodeOrToken> edits := SE(edit) | EList(edit, edits);
 SyntaxNodeOrToken edit := Insert(node, k, match, ast) | Update(node, match, ast) | Move(node, k, match, match) | Delete(node, match);
 
 MatchResult match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
-
 MatchResult kindRef := KindRef(node, kind, k) | Literal(node, tree);
 
 IEnumerable<MatchResult> children := SC(match) | CList(match, children);

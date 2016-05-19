@@ -55,6 +55,10 @@
       <Project>{4bf08076-5ba3-45b8-8da9-bed3c4bca9f7}</Project>
       <Name>TreeEdit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\tutor\Tutor\Tutor.csproj">
+      <Project>{a56c13e4-5c55-4372-813f-af5611425ec6}</Project>
+      <Name>Tutor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProseSample.Substrings\ProseSample.Substrings.csproj">
       <Project>{41e9a9b1-b013-4a87-9759-e3004fef8a81}</Project>
       <Name>ProseSample.Substrings</Name>

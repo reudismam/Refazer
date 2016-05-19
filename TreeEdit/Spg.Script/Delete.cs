@@ -1,4 +1,4 @@
-﻿using Spg.TreeEdit.Node;
+﻿using Tutor.Spg.Node;
 
 namespace TreeEdit.Spg.Script
 {

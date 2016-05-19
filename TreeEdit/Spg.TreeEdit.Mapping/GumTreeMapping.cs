@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using TreeEdit.Spg.TreeEdit.PQ;
-using Spg.TreeEdit.Node;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Isomorphic;
 using Tutor;
+using Tutor.Spg.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
 {

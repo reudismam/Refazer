@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using TreeEdit.Spg.Walker;
-using Tutor.Spg.TreeEdit.Node;
 
-namespace Spg.TreeEdit.Node
+namespace Tutor.Spg.Node
 {
     /// <summary>
     /// TreeNode class

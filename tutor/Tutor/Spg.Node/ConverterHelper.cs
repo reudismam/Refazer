@@ -2,9 +2,8 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Tutor.Spg.TreeEdit.Node;
 
-namespace Spg.TreeEdit.Node
+namespace Tutor.Spg.Node
 {
     public class ConverterHelper
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Spg.TreeEdit.Node;
+using Tutor.Spg.Node;
 
 namespace TreeEdit.Spg.Print
 {

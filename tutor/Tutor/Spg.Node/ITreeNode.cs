@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Tutor.Spg.TreeEdit.Node;
 
-namespace Spg.TreeEdit.Node
+namespace Tutor.Spg.Node
 {
     /// <summary>
     /// A tree node.
