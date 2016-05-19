@@ -756,8 +756,8 @@ namespace ProseSample.Substrings
             return new SubsequenceSpec(kExamples);
         }
 
-        [WitnessFunction("Florest", 1)]
-        public static DisjunctiveExamplesSpec WitnessFunctionBreakByKind(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        [WitnessFunction("Template", 1)]
+        public static DisjunctiveExamplesSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -768,9 +768,7 @@ namespace ProseSample.Substrings
                 foreach (List<EditOperation<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
                     var template = BuildTemplate(cc, inpTree).First();
-                    var result = template;
-                    //kMatches.Add(result);
-                    ocurrences.Add(result);
+                    ocurrences.Add(template);
                     //TODO refactor this.
                     TreeUpdate treeUp = new TreeUpdate();
                     var tree = cc.First().Parent.Value;

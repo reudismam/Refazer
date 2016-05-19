@@ -32,7 +32,7 @@ IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxN
 
 IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions);
 
-IEnumerable<SyntaxNodeOrToken> regions := Florest(node, template);
+IEnumerable<SyntaxNodeOrToken> regions := Template(node, template);
 
 Pattern template:= P(node, kind, pchildren) | Abstract(kind) | Concrete(tree);
 IEnumerable<Pattern> pchildren := SP(template) | PList(template, pchildren);

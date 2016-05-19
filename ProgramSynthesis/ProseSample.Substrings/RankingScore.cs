@@ -47,8 +47,8 @@ namespace ProseSample.Substrings
         [FeatureCalculator("SplitNodes")]
         public static double Score_SplitNodes(double inScore) => inScore;
 
-        [FeatureCalculator("Florest")]
-        public static double Score_Florest(double inScore, double kind) => inScore + kind;
+        [FeatureCalculator("Template")]
+        public static double Score_Template(double inScore, double kind) => inScore + kind;
 
         [FeatureCalculator("Script")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;

@@ -408,7 +408,7 @@ namespace ProseSample.Substrings
             //return node;
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> Florest(SyntaxNodeOrToken node, Pattern match)
+        public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern match)
         {
             var currentTree = GetCurrentTree(node);
             var nodeList = SplitToNodes(currentTree, match.Tree.Value.Kind);
