@@ -10,5 +10,10 @@ namespace ProseSample.Substrings
         {
             Kind = kind;
         }
+
+        public override string ToString()
+        {
+            return $"Token({Kind})";
+        }
     }
 }

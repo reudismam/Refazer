@@ -93,7 +93,7 @@ namespace ProseSample.Substrings
         public static double Score_Abstract(double kindScore) => kindScore;
 
         [FeatureCalculator("Concrete")]
-        public static double Score_Concrete(double treeScore) => 50;
+        public static double Score_Concrete(double treeScore) => -50;
 
         [FeatureCalculator("Parent")]
         public static double Score_Parent(double inScore, double matchScore, double kScore) => matchScore;

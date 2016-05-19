@@ -1,16 +1,20 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Tutor.Spg.Node;
 
 namespace ProseSample.Substrings
 {
     public class DynToken : Token
     {
-        public ITreeNode<SyntaxNodeOrToken> Value;
+        public SyntaxNodeOrToken Value;
 
-        public DynToken(SyntaxKind kind, ITreeNode<SyntaxNodeOrToken> value = null) : base(kind)
+        public DynToken(SyntaxKind kind, SyntaxNodeOrToken value) : base(kind)
         {
             Value = value;
+        }
+
+        public override string ToString()
+        {
+            return $"DynToken({Value})";
         }
     }
 }

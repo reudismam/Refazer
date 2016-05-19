@@ -67,28 +67,12 @@ namespace ProseSample.Substrings
         /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
         public static Pattern P(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<Pattern> children)
         {
-            var currentTree = GetCurrentTree(node);
+            var pchildren = children.Select(child => child.Tree).ToList();
 
-            var klist = SplitToNodes(currentTree, kind);
-
-            foreach (var item in klist)
-            {
-                //if(item.Children.Count != children.Count()) continue;
-
-                //for (int i = 0; i < children.Count(); i++)
-                //{
-                //    var kindMatch = item.Children[i];
-                //    var expression = children.ElementAt(i);
-                //    if (MatchChildren(item.Value, expression.Match.Item1.Value))
-                //    {
-                //        var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
-                //        MatchResult matchResult = new MatchResult(match);
-                //        return matchResult;
-                //    }
-                //}
-            }
-
-            return null;
+            var token = new Token(kind);
+            var inode = new TreeNode<Token>(token, null, pchildren);
+            var pattern = new Pattern(inode);
+            return pattern;         
         }
 
         /// <summary>
@@ -160,28 +144,23 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Build a literal
         /// </summary>
-        /// <param name="node">Input node</param>
         /// <param name="lookFor">Literal itself.</param>
         /// <returns>Match of parameter literal in the source code.</returns>
         public static Pattern Concrete(SyntaxNodeOrToken lookFor)
         {
-            var currentTree = GetCurrentTree(lookFor);
-            var matches = Matches(currentTree, lookFor);
-            if (matches.Any())
-            {
-                //var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(ConverterHelper.ConvertCSharpToTreeNode(matches.First()), null);
-                //MatchResult matchResult = new MatchResult(match);
-                //return matchResult;
-            }
-
-            return null;
+            var token = new DynToken(lookFor.Kind(), lookFor);
+            var label = new TLabel(lookFor.Kind());
+            var inode = new TreeNode<Token>(token, label);
+            var pattern = new Pattern(inode);
+            return pattern;
         }
 
         public static Pattern Abstract(SyntaxKind kind)
         {
-            //var pattern = new Pattern(kind);
-            //return pattern;
-            return null;
+            var token = new Token(kind);
+            var inode = new TreeNode<Token>(token, null);
+            var pattern = new Pattern(inode);
+            return pattern;
         }
 
         /// <summary>
@@ -453,12 +432,31 @@ namespace ProseSample.Substrings
         public static IEnumerable<SyntaxNodeOrToken> Florest(SyntaxNodeOrToken node, Pattern match)
         {
             var currentTree = GetCurrentTree(node);
-            //var nodeList = SplitToNodes(currentTree, match.Match.Item1.Value.Kind());
+            var nodeList = SplitToNodes(currentTree, match.Tree.Value.Kind);
 
-            //var kList = nodeList.Select(o => o.Value);
+            var result = new List<SyntaxNodeOrToken>();
+            foreach (var snode in nodeList)
+            {
+                if (IsValue(snode, match.Tree))
+                {
+                    result.Add(snode.Value);
+                }
+            }
 
-            //return kList;
-            return null;
+            return result;
+        }
+
+
+        private static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
+        {
+            if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root match
+            foreach (var child in pattern.Children)
+            {
+                var valid = snode.Children.Any(tchild => IsValue(tchild, child));
+
+                if (!valid) return false;
+            }
+            return true;
         }
 
         /// <summary>

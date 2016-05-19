@@ -111,9 +111,12 @@ namespace ProseSample.Substrings
                 var matches = new List<object>();
                 foreach (List<ITreeNode<SyntaxNodeOrToken>> matchResultList in spec.DisjunctiveExamples[input])
                 {
-                    var kind = matchResultList.First().Value.Kind();
+                    var first = matchResultList.First().Value;
+                    var kind = first.Kind();
                     if (matchResultList.Any(matchResult => !matchResult.Value.IsKind(kind) || matchResult.Children.Any())) return null;
-                    
+
+                    if (matchResultList.All(matchResult => matchResult.Value.ToString().Equals(first.ToString()))) return null;
+
                     matches.Add(kind);
                 }
                 kindExamples[input] = matches;
