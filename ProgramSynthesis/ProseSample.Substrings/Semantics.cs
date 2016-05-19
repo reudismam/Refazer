@@ -458,7 +458,7 @@ namespace ProseSample.Substrings
             return node;
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> BreakByKind(SyntaxNodeOrToken node, MatchResult match)
+        public static IEnumerable<SyntaxNodeOrToken> Florest(SyntaxNodeOrToken node, MatchResult match)
         {
             //var currentTree = GetCurrentTree(node);
             //var nodeList = SplitToNodes(currentTree, kind);

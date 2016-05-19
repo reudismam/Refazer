@@ -99,7 +99,7 @@ namespace ProseSample.Substrings
 
                         if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(tree, sot)) return null;
                     }
-                    literalExamples.Add(tree);
+                    literalExamples.Add(tree.Value);
                 }
                 treeExamples[input] = literalExamples;
             }
@@ -125,6 +125,25 @@ namespace ProseSample.Substrings
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
+
+        //[WitnessFunction("FTrue", 0)]
+        //public static DisjunctiveExamplesSpec WitnessFTrueKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    var treeExamples = new Dictionary<State, IEnumerable<object>>();
+        //    foreach (var input in spec.ProvidedInputs)
+        //    {
+        //        var mats = new List<object>();
+        //        foreach (List<MatchResult> matchResultList in spec.DisjunctiveExamples[input])
+        //        {
+        //            var kind = matchResultList.First().Match.Item1.Value.Kind();
+        //            if (matchResultList.Any(matchResult => !matchResult.Match.Item1.Value.IsKind(kind) || matchResult.Match.Item1.Children.Any())) return null;
+
+        //            mats.Add(kind);
+        //        }
+        //        treeExamples[input] = mats;
+        //    }
+        //    return DisjunctiveExamplesSpec.From(treeExamples);
+        //}
 
         [WitnessFunction("Tree", 0)]
         public static DisjunctiveExamplesSpec WitnessTreeKind(GrammarRule rule, int parameter, ExampleSpec spec)
@@ -752,7 +771,7 @@ namespace ProseSample.Substrings
             return new SubsequenceSpec(kExamples);
         }
 
-        [WitnessFunction("BreakByKind", 1)]
+        [WitnessFunction("Florest", 1)]
         public static DisjunctiveExamplesSpec WitnessFunctionBreakByKind(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
