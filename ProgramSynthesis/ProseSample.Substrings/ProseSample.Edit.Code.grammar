@@ -35,7 +35,7 @@ IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: Synt
 IEnumerable<SyntaxNodeOrToken> regions := Florest(node, template);
 
 Pattern template:= P(node, kind, pchildren) | Abstract(kind) | Concrete(tree);
-IEnumerable<Pattern> pchildren := PC(template) | PList(template, pchildren);
+IEnumerable<Pattern> pchildren := SP(template) | PList(template, pchildren);
 
 SyntaxNodeOrToken script := Script(node, edits);
 

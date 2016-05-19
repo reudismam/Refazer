@@ -26,7 +26,7 @@ namespace ProseSample.Substrings
         [FeatureCalculator("CList")]
         public static double Score_CList(double childScore, double childrenScore) => (childScore + childrenScore) > 0 ? -(childScore + childrenScore) : (childScore + childrenScore);
 
-        [FeatureCalculator("PC")]
+        [FeatureCalculator("SP")]
         public static double Score_PS(double childScore) => childScore;
 
         [FeatureCalculator("PList")]

@@ -360,7 +360,7 @@ namespace ProseSample.Substrings
             return GList<Pattern>.List(child1, cList);
         }
 
-        public static IEnumerable<Pattern> PC(Pattern child)
+        public static IEnumerable<Pattern> SP(Pattern child)
         {
             return GList<Pattern>.Single(child);
         }
