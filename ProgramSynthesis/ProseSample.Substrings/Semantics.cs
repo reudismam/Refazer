@@ -179,15 +179,8 @@ namespace ProseSample.Substrings
 
         public static Pattern Abstract(SyntaxKind kind)
         {
-            //var currentTree = GetCurrentTree(node);
-
-            //var matches = SplitToNodes(currentTree, kind);
-
-            //if (matches.Any())
-            //{
-            //    var result = new MatchResult(Tuple.Create(matches.ElementAt(k - 1), new Bindings(new List<SyntaxNodeOrToken> { matches.ElementAt(k - 1).Value })));
-            //    return result;
-            //}
+            //var pattern = new Pattern(kind);
+            //return pattern;
             return null;
         }
 

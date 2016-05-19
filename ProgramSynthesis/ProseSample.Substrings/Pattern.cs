@@ -5,11 +5,9 @@ namespace ProseSample.Substrings
 {
     public class Pattern
     {
-        public ITreeNode<Token> Tokens;
+        public ITreeNode<Token> Tree;
 
-        public ITreeNode<SyntaxNodeOrToken> Tree;
-
-        public Pattern(ITreeNode<SyntaxNodeOrToken> tree)
+        public Pattern(ITreeNode<Token> tree)
         {
             Tree = tree;
         }
