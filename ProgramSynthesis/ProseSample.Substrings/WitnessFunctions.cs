@@ -707,15 +707,6 @@ namespace ProseSample.Substrings
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
 
-                    //foreach (var cc in ccs)
-                    //{
-                    //    TreeUpdate treeUp = new TreeUpdate();
-                    //    var tree = cc.First().Parent.Value;
-                    //    treeUp.PreProcessTree(script, tree);
-                    //    _treeUpdateDictionary.Add(tree, treeUp);
-                    //    PrintScript(cc);
-                    //}
-
                     kMatches.AddRange(ccs);
                 }
                 kExamples[input] = kMatches;

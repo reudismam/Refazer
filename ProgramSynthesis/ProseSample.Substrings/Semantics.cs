@@ -39,11 +39,8 @@ namespace ProseSample.Substrings
 
             foreach (var item in klist)
             {
-                //if(item.Children.Count != children.Count()) continue;
-
                 for (int i = 0; i < children.Count(); i++)
                 {
-                    //var kindMatch = item.Children[i];
                     var expression = children.ElementAt(i);
                     if (MatchChildren(item.Value, expression.Match.Item1.Value))
                     {
@@ -108,7 +105,9 @@ namespace ProseSample.Substrings
                     return true;
                 }
 
-                if (child.IsKind(SyntaxKind.IdentifierToken) || child.IsKind(SyntaxKind.IdentifierName))
+                if (child.IsKind(SyntaxKind.IdentifierToken) || child.IsKind(SyntaxKind.IdentifierName) || 
+                    (child.IsKind(SyntaxKind.NumericLiteralToken) || child.IsKind(SyntaxKind.NumericLiteralExpression)) 
+                    || (child.IsKind(SyntaxKind.StringLiteralToken) || child.IsKind(SyntaxKind.StringLiteralExpression)))
                 {
                     string itemString = item.ToString();
                     string childString = child.ToString();
@@ -116,27 +115,7 @@ namespace ProseSample.Substrings
                     {
                         return true;
                     }
-                }
-
-                if (child.IsKind(SyntaxKind.NumericLiteralToken) || child.IsKind(SyntaxKind.NumericLiteralExpression))
-                {
-                    string itemString = item.ToString();
-                    string childString = child.ToString();
-                    if (itemString.Equals(childString))
-                    {
-                        return true;
-                    }
-                }
-
-                if (child.IsKind(SyntaxKind.StringLiteralToken) || child.IsKind(SyntaxKind.StringLiteralExpression))
-                {
-                    string itemString = item.ToString();
-                    string childString = child.ToString();
-                    if (itemString.Equals(childString))
-                    {
-                        return true;
-                    }
-                }
+                }           
             }
             return false;
         }
@@ -289,10 +268,8 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        //TODO rename to child
         public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult kindRef, int k)
         {
-            //SyntaxNodeOrToken child = kindRef.match.Item1.AsNode().ChildNodes().ElementAt(k - 1);
             var child = TreeUpdate.FindNode(GetCurrentTree(node), kindRef.Match.Item1.Value).Children.ElementAt(k - 1);
             var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
             return result;
@@ -409,24 +386,25 @@ namespace ProseSample.Substrings
         }
 
         public static SyntaxNodeOrToken ManyTrans(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
-        {
+        {       
             var list = loop.ToList();
-            var nodeElements = from snode in node.AsNode().DescendantNodesAndSelf()
-                where snode.IsKind(list.First().Kind())
-                select snode;
+            throw new Exception("Non implemented yet.");
+            //var nodeElements = from snode in node.AsNode().DescendantNodesAndSelf()
+            //    where snode.IsKind(list.First().Kind())
+            //    select snode;
 
-            for(int i = 0; i < nodeElements.Count(); i++)
-            {
-                var kinds = from snode in node.AsNode().DescendantNodesAndSelf()
-                                   where snode.IsKind(list.First().Kind())
-                                   select snode;
+            //for(int i = 0; i < nodeElements.Count(); i++)
+            //{
+            //    var kinds = from snode in node.AsNode().DescendantNodesAndSelf()
+            //                       where snode.IsKind(list.First().Kind())
+            //                       select snode;
 
-                var item = kinds.ElementAt(i);
-                var rewriter = new UpdateTreeRewriter(item, list.ElementAt(i).AsNode());
-                node = rewriter.Visit(node.AsNode());
-            }
+            //    var item = kinds.ElementAt(i);
+            //    var rewriter = new UpdateTreeRewriter(item, list.ElementAt(i).AsNode());
+            //    node = rewriter.Visit(node.AsNode());
+            //}
 
-            return node;
+            //return node;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> Florest(SyntaxNodeOrToken node, Pattern match)
@@ -434,15 +412,22 @@ namespace ProseSample.Substrings
             var currentTree = GetCurrentTree(node);
             var nodeList = SplitToNodes(currentTree, match.Tree.Value.Kind);
 
-            var result = new List<SyntaxNodeOrToken>();
-            foreach (var snode in nodeList)
-            {
-                if (IsValue(snode, match.Tree))
-                {
-                    result.Add(snode.Value);
-                }
-            }
+            var result = (from snode in nodeList where IsValue(snode, match.Tree) select snode.Value).ToList();
 
+            //var indices = new int[result.Count];
+            //for (int tartgetIndex = 0; tartgetIndex < result.Count; tartgetIndex++)
+            //{
+            //    var snode = result[tartgetIndex];
+            //    var bfs = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(currentTree);
+            //    for (int bfsIndex = 0; bfsIndex < bfs.Count; bfsIndex++)
+            //    {
+            //        var bnode = bfs[bfsIndex];
+            //        if (snode.Equals(bnode.Value))
+            //        {
+            //            indices[tartgetIndex] = bfsIndex;
+            //        }
+            //    }
+            //}
             return result;
         }
 
