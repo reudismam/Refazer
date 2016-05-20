@@ -60,7 +60,7 @@ namespace ProseSample.Substrings
         public static double Score_Loop(double inScore, double breaks) => inScore + breaks;
 
         [FeatureCalculator("Insert")]
-        public static double Score_Insert(double inScore, double kScore, double expressionScore, double astScore) => inScore + kScore + expressionScore + astScore;
+        public static double Score_Insert(double inScore, double expressionScore, double astScore, double kScore) => inScore + expressionScore + astScore + kScore;
 
         [FeatureCalculator("Move")]
         public static double Score_Move(double inScore, double kScore, double fromScore, double toScore) => inScore + kScore + fromScore + toScore;
@@ -90,7 +90,7 @@ namespace ProseSample.Substrings
         public static double Score_Abstract(double kindScore) => kindScore;
 
         [FeatureCalculator("Concrete")]
-        public static double Score_Concrete(double treeScore) => -50;
+        public static double Score_Concrete(double treeScore) => treeScore;
 
         [FeatureCalculator("Parent")]
         public static double Score_Parent(double inScore, double matchScore, double kScore) => matchScore;

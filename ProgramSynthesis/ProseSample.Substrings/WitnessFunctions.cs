@@ -1018,7 +1018,10 @@ namespace ProseSample.Substrings
 
                     var key = input[rule.Body[0]];
                     var treeUp = _treeUpdateDictionary[key];
-                    matches.Add(editOperation.K);
+   
+                    var parent = editOperation.Parent;
+                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
+                    matches.Add(result);
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
@@ -1054,10 +1057,8 @@ namespace ProseSample.Substrings
                 {
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
-                    var parent = editOperation.Parent;
-                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
-
-                    matches.Add(result);
+                    editOperation.T1Node.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
+                    matches.Add(editOperation.T1Node);
                 }
 
                 kExamples[input] = matches;
@@ -1086,9 +1087,8 @@ namespace ProseSample.Substrings
                 foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-
-                    editOperation.T1Node.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
-                    matches.Add(editOperation.T1Node);
+        
+                    matches.Add(editOperation.K);
                 }
                 kExamples[input] = matches;
             }

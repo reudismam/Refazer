@@ -185,7 +185,7 @@ namespace ProseSample.Substrings
         /// <param name="mresult">Matching result</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, int k, MatchResult mresult, SyntaxNodeOrToken ast)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, MatchResult mresult, SyntaxNodeOrToken ast, int k)
         {
             TreeUpdate update = TreeUpdateDictionary[node];
 
