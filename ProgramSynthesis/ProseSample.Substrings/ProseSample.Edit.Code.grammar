@@ -27,7 +27,6 @@ Boolean pred := FTrue();
 IEnumerable<SyntaxNodeOrToken> splits := SplitNodes(n);
 
 SyntaxNodeOrToken trans := ManyTrans(node, loop);
-
 IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
 
 IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions);

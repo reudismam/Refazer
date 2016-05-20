@@ -68,30 +68,39 @@ namespace TreeEdit.Spg.ConnectedComponents
             
             Graph = new Dictionary<Tuple<T, T, int>, List<EditOperation<T>>>();
 
+            foreach (var edit in script)
+            {
+                var t = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
+                Graph[t] = new List<EditOperation<T>>();
+            }
+
             for (int i = 0; i < script.Count; i++)
             {
                 var editI = script[i];
                 var ti = Tuple.Create(editI.T1Node.Value, editI.Parent.Value, editI.K);
 
-                if (!Graph.ContainsKey(ti))
-                {
-                    Graph.Add(ti, new List<EditOperation<T>>());
-                }
+                //if (!Graph.ContainsKey(ti))
+                //{
+                //    Graph.Add(ti, new List<EditOperation<T>>());
+                //}
 
-                for (int j = i + 1; j < script.Count; j++)
+                for (int j = 0; j < script.Count; j++)
                 {
                     var editJ = script[j];
+                    var tj = Tuple.Create(editJ.T1Node.Value, editJ.Parent.Value, editJ.K);
 
                     //Two nodes have the same parent
                     if (editI.Parent.Equals(editJ.Parent))
                     {
                         Graph[ti].Add(editJ);
+                        Graph[tj].Add(editI);
                     }
 
                     //T1Node from an operation is the parent in another edit operation 
                     if (editI.T1Node.Equals(editJ.Parent))
                     {
                         Graph[ti].Add(editJ);
+                        Graph[tj].Add(editI);
                     }
 
                     if (editI is Move<T>)
@@ -101,6 +110,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                         if (move.PreviousParent.Equals(editJ.Parent))
                         {
                             Graph[ti].Add(editJ);
+                            Graph[tj].Add(editI);
                         }
                     }
                 }
