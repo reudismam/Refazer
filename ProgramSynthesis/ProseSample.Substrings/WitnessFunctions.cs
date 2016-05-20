@@ -907,7 +907,13 @@ namespace ProseSample.Substrings
 
                     var key = input[rule.Body[0]];
                     var treeUp = _treeUpdateDictionary[key];
-                    matches.Add(editOperation.K);
+
+                    var move = (Move<SyntaxNodeOrToken>)editOperation;
+                    var parent = move.Parent;
+                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
+
+                    matches.Add(result);
+                    //matches.Add(editOperation.K);
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
@@ -930,7 +936,29 @@ namespace ProseSample.Substrings
         [WitnessFunction("Move", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec WitnessFunctionMoveFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return MoveBase(rule, parameter, spec);
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                {
+                    if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
+
+                    //var move = (Move<SyntaxNodeOrToken>)editOperation;
+                    //var parent = move.Parent;
+                    //var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
+
+                    //matches.Add(result);
+
+                    var from = editOperation.T1Node;
+                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
+                    matches.Add(result);
+                }
+
+                kExamples[input] = matches;
+            }
+
+            return DisjunctiveExamplesSpec.From(kExamples);
         }
 
         /// <summary>
@@ -953,50 +981,55 @@ namespace ProseSample.Substrings
                 {
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
-                    var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
-                    matches.Add(result);
+                    //var from = editOperation.T1Node;
+                    //var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
+                    //matches.Add(result);
+                    matches.Add(editOperation.K);
                 }
                 kExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
-        public static DisjunctiveExamplesSpec MoveBase(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
+        //public static DisjunctiveExamplesSpec MoveBase(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        //{
+        //    var kExamples = new Dictionary<State, IEnumerable<object>>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var matches = new List<object>();
+        //        foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+        //        {
+        //            if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
-                    AddMatchesMove(matches, parameter, editOperation);
-                }
+        //            var move = (Move<SyntaxNodeOrToken>)editOperation;
+        //            var parent = move.Parent;
+        //            var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
 
-                kExamples[input] = matches;
-            }
+        //            matches.Add(result);
+        //        }
 
-            return DisjunctiveExamplesSpec.From(kExamples);
-        }
+        //        kExamples[input] = matches;
+        //    }
 
-        private static void AddMatchesMove(List<object> matches, int parameter, EditOperation<SyntaxNodeOrToken> editOperation)
-        {
-            if (parameter == 1)
-            {
-                matches.Add(editOperation.K);
-            }
+        //    return DisjunctiveExamplesSpec.From(kExamples);
+        //}
 
-            if (parameter == 2)
-            {
-                var move = (Move<SyntaxNodeOrToken>)editOperation;
-                var parent = move.Parent;
-                var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
+        //private static void AddMatchesMove(List<object> matches, int parameter, EditOperation<SyntaxNodeOrToken> editOperation)
+        //{
+        //    if (parameter == 1)
+        //    {
+        //        matches.Add(editOperation.K);
+        //    }
 
-                matches.Add(result);
-            }
-        }
+        //    if (parameter == 2)
+        //    {
+        //        var move = (Move<SyntaxNodeOrToken>)editOperation;
+        //        var parent = move.Parent;
+        //        var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
+
+        //        matches.Add(result);
+        //    }
+        //}
 
         /// <summary>
         /// Witness function for parater k in the insert operator

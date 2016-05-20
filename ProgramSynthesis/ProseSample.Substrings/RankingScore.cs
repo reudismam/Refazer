@@ -63,7 +63,7 @@ namespace ProseSample.Substrings
         public static double Score_Insert(double inScore, double expressionScore, double astScore, double kScore) => inScore + expressionScore + astScore + kScore;
 
         [FeatureCalculator("Move")]
-        public static double Score_Move(double inScore, double kScore, double fromScore, double toScore) => inScore + kScore + fromScore + toScore;
+        public static double Score_Move(double inScore, double fromScore, double toScore, double kScore) => inScore + kScore + fromScore + toScore;
 
         [FeatureCalculator("Update")]
         public static double Score_Update(double inScore, double fromScore, double toScore) => inScore + fromScore + toScore;

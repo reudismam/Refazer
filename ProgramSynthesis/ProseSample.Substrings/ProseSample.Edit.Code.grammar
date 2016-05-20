@@ -41,7 +41,7 @@ SyntaxNodeOrToken script := Script(node, edits);
 
 IEnumerable<SyntaxNodeOrToken> edits := SE(edit) | EList(edit, edits);
 
-SyntaxNodeOrToken edit := Insert(node, match, ast, k) | Update(node, match, ast) | Move(node, k, match, match) | Delete(node, match);
+SyntaxNodeOrToken edit := Insert(node, match, ast, k) | Update(node, match, ast) | Move(node, match, match, k) | Delete(node, match);
 
 MatchResult match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
 MatchResult kindRef := Variable(node, kind, k) | Literal(node, tree);

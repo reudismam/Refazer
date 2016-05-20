@@ -208,7 +208,7 @@ namespace ProseSample.Substrings
         /// <param name="parent">Parent</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, int k, MatchResult parent, MatchResult from)
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, MatchResult parent, MatchResult from, int k)
         {
             TreeUpdate update = TreeUpdateDictionary[node];
 
