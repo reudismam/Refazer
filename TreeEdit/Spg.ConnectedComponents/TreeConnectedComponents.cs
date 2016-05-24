@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TreeEdit.Spg.Script;
 
 namespace TreeEdit.Spg.ConnectedComponents
@@ -74,9 +75,8 @@ namespace TreeEdit.Spg.ConnectedComponents
                 Graph[t] = new List<EditOperation<T>>();
             }
 
-            for (int i = 0; i < script.Count; i++)
+            foreach (var editI in script)
             {
-                var editI = script[i];
                 var ti = Tuple.Create(editI.T1Node.Value, editI.Parent.Value, editI.K);
 
                 //if (!Graph.ContainsKey(ti))
@@ -84,9 +84,8 @@ namespace TreeEdit.Spg.ConnectedComponents
                 //    Graph.Add(ti, new List<EditOperation<T>>());
                 //}
 
-                for (int j = 0; j < script.Count; j++)
+                foreach (var editJ in script)
                 {
-                    var editJ = script[j];
                     var tj = Tuple.Create(editJ.T1Node.Value, editJ.Parent.Value, editJ.K);
 
                     //Two nodes have the same parent

@@ -706,7 +706,10 @@ namespace ProseSample.Substrings
                     PrintScript(script);
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+                    ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
+                    //var regions = FindRegion(ccs, inpTree);
+                    
                     kMatches.AddRange(ccs);
                 }
                 kExamples[input] = kMatches;
@@ -714,6 +717,17 @@ namespace ProseSample.Substrings
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
             return subsequenceSpec;
+        }
+
+        private static object FindRegion(List<List<EditOperation<SyntaxNodeOrToken>>> ccs, SyntaxNodeOrToken inpTree)
+        {
+            var l = new List<ITreeNode<SyntaxNodeOrToken>>();
+            foreach (var cc in ccs)
+            {
+                var template = BuildTemplate(cc, inpTree);
+                l.Add(template.First());
+            }
+            return l;
         }
 
         private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(List<EditOperation<SyntaxNodeOrToken>> cc, SyntaxNodeOrToken inpTree)
@@ -727,7 +741,15 @@ namespace ProseSample.Substrings
             {
                 foreach (var edit in cc)
                 {
-                    if (node.Equals(edit.T1Node) || node.Equals(edit.T1Node.Parent))
+                    if (node.Equals(edit.T1Node))
+                    {
+                        if (!list.Contains(node))
+                        {
+                            list.Add(node);
+                        }
+                    }
+
+                    if (!(edit is Delete<SyntaxNodeOrToken>) && node.Equals(edit.T1Node.Parent))
                     {
                         if (!list.Contains(node))
                         {
