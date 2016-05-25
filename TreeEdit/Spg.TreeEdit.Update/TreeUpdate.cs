@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Script;
 using Tutor.Spg.Node;
@@ -25,11 +27,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
             CurrentTree = ConverterHelper.ConvertCSharpToTreeNode(tree);
         }
 
-        public TreeUpdate(){}
-
-        public void PreProcessTree(SyntaxNodeOrToken tree)
+        public TreeUpdate(ITreeNode<SyntaxNodeOrToken> tree)
         {
-            CurrentTree = ConverterHelper.ConvertCSharpToTreeNode(tree);
+            CurrentTree = tree;
         }
 
         /// <summary>
@@ -69,7 +69,11 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             if (editOperation is Delete<SyntaxNodeOrToken>)
             {
+                //Console.WriteLine("PREVIOUS TREE\n\n");
+                //PrintUtil<SyntaxNodeOrToken>.PrintPretty(CurrentTree, "", true);
                 RemoveNode(CurrentTree, editOperation.T1Node.Value);
+                //Console.WriteLine("UPDATED TREE\n\n");
+                //PrintUtil<SyntaxNodeOrToken>.PrintPretty(CurrentTree, "", true);               
             }
         }
 
@@ -81,7 +85,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             bool found = false;
             foreach (var item in iTree.Children)
             {
-                if (oldNode.Span.Contains(item.Value.Span) && item.Value.Span.Contains(oldNode.Span))
+                if (oldNode.Span.Contains(item.Value.Span) && item.Value.Span.Contains(oldNode.Span) && oldNode.IsKind(item.Value.Kind()))
                 {
                     found = true;
                     break;
