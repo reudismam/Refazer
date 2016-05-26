@@ -149,32 +149,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Variable", 1)]
-        public static DisjunctiveExamplesSpec KindRefKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var mats = new List<object>();
-                var key = input[rule.Body[0]];
-                var inpTree = GetCurrentTree(key);
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
-                {
-                    var sot = matchResult.Match.Item1;
-                    var matches = MatchManager.AbstractMatches(inpTree, sot.Value.Kind());
-
-                    foreach (var item in matches.Where(item => item.ToString().Equals(sot.ToString())))
-                    {
-                        mats.Add(item.Kind());
-                        if (!mats.First().Equals(item.Kind())) return null;
-                    }
-
-                    if (!mats.Any()) return null;
-                }
-                treeExamples[input] = mats.GetRange(0, 1);
-            }
-
-            var values = treeExamples.Values;
-            return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
+            return Variable.VariableKind(rule, parameter, spec);
         }
 
         /// <summary>
@@ -186,37 +163,9 @@ namespace ProseSample.Substrings
         /// <param name="kindBinding">kind binding</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Variable", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec KindRefK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        public static DisjunctiveExamplesSpec VariableK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var mats = new List<object>();
-                var key = input[rule.Body[0]];
-                var inpTree = GetCurrentTree(key);
-                PrintUtil<SyntaxNodeOrToken>.PrintPretty(inpTree, "", true);
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
-                {
-                    var sot = matchResult.Match.Item1;
-
-                    var kind = (SyntaxKind)kindBinding.Examples[input];
-                    var matches = MatchManager.AbstractMatches(inpTree, kind);
-
-                    for (int i = 0; i < matches.Count; i++)
-                    {
-                        var item = matches[i];
-                        if (item.ToString().Equals(sot.ToString()))
-                        {
-                            mats.Add(i + 1);
-                        }
-                    }
-                    if (mats.Count > 1) return null;
-                }
-
-                treeExamples[input] = mats;
-            }
-            var values = treeExamples.Values;
-            return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
+            return Variable.VariableK(rule, parameter, spec, kindBinding);
         }
 
         /// <summary>

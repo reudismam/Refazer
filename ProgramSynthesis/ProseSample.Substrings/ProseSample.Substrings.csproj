@@ -180,6 +180,7 @@
     <Compile Include="Region.cs" />
     <Compile Include="Semantics.cs" />
     <Compile Include="Spg.Witness\Literal.cs" />
+    <Compile Include="Spg.Witness\Variable.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="WitnessFunctions.cs" />
   </ItemGroup>
