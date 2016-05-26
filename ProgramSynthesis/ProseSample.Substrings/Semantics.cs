@@ -14,10 +14,10 @@ namespace ProseSample.Substrings
 {
     public static class Semantics
     {
-        /// <summary>
-        /// Store the current trees.
-        /// </summary>
-        private static readonly Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
+        ///// <summary>
+        ///// Store the current trees.
+        ///// </summary>
+        //private static readonly Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
 
         /// <summary>
         /// Store the tree update associate to each node
@@ -262,7 +262,8 @@ namespace ProseSample.Substrings
 
             if (matches.Any())
             {
-                var result = new MatchResult(Tuple.Create(matches.ElementAt(k - 1), new Bindings(new List<SyntaxNodeOrToken> { matches.ElementAt(k - 1).Value })));
+                var child = matches.ElementAt(k - 1);
+                var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
                 return result;
             }
             return null;
@@ -277,9 +278,9 @@ namespace ProseSample.Substrings
 
         private static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
         {
-            if (!CurrentTrees.ContainsKey(n))
+            if (!TreeUpdateDictionary.ContainsKey(n))
             {
-                CurrentTrees[n] = ConverterHelper.ConvertCSharpToTreeNode(n);
+                //CurrentTrees[n] = ConverterHelper.ConvertCSharpToTreeNode(n);
                 TreeUpdate update = new TreeUpdate(n);
                 TreeUpdateDictionary[n] = update;
             }
@@ -291,7 +292,8 @@ namespace ProseSample.Substrings
 
         public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> edit)
         {
-            var tree = ReconstructTree(GetCurrentTree(node));
+            var current = GetCurrentTree(node);
+            var tree = ReconstructTree(current);
             return tree;
         }
 
@@ -411,25 +413,39 @@ namespace ProseSample.Substrings
         public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern match)
         {
             var currentTree = GetCurrentTree(node);
-            var nodeList = SplitToNodes(currentTree, match.Tree.Value.Kind);
 
-            var result = (from snode in nodeList where IsValue(snode, match.Tree) select snode.Value).ToList();
+            var list = new List<List<SyntaxNodeOrToken>>();
+            var res = new List<SyntaxNodeOrToken>();
+            if (match.Tree.Value.Kind == SyntaxKind.EmptyStatement)
+            {
+                foreach (var child in match.Tree.Children)
+                {
+                    var nodeList = SplitToNodes(currentTree, child.Value.Kind);
+                    var result = (from snode in nodeList where IsValue(snode, child) select snode.Value).ToList();
+                   
+                    list.Add(result);
+                }
 
-            //var indices = new int[result.Count];
-            //for (int tartgetIndex = 0; tartgetIndex < result.Count; tartgetIndex++)
-            //{
-            //    var snode = result[tartgetIndex];
-            //    var bfs = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(currentTree);
-            //    for (int bfsIndex = 0; bfsIndex < bfs.Count; bfsIndex++)
-            //    {
-            //        var bnode = bfs[bfsIndex];
-            //        if (snode.Equals(bnode.Value))
-            //        {
-            //            indices[tartgetIndex] = bfsIndex;
-            //        }
-            //    }
-            //}
-            return result;
+                if (list.Any())
+                {
+                    var iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        var child = list[i];
+                        if (child.Any())
+                        {
+                            var newchild = ConverterHelper.ConvertCSharpToTreeNode(child.First());
+                            iTree.AddChild(newchild, i);
+                            TreeUpdateDictionary[child.First()] = new TreeUpdate(iTree);
+                            res.Add(child.First());
+                        }
+                    }
+                    
+                }
+            }
+
+            return res;
+            //return result;
         }
 
 
@@ -507,8 +523,14 @@ namespace ProseSample.Substrings
 
             if (kind == SyntaxKind.ArgumentList)
             {
-                ArgumentSyntax argument = (ArgumentSyntax)children.First();
-                var spal = SyntaxFactory.SeparatedList(new[] { argument });
+                var listArguments = new List<ArgumentSyntax>();
+                foreach (var child in children)
+                {
+                    ArgumentSyntax argument = (ArgumentSyntax) child;
+                    listArguments.Add(argument);
+                }
+                
+                var spal = SyntaxFactory.SeparatedList(listArguments);
                 var argumentList = SyntaxFactory.ArgumentList(spal);
                 return argumentList;
             }
@@ -519,6 +541,15 @@ namespace ProseSample.Substrings
                 var argument = SyntaxFactory.Argument(s);
                 return argument;
             }
+
+            if (kind == SyntaxKind.ParenthesizedLambdaExpression)
+            {
+                var parameterList = (ParameterListSyntax) children[0];
+                var csharpbody = (CSharpSyntaxNode) children[1];
+                var parenthizedLambdaExpression = SyntaxFactory.ParenthesizedLambdaExpression(parameterList, csharpbody);
+                return parenthizedLambdaExpression;
+            }
+
 
             if (kind == SyntaxKind.EqualsExpression)
             {

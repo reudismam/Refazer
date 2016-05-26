@@ -1,6 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
+using Microsoft.ProgramSynthesis.AST;
 
 namespace ProseSample.Substrings
 {

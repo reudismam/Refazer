@@ -55,11 +55,12 @@ namespace ProseSample.Substrings
                     if (sot.Value.IsToken || sot.Children.Any()) return null;
 
                     var matches = ConcreteTreeMatches(inpTree, matchResult);
-                    if (!matches.Any()) return null;
+                    //if (!matches.Any()) return null;
+                    if (matches.Count != 1) return null;
 
                     literalExamples.Add(matches.First());
 
-                    var first = (ITreeNode<SyntaxNodeOrToken>) literalExamples.First();
+                    var first = (ITreeNode<SyntaxNodeOrToken>)literalExamples.First();
                     if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(matches.First(), first)) return null;
                 }
 
@@ -81,7 +82,7 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec ConcreateTree(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            
+
             foreach (var input in spec.ProvidedInputs)
             {
                 var literalExamples = new List<object>();
@@ -129,7 +130,7 @@ namespace ProseSample.Substrings
                 kindExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(kindExamples);
-        } 
+        }
 
         /// <summary>
         /// Tree witness function for parameter tree.
@@ -215,11 +216,22 @@ namespace ProseSample.Substrings
                     {
                         var item = matches[i];
                         if (item.ToString().Equals(sot.ToString()))
+                        //if(item.Span.Contains(sot.Value.Span) && sot.Value.Span.Contains(item.Span))
                         {
                             mats.Add(i + 1);
                         }
                     }
+
+                    if (mats.Count > 1)
+                    {
+                        var list = mats.Where(i => matches[(int)i - 1].SpanStart == sot.Value.SpanStart && sot.Value.Span.End == matches[(int)i - 1].Span.End);
+
+                        mats = list.ToList();
+
+                        if (!mats.Any()) return null;
+                    }
                 }
+
                 treeExamples[input] = mats;
             }
             var values = treeExamples.Values;
@@ -291,7 +303,7 @@ namespace ProseSample.Substrings
                 var value = kExamples.Values;
 
                 if (value.Any(sequence => !sequence.SequenceEqual(value.First()))) return null;
-                          
+
             }
             return DisjunctiveExamplesSpec.From(kExamples);
         }
@@ -494,7 +506,7 @@ namespace ProseSample.Substrings
             {
                 var syntaxKinds = new List<object>();
                 foreach (List<ITreeNode<SyntaxNodeOrToken>> mt in spec.DisjunctiveExamples[input])
-                { 
+                {
                     syntaxKinds.Add(mt.First().Value.Kind());
                 }
                 kdExamples[input] = syntaxKinds.GetRange(0, 1);
@@ -517,7 +529,7 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                
+
                 foreach (List<ITreeNode<SyntaxNodeOrToken>> matchResultList in spec.DisjunctiveExamples[input])
                 {
                     var firstExample = matchResultList.First();
@@ -538,7 +550,7 @@ namespace ProseSample.Substrings
                     }
 
                     matches.Add(children);
-                }    
+                }
 
                 eExamples[input] = matches;
             }
@@ -603,7 +615,7 @@ namespace ProseSample.Substrings
                     {
                         var binding = matchResult.Match.Item2;
                         binding.bindings.Add(item.Value);
-                         
+
                         MatchResult m = new MatchResult(Tuple.Create(item, binding));
                         childList.Add(m);
                     }
@@ -647,7 +659,7 @@ namespace ProseSample.Substrings
         {
             List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
             foreach (var child in parent.ChildNodesAndTokens())
-            { 
+            {
                 if (child.IsNode)
                 {
                     lsot.Add(child);
@@ -708,9 +720,24 @@ namespace ProseSample.Substrings
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
+                    var cscripts = new List<EditOperation<SyntaxNodeOrToken>>();
+                    foreach (var cc in ccs)
+                    {
+                        cscripts.AddRange(cc);
+                    }
+
                     //var regions = FindRegion(ccs, inpTree);
-                    
-                    kMatches.AddRange(ccs);
+
+                    //var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+
+                    //for (int i = 0; i < regions.Count; i++)
+                    //{
+                    //    var r = regions[i];
+                    //    tree.AddChild(r, i);
+                    //}
+
+
+                    kMatches.Add(cscripts);
                 }
                 kExamples[input] = kMatches;
             }
@@ -719,7 +746,7 @@ namespace ProseSample.Substrings
             return subsequenceSpec;
         }
 
-        private static object FindRegion(List<List<EditOperation<SyntaxNodeOrToken>>> ccs, SyntaxNodeOrToken inpTree)
+        private static List<ITreeNode<SyntaxNodeOrToken>> FindRegion(List<List<EditOperation<SyntaxNodeOrToken>>> ccs, SyntaxNodeOrToken inpTree)
         {
             var l = new List<ITreeNode<SyntaxNodeOrToken>>();
             foreach (var cc in ccs)
@@ -789,15 +816,23 @@ namespace ProseSample.Substrings
                 var ocurrences = new List<ITreeNode<SyntaxNodeOrToken>>();
                 foreach (List<EditOperation<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
-                    var template = BuildTemplate(cc, inpTree).First();
-                    ocurrences.Add(template);
-                    //TODO refactor this.
-                    TreeUpdate treeUp = new TreeUpdate();
-                    var tree = cc.First().Parent.Value;
-                    treeUp.PreProcessTree(tree);
+                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(cc);
+                    ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
+
+                    var regions = FindRegion(ccs, inpTree);
+
+                    var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+
+                    for (int i = 0; i < regions.Count; i++)
+                    {
+                        var r = ConverterHelper.ConvertCSharpToTreeNode(regions[i].Value);
+                        tree.AddChild(r, i);
+                    }
+
+                    ocurrences.Add(tree);
+                    TreeUpdate treeUp = new TreeUpdate(tree);
                     _treeUpdateDictionary.Add(cc, treeUp);
-                    _currentTrees[cc] = cc.First().Parent;
-                    PrintScript(cc);
+                    _currentTrees[cc] = tree;
                 }
 
                 if (ocurrences.Any())
@@ -837,6 +872,11 @@ namespace ProseSample.Substrings
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
                     _currentTrees[key] = previousTree;
+
+                    Console.WriteLine("PREVIOUS TREE\n\n");
+                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
+                    Console.WriteLine("UPDATED TREE\n\n");
+                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
                 }
 
                 kExamples[input] = matches;
@@ -1001,7 +1041,7 @@ namespace ProseSample.Substrings
                 kExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
-        }   
+        }
 
         /// <summary>
         /// Witness function for parater k in the insert operator
@@ -1023,7 +1063,7 @@ namespace ProseSample.Substrings
 
                     var key = input[rule.Body[0]];
                     var treeUp = _treeUpdateDictionary[key];
-   
+
                     var parent = editOperation.Parent;
                     var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
                     matches.Add(result);
@@ -1092,7 +1132,7 @@ namespace ProseSample.Substrings
                 foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
                 {
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-        
+
                     matches.Add(editOperation.K);
                 }
                 kExamples[input] = matches;
@@ -1157,7 +1197,7 @@ namespace ProseSample.Substrings
 
                 foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
                 {
-                    if (sot.IsToken) return null;     
+                    if (sot.IsToken) return null;
 
                     var lsot = ExtractChildren(sot);
 

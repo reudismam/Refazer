@@ -80,7 +80,7 @@ namespace TreeEdit
             
             var script = generator.EditScript(inpNode, outNode, M);
 
-            TreeUpdate update = new TreeUpdate();
+            //TreeUpdate update = new TreeUpdate();
             //update.UpdateTree(script, inpTree/*, M*/);
             Console.WriteLine();
         }
