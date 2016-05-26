@@ -148,13 +148,14 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="lookFor">Literal itself.</param>
         /// <returns>Match of parameter literal in the source code.</returns>
-        public static MatchResult Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor)
+        public static MatchResult Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor, int k)
         {
             var currentTree = GetCurrentTree(node);
             var matches = Matches(currentTree, lookFor);
-            if (matches.Any())
+            if (matches.Count >= k)
             {
-                var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(ConverterHelper.ConvertCSharpToTreeNode(matches.First()), null);
+                var item = matches.ElementAt(k - 1);
+                var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(ConverterHelper.ConvertCSharpToTreeNode(item), null);
                 MatchResult matchResult = new MatchResult(match);
                 return matchResult;
             }

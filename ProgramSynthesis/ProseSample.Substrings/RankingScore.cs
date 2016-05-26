@@ -101,7 +101,7 @@ namespace ProseSample.Substrings
         public static double Score_P(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Literal")]
-        public static double Score_Literal(double inScore, double treeScore) => treeScore;
+        public static double Score_Literal(double inScore, double treeScore, double kind) => treeScore;
 
         [FeatureCalculator("C")]
         public static double Score_C1(double inScore, double kindScore, double expression1Score) => kindScore + expression1Score;

@@ -56,7 +56,7 @@ namespace ProseSample.Substrings
 
                     var matches = ConcreteTreeMatches(inpTree, matchResult);
                     //if (!matches.Any()) return null;
-                    if (matches.Count != 1) return null;
+                    //if (matches.Count != 1) return null;
 
                     literalExamples.Add(matches.First());
 
@@ -69,6 +69,48 @@ namespace ProseSample.Substrings
                 treeExamples[input] = examples;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+
+        /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Literal", 2, DependsOnParameters = new []{1})]
+        public static DisjunctiveExamplesSpec LiteralK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec treeBinding)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            //var literalExamples = new List<object>();
+            foreach (var input in spec.ProvidedInputs)
+            {
+                var mats = new List<object>();
+                var key = input[rule.Body[0]];
+                var inpTree = GetCurrentTree(key);
+
+                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+                {
+                    var sot = matchResult.Match.Item1;
+                    if (sot.Value.IsToken || sot.Children.Any()) return null;
+
+                    var matches = ConcreteTreeMatches(inpTree, matchResult);
+
+                    for (int i = 0; i < matches.Count; i++)
+                    {
+                        var item = matches[i].Value;
+                        if(item.Span.Contains(sot.Value.Span) && sot.Value.Span.Contains(item.Span))
+                        {
+                            mats.Add(i + 1);
+                        }
+                    }
+                }
+
+                treeExamples[input] = mats;
+            }
+            var values = treeExamples.Values;
+            return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
         }
 
         /// <summary>
@@ -222,14 +264,14 @@ namespace ProseSample.Substrings
                         }
                     }
 
-                    if (mats.Count > 1)
-                    {
-                        var list = mats.Where(i => matches[(int)i - 1].SpanStart == sot.Value.SpanStart && sot.Value.Span.End == matches[(int)i - 1].Span.End);
+                    if (mats.Count > 1) return null;
+                    //{
+                    //var list = mats.Where(i => matches[(int)i - 1].SpanStart == sot.Value.SpanStart && sot.Value.Span.End == matches[(int)i - 1].Span.End);
 
-                        mats = list.ToList();
+                    //mats = list.ToList();
 
-                        if (!mats.Any()) return null;
-                    }
+                    //if (!mats.Any()) return null;
+                    //}
                 }
 
                 treeExamples[input] = mats;
