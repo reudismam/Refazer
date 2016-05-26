@@ -27,12 +27,12 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Current trees.
         /// </summary>
-        private static Dictionary<object, ITreeNode<SyntaxNodeOrToken>> _currentTrees = new Dictionary<object, ITreeNode<SyntaxNodeOrToken>>();
+        public static Dictionary<object, ITreeNode<SyntaxNodeOrToken>> _currentTrees = new Dictionary<object, ITreeNode<SyntaxNodeOrToken>>();
 
         /// <summary>
         /// TreeUpdate mapping.
         /// </summary>
-        private static Dictionary<object, TreeUpdate> _treeUpdateDictionary = new Dictionary<object, TreeUpdate>();
+        public static Dictionary<object, TreeUpdate> _treeUpdateDictionary = new Dictionary<object, TreeUpdate>();
 
         /// <summary>
         /// Literal witness function for parameter tree.
@@ -729,36 +729,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Delete", 1)]
-        public static DisjunctiveExamplesSpec WitnessFunctionDeleteFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec DeleteFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Delete<SyntaxNodeOrToken>)) return null;
-
-                    var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
-                    matches.Add(result);
-
-                    var key = input[rule.Body[0]];
-                    var treeUp = _treeUpdateDictionary[key];
-                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    treeUp.ProcessEditOperation(editOperation);
-                    _currentTrees[key] = previousTree;
-
-                    Console.WriteLine("PREVIOUS TREE\n\n");
-                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
-                    Console.WriteLine("UPDATED TREE\n\n");
-                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
-                }
-
-                kExamples[input] = matches;
-            }
-
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.DeleteFrom(rule, parameter, spec);
         }
 
         /// <summary>
@@ -769,32 +742,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Update", 1)]
-        public static DisjunctiveExamplesSpec WitnessFunctionUpdateFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec UpdateFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
-
-                    var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
-                    matches.Add(result);
-
-                    var key = input[rule.Body[0]];
-                    var treeUp = _treeUpdateDictionary[key];
-
-                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    treeUp.ProcessEditOperation(editOperation);
-                    _currentTrees[key] = previousTree;
-                }
-
-                kExamples[input] = matches;
-            }
-
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.UpdateFrom(rule, parameter, spec);
         }
 
         /// <summary>
@@ -806,22 +756,9 @@ namespace ProseSample.Substrings
         /// <param name="fromBinding">Learned examples for k</param>
         /// <returns></returns>
         [WitnessFunction("Update", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec WitnessFunctionUpdateTo(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec fromBinding)
+        public static DisjunctiveExamplesSpec UpdateTo(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec fromBinding)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
-
-                    var update = (Update<SyntaxNodeOrToken>)editOperation;
-                    matches.Add(update.To);
-                }
-                kExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.UpdateTo(rule, parameter, spec, fromBinding);
         }
 
 
@@ -833,34 +770,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Move", 1)]
-        public static DisjunctiveExamplesSpec WitnessFunctionMoveK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec MoveFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
-
-                    var key = input[rule.Body[0]];
-                    var treeUp = _treeUpdateDictionary[key];
-
-                    var move = (Move<SyntaxNodeOrToken>)editOperation;
-                    var parent = move.Parent;
-                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
-
-                    matches.Add(result);
-
-                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    treeUp.ProcessEditOperation(editOperation);
-                    _currentTrees[key] = previousTree;
-                }
-
-                kExamples[input] = matches;
-            }
-
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.MoveFrom(rule, parameter, spec);
         }
 
         /// <summary>
@@ -871,25 +783,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Move", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec WitnessFunctionMoveFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec MoveTo(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
-
-                    var from = editOperation.T1Node;
-                    var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
-                    matches.Add(result);
-                }
-
-                kExamples[input] = matches;
-            }
-
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.MoveTo(rule, parameter, spec);
         }
 
         /// <summary>
@@ -902,21 +798,9 @@ namespace ProseSample.Substrings
         /// <param name="parentBinding">Learned examples for parent</param>
         /// <returns></returns>
         [WitnessFunction("Move", 3, DependsOnParameters = new[] { 1, 2 })]
-        public static DisjunctiveExamplesSpec WitnessFunctionMoveTo(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding, ExampleSpec parentBinding)
+        public static DisjunctiveExamplesSpec MoveK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding, ExampleSpec parentBinding)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
-
-                    matches.Add(editOperation.K);
-                }
-                kExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.MoveK(rule, parameter, spec, kBinding, parentBinding);
         }
 
         /// <summary>
@@ -927,36 +811,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Insert", 1)]
-        public static DisjunctiveExamplesSpec WitnessFunctionInsertK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec InsertParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-
-                    var key = input[rule.Body[0]];
-                    var treeUp = _treeUpdateDictionary[key];
-
-                    var parent = editOperation.Parent;
-                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
-                    matches.Add(result);
-
-                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                    treeUp.ProcessEditOperation(editOperation);
-                    _currentTrees[key] = previousTree;
-                    Console.WriteLine("PREVIOUS TREE\n\n");
-                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
-                    Console.WriteLine("UPDATED TREE\n\n");
-                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
-                }
-
-                kExamples[input] = matches;
-            }
-
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.InsertParent(rule, parameter, spec);
         }
 
         /// <summary>
@@ -968,24 +825,9 @@ namespace ProseSample.Substrings
         /// <param name="kBinding">kBinding</param>
         /// <returns></returns>
         [WitnessFunction("Insert", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec WitnessFunctionInsertParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding)
+        public static DisjunctiveExamplesSpec InsertAST(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-
-                    editOperation.T1Node.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
-                    matches.Add(editOperation.T1Node);
-                }
-
-                kExamples[input] = matches;
-            }
-
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.InsertAST(rule, parameter, spec, kBinding);
         }
 
         /// <summary>
@@ -998,21 +840,9 @@ namespace ProseSample.Substrings
         /// <param name="parentBinding">Learned examples for parent</param>
         /// <returns></returns>
         [WitnessFunction("Insert", 3, DependsOnParameters = new[] { 1, 2 })]
-        public static DisjunctiveExamplesSpec WitnessFunctionInsertAST(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding, ExampleSpec parentBinding)
+        public static DisjunctiveExamplesSpec InsertK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding, ExampleSpec parentBinding)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
-                {
-                    if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-
-                    matches.Add(editOperation.K);
-                }
-                kExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return EditOperation.InsertK(rule, parameter, spec, kBinding, parentBinding);
         }
 
         /// <summary>
