@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseSample.Substrings.List;
+using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -14,11 +15,6 @@ namespace ProseSample.Substrings
 {
     public static class Semantics
     {
-        ///// <summary>
-        ///// Store the current trees.
-        ///// </summary>
-        //private static readonly Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<SyntaxNodeOrToken, ITreeNode<SyntaxNodeOrToken>>();
-
         /// <summary>
         /// Store the tree update associate to each node
         /// </summary>
@@ -58,7 +54,6 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Match function. This function matches the first element on the tree that has the specified kind and child nodes.
         /// </summary>
-        /// <param name="node">Node</param>
         /// <param name="kind">Syntax kind</param>
         /// <param name="children">Children nodes</param>
         /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
@@ -89,7 +84,6 @@ namespace ProseSample.Substrings
             return kinds.ToList();
         }
 
-        //TODO refactor this method
         /// <summary>
         /// Verify if the parent contains the parameter child
         /// </summary>
@@ -100,7 +94,7 @@ namespace ProseSample.Substrings
         {
             foreach (var item in parent.ChildNodesAndTokens())
             {
-                if (item.IsKind(child.Kind()) /*&& item.ToString().Equals(child.ToString())*/)
+                if (item.IsKind(child.Kind()))
                 {
                     return true;
                 }
@@ -151,31 +145,16 @@ namespace ProseSample.Substrings
         public static MatchResult Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor, int k)
         {
             var currentTree = GetCurrentTree(node);
-            var matches = Matches(currentTree, lookFor);
+            var matches = MatchManager.ConcreteMatches(currentTree, lookFor);
             if (matches.Count >= k)
             {
                 var item = matches.ElementAt(k - 1);
-                var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(ConverterHelper.ConvertCSharpToTreeNode(item), null);
+                var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
                 MatchResult matchResult = new MatchResult(match);
                 return matchResult;
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Concrete matches
-        /// </summary>
-        /// <param name="inpTree">Source node</param>
-        /// <param name="sot">Concrete node to look for.</param>
-        /// <returns>Concrete matches</returns>
-        private static List<SyntaxNodeOrToken> Matches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxNodeOrToken sot)
-        {
-            var descendants = inpTree.DescendantNodes();
-            var matches = from item in descendants
-                          where item.Value.IsKind(sot.Kind()) && item.ToString().Equals(sot.ToString())
-                          select item.Value;
-            return matches.ToList();
         }
 
         /// <summary>
@@ -281,7 +260,6 @@ namespace ProseSample.Substrings
         {
             if (!TreeUpdateDictionary.ContainsKey(n))
             {
-                //CurrentTrees[n] = ConverterHelper.ConvertCSharpToTreeNode(n);
                 TreeUpdate update = new TreeUpdate(n);
                 TreeUpdateDictionary[n] = update;
             }
@@ -290,8 +268,13 @@ namespace ProseSample.Substrings
             return node;
         }
 
-
-        public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> edit)
+        /// <summary>
+        /// Script semantic function
+        /// </summary>
+        /// <param name="node">Input node</param>
+        /// <param name="editOperations">Edit operations</param>
+        /// <returns>Transformed node.</returns>
+        public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> editOperations)
         {
             var current = GetCurrentTree(node);
             var tree = ReconstructTree(current);
@@ -320,6 +303,12 @@ namespace ProseSample.Substrings
             return cst;
         }
 
+        /// <summary>
+        /// Reference semantic function
+        /// </summary>
+        /// <param name="node">Node</param>
+        /// <param name="result">Result of the match</param>
+        /// <returns>Result of the match</returns>
         public static SyntaxNodeOrToken Ref(SyntaxNodeOrToken node, MatchResult result)
         {
             return result.Match.Item1.Value;
@@ -446,9 +435,7 @@ namespace ProseSample.Substrings
             }
 
             return res;
-            //return result;
         }
-
 
         private static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
         {
@@ -495,8 +482,8 @@ namespace ProseSample.Substrings
 
             if (kind == SyntaxKind.InvocationExpression)
             {
-                var expressionSyntax = (ExpressionSyntax)children[0]; //expression syntax
-                ArgumentListSyntax argumentList = (ArgumentListSyntax)children[1]; //argument list
+                var expressionSyntax = (ExpressionSyntax)children[0]; 
+                ArgumentListSyntax argumentList = (ArgumentListSyntax)children[1]; 
                 var invocation = SyntaxFactory.InvocationExpression(expressionSyntax, argumentList);
                 return invocation;
             }
@@ -524,13 +511,8 @@ namespace ProseSample.Substrings
 
             if (kind == SyntaxKind.ArgumentList)
             {
-                var listArguments = new List<ArgumentSyntax>();
-                foreach (var child in children)
-                {
-                    ArgumentSyntax argument = (ArgumentSyntax) child;
-                    listArguments.Add(argument);
-                }
-                
+                var listArguments = children.Select(child => (ArgumentSyntax) child).ToList();
+
                 var spal = SyntaxFactory.SeparatedList(listArguments);
                 var argumentList = SyntaxFactory.ArgumentList(spal);
                 return argumentList;

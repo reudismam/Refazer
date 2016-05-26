@@ -12,6 +12,7 @@ using ProseSample.Substrings.List;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Isomorphic;
+using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -54,9 +55,7 @@ namespace ProseSample.Substrings
                     var sot = matchResult.Match.Item1;
                     if (sot.Value.IsToken || sot.Children.Any()) return null;
 
-                    var matches = ConcreteTreeMatches(inpTree, matchResult);
-                    //if (!matches.Any()) return null;
-                    //if (matches.Count != 1) return null;
+                    var matches = MatchManager.ConcreteMatches(inpTree, sot.Value);
 
                     literalExamples.Add(matches.First());
 
@@ -78,12 +77,12 @@ namespace ProseSample.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
+        /// <param name="treeBinding">TreeBinding</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Literal", 2, DependsOnParameters = new []{1})]
         public static DisjunctiveExamplesSpec LiteralK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec treeBinding)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            //var literalExamples = new List<object>();
             foreach (var input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
@@ -95,7 +94,7 @@ namespace ProseSample.Substrings
                     var sot = matchResult.Match.Item1;
                     if (sot.Value.IsToken || sot.Children.Any()) return null;
 
-                    var matches = ConcreteTreeMatches(inpTree, matchResult);
+                    var matches = MatchManager.ConcreteMatches(inpTree, sot.Value);
 
                     for (int i = 0; i < matches.Count; i++)
                     {
@@ -212,7 +211,7 @@ namespace ProseSample.Substrings
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
                     var sot = matchResult.Match.Item1;
-                    var matches = MatchesAbstract(inpTree, sot.Value.Kind());
+                    var matches = MatchManager.AbstractMatches(inpTree, sot.Value.Kind());
 
                     foreach (var item in matches.Where(item => item.ToString().Equals(sot.ToString())))
                     {
@@ -252,26 +251,17 @@ namespace ProseSample.Substrings
                     var sot = matchResult.Match.Item1;
 
                     var kind = (SyntaxKind)kindBinding.Examples[input];
-                    var matches = MatchesAbstract(inpTree, kind);
+                    var matches = MatchManager.AbstractMatches(inpTree, kind);
 
                     for (int i = 0; i < matches.Count; i++)
                     {
                         var item = matches[i];
                         if (item.ToString().Equals(sot.ToString()))
-                        //if(item.Span.Contains(sot.Value.Span) && sot.Value.Span.Contains(item.Span))
                         {
                             mats.Add(i + 1);
                         }
                     }
-
                     if (mats.Count > 1) return null;
-                    //{
-                    //var list = mats.Where(i => matches[(int)i - 1].SpanStart == sot.Value.SpanStart && sot.Value.Span.End == matches[(int)i - 1].Span.End);
-
-                    //mats = list.ToList();
-
-                    //if (!mats.Any()) return null;
-                    //}
                 }
 
                 treeExamples[input] = mats;
@@ -506,32 +496,21 @@ namespace ProseSample.Substrings
             return GList<EditOperation<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
         }
 
-        /// <summary>
-        /// Matches concrete
-        /// </summary>
-        /// <param name="inpTree">Input tree</param>
-        /// <param name="matchResult">Match on code</param>
-        /// <returns>Matched nodes</returns>
-        private static List<ITreeNode<SyntaxNodeOrToken>> ConcreteTreeMatches(ITreeNode<SyntaxNodeOrToken> inpTree, MatchResult matchResult)
-        {
-            var descendants = inpTree.DescendantNodes();
-            var sot = matchResult.Match.Item1;
-            var matches = from item in descendants
-                          where item.Value.IsKind(sot.Value.Kind()) && item.ToString().Equals(sot.ToString())
-                          select item;
-            return matches.ToList();
-        }
-
-        /// <summary>
-        /// Abstract match
-        /// </summary>
-        /// <param name="inpTree">Input tree</param>
-        /// <param name="kind">Syntax node or token to be matched.</param>
-        /// <returns>Abstract match</returns>
-        private static List<SyntaxNodeOrToken> MatchesAbstract(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
-        {
-            return (from item in inpTree.DescendantNodes() where item.Value.IsKind(kind) select item.Value).ToList();
-        }
+        ///// <summary>
+        ///// Matches concrete
+        ///// </summary>
+        ///// <param name="inpTree">Input tree</param>
+        ///// <param name="matchResult">Match on code</param>
+        ///// <returns>Matched nodes</returns>
+        //private static List<ITreeNode<SyntaxNodeOrToken>> ConcreteTreeMatches(ITreeNode<SyntaxNodeOrToken> inpTree, MatchResult matchResult)
+        //{
+        //    var descendants = inpTree.DescendantNodes();
+        //    var sot = matchResult.Match.Item1;
+        //    var matches = from item in descendants
+        //                  where item.Value.IsKind(sot.Value.Kind()) && item.ToString().Equals(sot.ToString())
+        //                  select item;
+        //    return matches.ToList();
+        //}
 
         /// <summary>
         /// C witness function for kind parameter with one child
