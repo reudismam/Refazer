@@ -179,6 +179,7 @@
     <Compile Include="RegexUtils.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="Semantics.cs" />
+    <Compile Include="Spg.Witness\Literal.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="WitnessFunctions.cs" />
   </ItemGroup>
@@ -216,6 +217,7 @@
       <Name>Tutor</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
