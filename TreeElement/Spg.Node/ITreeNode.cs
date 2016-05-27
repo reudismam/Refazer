@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tutor.Spg.Node
+namespace TreeElement.Spg.Node
 {
     /// <summary>
     /// A tree node.

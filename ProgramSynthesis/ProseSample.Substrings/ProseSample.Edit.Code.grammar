@@ -2,14 +2,13 @@
 reference 'ProseSample.Substrings.dll';
 reference 'Microsoft.CodeAnalysis.CSharp.dll';
 reference 'Microsoft.CodeAnalysis.dll';
-reference 'Tutor.exe';
+reference 'TreeElement.dll';
 
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using ProseSample.Substrings;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
-using Tutor.Spg.Node;
 using System;
 
 using semantics ProseSample.Substrings.Semantics;

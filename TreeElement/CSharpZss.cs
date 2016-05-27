@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TreeEdit.Spg.TreeEdit.Mapping;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
-namespace Tutor
+namespace TreeElement
 {
     public class CSharpZss<T> : Zss<ITreeNode<T>>
     {

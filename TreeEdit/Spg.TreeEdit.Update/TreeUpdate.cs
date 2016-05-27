@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
-using TreeEdit.Spg.TreeEdit.Script;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Update
 {

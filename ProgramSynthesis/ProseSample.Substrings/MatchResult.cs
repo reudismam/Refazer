@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {

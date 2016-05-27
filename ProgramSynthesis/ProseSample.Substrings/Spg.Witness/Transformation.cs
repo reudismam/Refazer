@@ -9,8 +9,8 @@ using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
-using TreeEdit.Spg.Walker;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
+using TreeElement.Spg.Walker;
 
 namespace ProseSample.Substrings.Spg.Witness
 {

@@ -1,11 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using System;
+﻿using System;
 using System.Linq;
-using TreeEdit.Spg.TreeEdit.Mapping;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
-namespace Tutor
+namespace TreeElement
 {
     public class CSharpZssNode<T> : ZssNode<ITreeNode<T>>
     {

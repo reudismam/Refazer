@@ -220,9 +220,9 @@
       <Project>{4BF08076-5BA3-45B8-8DA9-BED3C4BCA9F7}</Project>
       <Name>TreeEdit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\tutor\Tutor\Tutor.csproj">
-      <Project>{a56c13e4-5c55-4372-813f-af5611425ec6}</Project>
-      <Name>Tutor</Name>
+    <ProjectReference Include="..\..\TreeElement\TreeElement.csproj">
+      <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>
+      <Name>TreeElement</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

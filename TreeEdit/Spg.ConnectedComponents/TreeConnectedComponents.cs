@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.ConnectedComponents
 {

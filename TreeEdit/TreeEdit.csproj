@@ -132,9 +132,9 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\tutor\Tutor\Tutor.csproj">
-      <Project>{a56c13e4-5c55-4372-813f-af5611425ec6}</Project>
-      <Name>Tutor</Name>
+    <ProjectReference Include="..\TreeElement\TreeElement.csproj">
+      <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>
+      <Name>TreeElement</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

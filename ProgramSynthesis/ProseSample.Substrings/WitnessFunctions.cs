@@ -6,8 +6,8 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.List;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using Tutor.Spg.Node;
 using ProseSample.Substrings.Spg.Witness;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {

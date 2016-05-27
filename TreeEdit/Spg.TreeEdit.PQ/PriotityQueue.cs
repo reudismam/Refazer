@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.TreeEdit.PQ
 {

@@ -1,4 +1,4 @@
-﻿namespace Tutor.Spg.Node
+﻿namespace TreeElement.Spg.Node
 {
     public class TLabel
     {

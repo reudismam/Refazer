@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
-namespace TreeEdit.Spg.Walker
+namespace TreeElement.Spg.Walker
 {
     public class BFSWalker<T>
     {

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using IronPython.Compiler.Ast;
 
-namespace Tutor
+namespace TreeElement
 {
     /// <summary>
     /// Class that implements the Zhang and Shasha algoritm for tree edit distance

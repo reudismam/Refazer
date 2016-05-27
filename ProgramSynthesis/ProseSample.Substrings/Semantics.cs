@@ -9,7 +9,7 @@ using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {

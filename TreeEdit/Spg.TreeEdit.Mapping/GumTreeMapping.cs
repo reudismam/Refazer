@@ -4,8 +4,8 @@ using System.Linq;
 using TreeEdit.Spg.TreeEdit.PQ;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Isomorphic;
-using Tutor;
-using Tutor.Spg.Node;
+using TreeElement;
+using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
 {

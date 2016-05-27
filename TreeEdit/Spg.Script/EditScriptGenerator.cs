@@ -3,8 +3,9 @@ using System.Linq;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
-using TreeEdit.Spg.Walker;
-using Tutor.Spg.Node;
+using TreeElement;
+using TreeElement.Spg.Node;
+using TreeElement.Spg.Walker;
 
 namespace TreeEdit.Spg.Script
 {

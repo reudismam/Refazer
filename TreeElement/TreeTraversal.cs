@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Tutor.Spg.Node;
+using TreeElement.Spg.Node;
 
-namespace TreeEdit.Spg.TreeEdit.Mapping
+namespace TreeElement
 {
     public class TreeTraversal<T>
     {
