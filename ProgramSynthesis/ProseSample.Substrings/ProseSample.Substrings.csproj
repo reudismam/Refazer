@@ -185,6 +185,7 @@
     <Compile Include="Spg.Witness\Match.cs" />
     <Compile Include="Spg.Witness\Parent.cs" />
     <Compile Include="Spg.Witness\Template.cs" />
+    <Compile Include="Spg.Witness\Transformation.cs" />
     <Compile Include="Spg.Witness\Variable.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="WitnessFunctions.cs" />
