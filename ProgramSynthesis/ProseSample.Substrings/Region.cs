@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Tutor.Spg.Node;
 
 namespace ProseSample.Substrings
@@ -18,6 +17,11 @@ namespace ProseSample.Substrings
         public override bool Equals(object obj)
         {
             return Tree.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
         }
 
         public override string ToString()
