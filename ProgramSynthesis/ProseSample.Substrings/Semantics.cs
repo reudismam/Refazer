@@ -403,20 +403,19 @@ namespace ProseSample.Substrings
                 }
 
                 if (list.Any())
-                {
-                    var iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                {                   
                     for (int j = 0; j < list.First().Count; j++)
                     {
+                        var iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
                         for (int i = 0; i < list.Count; i++)
                         {
                             var child = list[i][j];
                                 var newchild = ConverterHelper.ConvertCSharpToTreeNode(child);
                                 iTree.AddChild(newchild, i);
                         }
-                    }
-                    TreeUpdateDictionary[list.First().First()] = new TreeUpdate(iTree);
-                    res.Add(list.First().First());
-
+                        TreeUpdateDictionary[list.First().First()] = new TreeUpdate(iTree);
+                        res.Add(list.First().First());
+                    }                
                 }
             }
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
+using Tutor.Spg.Node;
 
 namespace TreeEdit.Spg.ConnectedComponents
 {
@@ -89,7 +91,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                     var tj = Tuple.Create(editJ.T1Node.Value, editJ.Parent.Value, editJ.K);
 
                     //Two nodes have the same parent
-                    if (editI.Parent.Equals(editJ.Parent))
+                    if (editI.Parent.Equals(editJ.Parent) && !editI.Parent.IsLabel(new TLabel(SyntaxKind.Block)))
                     {
                         Graph[ti].Add(editJ);
                         Graph[tj].Add(editI);

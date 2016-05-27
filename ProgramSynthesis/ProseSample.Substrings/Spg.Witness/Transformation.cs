@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
@@ -61,9 +58,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     var cscripts = new List<EditOperation<SyntaxNodeOrToken>>();
                     foreach (var cc in ccs)
                     {
-                        cscripts.AddRange(cc);
+                       cscripts.AddRange(cc);
+                        kMatches.Add(cc);
+                        PrintScript(cc);
                     }
-
                     //var regions = FindRegion(ccs, inpTree);
 
                     //var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
@@ -75,7 +73,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     //}
 
 
-                    kMatches.Add(cscripts);
+                    //kMatches.Add(cscripts);
                 }
                 kExamples[input] = kMatches;
             }
@@ -97,7 +95,6 @@ namespace ProseSample.Substrings.Spg.Witness
             return new SubsequenceSpec(kExamples);
         }
 
-
         public static DisjunctiveExamplesSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
@@ -114,17 +111,20 @@ namespace ProseSample.Substrings.Spg.Witness
                     var regions = FindRegion(ccs, inpTree);
 
                     var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                    var treePattern = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
 
                     for (int i = 0; i < regions.Count; i++)
                     {
                         var r = ConverterHelper.ConvertCSharpToTreeNode(regions[i].Value);
                         tree.AddChild(r, i);
+                        treePattern.AddChild(regions[i], i);
                     }
 
-                    ocurrences.Add(tree);
                     TreeUpdate treeUp = new TreeUpdate(tree);
                     WitnessFunctions.TreeUpdateDictionary.Add(cc, treeUp);
                     WitnessFunctions.CurrentTrees[cc] = tree;
+
+                    ocurrences.Add(treePattern);
                 }
 
                 if (ocurrences.Any())
@@ -164,13 +164,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static List<ITreeNode<SyntaxNodeOrToken>> FindRegion(List<List<EditOperation<SyntaxNodeOrToken>>> ccs, SyntaxNodeOrToken inpTree)
         {
-            var l = new List<ITreeNode<SyntaxNodeOrToken>>();
-            foreach (var cc in ccs)
-            {
-                var template = BuildTemplate(cc, inpTree);
-                l.Add(template.First());
-            }
-            return l;
+            return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).ToList();
         }
 
         private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(List<EditOperation<SyntaxNodeOrToken>> cc, SyntaxNodeOrToken inpTree)

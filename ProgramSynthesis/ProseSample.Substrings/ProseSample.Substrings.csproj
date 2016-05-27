@@ -182,6 +182,7 @@
     <Compile Include="Spg.Witness\AST.cs" />
     <Compile Include="Spg.Witness\EditOperation.cs" />
     <Compile Include="Spg.Witness\Literal.cs" />
+    <Compile Include="Spg.Witness\Map.cs" />
     <Compile Include="Spg.Witness\Match.cs" />
     <Compile Include="Spg.Witness\Parent.cs" />
     <Compile Include="Spg.Witness\Template.cs" />
