@@ -381,23 +381,6 @@ namespace ProseSample.Substrings
         {       
             var list = loop.ToList();
             return null;
-            //throw new Exception("Non implemented yet.");
-            //var nodeElements = from snode in node.AsNode().DescendantNodesAndSelf()
-            //    where snode.IsKind(list.First().Kind())
-            //    select snode;
-
-            //for(int i = 0; i < nodeElements.Count(); i++)
-            //{
-            //    var kinds = from snode in node.AsNode().DescendantNodesAndSelf()
-            //                       where snode.IsKind(list.First().Kind())
-            //                       select snode;
-
-            //    var item = kinds.ElementAt(i);
-            //    var rewriter = new UpdateTreeRewriter(item, list.ElementAt(i).AsNode());
-            //    node = rewriter.Visit(node.AsNode());
-            //}
-
-            //return node;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern match)
