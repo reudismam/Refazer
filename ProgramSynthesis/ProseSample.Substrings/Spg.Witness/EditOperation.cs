@@ -27,10 +27,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     matches.Add(result);
 
                     var key = input[rule.Body[0]];
-                    var treeUp = WitnessFunctions._treeUpdateDictionary[key];
+                    var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    WitnessFunctions._currentTrees[key] = previousTree;
+                    WitnessFunctions.CurrentTrees[key] = previousTree;
 
                     Console.WriteLine("PREVIOUS TREE\n\n");
                     PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
@@ -60,11 +60,11 @@ namespace ProseSample.Substrings.Spg.Witness
                     matches.Add(result);
 
                     var key = input[rule.Body[0]];
-                    var treeUp = WitnessFunctions._treeUpdateDictionary[key];
+                    var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    WitnessFunctions._currentTrees[key] = previousTree;
+                    WitnessFunctions.CurrentTrees[key] = previousTree;
                 }
 
                 kExamples[input] = matches;
@@ -102,7 +102,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                     var key = input[rule.Body[0]];
-                    var treeUp = WitnessFunctions._treeUpdateDictionary[key];
+                    var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
 
                     var move = (Move<SyntaxNodeOrToken>)editOperation;
                     var parent = move.Parent;
@@ -112,7 +112,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    WitnessFunctions._currentTrees[key] = previousTree;
+                    WitnessFunctions.CurrentTrees[key] = previousTree;
                 }
 
                 kExamples[input] = matches;
@@ -170,7 +170,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                     var key = input[rule.Body[0]];
-                    var treeUp = WitnessFunctions._treeUpdateDictionary[key];
+                    var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
 
                     var parent = editOperation.Parent;
                     var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { parent.Value })));
@@ -178,7 +178,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
-                    WitnessFunctions._currentTrees[key] = previousTree;
+                    WitnessFunctions.CurrentTrees[key] = previousTree;
                     Console.WriteLine("PREVIOUS TREE\n\n");
                     PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
                     Console.WriteLine("UPDATED TREE\n\n");

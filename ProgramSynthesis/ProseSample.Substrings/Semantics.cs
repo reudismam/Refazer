@@ -412,25 +412,28 @@ namespace ProseSample.Substrings
                 {
                     var nodeList = SplitToNodes(currentTree, child.Value.Kind);
                     var result = (from snode in nodeList where IsValue(snode, child) select snode.Value).ToList();
-                   
-                    list.Add(result);
+
+                    if (result.Any())
+                    {
+                        list.Add(result);
+                    }
                 }
 
                 if (list.Any())
                 {
                     var iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
-                    for (int i = 0; i < list.Count; i++)
+                    for (int j = 0; j < list.First().Count; j++)
                     {
-                        var child = list[i];
-                        if (child.Any())
+                        for (int i = 0; i < list.Count; i++)
                         {
-                            var newchild = ConverterHelper.ConvertCSharpToTreeNode(child.First());
-                            iTree.AddChild(newchild, i);
-                            TreeUpdateDictionary[child.First()] = new TreeUpdate(iTree);
-                            res.Add(child.First());
+                            var child = list[i][j];
+                                var newchild = ConverterHelper.ConvertCSharpToTreeNode(child);
+                                iTree.AddChild(newchild, i);
                         }
                     }
-                    
+                    TreeUpdateDictionary[list.First().First()] = new TreeUpdate(iTree);
+                    res.Add(list.First().First());
+
                 }
             }
 
