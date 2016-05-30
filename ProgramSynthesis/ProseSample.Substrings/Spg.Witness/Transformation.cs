@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using DbscanImplementation;
+using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
@@ -54,6 +58,16 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
+
+                    //var featureData = ccs.ToArray();
+                    HashSet<EditOperationDatasetItem[]> clusters;
+
+                    var lcc  = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
+
+                    var featureData = ccs.Select(x => new EditOperationDatasetItem(x)).ToArray();
+
+                    var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => (2 * (double)lcc.FindCommon(x.Operations, y.Operations).Count) / ((double) x.Operations.Count + (double) y.Operations.Count) );
+                    dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: .01, minPts: 1, clusters: out clusters);
 
                     var cscripts = new List<EditOperation<SyntaxNodeOrToken>>();
                     foreach (var cc in ccs)
