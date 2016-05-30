@@ -59,41 +59,57 @@ namespace ProseSample.Substrings.Spg.Witness
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
-                    //var featureData = ccs.ToArray();
-                    HashSet<EditOperationDatasetItem[]> clusters;
-
-                    var lcc  = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
-
-                    var featureData = ccs.Select(x => new EditOperationDatasetItem(x)).ToArray();
-
-                    var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => (2 * (double)lcc.FindCommon(x.Operations, y.Operations).Count) / ((double) x.Operations.Count + (double) y.Operations.Count) );
-                    dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: .01, minPts: 1, clusters: out clusters);
-
-                    var cscripts = new List<EditOperation<SyntaxNodeOrToken>>();
-                    foreach (var cc in ccs)
+                    if (ccs.Any())
                     {
-                       cscripts.AddRange(cc);
-                        kMatches.Add(cc);
-                        PrintScript(cc);
+                        var list = ClusterConnectedComponentsInRegions(ccs);
+
+                        foreach (var cc in list)
+                        {
+                            kMatches.Add(cc);
+                            PrintScript(cc);
+                        }
                     }
-                    //var regions = FindRegion(ccs, inpTree);
-
-                    //var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
-
-                    //for (int i = 0; i < regions.Count; i++)
-                    //{
-                    //    var r = regions[i];
-                    //    tree.AddChild(r, i);
-                    //}
-
-
-                    //kMatches.Add(cscripts);
                 }
                 kExamples[input] = kMatches;
             }
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
             return subsequenceSpec;
+        }
+
+        private static List<List<EditOperation<SyntaxNodeOrToken>>> ClusterConnectedComponentsInRegions(List<List<EditOperation<SyntaxNodeOrToken>>> ccs)
+        {
+            var clusters = Clusters(ccs);
+
+            var list = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+            for (int i = 0; i < clusters.First().Length; i++) list.Add(new List<EditOperation<SyntaxNodeOrToken>>());
+
+
+            foreach (var v in clusters)
+            {
+                var editOperationDatasetItems = v.OrderBy(o => o.Operations.First().T1Node.Value.Span);
+                for (int i = 0; i < editOperationDatasetItems.Count(); i++)
+                {
+                    list[i].AddRange(v.ElementAt(i).Operations);
+                }
+            }
+            return list;
+        }
+
+        private static HashSet<EditOperationDatasetItem[]> Clusters(List<List<EditOperation<SyntaxNodeOrToken>>> ccs)
+        {
+            HashSet<EditOperationDatasetItem[]> clusters;
+            var lcc = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
+            var featureData = ccs.Select(x => new EditOperationDatasetItem(x)).ToArray();
+            var dbs =
+                new DbscanAlgorithm<EditOperationDatasetItem>(
+                    (x, y) =>
+                        1.0 -
+                        (2*(double) lcc.FindCommon(x.Operations, y.Operations).Count)/
+                        ((double) x.Operations.Count + (double) y.Operations.Count));
+
+            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.2, minPts: 1, clusters: out clusters);
+            return clusters;
         }
 
         public static SubsequenceSpec Loop(GrammarRule rule, int parameter, SubsequenceSpec spec)
@@ -178,7 +194,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static List<ITreeNode<SyntaxNodeOrToken>> FindRegion(List<List<EditOperation<SyntaxNodeOrToken>>> ccs, SyntaxNodeOrToken inpTree)
         {
-            return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).ToList();
+            return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).OrderBy(o=> o.Value.SpanStart).ToList();
         }
 
         private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(List<EditOperation<SyntaxNodeOrToken>> cc, SyntaxNodeOrToken inpTree)

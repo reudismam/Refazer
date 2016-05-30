@@ -27,23 +27,18 @@ IEnumerable<SyntaxNodeOrToken> splits := SplitNodes(n);
 
 SyntaxNodeOrToken trans := ManyTrans(node, loop);
 IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
-
 IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions);
-
 IEnumerable<SyntaxNodeOrToken> regions := Template(node, pattern);
 
 Pattern pattern:= P(kind, pchildren) | Abstract(kind) | Concrete(tree);
 IEnumerable<Pattern> pchildren := SP(pattern) | PList(pattern, pchildren);
 
 SyntaxNodeOrToken script := Script(node, edits);
-
 IEnumerable<SyntaxNodeOrToken> edits := SE(edit) | EList(edit, edits);
-
 SyntaxNodeOrToken edit := Insert(node, match, ast, k) | Update(node, match, ast) | Move(node, match, match, k) | Delete(node, match);
 
 MatchResult match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
 MatchResult kindRef := Variable(node, kind, k) | Literal(node, tree, k);
-
 IEnumerable<MatchResult> children := SC(match) | CList(match, children);
 
 SyntaxNodeOrToken ast:= Node(kind, childrenNodes) | Const(tree) | Ref(node, match);
