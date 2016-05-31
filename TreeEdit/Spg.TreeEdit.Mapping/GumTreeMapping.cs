@@ -165,7 +165,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     if (t2Node != null && dice > 0.25)
                     {                                 
                         M.Add(t1Node, t2Node);
-                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 100)
+                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 2000)
                         {
                             RemoveFromM(t1Node, M);
                             var R = Opt(t1Node, t2Node);
@@ -338,16 +338,19 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         {
             if (t2 == null) return 0.0;
 
+            var t2DescendantsAndSelf = t2.DescendantNodesAndSelf();
+            var t1Descendants = t1.DescendantNodes();
+
             double count = 0.0;
-            foreach (var item in t1.DescendantNodes())
+            foreach (var item in t1Descendants)
             {
-                if (M.ContainsKey(item) && t2.DescendantNodesAndSelf().Contains(M[item]))
+                if (M.ContainsKey(item) && t2DescendantsAndSelf.Contains(M[item]))
                 {
                     count++;
                 }
             }
 
-            double den = t1.DescendantNodes().Count + t2.DescendantNodes().Count();
+            double den = t1Descendants.Count + t2DescendantsAndSelf.Count - 1;
 
             double dice = 2.0 * count / den;
             return dice;
