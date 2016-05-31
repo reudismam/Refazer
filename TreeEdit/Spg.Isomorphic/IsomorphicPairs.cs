@@ -16,24 +16,26 @@ namespace TreeEdit.Spg.Isomorphic
 
         private void AllPairOfIsomorphic(ITreeNode<T> t1, ITreeNode<T> t2)
         {
-            if (_dict1[t1].Equals(_dict2[t2]))
+            if (!t1.Children.Any())
             {
-                _alg.Add(Tuple.Create(t1, t2), -1);
+                _alg.Add(Tuple.Create(t1, t2), -1); //_alg.Add(Tuple.Create(t1, t2), -1); 
+                return;
             }
 
-            foreach (var ci in t1.DescendantNodes())
+            foreach (var ci in t1.Children)
             {
-                var t2Descendants = SplitToNodes(t2, ci.Label);
+                var t2Descendants = t2.Children;//SplitToNodes(t2, ci.Label);
                 foreach (var cj in t2Descendants)
                 {
                     string ciValue = _dict1[ci];
                     string cjValue = _dict2[cj];
                     if (ciValue.Equals(cjValue))
                     {
-                        _alg.Add(Tuple.Create(ci, cj), -1);
+                        AllPairOfIsomorphic(ci, cj);                      
                     }
-                }
+                } 
             }
+            _alg.Add(Tuple.Create(t1, t2), -1);
         }
 
         /// <summary>
