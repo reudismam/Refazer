@@ -31,7 +31,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             l1.Push(t1);
             l2.Push(t2);
 
-            int minH = 1;
+            int minH = 0;
 
             while (l1.PeekMax() > minH && l2.PeekMax() > minH)
             {
@@ -165,7 +165,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     if (t2Node != null && dice > 0.25)
                     {                                 
                         M.Add(t1Node, t2Node);
-                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 2000)
+                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 100)
                         {
                             RemoveFromM(t1Node, M);
                             var R = Opt(t1Node, t2Node);
