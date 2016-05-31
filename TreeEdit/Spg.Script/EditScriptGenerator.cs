@@ -48,11 +48,13 @@ namespace TreeEdit.Spg.Script
                     if (!w.Children.Any() && !w.ToString().Equals(x.ToString()))
                     {
                         var update = new Update<T>(w, x, z);
-                        int index = z.Children.TakeWhile(item => !item.Equals(w)).Count();
-                        z.RemoveNode(index);
+                        int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
+                        v.RemoveNode(index);
                         var xnode = new TreeNode<T>(x.Value, x.Label);
-                        z.AddChild(xnode, index);
+                        v.AddChild(xnode, index);
                         M.Add(xnode, x);
+                        M.Remove(w);
+                        w = xnode;
                         PrintUtil<T>.PrintPretty(t1, "", true);
                         editScript.Add(update);
                     }
