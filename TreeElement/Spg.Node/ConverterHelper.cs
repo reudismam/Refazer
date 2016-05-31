@@ -20,17 +20,21 @@ namespace TreeElement.Spg.Node
             var list = st.AsNode().ChildNodes();
             if (!list.Any())
             {
-                return new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
+                var treeNode = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
+                treeNode.Start = st.SpanStart;
+                return treeNode;
             }
 
             List<ITreeNode<SyntaxNodeOrToken>> children = new List<ITreeNode<SyntaxNodeOrToken>>();
             foreach (SyntaxNodeOrToken sot in st.AsNode().ChildNodes())
             {
                 ITreeNode<SyntaxNodeOrToken> node = ConvertCSharpToTreeNode(sot);
+                node.Start = sot.SpanStart;
                 children.Add(node);
             }
 
             ITreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()), children);
+            tree.Start = st.SpanStart;
             return tree;
         }
 
@@ -55,6 +59,32 @@ namespace TreeElement.Spg.Node
             }
 
             ITreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st.Value, st.Label, children);
+            return tree;
+        }
+
+
+
+        /// <summary>
+        /// Convert a syntax tree to a TreeNode
+        /// </summary>
+        /// <param name="st">Syntax tree root</param>
+        /// <returns>TreeNode</returns>
+        public static string ConvertTreeNodeToString<T>(ITreeNode<T> st)
+        {           
+            var list = st.Children;
+            if (!list.Any())
+            {
+                var treeNode = "{"+st.Label+"("+st.Value.ToString().Trim()+")}";
+                return treeNode;
+            }
+            var tree = "{"+ st.Label;
+            foreach (var sot in st.Children)
+            {
+                var node = ConvertTreeNodeToString(sot);
+                tree += node;
+            }
+
+            tree += "}";
             return tree;
         }
     }

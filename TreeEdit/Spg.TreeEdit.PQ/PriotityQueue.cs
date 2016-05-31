@@ -81,7 +81,9 @@ namespace TreeEdit.Spg.TreeEdit.PQ
             {
                 if (x.Item1 > y.Item1) return 1;
 
-                if (x.Item1 == y.Item1) return 0;
+                if (x.Item1 == y.Item1 && x.Item2.Start > y.Item2.Start) return 1;
+
+                if (x.Item1 == y.Item1 && x.Item2.Start > y.Item2.Start) return 0;
 
                 return -1;
             }

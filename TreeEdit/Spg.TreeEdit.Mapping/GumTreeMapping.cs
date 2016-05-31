@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
+using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.TreeEdit.PQ;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Isomorphic;
@@ -93,6 +97,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                                             A.Add(v);
                                         }
                                     }
+                                    PrintUtil<T>.PrettyPrintString(t1, t2, M);
                                 }
                             }
                         }
@@ -158,8 +163,9 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     double dice = Dice(t1Node, t2Node, M);
 
                     if (t2Node != null && dice > 0.25)
-                    {
-                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 1000)
+                    {                                 
+                        M.Add(t1Node, t2Node);
+                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 100)
                         {
                             RemoveFromM(t1Node, M);
                             var R = Opt(t1Node, t2Node);
@@ -191,6 +197,38 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             }
         }
 
+        ///// <summary>
+        ///// Mapping between nodes without move operation
+        ///// </summary>
+        ///// <param name="t1">T1 tree</param>
+        ///// <param name="t2">T2 tree</param>
+        ///// <returns></returns>
+        //private Dictionary<ITreeNode<T>, ITreeNode<T>> Opt(ITreeNode<T> t1, ITreeNode<T> t2)
+        //{
+        //    var zss = new CSharpZss<T>(t1, t2);
+        //    var result = zss.Compute();
+        //    var script = result.Item2;
+        //    var dict = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
+
+        //    foreach (var editOperation in script.Where(editOperation => editOperation.Item1 != null && editOperation.Item2 != null))
+        //    {
+        //        dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
+        //        var isomorphicPairs = IsomorphicManager<T>.AllPairOfIsomorphic(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
+
+        //        if (IsomorphicManager<T>.IsIsomorphic(editOperation.Item1.InternalNode,
+        //            editOperation.Item2.InternalNode))
+        //        {
+        //            dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
+        //        }
+
+        //        foreach (var pair in isomorphicPairs.Where(pair => !dict.ContainsKey(pair.Item1) && !dict.ContainsValue(pair.Item2)))
+        //        {
+        //            dict.Add(pair.Item1, pair.Item2);
+        //        }
+        //    }
+        //    return dict;
+        //}
+
         /// <summary>
         /// Mapping between nodes without move operation
         /// </summary>
@@ -199,30 +237,60 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <returns></returns>
         private Dictionary<ITreeNode<T>, ITreeNode<T>> Opt(ITreeNode<T> t1, ITreeNode<T> t2)
         {
-            var zss = new CSharpZss<T>(t1, t2);
-            var result = zss.Compute();
-            var script = result.Item2;
-            var dict = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
+            var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
+            var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
 
-            foreach (var editOperation in script.Where(editOperation => editOperation.Item1 != null && editOperation.Item2 != null))
+            string cmd = $"/c java -jar RTED_v1.1.jar -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
+            Process proc = new System.Diagnostics.Process();
+            proc.StartInfo.FileName = "cmd.exe";
+            proc.StartInfo.Arguments = cmd;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.Start();
+            string output = proc.StandardOutput.ReadToEnd();
+
+            var t1Traversal = new TreeTraversal<T>();
+            var t1List = t1Traversal.PostOrderTraversal(t1);
+
+            var t2Traversal = new TreeTraversal<T>();
+            var t2List = t2Traversal.PostOrderTraversal(t2);
+
+
+            var dic1 = new Dictionary<int, ITreeNode<T>>();
+            var dic2 = new Dictionary<int, ITreeNode<T>>();
+
+            for (int i = 0; i < t1List.Count; i++)
             {
-                dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-                var isomorphicPairs = IsomorphicManager<T>.AllPairOfIsomorphic(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-
-                if (IsomorphicManager<T>.IsIsomorphic(editOperation.Item1.InternalNode,
-                    editOperation.Item2.InternalNode))
-                {
-                    dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-                }
-
-                foreach (var pair in isomorphicPairs.Where(pair => !dict.ContainsKey(pair.Item1) && !dict.ContainsValue(pair.Item2)))
-                {
-                    dict.Add(pair.Item1, pair.Item2);
-                }
+                dic1.Add(i + 1, t1List[i]);
             }
-            return dict;
-        }
 
+            for (int i = 0; i < t2List.Count; i++)
+            {
+                dic2.Add(i + 1, t2List[i]);
+            }
+
+            var dictionary = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
+
+            StringReader strReader = new StringReader(output);
+            strReader.ReadLine(); //discard files line
+            while (true)
+            {
+                var aLine = strReader.ReadLine();
+                if (aLine == null) break;
+
+                int first = int.Parse(aLine.Substring(0, aLine.IndexOf("->", StringComparison.Ordinal)));
+                var substr = aLine.IndexOf("->", StringComparison.Ordinal) + 2;
+                
+                int second = int.Parse(aLine.Substring(substr));
+                if (first != 0 && second != 0)
+                {
+                    dictionary.Add(dic1[first], dic2[second]);
+                }
+
+            }
+
+            return dictionary;
+        }
 
         /// <summary>
         /// This method verify if tree t has some matching children.

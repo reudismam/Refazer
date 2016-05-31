@@ -52,6 +52,7 @@ namespace TreeElement.Spg.Node
         public T Value { get; set; }
 
         public TLabel Label { get; set; }
+        public int Start { get; set; }
 
 
         /// <summary>
