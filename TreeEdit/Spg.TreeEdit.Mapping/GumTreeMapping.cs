@@ -165,7 +165,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     if (t2Node != null && dice > 0.25)
                     {                                 
                         M.Add(t1Node, t2Node);
-                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 100)
+                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 500)
                         {
                             RemoveFromM(t1Node, M);
                             var R = Opt(t1Node, t2Node);
@@ -241,7 +241,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
 
             string cmd = $"/c java -jar RTED_v1.1.jar -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
-            Process proc = new System.Diagnostics.Process();
+            Process proc = new Process();
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.Arguments = cmd;
             proc.StartInfo.UseShellExecute = false;
