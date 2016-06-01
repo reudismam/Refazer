@@ -76,9 +76,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var tree = treeNodes.First();
 
-                    foreach (var sot in treeNodes.Select(matchResult => matchResult))
+                    foreach (var sot in treeNodes)
                     {
-                        if (sot.Value.IsToken || sot.Children.Any()) return null;
+                        if (sot.Value.IsToken || sot.Children.Any() || sot.Value.AsNode().ChildNodes().Any()) return null;
 
                         if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(tree, sot)) return null;
                     }
@@ -101,7 +101,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     var kind = first.Kind();
                     if (treeNodes.Any(t => !t.Value.IsKind(kind) || t.Children.Any())) return null;
 
-                    if (treeNodes.All(matchResult => matchResult.Value.ToString().Equals(first.ToString()))) return null;
+                    if (!treeNodes.First().Value.AsNode().ChildNodes().Any())
+                    {
+                        if (treeNodes.All(matchResult => matchResult.Value.ToString().Equals(first.ToString()))) return null;
+                    }
 
                     matches.Add(kind);
                 }

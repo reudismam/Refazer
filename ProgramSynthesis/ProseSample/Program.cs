@@ -17,7 +17,7 @@ namespace ProseSample
     {
         private static void Main(string[] args)
         {
-            LoadAndRunRepetitiveChangeMultipleEditions6();
+            LoadAndRunRepetitiveChangeMultipleEditions7();
         }
 
         private static void LoadAndRunRepetitiveChangeMultipleEditions4()
