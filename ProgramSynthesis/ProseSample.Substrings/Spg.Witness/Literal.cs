@@ -61,6 +61,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var matches = MatchManager.ConcreteMatches(inpTree, sot.Value);
 
+                    if (!matches.Any()) return null;
+
                     literalExamples.Add(matches.First());
 
                     var first = (ITreeNode<SyntaxNodeOrToken>)literalExamples.First();

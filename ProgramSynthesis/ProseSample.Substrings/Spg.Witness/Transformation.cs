@@ -27,6 +27,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 foreach (List<EditOperation<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
+                    //var newScript = script.GetRange(0, 6);
                     kMatches.Add(script);
                 }
 
