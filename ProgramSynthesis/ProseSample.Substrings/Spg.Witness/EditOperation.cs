@@ -18,8 +18,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Delete<SyntaxNodeOrToken>)) return null;
 
                     var from = editOperation.T1Node;
@@ -51,8 +52,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
 
                     var from = editOperation.T1Node;
@@ -79,8 +81,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
 
                     var update = (Update<SyntaxNodeOrToken>)editOperation;
@@ -97,8 +100,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                     var key = input[rule.Body[0]];
@@ -127,8 +131,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                     var from = editOperation.T1Node;
@@ -148,8 +153,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                     matches.Add(editOperation.K);
@@ -165,8 +171,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                     var key = input[rule.Body[0]];
@@ -197,8 +204,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                     editOperation.T1Node.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
@@ -217,8 +225,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (EditOperation<SyntaxNodeOrToken> editOperation in spec.DisjunctiveExamples[input])
+                foreach (Edit<SyntaxNodeOrToken> edit in spec.DisjunctiveExamples[input])
                 {
+                    var editOperation = edit.EditOperation;
                     if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                     matches.Add(editOperation.K);
@@ -227,8 +236,5 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return DisjunctiveExamplesSpec.From(kExamples);
         }
-
-
-
     }
 }

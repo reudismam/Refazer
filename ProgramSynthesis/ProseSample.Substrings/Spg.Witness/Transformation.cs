@@ -25,7 +25,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-                foreach (List<EditOperation<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
+                foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
                     //var newScript = script.GetRange(0, 6);
                     kMatches.Add(script);
@@ -65,7 +65,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
                         foreach (var cc in list)
                         {
-                            kMatches.Add(cc);
+                            var edits = cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
+                            kMatches.Add(edits);
                             PrintScript(cc);
                         }
                     }
@@ -118,7 +119,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = spec.Examples[input].Cast<List<EditOperation<SyntaxNodeOrToken>>>().Cast<object>().ToList();
+                var kMatches = spec.Examples[input].Cast<List<Edit<SyntaxNodeOrToken>>>().Cast<object>().ToList();
 
                 kExamples[input] = kMatches;
             }
@@ -133,9 +134,10 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
                 var ocurrences = new List<ITreeNode<SyntaxNodeOrToken>>();
-                foreach (List<EditOperation<SyntaxNodeOrToken>> cc in spec.Examples[input])
+                foreach (List<Edit<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
-                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(cc);
+                    var editOperations = cc.Select(o => o.EditOperation).ToList();
+                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(editOperations);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
                     var regions = FindRegion(ccs, inpTree);
