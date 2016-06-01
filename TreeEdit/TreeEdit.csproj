@@ -110,6 +110,7 @@
     <Compile Include="Spg.Match\MatchManager.cs" />
     <Compile Include="Spg.Print\PrintUtil.cs" />
     <Compile Include="Spg.Isomorphic\IsomorphicManager.cs" />
+    <Compile Include="Spg.Script\Edit.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\GumTreeMapping.cs" />
     <Compile Include="Spg.Isomorphic\IsomorphicPairs.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\ITreeMapping.cs" />
