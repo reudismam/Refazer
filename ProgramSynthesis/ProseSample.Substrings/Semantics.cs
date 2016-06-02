@@ -9,6 +9,7 @@ using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
+using TreeElement;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
@@ -19,6 +20,10 @@ namespace ProseSample.Substrings
         /// Store the tree update associate to each node
         /// </summary>
         private static readonly Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
+
+        private static readonly Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> BeforeAfterMapping = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
+
+        private static readonly Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> MappingRegions = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
 
         /// <summary>
         /// Match function. This function matches the first element on the tree that has the specified kind and child nodes.
@@ -141,6 +146,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="node">Input node</param>
         /// <param name="lookFor">Literal itself.</param>
+        /// <param name="k">Index</param>
         /// <returns>Match of parameter literal in the source code.</returns>
         public static MatchResult Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor, int k)
         {
@@ -176,6 +182,7 @@ namespace ProseSample.Substrings
             var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
             update.ProcessEditOperation(insert);
 
+            Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
             return update.CurrentTree.Value;
         }
@@ -198,6 +205,7 @@ namespace ProseSample.Substrings
             var move = new Move<SyntaxNodeOrToken>(child, parentNode, k);
             update.ProcessEditOperation(move);
 
+            Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
             return update.CurrentTree.Value;
         }
@@ -212,6 +220,7 @@ namespace ProseSample.Substrings
             var updateEdit = new Update<SyntaxNodeOrToken>(fromTreeNode, toTreeNode, null);
             update.ProcessEditOperation(updateEdit);
 
+            Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
             return update.CurrentTree.Value;
         }
@@ -225,6 +234,7 @@ namespace ProseSample.Substrings
             var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
             update.ProcessEditOperation(updateEdit);
 
+            Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
             return update.CurrentTree.Value;
         }
@@ -277,8 +287,15 @@ namespace ProseSample.Substrings
         public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> editOperations)
         {
             var current = GetCurrentTree(node);
-            var tree = ReconstructTree(current);
-            return tree;
+
+            var afterFlorest = current.Children.Select(ReconstructTree).ToList();
+
+            var beforeFlorest = current.Children.Select(o => o.Value).ToList();
+
+            BeforeAfterMapping[node] = beforeFlorest;
+            MappingRegions[node] = afterFlorest;
+
+            return node;
         }
 
         /// <summary>
@@ -307,8 +324,8 @@ namespace ProseSample.Substrings
         /// Reference semantic function
         /// </summary>
         /// <param name="node">Node</param>
-        /// <param name="result">Result of the match</param>
-        /// <returns>Result of the match</returns>
+        /// <param name="result">Result of the pattern</param>
+        /// <returns>Result of the pattern</returns>
         public static SyntaxNodeOrToken Ref(SyntaxNodeOrToken node, MatchResult result)
         {
             return result.Match.Item1.Value;
@@ -379,52 +396,105 @@ namespace ProseSample.Substrings
 
         public static SyntaxNodeOrToken ManyTrans(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
         {       
-            var list = loop.ToList();
-            return null;
+            var afterNodeList = new List<SyntaxNodeOrToken>();
+            var beforeNodeList = new List<SyntaxNodeOrToken>();
+            foreach (var snode in loop)
+            {
+                afterNodeList.AddRange(MappingRegions[snode]);
+                beforeNodeList.AddRange(BeforeAfterMapping[snode]);
+            }
+
+            var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
+            var traversalNodes = treeNode.DescendantNodesAndSelf();
+            var traversalIndices = new List<int>();
+
+            for (int i = 0; i < traversalNodes.Count; i++)
+            {
+                var snode = traversalNodes[i];
+                foreach (var v in beforeNodeList)
+                {
+                    if (snode.Value.Equals(v))
+                    {
+                        traversalIndices.Add(i);
+                    }
+                }
+            }
+
+            treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
+            traversalNodes = treeNode.DescendantNodesAndSelf();
+
+            foreach (var index in traversalIndices)
+            {
+                treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
+                traversalNodes = treeNode.DescendantNodesAndSelf();
+                var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(), new List<SyntaxAnnotation> {new SyntaxAnnotation($"ANN{index}")});
+                node = ann.Visit(node.AsNode());
+            }
+
+            for (int i = 0; i < traversalIndices.Count; i++)
+            {
+                var index = traversalIndices[i];
+                var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
+                var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
+                node = rewriter.Visit(node.AsNode());
+            }
+
+            var stringNode = node.ToFullString();
+            return node;
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern match)
+        public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern pattern)
         {
             var currentTree = GetCurrentTree(node);
 
-            var list = new List<List<SyntaxNodeOrToken>>();
             var res = new List<SyntaxNodeOrToken>();
-            if (match.Tree.Value.Kind == SyntaxKind.EmptyStatement)
+            if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
             {
-                foreach (var child in match.Tree.Children)
-                {
-                    var nodeList = SplitToNodes(currentTree, child.Value.Kind);
-                    var result = (from snode in nodeList where IsValue(snode, child) select snode.Value).ToList();
+                var list = FlorestByKind(pattern, currentTree);
 
-                    if (result.Any())
-                    {
-                        list.Add(result);
-                    }
-                }
-
-                if (list.Any())
-                {                   
-                    for (int j = 0; j < list.First().Count; j++)
-                    {
-                        var iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            var child = list[i][j];
-                                var newchild = ConverterHelper.ConvertCSharpToTreeNode(child);
-                                iTree.AddChild(newchild, i);
-                        }
-                        TreeUpdateDictionary[list.First().First()] = new TreeUpdate(iTree);
-                        res.Add(list.First().First());
-                    }                
-                }
+                if (list.Any()) res = CreateRegions(list); 
             }
 
             return res;
         }
 
+        private static List<SyntaxNodeOrToken> CreateRegions(List<List<SyntaxNodeOrToken>> list)
+        {
+            var regions = new List<SyntaxNodeOrToken>();
+            for (int j = 0; j < list.First().Count; j++)
+            {
+                ITreeNode<SyntaxNodeOrToken> iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var child = list[i][j];
+                    var newchild = ConverterHelper.ConvertCSharpToTreeNode(child);
+                    iTree.AddChild(newchild, i);
+                }
+                TreeUpdateDictionary[iTree.Children.First().Value] = new TreeUpdate(iTree); //each column represent a new region
+                regions.Add(iTree.Children.First().Value);
+            }
+            return regions;
+        }
+
+        private static List<List<SyntaxNodeOrToken>> FlorestByKind(Pattern match, ITreeNode<SyntaxNodeOrToken> currentTree)
+        {
+            var list = new List<List<SyntaxNodeOrToken>>();
+            foreach (var child in match.Tree.Children)
+            {
+                var nodeList = SplitToNodes(currentTree, child.Value.Kind);
+                var result = (from node in nodeList where IsValue(node, child) select node.Value).ToList();
+
+                if (result.Any())
+                {
+                    list.Add(result);
+                }
+            }
+            return list;
+        }
+
         private static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
         {
-            if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root match
+            if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root pattern
             foreach (var child in pattern.Children)
             {
                 var valid = snode.Children.Any(tchild => IsValue(tchild, child));

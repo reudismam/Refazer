@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.TreeEdit.PQ;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Isomorphic;
@@ -31,7 +29,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             l1.Push(t1);
             l2.Push(t2);
 
-            int minH = 0;
+            const int minH = 0;
 
             while (l1.PeekMax() > minH && l2.PeekMax() > minH)
             {

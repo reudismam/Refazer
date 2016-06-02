@@ -126,6 +126,7 @@
     <Compile Include="Spg.Script\Update.cs" />
     <Compile Include="Spg.TreeEdit.Update\TreeUpdate.cs" />
     <Compile Include="Spg.TreeEdit.Update\AddAnnotationRewriter.cs" />
+    <Compile Include="Spg.TreeEdit.Update\TraversalTreeRewriter.cs" />
     <Compile Include="Spg.TreeEdit.Update\UpdateTreeRewriter.cs" />
     <Compile Include="TreeEditMain.cs" />
   </ItemGroup>
