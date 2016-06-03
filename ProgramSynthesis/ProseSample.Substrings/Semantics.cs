@@ -5,11 +5,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseSample.Substrings.List;
+using ProseSample.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using TreeElement;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
@@ -19,7 +19,7 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Store the tree update associate to each node
         /// </summary>
-        private static readonly Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
+        public static readonly Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
 
         private static readonly Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> BeforeAfterMapping = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
 
@@ -173,18 +173,7 @@ namespace ProseSample.Substrings
         /// <returns>New node with the ast node inserted as the k child</returns>
         public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, MatchResult mresult, SyntaxNodeOrToken ast, int k)
         {
-            TreeUpdate update = TreeUpdateDictionary[node];
-
-            var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
-            var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
-
-
-            var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
-            update.ProcessEditOperation(insert);
-
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            return EditOperation.Insert(node, mresult, ast, k);
         }
 
         /// <summary>
@@ -197,46 +186,17 @@ namespace ProseSample.Substrings
         /// <returns></returns>
         public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, MatchResult parent, MatchResult from, int k)
         {
-            TreeUpdate update = TreeUpdateDictionary[node];
-
-            var parentNode = ConverterHelper.ConvertCSharpToTreeNode(parent.Match.Item1.Value);
-            var child = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
-
-            var move = new Move<SyntaxNodeOrToken>(child, parentNode, k);
-            update.ProcessEditOperation(move);
-
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            return EditOperation.Move(node, parent, from, k);
         }
 
         public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, SyntaxNodeOrToken to)
         {
-            TreeUpdate update = TreeUpdateDictionary[node];
-
-            var fromTreeNode = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
-            var toTreeNode = ConverterHelper.ConvertCSharpToTreeNode(to);
-
-            var updateEdit = new Update<SyntaxNodeOrToken>(fromTreeNode, toTreeNode, null);
-            update.ProcessEditOperation(updateEdit);
-
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            return EditOperation.Update(node, from, to);
         }
 
         public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, MatchResult delete)
         {
-            TreeUpdate update = TreeUpdateDictionary[node];
-
-            var t1Node = ConverterHelper.ConvertCSharpToTreeNode(delete.Match.Item1.Value);
-
-            var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
-            update.ProcessEditOperation(updateEdit);
-
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            return EditOperation.Delete(node, delete);
         }
 
         public static MatchResult Tree(MatchResult variable)
