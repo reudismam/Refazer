@@ -38,10 +38,12 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
+                var key = input[rule.Body[0]];
+                var inpTree = WitnessFunctions.GetCurrentTree(key);
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
                     var sot = matchResult.Match.Item1;
-                    var parent = sot.Parent;
+                    var parent = TreeUpdate.FindNode(inpTree, sot.Value);
 
                     if (sot.Value.IsToken || parent == null) return null;
 

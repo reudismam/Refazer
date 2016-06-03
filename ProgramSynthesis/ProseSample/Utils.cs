@@ -52,7 +52,7 @@ namespace ProseSample
 
             ProgramSet consistentPrograms = engine.LearnGrammar(spec);
 
-            const ulong a = 10;
+            const ulong a = 1;
             var b = consistentPrograms.Size;
             var topK = consistentPrograms.TopK("Score").ToList().GetRange(0, (int) Math.Min(a, b));
             string programs = "";

@@ -201,7 +201,8 @@ namespace ProseSample.Substrings
 
         public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult variable, int k)
         {
-            var child = TreeUpdate.FindNode(GetCurrentTree(node), variable.Match.Item1.Value).Children.ElementAt(k - 1);
+            var currentTree = GetCurrentTree(node);
+            var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value).Children.ElementAt(k - 1);
             var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
             return result;
         }

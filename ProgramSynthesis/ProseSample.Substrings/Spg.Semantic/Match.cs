@@ -20,17 +20,36 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             var currentTree = Semantics.GetCurrentTree(node);
             var klist = Semantics.SplitToNodes(currentTree, kind);
-            foreach (var item in klist)
+            foreach (var candicate in klist)
             {
-                for (int i = 0; i < children.Count(); i++)
+                //for (int i = 0; i < children.Count(); i++)
+                //{
+                //    var expression = children.ElementAt(i);
+                //    if (MatchChildren(item.Value, expression.Match.Item1.Value))
+                //    {
+                //        var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
+                //        var matchResult = new MatchResult(match);
+                //        return matchResult;
+                //    }
+                //}
+                if (candicate.Children.Count != children.Count()) continue;
+
+                bool isMatch = true;
+                for (int i = 0; i < candicate.Children.Count; i++)
                 {
-                    var expression = children.ElementAt(i);
-                    if (MatchChildren(item.Value, expression.Match.Item1.Value))
-                    {
-                        var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
-                        var matchResult = new MatchResult(match);
-                        return matchResult;
+                    var child = candicate.Children[i];
+                    var childCandidate = children.ElementAt(i);
+                    if (!child.Value.Equals(childCandidate.Match.Item1.Value)) {
+                        isMatch = false;
+                        break;
                     }
+                }
+
+                if (isMatch)
+                {
+                    var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(candicate, null);
+                    var matchResult = new MatchResult(match);
+                    return matchResult;
                 }
             }
             return null;
@@ -45,24 +64,25 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <returns>True, if parent contains the child, false otherwise.</returns>
         private static bool MatchChildren(SyntaxNodeOrToken parent, SyntaxNodeOrToken child)
         {
-            foreach (var item in parent.ChildNodesAndTokens())
+            foreach (var item in parent.AsNode().ChildNodes())
             {
-                if (item.IsKind(child.Kind()))
-                {
-                    return true;
-                }
 
-                if (child.IsKind(SyntaxKind.IdentifierToken) || child.IsKind(SyntaxKind.IdentifierName) ||
-                    (child.IsKind(SyntaxKind.NumericLiteralToken) || child.IsKind(SyntaxKind.NumericLiteralExpression))
-                    || (child.IsKind(SyntaxKind.StringLiteralToken) || child.IsKind(SyntaxKind.StringLiteralExpression)))
-                {
-                    string itemString = item.ToString();
-                    string childString = child.ToString();
-                    if (itemString.Equals(childString))
-                    {
-                        return true;
-                    }
-                }
+                //if (item.IsKind(child.Kind()) && )
+                //{
+                //    return true;
+                //}
+
+                //if (child.IsKind(SyntaxKind.IdentifierToken) || child.IsKind(SyntaxKind.IdentifierName) ||
+                //    (child.IsKind(SyntaxKind.NumericLiteralToken) || child.IsKind(SyntaxKind.NumericLiteralExpression))
+                //    || (child.IsKind(SyntaxKind.StringLiteralToken) || child.IsKind(SyntaxKind.StringLiteralExpression)))
+                //{
+                //    string itemString = item.ToString();
+                //    string childString = child.ToString();
+                //    if (itemString.Equals(childString))
+                //    {
+                //        return true;
+                //    }
+                //}
             }
             return false;
         }
