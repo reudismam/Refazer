@@ -7,8 +7,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseSample.Substrings.List;
 using ProseSample.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
-using TreeEdit.Spg.Print;
-using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
