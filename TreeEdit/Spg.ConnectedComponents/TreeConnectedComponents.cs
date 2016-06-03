@@ -104,6 +104,12 @@ namespace TreeEdit.Spg.ConnectedComponents
                         Graph[tj].Add(editI);
                     }
 
+                    if (editI.Parent.Parent != null && editI.Parent.Parent.Equals(editJ.T1Node))
+                    {
+                        Graph[ti].Add(editJ);
+                        Graph[tj].Add(editI);
+                    }
+
                     if (editI is Move<T>)
                     {
                         var move = editI as Move<T>;

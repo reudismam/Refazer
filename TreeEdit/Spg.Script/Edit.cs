@@ -8,5 +8,10 @@
         {
             EditOperation = operation;
         }
+
+        public override string ToString()
+        {
+            return EditOperation.ToString();
+        }
     }
 }

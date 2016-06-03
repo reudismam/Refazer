@@ -9,6 +9,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -27,8 +28,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
-                    //var newScript = script.GetRange(0, 6);
-                    kMatches.Add(script);
+                    var newScript = script.GetRange(0, 8);
+                    kMatches.Add(newScript);
                 }
 
                 editsExamples[input] = kMatches;
@@ -162,6 +163,10 @@ namespace ProseSample.Substrings.Spg.Witness
                 if (ocurrences.Any())
                 {
                     kMatches.Add(ocurrences);
+                    foreach (var v in ocurrences)
+                    {
+                        PrintUtil<SyntaxNodeOrToken>.PrintPretty(v, "", true);
+                    }
                     kExamples[input] = kMatches;
                 }
             }

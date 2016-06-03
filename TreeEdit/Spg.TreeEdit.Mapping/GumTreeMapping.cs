@@ -163,7 +163,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     if (t2Node != null && dice > 0.25)
                     {                                 
                         M.Add(t1Node, t2Node);
-                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 500)
+                        if (Math.Max(t1Node.DescendantNodes().Count, t2.DescendantNodes().Count) < 100)
                         {
                             RemoveFromM(t1Node, M);
                             var R = Opt(t1Node, t2Node);
