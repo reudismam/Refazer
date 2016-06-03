@@ -183,6 +183,7 @@
     <Compile Include="Region.cs" />
     <Compile Include="Semantics.cs" />
     <Compile Include="Spg.Semantic\EditOperation.cs" />
+    <Compile Include="Spg.Semantic\Match.cs" />
     <Compile Include="Spg.Witness\AST.cs" />
     <Compile Include="Spg.Witness\EditOperation.cs" />
     <Compile Include="Spg.Witness\Literal.cs" />

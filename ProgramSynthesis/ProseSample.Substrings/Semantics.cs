@@ -32,25 +32,7 @@ namespace ProseSample.Substrings
         /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
         public static MatchResult C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
-            var currentTree = GetCurrentTree(node);
-
-            var klist = SplitToNodes(currentTree, kind);
-
-            foreach (var item in klist)
-            {
-                for (int i = 0; i < children.Count(); i++)
-                {
-                    var expression = children.ElementAt(i);
-                    if (MatchChildren(item.Value, expression.Match.Item1.Value))
-                    {
-                        var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
-                        MatchResult matchResult = new MatchResult(match);
-                        return matchResult;
-                    }
-                }
-            }
-
-            return null;
+            return Match.C(node, kind, children);
         }
 
 
@@ -76,7 +58,7 @@ namespace ProseSample.Substrings
         /// <param name="node">Source node</param>
         /// <param name="kind">Syntax kind</param>
         /// <returns></returns>
-        private static List<ITreeNode<SyntaxNodeOrToken>> SplitToNodes(ITreeNode<SyntaxNodeOrToken> node, SyntaxKind kind)
+        public static List<ITreeNode<SyntaxNodeOrToken>> SplitToNodes(ITreeNode<SyntaxNodeOrToken> node, SyntaxKind kind)
         {
             TLabel label = new TLabel(kind);
             var descendantNodes = node.DescendantNodesAndSelf();
@@ -87,35 +69,35 @@ namespace ProseSample.Substrings
             return kinds.ToList();
         }
 
-        /// <summary>
-        /// Verify if the parent contains the parameter child
-        /// </summary>
-        /// <param name="parent">Parent node</param>
-        /// <param name="child">Child node</param>
-        /// <returns>True, if parent contains the child, false otherwise.</returns>
-        private static bool MatchChildren(SyntaxNodeOrToken parent, SyntaxNodeOrToken child)
-        {
-            foreach (var item in parent.ChildNodesAndTokens())
-            {
-                if (item.IsKind(child.Kind()))
-                {
-                    return true;
-                }
+        ///// <summary>
+        ///// Verify if the parent contains the parameter child
+        ///// </summary>
+        ///// <param name="parent">Parent node</param>
+        ///// <param name="child">Child node</param>
+        ///// <returns>True, if parent contains the child, false otherwise.</returns>
+        //private static bool MatchChildren(SyntaxNodeOrToken parent, SyntaxNodeOrToken child)
+        //{
+        //    foreach (var item in parent.ChildNodesAndTokens())
+        //    {
+        //        if (item.IsKind(child.Kind()))
+        //        {
+        //            return true;
+        //        }
 
-                if (child.IsKind(SyntaxKind.IdentifierToken) || child.IsKind(SyntaxKind.IdentifierName) ||
-                    (child.IsKind(SyntaxKind.NumericLiteralToken) || child.IsKind(SyntaxKind.NumericLiteralExpression))
-                    || (child.IsKind(SyntaxKind.StringLiteralToken) || child.IsKind(SyntaxKind.StringLiteralExpression)))
-                {
-                    string itemString = item.ToString();
-                    string childString = child.ToString();
-                    if (itemString.Equals(childString))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+        //        if (child.IsKind(SyntaxKind.IdentifierToken) || child.IsKind(SyntaxKind.IdentifierName) ||
+        //            (child.IsKind(SyntaxKind.NumericLiteralToken) || child.IsKind(SyntaxKind.NumericLiteralExpression))
+        //            || (child.IsKind(SyntaxKind.StringLiteralToken) || child.IsKind(SyntaxKind.StringLiteralExpression)))
+        //        {
+        //            string itemString = item.ToString();
+        //            string childString = child.ToString();
+        //            if (itemString.Equals(childString))
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    return false;
+        //}
 
         /// <summary>
         /// Build a literal
@@ -224,7 +206,7 @@ namespace ProseSample.Substrings
             return result;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
+        public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
         {
             if (!TreeUpdateDictionary.ContainsKey(n))
             {
