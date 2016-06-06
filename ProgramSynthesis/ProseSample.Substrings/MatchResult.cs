@@ -8,6 +8,12 @@ namespace ProseSample.Substrings
     {
         private Tuple<ITreeNode<SyntaxNodeOrToken>, Bindings> _match { get; set; }
 
+        public int Type { get; set; }
+
+        public const int Literal = 0;
+        public const int Variable = 1;
+        public const int C = 2;
+
         public Tuple<ITreeNode<SyntaxNodeOrToken>, Bindings> Match
         {
             get { return _match; }

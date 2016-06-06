@@ -137,6 +137,7 @@ namespace ProseSample.Substrings
                 var item = matches.ElementAt(k - 1);
                 var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
                 MatchResult matchResult = new MatchResult(match);
+                matchResult.Type = MatchResult.Literal;
                 return matchResult;
             }
 
@@ -194,6 +195,7 @@ namespace ProseSample.Substrings
             {
                 var child = matches.ElementAt(k - 1);
                 var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
+                result.Type = MatchResult.Variable;
                 return result;
             }
             return null;
@@ -330,16 +332,12 @@ namespace ProseSample.Substrings
             return true;
         }
 
-        public static SyntaxNodeOrToken OneTrans(SyntaxNodeOrToken node, SyntaxNodeOrToken script)
-        {
-            return null;
-        }
-
         public static SyntaxNodeOrToken ManyTrans(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
         {
             var afterNodeList = new List<SyntaxNodeOrToken>();
             var beforeNodeList = new List<SyntaxNodeOrToken>();
-            foreach (var snode in loop)
+            var list = loop.ToList();
+            foreach (var snode in list)
             {
                 afterNodeList.AddRange(MappingRegions[snode]);
                 beforeNodeList.AddRange(BeforeAfterMapping[snode]);
@@ -361,8 +359,6 @@ namespace ProseSample.Substrings
                 }
             }
 
-            treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
-            traversalNodes = treeNode.DescendantNodesAndSelf();
 
             foreach (var index in traversalIndices)
             {
@@ -376,8 +372,11 @@ namespace ProseSample.Substrings
             {
                 var index = traversalIndices[i];
                 var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
-                var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
-                node = rewriter.Visit(node.AsNode());
+                if (snode.Any())
+                {
+                    var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
+                    node = rewriter.Visit(node.AsNode());
+                }
             }
 
             var stringNode = node.ToFullString();
@@ -395,8 +394,39 @@ namespace ProseSample.Substrings
 
                 if (list.Any()) res = CreateRegions(list);
             }
-
+            res = SingleLocations(res);
             return res;
+        }
+
+        private static List<SyntaxNodeOrToken> SingleLocations(List<SyntaxNodeOrToken> res)
+        {
+            var list = new List<SyntaxNodeOrToken>();
+            var candidates = new List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> ();
+            bool [] intersect = new bool[res.Count]; 
+
+            for (int i = 0; i < res.Count; i++)
+            {
+                var v = res[i];
+                for (int j =  i + 1; j < res.Count; j++)
+                {
+                    var c = res[j];
+                    if (v.Span.Contains(c.Span) || c.Span.Contains(v.Span))
+                    {
+                        intersect[i] = true;
+                        intersect[j] = true;
+                        candidates.Add(Tuple.Create(v, c));
+                        break;
+                    }
+                }
+
+                if (!intersect[i])
+                {
+                    list.Add(v);
+                }
+            }
+
+            list.AddRange(candidates.Select(v => v.Item1.Span.Contains(v.Item2.Span) ? v.Item2 : v.Item1));
+            return list.OrderBy(o => o.SpanStart).ToList();
         }
 
         private static List<SyntaxNodeOrToken> CreateRegions(List<List<SyntaxNodeOrToken>> list)

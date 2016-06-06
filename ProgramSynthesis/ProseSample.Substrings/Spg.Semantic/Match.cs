@@ -22,16 +22,6 @@ namespace ProseSample.Substrings.Spg.Semantic
             var klist = Semantics.SplitToNodes(currentTree, kind);
             foreach (var candicate in klist)
             {
-                //for (int i = 0; i < children.Count(); i++)
-                //{
-                //    var expression = children.ElementAt(i);
-                //    if (MatchChildren(item.Value, expression.Match.Item1.Value))
-                //    {
-                //        var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
-                //        var matchResult = new MatchResult(match);
-                //        return matchResult;
-                //    }
-                //}
                 if (candicate.Children.Count != children.Count()) continue;
 
                 bool isMatch = true;
@@ -39,7 +29,22 @@ namespace ProseSample.Substrings.Spg.Semantic
                 {
                     var child = candicate.Children[i];
                     var childCandidate = children.ElementAt(i);
-                    if (!child.Value.Equals(childCandidate.Match.Item1.Value)) {
+                    var isKind = child.Value.Kind().Equals(childCandidate.Match.Item1.Value.Kind());
+                    var isValue = child.Value.ToString().Equals(childCandidate.Match.Item1.Value.ToString());
+                    var isSame  = child.Value.Equals(childCandidate.Match.Item1.Value);
+                    if (childCandidate.Type != MatchResult.Literal && !isKind) {
+                        isMatch = false;
+                        break;
+                    }
+
+                    if (childCandidate.Type == MatchResult.Literal && !(isKind && isValue))
+                    {
+                        isMatch = false;
+                        break;
+                    }
+
+                    if (childCandidate.Type == MatchResult.C && !isSame)
+                    {
                         isMatch = false;
                         break;
                     }
@@ -49,42 +54,11 @@ namespace ProseSample.Substrings.Spg.Semantic
                 {
                     var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(candicate, null);
                     var matchResult = new MatchResult(match);
+                    matchResult.Type = MatchResult.C;
                     return matchResult;
                 }
             }
             return null;
-        }
-
-
-        /// <summary>
-        /// Verify if the parent contains the parameter child
-        /// </summary>
-        /// <param name="parent">Parent node</param>
-        /// <param name="child">Child node</param>
-        /// <returns>True, if parent contains the child, false otherwise.</returns>
-        private static bool MatchChildren(SyntaxNodeOrToken parent, SyntaxNodeOrToken child)
-        {
-            foreach (var item in parent.AsNode().ChildNodes())
-            {
-
-                //if (item.IsKind(child.Kind()) && )
-                //{
-                //    return true;
-                //}
-
-                //if (child.IsKind(SyntaxKind.IdentifierToken) || child.IsKind(SyntaxKind.IdentifierName) ||
-                //    (child.IsKind(SyntaxKind.NumericLiteralToken) || child.IsKind(SyntaxKind.NumericLiteralExpression))
-                //    || (child.IsKind(SyntaxKind.StringLiteralToken) || child.IsKind(SyntaxKind.StringLiteralExpression)))
-                //{
-                //    string itemString = item.ToString();
-                //    string childString = child.ToString();
-                //    if (itemString.Equals(childString))
-                //    {
-                //        return true;
-                //    }
-                //}
-            }
-            return false;
         }
     }
 }

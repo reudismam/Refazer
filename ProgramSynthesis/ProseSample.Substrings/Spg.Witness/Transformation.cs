@@ -28,8 +28,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
-                    var newScript = script.GetRange(0, 8);
-                    kMatches.Add(newScript);
+                    //var newScript = script.GetRange(0, 8);
+                    kMatches.Add(script);
                 }
 
                 editsExamples[input] = kMatches;
@@ -72,7 +72,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                     }
                 }
-                kExamples[input] = kMatches;
+                 kExamples[input] = kMatches;
             }
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
