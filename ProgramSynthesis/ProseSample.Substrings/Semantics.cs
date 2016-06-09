@@ -209,6 +209,19 @@ namespace ProseSample.Substrings
             return result;
         }
 
+        public static MatchResult RightChild(SyntaxNodeOrToken node, MatchResult variable)
+        {
+            var currentTree = GetCurrentTree(node);
+            var position = Spg.Witness.RightChild.NodePosition(variable.Match.Item1);
+            if (position + 1 >= variable.Match.Item1.Parent.Children.Count)
+            {
+                return null;
+            }
+            var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Parent.Children.ElementAt(position + 1).Value);
+            var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
+            return result;
+        }
+
         public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
         {
             if (!TreeUpdateDictionary.ContainsKey(n))

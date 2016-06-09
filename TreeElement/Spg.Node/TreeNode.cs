@@ -91,7 +91,9 @@ namespace TreeElement.Spg.Node
             //}
 
             //return list;
-            return BFSWalker<T>.BreadFirstSearch(this);
+            //return BFSWalker<T>.BreadFirstSearch(this);
+            var traversal = new TreeTraversal<T>();
+            return traversal.PostOrderTraversal(this);
         }
 
         /// <summary>

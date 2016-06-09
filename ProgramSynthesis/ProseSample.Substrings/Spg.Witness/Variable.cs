@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
@@ -63,7 +60,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     for (int i = 0; i < matches.Count; i++)
                     {
                         var item = matches[i];
-                        if (item.ToString().Equals(sot.ToString()))
+                        if (item.Equals(sot.Value))
                         {
                             mats.Add(i + 1);
                         }

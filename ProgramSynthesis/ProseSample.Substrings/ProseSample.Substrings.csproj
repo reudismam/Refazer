@@ -189,6 +189,8 @@
     <Compile Include="Spg.Witness\Literal.cs" />
     <Compile Include="Spg.Witness\Map.cs" />
     <Compile Include="Spg.Witness\Match.cs" />
+    <Compile Include="Spg.Witness\Context.cs" />
+    <Compile Include="Spg.Witness\RightChild.cs" />
     <Compile Include="Spg.Witness\Parent.cs" />
     <Compile Include="Spg.Witness\Template.cs" />
     <Compile Include="Spg.Witness\Transformation.cs" />

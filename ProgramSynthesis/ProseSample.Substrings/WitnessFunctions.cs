@@ -100,7 +100,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Parent", 1)]
         public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return Parent.ParentVariable(rule, parameter, spec);
+            return new Parent().ParentVariable(rule, parameter, spec);
         }
 
         /// <summary>
@@ -114,7 +114,35 @@ namespace ProseSample.Substrings
         [WitnessFunction("Parent", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
-            return Parent.ParentK(rule, parameter, spec, kindBinding);
+            return new Parent().ParentK(rule, parameter, spec, kindBinding);
+        }
+
+
+        /// <summary>
+        /// Parent witness function for parameter kindRef
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjuntive example specification</returns>
+        [WitnessFunction("RightChild", 0)]
+        public static DisjunctiveExamplesSpec RightChildVariable(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return new RightChild().ParentVariable(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// Parent witness function for parameter k
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <param name="kindBinding">kindRef binding</param>
+        /// <returns>Disjuntive example specification</returns>
+        [WitnessFunction("RightChild", 1, DependsOnParameters = new[] { 0 })]
+        public static DisjunctiveExamplesSpec RightChildK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        {
+            return new RightChild().ParentK(rule, parameter, spec, kindBinding);
         }
 
         /// <summary>

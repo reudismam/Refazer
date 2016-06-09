@@ -28,7 +28,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
-                    //var newScript = script.GetRange(0, 8);
+                    //var newScript = script.GetRange(0, 1);
                     kMatches.Add(script);
                 }
 
@@ -110,7 +110,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         (2*(double) lcc.FindCommon(x.Operations, y.Operations).Count)/
                         ((double) x.Operations.Count + (double) y.Operations.Count));
 
-            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.2, minPts: 1, clusters: out clusters);
+            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.5, minPts: 1, clusters: out clusters);
             return clusters;
         }
 
@@ -148,9 +148,14 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     for (int i = 0; i < regions.Count; i++)
                     {
-                        var r = ConverterHelper.ConvertCSharpToTreeNode(regions[i].Value);
+                        var region = regions[i];
+                        if (region.Children.Count == 1)
+                        {
+                            region = region.Children.First();
+                        }
+                        var r = ConverterHelper.ConvertCSharpToTreeNode(region.Value);
                         tree.AddChild(r, i);
-                        treePattern.AddChild(regions[i], i);
+                        treePattern.AddChild(region, i);
                     }
 
                     TreeUpdate treeUp = new TreeUpdate(tree);

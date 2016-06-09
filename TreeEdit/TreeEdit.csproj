@@ -115,7 +115,6 @@
     <Compile Include="Spg.Isomorphic\IsomorphicPairs.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\ITreeMapping.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\TreeAlignment.cs" />
-    <Compile Include="Spg.TreeEdit.Mapping\TreeTraversal.cs" />
     <Compile Include="Spg.TreeEdit.PQ\PriotityQueue.cs" />
     <Compile Include="Spg.Script\CSharpTreeComparer.cs" />
     <Compile Include="Spg.Script\Delete.cs" />
