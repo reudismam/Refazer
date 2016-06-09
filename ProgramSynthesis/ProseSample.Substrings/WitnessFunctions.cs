@@ -132,6 +132,19 @@ namespace ProseSample.Substrings
         }
 
         /// <summary>
+        /// Parent witness function for parameter kindRef
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjuntive example specification</returns>
+        [WitnessFunction("Child", 0)]
+        public static DisjunctiveExamplesSpec ChildVariable(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return Child.ParentVariable(rule, parameter, spec);
+        }
+
+        /// <summary>
         /// Parent witness function for parameter k
         /// </summary>
         /// <param name="rule">Grammar rule</param>

@@ -145,6 +145,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
                     var treePattern = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                    cc.First().EditOperation.Parent = tree;
 
                     for (int i = 0; i < regions.Count; i++)
                     {

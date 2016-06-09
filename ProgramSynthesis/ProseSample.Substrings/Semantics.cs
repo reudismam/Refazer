@@ -222,6 +222,15 @@ namespace ProseSample.Substrings
             return result;
         }
 
+
+        public static MatchResult Child(SyntaxNodeOrToken node, MatchResult variable)
+        {
+            var currentTree = GetCurrentTree(node);
+            var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value);
+            var result = new MatchResult(Tuple.Create(child.Parent, new Bindings(new List<SyntaxNodeOrToken> { child.Parent.Value })));
+            return result;
+        }
+
         public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
         {
             if (!TreeUpdateDictionary.ContainsKey(n))

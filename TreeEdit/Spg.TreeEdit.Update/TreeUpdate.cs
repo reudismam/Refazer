@@ -40,6 +40,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             if (editOperation is Insert<SyntaxNodeOrToken>)
             {
                 var parent = FindNode(CurrentTree, editOperation.Parent.Value);
+                if (parent == null) parent = CurrentTree;
                 var treeNode = ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
 
                 treeNode.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
@@ -57,6 +58,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             if (editOperation is Move<SyntaxNodeOrToken>)
             {
                 var parent = FindNode(CurrentTree, editOperation.Parent.Value);
+                if (parent == null) parent = CurrentTree;
                 RemoveNode(CurrentTree, editOperation.T1Node.Value);
 
                 ITreeNode<SyntaxNodeOrToken> treeNode = ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);

@@ -185,6 +185,7 @@
     <Compile Include="Spg.Semantic\EditOperation.cs" />
     <Compile Include="Spg.Semantic\Match.cs" />
     <Compile Include="Spg.Witness\AST.cs" />
+    <Compile Include="Spg.Witness\Child.cs" />
     <Compile Include="Spg.Witness\EditOperation.cs" />
     <Compile Include="Spg.Witness\Literal.cs" />
     <Compile Include="Spg.Witness\Map.cs" />
