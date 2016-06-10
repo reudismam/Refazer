@@ -93,7 +93,9 @@ namespace TreeElement.Spg.Node
             //return list;
             //return BFSWalker<T>.BreadFirstSearch(this);
             var traversal = new TreeTraversal<T>();
-            return traversal.PostOrderTraversal(this);
+            var list =  traversal.PostOrderTraversal(this);
+            list.RemoveAt(list.Count - 1);
+            return list;
         }
 
         /// <summary>
@@ -124,7 +126,7 @@ namespace TreeElement.Spg.Node
         public List<ITreeNode<T>> DescendantNodesAndSelf()
         {
             var list = DescendantNodes();
-            list.Insert(0, this);
+            //list.Insert(0, this);
             return list;
         }
 
