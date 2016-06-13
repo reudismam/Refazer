@@ -58,7 +58,7 @@ namespace TreeEdit.Spg.Script
                     }
 
                    
-                    if (z == null || M.ToList().Find(o => o.Value.Equals(y) && o.Key.Equals(v)).Key == null)
+                    if (z != null && M.ToList().Find(o => o.Value.Equals(y) && o.Key.Equals(v)).Key == null)
                     {
                         int k = FindPos(x, M);
                         var move = new Move<T>(w, z, k);

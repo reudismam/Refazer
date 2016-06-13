@@ -94,7 +94,7 @@ namespace TreeElement.Spg.Node
             //return BFSWalker<T>.BreadFirstSearch(this);
             var traversal = new TreeTraversal<T>();
             var list =  traversal.PostOrderTraversal(this);
-            list.RemoveAt(list.Count - 1);
+            //list.RemoveAt(list.Count - 1);
             return list;
         }
 
