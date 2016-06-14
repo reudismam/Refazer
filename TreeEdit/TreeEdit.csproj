@@ -105,8 +105,9 @@
     <Compile Include="C5\IPriorityQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spg.Clustering\EditOperationDatasetItem.cs" />
+    <Compile Include="Spg.ConnectedComponents\IConnectionComparer.cs" />
     <Compile Include="Spg.ConnectedComponents\TemplateConnectedComponents.cs" />
-    <Compile Include="Spg.ConnectedComponents\TreeConnectedComponents.cs" />
+    <Compile Include="Spg.ConnectedComponents\ConnectedComponentMannager.cs" />
     <Compile Include="Spg.Match\MatchManager.cs" />
     <Compile Include="Spg.Print\PrintUtil.cs" />
     <Compile Include="Spg.Isomorphic\IsomorphicManager.cs" />
