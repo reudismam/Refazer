@@ -40,23 +40,15 @@ namespace ProseSample.Substrings.Spg.Witness
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
-
-            WitnessFunctions.TreeUpdateDictionary = new Dictionary<object, TreeUpdate>();
-            WitnessFunctions.CurrentTrees = new Dictionary<object, ITreeNode<SyntaxNodeOrToken>>();
-
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
                 var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
-                    Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m;
-                    var script = Script(inpTree, outTree, out m);
-                    scrips.Add(script);
-
-                    PrintScript(script);
-
+                    Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> mapping;
+                    var script = Script(inpTree, outTree, out mapping);
+                   
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
@@ -68,7 +60,6 @@ namespace ProseSample.Substrings.Spg.Witness
                         {
                             var edits = cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
                             kMatches.Add(edits);
-                            PrintScript(cc);
                         }
                     }
                 }
