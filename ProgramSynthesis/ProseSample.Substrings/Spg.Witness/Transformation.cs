@@ -46,8 +46,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
-                    Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> mapping;
-                    var script = Script(inpTree, outTree, out mapping);
+                    var script = Script(inpTree, outTree);
                    
                     var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
@@ -178,16 +177,16 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <param name="outTree">Output tree</param>
         /// <param name="m">out Mapping</param>
         /// <returns>Computed edit script</returns>
-        private static List<EditOperation<SyntaxNodeOrToken>> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree, out Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> m)
+        private static List<EditOperation<SyntaxNodeOrToken>> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree)
         {
-            var mapping = new GumTreeMapping<SyntaxNodeOrToken>();
+            var gumTreeMapping = new GumTreeMapping<SyntaxNodeOrToken>();
 
             var inpNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
             var outNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
-            m = mapping.Mapping(inpNode, outNode);
+            var mapping = gumTreeMapping.Mapping(inpNode, outNode);
 
             var generator = new EditScriptGenerator<SyntaxNodeOrToken>();
-            var script = generator.EditScript(inpNode, outNode, m);
+            var script = generator.EditScript(inpNode, outNode, mapping);
             return script;
         }
 
