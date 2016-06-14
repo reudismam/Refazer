@@ -47,19 +47,15 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
+                    var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(script);
                    
-                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(script);
+                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
                     if (ccs.Any())
                     {
                         var list = ClusterConnectedComponentsInRegions(ccs);
-
-                        foreach (var cc in list)
-                        {
-                            var edits = cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
-                            kMatches.Add(edits);
-                        }
+                        kMatches.AddRange(list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
                     }
                 }
                  kExamples[input] = kMatches;
@@ -128,7 +124,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (List<Edit<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
                     var editOperations = cc.Select(o => o.EditOperation).ToList();
-                    var ccs = TreeConnectedComponents<SyntaxNodeOrToken>.ConnectedComponents(editOperations);
+                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(editOperations);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
                     var regions = FindRegion(ccs, inpTree);
