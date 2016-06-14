@@ -17,7 +17,88 @@ namespace ProseSample
     {
         private static void Main(string[] args)
         {
-            LoadAndRunRepetitiveChangeMultipleEditions3();
+            LoadAndRunRepetitiveChangeMultipleEditions();
+        }
+
+        private static void LoadAndRunRepetitiveChangeMultipleEditions()
+        {
+            //Load grammar
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+
+            //input data
+            string inputText = File.ReadAllText(@"SyntaxTreeExtensionsB.cs");
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = File.ReadAllText(@"SyntaxTreeExtensionsA.cs");
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //Getting examples methods
+            var examplesInput = GetMethods(inpTree);
+            var examplesOutput = GetMethods(outTree);
+
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+
+            for (int i = 0; i < examplesInput.Count; i++)
+            {
+                var inputState = State.Create(grammar.InputSymbol, examplesInput.ElementAt(i));
+                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+            }
+
+            //Learn program
+
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            ProgramNode program = Learn(grammar, spec);
+
+            //Run program
+            object[] output = program.Invoke(ioExamples.First().Key).ToEnumerable().ToArray();
+            WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+        }
+
+
+        private static List<object> GetMethods(SyntaxNodeOrToken outTree)
+        {
+            //select nodes of type method declaration
+            var exampleMethodsInput = from inode in outTree.AsNode().DescendantNodes()
+                                      where inode.IsKind(SyntaxKind.MethodDeclaration)
+                                      select inode;
+
+            //Select two examples
+            var examplesSotInput = exampleMethodsInput.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 1);
+            var examplesInput = examplesSotInput.Select(o => (object)o).ToList();
+            return examplesInput;
+        }
+
+        /*private static void LoadAndRunRepetitiveChangeMultipleEditions8()
+        {
+            //Load grammar
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+
+            //input data
+            string inputText = File.ReadAllText(@"SyntaxTreeExtensionsB.cs");
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = File.ReadAllText(@"SyntaxTreeExtensionsA.cs");
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //Examples
+            var examplesNodes = from inode in outTree.AsNode().DescendantNodes()
+                                where inode.IsKind(SyntaxKind.MethodDeclaration)
+                                select inode;
+            //Select two examples
+            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 2);
+            var examples = examplesSot.Select(o => (object)o).ToList();
+
+            //Learn program
+            var input = State.Create(grammar.InputSymbol, inpTree);
+            var spec = new SubsequenceSpec(input, examples);
+            ProgramNode program = Learn(grammar, spec);
+
+            //Run program
+            object[] output = program.Invoke(input).ToEnumerable().ToArray();
+            WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
         }
 
         private static void LoadAndRunRepetitiveChangeMultipleEditions4()
@@ -84,40 +165,7 @@ namespace ProseSample
             WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
         }
 
-
-        private static void LoadAndRunRepetitiveChangeMultipleEditions5()
-        {
-            //Load grammar
-            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
-
-            //input data
-            string inputText = File.ReadAllText(@"SyntaxFactoryB.cs");
-            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
-            //output with some code fragments edited.
-            string outputText = File.ReadAllText(@"SyntaxFactoryA.cs");
-            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-            //Examples
-            var examplesNodes = from inode in outTree.AsNode().DescendantNodes()
-                                where inode.IsKind(SyntaxKind.MethodDeclaration)
-                                select inode;
-            //Select two examples
-            var examplesSot = examplesNodes.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 1);
-            var examples = examplesSot.Select(o => (object)o).ToList();
-
-            //Learn program
-            var input = State.Create(grammar.InputSymbol, inpTree);
-            var spec = new SubsequenceSpec(input, examples);
-            ProgramNode program = Learn(grammar, spec);
-
-            //Run program
-            object[] output = program.Invoke(input).ToEnumerable().ToArray();
-            WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        }
-
-
-        private static void LoadAndRunRepetitiveChangeMultipleEditions6()
+        /*private static void LoadAndRunRepetitiveChangeMultipleEditions6()
         {
             //Load grammar
             var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
@@ -432,6 +480,6 @@ namespace ProseSample
             //Run program
             SyntaxNodeOrToken[] output = program.Invoke(input).ToEnumerable().Select(s => (SyntaxNodeOrToken)s).ToArray();
             WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        }
+        }*/
     }
 }

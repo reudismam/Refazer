@@ -354,55 +354,56 @@ namespace ProseSample.Substrings
             return true;
         }
 
-        public static SyntaxNodeOrToken ManyTrans(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
+        public static SyntaxNodeOrToken Transformation(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
         {
-            var afterNodeList = new List<SyntaxNodeOrToken>();
-            var beforeNodeList = new List<SyntaxNodeOrToken>();
-            var list = loop.ToList();
-            foreach (var snode in list)
-            {
-                afterNodeList.AddRange(MappingRegions[snode]);
-                beforeNodeList.AddRange(BeforeAfterMapping[snode]);
-            }
+            //var afterNodeList = new List<SyntaxNodeOrToken>();
+            //var beforeNodeList = new List<SyntaxNodeOrToken>();
+            //var list = loop.ToList();
+            //foreach (var snode in list)
+            //{
+            //    afterNodeList.AddRange(MappingRegions[snode]);
+            //    beforeNodeList.AddRange(BeforeAfterMapping[snode]);
+            //}
 
-            var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
-            var traversalNodes = treeNode.DescendantNodesAndSelf();
-            var traversalIndices = new List<int>();
+            //var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
+            //var traversalNodes = treeNode.DescendantNodesAndSelf();
+            //var traversalIndices = new List<int>();
 
-            for (int i = 0; i < traversalNodes.Count; i++)
-            {
-                var snode = traversalNodes[i];
-                foreach (var v in beforeNodeList)
-                {
-                    if (snode.Value.Equals(v))
-                    {
-                        traversalIndices.Add(i);
-                    }
-                }
-            }
+            //for (int i = 0; i < traversalNodes.Count; i++)
+            //{
+            //    var snode = traversalNodes[i];
+            //    foreach (var v in beforeNodeList)
+            //    {
+            //        if (snode.Value.Equals(v))
+            //        {
+            //            traversalIndices.Add(i);
+            //        }
+            //    }
+            //}
 
 
-            foreach (var index in traversalIndices)
-            {
-                treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
-                traversalNodes = treeNode.DescendantNodesAndSelf();
-                var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(), new List<SyntaxAnnotation> { new SyntaxAnnotation($"ANN{index}") });
-                node = ann.Visit(node.AsNode());
-            }
+            //foreach (var index in traversalIndices)
+            //{
+            //    treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
+            //    traversalNodes = treeNode.DescendantNodesAndSelf();
+            //    var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(), new List<SyntaxAnnotation> { new SyntaxAnnotation($"ANN{index}") });
+            //    node = ann.Visit(node.AsNode());
+            //}
 
-            for (int i = 0; i < traversalIndices.Count; i++)
-            {
-                var index = traversalIndices[i];
-                var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
-                if (snode.Any())
-                {
-                    var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
-                    node = rewriter.Visit(node.AsNode());
-                }
-            }
+            //for (int i = 0; i < traversalIndices.Count; i++)
+            //{
+            //    var index = traversalIndices[i];
+            //    var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
+            //    if (snode.Any())
+            //    {
+            //        var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
+            //        node = rewriter.Visit(node.AsNode());
+            //    }
+            //}
 
-            var stringNode = node.ToFullString();
-            return node;
+            //var stringNode = node.ToFullString();
+            //return node;
+            return null;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern pattern)

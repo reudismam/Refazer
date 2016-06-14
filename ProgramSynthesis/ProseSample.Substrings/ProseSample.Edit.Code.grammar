@@ -19,15 +19,10 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
-@start IEnumerable<SyntaxNodeOrToken> spans := NodesMap(trans, nodes) = Map(\node: SyntaxNodeOrToken => trans, nodes);
-
-IEnumerable<SyntaxNodeOrToken> nodes := Stts(pred, splits) = Filter(\x: SyntaxNodeOrToken => pred, splits);
-Boolean pred := FTrue();
-IEnumerable<SyntaxNodeOrToken> splits := SplitNodes(n);
-
-SyntaxNodeOrToken trans := ManyTrans(node, loop);
+@start SyntaxNodeOrToken trans := Transformation(n, loop);
 IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
 IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions);
+Boolean pred := FTrue();
 IEnumerable<SyntaxNodeOrToken> regions := Template(node, pattern);
 
 Pattern pattern:= P(kind, pchildren) | Abstract(kind) | Concrete(tree);

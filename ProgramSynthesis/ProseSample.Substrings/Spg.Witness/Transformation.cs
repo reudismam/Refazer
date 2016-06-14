@@ -37,7 +37,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(editsExamples);
         }
 
-        public static SubsequenceSpec ManyTransLoop(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var scrips = new List<List<EditOperation<SyntaxNodeOrToken>>>();
