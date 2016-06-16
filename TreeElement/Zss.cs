@@ -60,7 +60,8 @@ namespace TreeElement
         protected abstract void GenerateNodes(T t1, T t2);
 
         /// <summary>
-        /// Generate keyroots of tree T , K(T) = { k E T | !e k' > k with l(k') = l(k) }        /// </summary>
+        /// Generate keyroots of tree T , K(T) = { k E T | !e k' > k with l(k') = l(k) }
+        /// </summary>
         /// <param name="tree">list of vertices of the tree sorted in post order</param>
         /// <param name="l">the leftmost leaf descendant of the subtree rooted at i</param>
         /// <returns></returns>
