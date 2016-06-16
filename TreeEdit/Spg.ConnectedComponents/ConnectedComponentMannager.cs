@@ -148,7 +148,6 @@ namespace TreeEdit.Spg.ConnectedComponents
 
         private class EditConnected : ConnectionComparer<T>
         {
-
             public EditConnected(List<EditOperation<T>> script) : base(script)
             {
             }

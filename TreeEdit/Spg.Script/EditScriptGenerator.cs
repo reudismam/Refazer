@@ -89,6 +89,20 @@ namespace TreeEdit.Spg.Script
                     editScript.Add(delete);
                 }
             }
+
+            for (int i = 0; i < editScript.Count; i++)
+            {
+                var v = editScript[i];
+                if (v is Insert<T>)
+                {
+                    var xnode = new TreeNode<T>(v.T1Node.Value, v.T1Node.Label);
+                    var znode = new TreeNode<T>(v.Parent.Value, v.Parent.Label);
+
+                    var insert = new Insert<T>(xnode, znode, v.K);
+                    editScript[i] = insert;
+                }
+            }
+
             return editScript;
         }
 

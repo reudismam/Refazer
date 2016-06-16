@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
@@ -51,15 +52,17 @@ namespace ProseSample.Substrings.Spg.Witness
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
+                    var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
                     foreach (var cc in ccs)
                     {
                         var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
+                        var newScript = Compact(editionConnected);
+                        newccs.Add(newScript);
                     }
 
                     if (ccs.Any())
-                    {
-                        
-                        var list = ClusterConnectedComponentsInRegions(ccs);
+                    {                    
+                        var list = ClusterConnectedComponentsInRegions(newccs);
                         kMatches.AddRange(list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
                     }
                 }
@@ -68,6 +71,33 @@ namespace ProseSample.Substrings.Spg.Witness
 
             var subsequenceSpec = new SubsequenceSpec(kExamples);
             return subsequenceSpec;
+        }
+
+        private static List<EditOperation<SyntaxNodeOrToken>> Compact(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
+        {
+            var newList = new List<EditOperation<SyntaxNodeOrToken>>();
+            var removes = new List<EditOperation<SyntaxNodeOrToken>>();
+
+            foreach (var editOperations in connectedComponents)
+            {
+                foreach (var editI in editOperations)
+                {
+                    foreach (var editJ in editOperations)
+                    {
+                        if (editI.Equals(editJ)) continue;
+                        if (editI.T1Node.Equals(editJ.Parent))
+                        {
+                            editI.T1Node.AddChild(editJ.T1Node, editI.T1Node.Children.Count);
+                            removes.Add(editJ);
+                        }
+                    }
+                }
+                newList.AddRange(editOperations);
+            }
+
+            newList.RemoveAll(o => removes.Contains(o));
+
+            return newList;
         }
 
         private static List<List<EditOperation<SyntaxNodeOrToken>>> ClusterConnectedComponentsInRegions(List<List<EditOperation<SyntaxNodeOrToken>>> ccs)
