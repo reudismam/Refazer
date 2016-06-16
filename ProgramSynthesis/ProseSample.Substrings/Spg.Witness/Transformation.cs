@@ -47,13 +47,18 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
-                    var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(script);
-                   
+
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
+                    foreach (var cc in ccs)
+                    {
+                        var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
+                    }
+
                     if (ccs.Any())
                     {
+                        
                         var list = ClusterConnectedComponentsInRegions(ccs);
                         kMatches.AddRange(list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
                     }
@@ -171,7 +176,6 @@ namespace ProseSample.Substrings.Spg.Witness
         /// </summary>
         /// <param name="inpTree">Input tree</param>
         /// <param name="outTree">Output tree</param>
-        /// <param name="m">out Mapping</param>
         /// <returns>Computed edit script</returns>
         private static List<EditOperation<SyntaxNodeOrToken>> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree)
         {

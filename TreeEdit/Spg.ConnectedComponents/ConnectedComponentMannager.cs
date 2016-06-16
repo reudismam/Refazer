@@ -18,7 +18,7 @@ namespace TreeEdit.Spg.ConnectedComponents
         /// </summary>
         private static Dictionary<Tuple<T, T, int>, List<EditOperation<T>>> Graph { get; set; }
 
-        private static IConnectionComparer<T> ConnectionComparer { get; set; }
+        private static ConnectionComparer<T> ConnectionComparer { get; set; }
 
         /// <summary>
         /// Computed connected components
@@ -56,14 +56,14 @@ namespace TreeEdit.Spg.ConnectedComponents
 
         public static List<List<EditOperation<T>>> ConnectedComponents(List<EditOperation<T>> script)
         {
-            ConnectionComparer = new FullConnected();
+            ConnectionComparer = new FullConnected(script);
             BuildGraph(script);        
             return ConnectedComponentsBase(script);
         }
 
         public static List<List<EditOperation<T>>> EditConnectedComponents(List<EditOperation<T>> script)
         {
-            ConnectionComparer = new EditConnected();
+            ConnectionComparer = new EditConnected(script);
             BuildGraph(script);
             return ConnectedComponentsBase(script);
         }
@@ -93,33 +93,41 @@ namespace TreeEdit.Spg.ConnectedComponents
                 Graph[t] = new List<EditOperation<T>>();
             }
 
-            foreach (var editI in script)
+            for (int i = 0; i < script.Count; i++)
             {
+                var editI = script[i];
                 var ti = Tuple.Create(editI.T1Node.Value, editI.Parent.Value, editI.K);
 
-                foreach (var editJ in script)
+                for (int j = i + 1; j < script.Count; j++)
                 {
+                    var editJ = script[j];
                     var tj = Tuple.Create(editJ.T1Node.Value, editJ.Parent.Value, editJ.K);
 
-                    IsConnected(editI, editJ, ti, tj);
+                    if (IsConnected(i, j))
+                    {
+                        Graph[ti].Add(editJ);
+                        Graph[tj].Add(editI);
+                    }
                 }
             }
         }
 
-        private static void IsConnected(EditOperation<T> editI, EditOperation<T> editJ, Tuple<T, T, int> ti, Tuple<T, T, int> tj)
+        private static bool IsConnected(int editI, int editJ)
         {
-            if (ConnectionComparer.IsConnected(editI, editJ))
-            {
-                Graph[ti].Add(editJ);
-                Graph[tj].Add(editI);
-            }
+            return ConnectionComparer.IsConnected(editI, editJ) || ConnectionComparer.IsConnected(editJ, editI);
         }
 
-        private class FullConnected : IConnectionComparer<T>
+        private class FullConnected : ConnectionComparer<T>
         {
-            public bool IsConnected(EditOperation<T> editI, EditOperation<T> editJ)
+            public FullConnected(List<EditOperation<T>> script) : base(script)
             {
-                if (editI == editJ) return false;
+            }
+
+            public override bool IsConnected(int indexI, int indexJ)
+            {
+                var editI = Script[indexI];
+                var editJ = Script[indexJ];
+
                 //Two nodes have the same parent
                 if (editI.Parent.Equals(editJ.Parent) && !editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))) return true;        
 
@@ -135,21 +143,35 @@ namespace TreeEdit.Spg.ConnectedComponents
                     if (move.PreviousParent.Equals(editJ.Parent)) return false;
                 }
                 return false;
-            }
+            }     
         }
 
-        private class EditConnected : IConnectionComparer<T>
+        private class EditConnected : ConnectionComparer<T>
         {
-            public bool IsConnected(EditOperation<T> editI, EditOperation<T> editJ)
+
+            public EditConnected(List<EditOperation<T>> script) : base(script)
             {
-                if (editI == editJ) return false;
+            }
+            public override bool IsConnected(int indexI, int indexJ)
+            {
+                var editI = Script[indexI];
+                var editJ = Script[indexJ];
+
                 var typeI = editI.GetType();
                 var typeJ = editJ.GetType();
 
                 if (typeI != typeJ) return false;
 
-                return new FullConnected().IsConnected(editI, editJ);
+                for (int i = Math.Min(indexI, indexJ) + 1; i < Math.Max(indexI, indexJ); i++)
+                {
+                    var type = Script[i].GetType();
+                    if (!(Script[i] is Update<T>) && type != typeI) return false;
+                }
+
+                return new FullConnected(Script).IsConnected(indexI, indexJ);
             }
+
+            
         }
     }
 }
