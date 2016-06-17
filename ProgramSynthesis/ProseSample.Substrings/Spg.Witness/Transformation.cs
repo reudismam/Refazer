@@ -189,10 +189,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 if (ocurrences.Any())
                 {
                     kMatches.Add(ocurrences);
-                    //foreach (var v in ocurrences)
-                    //{
-                    //    PrintUtil<SyntaxNodeOrToken>.PrintPretty(v, "", true);
-                    //}
                     kExamples[input] = kMatches;
                 }
             }
