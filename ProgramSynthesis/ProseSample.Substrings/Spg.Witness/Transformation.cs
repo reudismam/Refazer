@@ -237,11 +237,12 @@ namespace ProseSample.Substrings.Spg.Witness
 
             var list = new List<ITreeNode<SyntaxNodeOrToken>>();
 
+            var editNodes = EditNodes(cc);
             foreach (var node in nodes)
             {
-                foreach (var edit in cc)
+                foreach (var t1Node in editNodes)
                 {
-                    if (node.Equals(edit.T1Node))
+                    if (node.Equals(t1Node))
                     {
                         if (!list.Contains(node))
                         {
@@ -249,19 +250,30 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                     }
 
-                    if (!(edit is Delete<SyntaxNodeOrToken>) && node.Equals(edit.T1Node.Parent))
-                    {
-                        if (!list.Contains(node))
-                        {
-                            list.Add(node);
-                        }
-                    }
+                    //if (!(t1Node is Delete<SyntaxNodeOrToken>) && node.Equals(t1Node.T1Node.Parent))
+                    //{
+                    //    if (!list.Contains(node))
+                    //    {
+                    //        list.Add(node);
+                    //    }
+                    //}
                 }
             }
 
             var tcc = new TemplateConnectedComponents<SyntaxNodeOrToken>();
             var cnodes = tcc.ConnectedNodes(list);
             return cnodes;
+        }
+
+        private static List<ITreeNode<SyntaxNodeOrToken>> EditNodes(List<EditOperation<SyntaxNodeOrToken>> cc)
+        {
+            var nodes = new List<ITreeNode<SyntaxNodeOrToken>>();
+            foreach (var edit in cc)
+            {
+                nodes.AddRange(edit.T1Node.DescendantNodesAndSelf());
+            }
+
+            return nodes;
         }
     }
 }

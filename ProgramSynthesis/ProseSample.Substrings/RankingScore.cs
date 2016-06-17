@@ -53,7 +53,7 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Script")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
-        [FeatureCalculator("ManyTrans")]
+        [FeatureCalculator("Transformation")]
         public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;
 
         [FeatureCalculator("Loop")]
