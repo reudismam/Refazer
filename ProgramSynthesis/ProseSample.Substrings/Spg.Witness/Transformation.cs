@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
@@ -10,7 +9,6 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
-using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -29,7 +27,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
-                    var newScript = script.GetRange(0, 4);
+                    //var newScript = script.GetRange(0, 5);
+                    var newScript = script;
                     kMatches.Add(newScript);
                 }
 
@@ -271,6 +270,11 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (var edit in cc)
             {
                 nodes.AddRange(edit.T1Node.DescendantNodesAndSelf());
+
+                if (!(edit is Delete<SyntaxNodeOrToken>))
+                {
+                    nodes.AddRange(edit.Parent.DescendantNodesAndSelf());
+                }
             }
 
             return nodes;
