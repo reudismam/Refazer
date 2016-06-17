@@ -19,17 +19,19 @@ namespace ProseSample.Substrings
         /// </summary>
         public static readonly Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
 
+        //Before transformation mapping
         private static readonly Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> BeforeAfterMapping = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
 
+        //After transformation mapping
         private static readonly Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> MappingRegions = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
 
         /// <summary>
-        /// Match function. This function matches the first element on the tree that has the specified kind and child nodes.
+        /// Matches the element on the tree with specified kind and child nodes.
         /// </summary>
         /// <param name="node">Node</param>
         /// <param name="kind">Syntax kind</param>
         /// <param name="children">Children nodes</param>
-        /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
+        /// <returns>The element on the tree with specified kind and child nodes</returns>
         public static MatchResult C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
             return Match.C(node, kind, children);
@@ -255,9 +257,9 @@ namespace ProseSample.Substrings
 
             var afterFlorest = current.Children.Select(ReconstructTree).ToList();
 
-            var beforeFlorest = current.Children.Select(o => o.Value).ToList();
+            //var beforeFlorest = current.Children.Select(o => o.Value).ToList();
 
-            BeforeAfterMapping[node] = beforeFlorest;
+            //BeforeAfterMapping[node] = beforeFlorest;
             MappingRegions[node] = afterFlorest;
 
             return node;
@@ -374,15 +376,65 @@ namespace ProseSample.Substrings
 
         public static SyntaxNodeOrToken Transformation(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
         {
-            var afterNodeList = new List<SyntaxNodeOrToken>();
-            var beforeNodeList = new List<SyntaxNodeOrToken>();
+            List<SyntaxNodeOrToken> afterNodeList;
+            List<SyntaxNodeOrToken> beforeNodeList;
+            FillBeforeAfterList(out afterNodeList, loop, out beforeNodeList);
+
+            //traversal index of the nodes before the transformation
+            var traversalIndices = PostOrderTraversalIndices(node, beforeNodeList);
+
+            //Annotate edited nodes
+            node = AnnotateNodeEditedNodes(node, traversalIndices);
+
+            //Update annotated nodes
+            node = UpdateAnnotatedNodes(node, traversalIndices, afterNodeList);
+
+            var stringNode = node.ToFullString();
+            return node;
+        }
+
+        private static SyntaxNodeOrToken UpdateAnnotatedNodes(SyntaxNodeOrToken node, List<int> traversalIndices, List<SyntaxNodeOrToken> afterNodeList)
+        {
+            for (int i = 0; i < traversalIndices.Count; i++)
+            {
+                var index = traversalIndices[i];
+                var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
+                if (snode.Any())
+                {
+                    var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
+                    node = rewriter.Visit(node.AsNode());
+                }
+            }
+            return node;
+        }
+
+        private static SyntaxNodeOrToken AnnotateNodeEditedNodes(SyntaxNodeOrToken node, List<int> traversalIndices)
+        {
+            foreach (var index in traversalIndices)
+            {
+                var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
+                var traversalNodes = treeNode.DescendantNodesAndSelf();
+                var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(),
+                    new List<SyntaxAnnotation> {new SyntaxAnnotation($"ANN{index}")});
+                node = ann.Visit(node.AsNode());
+            }
+            return node;
+        }
+
+        private static void FillBeforeAfterList(out List<SyntaxNodeOrToken> afterNodeList, IEnumerable<SyntaxNodeOrToken> loop, out List<SyntaxNodeOrToken> beforeNodeList)
+        {
+            afterNodeList = new List<SyntaxNodeOrToken>();
+            beforeNodeList = new List<SyntaxNodeOrToken>();
             var list = loop.ToList();
             foreach (var snode in list)
             {
                 afterNodeList.AddRange(MappingRegions[snode]);
                 beforeNodeList.AddRange(BeforeAfterMapping[snode]);
             }
+        }
 
+        private static List<int> PostOrderTraversalIndices(SyntaxNodeOrToken node, List<SyntaxNodeOrToken> beforeNodeList)
+        {
             var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
             var traversalNodes = treeNode.DescendantNodesAndSelf();
             var traversalIndices = new List<int>();
@@ -398,29 +450,7 @@ namespace ProseSample.Substrings
                     }
                 }
             }
-
-
-            foreach (var index in traversalIndices)
-            {
-                treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
-                traversalNodes = treeNode.DescendantNodesAndSelf();
-                var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(), new List<SyntaxAnnotation> { new SyntaxAnnotation($"ANN{index}") });
-                node = ann.Visit(node.AsNode());
-            }
-
-            for (int i = 0; i < traversalIndices.Count; i++)
-            {
-                var index = traversalIndices[i];
-                var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
-                if (snode.Any())
-                {
-                    var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
-                    node = rewriter.Visit(node.AsNode());
-                }
-            }
-
-            var stringNode = node.ToFullString();
-            return node;
+            return traversalIndices;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern pattern)
@@ -482,6 +512,10 @@ namespace ProseSample.Substrings
                     iTree.AddChild(newchild, i);
                 }
                 TreeUpdateDictionary[iTree.Children.First().Value] = new TreeUpdate(iTree); //each column represent a new region
+
+                var beforeFlorest = iTree.Children.Select(o => o.Value).ToList();
+                BeforeAfterMapping[iTree.Children.First().Value] = beforeFlorest;
+
                 regions.Add(iTree.Children.First().Value);
             }
             return regions;
@@ -687,14 +721,14 @@ namespace ProseSample.Substrings
 
             var children = tree.Children.Select(ReconstructTree).ToList();
 
-            if (tree.Value.IsKind(SyntaxKind.MethodDeclaration))
-            {
-                var method = (MethodDeclarationSyntax)tree.Value;
-                method = method.WithReturnType((TypeSyntax)children[0]);
-                method = method.WithParameterList((ParameterListSyntax)children[1]);
-                method = method.WithBody((BlockSyntax)children[2]);
-                return method.NormalizeWhitespace();
-            }
+            //if (tree.Value.IsKind(SyntaxKind.MethodDeclaration))
+            //{
+            //    var method = (MethodDeclarationSyntax)tree.Value;
+            //    method = method.WithReturnType((TypeSyntax)children[0]);
+            //    method = method.WithParameterList((ParameterListSyntax)children[1]);
+            //    method = method.WithBody((BlockSyntax)children[2]);
+            //    return method.NormalizeWhitespace();
+            //}
 
             var node = GetSyntaxElement(tree.Value.Kind(), children, tree.Value);
             return node;
