@@ -9,16 +9,16 @@ namespace TreeEdit.Spg.Print
 {
     public class PrintUtil<T>
     {
-        private static StreamWriter prettyPrint;
+        private static StreamWriter _prettyPrint;
 
-        private static Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int> dic;
+        private static Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int> _dic;
 
-        private static int currentIndex;
+        private static int _currentIndex;
 
         public StreamWriter PrettyPrint
         {
-            get { return prettyPrint; }
-            set { prettyPrint = value;}
+            get { return _prettyPrint; }
+            set { _prettyPrint = value;}
         } 
 
         public static void PrintPretty(ITreeNode<T> tree, string indent, bool last)
@@ -50,24 +50,24 @@ namespace TreeEdit.Spg.Print
 
         private static void PrettyPrintString(ITreeNode<T> tree, string indent, bool last)
         {
-            prettyPrint.Write(indent);
+            _prettyPrint.Write(indent);
             if (last)
             {
-                prettyPrint.Write("\\-");
+                _prettyPrint.Write("\\-");
                 indent += "  ";
             }
             else
             {
-                prettyPrint.Write("|-");
+                _prettyPrint.Write("|-");
                 indent += "| ";
             }
             if (!tree.Children.Any())
             {
-                prettyPrint.WriteLine(tree.Label + "(\"" + tree + "\")");
+                _prettyPrint.WriteLine(tree.Label + "(\"" + tree + "\")");
             }
             else
             {
-                prettyPrint.WriteLine(tree.Label + "");
+                _prettyPrint.WriteLine(tree.Label + "");
             }
 
             for (int i = 0; i < tree.Children.Count; i++)
@@ -87,36 +87,36 @@ namespace TreeEdit.Spg.Print
             int index ;
             if (t != null)
             {
-                if (!dic.ContainsKey(t))
+                if (!_dic.ContainsKey(t))
                 {
-                    dic.Add(t, currentIndex++);
+                    _dic.Add(t, _currentIndex++);
                 }
 
-                index = dic[t];
+                index = _dic[t];
             }
             else
             {
                 index = -1;
             }
 
-            prettyPrint.Write(indent);
+            _prettyPrint.Write(indent);
             if (last)
             {
-                prettyPrint.Write("\\-");
+                _prettyPrint.Write("\\-");
                 indent += "  ";
             }
             else
             {
-                prettyPrint.Write("|-");
+                _prettyPrint.Write("|-");
                 indent += "| ";
             }
             if (!tree.Children.Any())
             {
-                prettyPrint.WriteLine(tree.Label + "(\"" + tree + "\")" + "[" + index +"]");
+                _prettyPrint.WriteLine(tree.Label + "(\"" + tree + "\")" + "[" + index +"]");
             }
             else
             {
-                prettyPrint.WriteLine(tree.Label + "[" + index + "]");
+                _prettyPrint.WriteLine(tree.Label + "[" + index + "]");
             }
 
             for (int i = 0; i < tree.Children.Count; i++)
@@ -138,7 +138,7 @@ namespace TreeEdit.Spg.Print
             {
                 foreach (var mat in listT)
                 {
-                    indices.Add(dic[mat]);
+                    indices.Add(_dic[mat]);
                 }
             }
             else
@@ -149,24 +149,24 @@ namespace TreeEdit.Spg.Print
             string index = indices.GetRange(0, indices.Count - 1).Aggregate("", (current, s) => current + (s + ", "));
             index += indices.Last();
 
-            prettyPrint.Write(indent);
+            _prettyPrint.Write(indent);
             if (last)
             {
-                prettyPrint.Write("\\-");
+                _prettyPrint.Write("\\-");
                 indent += "  ";
             }
             else
             {
-                prettyPrint.Write("|-");
+                _prettyPrint.Write("|-");
                 indent += "| ";
             }
             if (!tree.Children.Any())
             {
-                prettyPrint.WriteLine(tree.Label + "(\"" + tree + "\")" + "[" + index + "]");
+                _prettyPrint.WriteLine(tree.Label + "(\"" + tree + "\")" + "[" + index + "]");
             }
             else
             {
-                prettyPrint.WriteLine(tree.Label + "[" + index + "]");
+                _prettyPrint.WriteLine(tree.Label + "[" + index + "]");
             }
 
             for (int i = 0; i < tree.Children.Count; i++)
@@ -175,26 +175,26 @@ namespace TreeEdit.Spg.Print
 
         public static string PrettyPrintString(ITreeNode<T> tree, string path = "out.txt")
         {
-            prettyPrint = new StreamWriter(path);
+            _prettyPrint = new StreamWriter(path);
             PrettyPrintString(tree, "", true);
-            prettyPrint.Close();
+            _prettyPrint.Close();
             string result = File.ReadAllText(path);
             return result;
         }
 
         public static Tuple<string, string> PrettyPrintString(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M, string path = "out.txt")
         {
-            currentIndex = 0;
-            dic = new Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int>();
-            prettyPrint = new StreamWriter(path);
+            _currentIndex = 0;
+            _dic = new Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int>();
+            _prettyPrint = new StreamWriter(path);
             PrettyPrintKey(t1, "", true, M);
-            prettyPrint.Close();
+            _prettyPrint.Close();
 
             string t1result = File.ReadAllText(path);
 
-            prettyPrint = new StreamWriter(path);
+            _prettyPrint = new StreamWriter(path);
             PrettyPrintValue(t2, "", true, M);
-            prettyPrint.Close();
+            _prettyPrint.Close();
 
             string t2result = File.ReadAllText(path);
 

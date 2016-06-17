@@ -42,11 +42,11 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var matches = new List<object>();
 
-                foreach (SyntaxNodeOrToken sot in spec.DisjunctiveExamples[input])
+                foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
-                    if (sot.IsToken) return null;
+                    if (sot.Value.IsToken) return null;
 
-                    var lsot = ExtractChildren(sot);
+                    var lsot = sot.Children.Select(o => o.Value).ToList();//ExtractChildren(sot);
 
                     matches.Add(lsot);
                 }

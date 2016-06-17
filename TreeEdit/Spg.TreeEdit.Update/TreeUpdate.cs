@@ -41,9 +41,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 var parent = FindNode(CurrentTree, editOperation.Parent.Value);
                 if (parent == null) parent = CurrentTree;
-                var treeNode = ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
+                var treeNode = editOperation.T1Node;//ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
 
-                treeNode.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
+                //treeNode.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
                 parent.AddChild(treeNode, editOperation.K - 1);
                 treeNode.Parent = parent;
             }
@@ -61,7 +61,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 if (parent == null) parent = CurrentTree;
                 RemoveNode(CurrentTree, editOperation.T1Node.Value);
 
-                ITreeNode<SyntaxNodeOrToken> treeNode = ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
+                ITreeNode<SyntaxNodeOrToken> treeNode = editOperation.T1Node;//ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
                 parent.AddChild(treeNode, editOperation.K - 1);
                 treeNode.Parent = parent;
             }

@@ -37,7 +37,7 @@ namespace TreeEdit.Spg.Script
                     z.AddChild(xnode, k - 1);
                     M.Add(xnode, x);
 
-                    PrintUtil<T>.PrintPretty(t1, "", true);
+                    //PrintUtil<T>.PrintPretty(t1, "", true);
                     editScript.Add(insert);
                 }
                 else //x has a partner in M
@@ -53,7 +53,7 @@ namespace TreeEdit.Spg.Script
                         M.Add(xnode, x);
                         M.Remove(w);
                         w = xnode;
-                        PrintUtil<T>.PrintPretty(t1, "", true);
+                        //PrintUtil<T>.PrintPretty(t1, "", true);
                         editScript.Add(update);
                     }
 
@@ -61,12 +61,14 @@ namespace TreeEdit.Spg.Script
                     if (z != null && M.ToList().Find(o => o.Value.Equals(y) && o.Key.Equals(v)).Key == null)
                     {
                         int k = FindPos(x, M);
-                        var move = new Move<T>(w, z, k);
+                        var znode = ConverterHelper.MakeACopy(z);
+                        var wnode = ConverterHelper.MakeACopy(w);
+                        var move = new Move<T>(wnode, znode, k);
                         move.PreviousParent = w.Parent;
                         z.AddChild(w, k - 1);
                         int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
                         v.RemoveNode(index);
-                        PrintUtil<T>.PrintPretty(t1, "", true);
+                        //PrintUtil<T>.PrintPretty(t1, "", true);
                         editScript.Add(move);
                     }
                 }
@@ -85,7 +87,7 @@ namespace TreeEdit.Spg.Script
                     var v = delete.Parent;
                     int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
                     v.RemoveNode(index);
-                    PrintUtil<T>.PrintPretty(t1, "", true);
+                    //PrintUtil<T>.PrintPretty(t1, "", true);
                     editScript.Add(delete);
                 }
             }

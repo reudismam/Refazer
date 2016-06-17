@@ -29,8 +29,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
-                    //var newScript = script.GetRange(0, 2);
-                    kMatches.Add(script);
+                    var newScript = script.GetRange(0, 4);
+                    kMatches.Add(newScript);
                 }
 
                 editsExamples[input] = kMatches;
@@ -190,10 +190,10 @@ namespace ProseSample.Substrings.Spg.Witness
                 if (ocurrences.Any())
                 {
                     kMatches.Add(ocurrences);
-                    foreach (var v in ocurrences)
-                    {
-                        PrintUtil<SyntaxNodeOrToken>.PrintPretty(v, "", true);
-                    }
+                    //foreach (var v in ocurrences)
+                    //{
+                    //    PrintUtil<SyntaxNodeOrToken>.PrintPretty(v, "", true);
+                    //}
                     kExamples[input] = kMatches;
                 }
             }

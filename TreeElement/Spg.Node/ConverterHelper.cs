@@ -43,22 +43,22 @@ namespace TreeElement.Spg.Node
             return null;
         }
 
-        public static ITreeNode<SyntaxNodeOrToken> MakeACopy(ITreeNode<SyntaxNodeOrToken> st)
+        public static ITreeNode<T> MakeACopy<T>(ITreeNode<T> st)
         {
             var list = st.Children;
             if (!list.Any())
             {
-                return new TreeNode<SyntaxNodeOrToken>(st.Value, st.Label);
+                return new TreeNode<T>(st.Value, st.Label);
             }
 
-            List<ITreeNode<SyntaxNodeOrToken>> children = new List<ITreeNode<SyntaxNodeOrToken>>();
-            foreach (ITreeNode<SyntaxNodeOrToken> sot in st.Children)
+            List<ITreeNode<T>> children = new List<ITreeNode<T>>();
+            foreach (ITreeNode<T> sot in st.Children)
             {
-                ITreeNode<SyntaxNodeOrToken> node = MakeACopy(sot);
+                ITreeNode<T> node = MakeACopy(sot);
                 children.Add(node);
             }
 
-            ITreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st.Value, st.Label, children);
+            ITreeNode<T> tree = new TreeNode<T>(st.Value, st.Label, children);
             return tree;
         }
 

@@ -49,7 +49,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var mats = new List<object>();
                 var key = input[rule.Body[0]];
                 var inpTree = WitnessFunctions.GetCurrentTree(key);
-                PrintUtil<SyntaxNodeOrToken>.PrintPretty(inpTree, "", true);
+                //PrintUtil<SyntaxNodeOrToken>.PrintPretty(inpTree, "", true);
                 foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
                 {
                     var sot = matchResult.Match.Item1;
