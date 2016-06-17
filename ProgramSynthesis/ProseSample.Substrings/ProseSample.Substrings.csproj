@@ -182,6 +182,7 @@
     <Compile Include="RegexUtils.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="Semantics.cs" />
+    <Compile Include="Spg.Bean\MatchResult.cs" />
     <Compile Include="Spg.Semantic\EditOperation.cs" />
     <Compile Include="Spg.Semantic\Match.cs" />
     <Compile Include="Spg.Witness\AST.cs" />

@@ -36,8 +36,8 @@ MatchResult match := C(node, kind, children) | Tree(kindRef) | Parent(node, kind
 MatchResult kindRef := Variable(node, kind, k) | Literal(node, tree, k);
 IEnumerable<MatchResult> children := SC(match) | CList(match, children);
 
-SyntaxNodeOrToken ast:= Node(kind, childrenNodes) | Const(tree) | Ref(node, match);
-IEnumerable<SyntaxNodeOrToken> childrenNodes := SN(ast) | NList(ast, childrenNodes);
+Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(node, match);
+IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 
 @feature[Score=KindScore] SyntaxKind kind;                     @input SyntaxNodeOrToken n;
 @feature[Score=KDScore] string id;                             @feature[Score=KScore] int k;

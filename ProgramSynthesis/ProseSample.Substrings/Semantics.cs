@@ -152,7 +152,7 @@ namespace ProseSample.Substrings
         /// <param name="mresult">Matching result</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, MatchResult mresult, SyntaxNodeOrToken ast, int k)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, MatchResult mresult, Node ast, int k)
         {
             return EditOperation.Insert(node, mresult, ast, k);
         }
@@ -170,7 +170,7 @@ namespace ProseSample.Substrings
             return EditOperation.Move(node, parent, from, k);
         }
 
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, SyntaxNodeOrToken to)
+        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, Node to)
         {
             return EditOperation.Update(node, from, to);
         }
@@ -269,9 +269,21 @@ namespace ProseSample.Substrings
         /// <param name="kind">Returned node SyntaxKind</param>
         /// <param name="childrenNodes">Children nodes</param>
         /// <returns>A new node with kind and child</returns>
-        public static SyntaxNodeOrToken Node(SyntaxKind kind, IEnumerable<SyntaxNodeOrToken> childrenNodes)
+        public static Node Node(SyntaxKind kind, IEnumerable<Node> childrenNodes)
         {
-            var node = GetSyntaxElement(kind, childrenNodes.ToList());
+            var childrenList = (List<Node>) childrenNodes;
+
+            if (!childrenList.Any()) return null;
+
+            var parent = childrenNodes.First().Value.Parent;
+
+            for (int i = 0; i < childrenList.Count(); i++)
+            {
+                var child = childrenList.ElementAt(i).Value;
+                parent.AddChild(child, i);
+            }
+
+            var node = new Node(parent);
             return node;
         }
 
@@ -280,9 +292,13 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="cst">Constant</param>
         /// <returns>A new constant node.</returns>
-        public static SyntaxNodeOrToken Const(SyntaxNodeOrToken cst)
+        public static Node Const(SyntaxNodeOrToken cst)
         {
-            return cst;
+            var parent = new TreeNode<SyntaxNodeOrToken>(cst.Parent, new TLabel(cst.Parent.Kind()));
+            var itreeNode = new TreeNode<SyntaxNodeOrToken>(cst, new TLabel(cst.Kind()));
+            itreeNode.Parent = parent;
+            var node = new Node(itreeNode);
+            return node;
         }
 
         /// <summary>
@@ -291,9 +307,11 @@ namespace ProseSample.Substrings
         /// <param name="node">Node</param>
         /// <param name="result">Result of the pattern</param>
         /// <returns>Result of the pattern</returns>
-        public static SyntaxNodeOrToken Ref(SyntaxNodeOrToken node, MatchResult result)
+        public static Node Ref(SyntaxNodeOrToken node, MatchResult result)
         {
-            return result.Match.Item1.Value;
+            var itreeNode = result.Match.Item1;
+            var nnode = new Node(itreeNode);
+            return nnode;
         }
 
         public static IEnumerable<MatchResult> CList(MatchResult child1, IEnumerable<MatchResult> cList)
@@ -316,14 +334,14 @@ namespace ProseSample.Substrings
             return GList<Pattern>.Single(child);
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> NList(SyntaxNodeOrToken child1, IEnumerable<SyntaxNodeOrToken> cList)
+        public static IEnumerable<Node> NList(Node child1, IEnumerable<Node> cList)
         {
-            return GList<SyntaxNodeOrToken>.List(child1, cList);
+            return GList<Node>.List(child1, cList);
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> SN(SyntaxNodeOrToken child)
+        public static IEnumerable<Node> SN(Node child)
         {
-            return GList<SyntaxNodeOrToken>.Single(child);
+            return GList<Node>.Single(child);
         }
 
         public static IEnumerable<SyntaxNodeOrToken> EList(SyntaxNodeOrToken child1, IEnumerable<SyntaxNodeOrToken> cList)
@@ -356,54 +374,53 @@ namespace ProseSample.Substrings
 
         public static SyntaxNodeOrToken Transformation(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
         {
-            //var afterNodeList = new List<SyntaxNodeOrToken>();
-            //var beforeNodeList = new List<SyntaxNodeOrToken>();
-            //var list = loop.ToList();
-            //foreach (var snode in list)
-            //{
-            //    afterNodeList.AddRange(MappingRegions[snode]);
-            //    beforeNodeList.AddRange(BeforeAfterMapping[snode]);
-            //}
+            var afterNodeList = new List<SyntaxNodeOrToken>();
+            var beforeNodeList = new List<SyntaxNodeOrToken>();
+            var list = loop.ToList();
+            foreach (var snode in list)
+            {
+                afterNodeList.AddRange(MappingRegions[snode]);
+                beforeNodeList.AddRange(BeforeAfterMapping[snode]);
+            }
 
-            //var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
-            //var traversalNodes = treeNode.DescendantNodesAndSelf();
-            //var traversalIndices = new List<int>();
+            var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
+            var traversalNodes = treeNode.DescendantNodesAndSelf();
+            var traversalIndices = new List<int>();
 
-            //for (int i = 0; i < traversalNodes.Count; i++)
-            //{
-            //    var snode = traversalNodes[i];
-            //    foreach (var v in beforeNodeList)
-            //    {
-            //        if (snode.Value.Equals(v))
-            //        {
-            //            traversalIndices.Add(i);
-            //        }
-            //    }
-            //}
+            for (int i = 0; i < traversalNodes.Count; i++)
+            {
+                var snode = traversalNodes[i];
+                foreach (var v in beforeNodeList)
+                {
+                    if (snode.Value.Equals(v))
+                    {
+                        traversalIndices.Add(i);
+                    }
+                }
+            }
 
 
-            //foreach (var index in traversalIndices)
-            //{
-            //    treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
-            //    traversalNodes = treeNode.DescendantNodesAndSelf();
-            //    var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(), new List<SyntaxAnnotation> { new SyntaxAnnotation($"ANN{index}") });
-            //    node = ann.Visit(node.AsNode());
-            //}
+            foreach (var index in traversalIndices)
+            {
+                treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
+                traversalNodes = treeNode.DescendantNodesAndSelf();
+                var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(), new List<SyntaxAnnotation> { new SyntaxAnnotation($"ANN{index}") });
+                node = ann.Visit(node.AsNode());
+            }
 
-            //for (int i = 0; i < traversalIndices.Count; i++)
-            //{
-            //    var index = traversalIndices[i];
-            //    var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
-            //    if (snode.Any())
-            //    {
-            //        var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
-            //        node = rewriter.Visit(node.AsNode());
-            //    }
-            //}
+            for (int i = 0; i < traversalIndices.Count; i++)
+            {
+                var index = traversalIndices[i];
+                var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
+                if (snode.Any())
+                {
+                    var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
+                    node = rewriter.Visit(node.AsNode());
+                }
+            }
 
-            //var stringNode = node.ToFullString();
-            //return node;
-            return null;
+            var stringNode = node.ToFullString();
+            return node;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern pattern)

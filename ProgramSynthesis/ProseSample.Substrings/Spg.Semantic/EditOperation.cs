@@ -17,13 +17,13 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="mresult">Matching result</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, MatchResult mresult, SyntaxNodeOrToken ast, int k)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, MatchResult mresult, Node ast, int k)
         {
             TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
             var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
-            var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
-
+            //var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
+            var child = ast.Value;
 
             var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
             update.ProcessEditOperation(insert);
@@ -56,12 +56,12 @@ namespace ProseSample.Substrings.Spg.Semantic
             return update.CurrentTree.Value;
         }
 
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, SyntaxNodeOrToken to)
+        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, Node to)
         {
             TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
             var fromTreeNode = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
-            var toTreeNode = ConverterHelper.ConvertCSharpToTreeNode(to);
+            var toTreeNode = to.Value;//ConverterHelper.ConvertCSharpToTreeNode(to);
 
             var updateEdit = new Update<SyntaxNodeOrToken>(fromTreeNode, toTreeNode, null);
             update.ProcessEditOperation(updateEdit);
