@@ -7,15 +7,8 @@ using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Semantic
 {
-    public class Match
-    {
-        /// <summary>
-        /// Match function. This function matches the first element on the tree that has the specified kind and child nodes.
-        /// </summary>
-        /// <param name="node">Node</param>
-        /// <param name="kind">Syntax kind</param>
-        /// <param name="children">Children nodes</param>
-        /// <returns> Returns the first element on the tree that has the specified kind and child nodes.</returns>
+    public class SemanticMatch
+    {   
         public static MatchResult C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
         {
             var currentTree = Semantics.GetCurrentTree(node);
