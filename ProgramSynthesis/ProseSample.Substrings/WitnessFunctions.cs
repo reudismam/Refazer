@@ -36,19 +36,19 @@ namespace ProseSample.Substrings
             return Literal.LiteralTree(rule, parameter, spec);
         }
 
-        /// <summary>
-        /// Literal witness function for parameter tree.
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <param name="treeBinding">TreeBinding</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Literal", 2, DependsOnParameters = new []{1})]
-        public static DisjunctiveExamplesSpec LiteralK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec treeBinding)
-        {
-            return Literal.LiteralK(rule, parameter, spec, treeBinding);
-        }
+        ///// <summary>
+        ///// Literal witness function for parameter tree.
+        ///// </summary>
+        ///// <param name="rule">Literal rule</param>
+        ///// <param name="parameter">Parameter number</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <param name="treeBinding">TreeBinding</param>
+        ///// <returns>Disjunctive example specification</returns>
+        //[WitnessFunction("Literal", 2, DependsOnParameters = new []{1})]
+        //public static DisjunctiveExamplesSpec LiteralK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec treeBinding)
+        //{
+        //    return Literal.LiteralK(rule, parameter, spec, treeBinding);
+        //}
 
         /// <summary>
         /// Tree witness function for parameter tree.
@@ -76,19 +76,19 @@ namespace ProseSample.Substrings
             return Variable.VariableKind(rule, parameter, spec);
         }
 
-        /// <summary>
-        /// KindRef witness function for parameter k.
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <param name="kindBinding">kind binding</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Variable", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec VariableK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
-        {
-            return Variable.VariableK(rule, parameter, spec, kindBinding);
-        }
+        ///// <summary>
+        ///// KindRef witness function for parameter k.
+        ///// </summary>
+        ///// <param name="rule">Literal rule</param>
+        ///// <param name="parameter">Parameter number</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <param name="kindBinding">kind binding</param>
+        ///// <returns>Disjunctive example specification</returns>
+        //[WitnessFunction("Variable", 2, DependsOnParameters = new[] { 1 })]
+        //public static DisjunctiveExamplesSpec VariableK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        //{
+        //    return Variable.VariableK(rule, parameter, spec, kindBinding);
+        //}
 
         /// <summary>
         /// Parent witness function for parameter kindRef
@@ -392,6 +392,18 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             return Match.CChildren(rule, parameter, spec, kind);
+        }
+
+        [WitnessFunction("Match", 1)]
+        public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return Match.MatchPattern(rule, parameter, spec);
+        }
+
+        [WitnessFunction("Match", 2, DependsOnParameters = new[] { 1 })]
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        {
+            return Match.MatchK(rule, parameter, spec, kind);
         }
 
         /// <summary>

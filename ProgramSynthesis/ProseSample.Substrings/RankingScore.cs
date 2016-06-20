@@ -84,7 +84,7 @@ namespace ProseSample.Substrings
         public static double Score_Ref(double inScore, double matchScore) => matchScore;
 
         [FeatureCalculator("Variable")]
-        public static double Score_Variable(double inScore, double kindScore, double kScore) => kindScore;
+        public static double Score_Variable(double inScore, double kindScore) => kindScore;
 
         [FeatureCalculator("Abstract")]
         public static double Score_Abstract(double kindScore) => kindScore;
@@ -105,10 +105,13 @@ namespace ProseSample.Substrings
         public static double Score_P(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Literal")]
-        public static double Score_Literal(double inScore, double treeScore, double kind) => treeScore;
+        public static double Score_Literal(double inScore, double treeScore) => treeScore;
 
         [FeatureCalculator("C")]
         public static double Score_C1(double inScore, double kindScore, double expression1Score) => kindScore + expression1Score;
+
+        [FeatureCalculator("Match")]
+        public static double Score_Match(double inScore, double patternScore, double kScore) => patternScore + kScore;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KScore(int k) => k >= 0 ? 1.0 / (k + 1.0) : 1.0 / (-k + 1.1);

@@ -37,6 +37,11 @@ namespace ProseSample.Substrings
             return SemanticMatch.C(node, kind, children);
         }
 
+        public static Pattern Match(SyntaxNodeOrToken node, Pattern pattern, int k)
+        {
+            return SemanticMatch.Match(node, pattern, k);
+        }
+
         /// <summary>
         /// Matches the element on the tree with specified kind and child nodes.
         /// </summary>
@@ -104,7 +109,7 @@ namespace ProseSample.Substrings
         /// <param name="lookFor">Value</param>
         /// <param name="k">Index</param>
         /// <returns>Literal</returns>
-        public static Pattern Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor, int k)
+        public static Pattern Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor)
         {
             var currentTree = GetCurrentTree(node);
             var matches = MatchManager.ConcreteMatches(currentTree, lookFor);
@@ -186,7 +191,7 @@ namespace ProseSample.Substrings
         /// <param name="kind">Kind</param>
         /// <param name="k">Occurrence index</param>
         /// <returns>Search result</returns>
-        public static Pattern Variable(SyntaxNodeOrToken node, SyntaxKind kind, int k)
+        public static Pattern Variable(SyntaxNodeOrToken node, SyntaxKind kind)
         {
             var currentTree = GetCurrentTree(node);
 

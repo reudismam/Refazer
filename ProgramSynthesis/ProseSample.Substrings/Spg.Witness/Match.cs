@@ -44,7 +44,6 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(kdExamples);
         }
 
-
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
@@ -103,8 +102,45 @@ namespace ProseSample.Substrings.Spg.Witness
             return lsot;
         }
 
-        
 
+        public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var eExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+                {
+                    var sot = matchResult.Match.Item1;
+                    if (sot.Value.IsToken) return null;
 
+                    var key = input[rule.Body[0]];
+                    var currentTree = WitnessFunctions.GetCurrentTree(key);
+                    var snode = TreeUpdate.FindNode(currentTree, sot.Value);
+                    if (snode == null || !snode.Children.Any()) return null;
+
+                    var lsot = ExtractChildren(snode);
+
+                    var childList = new List<MatchResult>();
+                    foreach (var item in lsot)
+                    {
+                        var binding = matchResult.Match.Item2;
+                        binding.bindings.Add(item.Value);
+
+                        MatchResult m = new MatchResult(Tuple.Create(item, binding));
+                        childList.Add(m);
+                    }
+
+                    matches.Add(childList);
+                }
+                eExamples[input] = matches;
+            }
+            return DisjunctiveExamplesSpec.From(eExamples);
+        }
+
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

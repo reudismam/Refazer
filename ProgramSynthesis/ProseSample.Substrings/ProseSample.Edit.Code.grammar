@@ -32,8 +32,9 @@ SyntaxNodeOrToken script := Script(node, edits);
 IEnumerable<SyntaxNodeOrToken> edits := SE(edit) | EList(edit, edits);
 SyntaxNodeOrToken edit := Insert(node, match, ast, k) | Update(node, match, ast) | Move(node, match, match, k) | Delete(node, match);
 
+Pattern binding := Match(node, match, k);
 Pattern match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
-Pattern kindRef := Variable(node, kind, k) | Literal(node, tree, k);
+Pattern kindRef := Variable(node, kind) | Literal(node, tree);
 IEnumerable<Pattern> children := SC(match) | CList(match, children);
 
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(node, match);

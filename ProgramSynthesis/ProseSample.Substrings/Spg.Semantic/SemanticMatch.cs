@@ -53,5 +53,10 @@ namespace ProseSample.Substrings.Spg.Semantic
             }
             return null;
         }
+
+        public static Pattern Match(SyntaxNodeOrToken node, Pattern pattern, int i)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
