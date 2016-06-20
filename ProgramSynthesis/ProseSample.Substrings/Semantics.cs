@@ -480,6 +480,24 @@ namespace ProseSample.Substrings
             return res;
         }
 
+        public static IEnumerable<SyntaxNodeOrToken> Traversal(SyntaxNodeOrToken node)
+        {
+            var currentTree = GetCurrentTree(node);
+
+            var children = node.GetDiagnostics();
+
+            //var res = new List<SyntaxNodeOrToken>();
+            //if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
+            //{
+            //    var list = FlorestByKind(pattern, currentTree);
+
+            //    if (list.Any()) res = CreateRegions(list);
+            //}
+            //res = SingleLocations(res);
+            //return res;
+            return null;
+        }
+
         private static List<SyntaxNodeOrToken> SingleLocations(List<SyntaxNodeOrToken> res)
         {
             var list = new List<SyntaxNodeOrToken>();

@@ -386,7 +386,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Script", 1)]
-        public static DisjunctiveExamplesSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Transformation.ScriptEdits(rule, parameter, spec);
         }
@@ -552,6 +552,12 @@ namespace ProseSample.Substrings
         public static SubsequenceSpec NodesMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             return Map.NodesMap(rule, parameter, spec);
+        }
+
+        [WitnessFunction("EditMap", 1)]
+        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        {
+            return Map.EditMap(rule, parameter, spec);
         }
 
         public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)

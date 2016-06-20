@@ -28,6 +28,25 @@ namespace ProseSample.Substrings.Spg.Witness
             return new SubsequenceSpec(linesExamples);
         }
 
+
+        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        {
+            //var linesExamples = new Dictionary<State, IEnumerable<object>>();
+            //foreach (State input in spec.ProvidedInputs)
+            //{
+            //    var nodePrefix = spec.Examples[input].Cast<SyntaxNodeOrToken>();
+            //    var tuple = (SyntaxNodeOrToken)input.Bindings.First().Value;
+
+            //    var inpMapping = GetPair(tuple, nodePrefix);
+
+            //    var linesContainingSelection = inpMapping;
+
+            //    linesExamples[input] = linesContainingSelection;
+            //}
+            //return new SubsequenceSpec(linesExamples);
+            return null;
+        }
+
         /// <summary>
         /// Get the previous version of the transformed node on the input
         /// </summary>

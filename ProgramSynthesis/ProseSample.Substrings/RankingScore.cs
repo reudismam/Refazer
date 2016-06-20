@@ -11,11 +11,20 @@ namespace ProseSample.Substrings
         [FeatureCalculator("NodesMap")]
         public static double Score_NodesMap( double scriptScore, double editScore) =>  scriptScore + editScore;
 
+        [FeatureCalculator("EditMap")]
+        public static double Score_EditMap(double scriptScore, double editScore) => scriptScore + editScore;
+
+        [FeatureCalculator("Traversal")]
+        public static double Score_Traversal(double scriptScore, double editScore) => scriptScore + editScore;
+
         [FeatureCalculator("Stts")]
         public static double Score_Stts(double predScore, double splitScore) => predScore + splitScore;
 
         [FeatureCalculator("Breaks")]
         public static double Score_Breaks(double predScore, double splitScore) => predScore + splitScore;
+
+        [FeatureCalculator("TargetNodes")]
+        public static double Score_TargetNodes(double predScore, double splitScore) => predScore + splitScore;
 
         [FeatureCalculator("FTrue")]
         public static double Score_FTrue() => 1.1;

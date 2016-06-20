@@ -25,11 +25,10 @@ IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: Synt
 Boolean pred := FTrue();
 IEnumerable<SyntaxNodeOrToken> regions := Template(n, pattern);
 
-Pattern pattern:= P(kind, pchildren) | Abstract(kind) | Concrete(tree);
-IEnumerable<Pattern> pchildren := SP(pattern) | PList(pattern, pchildren);
-
 SyntaxNodeOrToken script := Script(node, edits);
-IEnumerable<SyntaxNodeOrToken> edits := SE(edit) | EList(edit, edits);
+IEnumerable<SyntaxNodeOrToken> edits := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
+IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(pred, fnodes) = Filter(\x: SyntaxNodeOrToken => pred, fnodes);
+IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(node);
 
 SyntaxNodeOrToken edit := ParentNode(node, match, operation) | Delete(node, match);
 SyntaxNodeOrToken operation := Insert(node, ast, k) | Update(node, ast) | Move(node, match, k);
@@ -37,6 +36,9 @@ SyntaxNodeOrToken operation := Insert(node, ast, k) | Update(node, ast) | Move(n
 Pattern match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
 Pattern kindRef := Variable(node, kind) | Literal(node, tree);
 IEnumerable<Pattern> children := SC(match) | CList(match, children);
+
+Pattern pattern:= P(kind, pchildren) | Abstract(kind) | Concrete(tree);
+IEnumerable<Pattern> pchildren := SP(pattern) | PList(pattern, pchildren);
 
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(node, match);
 IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
