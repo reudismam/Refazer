@@ -179,7 +179,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         treePattern.AddChild(region, i);
                     }
 
-                    TreeUpdate treeUp = new TreeUpdate(tree);
+                    TreeUpdate treeUp = new TreeUpdate(ConverterHelper.MakeACopy(tree));
                     WitnessFunctions.TreeUpdateDictionary.Add(cc, treeUp);
                     WitnessFunctions.CurrentTrees[cc] = tree;
 
@@ -192,6 +192,12 @@ namespace ProseSample.Substrings.Spg.Witness
                     kExamples[input] = kMatches;
                 }
             }
+
+            //foreach(var v in WitnessFunctions.TreeUpdateDictionary)
+            //{
+            //    var inputState = State.Create(grammar.InputSymbol, examplesInput.ElementAt(i));
+            //    ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+            //}
 
             return DisjunctiveExamplesSpec.From(kExamples);
         }

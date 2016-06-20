@@ -17,20 +17,21 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="mresult">Matching result</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, MatchResult mresult, Node ast, int k)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, Pattern mresult, Node ast, int k)
         {
             TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
-            var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
-            //var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
-            var child = ast.Value;
+            //var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
+            ////var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
+            //var child = ast.Value;
 
-            var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
-            update.ProcessEditOperation(insert);
+            //var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
+            //update.ProcessEditOperation(insert);
 
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            //return update.CurrentTree.Value;
+            return null;
         }
 
         /// <summary>
@@ -41,48 +42,51 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="parent">Parent</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, MatchResult parent, MatchResult from, int k)
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, Pattern parent, Pattern from, int k)
         {
-            TreeUpdate update = Semantics.TreeUpdateDictionary[node];
+            //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
-            var parentNode = ConverterHelper.ConvertCSharpToTreeNode(parent.Match.Item1.Value);
-            var child = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
+            //var parentNode = ConverterHelper.ConvertCSharpToTreeNode(parent.Match.Item1.Value);
+            //var child = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
 
-            var move = new Move<SyntaxNodeOrToken>(child, parentNode, k);
-            update.ProcessEditOperation(move);
+            //var move = new Move<SyntaxNodeOrToken>(child, parentNode, k);
+            //update.ProcessEditOperation(move);
 
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            //return update.CurrentTree.Value;
+            return null;
         }
 
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, Node to)
+        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, Pattern from, Node to)
         {
-            TreeUpdate update = Semantics.TreeUpdateDictionary[node];
+            //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
-            var fromTreeNode = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
-            var toTreeNode = to.Value;//ConverterHelper.ConvertCSharpToTreeNode(to);
+            //var fromTreeNode = ConverterHelper.ConvertCSharpToTreeNode(from.Match.Item1.Value);
+            //var toTreeNode = to.Value;//ConverterHelper.ConvertCSharpToTreeNode(to);
 
-            var updateEdit = new Update<SyntaxNodeOrToken>(fromTreeNode, toTreeNode, null);
-            update.ProcessEditOperation(updateEdit);
+            //var updateEdit = new Update<SyntaxNodeOrToken>(fromTreeNode, toTreeNode, null);
+            //update.ProcessEditOperation(updateEdit);
 
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            //return update.CurrentTree.Value;
+            return null;
         }
 
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, MatchResult delete)
+        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, Pattern delete)
         {
-            TreeUpdate update = Semantics.TreeUpdateDictionary[node];
+            //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
-            var t1Node = ConverterHelper.ConvertCSharpToTreeNode(delete.Match.Item1.Value);
+            //var t1Node = ConverterHelper.ConvertCSharpToTreeNode(delete.Match.Item1.Value);
 
-            var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
-            update.ProcessEditOperation(updateEdit);
+            //var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
+            //update.ProcessEditOperation(updateEdit);
 
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            //return update.CurrentTree.Value;
+            return null;
         }
     }
 }

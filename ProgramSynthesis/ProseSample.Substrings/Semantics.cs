@@ -32,7 +32,7 @@ namespace ProseSample.Substrings
         /// <param name="kind">Syntax kind</param>
         /// <param name="children">Children nodes</param>
         /// <returns>The element on the tree with specified kind and child nodes</returns>
-        public static MatchResult C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<MatchResult> children)
+        public static Pattern C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<Pattern> children)
         {
             return SemanticMatch.C(node, kind, children);
         }
@@ -104,18 +104,18 @@ namespace ProseSample.Substrings
         /// <param name="lookFor">Value</param>
         /// <param name="k">Index</param>
         /// <returns>Literal</returns>
-        public static MatchResult Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor, int k)
+        public static Pattern Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor, int k)
         {
             var currentTree = GetCurrentTree(node);
             var matches = MatchManager.ConcreteMatches(currentTree, lookFor);
-            if (matches.Count >= k)
-            {
-                var item = matches.ElementAt(k - 1);
-                var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
-                MatchResult matchResult = new MatchResult(match);
-                matchResult.Type = MatchResult.Literal;
-                return matchResult;
-            }
+            //if (matches.Count >= k)
+            //{
+            //    var item = matches.ElementAt(k - 1);
+            //    var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
+            //    MatchResult matchResult = new MatchResult(match);
+            //    matchResult.Type = MatchResult.Literal;
+            //    return matchResult;
+            //}
 
             return null;
         }
@@ -128,7 +128,7 @@ namespace ProseSample.Substrings
         /// <param name="mresult">Matching result</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, MatchResult mresult, Node newNode, int k)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, Pattern mresult, Node newNode, int k)
         {
             return EditOperation.Insert(node, mresult, newNode, k);
         }
@@ -141,7 +141,7 @@ namespace ProseSample.Substrings
         /// <param name="parent">Parent</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, MatchResult parent, MatchResult from, int k)
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, Pattern parent, Pattern from, int k)
         {
             return EditOperation.Move(node, parent, from, k);
         }
@@ -153,7 +153,7 @@ namespace ProseSample.Substrings
         /// <param name="from">Updated node</param>
         /// <param name="to">New value</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, MatchResult from, Node to)
+        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, Pattern from, Node to)
         {
             return EditOperation.Update(node, from, to);
         }
@@ -164,7 +164,7 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="delete">Deleted node</param>
         /// <returns>Result of the edit opration</returns>
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, MatchResult delete)
+        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, Pattern delete)
         {
             return EditOperation.Delete(node, delete);
         }
@@ -174,7 +174,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="variable">Result of a match result</param>
         /// <returns></returns>
-        public static MatchResult Tree(MatchResult variable)
+        public static Pattern Tree(Pattern variable)
         {
             return variable;
         }
@@ -186,28 +186,29 @@ namespace ProseSample.Substrings
         /// <param name="kind">Kind</param>
         /// <param name="k">Occurrence index</param>
         /// <returns>Search result</returns>
-        public static MatchResult Variable(SyntaxNodeOrToken node, SyntaxKind kind, int k)
+        public static Pattern Variable(SyntaxNodeOrToken node, SyntaxKind kind, int k)
         {
             var currentTree = GetCurrentTree(node);
 
             var matches = SplitToNodes(currentTree, kind);
 
-            if (matches.Any())
-            {
-                var child = matches.ElementAt(k - 1);
-                var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
-                result.Type = MatchResult.Variable;
-                return result;
-            }
+            //if (matches.Any())
+            //{
+            //    var child = matches.ElementAt(k - 1);
+            //    var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
+            //    result.Type = MatchResult.Variable;
+            //    return result;
+            //}
             return null;
         }
 
-        public static MatchResult Parent(SyntaxNodeOrToken node, MatchResult variable, int k)
+        public static Pattern Parent(SyntaxNodeOrToken node, Pattern variable, int k)
         {
             var currentTree = GetCurrentTree(node);
-            var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value).Children.ElementAt(k - 1);
-            var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
-            return result;
+            //var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value).Children.ElementAt(k - 1);
+            //var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
+            //return result;
+            return null;
         }
 
         public static MatchResult RightChild(SyntaxNodeOrToken node, MatchResult variable)
@@ -308,21 +309,22 @@ namespace ProseSample.Substrings
         /// <param name="node">Node</param>
         /// <param name="result">Result of the pattern</param>
         /// <returns>Result of the pattern</returns>
-        public static Node Ref(SyntaxNodeOrToken node, MatchResult result)
+        public static Node Ref(SyntaxNodeOrToken node, Pattern result)
         {
-            var itreeNode = result.Match.Item1;
-            var nnode = new Node(itreeNode);
-            return nnode;
+            //var itreeNode = result.Match.Item1;
+            //var nnode = new Node(itreeNode);
+            //return nnode;
+            return null;
         }
 
-        public static IEnumerable<MatchResult> CList(MatchResult child1, IEnumerable<MatchResult> cList)
+        public static IEnumerable<Pattern> CList(Pattern child1, IEnumerable<Pattern> cList)
         {
-            return GList<MatchResult>.List(child1, cList);
+            return GList<Pattern>.List(child1, cList);
         }
 
-        public static IEnumerable<MatchResult> SC(MatchResult child)
+        public static IEnumerable<Pattern> SC(Pattern child)
         {
-            return GList<MatchResult>.Single(child);
+            return GList<Pattern>.Single(child);
         }
 
         public static IEnumerable<Pattern> PList(Pattern child1, IEnumerable<Pattern> cList)
