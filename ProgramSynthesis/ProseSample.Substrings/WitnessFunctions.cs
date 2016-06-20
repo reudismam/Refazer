@@ -36,20 +36,6 @@ namespace ProseSample.Substrings
             return Literal.LiteralTree(rule, parameter, spec);
         }
 
-        ///// <summary>
-        ///// Literal witness function for parameter tree.
-        ///// </summary>
-        ///// <param name="rule">Literal rule</param>
-        ///// <param name="parameter">Parameter number</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <param name="treeBinding">TreeBinding</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("Literal", 2, DependsOnParameters = new []{1})]
-        //public static DisjunctiveExamplesSpec LiteralK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec treeBinding)
-        //{
-        //    return Literal.LiteralK(rule, parameter, spec, treeBinding);
-        //}
-
         /// <summary>
         /// Tree witness function for parameter tree.
         /// </summary>
@@ -75,20 +61,6 @@ namespace ProseSample.Substrings
         {
             return Variable.VariableKind(rule, parameter, spec);
         }
-
-        ///// <summary>
-        ///// KindRef witness function for parameter k.
-        ///// </summary>
-        ///// <param name="rule">Literal rule</param>
-        ///// <param name="parameter">Parameter number</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <param name="kindBinding">kind binding</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("Variable", 2, DependsOnParameters = new[] { 1 })]
-        //public static DisjunctiveExamplesSpec VariableK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
-        //{
-        //    return Variable.VariableK(rule, parameter, spec, kindBinding);
-        //}
 
         /// <summary>
         /// Parent witness function for parameter kindRef
@@ -460,22 +432,8 @@ namespace ProseSample.Substrings
         [WitnessFunction("Update", 1)]
         public static DisjunctiveExamplesSpec UpdateFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return EditOperation.UpdateFrom(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// Witness function for parater k in the insert operator
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
-        /// <param name="spec">Examples specification</param>
-        /// <param name="fromBinding">Learned examples for k</param>
-        /// <returns></returns>
-        [WitnessFunction("Update", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec UpdateTo(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec fromBinding)
-        {
-            return EditOperation.UpdateTo(rule, parameter, spec, fromBinding);
-        }
+            return EditOperation.UpdateTo(rule, parameter, spec);
+        }  
 
         /// <summary>
         /// Witness function for parater k in the insert operator
@@ -487,7 +445,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Move", 1)]
         public static DisjunctiveExamplesSpec MoveFrom(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return EditOperation.MoveFrom(rule, parameter, spec);
+            return EditOperation.MoveTo(rule, parameter, spec);
         }
 
         /// <summary>
@@ -500,22 +458,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Move", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec MoveTo(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return EditOperation.MoveTo(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// Witness function for parater k in the insert operator
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
-        /// <param name="spec">Examples specification</param>
-        /// <param name="kBinding">Learned examples for k</param>
-        /// <param name="parentBinding">Learned examples for parent</param>
-        /// <returns></returns>
-        [WitnessFunction("Move", 3, DependsOnParameters = new[] { 1, 2 })]
-        public static DisjunctiveExamplesSpec MoveK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding, ExampleSpec parentBinding)
-        {
-            return EditOperation.MoveK(rule, parameter, spec, kBinding, parentBinding);
+            return EditOperation.MoveK(rule, parameter, spec);
         }
 
         /// <summary>
@@ -528,7 +471,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Insert", 1)]
         public static DisjunctiveExamplesSpec InsertParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return EditOperation.InsertParent(rule, parameter, spec);
+            return EditOperation.InsertAST(rule, parameter, spec);
         }
 
         /// <summary>
@@ -542,24 +485,23 @@ namespace ProseSample.Substrings
         [WitnessFunction("Insert", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec InsertAST(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding)
         {
-            return EditOperation.InsertAST(rule, parameter, spec, kBinding);
+            return EditOperation.InsertK(rule, parameter, spec, kBinding);
         }
 
-        /// <summary>
-        /// Witness function for parater k in the insert operator
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
-        /// <param name="spec">Examples specification</param>
-        /// <param name="kBinding">Learned examples for k</param>
-        /// <param name="parentBinding">Learned examples for parent</param>
-        /// <returns></returns>
-        [WitnessFunction("Insert", 3, DependsOnParameters = new[] { 1, 2 })]
-        public static DisjunctiveExamplesSpec InsertK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding, ExampleSpec parentBinding)
+
+        [WitnessFunction("ParentNode", 1)]
+        public static DisjunctiveExamplesSpec ParentNodeParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return EditOperation.InsertK(rule, parameter, spec, kBinding, parentBinding);
+            return EditOperation.InsertParent(rule, parameter, spec);
         }
 
+
+        [WitnessFunction("ParentNode", 2, DependsOnParameters = new[] { 1 })]
+        public static DisjunctiveExamplesSpec ParentNodeOperation(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding)
+        {
+            return spec;
+        }
+        
         /// <summary>
         /// Node witness function for expression parameter with one child
         /// </summary>

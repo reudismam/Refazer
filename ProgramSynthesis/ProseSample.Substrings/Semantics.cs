@@ -125,6 +125,12 @@ namespace ProseSample.Substrings
             return null;
         }
 
+        public static SyntaxNodeOrToken ParentNode(SyntaxNodeOrToken node, Pattern mresult, SyntaxNodeOrToken edit)
+        {
+            //return EditOperation.Insert(node, /*mresult,*/ newNode, k);
+            return null;
+        }
+
         /// <summary>
         /// Insert the newNode node as in the k position of the node in the matching result 
         /// </summary>
@@ -133,9 +139,9 @@ namespace ProseSample.Substrings
         /// <param name="mresult">Matching result</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, Pattern mresult, Node newNode, int k)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, /*Pattern mresult,*/ Node newNode, int k)
         {
-            return EditOperation.Insert(node, mresult, newNode, k);
+            return EditOperation.Insert(node, /*mresult,*/ newNode, k);
         }
 
         /// <summary>
@@ -146,9 +152,9 @@ namespace ProseSample.Substrings
         /// <param name="parent">Parent</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, Pattern parent, Pattern from, int k)
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, Pattern from, int k)
         {
-            return EditOperation.Move(node, parent, from, k);
+            return EditOperation.Move(node, /*parent,*/ from, k);
         }
 
         /// <summary>
@@ -158,9 +164,9 @@ namespace ProseSample.Substrings
         /// <param name="from">Updated node</param>
         /// <param name="to">New value</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, Pattern from, Node to)
+        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, /*Pattern from,*/ Node to)
         {
-            return EditOperation.Update(node, from, to);
+            return EditOperation.Update(node, /*from,*/ to);
         }
 
         /// <summary>

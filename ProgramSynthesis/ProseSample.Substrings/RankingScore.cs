@@ -59,14 +59,17 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Loop")]
         public static double Score_Loop(double inScore, double breaks) => inScore + breaks;
 
+        [FeatureCalculator("ParentNode")]
+        public static double Score_ParentNode(double inScore, double expressionScore, double astScore) => inScore + expressionScore + astScore;
+
         [FeatureCalculator("Insert")]
-        public static double Score_Insert(double inScore, double expressionScore, double astScore, double kScore) => inScore + expressionScore + astScore + kScore;
+        public static double Score_Insert(double inScore, double astScore, double kScore) => inScore + astScore + kScore;
 
         [FeatureCalculator("Move")]
-        public static double Score_Move(double inScore, double fromScore, double toScore, double kScore) => inScore + kScore + fromScore + toScore;
+        public static double Score_Move(double inScore, double toScore, double kScore) => inScore + kScore + toScore;
 
         [FeatureCalculator("Update")]
-        public static double Score_Update(double inScore, double fromScore, double toScore) => inScore + fromScore + toScore;
+        public static double Score_Update(double inScore, double toScore) => inScore + toScore;
 
         [FeatureCalculator("Delete")]
         public static double Score_Delete(double inScore, double fromScore) => inScore + fromScore;

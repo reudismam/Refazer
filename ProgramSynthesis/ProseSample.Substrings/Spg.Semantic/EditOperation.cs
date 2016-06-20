@@ -17,9 +17,9 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="mresult">Matching result</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, Pattern mresult, Node ast, int k)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, /*Pattern mresult,*/ Node ast, int k)
         {
-            TreeUpdate update = Semantics.TreeUpdateDictionary[node];
+            //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
             //var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
             ////var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
@@ -42,7 +42,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="parent">Parent</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, Pattern parent, Pattern from, int k)
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, /*Pattern parent,*/ Pattern from, int k)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
@@ -58,7 +58,7 @@ namespace ProseSample.Substrings.Spg.Semantic
             return null;
         }
 
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, Pattern from, Node to)
+        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, /*Pattern from,*/ Node to)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
@@ -74,7 +74,7 @@ namespace ProseSample.Substrings.Spg.Semantic
             return null;
         }
 
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, Pattern delete)
+        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node,  Pattern delete)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 

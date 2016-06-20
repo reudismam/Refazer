@@ -55,12 +55,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     var sot = matchResult.Match.Item1;
                     if (sot.Value.IsToken) return null;
 
-                    var key = input[rule.Body[0]];
-                    var currentTree = WitnessFunctions.GetCurrentTree(key);
-                    var snode = TreeUpdate.FindNode(currentTree, sot.Value);
-                    if (snode == null || !snode.Children.Any()) return null;
+                    if (!sot.Children.Any()) return null;
+                    if (!sot.Children.Any()) return null;
 
-                    var lsot = ExtractChildren(snode);
+                    var lsot = ExtractChildren(sot);
 
                     var childList = new List<MatchResult>();
                     foreach (var item in lsot)
@@ -102,7 +100,6 @@ namespace ProseSample.Substrings.Spg.Witness
             return lsot;
         }
 
-
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
@@ -114,12 +111,9 @@ namespace ProseSample.Substrings.Spg.Witness
                     var sot = matchResult.Match.Item1;
                     if (sot.Value.IsToken) return null;
 
-                    var key = input[rule.Body[0]];
-                    var currentTree = WitnessFunctions.GetCurrentTree(key);
-                    var snode = TreeUpdate.FindNode(currentTree, sot.Value);
-                    if (snode == null || !snode.Children.Any()) return null;
+                    if (!sot.Children.Any()) return null;
 
-                    var lsot = ExtractChildren(snode);
+                    var lsot = ExtractChildren(sot);
 
                     var childList = new List<MatchResult>();
                     foreach (var item in lsot)

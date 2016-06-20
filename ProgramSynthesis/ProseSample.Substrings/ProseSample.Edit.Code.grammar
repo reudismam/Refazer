@@ -30,9 +30,10 @@ IEnumerable<Pattern> pchildren := SP(pattern) | PList(pattern, pchildren);
 
 SyntaxNodeOrToken script := Script(node, edits);
 IEnumerable<SyntaxNodeOrToken> edits := SE(edit) | EList(edit, edits);
-SyntaxNodeOrToken edit := Insert(node, match, ast, k) | Update(node, match, ast) | Move(node, match, match, k) | Delete(node, match);
 
-Pattern binding := Match(node, match, k);
+SyntaxNodeOrToken edit := ParentNode(node, match, operation) | Delete(node, match);
+SyntaxNodeOrToken operation := Insert(node, ast, k) | Update(node, ast) | Move(node, match, k);
+
 Pattern match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
 Pattern kindRef := Variable(node, kind) | Literal(node, tree);
 IEnumerable<Pattern> children := SC(match) | CList(match, children);
