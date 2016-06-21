@@ -548,11 +548,11 @@ namespace ProseSample.Substrings
             return AST.Ref(rule, parameter, spec);
         }
 
-        [WitnessFunction("NodesMap", 1)]
-        public static SubsequenceSpec NodesMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
-        {
-            return Map.NodesMap(rule, parameter, spec);
-        }
+        //[WitnessFunction("NodesMap", 1)]
+        //public static SubsequenceSpec NodesMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        //{
+        //    return Map.NodesMap(rule, parameter, spec);
+        //}
 
         [WitnessFunction("EditMap", 1)]
         public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)

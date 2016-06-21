@@ -138,6 +138,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         public static SubsequenceSpec Loop(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
+            //todo REFACTOR loop method
             var kExamples = new Dictionary<State, IEnumerable<object>>();
 
             foreach (State input in spec.ProvidedInputs)
@@ -167,15 +168,16 @@ namespace ProseSample.Substrings.Spg.Witness
                         tree.AddChild(r, i);
                     }
 
-                    TreeUpdate treeUp = new TreeUpdate(ConverterHelper.MakeACopy(tree));
-                    WitnessFunctions.TreeUpdateDictionary.Add(cc, treeUp);
-                    WitnessFunctions.CurrentTrees[cc] = tree;
+                    var copy = ConverterHelper.MakeACopy(tree);
+                    TreeUpdate treeUp = new TreeUpdate(copy);
+                    WitnessFunctions.TreeUpdateDictionary.Add(copy, treeUp);
+                    WitnessFunctions.CurrentTrees[copy] = tree;
 
                     ocurrences.Add(tree);
                 }
                 if (ocurrences.Any())
                 {
-                    kMatches.Add(ocurrences);
+                    kMatches.AddRange(ocurrences);
                     kExamples[input] = kMatches;
                 }
             }
@@ -185,48 +187,53 @@ namespace ProseSample.Substrings.Spg.Witness
         public static ExampleSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             //Load grammar
-            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            //var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                foreach (List<ITreeNode<SyntaxNodeOrToken>> cc in spec.Examples[input])
+                var kMatches = new List<ITreeNode<SyntaxNodeOrToken>>();
+                foreach (ITreeNode<SyntaxNodeOrToken> cc in spec.Examples[input])
                 {
-                    foreach (var s in cc)
-                    {
-                        var state = State.Create(new Symbol(grammar, s.GetType(), "node"), s);
-                        kExamples.Add(state, s);
-                    }
+                    kMatches.Add(cc);
+                    //foreach (var s in cc)
+                    //{                
+                    //    //todo REFACTOR remove MatchResult from the code.
+                    //    var result = new MatchResult(Tuple.Create(s, new Bindings(new List<SyntaxNodeOrToken> {})));
+                    //    var state = State.Create(new Symbol(grammar, result.GetType(), "snode"), result);
+                    //    kExamples.Add(state, result);
                 }
+                kExamples[input] = kMatches;
+                //}
             }
 
             return new ExampleSpec(kExamples);
         }
 
-        public static Grammar LoadGrammar(string grammarFile, params string[] prerequisiteGrammars)
-        {
-            foreach (string prerequisite in prerequisiteGrammars)
-            {
-                var buildResult = DSLCompiler.Compile(prerequisite, $"{prerequisite}.xml");
-                if (buildResult.HasErrors)
-                {
-                    //WriteColored(ConsoleColor.Magenta, buildResult.TraceDiagnostics);
-                    return null;
-                }
-            }
+        //public static Grammar LoadGrammar(string grammarFile, params string[] prerequisiteGrammars)
+        //{
+        //    foreach (string prerequisite in prerequisiteGrammars)
+        //    {
+        //        var buildResult = DSLCompiler.Compile(prerequisite, $"{prerequisite}.xml");
+        //        if (buildResult.HasErrors)
+        //        {
+        //            //WriteColored(ConsoleColor.Magenta, buildResult.TraceDiagnostics);
+        //            return null;
+        //        }
+        //    }
 
-            var compilationResult = DSLCompiler.LoadGrammarFromFile(grammarFile);
-            if (compilationResult.HasErrors)
-            {
-                //WriteColored(ConsoleColor.Magenta, compilationResult.TraceDiagnostics);
-                return null;
-            }
-            if (compilationResult.Diagnostics.Count > 0)
-            {
-                //WriteColored(ConsoleColor.Yellow, compilationResult.TraceDiagnostics);
-            }
+        //    var compilationResult = DSLCompiler.LoadGrammarFromFile(grammarFile);
+        //    if (compilationResult.HasErrors)
+        //    {
+        //        //WriteColored(ConsoleColor.Magenta, compilationResult.TraceDiagnostics);
+        //        return null;
+        //    }
+        //    if (compilationResult.Diagnostics.Count > 0)
+        //    {
+        //        //WriteColored(ConsoleColor.Yellow, compilationResult.TraceDiagnostics);
+        //    }
 
-            return compilationResult.Value;
-        }
+        //    return compilationResult.Value;
+        //}
 
         /// <summary>
         /// Compute the edition script
