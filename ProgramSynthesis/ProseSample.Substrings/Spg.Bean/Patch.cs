@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace ProseSample.Substrings.Spg.Bean
+namespace ProseSample.Substrings
 {
     public class Patch
     {
-        public List<List<SyntaxNodeOrToken>> Edits { get; set; }
+        public IEnumerable<IEnumerable<SyntaxNodeOrToken>> Edits { get; set; }
 
-
-        public Patch(List<List<SyntaxNodeOrToken>> edits)
+        public Patch(IEnumerable<IEnumerable<SyntaxNodeOrToken>> edits)
         {
             Edits = edits;
         }

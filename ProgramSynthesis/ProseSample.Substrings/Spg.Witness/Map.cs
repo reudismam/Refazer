@@ -7,6 +7,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Script;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -30,15 +31,15 @@ namespace ProseSample.Substrings.Spg.Witness
         //}
 
 
-        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var editExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<SyntaxNodeOrToken>();
-                foreach (List<Edit<SyntaxNodeOrToken>> editList in spec.Examples[input])
+                var kMatches = new List<ITreeNode<SyntaxNodeOrToken>>();
+                foreach (Edit<SyntaxNodeOrToken> editList in spec.DisjunctiveExamples[input])
                 {
-                    kMatches.AddRange(editList.Select(o => o.EditOperation.Parent.Value));
+                    kMatches.Add(editList.EditOperation.Parent);
                 }
                 editExamples[input] = kMatches.Select(o => (object) o).ToList();
             }

@@ -21,7 +21,7 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Transformation
     {
-        public static SubsequenceSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var editsExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -36,7 +36,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                 editsExamples[input] = kMatches;
             }
-            return new SubsequenceSpec(editsExamples);
+            return DisjunctiveExamplesSpec.From(editsExamples);
         }
 
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)

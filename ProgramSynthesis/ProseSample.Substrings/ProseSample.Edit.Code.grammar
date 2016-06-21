@@ -27,7 +27,7 @@ bool pred := FTrue();
 IEnumerable<SyntaxNodeOrToken> regions := Template(n, pattern);
 
 SyntaxNodeOrToken script := Script(node, patch);
-IEnumerable<SyntaxNodeOrToken> := SE(editList)
+Patch patch := SE(editList) | EList(editList, patch);
 
 IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
 IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(mm, fnodes) = Filter(\e: SyntaxNodeOrToken => mm, fnodes);

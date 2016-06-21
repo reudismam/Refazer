@@ -262,7 +262,7 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="editOperations">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> editOperations)
+        public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, Patch patch)
         {
             var current = GetCurrentTree(node);
 
@@ -358,14 +358,18 @@ namespace ProseSample.Substrings
             return GList<Node>.Single(child);
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> EList(SyntaxNodeOrToken child1, IEnumerable<SyntaxNodeOrToken> cList)
+        public static Patch EList(IEnumerable<SyntaxNodeOrToken> child1, Patch cList)
         {
-            return GList<SyntaxNodeOrToken>.List(child1, cList);
+            var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.List(child1, cList.Edits);
+            var patch = new Patch(editList.ToList());
+            return patch;
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> SE(SyntaxNodeOrToken child)
+        public static Patch SE(IEnumerable<SyntaxNodeOrToken> child)
         {
-            return GList<SyntaxNodeOrToken>.Single(child);
+            var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.Single(child);
+            var patch = new Patch(editList);
+            return patch;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -286,6 +289,32 @@ namespace ProseSample.Substrings
             return GList<Edit<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
         }
 
+        private static List<List<Edit<SyntaxNodeOrToken>>> EditList(ExampleSpec spec)
+        {
+            var editOperations = new List<List<Edit<SyntaxNodeOrToken>>>();
+
+            foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples.Values.First())
+            {
+                for (int i = 0; i < script.Count; i++)
+                {
+                    editOperations.Add(new List<Edit<SyntaxNodeOrToken>>());
+                }
+            }
+
+            foreach (State input in spec.ProvidedInputs)
+            {
+                
+                foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
+                {
+                    for (int i = 0; i < script.Count(); i++)
+                    {
+                        editOperations.ElementAt(i).Add(script[i]);
+                    }
+                }
+            }
+            return editOperations;
+        }
+
         /// <summary>
         /// C witness function for kind parameter with one child
         /// </summary>
@@ -386,7 +415,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Script", 1)]
-        public static SubsequenceSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Transformation.ScriptEdits(rule, parameter, spec);
         }
@@ -555,16 +584,22 @@ namespace ProseSample.Substrings
         //}
 
         [WitnessFunction("EditMap", 1)]
-        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Map.EditMap(rule, parameter, spec);
         }
 
         [WitnessFunction("MM", 1)]
-        public static DisjunctiveExamplesSpec MMMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static ExampleSpec MMMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            //return Map.EditMap(rule, parameter, spec);
-            return null;
+            var editExamples = new Dictionary<State, object>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var inpTree = (ITreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                editExamples[input] = new MatchResult(Tuple.Create(inpTree, new Bindings(new List<SyntaxNodeOrToken> {})));
+            }
+
+            return new ExampleSpec(editExamples);
         }
 
         public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
