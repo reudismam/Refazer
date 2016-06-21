@@ -465,6 +465,12 @@ namespace ProseSample.Substrings
             return traversalIndices;
         }
 
+        public static bool MM(SyntaxNodeOrToken x, Pattern template)
+        {
+            x.AsNode();
+            return false;
+        }
+
         public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern pattern)
         {
             var currentTree = GetCurrentTree(node);

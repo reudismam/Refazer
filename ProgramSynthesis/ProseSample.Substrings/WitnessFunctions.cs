@@ -560,6 +560,13 @@ namespace ProseSample.Substrings
             return Map.EditMap(rule, parameter, spec);
         }
 
+        [WitnessFunction("MM", 1)]
+        public static DisjunctiveExamplesSpec MMMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            //return Map.EditMap(rule, parameter, spec);
+            return null;
+        }
+
         public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
         {
             var node = CurrentTrees[n];

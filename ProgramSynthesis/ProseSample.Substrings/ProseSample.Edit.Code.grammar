@@ -21,13 +21,17 @@ feature double Score = RankingScore;
 
 @start SyntaxNodeOrToken trans := Transformation(n, loop);
 IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
-IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions);
-Boolean pred := FTrue();
+IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions); 
+bool pred := FTrue();
+
 IEnumerable<SyntaxNodeOrToken> regions := Template(n, pattern);
 
-SyntaxNodeOrToken script := Script(node, edits);
-IEnumerable<SyntaxNodeOrToken> edits := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
-IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(pred, fnodes) = Filter(\x: SyntaxNodeOrToken => pred, fnodes);
+SyntaxNodeOrToken script := Script(node, patch);
+IEnumerable<SyntaxNodeOrToken> := SE(editList)
+
+IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
+IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(mm, fnodes) = Filter(\e: SyntaxNodeOrToken => mm, fnodes);
+bool mm := MM(e, match);
 IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(node);
 
 SyntaxNodeOrToken edit := ParentNode(node, match, operation) | Delete(node, match);
