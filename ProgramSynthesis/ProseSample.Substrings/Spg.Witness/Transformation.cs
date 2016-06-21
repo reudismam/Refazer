@@ -29,8 +29,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
                 {
-                    //var newScript = script.GetRange(0, 5);
-                    var newScript = script;
+                    var newScript = script.GetRange(5, 1);
+                    //var newScript = script;
                     kMatches.Add(newScript);
                 }
 
@@ -155,7 +155,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var regions = FindRegion(ccs, inpTree);
 
                     var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
-                    cc.First().EditOperation.Parent = tree;
+                    cc.First().EditOperation.Parent = ConverterHelper.MakeACopy(tree);
 
                     for (int i = 0; i < regions.Count; i++)
                     {

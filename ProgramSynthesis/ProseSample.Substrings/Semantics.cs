@@ -8,6 +8,7 @@ using ProseSample.Substrings.List;
 using ProseSample.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
+using TreeElement;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
@@ -492,20 +493,11 @@ namespace ProseSample.Substrings
 
         public static IEnumerable<SyntaxNodeOrToken> Traversal(SyntaxNodeOrToken node)
         {
-            var currentTree = GetCurrentTree(node);
+            var traversal = new TreeTraversal<SyntaxNodeOrToken>();
+            var itreenode = ConverterHelper.ConvertCSharpToTreeNode(node);
+            var nodes = traversal.PostOrderTraversal(itreenode).Select(o => o.Value).ToList();
 
-            var children = node.GetDiagnostics();
-
-            //var res = new List<SyntaxNodeOrToken>();
-            //if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
-            //{
-            //    var list = FlorestByKind(pattern, currentTree);
-
-            //    if (list.Any()) res = CreateRegions(list);
-            //}
-            //res = SingleLocations(res);
-            //return res;
-            return null;
+            return nodes;
         }
 
         private static List<SyntaxNodeOrToken> SingleLocations(List<SyntaxNodeOrToken> res)

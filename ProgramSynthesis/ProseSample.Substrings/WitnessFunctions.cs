@@ -258,9 +258,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("EList", 0)]
-        public static DisjunctiveExamplesSpec WitnessEList1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec WitnessEList1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<Edit<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
+            return GList<Edit<SyntaxNodeOrToken>>.List0Sequence(rule, parameter, spec);
         }
 
         /// <summary>
@@ -271,9 +271,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("EList", 1)]
-        public static DisjunctiveExamplesSpec WitnessEList2(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec WitnessEList2(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<Edit<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
+            return GList<Edit<SyntaxNodeOrToken>>.List1Sequence(rule, parameter, spec);
         }
 
         /// <summary>
@@ -284,9 +284,9 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("SE", 0)]
-        public static DisjunctiveExamplesSpec WitnessSeChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec WitnessSeChild1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<Edit<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
+            return GList<Edit<SyntaxNodeOrToken>>.SingleSequence(rule, parameter, spec);
         }
 
         private static List<List<Edit<SyntaxNodeOrToken>>> EditList(ExampleSpec spec)
@@ -521,7 +521,8 @@ namespace ProseSample.Substrings
         [WitnessFunction("ParentNode", 1)]
         public static DisjunctiveExamplesSpec ParentNodeParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return EditOperation.InsertParent(rule, parameter, spec);
+            //return EditOperation.InsertParent(rule, parameter, spec);
+            return null;
         }
 
 
@@ -583,8 +584,14 @@ namespace ProseSample.Substrings
         //    return Map.NodesMap(rule, parameter, spec);
         //}
 
+        //[WitnessFunction("EditMap", 0)]
+        //public static SubsequenceSpec EditMap0(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        //{
+        //    return Map.EditMap(rule, parameter, spec);
+        //}
+
         [WitnessFunction("EditMap", 1)]
-        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             return Map.EditMap(rule, parameter, spec);
         }
@@ -595,8 +602,8 @@ namespace ProseSample.Substrings
             var editExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = (ITreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                editExamples[input] = new MatchResult(Tuple.Create(inpTree, new Bindings(new List<SyntaxNodeOrToken> {})));
+                var inpTree = (Edit<SyntaxNodeOrToken>)input[rule.Body[0]];
+                editExamples[input] = new MatchResult(Tuple.Create(inpTree.EditOperation.Parent, new Bindings(new List<SyntaxNodeOrToken> {})));
             }
 
             return new ExampleSpec(editExamples);

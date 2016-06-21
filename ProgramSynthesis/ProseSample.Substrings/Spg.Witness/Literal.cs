@@ -63,10 +63,11 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     if (!matches.Any()) return null;
 
-                    literalExamples.Add(matches.First());
+                    //literalExamples.Add(matches.First());
+                    literalExamples.Add(sot);
 
                     var first = (ITreeNode<SyntaxNodeOrToken>)literalExamples.First();
-                    if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(matches.First(), first)) return null;
+                    if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(sot, first)) return null;
                 }
 
                 var examples = (from ITreeNode<SyntaxNodeOrToken> v in literalExamples.GetRange(0, 1) select v.Value).Cast<object>().ToList();

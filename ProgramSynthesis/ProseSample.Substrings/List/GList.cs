@@ -65,6 +65,62 @@ namespace ProseSample.Substrings.List
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
+        public static SubsequenceSpec List0Sequence(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (List<T> matchResult in spec.DisjunctiveExamples[input])
+                {
+                    if (!matchResult.Any()) return null;
+                    if (matchResult.Count == 1) return null;
+
+                    matches.Add(matchResult.First());
+                }
+                treeExamples[input] = matches;
+            }
+            return new SubsequenceSpec(treeExamples);
+        }
+
+
+        public static SubsequenceSpec List1Sequence(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (List<T> matchResult in spec.DisjunctiveExamples[input])
+                {
+                    if (!matchResult.Any()) return null;
+                    if (matchResult.Count == 1) return null;
+
+                    matchResult.RemoveAt(0);
+                    matches.Add(matchResult);
+                }
+                treeExamples[input] = matches;
+            }
+            return new SubsequenceSpec(treeExamples);
+        }
+
+        public static SubsequenceSpec SingleSequence(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (List<T> matchResult in spec.DisjunctiveExamples[input])
+                {
+                    if (!matchResult.Any()) return null;
+                    if (matchResult.Count != 1) return null;
+
+                    matches.Add(matchResult.First());
+                }
+                treeExamples[input] = matches;
+            }
+            return new SubsequenceSpec(treeExamples);
+        }
+
         public static IEnumerable<T> List(T child, IEnumerable<T> clist)
         {
             var list = clist.ToList();

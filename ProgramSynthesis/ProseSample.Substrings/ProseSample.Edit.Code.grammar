@@ -26,16 +26,16 @@ bool pred := FTrue();
 
 IEnumerable<SyntaxNodeOrToken> regions := Template(n, pattern);
 
-SyntaxNodeOrToken script := Script(node, patch);
+SyntaxNodeOrToken script := Script(n, patch);
 Patch patch := SE(editList) | EList(editList, patch);
 
 IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
 IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(mm, fnodes) = Filter(\e: SyntaxNodeOrToken => mm, fnodes);
 bool mm := MM(e, match);
-IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(node);
+IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(n);
 
-SyntaxNodeOrToken edit := ParentNode(node, match, operation) | Delete(node, match);
-SyntaxNodeOrToken operation := Insert(node, ast, k) | Update(node, ast) | Move(node, match, k);
+SyntaxNodeOrToken edit := ParentNode(target, match, operation) | Delete(target, match);
+SyntaxNodeOrToken operation := Insert(target, ast, k) | Update(target, ast) | Move(target, match, k);
 
 Pattern match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
 Pattern kindRef := Variable(node, kind) | Literal(node, tree);

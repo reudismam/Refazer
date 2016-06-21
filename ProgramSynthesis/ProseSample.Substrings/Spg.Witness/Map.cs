@@ -31,15 +31,15 @@ namespace ProseSample.Substrings.Spg.Witness
         //}
 
 
-        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             var editExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<ITreeNode<SyntaxNodeOrToken>>();
-                foreach (Edit<SyntaxNodeOrToken> editList in spec.DisjunctiveExamples[input])
+                var kMatches = new List<Edit<SyntaxNodeOrToken>>();
+                foreach (Edit<SyntaxNodeOrToken> editList in spec.Examples[input])
                 {
-                    kMatches.Add(editList.EditOperation.Parent);
+                    kMatches.Add(editList);
                 }
                 editExamples[input] = kMatches.Select(o => (object) o).ToList();
             }
