@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
+using Microsoft.ProgramSynthesis.Compiler;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Clustering;
@@ -140,20 +142,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = spec.Examples[input].Cast<List<Edit<SyntaxNodeOrToken>>>().Cast<object>().ToList();
-
-                kExamples[input] = kMatches;
-            }
-            return new SubsequenceSpec(kExamples);
-        }
-
-        public static DisjunctiveExamplesSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
                 var kMatches = new List<object>();
-                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                var inpTree = (SyntaxNodeOrToken)input[rule.Grammar.InputSymbol];
                 var ocurrences = new List<ITreeNode<SyntaxNodeOrToken>>();
                 foreach (List<Edit<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
@@ -164,7 +154,6 @@ namespace ProseSample.Substrings.Spg.Witness
                     var regions = FindRegion(ccs, inpTree);
 
                     var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
-                    var treePattern = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
                     cc.First().EditOperation.Parent = tree;
 
                     for (int i = 0; i < regions.Count; i++)
@@ -176,30 +165,67 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                         var r = ConverterHelper.ConvertCSharpToTreeNode(region.Value);
                         tree.AddChild(r, i);
-                        treePattern.AddChild(region, i);
                     }
 
                     TreeUpdate treeUp = new TreeUpdate(ConverterHelper.MakeACopy(tree));
                     WitnessFunctions.TreeUpdateDictionary.Add(cc, treeUp);
                     WitnessFunctions.CurrentTrees[cc] = tree;
 
-                    ocurrences.Add(treePattern);
+                    ocurrences.Add(tree);
                 }
-
                 if (ocurrences.Any())
                 {
                     kMatches.Add(ocurrences);
                     kExamples[input] = kMatches;
                 }
             }
+            return new SubsequenceSpec(kExamples);
+        }
 
-            //foreach(var v in WitnessFunctions.TreeUpdateDictionary)
-            //{
-            //    var inputState = State.Create(grammar.InputSymbol, examplesInput.ElementAt(i));
-            //    ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-            //}
+        public static ExampleSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        {
+            //Load grammar
+            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            var kExamples = new Dictionary<State, object>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                foreach (List<ITreeNode<SyntaxNodeOrToken>> cc in spec.Examples[input])
+                {
+                    foreach (var s in cc)
+                    {
+                        var state = State.Create(new Symbol(grammar, s.GetType(), "node"), s);
+                        kExamples.Add(state, s);
+                    }
+                }
+            }
 
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return new ExampleSpec(kExamples);
+        }
+
+        public static Grammar LoadGrammar(string grammarFile, params string[] prerequisiteGrammars)
+        {
+            foreach (string prerequisite in prerequisiteGrammars)
+            {
+                var buildResult = DSLCompiler.Compile(prerequisite, $"{prerequisite}.xml");
+                if (buildResult.HasErrors)
+                {
+                    //WriteColored(ConsoleColor.Magenta, buildResult.TraceDiagnostics);
+                    return null;
+                }
+            }
+
+            var compilationResult = DSLCompiler.LoadGrammarFromFile(grammarFile);
+            if (compilationResult.HasErrors)
+            {
+                //WriteColored(ConsoleColor.Magenta, compilationResult.TraceDiagnostics);
+                return null;
+            }
+            if (compilationResult.Diagnostics.Count > 0)
+            {
+                //WriteColored(ConsoleColor.Yellow, compilationResult.TraceDiagnostics);
+            }
+
+            return compilationResult.Value;
         }
 
         /// <summary>

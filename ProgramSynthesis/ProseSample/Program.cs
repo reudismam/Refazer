@@ -6,8 +6,8 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
-using static ProseSample.Utils;
 using Microsoft.CodeAnalysis.CSharp;
+using static ProseSample.Utils;
 using Microsoft.CodeAnalysis;
 
 namespace ProseSample

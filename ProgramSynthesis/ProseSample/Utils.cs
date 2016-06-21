@@ -14,7 +14,7 @@ using Microsoft.ProgramSynthesis.VersionSpace;
 
 namespace ProseSample
 {
-    internal static class Utils
+    static class Utils
     {
         public static Grammar LoadGrammar(string grammarFile, params string[] prerequisiteGrammars)
         {
