@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -6,6 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeElement.Spg.Node;
 
@@ -38,6 +40,26 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var edits = (List<Edit<SyntaxNodeOrToken>>) spec.Examples[input];
                 editExamples[input] = edits.Select(e => e.EditOperation.Parent).ToList();
+
+                foreach (var edit in edits)
+                {
+                    //var key = input[rule.Body[0]];
+                    var treeUp = WitnessFunctions.TreeUpdateDictionary[edit.EditOperation.Parent];
+                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
+                    treeUp.ProcessEditOperation(edit.EditOperation);
+                    
+
+                    var modifieds = WitnessFunctions.TreeUpdateDictionary.Where(o => o.Value == treeUp);
+                    foreach (var v in modifieds)
+                    {
+                        WitnessFunctions.CurrentTrees[v.Key] = previousTree;
+                    }
+
+                    Console.WriteLine("PREVIOUS TREE\n\n");
+                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
+                    Console.WriteLine("UPDATED TREE\n\n");
+                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
+                }
             }
             return new SubsequenceSpec(editExamples);
         }
