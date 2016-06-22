@@ -36,12 +36,8 @@ namespace ProseSample.Substrings.Spg.Witness
             var editExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (Edit<SyntaxNodeOrToken> editList in spec.Examples[input])
-                {
-                    kMatches.Add(editList);
-                }
-                editExamples[input] = kMatches.Select(o => (object) o).ToList();
+                var edits = (List<Edit<SyntaxNodeOrToken>>) spec.Examples[input];
+                editExamples[input] = edits.Select(e => e.EditOperation.Parent).ToList();
             }
             return new SubsequenceSpec(editExamples);
         }

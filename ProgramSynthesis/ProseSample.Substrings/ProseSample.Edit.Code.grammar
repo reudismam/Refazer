@@ -19,23 +19,17 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
-@start SyntaxNodeOrToken trans := Transformation(n, loop);
-IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
-IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions); 
-bool pred := FTrue();
-
-IEnumerable<SyntaxNodeOrToken> regions := Template(n, pattern);
-
-SyntaxNodeOrToken script := Script(n, patch);
+@start SyntaxNodeOrToken script := Script(node, patch);
 Patch patch := SE(editList) | EList(editList, patch);
 
-IEnumerable<SyntaxNodeOrToken> editList := EditMap(operation, tnodes) = Map(\target: SyntaxNodeOrToken => operation, tnodes);
+IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
 IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(pred, fnodes) = Filter(\e: SyntaxNodeOrToken => pred, fnodes);
 bool mm := MM(e, match);
-IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(n);
+bool pred := FTrue();
+IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(node, id);
 
-SyntaxNodeOrToken edit := ParentNode(target, match, operation) | Delete(target, match);
-SyntaxNodeOrToken operation := Insert(target, ast, k) | Update(target, ast) | Move(target, match, k);
+SyntaxNodeOrToken edit := ParentNode(node, match, operation) | Delete(node, match);
+SyntaxNodeOrToken operation := Insert(node, ast, k) | Update(node, ast) | Move(node, match, k);
 
 Pattern match := C(node, kind, children) | Tree(kindRef) | Parent(node, kindRef, k);
 Pattern kindRef := Variable(node, kind) | Literal(node, tree);
@@ -47,6 +41,6 @@ IEnumerable<Pattern> pchildren := SP(pattern) | PList(pattern, pchildren);
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(node, match);
 IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 
-@feature[Score=KindScore] SyntaxKind kind;                     @input SyntaxNodeOrToken n;
+@feature[Score=KindScore] SyntaxKind kind;                     @input SyntaxNodeOrToken node;
 @feature[Score=KDScore] string id;                             @feature[Score=KScore] int k;
 @feature[Score=NodeScore] SyntaxNodeOrToken tree;

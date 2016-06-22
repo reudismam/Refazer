@@ -114,7 +114,7 @@ namespace ProseSample.Substrings.List
                     if (!matchResult.Any()) return null;
                     if (matchResult.Count != 1) return null;
 
-                    matches.Add(matchResult.First());
+                    matches.Add(matchResult);
                 }
                 treeExamples[input] = matches;
             }

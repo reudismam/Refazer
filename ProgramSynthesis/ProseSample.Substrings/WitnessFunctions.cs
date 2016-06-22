@@ -260,7 +260,21 @@ namespace ProseSample.Substrings
         [WitnessFunction("EList", 0)]
         public static SubsequenceSpec WitnessEList1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<Edit<SyntaxNodeOrToken>>.List0Sequence(rule, parameter, spec);
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (Patch patch in spec.DisjunctiveExamples[input])
+                {
+                    var matchResult = patch.Edits;
+                    if (!matchResult.Any()) return null;
+                    if (matchResult.Count == 1) return null;
+
+                    matches.Add(matchResult.First());
+                }
+                treeExamples[input] = matches;
+            }
+            return new SubsequenceSpec(treeExamples);
         }
 
         /// <summary>
@@ -273,7 +287,22 @@ namespace ProseSample.Substrings
         [WitnessFunction("EList", 1)]
         public static SubsequenceSpec WitnessEList2(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<Edit<SyntaxNodeOrToken>>.List1Sequence(rule, parameter, spec);
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<object>();
+                foreach (Patch patch in spec.DisjunctiveExamples[input])
+                {
+                    var matchResult = patch.Edits;
+                    if (!matchResult.Any()) return null;
+                    if (matchResult.Count == 1) return null;
+
+                    matchResult.RemoveAt(0);
+                    matches.Add(matchResult);
+                }
+                treeExamples[input] = matches;
+            }
+            return new SubsequenceSpec(treeExamples);
         }
 
         /// <summary>
@@ -286,7 +315,21 @@ namespace ProseSample.Substrings
         [WitnessFunction("SE", 0)]
         public static SubsequenceSpec WitnessSeChild1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<Edit<SyntaxNodeOrToken>>.SingleSequence(rule, parameter, spec);
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var matches = new List<Edit<SyntaxNodeOrToken>>();
+                foreach (Patch patch in spec.DisjunctiveExamples[input])
+                {
+                    var matchResult = patch.Edits;
+                    if (!matchResult.Any()) return null;
+                    if (matchResult.Count != 1) return null;
+
+                    matches = matchResult.First();
+                }
+                treeExamples[input] = matches;
+            }
+            return new SubsequenceSpec(treeExamples);
         }
 
         private static List<List<Edit<SyntaxNodeOrToken>>> EditList(ExampleSpec spec)
@@ -438,6 +481,17 @@ namespace ProseSample.Substrings
             return Transformation.TemplateTemplate(rule, parameter, spec);
         }
 
+        [WitnessFunction("Traversal", 1)]
+        public static DisjunctiveExamplesSpec TemplateTraversal(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                treeExamples[input] = new List<string> {"PostOrder"};
+            }
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
         /// <summary>
         /// Witness function for parater k in the insert operator
         /// </summary>
@@ -521,8 +575,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("ParentNode", 1)]
         public static DisjunctiveExamplesSpec ParentNodeParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            //return EditOperation.InsertParent(rule, parameter, spec);
-            return null;
+            return EditOperation.InsertParent(rule, parameter, spec);
         }
 
 

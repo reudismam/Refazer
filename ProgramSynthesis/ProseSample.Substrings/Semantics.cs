@@ -361,16 +361,18 @@ namespace ProseSample.Substrings
 
         public static Patch EList(IEnumerable<SyntaxNodeOrToken> child1, Patch cList)
         {
-            var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.List(child1, cList.Edits);
-            var patch = new Patch(editList.ToList());
-            return patch;
+            //var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.List(child1, cList.Edits);
+            //var patch = new Patch(editList.ToList());
+            //return patch;
+            return null;
         }
 
         public static Patch SE(IEnumerable<SyntaxNodeOrToken> child)
         {
-            var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.Single(child);
-            var patch = new Patch(editList);
-            return patch;
+            //var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.Single(child);
+            //var patch = new Patch(editList);
+            //return patch;
+            return null;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
@@ -491,11 +493,11 @@ namespace ProseSample.Substrings
             return res;
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> Traversal(SyntaxNodeOrToken node)
+        public static IEnumerable<SyntaxNodeOrToken> Traversal(SyntaxNodeOrToken node, string type)
         {
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = ConverterHelper.ConvertCSharpToTreeNode(node);
-            var nodes = traversal.PostOrderTraversal(itreenode).Select(o => o.Value).ToList();
+            var nodes = traversal.PostOrderTraversal(itreenode).Select(o => o.Value);
 
             return nodes;
         }
