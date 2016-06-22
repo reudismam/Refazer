@@ -187,16 +187,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DirectedGraph\DirectedGraph\DirectedGraph.csproj">
-      <Project>{e4bcc550-8993-4d14-b2dc-b6d778a025fc}</Project>
-      <Name>DirectedGraph</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExampleRefactoring\ExampleRefactoring.csproj">
-      <Project>{6060b3c1-8b16-47ae-a7a5-b34eb1c170ad}</Project>
-      <Name>ExampleRefactoring</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
       <VersionMajor>2</VersionMajor>

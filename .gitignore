@@ -1,45 +1,15 @@
-ExampleRefactoring/bin/*
-ExampleRefactoring/obj/*
-CodeRefactoringCS/bin/*
-CodeRefactoringCS/obj/*
+ExampleRefactoring/*
+NUnitTests/*
+LocationCodeRefactoring/*
+DirectedGraph/*
+NUnitTests/*
+IntelliExtract/*
+IntelliLocation/*
+IntelliMeta/*
+LocateAdornment/*
+Refactor/*
+IntelliUndo/*
 
-NUnitTests/bin/*
-NUnitTests/obj/*
-
-
-LocationCodeRefactoring/bin/*
-LocationCodeRefactoring/obj/*
-
-DirectedGraph/Backup/*
-DirectedGraph/DirectedGraph.sln.ide/*
-DirectedGraph/Test/*
-
-NUnitTests/bin/*
-NUnitTests/obj/*
-
-IntelliExtract/bin/*
-IntelliExtract/obj/*
-
-IntelliLocation/bin/*
-IntelliLocation/obj/*
-
-IntelliMeta/bin/*
-IntelliMeta/obj/*
-
-LocateAdornment/bin/*
-LocateAdornment/obj/*
-
-Refactor/bin/*
-Refactor/obj/*
-
-IntelliUndo/bin/*
-IntelliUndo/obj/*
-
-CompileChecker/bin/*
-CompileChecker/obj/*
-
-ASTBuilder/bin/*
-ASTBuilder/obj/*
 
 ProgramSynthesis/ProseSample.Substrings/bin/*
 ProgramSynthesis/ProseSample.Substrings/obj/*
@@ -63,9 +33,6 @@ TreeEdit/obj/*
 TestResults/*
 
 packages/*
-
-DirectedGraph/DirectedGraph/bin/*
-DirectedGraph/DirectedGraph/obj/*
 
 IntelliMeta.sln.ide/*
 

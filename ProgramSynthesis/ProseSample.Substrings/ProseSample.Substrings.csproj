@@ -215,10 +215,6 @@
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ExampleRefactoring\ExampleRefactoring.csproj">
-      <Project>{6060b3c1-8b16-47ae-a7a5-b34eb1c170ad}</Project>
-      <Name>ExampleRefactoring</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\LongestCommonAncestor\LongestCommonSubsequence.csproj">
       <Project>{b66821a8-75db-4165-83b7-91a8b5df8eb0}</Project>
       <Name>LongestCommonSubsequence</Name>

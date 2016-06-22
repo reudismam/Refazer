@@ -88,10 +88,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExampleRefactoring\ExampleRefactoring.csproj">
-      <Project>{6060B3C1-8B16-47AE-A7A5-B34EB1C170AD}</Project>
-      <Name>ExampleRefactoring</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LocationCodeRefactoring\LocationRefactoring.csproj">
       <Project>{638186db-e7e4-4e76-b51e-1c35efae6280}</Project>
       <Name>LocationRefactoring</Name>

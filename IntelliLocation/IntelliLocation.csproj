@@ -210,16 +210,6 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DirectedGraph\DirectedGraph\DirectedGraph.csproj">
-      <Project>{e4bcc550-8993-4d14-b2dc-b6d778a025fc}</Project>
-      <Name>DirectedGraph</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExampleRefactoring\ExampleRefactoring.csproj">
-      <Project>{6060B3C1-8B16-47AE-A7A5-B34EB1C170AD}</Project>
-      <Name>ExampleRefactoring</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-    </ProjectReference>
     <ProjectReference Include="..\LocateAdornment\LocateAdornment.csproj">
       <Project>{6C48821E-FFA3-42D4-9201-078ED13D554F}</Project>
       <Name>LocateAdornment</Name>
