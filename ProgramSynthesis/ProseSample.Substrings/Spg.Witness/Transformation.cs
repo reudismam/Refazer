@@ -26,22 +26,29 @@ namespace ProseSample.Substrings.Spg.Witness
             var editsExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
+                var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
+                script = script.GetRange(0, 1);
                 //editsExamples[input] = script.GetRange(0, 1);
-                var inpTree = (SyntaxNodeOrToken) input[rule.Body[0]];
-                foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
-                {
-                    var script = Script(inpTree, outTree).GetRange(0, 1);
 
-                    Patch patch = new Patch();
+                Patch patch = new Patch();
 
-                    var treeUpdate = new TreeUpdate(inpTree);
-                    WitnessFunctions.TreeUpdateDictionary[inpTree] = treeUpdate;
-
-                    script.ForEach(e => patch.Edits.Add(new List<Edit<SyntaxNodeOrToken>> {new Edit<SyntaxNodeOrToken>(e)}));
-                    editsExamples[input] = patch;
-                }
+                script.ForEach(e => patch.Edits.Add(new List<Edit<SyntaxNodeOrToken>> { e }));
+                editsExamples[input] = patch;
             }
+            //var inpTree = (SyntaxNodeOrToken) input[rule.Body[0]];
+            //foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
+            //{
+            //    var script = Script(inpTree, outTree).GetRange(0, 1);
+
+            //    Patch patch = new Patch();
+
+            //    var treeUpdate = new TreeUpdate(inpTree);
+            //    WitnessFunctions.TreeUpdateDictionary[inpTree] = treeUpdate;
+
+            //    script.ForEach(e => patch.Edits.Add(new List<Edit<SyntaxNodeOrToken>> {new Edit<SyntaxNodeOrToken>(e)}));
+            //    editsExamples[input] = patch;
+            //}
+        //}
             return new ExampleSpec(editsExamples);
         }
 
