@@ -65,7 +65,7 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Transformation")]
         public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;
 
-        [FeatureCalculator("Loop")]
+        [FeatureCalculator("RegionMap")]
         public static double Score_Loop(double inScore, double breaks) => inScore + breaks;
 
         [FeatureCalculator("ParentNode")]

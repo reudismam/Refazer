@@ -19,8 +19,8 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
-@start SyntaxNodeOrToken trans := Transformation(n, loop);
-IEnumerable<SyntaxNodeOrToken> loop := Loop(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
+@start SyntaxNodeOrToken trans := Transformation(n, regionMap);
+IEnumerable<SyntaxNodeOrToken> regionMap := RegionMap(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
 IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions); 
 bool pred := FTrue();
 

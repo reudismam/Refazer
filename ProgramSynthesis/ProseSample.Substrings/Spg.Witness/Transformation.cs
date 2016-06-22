@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
-using Microsoft.ProgramSynthesis.Compiler;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Clustering;
@@ -27,28 +25,14 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
-                script = script.GetRange(0, 1);
-                //editsExamples[input] = script.GetRange(0, 1);
+                script = script.GetRange(0, 2);
 
                 Patch patch = new Patch();
 
                 script.ForEach(e => patch.Edits.Add(new List<Edit<SyntaxNodeOrToken>> { e }));
                 editsExamples[input] = patch;
             }
-            //var inpTree = (SyntaxNodeOrToken) input[rule.Body[0]];
-            //foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
-            //{
-            //    var script = Script(inpTree, outTree).GetRange(0, 1);
-
-            //    Patch patch = new Patch();
-
-            //    var treeUpdate = new TreeUpdate(inpTree);
-            //    WitnessFunctions.TreeUpdateDictionary[inpTree] = treeUpdate;
-
-            //    script.ForEach(e => patch.Edits.Add(new List<Edit<SyntaxNodeOrToken>> {new Edit<SyntaxNodeOrToken>(e)}));
-            //    editsExamples[input] = patch;
-            //}
-        //}
+            
             return new ExampleSpec(editsExamples);
         }
 
@@ -138,13 +122,7 @@ namespace ProseSample.Substrings.Spg.Witness
             HashSet<EditOperationDatasetItem[]> clusters;
             var lcc = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
             var featureData = ccs.Select(x => new EditOperationDatasetItem(x)).ToArray();
-            var dbs =
-                new DbscanAlgorithm<EditOperationDatasetItem>(
-                    (x, y) =>
-                        1.0 -
-                        (2*(double) lcc.FindCommon(x.Operations, y.Operations).Count)/
-                        ((double) x.Operations.Count + (double) y.Operations.Count));
-
+            var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => 1.0 - (2*(double) lcc.FindCommon(x.Operations, y.Operations).Count)/ ((double) x.Operations.Count + (double) y.Operations.Count));
             dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.5, minPts: 1, clusters: out clusters);
             return clusters;
         }
@@ -183,8 +161,14 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var copy = ConverterHelper.MakeACopy(tree);
                     TreeUpdate treeUp = new TreeUpdate(copy);
-                    WitnessFunctions.TreeUpdateDictionary.Add(copy, treeUp);
-                    WitnessFunctions.CurrentTrees[copy] = tree;
+
+                    foreach (var v in cc.Where(v => !WitnessFunctions.TreeUpdateDictionary.ContainsKey(v.EditOperation.Parent)))
+                    {
+                        WitnessFunctions.TreeUpdateDictionary.Add(v.EditOperation.Parent, treeUp);
+                        WitnessFunctions.CurrentTrees[v.EditOperation.Parent] = tree;
+                    }
+                    //WitnessFunctions.TreeUpdateDictionary.Add(copy, treeUp);
+                    //WitnessFunctions.CurrentTrees[copy] = tree;
 
                     ocurrences.Add(tree);
                 }
@@ -199,8 +183,6 @@ namespace ProseSample.Substrings.Spg.Witness
 
         public static ExampleSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
-            //Load grammar
-            //var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -208,45 +190,12 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (ITreeNode<SyntaxNodeOrToken> cc in spec.Examples[input])
                 {
                     kMatches.Add(cc);
-                    //foreach (var s in cc)
-                    //{                
-                    //    //todo REFACTOR remove MatchResult from the code.
-                    //    var result = new MatchResult(Tuple.Create(s, new Bindings(new List<SyntaxNodeOrToken> {})));
-                    //    var state = State.Create(new Symbol(grammar, result.GetType(), "snode"), result);
-                    //    kExamples.Add(state, result);
                 }
                 kExamples[input] = kMatches;
-                //}
             }
 
             return new ExampleSpec(kExamples);
         }
-
-        //public static Grammar LoadGrammar(string grammarFile, params string[] prerequisiteGrammars)
-        //{
-        //    foreach (string prerequisite in prerequisiteGrammars)
-        //    {
-        //        var buildResult = DSLCompiler.Compile(prerequisite, $"{prerequisite}.xml");
-        //        if (buildResult.HasErrors)
-        //        {
-        //            //WriteColored(ConsoleColor.Magenta, buildResult.TraceDiagnostics);
-        //            return null;
-        //        }
-        //    }
-
-        //    var compilationResult = DSLCompiler.LoadGrammarFromFile(grammarFile);
-        //    if (compilationResult.HasErrors)
-        //    {
-        //        //WriteColored(ConsoleColor.Magenta, compilationResult.TraceDiagnostics);
-        //        return null;
-        //    }
-        //    if (compilationResult.Diagnostics.Count > 0)
-        //    {
-        //        //WriteColored(ConsoleColor.Yellow, compilationResult.TraceDiagnostics);
-        //    }
-
-        //    return compilationResult.Value;
-        //}
 
         /// <summary>
         /// Compute the edition script
@@ -295,15 +244,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         {
                             list.Add(node);
                         }
-                    }
-
-                    //if (!(t1Node is Delete<SyntaxNodeOrToken>) && node.Equals(t1Node.T1Node.Parent))
-                    //{
-                    //    if (!list.Contains(node))
-                    //    {
-                    //        list.Add(node);
-                    //    }
-                    //}
+                    }   
                 }
             }
 
@@ -324,7 +265,6 @@ namespace ProseSample.Substrings.Spg.Witness
                     nodes.AddRange(edit.Parent.DescendantNodesAndSelf());
                 }
             }
-
             return nodes;
         }
     }
