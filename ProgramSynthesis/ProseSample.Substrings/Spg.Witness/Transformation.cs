@@ -182,20 +182,29 @@ namespace ProseSample.Substrings.Spg.Witness
             return new SubsequenceSpec(kExamples);
         }
 
-        public static DisjunctiveExamplesSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        public static ExampleSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            //Load grammar
+            //var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<MatchResult>();
+                var kMatches = new List<ITreeNode<SyntaxNodeOrToken>>();
                 foreach (ITreeNode<SyntaxNodeOrToken> cc in spec.Examples[input])
                 {
-                    kMatches.Add(new MatchResult(Tuple.Create(cc, new Bindings(new List<SyntaxNodeOrToken> {}))));
+                    kMatches.Add(cc);
+                    //foreach (var s in cc)
+                    //{                
+                    //    //todo REFACTOR remove MatchResult from the code.
+                    //    var result = new MatchResult(Tuple.Create(s, new Bindings(new List<SyntaxNodeOrToken> {})));
+                    //    var state = State.Create(new Symbol(grammar, result.GetType(), "snode"), result);
+                    //    kExamples.Add(state, result);
                 }
                 kExamples[input] = kMatches;
+                //}
             }
 
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return new ExampleSpec(kExamples);
         }
 
         /// <summary>

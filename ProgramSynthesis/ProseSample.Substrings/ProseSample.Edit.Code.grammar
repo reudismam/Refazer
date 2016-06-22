@@ -24,7 +24,7 @@ IEnumerable<SyntaxNodeOrToken> regionMap := RegionMap(script, breaks) = Map(\nod
 IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions); 
 bool pred := FTrue();
 
-IEnumerable<SyntaxNodeOrToken> regions := Template(n, match);
+IEnumerable<SyntaxNodeOrToken> regions := Template(n, pattern);
 
 SyntaxNodeOrToken script := Script(n, patch);
 Patch patch := SE(editList) | EList(editList, patch);
