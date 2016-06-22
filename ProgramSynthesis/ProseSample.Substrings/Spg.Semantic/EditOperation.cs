@@ -74,7 +74,7 @@ namespace ProseSample.Substrings.Spg.Semantic
             return null;
         }
 
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node,  Pattern delete)
+        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node/*,  Pattern delete*/)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 

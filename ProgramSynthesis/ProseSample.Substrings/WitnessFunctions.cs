@@ -544,18 +544,18 @@ namespace ProseSample.Substrings
             return EditOperation.InsertK(rule, parameter, spec, kBinding);
         }
 
-        [WitnessFunction("ParentNode", 1)]
-        public static DisjunctiveExamplesSpec ParentNodeParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return EditOperation.InsertParent(rule, parameter, spec);
-        }
+        //[WitnessFunction("ParentNode", 1)]
+        //public static DisjunctiveExamplesSpec ParentNodeParent(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        //{
+        //    return EditOperation.InsertParent(rule, parameter, spec);
+        //}
 
 
-        [WitnessFunction("ParentNode", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec ParentNodeOperation(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding)
-        {
-            return spec;
-        }
+        //[WitnessFunction("ParentNode", 2, DependsOnParameters = new[] { 1 })]
+        //public static DisjunctiveExamplesSpec ParentNodeOperation(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kBinding)
+        //{
+        //    return spec;
+        //}
         
         /// <summary>
         /// Node witness function for expression parameter with one child

@@ -176,9 +176,9 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="delete">Deleted node</param>
         /// <returns>Result of the edit opration</returns>
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, Pattern delete)
+        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, string from)
         {
-            return EditOperation.Delete(node, delete);
+            return EditOperation.Delete(node);
         }
 
         /// <summary>
