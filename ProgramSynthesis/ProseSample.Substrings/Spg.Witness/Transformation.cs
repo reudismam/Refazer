@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
@@ -181,20 +182,20 @@ namespace ProseSample.Substrings.Spg.Witness
             return new SubsequenceSpec(kExamples);
         }
 
-        public static ExampleSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        public static DisjunctiveExamplesSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
-            var kExamples = new Dictionary<State, object>();
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<ITreeNode<SyntaxNodeOrToken>>();
+                var kMatches = new List<MatchResult>();
                 foreach (ITreeNode<SyntaxNodeOrToken> cc in spec.Examples[input])
                 {
-                    kMatches.Add(cc);
+                    kMatches.Add(new MatchResult(Tuple.Create(cc, new Bindings(new List<SyntaxNodeOrToken> {}))));
                 }
                 kExamples[input] = kMatches;
             }
 
-            return new ExampleSpec(kExamples);
+            return DisjunctiveExamplesSpec.From(kExamples);
         }
 
         /// <summary>
