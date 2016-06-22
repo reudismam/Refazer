@@ -29,8 +29,8 @@ IEnumerable<SyntaxNodeOrToken> regions := Template(n, pattern);
 SyntaxNodeOrToken script := Script(n, patch);
 Patch patch := SE(editList) | EList(editList, patch);
 
-IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
-IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(mm, fnodes) = Filter(\e: SyntaxNodeOrToken => mm, fnodes);
+IEnumerable<SyntaxNodeOrToken> editList := EditMap(operation, tnodes) = Map(\target: SyntaxNodeOrToken => operation, tnodes);
+IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(pred, fnodes) = Filter(\e: SyntaxNodeOrToken => pred, fnodes);
 bool mm := MM(e, match);
 IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(n);
 

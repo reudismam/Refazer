@@ -21,22 +21,15 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Transformation
     {
-        public static DisjunctiveExamplesSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var editsExamples = new Dictionary<State, IEnumerable<object>>();
+            var editsExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<object>();
-                foreach (List<Edit<SyntaxNodeOrToken>> script in spec.DisjunctiveExamples[input])
-                {
-                    var newScript = script.GetRange(5, 1);
-                    //var newScript = script;
-                    kMatches.Add(newScript);
-                }
-
-                editsExamples[input] = kMatches;
+                var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
+                editsExamples[input] = script.GetRange(0, 1);
             }
-            return DisjunctiveExamplesSpec.From(editsExamples);
+            return new ExampleSpec(editsExamples);
         }
 
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
