@@ -132,44 +132,44 @@ namespace ProseSample.Substrings
             return new RightChild().ParentK(rule, parameter, spec, kindBinding);
         }
 
-        /// <summary>
-        /// PList witness function for parameter 0
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("PList", 0)]
-        public static DisjunctiveExamplesSpec PListTemplate(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return GList<List<ITreeNode<SyntaxNodeOrToken>>>.List0(rule, parameter, spec);
-        }
+        ///// <summary>
+        ///// PList witness function for parameter 0
+        ///// </summary>
+        ///// <param name="rule">Literal rule</param>
+        ///// <param name="parameter">Parameter number</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <returns>Disjunctive example specification</returns>
+        //[WitnessFunction("PList", 0)]
+        //public static DisjunctiveExamplesSpec PListTemplate(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    return GList<List<ITreeNode<SyntaxNodeOrToken>>>.List0(rule, parameter, spec);
+        //}
 
-        /// <summary>
-        /// PList witness function for parameter 1
-        /// </summary>
-        /// <param name="rule">Literal rule</param>Pa
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("PList", 1)]
-        public static DisjunctiveExamplesSpec PListChildren(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return GList<List<ITreeNode<SyntaxNodeOrToken>>>.List1(rule, parameter, spec);
-        }
+        ///// <summary>
+        ///// PList witness function for parameter 1
+        ///// </summary>
+        ///// <param name="rule">Literal rule</param>Pa
+        ///// <param name="parameter">Parameter number</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <returns>Disjunctive example specification</returns>
+        //[WitnessFunction("PList", 1)]
+        //public static DisjunctiveExamplesSpec PListChildren(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    return GList<List<ITreeNode<SyntaxNodeOrToken>>>.List1(rule, parameter, spec);
+        //}
 
-        /// <summary>
-        /// SP witness function for parameter 0
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("SP", 0)]
-        public static DisjunctiveExamplesSpec SpTemplate(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return GList<List<ITreeNode<SyntaxNodeOrToken>>>.Single(rule, parameter, spec);
-        }
+        ///// <summary>
+        ///// SP witness function for parameter 0
+        ///// </summary>
+        ///// <param name="rule">Literal rule</param>
+        ///// <param name="parameter">Parameter number</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <returns>Disjunctive example specification</returns>
+        //[WitnessFunction("SP", 0)]
+        //public static DisjunctiveExamplesSpec SpTemplate(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    return GList<List<ITreeNode<SyntaxNodeOrToken>>>.Single(rule, parameter, spec);
+        //}
 
         /// <summary>
         /// CList witness function for parameter 0
@@ -179,7 +179,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("CList", 0)]
-        public static DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return GList<Node>.List0(rule, parameter, spec);
         }
@@ -192,7 +192,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("CList", 1)]
-        public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return GList<Node>.List1(rule, parameter, spec);
         }
@@ -205,7 +205,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("SC", 0)]
-        public static DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return GList<Node>.Single(rule, parameter, spec);
         }
@@ -218,7 +218,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("NList", 0)]
-        public static DisjunctiveExamplesSpec WitnessNList1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessNList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return GList<ITreeNode<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
         }
@@ -231,7 +231,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("NList", 1)]
-        public static DisjunctiveExamplesSpec WitnessCList2(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessCList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return GList<ITreeNode<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
         }
@@ -244,7 +244,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("SN", 0)]
-        public static DisjunctiveExamplesSpec WitnessCnChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec WitnessCnChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return GList<ITreeNode<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
         }
@@ -257,7 +257,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("EList", 0)]
-        public static SubsequenceSpec WitnessEList1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec WitnessEList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -284,7 +284,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("EList", 1)]
-        public static ExampleSpec WitnessEList2(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec WitnessEList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
@@ -312,7 +312,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("SE", 0)]
-        public static SubsequenceSpec WitnessSeChild1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec WitnessSeChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -331,58 +331,58 @@ namespace ProseSample.Substrings
             return new SubsequenceSpec(treeExamples);
         }
 
-        /// <summary>
-        /// C witness function for kind parameter with one child
-        /// </summary>
-        /// <param name="rule">C rule</param>
-        /// <param name="parameter">Parameter associated to C rule</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive examples specification with the kind of the nodes in the examples</returns>
-        [WitnessFunction("P", 0)]
-        public static DisjunctiveExamplesSpec PKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return Template.PKind(rule, parameter, spec);
-        }
+        ///// <summary>
+        ///// C witness function for kind parameter with one child
+        ///// </summary>
+        ///// <param name="rule">C rule</param>
+        ///// <param name="parameter">Parameter associated to C rule</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <returns>Disjunctive examples specification with the kind of the nodes in the examples</returns>
+        //[WitnessFunction("P", 0)]
+        //public static DisjunctiveExamplesSpec PKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        //{
+        //    return Template.PKind(rule, parameter, spec);
+        //}
 
-        /// <summary>
-        /// C witness functino for expression parameter with one child
-        /// </summary>
-        /// <param name="rule">C rule</param>
-        /// <param name="parameter">Parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <param name="kind">Learned kind</param>
-        /// <returns>Disjuntive examples specification</returns>
-        [WitnessFunction("P", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec PChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
-        {
-            return Template.PChildren(rule, parameter, spec, kind);
-        }
+        ///// <summary>
+        ///// C witness functino for expression parameter with one child
+        ///// </summary>
+        ///// <param name="rule">C rule</param>
+        ///// <param name="parameter">Parameter</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <param name="kind">Learned kind</param>
+        ///// <returns>Disjuntive examples specification</returns>
+        //[WitnessFunction("P", 1, DependsOnParameters = new[] { 0 })]
+        //public static DisjunctiveExamplesSpec PChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        //{
+        //    return Template.PChildren(rule, parameter, spec, kind);
+        //}
 
-        /// <summary>
-        /// Concrete witness function for parameter tree.
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Concrete", 0)]
-        public static DisjunctiveExamplesSpec ConcreteTree(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return Template.ConcreteTree(rule, parameter, spec);
-        }
+        ///// <summary>
+        ///// Concrete witness function for parameter tree.
+        ///// </summary>
+        ///// <param name="rule">Literal rule</param>
+        ///// <param name="parameter">Parameter number</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <returns>Disjunctive example specification</returns>
+        //[WitnessFunction("Concrete", 0)]
+        //public static DisjunctiveExamplesSpec ConcreteTree(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    return Template.ConcreteTree(rule, parameter, spec);
+        //}
 
-        /// <summary>
-        /// Abstract witness function for parameter kind
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Rule parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Abstract", 0)]
-        public static DisjunctiveExamplesSpec AbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return Template.AbstractKind(rule, parameter, spec);
-        }
+        ///// <summary>
+        ///// Abstract witness function for parameter kind
+        ///// </summary>
+        ///// <param name="rule">Grammar rule</param>
+        ///// <param name="parameter">Rule parameter</param>
+        ///// <param name="spec">Example specification</param>
+        ///// <returns>Disjunctive example specification</returns>
+        //[WitnessFunction("Abstract", 0)]
+        //public static DisjunctiveExamplesSpec AbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    return Template.AbstractKind(rule, parameter, spec);
+        //}
 
         /// <summary>
         /// C witness function for kind parameter with one child

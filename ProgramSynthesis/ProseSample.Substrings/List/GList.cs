@@ -9,7 +9,7 @@ namespace ProseSample.Substrings.List
 {
     public class GList<T>
     {
-        public static DisjunctiveExamplesSpec List0(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec List0(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -28,7 +28,7 @@ namespace ProseSample.Substrings.List
         }
 
 
-        public static DisjunctiveExamplesSpec List1(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec List1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -47,7 +47,7 @@ namespace ProseSample.Substrings.List
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        public static DisjunctiveExamplesSpec Single(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec Single(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -65,7 +65,7 @@ namespace ProseSample.Substrings.List
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        public static SubsequenceSpec List0Sequence(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec List0Sequence(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -84,7 +84,7 @@ namespace ProseSample.Substrings.List
         }
 
 
-        public static SubsequenceSpec List1Sequence(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec List1Sequence(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -103,7 +103,7 @@ namespace ProseSample.Substrings.List
             return new SubsequenceSpec(treeExamples);
         }
 
-        public static SubsequenceSpec SingleSequence(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec SingleSequence(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
