@@ -223,27 +223,27 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        public static MatchResult RightChild(SyntaxNodeOrToken node, MatchResult variable)
-        {
-            var currentTree = GetCurrentTree(node);
-            var position = Spg.Witness.RightChild.NodePosition(variable.Match.Item1);
-            if (position + 1 >= variable.Match.Item1.Parent.Children.Count)
-            {
-                return null;
-            }
-            var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Parent.Children.ElementAt(position + 1).Value);
-            var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
-            return result;
-        }
+        //public static Pattern RightChild(SyntaxNodeOrToken node, Pattern variable)
+        //{
+        //    var currentTree = GetCurrentTree(node);
+        //    var position = Spg.Witness.RightChild.NodePosition(variable.Tree.Value);
+        //    if (position + 1 >= variable.Match.Item1.Parent.Children.Count)
+        //    {
+        //        return null;
+        //    }
+        //    var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Parent.Children.ElementAt(position + 1).Value);
+        //    var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
+        //    return result;
+        //}
 
 
-        public static MatchResult Child(SyntaxNodeOrToken node, MatchResult variable)
-        {
-            var currentTree = GetCurrentTree(node);
-            var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value);
-            var result = new MatchResult(Tuple.Create(child.Parent, new Bindings(new List<SyntaxNodeOrToken> { child.Parent.Value })));
-            return result;
-        }
+        //public static MatchResult Child(SyntaxNodeOrToken node, MatchResult variable)
+        //{
+        //    var currentTree = GetCurrentTree(node);
+        //    var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value);
+        //    var result = new MatchResult(Tuple.Create(child.Parent, new Bindings(new List<SyntaxNodeOrToken> { child.Parent.Value })));
+        //    return result;
+        //}
 
         public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
         {
@@ -261,7 +261,7 @@ namespace ProseSample.Substrings
         /// Script semantic function
         /// </summary>
         /// <param name="node">Input node</param>
-        /// <param name="editOperations">Edit operations</param>
+        /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
         public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, Patch patch)
         {

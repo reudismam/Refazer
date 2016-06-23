@@ -113,7 +113,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     if (node == null) return null;
 
-                    var result = new MatchResult(Tuple.Create(sot, new Bindings(new List<SyntaxNodeOrToken> { sot.Value })));
+                    var result = new Node(sot);
 
                     mats.Add(result);
                 }

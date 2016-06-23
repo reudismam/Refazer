@@ -54,9 +54,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 //var key = input[rule.Body[0]];
                 //var inpTree = WitnessFunctions.GetCurrentTree(key);
 
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+                foreach (Node node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = matchResult.Match.Item1;
+                    var sot = node.Value;
                     if (sot.Value.IsToken || sot.Children.Any()) return null;
 
                     //var matches = MatchManager.ConcreteMatches(inpTree, sot.Value);

@@ -181,7 +181,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 0)]
         public static DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<MatchResult>.List0(rule, parameter, spec);
+            return GList<Node>.List0(rule, parameter, spec);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 1)]
         public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<MatchResult>.List1(rule, parameter, spec);
+            return GList<Node>.List1(rule, parameter, spec);
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("SC", 0)]
         public static DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return GList<MatchResult>.Single(rule, parameter, spec);
+            return GList<Node>.Single(rule, parameter, spec);
         }
 
         /// <summary>
@@ -602,7 +602,7 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Edit<SyntaxNodeOrToken>)input[rule.Body[0]];
-                editExamples[input] = new MatchResult(Tuple.Create(inpTree.EditOperation.Parent, new Bindings(new List<SyntaxNodeOrToken> {})));
+                editExamples[input] = new Node(inpTree.EditOperation.Parent);
             }
 
             return new ExampleSpec(editExamples);

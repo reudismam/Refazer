@@ -187,11 +187,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<MatchResult>();
-                foreach (ITreeNode<SyntaxNodeOrToken> cc in spec.Examples[input])
-                {
-                    kMatches.Add(new MatchResult(Tuple.Create(cc, new Bindings(new List<SyntaxNodeOrToken> { }))));
-                }
+                var kMatches = (from ITreeNode<SyntaxNodeOrToken> cc in spec.Examples[input] select new Node(cc)).ToList();
                 kExamples[input] = kMatches;
             }
 

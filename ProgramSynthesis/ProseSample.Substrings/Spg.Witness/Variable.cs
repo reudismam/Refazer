@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Match;
-using TreeEdit.Spg.Print;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -51,9 +49,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 var key = input[rule.Body[0]];
                 var inpTree = WitnessFunctions.GetCurrentTree(key);
                 //PrintUtil<SyntaxNodeOrToken>.PrintPretty(inpTree, "", true);
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+                foreach (Node node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = matchResult.Match.Item1;
+                    var sot = node.Value;
 
                     var kind = (SyntaxKind)kindBinding.Examples[input];
                     var matches = MatchManager.AbstractMatches(inpTree, kind);

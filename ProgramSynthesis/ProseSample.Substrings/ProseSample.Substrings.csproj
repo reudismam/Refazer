@@ -175,8 +175,7 @@
     <Compile Include="Bindings.cs" />
     <Compile Include="DynToken.cs" />
     <Compile Include="List\GList.cs" />
-    <Compile Include="MatchResult.cs" />
-    <Compile Include="Pattern.cs" />
+    <Compile Include="Spg.Bean\Pattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RankingScore.cs" />
     <Compile Include="RegexUtils.cs" />

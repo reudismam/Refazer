@@ -23,9 +23,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var syntaxKinds = new List<SyntaxKind>();
-                foreach (MatchResult mt in spec.DisjunctiveExamples[input])
+                foreach (Node node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = mt.Match.Item1;
+                    var sot = node.Value;
                     if (sot.Value.IsToken) return null;
 
                     syntaxKinds.Add(sot.Value.Kind());
@@ -42,9 +42,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+                foreach (Node node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = matchResult.Match.Item1;
+                    var sot = node.Value;
                     if (sot.Value.IsToken) return null;
 
                     if (!sot.Children.Any()) return null;
@@ -52,15 +52,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var lsot = ExtractChildren(sot);
 
-                    var childList = new List<MatchResult>();
-                    foreach (var item in lsot)
-                    {
-                        var binding = matchResult.Match.Item2;
-                        binding.bindings.Add(item.Value);
-
-                        MatchResult m = new MatchResult(Tuple.Create(item, binding));
-                        childList.Add(m);
-                    }
+                    var childList = lsot.Select(item => new Node(item)).ToList();
 
                     matches.Add(childList);
                 }
@@ -98,25 +90,13 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+                foreach (Node node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = matchResult.Match.Item1;
+                    var sot = node.Value;
                     if (sot.Value.IsToken) return null;
-
                     if (!sot.Children.Any()) return null;
-
                     var lsot = ExtractChildren(sot);
-
-                    var childList = new List<MatchResult>();
-                    foreach (var item in lsot)
-                    {
-                        var binding = matchResult.Match.Item2;
-                        binding.bindings.Add(item.Value);
-
-                        MatchResult m = new MatchResult(Tuple.Create(item, binding));
-                        childList.Add(m);
-                    }
-
+                    var childList = lsot.Select(item => new Node(item)).ToList();
                     matches.Add(childList);
                 }
                 eExamples[input] = matches;

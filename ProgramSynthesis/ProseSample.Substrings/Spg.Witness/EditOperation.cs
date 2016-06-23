@@ -47,7 +47,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
 
                 var from = editOperation.T1Node;
-                var result = new MatchResult(Tuple.Create(from, new Bindings(new List<SyntaxNodeOrToken> { from.Value })));
+                var result = new Node(from);
 
                 kExamples[input] = result;
             }

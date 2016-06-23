@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -18,20 +16,13 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
-                //var key = input[rule.Body[0]];
-                //var inpTree = WitnessFunctions.GetCurrentTree(key);
-                foreach (var sot in from MatchResult matchResult in spec.DisjunctiveExamples[input] select matchResult.Match.Item1)
+                foreach (var sot in from Node node in spec.DisjunctiveExamples[input] select node.Value)
                 {
                     var target = Target(sot);
-                    if (target == null) return null;
-                    var parent = target;//TreeUpdate.FindNode(inpTree, target);
-
-                    if (sot.Value.IsToken || parent == null) return null;
-
-                    var result = new MatchResult(Tuple.Create(parent, new Bindings(new List<SyntaxNodeOrToken> { })));
-                    mats.Add(result);
+                    if (sot.Value.IsToken || target == null) return null;
+                    mats.Add(new Node(target));
                 }
-                treeExamples[input] = mats.GetRange(0, 1);
+                treeExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
@@ -44,9 +35,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 var matches = new List<object>();
                 //var key = input[rule.Body[0]];
                 //var inpTree = WitnessFunctions.GetCurrentTree(key);
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+                foreach (Node node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = matchResult.Match.Item1;
+                    var sot = node.Value;
                     var target = Target(sot);
                     if (target == null) return null;
                     var parent = target;//TreeUpdate.FindNode(inpTree, target);
