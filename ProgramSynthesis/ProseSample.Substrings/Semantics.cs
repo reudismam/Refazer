@@ -472,7 +472,7 @@ namespace ProseSample.Substrings
             return traversalIndices;
         }
 
-        public static bool MM(SyntaxNodeOrToken x, Pattern template)
+        public static bool NodeMatch(SyntaxNodeOrToken x, Pattern template)
         {
             x.AsNode();
             return false;

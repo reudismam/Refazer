@@ -29,6 +29,9 @@ namespace ProseSample.Substrings
         [FeatureCalculator("FTrue")]
         public static double Score_FTrue() => 1.1;
 
+        [FeatureCalculator("NodeMatch")]
+        public static double Score_NodeMatch(double inSource, double matchScore) => matchScore;
+
         [FeatureCalculator("SC")]
         public static double Score_CS(double childScore) => childScore;
 

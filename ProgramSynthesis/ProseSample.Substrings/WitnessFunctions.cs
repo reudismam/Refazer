@@ -595,14 +595,14 @@ namespace ProseSample.Substrings
             return Map.EditMap(rule, parameter, spec);
         }
 
-        [WitnessFunction("MM", 1)]
-        public static ExampleSpec MMMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        [WitnessFunction("NodeMatch", 1)]
+        public static ExampleSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var editExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = (Edit<SyntaxNodeOrToken>)input[rule.Body[0]];
-                editExamples[input] = new Node(inpTree.EditOperation.Parent);
+                var inpTree = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                editExamples[input] = new Node(inpTree);
             }
 
             return new ExampleSpec(editExamples);

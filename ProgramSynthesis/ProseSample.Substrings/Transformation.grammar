@@ -29,9 +29,9 @@ SyntaxNodeOrToken script := Script(n, patch);
 Patch patch := SE(editList) | EList(editList, patch);
 
 IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
-IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(pred, fnodes) = Filter(\e: SyntaxNodeOrToken => pred, fnodes);
+IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(nodematch, fnodes) = Filter(\e: SyntaxNodeOrToken => nodematch, fnodes);
 SyntaxNodeOrToken edit := Insert(target, ast, k) | Update(target, ast) | Move(target, match, k) | Delete(target, id);
-bool mm := MM(e, match);
+bool nodematch := NodeMatch(e, match);
 IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(n, id);
 
 Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);
