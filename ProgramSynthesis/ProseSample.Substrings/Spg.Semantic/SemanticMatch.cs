@@ -9,12 +9,12 @@ namespace ProseSample.Substrings.Spg.Semantic
 {
     public class SemanticMatch
     {   
-        public static Pattern C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<Pattern> children)
+        public static Pattern C(/*SyntaxNodeOrToken node, */SyntaxKind kind, IEnumerable<Pattern> children)
         {
-            var currentTree = Semantics.GetCurrentTree(node);
-            var klist = Semantics.SplitToNodes(currentTree, kind);
-            foreach (var candicate in klist)
-            {
+            //var currentTree = Semantics.GetCurrentTree(node);
+            //var klist = Semantics.SplitToNodes(currentTree, kind);
+            //foreach (var candicate in klist)
+            //{
                 //if (candicate.Children.Count != children.Count()) continue;
 
                 //bool isMatch = true;
@@ -50,7 +50,7 @@ namespace ProseSample.Substrings.Spg.Semantic
                 //    matchResult.Type = MatchResult.C;
                 //    return matchResult;
                 //}
-            }
+            //}
             return null;
         }
 

@@ -45,10 +45,10 @@ namespace ProseSample.Substrings.Spg.Witness
         //}
 
 
-        public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static ExampleSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            var literalExamples = new List<object>();
+            var treeExamples = new Dictionary<State, object>();
+            var literalExamples = new List<ITreeNode<SyntaxNodeOrToken>>();
             foreach (var input in spec.ProvidedInputs)
             {
                 //var key = input[rule.Body[0]];
@@ -66,15 +66,13 @@ namespace ProseSample.Substrings.Spg.Witness
                     //literalExamples.Add(matches.First());
                     literalExamples.Add(sot);
 
-                    var first = (ITreeNode<SyntaxNodeOrToken>)literalExamples.First();
+                    var first = literalExamples.First();
                     if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(sot, first)) return null;
                 }
 
-                var examples = (from ITreeNode<SyntaxNodeOrToken> v in literalExamples.GetRange(0, 1) select v.Value).Cast<object>().ToList();
-
-                treeExamples[input] = examples;
+                treeExamples[input] = literalExamples.First().Value;
             }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return new ExampleSpec(treeExamples);
         }
     }
 }

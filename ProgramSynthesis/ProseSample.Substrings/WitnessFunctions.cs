@@ -391,7 +391,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter associated to C rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive examples specification with the kind of the nodes in the examples</returns>
-        [WitnessFunction("C", 1)]
+        [WitnessFunction("C", 0)]
         public static DisjunctiveExamplesSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Match.CKind(rule, parameter, spec);
@@ -405,7 +405,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Learned kind</param>
         /// <returns>Disjuntive examples specification</returns>
-        [WitnessFunction("C", 2, DependsOnParameters = new[] { 1 })]
+        [WitnessFunction("C", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             return Match.CChildren(rule, parameter, spec, kind);

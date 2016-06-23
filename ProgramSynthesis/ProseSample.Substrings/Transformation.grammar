@@ -34,7 +34,7 @@ SyntaxNodeOrToken edit := Insert(target, ast, k) | Update(target, ast) | Move(ta
 bool mm := MM(e, match);
 IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(n, id);
 
-Pattern match := C(node, kind, children) | Parent(kindRef, k) | Tree(kindRef);
+Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);
 Pattern kindRef := Variable(kind) | Literal(tree);
 IEnumerable<Pattern> children := SC(match) | CList(match, children);
 

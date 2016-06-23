@@ -41,19 +41,15 @@ namespace ProseSample.Substrings.Spg.Witness
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<object>();
+                var matches = new List<List<Node>>();
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
                     if (sot.Value.IsToken) return null;
-
-                    if (!sot.Children.Any()) return null;
                     if (!sot.Children.Any()) return null;
 
                     var lsot = ExtractChildren(sot);
-
                     var childList = lsot.Select(item => new Node(item)).ToList();
-
                     matches.Add(childList);
                 }
                 eExamples[input] = matches;

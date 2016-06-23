@@ -33,9 +33,9 @@ namespace ProseSample.Substrings
         /// <param name="kind">Syntax kind</param>
         /// <param name="children">Children nodes</param>
         /// <returns>The element on the tree with specified kind and child nodes</returns>
-        public static Pattern C(SyntaxNodeOrToken node, SyntaxKind kind, IEnumerable<Pattern> children)
+        public static Pattern C(SyntaxKind kind, IEnumerable<Pattern> children)
         {
-            return SemanticMatch.C(node, kind, children);
+            return SemanticMatch.C(kind, children);
         }
 
         public static Pattern Match(SyntaxNodeOrToken node, Pattern pattern, int k)
