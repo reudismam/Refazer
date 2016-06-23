@@ -54,7 +54,7 @@ namespace ProseSample
 
             const ulong a = 1;
             var b = consistentPrograms.Size;
-            var topK = consistentPrograms.TopK("Score").ToList().GetRange(0, (int) Math.Min(a, b));
+            var topK = consistentPrograms.RealizedPrograms;//consistentPrograms.TopK("Score").ToList().GetRange(0, (int) Math.Min(a, b));
             string programs = "";
             foreach (ProgramNode p in topK)
             {

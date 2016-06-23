@@ -6,10 +6,10 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class RightChild : Context
     {
-        public override SyntaxNodeOrToken Target(ITreeNode<SyntaxNodeOrToken> sot)
+        public override ITreeNode<SyntaxNodeOrToken> Target(ITreeNode<SyntaxNodeOrToken> sot)
         {
             var rchild = RChild(sot);
-            return rchild != null ? rchild.Value : null;
+            return rchild != null ? rchild : null;
         }
 
         public static int NodePosition(ITreeNode<SyntaxNodeOrToken> sot)

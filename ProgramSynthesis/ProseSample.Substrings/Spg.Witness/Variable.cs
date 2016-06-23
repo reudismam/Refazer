@@ -12,32 +12,33 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Variable
     {
-        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var mats = new List<object>();
-                var key = input[rule.Body[0]];
-                var inpTree = WitnessFunctions.GetCurrentTree(key);
-                foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
-                {
-                    var sot = matchResult.Match.Item1;
-                    var matches = MatchManager.AbstractMatches(inpTree, sot.Value.Kind());
+            //var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            //foreach (State input in spec.ProvidedInputs)
+            //{
+            //    var mats = new List<object>();
+            //    //var key = input[rule.Body[0]];
+            //    //var inpTree = WitnessFunctions.GetCurrentTree(key);
+            //    foreach (MatchResult matchResult in spec.DisjunctiveExamples[input])
+            //    {
+            //        var sot = matchResult.Match.Item1;
+            //        var matches = MatchManager.AbstractMatches(inpTree, sot.Value.Kind());
 
-                    foreach (var item in matches.Where(item => item.ToString().Equals(sot.ToString())))
-                    {
-                        mats.Add(item.Kind());
-                        if (!mats.First().Equals(item.Kind())) return null;
-                    }
+            //        foreach (var item in matches.Where(item => item.ToString().Equals(sot.ToString())))
+            //        {
+            //            mats.Add(item.Kind());
+            //            if (!mats.First().Equals(item.Kind())) return null;
+            //        }
 
-                    if (!mats.Any()) return null;
-                }
-                treeExamples[input] = mats.GetRange(0, 1);
-            }
+            //        if (!mats.Any()) return null;
+            //    }
+            //    treeExamples[input] = mats.GetRange(0, 1);
+            //}
 
-            var values = treeExamples.Values;
-            return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
+            //var values = treeExamples.Values;
+            //return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
+            return Match.CKind(rule, parameter, spec);
         }
 
 

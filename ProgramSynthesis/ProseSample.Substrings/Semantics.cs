@@ -110,10 +110,10 @@ namespace ProseSample.Substrings
         /// <param name="lookFor">Value</param>
         /// <param name="k">Index</param>
         /// <returns>Literal</returns>
-        public static Pattern Literal(SyntaxNodeOrToken node, SyntaxNodeOrToken lookFor)
+        public static Pattern Literal(SyntaxNodeOrToken lookFor)
         {
-            var currentTree = GetCurrentTree(node);
-            var matches = MatchManager.ConcreteMatches(currentTree, lookFor);
+            //var currentTree = GetCurrentTree(node);
+            //var matches = MatchManager.ConcreteMatches(currentTree, lookFor);
             //if (matches.Count >= k)
             //{
             //    var item = matches.ElementAt(k - 1);
@@ -198,11 +198,11 @@ namespace ProseSample.Substrings
         /// <param name="kind">Kind</param>
         /// <param name="k">Occurrence index</param>
         /// <returns>Search result</returns>
-        public static Pattern Variable(SyntaxNodeOrToken node, SyntaxKind kind)
+        public static Pattern Variable(SyntaxKind kind)
         {
-            var currentTree = GetCurrentTree(node);
+            //var currentTree = GetCurrentTree(node);
 
-            var matches = SplitToNodes(currentTree, kind);
+            //var matches = SplitToNodes(currentTree, kind);
 
             //if (matches.Any())
             //{
@@ -214,9 +214,9 @@ namespace ProseSample.Substrings
             return null;
         }
 
-        public static Pattern Parent(SyntaxNodeOrToken node, Pattern variable, int k)
+        public static Pattern Parent(Pattern variable, int k)
         {
-            var currentTree = GetCurrentTree(node);
+            //var currentTree = GetCurrentTree(node);
             //var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value).Children.ElementAt(k - 1);
             //var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
             //return result;

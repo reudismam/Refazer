@@ -1,47 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
     public class Match
     {
-        public static DisjunctiveExamplesSpec TreeKindRef(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec TreeKindRef(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (var input in spec.ProvidedInputs)
-            {
-                var matches = spec.DisjunctiveExamples[input].Cast<MatchResult>().Cast<object>().ToList();
-                treeExamples[input] = matches;
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return spec;
         }
 
-        public static DisjunctiveExamplesSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static ExampleSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var kdExamples = new Dictionary<State, IEnumerable<object>>();
+            var kdExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var syntaxKinds = new List<object>();
+                var syntaxKinds = new List<SyntaxKind>();
                 foreach (MatchResult mt in spec.DisjunctiveExamples[input])
                 {
                     var sot = mt.Match.Item1;
                     if (sot.Value.IsToken) return null;
 
                     syntaxKinds.Add(sot.Value.Kind());
+                    if (!sot.Value.Kind().Equals(syntaxKinds.First())) return null;
                 }
-                kdExamples[input] = syntaxKinds;
+                kdExamples[input] = syntaxKinds.First();
             }
-            return DisjunctiveExamplesSpec.From(kdExamples);
+            return new ExampleSpec(kdExamples);
         }
 
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
