@@ -240,7 +240,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
 
-            string cmd = $"/c java -jar RTED_v1.1.jar -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
+            string cmd = $"/c java -jar ../../libs/RTED_v1.1.jar -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
             Process proc = new Process();
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.Arguments = cmd;
