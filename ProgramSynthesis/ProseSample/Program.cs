@@ -23,7 +23,7 @@ namespace ProseSample
         private static void LoadAndRunRepetitiveChangeMultipleEditions()
         {
             //Load grammar
-            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            var grammar = LoadGrammar("Transformation.grammar");
 
             //input data
             string inputText = File.ReadAllText(@"SyntaxTreeExtensionsB.cs");
