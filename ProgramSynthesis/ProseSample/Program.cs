@@ -26,11 +26,11 @@ namespace ProseSample
             var grammar = LoadGrammar("Transformation.grammar");
 
             //input data
-            string inputText = File.ReadAllText(@"SyntaxTreeExtensionsB.cs");
+            string inputText = File.ReadAllText(@"..\..\benchmarks\SyntaxTreeExtensionsB.cs");
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
 
             //output with some code fragments edited.
-            string outputText = File.ReadAllText(@"SyntaxTreeExtensionsA.cs");
+            string outputText = File.ReadAllText(@"..\..\benchmarks\SyntaxTreeExtensionsA.cs");
             SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
 
             //Getting examples methods
