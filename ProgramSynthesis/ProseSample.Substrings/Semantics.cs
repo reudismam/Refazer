@@ -388,9 +388,11 @@ namespace ProseSample.Substrings
 
         public static IEnumerable<SyntaxNodeOrToken> Traversal(SyntaxNodeOrToken node, string type)
         {
+            var currentTree = GetCurrentTree(node);
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = ConverterHelper.ConvertCSharpToTreeNode(node);
             var nodes = traversal.PostOrderTraversal(itreenode).Select(o => o.Value).ToList();
+            //nodes.ForEach(o => TreeUpdateDictionary.Add(o, currentTree));
 
             return nodes;
         }
