@@ -20,19 +20,19 @@ language ProseSample_Match;
 feature double Score = RankingScore;
 
 @start SyntaxNodeOrToken trans := Transformation(n, regionMap);
-IEnumerable<SyntaxNodeOrToken> regionMap := RegionMap(script, breaks) = Map(\node: SyntaxNodeOrToken => script, breaks);
-IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: SyntaxNodeOrToken => pred, regions); 
+IEnumerable<Node> regionMap := RegionMap(script, breaks) = Map(\node: Node => script, breaks);
+IEnumerable<Node> breaks := Breaks(pred, regions) = Filter(\x: Node => pred, regions); 
 bool pred := FTrue();
-IEnumerable<SyntaxNodeOrToken> regions := Template(n, match);
+IEnumerable<Node> regions := Template(n, match);
 
-SyntaxNodeOrToken script := Script(node, patch);
+Node script := Script(node, patch);
 Patch patch := SE(editList) | EList(editList, patch);
 
-IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);
-IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(nodematch, fnodes) = Filter(\e: SyntaxNodeOrToken => nodematch, fnodes);
-SyntaxNodeOrToken edit := Insert(target, ast, k) | Update(target, ast) | Move(target, match, k) | Delete(target, id);
+IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
+IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\e: Node => nodematch, fnodes);
+Node edit := Insert(target, ast, k) | Update(target, ast) | Move(target, match, k) | Delete(target, id);
 bool nodematch := NodeMatch(e, match);
-IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(node, id);
+IEnumerable<Node> fnodes := Traversal(node, id);
 
 Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);
 Pattern kindRef := Variable(kind) | Literal(tree);

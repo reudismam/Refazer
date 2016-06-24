@@ -6,16 +6,16 @@ namespace ProseSample.Substrings
 {
     public class Patch
     {
-        public List<IEnumerable<SyntaxNodeOrToken>> Edits { get; set; }
+        public List<IEnumerable<Node>> Edits { get; set; }
 
-        public Patch(List<IEnumerable<SyntaxNodeOrToken>> edits)
+        public Patch(List<IEnumerable<Node>> edits)
         {
             Edits = edits;
         }
 
         public Patch()
         {
-            Edits = new List<IEnumerable<SyntaxNodeOrToken>>();
+            Edits = new List<IEnumerable<Node>>();
         }
     }
 }

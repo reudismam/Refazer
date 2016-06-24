@@ -100,8 +100,9 @@ namespace ProseSample.Substrings
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, Node newNode, int k)
+        public static Node Insert(Node snode, Node newNode, int k)
         {
+            var node = snode.Value.Value;
             return EditOperation.Insert(node, newNode, k);
         }
 
@@ -112,8 +113,9 @@ namespace ProseSample.Substrings
         /// <param name="k">Child index</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, Pattern from, int k)
+        public static Node Move(Node snode, Pattern from, int k)
         {
+            var node = snode.Value.Value;
             return EditOperation.Move(node, from, k);
         }
 
@@ -123,8 +125,9 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, Node to)
+        public static Node Update(Node snode, Node to)
         {
+            var node = snode.Value.Value;
             return EditOperation.Update(node, to);
         }
 
@@ -133,8 +136,9 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="node">Input node</param>
         /// <returns>Result of the edit opration</returns>
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, string from)
+        public static Node Delete(Node snode, string from)
         {
+            var node = snode.Value.Value;
             return EditOperation.Delete(node);
         }
 
@@ -156,8 +160,9 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static SyntaxNodeOrToken Script(SyntaxNodeOrToken node, Patch patch)
+        public static Node Script(Node snode, Patch patch)
         {
+            var node = snode.Value.Value;
             var current = GetCurrentTree(node);
 
             var afterFlorest = current.Children.Select(ReconstructTree).ToList();
@@ -168,7 +173,7 @@ namespace ProseSample.Substrings
             //BeforeAfterMapping[node] = beforeFlorest;
             MappingRegions[node] = afterFlorest;
 
-            return node;
+            return snode;
         }
 
         /// <summary>
@@ -215,7 +220,7 @@ namespace ProseSample.Substrings
         /// <param name="node">Node</param>
         /// <param name="result">Result of the pattern</param>
         /// <returns>Result of the pattern</returns>
-        public static Node Ref(SyntaxNodeOrToken node, Pattern result)
+        public static Node Ref(Node node, Pattern result)
         {
             //var itreeNode = result.Match.Item1;
             //var nnode = new Node(itreeNode);
@@ -253,16 +258,16 @@ namespace ProseSample.Substrings
             return GList<Node>.Single(child);
         }
 
-        public static Patch EList(IEnumerable<SyntaxNodeOrToken> child1, Patch cList)
+        public static Patch EList(IEnumerable<Node> child1, Patch cList)
         {
-            var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.List(child1, cList.Edits).ToList();
+            var editList =  GList<IEnumerable<Node>>.List(child1, cList.Edits).ToList();
             var patch = new Patch(editList);
             return patch;
         }
 
-        public static Patch SE(IEnumerable<SyntaxNodeOrToken> child)
+        public static Patch SE(IEnumerable<Node> child)
         {
-            var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.Single(child).ToList();
+            var editList =  GList<IEnumerable<Node>>.Single(child).ToList();
             var list = editList.ToList();
             var patch = new Patch(editList);
             return patch;
@@ -286,7 +291,7 @@ namespace ProseSample.Substrings
             return true;
         }
 
-        public static SyntaxNodeOrToken Transformation(SyntaxNodeOrToken node, IEnumerable<SyntaxNodeOrToken> loop)
+        public static SyntaxNodeOrToken Transformation(SyntaxNodeOrToken node, IEnumerable<Node> loop)
         {
             List<SyntaxNodeOrToken> afterNodeList;
             List<SyntaxNodeOrToken> beforeNodeList;
@@ -323,7 +328,7 @@ namespace ProseSample.Substrings
         private static SyntaxNodeOrToken AnnotateNodeEditedNodes(SyntaxNodeOrToken node, List<int> traversalIndices)
         {
             foreach (var index in traversalIndices)
-            {
+            {           
                 var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
                 var traversalNodes = treeNode.DescendantNodesAndSelf();
                 var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(),
@@ -333,15 +338,16 @@ namespace ProseSample.Substrings
             return node;
         }
 
-        private static void FillBeforeAfterList(out List<SyntaxNodeOrToken> afterNodeList, IEnumerable<SyntaxNodeOrToken> loop, out List<SyntaxNodeOrToken> beforeNodeList)
+        private static void FillBeforeAfterList(out List<SyntaxNodeOrToken> afterNodeList, IEnumerable<Node> loop, out List<SyntaxNodeOrToken> beforeNodeList)
         {
             afterNodeList = new List<SyntaxNodeOrToken>();
             beforeNodeList = new List<SyntaxNodeOrToken>();
             var list = loop.ToList();
             foreach (var snode in list)
             {
-                afterNodeList.AddRange(MappingRegions[snode]);
-                beforeNodeList.AddRange(BeforeAfterMapping[snode]);
+                //todo BUG correct snode.Value.Value
+                afterNodeList.AddRange(MappingRegions[snode.Value.Value]);
+                beforeNodeList.AddRange(BeforeAfterMapping[snode.Value.Value]);
             }
         }
 
@@ -365,8 +371,9 @@ namespace ProseSample.Substrings
             return traversalIndices;
         }
 
-        public static bool NodeMatch(SyntaxNodeOrToken x, Pattern template)
+        public static bool NodeMatch(Node sx, Pattern template)
         {
+            var x = sx.Value.Value;
             var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(x);
             return IsValue(itreeNode, template.Tree);
         }
@@ -386,15 +393,18 @@ namespace ProseSample.Substrings
             return res;
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> Traversal(SyntaxNodeOrToken node, string type)
+        public static IEnumerable<Node> Traversal(Node snode, string type)
         {
+            var node = snode.Value.Value;
             var currentTree = GetCurrentTree(node);
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = ConverterHelper.ConvertCSharpToTreeNode(node);
             var nodes = traversal.PostOrderTraversal(itreenode).Select(o => o.Value).ToList();
             //nodes.ForEach(o => TreeUpdateDictionary.Add(o, currentTree));
 
-            return nodes;
+            //return nodes;
+            //todo BUG
+            return new List<Node> {snode};
         }
 
         private static List<SyntaxNodeOrToken> SingleLocations(List<SyntaxNodeOrToken> res)

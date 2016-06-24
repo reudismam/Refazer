@@ -16,7 +16,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, Node ast, int k)
+        public static Node Insert(SyntaxNodeOrToken node, Node ast, int k)
         {
             TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
@@ -29,7 +29,9 @@ namespace ProseSample.Substrings.Spg.Semantic
 
             Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return update.CurrentTree.Value;
+            //return update.CurrentTree.Value;
+            //todo BUG resolve
+            return ast;
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="parent">Parent</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, /*Pattern parent,*/ Pattern from, int k)
+        public static Node Move(SyntaxNodeOrToken node, /*Pattern parent,*/ Pattern from, int k)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
@@ -56,7 +58,7 @@ namespace ProseSample.Substrings.Spg.Semantic
             return null;
         }
 
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, /*Pattern from,*/ Node to)
+        public static Node Update(SyntaxNodeOrToken node, /*Pattern from,*/ Node to)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
@@ -72,7 +74,7 @@ namespace ProseSample.Substrings.Spg.Semantic
             return null;
         }
 
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node/*,  Pattern delete*/)
+        public static Node Delete(SyntaxNodeOrToken node/*,  Pattern delete*/)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
