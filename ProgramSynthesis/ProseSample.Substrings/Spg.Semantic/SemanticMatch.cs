@@ -9,54 +9,41 @@ namespace ProseSample.Substrings.Spg.Semantic
 {
     public class SemanticMatch
     {   
-        public static Pattern C(/*SyntaxNodeOrToken node, */SyntaxKind kind, IEnumerable<Pattern> children)
+        public static Pattern C(SyntaxKind kind, IEnumerable<Pattern> children)
         {
-            //var currentTree = Semantics.GetCurrentTree(node);
-            //var klist = Semantics.SplitToNodes(currentTree, kind);
-            //foreach (var candicate in klist)
-            //{
-                //if (candicate.Children.Count != children.Count()) continue;
+            var pchildren = children.Select(child => child.Tree).ToList();
 
-                //bool isMatch = true;
-                //for (int i = 0; i < candicate.Children.Count; i++)
-                //{
-                //    var child = candicate.Children[i];
-                //    var childCandidate = children.ElementAt(i);
-                //    var isKind = child.Value.Kind().Equals(childCandidate.Match.Item1.Value.Kind());
-                //    var isValue = child.Value.ToString().Equals(childCandidate.Match.Item1.Value.ToString());
-                //    var isSame  = child.Value.Equals(childCandidate.Match.Item1.Value);
-                //    if (childCandidate.Type != MatchResult.Literal && !isKind) {
-                //        isMatch = false;
-                //        break;
-                //    }
+            var token = new Token(kind);
+            var inode = new TreeNode<Token>(token, null, pchildren);
+            var pattern = new Pattern(inode);
+            return pattern;
+        }    
 
-                //    if (childCandidate.Type == MatchResult.Literal && !(isKind && isValue))
-                //    {
-                //        isMatch = false;
-                //        break;
-                //    }
-
-                //    if (childCandidate.Type == MatchResult.C && !isSame)
-                //    {
-                //        isMatch = false;
-                //        break;
-                //    }
-                //}
-
-                //if (isMatch)
-                //{
-                //    var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(candicate, null);
-                //    var matchResult = new MatchResult(match);
-                //    matchResult.Type = MatchResult.C;
-                //    return matchResult;
-                //}
-            //}
-            return null;
+        /// <summary>
+        /// Literal
+        /// </summary>
+        /// <param name="tree">Value</param>
+        /// <returns>Literal</returns>
+        public static Pattern Literal(SyntaxNodeOrToken tree)
+        {
+            var token = new DynToken(tree.Kind(), tree);
+            var label = new TLabel(tree.Kind());
+            var inode = new TreeNode<Token>(token, label);
+            var pattern = new Pattern(inode);
+            return pattern;
         }
 
-        public static Pattern Match(SyntaxNodeOrToken node, Pattern pattern, int i)
+        /// <summary>
+        /// Searches a node with with kind and occurrence
+        /// </summary>
+        /// <param name="kind">Kind</param>
+        /// <returns>Search result</returns>
+        public static Pattern Variable(SyntaxKind kind)
         {
-            throw new NotImplementedException();
+            var token = new Token(kind);
+            var inode = new TreeNode<Token>(token, null);
+            var pattern = new Pattern(inode);
+            return pattern;
         }
     }
 }

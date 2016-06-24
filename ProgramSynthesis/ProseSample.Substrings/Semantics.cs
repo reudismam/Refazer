@@ -29,7 +29,6 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Matches the element on the tree with specified kind and child nodes.
         /// </summary>
-        /// <param name="node">Node</param>
         /// <param name="kind">Syntax kind</param>
         /// <param name="children">Children nodes</param>
         /// <returns>The element on the tree with specified kind and child nodes</returns>
@@ -38,26 +37,26 @@ namespace ProseSample.Substrings
             return SemanticMatch.C(kind, children);
         }
 
-        public static Pattern Match(SyntaxNodeOrToken node, Pattern pattern, int k)
-        {
-            return SemanticMatch.Match(node, pattern, k);
-        }
+        //public static Pattern Match(SyntaxNodeOrToken node, Pattern pattern, int k)
+        //{
+        //    return SemanticMatch.Match(node, pattern, k);
+        //}
 
-        /// <summary>
-        /// Matches the element on the tree with specified kind and child nodes.
-        /// </summary>
-        /// <param name="kind">Syntax kind</param>
-        /// <param name="children">Children nodes</param>
-        /// <returns>The element on the tree with specified kind and child nodes.</returns>
-        public static Pattern P(SyntaxKind kind, IEnumerable<Pattern> children)
-        {
-            var pchildren = children.Select(child => child.Tree).ToList();
+        ///// <summary>
+        ///// Matches the element on the tree with specified kind and child nodes.
+        ///// </summary>
+        ///// <param name="kind">Syntax kind</param>
+        ///// <param name="children">Children nodes</param>
+        ///// <returns>The element on the tree with specified kind and child nodes.</returns>
+        //public static Pattern P(SyntaxKind kind, IEnumerable<Pattern> children)
+        //{
+        //    var pchildren = children.Select(child => child.Tree).ToList();
 
-            var token = new Token(kind);
-            var inode = new TreeNode<Token>(token, null, pchildren);
-            var pattern = new Pattern(inode);
-            return pattern;
-        }
+        //    var token = new Token(kind);
+        //    var inode = new TreeNode<Token>(token, null, pchildren);
+        //    var pattern = new Pattern(inode);
+        //    return pattern;
+        //}
 
         /// <summary>
         /// Splits node in elements of kind type.
@@ -76,110 +75,32 @@ namespace ProseSample.Substrings
             return kinds.ToList();
         }
 
-        /// <summary>
-        /// Build a literal
-        /// </summary>
-        /// <param name="lookFor">Literal</param>
-        /// <returns>Literal</returns>
-        public static Pattern Concrete(SyntaxNodeOrToken lookFor)
-        {
-            var token = new DynToken(lookFor.Kind(), lookFor);
-            var label = new TLabel(lookFor.Kind());
-            var inode = new TreeNode<Token>(token, label);
-            var pattern = new Pattern(inode);
-            return pattern;
-        }
+        ///// <summary>
+        ///// Build a literal
+        ///// </summary>
+        ///// <param name="tree">Literal</param>
+        ///// <returns>Literal</returns>
+        //public static Pattern Concrete(SyntaxNodeOrToken tree)
+        //{
+        //    var token = new DynToken(tree.Kind(), tree);
+        //    var label = new TLabel(tree.Kind());
+        //    var inode = new TreeNode<Token>(token, label);
+        //    var pattern = new Pattern(inode);
+        //    return pattern;
+        //}
 
-        /// <summary>
-        /// Match the kind
-        /// </summary>
-        /// <param name="kind">Kind</param>
-        /// <returns>Match</returns>
-        public static Pattern Abstract(SyntaxKind kind)
-        {
-            var token = new Token(kind);
-            var inode = new TreeNode<Token>(token, null);
-            var pattern = new Pattern(inode);
-            return pattern;
-        }
-
-        /// <summary>
-        /// Literal
-        /// </summary>
-        /// <param name="node">Input node</param>
-        /// <param name="lookFor">Value</param>
-        /// <param name="k">Index</param>
-        /// <returns>Literal</returns>
-        public static Pattern Literal(SyntaxNodeOrToken lookFor)
-        {
-            //var currentTree = GetCurrentTree(node);
-            //var matches = MatchManager.ConcreteMatches(currentTree, lookFor);
-            //if (matches.Count >= k)
-            //{
-            //    var item = matches.ElementAt(k - 1);
-            //    var match = Tuple.Create<ITreeNode<SyntaxNodeOrToken>, Bindings>(item, null);
-            //    MatchResult matchResult = new MatchResult(match);
-            //    matchResult.Type = MatchResult.Literal;
-            //    return matchResult;
-            //}
-
-            return null;
-        }
-
-        public static SyntaxNodeOrToken ParentNode(SyntaxNodeOrToken node, Pattern mresult, SyntaxNodeOrToken edit)
-        {
-            //return EditOperation.Insert(node, /*mresult,*/ newNode, k);
-            return null;
-        }
-
-        /// <summary>
-        /// Insert the newNode node as in the k position of the node in the matching result 
-        /// </summary>
-        /// <param name="node">Input data</param>
-        /// <param name="k">Position in witch the node will be inserted.</param>
-        /// <param name="mresult">Matching result</param>
-        /// <param name="newNode">Node that will be insert</param>
-        /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, /*Pattern mresult,*/ Node newNode, int k)
-        {
-            return EditOperation.Insert(node, /*mresult,*/ newNode, k);
-        }
-
-        /// <summary>
-        /// Move edit operation
-        /// </summary>
-        /// <param name="node">Input node</param>
-        /// <param name="k">Child index</param>
-        /// <param name="parent">Parent</param>
-        /// <param name="from">Moved node</param>
-        /// <returns></returns>
-        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, Pattern from, int k)
-        {
-            return EditOperation.Move(node, /*parent,*/ from, k);
-        }
-
-        /// <summary>
-        /// Update edit operation
-        /// </summary>
-        /// <param name="node">Input node</param>
-        /// <param name="from">Updated node</param>
-        /// <param name="to">New value</param>
-        /// <returns></returns>
-        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, /*Pattern from,*/ Node to)
-        {
-            return EditOperation.Update(node, /*from,*/ to);
-        }
-
-        /// <summary>
-        /// Delete edit operation
-        /// </summary>
-        /// <param name="node">Input node</param>
-        /// <param name="delete">Deleted node</param>
-        /// <returns>Result of the edit opration</returns>
-        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, string from)
-        {
-            return EditOperation.Delete(node);
-        }
+        ///// <summary>
+        ///// Match the kind
+        ///// </summary>
+        ///// <param name="kind">Kind</param>
+        ///// <returns>Match</returns>
+        //public static Pattern Abstract(SyntaxKind kind)
+        //{
+        //    var token = new Token(kind);
+        //    var inode = new TreeNode<Token>(token, null);
+        //    var pattern = new Pattern(inode);
+        //    return pattern;
+        //}
 
         /// <summary>
         /// Return the tree
@@ -194,24 +115,11 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Searches a node with with kind and occurrence
         /// </summary>
-        /// <param name="node">Input node</param>
         /// <param name="kind">Kind</param>
-        /// <param name="k">Occurrence index</param>
         /// <returns>Search result</returns>
         public static Pattern Variable(SyntaxKind kind)
         {
-            //var currentTree = GetCurrentTree(node);
-
-            //var matches = SplitToNodes(currentTree, kind);
-
-            //if (matches.Any())
-            //{
-            //    var child = matches.ElementAt(k - 1);
-            //    var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
-            //    result.Type = MatchResult.Variable;
-            //    return result;
-            //}
-            return null;
+            return SemanticMatch.Variable(kind);
         }
 
         public static Pattern Parent(Pattern variable, int k)
@@ -221,6 +129,67 @@ namespace ProseSample.Substrings
             //var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
             //return result;
             return null;
+        }
+
+        /// <summary>
+        /// Literal
+        /// </summary>
+        /// <param name="tree">Value</param>
+        /// <returns>Literal</returns>
+        public static Pattern Literal(SyntaxNodeOrToken tree)
+        {
+            return SemanticMatch.Literal(tree);
+        }
+
+        //public static SyntaxNodeOrToken ParentNode(SyntaxNodeOrToken node, Pattern mresult, SyntaxNodeOrToken edit)
+        //{
+        //    //return EditOperation.Insert(node, /*mresult,*/ newNode, k);
+        //    return null;
+        //}
+
+        /// <summary>
+        /// Insert the newNode node as in the k position of the node in the matching result 
+        /// </summary>
+        /// <param name="node">Input data</param>
+        /// <param name="k">Position in witch the node will be inserted.</param>
+        /// <param name="newNode">Node that will be insert</param>
+        /// <returns>New node with the newNode node inserted as the k child</returns>
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, Node newNode, int k)
+        {
+            return EditOperation.Insert(node, newNode, k);
+        }
+
+        /// <summary>
+        /// Move edit operation
+        /// </summary>
+        /// <param name="node">Input node</param>
+        /// <param name="k">Child index</param>
+        /// <param name="from">Moved node</param>
+        /// <returns></returns>
+        public static SyntaxNodeOrToken Move(SyntaxNodeOrToken node, Pattern from, int k)
+        {
+            return EditOperation.Move(node, from, k);
+        }
+
+        /// <summary>
+        /// Update edit operation
+        /// </summary>
+        /// <param name="node">Input node</param>
+        /// <param name="to">New value</param>
+        /// <returns></returns>
+        public static SyntaxNodeOrToken Update(SyntaxNodeOrToken node, Node to)
+        {
+            return EditOperation.Update(node, to);
+        }
+
+        /// <summary>
+        /// Delete edit operation
+        /// </summary>
+        /// <param name="node">Input node</param>
+        /// <returns>Result of the edit opration</returns>
+        public static SyntaxNodeOrToken Delete(SyntaxNodeOrToken node, string from)
+        {
+            return EditOperation.Delete(node);
         }
 
         //public static Pattern RightChild(SyntaxNodeOrToken node, Pattern variable)
@@ -369,8 +338,8 @@ namespace ProseSample.Substrings
 
         public static Patch SE(IEnumerable<SyntaxNodeOrToken> child)
         {
-            //var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.Single(child);
-            //var patch = new Patch(editList);
+            //var editList =  GList<IEnumerable<SyntaxNodeOrToken>>.Single(child).ToList();
+            //var patch = new Patch(new List<List<SyntaxNodeOrToken>>(editList));
             //return patch;
             return null;
         }
@@ -497,7 +466,7 @@ namespace ProseSample.Substrings
         {
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = ConverterHelper.ConvertCSharpToTreeNode(node);
-            var nodes = traversal.PostOrderTraversal(itreenode).Select(o => o.Value);
+            var nodes = traversal.PostOrderTraversal(itreenode).Select(o => o.Value).ToList();
 
             return nodes;
         }

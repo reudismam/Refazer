@@ -32,7 +32,7 @@ IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: 
 IEnumerable<SyntaxNodeOrToken> tnodes := TargetNodes(nodematch, fnodes) = Filter(\e: SyntaxNodeOrToken => nodematch, fnodes);
 SyntaxNodeOrToken edit := Insert(target, ast, k) | Update(target, ast) | Move(target, match, k) | Delete(target, id);
 bool nodematch := NodeMatch(e, match);
-IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(n, id);
+IEnumerable<SyntaxNodeOrToken> fnodes := Traversal(node, id);
 
 Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);
 Pattern kindRef := Variable(kind) | Literal(tree);
