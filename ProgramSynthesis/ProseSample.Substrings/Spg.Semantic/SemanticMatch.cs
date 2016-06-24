@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,7 +11,6 @@ namespace ProseSample.Substrings.Spg.Semantic
         public static Pattern C(SyntaxKind kind, IEnumerable<Pattern> children)
         {
             var pchildren = children.Select(child => child.Tree).ToList();
-
             var token = new Token(kind);
             var inode = new TreeNode<Token>(token, null, pchildren);
             var pattern = new Pattern(inode);
@@ -22,7 +20,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <summary>
         /// Literal
         /// </summary>
-        /// <param name="tree">Value</param>
+        /// <param name="tree">Tree</param>
         /// <returns>Literal</returns>
         public static Pattern Literal(SyntaxNodeOrToken tree)
         {
@@ -34,10 +32,10 @@ namespace ProseSample.Substrings.Spg.Semantic
         }
 
         /// <summary>
-        /// Searches a node with with kind and occurrence
+        /// Variable
         /// </summary>
         /// <param name="kind">Kind</param>
-        /// <returns>Search result</returns>
+        /// <returns>Variable pattern</returns>
         public static Pattern Variable(SyntaxKind kind)
         {
             var token = new Token(kind);

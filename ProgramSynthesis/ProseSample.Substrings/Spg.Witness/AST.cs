@@ -26,7 +26,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     if (sot.Value.IsToken) return null;
                     if (!sot.Children.Any()) return null;
-
                     kMatches.Add(sot.Value.Kind());
                 }
                 kExamples[input] = kMatches;
@@ -45,37 +44,13 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (sot.Value.IsToken) return null;
-
-                    var lsot = sot.Children;//sot.Children.Select(o => o.Value).ToList();//ExtractChildren(sot);
-
+                    var lsot = sot.Children;
                     matches.Add(lsot);
                 }
                 eExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(eExamples);
-        }
-
-        ///// <summary>
-        ///// Extract relevant child
-        ///// </summary>
-        ///// <param name="parent">Parent</param>
-        ///// <returns>Relevant child</returns>
-        //private static List<SyntaxNodeOrToken> ExtractChildren(SyntaxNodeOrToken parent)
-        //{
-        //    List<SyntaxNodeOrToken> lsot = new List<SyntaxNodeOrToken>();
-        //    foreach (var child in parent.ChildNodesAndTokens())
-        //    {
-        //        if (child.IsNode)
-        //        {
-        //            lsot.Add(child);
-        //        }
-        //        else if (child.IsToken && child.IsKind(SyntaxKind.IdentifierToken))
-        //        {
-        //            lsot.Add(child);
-        //        }
-        //    }
-        //    return lsot;
-        //}
+        }   
 
         public static DisjunctiveExamplesSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
         {
@@ -122,7 +97,5 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
-
-
     }
 }

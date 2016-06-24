@@ -15,11 +15,6 @@ namespace ProseSample.Substrings
 {
     public static class Semantics
     {
-        /// <summary>
-        /// Store the tree update associate to each node
-        /// </summary>
-        public static readonly Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
-
         //Before transformation mapping
         private static readonly Dictionary<Node, List<SyntaxNodeOrToken>> BeforeAfterMapping = new Dictionary<Node, List<SyntaxNodeOrToken>>();
 
@@ -432,7 +427,6 @@ namespace ProseSample.Substrings
                     var newchild = ConverterHelper.ConvertCSharpToTreeNode(child);
                     iTree.AddChild(newchild, i);
                 }
-                TreeUpdateDictionary[iTree.Children.First().Value] = new TreeUpdate(iTree); //each column represent a new region
 
                 var beforeFlorest = iTree.Children.Select(o => o.Value).ToList();
                 var emptyStatement = SyntaxFactory.EmptyStatement();
