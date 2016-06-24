@@ -4,7 +4,6 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 
-
 namespace ProseSample.Substrings.List
 {
     public class GList<T>
@@ -26,7 +25,6 @@ namespace ProseSample.Substrings.List
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
-
 
         public static DisjunctiveExamplesSpec List1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
@@ -82,7 +80,6 @@ namespace ProseSample.Substrings.List
             }
             return new SubsequenceSpec(treeExamples);
         }
-
 
         public static SubsequenceSpec List1Sequence(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {

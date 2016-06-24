@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
@@ -91,85 +90,6 @@ namespace ProseSample.Substrings
         {
             return new Parent().ParentK(rule, parameter, spec, kindBinding);
         }
-
-        /// <summary>
-        /// Parent witness function for parameter kindRef
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjuntive example specification</returns>
-        [WitnessFunction("RightChild", 0)]
-        public static DisjunctiveExamplesSpec RightChildVariable(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return new RightChild().ParentVariable(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// Parent witness function for parameter kindRef
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjuntive example specification</returns>
-        [WitnessFunction("Child", 0)]
-        public static DisjunctiveExamplesSpec ChildVariable(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return Child.ParentVariable(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// Parent witness function for parameter k
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <param name="kindBinding">kindRef binding</param>
-        /// <returns>Disjuntive example specification</returns>
-        [WitnessFunction("RightChild", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec RightChildK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
-        {
-            return new RightChild().ParentK(rule, parameter, spec, kindBinding);
-        }
-
-        ///// <summary>
-        ///// PList witness function for parameter 0
-        ///// </summary>
-        ///// <param name="rule">Literal rule</param>
-        ///// <param name="parameter">Parameter number</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("PList", 0)]
-        //public static DisjunctiveExamplesSpec PListTemplate(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return GList<List<ITreeNode<SyntaxNodeOrToken>>>.List0(rule, parameter, spec);
-        //}
-
-        ///// <summary>
-        ///// PList witness function for parameter 1
-        ///// </summary>
-        ///// <param name="rule">Literal rule</param>Pa
-        ///// <param name="parameter">Parameter number</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("PList", 1)]
-        //public static DisjunctiveExamplesSpec PListChildren(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return GList<List<ITreeNode<SyntaxNodeOrToken>>>.List1(rule, parameter, spec);
-        //}
-
-        ///// <summary>
-        ///// SP witness function for parameter 0
-        ///// </summary>
-        ///// <param name="rule">Literal rule</param>
-        ///// <param name="parameter">Parameter number</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("SP", 0)]
-        //public static DisjunctiveExamplesSpec SpTemplate(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return GList<List<ITreeNode<SyntaxNodeOrToken>>>.Single(rule, parameter, spec);
-        //}
 
         /// <summary>
         /// CList witness function for parameter 0
@@ -327,59 +247,6 @@ namespace ProseSample.Substrings
             }
             return new SubsequenceSpec(treeExamples);
         }
-
-        ///// <summary>
-        ///// C witness function for kind parameter with one child
-        ///// </summary>
-        ///// <param name="rule">C rule</param>
-        ///// <param name="parameter">Parameter associated to C rule</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <returns>Disjunctive examples specification with the kind of the nodes in the examples</returns>
-        //[WitnessFunction("P", 0)]
-        //public static DisjunctiveExamplesSpec PKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        //{
-        //    return Template.PKind(rule, parameter, spec);
-        //}
-
-        ///// <summary>
-        ///// C witness functino for expression parameter with one child
-        ///// </summary>
-        ///// <param name="rule">C rule</param>
-        ///// <param name="parameter">Parameter</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <param name="kind">Learned kind</param>
-        ///// <returns>Disjuntive examples specification</returns>
-        //[WitnessFunction("P", 1, DependsOnParameters = new[] { 0 })]
-        //public static DisjunctiveExamplesSpec PChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
-        //{
-        //    return Template.PChildren(rule, parameter, spec, kind);
-        //}
-
-        ///// <summary>
-        ///// Concrete witness function for parameter tree.
-        ///// </summary>
-        ///// <param name="rule">Literal rule</param>
-        ///// <param name="parameter">Parameter number</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("Concrete", 0)]
-        //public static DisjunctiveExamplesSpec ConcreteTree(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return Template.ConcreteTree(rule, parameter, spec);
-        //}
-
-        ///// <summary>
-        ///// Abstract witness function for parameter kind
-        ///// </summary>
-        ///// <param name="rule">Grammar rule</param>
-        ///// <param name="parameter">Rule parameter</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("Abstract", 0)]
-        //public static DisjunctiveExamplesSpec AbstractKind(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return Template.AbstractKind(rule, parameter, spec);
-        //}
 
         /// <summary>
         /// C witness function for kind parameter with one child

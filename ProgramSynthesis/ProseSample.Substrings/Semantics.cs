@@ -442,7 +442,6 @@ namespace ProseSample.Substrings
             foreach (var child in pattern.Children)
             {
                 var valid = snode.Children.Any(tchild => IsValue(tchild, child));
-
                 if (!valid) return false;
             }
             return true;
