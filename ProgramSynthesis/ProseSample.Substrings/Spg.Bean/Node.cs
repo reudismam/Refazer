@@ -5,25 +5,18 @@ namespace ProseSample.Substrings
 {
     public class Node
     {
-        public ITreeNode<SyntaxNodeOrToken> Value;
-        public Node(ITreeNode<SyntaxNodeOrToken> value)
+        public ITreeNode<SyntaxNodeOrToken> Value { get; set; }
+        public ITreeNode<SyntaxNodeOrToken> SyntaxTree { get; set; }
+
+        public Node(ITreeNode<SyntaxNodeOrToken> value, ITreeNode<SyntaxNodeOrToken> syntaxTree = null)
         {
             Value = value;
+            SyntaxTree = syntaxTree;
         }
 
         public override string ToString()
         {
             return Value.ToString();
         }
-
-        //public override bool Equals(object obj)
-        //{
-        //    return Value.Equals(obj);
-        //}
-
-        //public override int GetHashCode()
-        //{
-        //    return ToString().GetHashCode();
-        //}
     }
 }

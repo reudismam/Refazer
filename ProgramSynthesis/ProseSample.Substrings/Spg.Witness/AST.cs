@@ -52,22 +52,22 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }   
 
-        public static DisjunctiveExamplesSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-
-            var mats = new List<object>();
+            var treeExamples = new Dictionary<State, object>();
+            var mats = new List<ITreeNode<SyntaxNodeOrToken>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (sot.Children.Any()) return null;
-                    mats.Add(sot.Value);
+                    mats.Add(sot);
+                    //var first = mats.First();
+                    //if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot)) return null;
                 }
-
-                treeExamples[input] = mats.GetRange(0, 1); //We do not need to pass more than a constant.
+                treeExamples[input] = mats.First().Value;
             }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return new ExampleSpec(treeExamples);
         }
 
         public static DisjunctiveExamplesSpec Ref(GrammarRule rule, int parameter, ExampleSpec spec)

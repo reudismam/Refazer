@@ -6,7 +6,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseSample.Substrings.List;
 using ProseSample.Substrings.Spg.Semantic;
-using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement;
 using TreeElement.Spg.Node;
@@ -132,21 +131,10 @@ namespace ProseSample.Substrings
             return EditOperation.Delete(node);
         }
 
-        //public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
-        //{
-        //    if (!TreeUpdateDictionary.ContainsKey(n))
-        //    {
-        //        TreeUpdate update = new TreeUpdate(n);
-        //        TreeUpdateDictionary[n] = update;
-        //    }
-        //    var node = TreeUpdateDictionary[n].CurrentTree;
-
-        //    return node;
-        //}
-
         /// <summary>
         /// Script semantic function
         /// </summary>
+        /// <param name="node">Node</param>
         /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
         public static Node Script(Node node, Patch patch)
@@ -380,7 +368,7 @@ namespace ProseSample.Substrings
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = node.Value;
             var nodes = traversal.PostOrderTraversal(itreenode);
-            var result = nodes.Select(o => new Node(o)).ToList();
+            var result = nodes.Select(o => new Node(o, node.Value)).ToList();
             return result;
         }
 
@@ -456,7 +444,7 @@ namespace ProseSample.Substrings
             return list;
         }
 
-        private static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
+        public static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
         {
             if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root pattern
             foreach (var child in pattern.Children)

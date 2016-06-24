@@ -575,7 +575,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Const", 0)]
-        public static DisjunctiveExamplesSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return AST.Const(rule, parameter, spec);
         }
