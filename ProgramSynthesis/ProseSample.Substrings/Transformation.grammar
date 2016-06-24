@@ -25,7 +25,7 @@ IEnumerable<SyntaxNodeOrToken> breaks := Breaks(pred, regions) = Filter(\x: Synt
 bool pred := FTrue();
 IEnumerable<SyntaxNodeOrToken> regions := Template(n, match);
 
-SyntaxNodeOrToken script := Script(n, patch);
+SyntaxNodeOrToken script := Script(node, patch);
 Patch patch := SE(editList) | EList(editList, patch);
 
 IEnumerable<SyntaxNodeOrToken> editList := EditMap(edit, tnodes) = Map(\target: SyntaxNodeOrToken => edit, tnodes);

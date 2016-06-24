@@ -162,7 +162,8 @@ namespace ProseSample.Substrings
 
             var afterFlorest = current.Children.Select(ReconstructTree).ToList();
 
-            //var beforeFlorest = current.Children.Select(o => o.Value).ToList();
+           
+            var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
 
             //BeforeAfterMapping[node] = beforeFlorest;
             MappingRegions[node] = afterFlorest;
