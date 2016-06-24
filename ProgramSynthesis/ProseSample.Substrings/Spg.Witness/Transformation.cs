@@ -26,12 +26,12 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
-                //script = script.GetRange(0, 2);
+                script = script.GetRange(0, 1);
 
-                Patch patch = new Patch();
+                var editsExample = new List<List<Edit<SyntaxNodeOrToken>>>();
 
-                script.ForEach(e => patch.Edits.Add(new List<Edit<SyntaxNodeOrToken>> { e }));
-                editsExamples[input] = patch;
+                script.ForEach(e => editsExample.Add(new List<Edit<SyntaxNodeOrToken>> { e }));
+                editsExamples[input] = editsExample;
             }            
             return new ExampleSpec(editsExamples);
         }

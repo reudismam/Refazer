@@ -263,13 +263,12 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (Patch patch in spec.DisjunctiveExamples[input])
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.DisjunctiveExamples[input])
                 {
-                    var matchResult = patch.Edits;
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count == 1) return null;
+                    if (!editList.Any()) return null;
+                    if (editList.Count == 1) return null;
 
-                    matches = matchResult.First();
+                    matches = editList.First();
                 }
                 treeExamples[input] = matches;
             }
@@ -289,15 +288,14 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var newPatch = new Patch();
-                foreach (Patch patch in spec.DisjunctiveExamples[input])
+                var newPatch = new List<List<Edit<SyntaxNodeOrToken>>>();
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.DisjunctiveExamples[input])
                 {
-                    var matchResult = patch.Edits;
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count == 1) return null;
+                    if (!editList.Any()) return null;
+                    if (editList.Count == 1) return null;
 
-                    matchResult.RemoveAt(0);
-                    newPatch.Edits = matchResult;
+                    editList.RemoveAt(0);
+                    newPatch = editList;
                 }
                 treeExamples[input] = newPatch;
             }
@@ -318,13 +316,12 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (Patch patch in spec.DisjunctiveExamples[input])
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.DisjunctiveExamples[input])
                 {
-                    var matchResult = patch.Edits;
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count != 1) return null;
+                    if (!editList.Any()) return null;
+                    if (editList.Count != 1) return null;
 
-                    matches = matchResult.First();
+                    matches = editList.First();
                 }
                 treeExamples[input] = matches;
             }

@@ -14,24 +14,22 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// </summary>
         /// <param name="node">Input data</param>
         /// <param name="k">Position in witch the node will be inserted.</param>
-        /// <param name="mresult">Matching result</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, /*Pattern mresult,*/ Node ast, int k)
+        public static SyntaxNodeOrToken Insert(SyntaxNodeOrToken node, Node ast, int k)
         {
-            //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
+            TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
-            //var parent = ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
-            ////var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
-            //var child = ast.Value;
+            var parent = update.CurrentTree;//ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
+            //var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
+            var child = ast.Value;
 
-            //var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
-            //update.ProcessEditOperation(insert);
+            var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
+            update.ProcessEditOperation(insert);
 
-            //Console.WriteLine("TREE UPDATE!!");
-            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            //return update.CurrentTree.Value;
-            return null;
+            Console.WriteLine("TREE UPDATE!!");
+            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            return update.CurrentTree.Value;
         }
 
         /// <summary>
