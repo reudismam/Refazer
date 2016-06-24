@@ -26,7 +26,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
-                script = script.GetRange(0, 1);
+                //script = script.GetRange(0, 1);
 
                 var editsExample = new List<List<Edit<SyntaxNodeOrToken>>>();
 
@@ -167,8 +167,6 @@ namespace ProseSample.Substrings.Spg.Witness
                         WitnessFunctions.TreeUpdateDictionary.Add(v.EditOperation.Parent, treeUp);
                         WitnessFunctions.CurrentTrees[v.EditOperation.Parent] = tree;
                     }
-                    //WitnessFunctions.TreeUpdateDictionary.Add(copy, treeUp);
-                    //WitnessFunctions.CurrentTrees[copy] = tree;
 
                     ocurrences.Add(tree);
                 }

@@ -67,7 +67,7 @@ namespace ProseSample.Substrings.Spg.Semantic
             return new Node(update.CurrentTree, node.SyntaxTree);
         }
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, Pattern pattern)
+        public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, Pattern pattern)
         {
             TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
             var nodes = tree.PostOrderTraversal(node);

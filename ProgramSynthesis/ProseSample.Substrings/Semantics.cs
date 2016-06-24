@@ -194,10 +194,9 @@ namespace ProseSample.Substrings
         /// <returns>Result of the pattern</returns>
         public static Node Ref(Node node, Pattern result)
         {
-            //var itreeNode = result.Match.Item1;
-            //var nnode = new Node(itreeNode);
-            //return nnode;
-            return null;
+            var nodes = EditOperation.Matches(node.Value, result);
+            if (nodes.Count > 1) throw new Exception("More than one element is not allowed.");
+            return new Node(nodes.First(), node.Value);
         }
 
         public static IEnumerable<Pattern> CList(Pattern child1, IEnumerable<Pattern> cList)
@@ -248,9 +247,7 @@ namespace ProseSample.Substrings
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
         {
             SyntaxKind targetKind = SyntaxKind.MethodDeclaration;
-
             SyntaxNode node = n.AsNode();
-
             var nodes = from snode in node.DescendantNodes()
                         where snode.IsKind(targetKind)
                         select snode;
@@ -268,16 +265,12 @@ namespace ProseSample.Substrings
             List<SyntaxNodeOrToken> afterNodeList;
             List<SyntaxNodeOrToken> beforeNodeList;
             FillBeforeAfterList(out afterNodeList, loop, out beforeNodeList);
-
             //traversal index of the nodes before the transformation
             var traversalIndices = PostOrderTraversalIndices(node, beforeNodeList);
-
             //Annotate edited nodes
             node = AnnotateNodeEditedNodes(node, traversalIndices);
-
             //Update annotated nodes
             node = UpdateAnnotatedNodes(node, traversalIndices, afterNodeList);
-
             var stringNode = node.ToFullString();
             return node;
         }
@@ -317,7 +310,6 @@ namespace ProseSample.Substrings
             var list = loop.ToList();
             foreach (var snode in list)
             {
-                //todo BUG correct snode.Value.Value
                 afterNodeList.AddRange(MappingRegions[snode]);
                 beforeNodeList.AddRange(BeforeAfterMapping[snode]);
             }
@@ -627,16 +619,6 @@ namespace ProseSample.Substrings
             }
 
             var children = tree.Children.Select(ReconstructTree).ToList();
-
-            //if (tree.Value.IsKind(SyntaxKind.MethodDeclaration))
-            //{
-            //    var method = (MethodDeclarationSyntax)tree.Value;
-            //    method = method.WithReturnType((TypeSyntax)children[0]);
-            //    method = method.WithParameterList((ParameterListSyntax)children[1]);
-            //    method = method.WithBody((BlockSyntax)children[2]);
-            //    return method.NormalizeWhitespace();
-            //}
-
             var node = GetSyntaxElement(tree.Value.Kind(), children, tree.Value);
             return node;
         }
