@@ -21,10 +21,10 @@ namespace ProseSample.Substrings
         public static readonly Dictionary<SyntaxNodeOrToken, TreeUpdate> TreeUpdateDictionary = new Dictionary<SyntaxNodeOrToken, TreeUpdate>();
 
         //Before transformation mapping
-        private static readonly Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> BeforeAfterMapping = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
+        private static readonly Dictionary<Node, List<SyntaxNodeOrToken>> BeforeAfterMapping = new Dictionary<Node, List<SyntaxNodeOrToken>>();
 
         //After transformation mapping
-        private static readonly Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>> MappingRegions = new Dictionary<SyntaxNodeOrToken, List<SyntaxNodeOrToken>>();
+        private static readonly Dictionary<Node, List<SyntaxNodeOrToken>> MappingRegions = new Dictionary<Node, List<SyntaxNodeOrToken>>();
 
         /// <summary>
         /// Matches the element on the tree with specified kind and child nodes.
@@ -100,22 +100,19 @@ namespace ProseSample.Substrings
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static Node Insert(Node snode, Node newNode, int k)
+        public static Node Insert(Node node, Node newNode, int k)
         {
-            var node = snode.Value.Value;
             return EditOperation.Insert(node, newNode, k);
         }
 
         /// <summary>
         /// Move edit operation
         /// </summary>
-        /// <param name="node">Input node</param>
         /// <param name="k">Child index</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static Node Move(Node snode, Pattern from, int k)
+        public static Node Move(Node node, Pattern from, int k)
         {
-            var node = snode.Value.Value;
             return EditOperation.Move(node, from, k);
         }
 
@@ -125,9 +122,8 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
         /// <returns></returns>
-        public static Node Update(Node snode, Node to)
+        public static Node Update(Node node, Node to)
         {
-            var node = snode.Value.Value;
             return EditOperation.Update(node, to);
         }
 
@@ -136,44 +132,37 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="node">Input node</param>
         /// <returns>Result of the edit opration</returns>
-        public static Node Delete(Node snode, string from)
+        public static Node Delete(Node node, string from)
         {
-            var node = snode.Value.Value;
             return EditOperation.Delete(node);
         }
 
-        public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
-        {
-            if (!TreeUpdateDictionary.ContainsKey(n))
-            {
-                TreeUpdate update = new TreeUpdate(n);
-                TreeUpdateDictionary[n] = update;
-            }
-            var node = TreeUpdateDictionary[n].CurrentTree;
+        //public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(SyntaxNodeOrToken n)
+        //{
+        //    if (!TreeUpdateDictionary.ContainsKey(n))
+        //    {
+        //        TreeUpdate update = new TreeUpdate(n);
+        //        TreeUpdateDictionary[n] = update;
+        //    }
+        //    var node = TreeUpdateDictionary[n].CurrentTree;
 
-            return node;
-        }
+        //    return node;
+        //}
 
         /// <summary>
         /// Script semantic function
         /// </summary>
-        /// <param name="node">Input node</param>
         /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static Node Script(Node snode, Patch patch)
+        public static Node Script(Node node, Patch patch)
         {
-            var node = snode.Value.Value;
-            var current = GetCurrentTree(node);
-
+            var current = node.Value;
             var afterFlorest = current.Children.Select(ReconstructTree).ToList();
-
-           
-            var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
-
-            //BeforeAfterMapping[node] = beforeFlorest;
             MappingRegions[node] = afterFlorest;
 
-            return snode;
+            var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
+
+            return node;
         }
 
         /// <summary>
@@ -346,8 +335,8 @@ namespace ProseSample.Substrings
             foreach (var snode in list)
             {
                 //todo BUG correct snode.Value.Value
-                afterNodeList.AddRange(MappingRegions[snode.Value.Value]);
-                beforeNodeList.AddRange(BeforeAfterMapping[snode.Value.Value]);
+                afterNodeList.AddRange(MappingRegions[snode]);
+                beforeNodeList.AddRange(BeforeAfterMapping[snode]);
             }
         }
 
@@ -373,74 +362,67 @@ namespace ProseSample.Substrings
 
         public static bool NodeMatch(Node sx, Pattern template)
         {
-            var x = sx.Value.Value;
-            var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(x);
-            return IsValue(itreeNode, template.Tree);
+            return IsValue(sx.Value, template.Tree);
         }
 
-        public static IEnumerable<SyntaxNodeOrToken> Template(SyntaxNodeOrToken node, Pattern pattern)
+        public static IEnumerable<Node> Template(SyntaxNodeOrToken node, Pattern pattern)
         {
-            var currentTree = GetCurrentTree(node);
-
-            var res = new List<SyntaxNodeOrToken>();
+            var currentTree = ConverterHelper.ConvertCSharpToTreeNode(node);
+            var res = new List<Node>();
             if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
             {
                 var list = FlorestByKind(pattern, currentTree);
 
                 if (list.Any()) res = CreateRegions(list);
             }
+
             res = SingleLocations(res);
             return res;
         }
 
-        public static IEnumerable<Node> Traversal(Node snode, string type)
+        public static IEnumerable<Node> Traversal(Node node, string type)
         {
-            var node = snode.Value.Value;
-            var currentTree = GetCurrentTree(node);
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
-            var itreenode = ConverterHelper.ConvertCSharpToTreeNode(node);
-            var nodes = traversal.PostOrderTraversal(itreenode).Select(o => o.Value).ToList();
-            //nodes.ForEach(o => TreeUpdateDictionary.Add(o, currentTree));
-
-            //return nodes;
-            //todo BUG
-            return new List<Node> {snode};
+            var itreenode = node.Value;
+            var nodes = traversal.PostOrderTraversal(itreenode);
+            var result = nodes.Select(o => new Node(o)).ToList();
+            return result;
         }
 
-        private static List<SyntaxNodeOrToken> SingleLocations(List<SyntaxNodeOrToken> res)
+        private static List<Node> SingleLocations(List<Node> res)
         {
-            var list = new List<SyntaxNodeOrToken>();
-            var candidates = new List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> ();
+            var list = new List<Node>();
+            var candidates = new List<Tuple<Node, Node>> ();
             bool [] intersect = new bool[res.Count]; 
 
             for (int i = 0; i < res.Count; i++)
             {
-                var v = res[i];
+                var v = res[i].Value.Value;
                 for (int j =  i + 1; j < res.Count; j++)
                 {
-                    var c = res[j];
+                    var c = res[j].Value.Value;
                     if (v.Span.Contains(c.Span) || c.Span.Contains(v.Span))
                     {
                         intersect[i] = true;
                         intersect[j] = true;
-                        candidates.Add(Tuple.Create(v, c));
+                        candidates.Add(Tuple.Create(res[i], res[j]));
                         break;
                     }
                 }
 
                 if (!intersect[i])
                 {
-                    list.Add(v);
+                    list.Add(res[i]);
                 }
             }
 
-            list.AddRange(candidates.Select(v => v.Item1.Span.Contains(v.Item2.Span) ? v.Item2 : v.Item1));
-            return list.OrderBy(o => o.SpanStart).ToList();
+            list.AddRange(candidates.Select(v => v.Item1.Value.Value.Span.Contains(v.Item2.Value.Value.Span) ? v.Item2 : v.Item1));
+            return list.OrderBy(o => o.Value.Value.SpanStart).ToList();
         }
 
-        private static List<SyntaxNodeOrToken> CreateRegions(List<List<SyntaxNodeOrToken>> list)
+        private static List<Node> CreateRegions(List<List<SyntaxNodeOrToken>> list)
         {
-            var regions = new List<SyntaxNodeOrToken>();
+            var regions = new List<Node>();
             for (int j = 0; j < list.First().Count; j++)
             {
                 ITreeNode<SyntaxNodeOrToken> iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
@@ -453,9 +435,13 @@ namespace ProseSample.Substrings
                 TreeUpdateDictionary[iTree.Children.First().Value] = new TreeUpdate(iTree); //each column represent a new region
 
                 var beforeFlorest = iTree.Children.Select(o => o.Value).ToList();
-                BeforeAfterMapping[iTree.Children.First().Value] = beforeFlorest;
+                var emptyStatement = SyntaxFactory.EmptyStatement();
+                var newtree = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement));
+                newtree.AddChild(iTree.Children.First(), 0);
+                var newNode = new Node(newtree);
+                BeforeAfterMapping[newNode] = beforeFlorest;
 
-                regions.Add(iTree.Children.First().Value);
+                regions.Add(newNode);
             }
             return regions;
         }

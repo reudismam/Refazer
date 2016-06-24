@@ -10,5 +10,20 @@ namespace ProseSample.Substrings
         {
             Value = value;
         }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        //public override bool Equals(object obj)
+        //{
+        //    return Value.Equals(obj);
+        //}
+
+        //public override int GetHashCode()
+        //{
+        //    return ToString().GetHashCode();
+        //}
     }
 }

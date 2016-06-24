@@ -16,22 +16,17 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="ast">Node that will be insert</param>
         /// <returns>New node with the ast node inserted as the k child</returns>
-        public static Node Insert(SyntaxNodeOrToken node, Node ast, int k)
+        public static Node Insert(Node node, Node ast, int k)
         {
-            TreeUpdate update = Semantics.TreeUpdateDictionary[node];
-
-            var parent = update.CurrentTree;//ConverterHelper.ConvertCSharpToTreeNode(mresult.Match.Item1.Value);
-            //var child = ConverterHelper.ConvertCSharpToTreeNode(ast);
+            TreeUpdate update = new TreeUpdate(node.Value);
+            var parent = update.CurrentTree;
             var child = ast.Value;
-
             var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
             update.ProcessEditOperation(insert);
 
             Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            //return update.CurrentTree.Value;
-            //todo BUG resolve
-            return ast;
+            return new Node(update.CurrentTree);
         }
 
         /// <summary>
@@ -42,7 +37,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <param name="parent">Parent</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static Node Move(SyntaxNodeOrToken node, /*Pattern parent,*/ Pattern from, int k)
+        public static Node Move(Node node, /*Pattern parent,*/ Pattern from, int k)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
@@ -58,7 +53,7 @@ namespace ProseSample.Substrings.Spg.Semantic
             return null;
         }
 
-        public static Node Update(SyntaxNodeOrToken node, /*Pattern from,*/ Node to)
+        public static Node Update(Node node, /*Pattern from,*/ Node to)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
@@ -74,7 +69,7 @@ namespace ProseSample.Substrings.Spg.Semantic
             return null;
         }
 
-        public static Node Delete(SyntaxNodeOrToken node/*,  Pattern delete*/)
+        public static Node Delete(Node node/*,  Pattern delete*/)
         {
             //TreeUpdate update = Semantics.TreeUpdateDictionary[node];
 
