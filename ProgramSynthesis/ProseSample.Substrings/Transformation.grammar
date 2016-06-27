@@ -14,18 +14,17 @@ using System;
 using semantics ProseSample.Substrings.Semantics;
 using learners ProseSample.Substrings.WitnessFunctions;
 
-language ProseSample_Match;
+language Transformation;
 
 @vardefault[VariableScore]
 feature double Score = RankingScore;
-
 @start  Node script := Script(node, patch);
 Patch patch := SE(editList) | EList(editList, patch);
 
 IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
-IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\e: Node => nodematch, fnodes);
+IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
 Node edit := Insert(target, ast, k) | Update(target, ast) | Move(target, match, k) | Delete(target, id);
-bool nodematch := NodeMatch(e, match);
+bool nodematch := NodeMatch(x, match);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
 Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);

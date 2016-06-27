@@ -41,6 +41,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
+            //TODO Refactor the code TransformationLoop
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -65,13 +66,13 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (ccs.Any())
                     {
                         var list = ClusterConnectedComponentsInRegions(newccs);
-                        var edits = list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
-                        AddContext(edits.ToList(), inpTree);
+                        var edits = list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()).ToList();
+                        AddContext(edits, inpTree);
                         kMatches.AddRange(edits.First().Select(v => new List<Edit<SyntaxNodeOrToken>>()));
 
                         foreach (var v in edits)
                         {
-                            for (int i = 0; i < v.Count(); i++)
+                            for (int i = 0; i < v.Count; i++)
                             {
                                 kMatches.ElementAt(i).Add(v.ElementAt(i));
                             }

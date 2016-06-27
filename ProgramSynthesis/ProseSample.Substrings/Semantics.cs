@@ -145,6 +145,8 @@ namespace ProseSample.Substrings
 
             var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
 
+            //node.Value.AddChild(ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement()), 0);
+
             return node;
         }
 

@@ -36,8 +36,8 @@ namespace ProseSample
             SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
 
             //Getting examples methods
-            var examplesInput = GetMethods(inpTree);
-            var examplesOutput = GetMethods(outTree);
+            var examplesInput = GetNodesByType(inpTree, SyntaxKind.LogicalAndExpression);
+            var examplesOutput = GetNodesByType(outTree, SyntaxKind.LogicalAndExpression);
 
             //building example methods
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
@@ -54,22 +54,27 @@ namespace ProseSample
             ProgramNode program = Learn(grammar, spec);
 
             //Run program
-            object[] output = program.Invoke(ioExamples.First().Key).ToEnumerable().ToArray();
+            var itreeNodeTarget = ConverterHelper.ConvertCSharpToTreeNode(examplesInput.First());
+            var emptyTarget = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+            emptyTarget.Children = itreeNodeTarget.Children;
+            var target = State.Create(grammar.InputSymbol, new Node(emptyTarget));
+
+            object[] output = program.Invoke(target).ToEnumerable().ToArray();
             WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
         }
 
-
-        private static List<object> GetMethods(SyntaxNodeOrToken outTree)
+        
+        private static List<SyntaxNodeOrToken> GetNodesByType(SyntaxNodeOrToken outTree, SyntaxKind kind)
         {
             //select nodes of type method declaration
             var exampleMethodsInput = from inode in outTree.AsNode().DescendantNodes()
-                                      where inode.IsKind(SyntaxKind.MethodDeclaration)
+                                      where inode.IsKind(kind)
                                       select inode;
 
             //Select two examples
-            var examplesSotInput = exampleMethodsInput.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 1);
-            var examplesInput = examplesSotInput.Select(o => (object)o).ToList();
-            return examplesInput;
+            var examplesSotInput = exampleMethodsInput.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 2);
+            //var examplesInput = examplesSotInput.Select(o => (object)o).ToList();
+            return examplesSotInput;
         }
 
         /*private static void LoadAndRunRepetitiveChangeMultipleEditions8()

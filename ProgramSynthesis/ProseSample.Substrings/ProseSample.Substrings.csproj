@@ -183,7 +183,6 @@
     <Compile Include="Semantics.cs" />
     <Compile Include="Spg.Bean\Node.cs" />
     <Compile Include="Spg.Bean\Patch.cs" />
-    <Compile Include="Spg.Bean\Script.cs" />
     <Compile Include="Spg.Semantic\EditOperation.cs" />
     <Compile Include="Spg.Semantic\SemanticMatch.cs" />
     <Compile Include="Spg.Witness\AST.cs" />
