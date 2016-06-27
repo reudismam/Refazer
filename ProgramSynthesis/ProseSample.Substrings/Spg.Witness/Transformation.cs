@@ -20,29 +20,33 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Transformation
     {
-        public static ExampleSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            var editsExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
-                //script = script.GetRange(0, 1);
+        //public static SubsequenceSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    var specification = TransformationLoop(rule, parameter, spec);
+        //    //var editsExamples = new Dictionary<State, object>();
+        //    //foreach (State input in spec.ProvidedInputs)
+        //    //{
+        //    //    var x = TransformationLoop(rule, parameter, spec);
+        //    //    var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
+        //    //    //script = script.GetRange(0, 1);
 
-                var editsExample = new List<List<Edit<SyntaxNodeOrToken>>>();
+        //    //    var editsExample = new List<List<Edit<SyntaxNodeOrToken>>>();
 
-                script.ForEach(e => editsExample.Add(new List<Edit<SyntaxNodeOrToken>> { e }));
-                editsExamples[input] = editsExample;
-            }            
-            return new ExampleSpec(editsExamples);
-        }
+        //    //    script.ForEach(e => editsExample.Add(new List<Edit<SyntaxNodeOrToken>> { e }));
+        //    //    editsExamples[input] = editsExample;
+        //    //}            
+        //    //return new ExampleSpec(editsExamples);
+        //    return specification;
+        //}
 
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<object>();
-                var inpTree = (SyntaxNodeOrToken)input[rule.Body[0]];
+                var kMatches = new List<List<Edit<SyntaxNodeOrToken>>>();
+                var inpTreeNode = (Node)input[rule.Body[0]];
+                var inpTree = inpTreeNode.Value.Value;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
@@ -59,17 +63,99 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
 
                     if (ccs.Any())
-                    {                    
+                    {
                         var list = ClusterConnectedComponentsInRegions(newccs);
-                        kMatches.AddRange(list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
+                        var edits = list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
+                        AddContext(edits.ToList(), inpTree);
+                        kMatches.AddRange(edits.First().Select(v => new List<Edit<SyntaxNodeOrToken>>()));
+
+                        foreach (var v in edits)
+                        {
+                            for (int i = 0; i < v.Count(); i++)
+                            {
+                                kMatches.ElementAt(i).Add(v.ElementAt(i));
+                            }
+                        }
                     }
+                    
                 }
-                 kExamples[input] = kMatches;
+                kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { kMatches };
             }
 
-            var subsequenceSpec = new SubsequenceSpec(kExamples);
-            return subsequenceSpec;
+            var subsequence = new SubsequenceSpec(kExamples);
+            return subsequence;
         }
+
+        private static void AddContext(List<List<Edit<SyntaxNodeOrToken>>> scripts, SyntaxNodeOrToken inpTree)
+        {
+            foreach (List<Edit<SyntaxNodeOrToken>> cc in scripts)
+            {
+                var editOperations = cc.Select(o => o.EditOperation).ToList();
+                var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(editOperations);
+                ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
+
+                var regions = FindRegion(ccs, inpTree);
+
+                var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                cc.First().EditOperation.Parent = ConverterHelper.MakeACopy(tree);
+
+                for (int i = 0; i < regions.Count; i++)
+                {
+                    var region = regions[i];
+                    if (region.Children.Count == 1)
+                    {
+                        region = region.Children.First();
+                    }
+                    var r = ConverterHelper.ConvertCSharpToTreeNode(region.Value);
+                    tree.AddChild(r, i);
+                }
+
+                var copy = ConverterHelper.MakeACopy(tree);
+                TreeUpdate treeUp = new TreeUpdate(copy);
+
+                foreach (var v in cc.Where(v => !WitnessFunctions.TreeUpdateDictionary.ContainsKey(v.EditOperation.Parent)))
+                {
+                    WitnessFunctions.TreeUpdateDictionary.Add(v.EditOperation.Parent, treeUp);
+                    WitnessFunctions.CurrentTrees[v.EditOperation.Parent] = tree;
+                }
+            }
+        }
+
+        //public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    var kExamples = new Dictionary<State, IEnumerable<object>>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var kMatches = new List<object>();
+        //        var inpTreeNode = (Node)input[rule.Body[0]];
+        //        var inpTree = inpTreeNode.Value.Value;
+        //        foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
+        //        {
+        //            var script = Script(inpTree, outTree);
+
+        //            var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
+        //            ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
+
+        //            var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+        //            foreach (var cc in ccs)
+        //            {
+        //                var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
+        //                var newScript = Compact(editionConnected);
+        //                newccs.Add(newScript);
+        //            }
+
+        //            if (ccs.Any())
+        //            {
+        //                var list = ClusterConnectedComponentsInRegions(newccs);
+        //                kMatches.AddRange(list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
+        //            }
+        //        }
+        //        kExamples[input] = kMatches;
+        //    }
+
+        //    var subsequenceSpec = new SubsequenceSpec(kExamples);
+        //    return subsequenceSpec;
+        //}
 
         private static List<EditOperation<SyntaxNodeOrToken>> Compact(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
@@ -104,8 +190,6 @@ namespace ProseSample.Substrings.Spg.Witness
 
             var list = new List<List<EditOperation<SyntaxNodeOrToken>>>();
             for (int i = 0; i < clusters.First().Length; i++) list.Add(new List<EditOperation<SyntaxNodeOrToken>>());
-
-
             foreach (var v in clusters)
             {
                 var editOperationDatasetItems = v.OrderBy(o => o.Operations.First().T1Node.Value.Span);
@@ -135,7 +219,8 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-                var inpTree = (SyntaxNodeOrToken)input[rule.Grammar.InputSymbol];
+                var inpTreeNode = (Node)input[rule.Grammar.InputSymbol];
+                var inpTree = inpTreeNode.Value.Value;
                 var ocurrences = new List<ITreeNode<SyntaxNodeOrToken>>();
                 foreach (List<Edit<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {

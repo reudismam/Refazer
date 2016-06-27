@@ -73,7 +73,7 @@ namespace ProseSample.Substrings.Spg.Witness
         public static DisjunctiveExamplesSpec Ref(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-
+            //Todo Bug correct the witness function Ref
             foreach (State input in spec.ProvidedInputs)
             {
                 var key = input[rule.Body[0]];

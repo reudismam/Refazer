@@ -19,14 +19,7 @@ language ProseSample_Match;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 
-@start SyntaxNodeOrToken trans := Transformation(n, regionMap);
-IEnumerable<Node> regionMap := RegionMap(script, breaks) = Map(\node: Node => script, breaks);
-IEnumerable<Node> breaks := Breaks(pred, regions) = Filter(\x: Node => pred, regions); 
-bool pred := FTrue();
-IEnumerable<Node> regions := Template(n, match);
-
-
-Node script := Script(node, patch);
+@start  Node script := Script(node, patch);
 Patch patch := SE(editList) | EList(editList, patch);
 
 IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
@@ -39,9 +32,9 @@ Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);
 Pattern kindRef := Variable(kind) | Literal(tree);
 IEnumerable<Pattern> children := SC(match) | CList(match, children);
 
-Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(node, match);
+Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, match);
 IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 
-@feature[Score=KindScore] SyntaxKind kind;                     @input SyntaxNodeOrToken n;
+@feature[Score=KindScore] SyntaxKind kind;                     @input Node node;
 @feature[Score=KDScore] string id;                             @feature[Score=KScore] int k;
 @feature[Score=NodeScore] SyntaxNodeOrToken tree;

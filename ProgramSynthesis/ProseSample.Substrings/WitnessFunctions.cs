@@ -177,13 +177,13 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("EList", 0)]
-        public static SubsequenceSpec WitnessEList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static SubsequenceSpec WitnessEList1(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.DisjunctiveExamples[input])
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -203,13 +203,13 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("EList", 1)]
-        public static ExampleSpec WitnessEList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static SubsequenceSpec WitnessEList2(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
-            var treeExamples = new Dictionary<State, object>();
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var newPatch = new List<List<Edit<SyntaxNodeOrToken>>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.DisjunctiveExamples[input])
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -217,9 +217,9 @@ namespace ProseSample.Substrings
                     editList.RemoveAt(0);
                     newPatch = editList;
                 }
-                treeExamples[input] = newPatch;
+                treeExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> {newPatch};
             }
-            return new ExampleSpec(treeExamples);
+            return new SubsequenceSpec(treeExamples);
         }
 
         /// <summary>
@@ -230,13 +230,13 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("SE", 0)]
-        public static SubsequenceSpec WitnessSeChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static SubsequenceSpec WitnessSeChild1(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.DisjunctiveExamples[input])
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count != 1) return null;
@@ -287,20 +287,20 @@ namespace ProseSample.Substrings
             return Match.MatchK(rule, parameter, spec, kind);
         }
 
-        /// <summary>
-        /// Witness function for script rule
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Rule parameter</param>
-        /// <param name="spec">Examples specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Script", 1)]
-        public static DisjunctiveExamplesSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return Transformation.ScriptEdits(rule, parameter, spec);
-        }
+        ///// <summary>
+        ///// Witness function for script rule
+        ///// </summary>
+        ///// <param name="rule">Grammar rule</param>
+        ///// <param name="parameter">Rule parameter</param>
+        ///// <param name="spec">Examples specification</param>
+        ///// <returns>Disjunctive example specification</returns>
+        //[WitnessFunction("Script", 1)]
+        //public static DisjunctiveExamplesSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    return Transformation.ScriptEdits(rule, parameter, spec);
+        //}
 
-        [WitnessFunction("Transformation", 1)]
+        [WitnessFunction("Script", 1)]
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Transformation.TransformationLoop(rule, parameter, spec);
