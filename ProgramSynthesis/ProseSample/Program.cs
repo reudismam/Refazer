@@ -45,7 +45,6 @@ namespace ProseSample
             for (int i = 0; i < examplesInput.Count; i++)
             {
                 var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-                //var outputElement = new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken) examplesOutput.ElementAt(i)));
                 ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
             }
 

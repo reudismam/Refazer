@@ -97,6 +97,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var regions = FindRegion(ccs, inpTree);
 
                 var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                var superClass = cc.First().EditOperation.Parent.Value;
                 cc.First().EditOperation.Parent = ConverterHelper.MakeACopy(tree);
 
                 for (int i = 0; i < regions.Count; i++)

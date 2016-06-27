@@ -340,9 +340,9 @@ namespace ProseSample.Substrings
             return IsValue(sx.Value, template.Tree);
         }
 
-        public static IEnumerable<Node> Template(SyntaxNodeOrToken node, Pattern pattern)
+        public static IEnumerable<Node> Template(Node node, Pattern pattern)
         {
-            var currentTree = ConverterHelper.ConvertCSharpToTreeNode(node);
+            var currentTree = node.Value;//ConverterHelper.ConvertCSharpToTreeNode(node);
             var res = new List<Node>();
             if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
             {
