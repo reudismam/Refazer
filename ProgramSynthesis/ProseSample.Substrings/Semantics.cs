@@ -63,7 +63,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="kind">Kind</param>
         /// <returns>Search result</returns>
-        public static Pattern Variable(Node target, SyntaxKind kind, int k)
+        public static Pattern Variable(SyntaxKind kind)
         {
             return SemanticMatch.Variable(kind);
         }
@@ -82,7 +82,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="tree">Value</param>
         /// <returns>Literal</returns>
-        public static Pattern Literal(Node target, SyntaxNodeOrToken tree, int k)
+        public static Pattern Literal(SyntaxNodeOrToken tree)
         {
             return SemanticMatch.Literal(tree);
         }

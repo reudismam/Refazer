@@ -27,7 +27,7 @@ bool nodematch := NodeMatch(x, match);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
 Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);
-Pattern kindRef := Variable(node, kind, k) | Literal(node, tree, k);
+Pattern kindRef := Variable(kind) | Literal(tree);
 IEnumerable<Pattern> children := SC(match) | CList(match, children);
 
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, match);
