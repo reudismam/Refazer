@@ -19,7 +19,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
-                    var matches = MatchManager.AbstractMatches(sot.SyntaxTree, sot.Value.Kind());
+                    var syntaxTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
+                    var matches = MatchManager.AbstractMatches(syntaxTree, sot.Value.Kind());
 
                     if (sot.Children.Any() && matches.Count > 1) continue;
                     if (!matches.Any()) continue;

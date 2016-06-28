@@ -367,6 +367,7 @@ namespace ProseSample.Substrings
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = node.Value;
             var nodes = traversal.PostOrderTraversal(itreenode);
+            nodes.ForEach(o => o.SyntaxTree = node.Value);
             var result = nodes.Select(o => new Node(o)).ToList();
             return result;
         }

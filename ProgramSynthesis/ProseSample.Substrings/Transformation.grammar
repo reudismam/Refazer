@@ -26,8 +26,8 @@ Node edit := Insert(target, ast, k) | Update(target, ast) | Move(target, match, 
 bool nodematch := NodeMatch(x, match);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
-Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);
-Pattern kindRef := Variable(kind) | Literal(tree);
+Pattern match := C(kind, children) | Tree(kindRef);
+Pattern kindRef :=  Literal(tree) | Variable(kind);
 IEnumerable<Pattern> children := SC(match) | CList(match, children);
 
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, match);
