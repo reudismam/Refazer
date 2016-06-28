@@ -49,7 +49,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (!sot.Children.Any()) return null;
 
                     var lsot = ExtractChildren(sot);
-                    var childList = lsot.Select(item => new Node(item)).ToList();
+                    var childList = lsot.Select(item => new Node(item, node.SyntaxTree)).ToList();
                     matches.Add(childList);
                 }
                 eExamples[input] = matches;
@@ -92,7 +92,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (sot.Value.IsToken) return null;
                     if (!sot.Children.Any()) return null;
                     var lsot = ExtractChildren(sot);
-                    var childList = lsot.Select(item => new Node(item)).ToList();
+                    var childList = lsot.Select(item => new Node(item, node.SyntaxTree)).ToList();
                     matches.Add(childList);
                 }
                 eExamples[input] = matches;

@@ -32,10 +32,24 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Literal", 0)]
+        [WitnessFunction("Literal", 1)]
         public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Literal.LiteralTree(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <param name="treeBinding">TreeBinding</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Literal", 2, DependsOnParameters = new[] { 1 })]
+        public static DisjunctiveExamplesSpec LiteralK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec treeBinding)
+        {
+            return Literal.LiteralK(rule, parameter, spec, treeBinding);
         }
 
         /// <summary>
@@ -58,10 +72,24 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Variable", 0)]
-        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        [WitnessFunction("Variable", 1)]
+        public static ExampleSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Variable.VariableKind(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// KindRef witness function for parameter k.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <param name="kindBinding">kind binding</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Variable", 2, DependsOnParameters = new[] { 1 })]
+        public static DisjunctiveExamplesSpec VariableK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        {
+            return Variable.VariableK(rule, parameter, spec, kindBinding);
         }
 
         /// <summary>
@@ -465,8 +493,8 @@ namespace ProseSample.Substrings
             var editExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                editExamples[input] = new Node(inpTree);
+                var inpTree = (Node)input[rule.Body[0]];
+                editExamples[input] = inpTree; //new Node(inpTree, CurrentTrees[inpTree]);
             }
 
             return new ExampleSpec(editExamples);

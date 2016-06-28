@@ -99,7 +99,7 @@ namespace ProseSample.Substrings
         public static double Score_Ref(double inScore, double matchScore) => matchScore;
 
         [FeatureCalculator("Variable")]
-        public static double Score_Variable(double kindScore) => kindScore;
+        public static double Score_Variable(double inSxore, double kindScore, double kScore) => kindScore;
 
         [FeatureCalculator("Abstract")]
         public static double Score_Abstract(double kindScore) => kindScore;
@@ -120,7 +120,7 @@ namespace ProseSample.Substrings
         public static double Score_P(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Literal")]
-        public static double Score_Literal(double treeScore) => treeScore;
+        public static double Score_Literal(double inSource, double treeScore, double kScore) => treeScore;
 
         [FeatureCalculator("C")]
         public static double Score_C1(double kindScore, double expression1Score) => kindScore + expression1Score;

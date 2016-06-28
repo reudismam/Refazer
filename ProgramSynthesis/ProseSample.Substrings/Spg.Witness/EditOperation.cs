@@ -45,10 +45,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
-
                 var from = editOperation.T1Node;
-                var result = new Node(from);
-
+                var result = new Node(from, from.Parent);
                 kExamples[input] = result;
             }
             return new ExampleSpec(kExamples);
@@ -62,8 +60,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
-
-
                 kExamples[input] = editOperation.K;
             }
             return new ExampleSpec(kExamples);

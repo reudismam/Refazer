@@ -76,15 +76,15 @@ namespace ProseSample.Substrings.Spg.Witness
             //Todo Bug correct the witness function Ref
             foreach (State input in spec.ProvidedInputs)
             {
-                var key = input[rule.Body[0]];
-                var inpTree = WitnessFunctions.GetCurrentTree(key);
+                var inpTree = (Node) input[rule.Body[0]];
+                //var inpTree = WitnessFunctions.GetCurrentTree(key);
                 var mats = new List<object>();
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (!sot.Value.IsNode) return null;
 
                     var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);
-                    var node = IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree, subTree);
+                    var node = IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree.Value, subTree);
 
                     if (node == null) return null;
 

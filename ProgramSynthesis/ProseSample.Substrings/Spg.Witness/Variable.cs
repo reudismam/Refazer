@@ -10,7 +10,7 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Variable
     {
-        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static ExampleSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             //var treeExamples = new Dictionary<State, IEnumerable<object>>();
             //foreach (State input in spec.ProvidedInputs)
@@ -39,21 +39,19 @@ namespace ProseSample.Substrings.Spg.Witness
             return Match.CKind(rule, parameter, spec);
         }
 
-
         public static DisjunctiveExamplesSpec VariableK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
-                var key = input[rule.Body[0]];
-                var inpTree = WitnessFunctions.GetCurrentTree(key);
-                //PrintUtil<SyntaxNodeOrToken>.PrintPretty(inpTree, "", true);
+                var key = (Node) input[rule.Body[0]];
+                var inpTree = WitnessFunctions.GetCurrentTree(key.Value);
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
 
-                    var kind = (SyntaxKind)kindBinding.Examples[input];
+                    var kind = (SyntaxKind) kindBinding.Examples[input];
                     var matches = MatchManager.AbstractMatches(inpTree, kind);
 
                     for (int i = 0; i < matches.Count; i++)

@@ -39,7 +39,19 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var edits = (List<Edit<SyntaxNodeOrToken>>) spec.Examples[input];
-                editExamples[input] = edits.Select(e => e.EditOperation.Parent).ToList();
+                var matches = new List<Node>();
+                foreach (var v in edits)
+                {
+                    if (!(v.EditOperation is Delete<SyntaxNodeOrToken>))
+                    {
+                        matches.Add(new Node(v.EditOperation.Parent));
+                    }
+                    else
+                    {
+                        matches.Add(new Node(v.EditOperation.T1Node));
+                    }
+                }
+                //var matches = edits.Select(e => new Node(e.EditOperation.Parent)).ToList();
 
                 foreach (var edit in edits)
                 {
@@ -60,6 +72,13 @@ namespace ProseSample.Substrings.Spg.Witness
                     Console.WriteLine("UPDATED TREE\n\n");
                     PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
                 }
+
+                //foreach (var v in matches)
+                //{
+                //    v.SyntaxTree = WitnessFunctions.CurrentTrees[v.Value];
+                //}
+
+                editExamples[input] = matches;
             }
             return new SubsequenceSpec(editExamples);
         }

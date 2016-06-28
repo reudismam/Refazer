@@ -19,15 +19,16 @@ namespace ProseSample.Substrings.Spg.Witness
                 var mats = new List<object>();
                 var key = input[rule.Body[0]];
                 var inpTree = WitnessFunctions.GetCurrentTree(key);
-                foreach (var sot in from Node matchResult in spec.DisjunctiveExamples[input] select matchResult.Value)
-                {               
+                foreach (Node node in spec.DisjunctiveExamples[input])
+                {
+                    var sot = node.Value;
                     var treeNode = TreeUpdate.FindNode(inpTree, sot.Value);
 
                     if (sot.Value.IsToken || treeNode != null) return null;
 
                     var child = inpTree.Children.Single();
 
-                    var result = new Node(child);
+                    var result = new Node(child, node.SyntaxTree);
                     mats.Add(result);
                 }
                 treeExamples[input] = mats.GetRange(0, 1);

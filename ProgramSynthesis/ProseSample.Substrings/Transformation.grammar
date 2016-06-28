@@ -14,7 +14,7 @@ using System;
 using semantics ProseSample.Substrings.Semantics;
 using learners ProseSample.Substrings.WitnessFunctions;
 
-language Transformation
+language Transformation;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 @start  Node script := Script(node, patch);
@@ -27,7 +27,7 @@ bool nodematch := NodeMatch(x, match);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
 Pattern match := C(kind, children) | Tree(kindRef) | Parent(kindRef, k);
-Pattern kindRef := Variable(kind) | Literal(tree);
+Pattern kindRef := Variable(node, kind, k) | Literal(node, tree, k);
 IEnumerable<Pattern> children := SC(match) | CList(match, children);
 
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, match);
