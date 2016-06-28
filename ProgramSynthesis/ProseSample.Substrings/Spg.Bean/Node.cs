@@ -6,12 +6,12 @@ namespace ProseSample.Substrings
     public class Node
     {
         public ITreeNode<SyntaxNodeOrToken> Value { get; set; }
-        public ITreeNode<SyntaxNodeOrToken> SyntaxTree { get; set; }
+        //public ITreeNode<SyntaxNodeOrToken> SyntaxTree { get; set; }
 
-        public Node(ITreeNode<SyntaxNodeOrToken> value, ITreeNode<SyntaxNodeOrToken> syntaxTree = null)
+        public Node(ITreeNode<SyntaxNodeOrToken> value/*, ITreeNode<SyntaxNodeOrToken> syntaxTree = null*/)
         {
             Value = value;
-            SyntaxTree = syntaxTree;
+            //SyntaxTree = syntaxTree;
         }
 
         public override string ToString()

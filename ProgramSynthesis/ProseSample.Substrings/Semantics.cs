@@ -198,7 +198,7 @@ namespace ProseSample.Substrings
         {
             var nodes = EditOperation.Matches(node.Value, result);
             if (nodes.Count > 1) throw new Exception("More than one element is not allowed.");
-            return new Node(nodes.First(), node.Value);
+            return new Node(nodes.First());
         }
 
         public static IEnumerable<Pattern> CList(Pattern child1, IEnumerable<Pattern> cList)
@@ -367,7 +367,7 @@ namespace ProseSample.Substrings
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = node.Value;
             var nodes = traversal.PostOrderTraversal(itreenode);
-            var result = nodes.Select(o => new Node(o, node.Value)).ToList();
+            var result = nodes.Select(o => new Node(o)).ToList();
             return result;
         }
 

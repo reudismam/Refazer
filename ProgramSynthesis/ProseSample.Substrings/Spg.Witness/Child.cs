@@ -28,7 +28,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var child = inpTree.Children.Single();
 
-                    var result = new Node(child, node.SyntaxTree);
+                    var result = new Node(child);
                     mats.Add(result);
                 }
                 treeExamples[input] = mats.GetRange(0, 1);

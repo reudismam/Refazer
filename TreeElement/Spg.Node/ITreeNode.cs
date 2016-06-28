@@ -18,6 +18,8 @@ namespace TreeElement.Spg.Node
 
         TLabel Label { get; set; }
 
+        ITreeNode<T> SyntaxTree { get; set; }
+
         int Start { get; set; }
 
         /// <summary>

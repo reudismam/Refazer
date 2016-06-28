@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TreeElement.Spg.Walker;
 
 namespace TreeElement.Spg.Node
 {
@@ -52,8 +51,8 @@ namespace TreeElement.Spg.Node
         public T Value { get; set; }
 
         public TLabel Label { get; set; }
+        public ITreeNode<T> SyntaxTree { get; set; }
         public int Start { get; set; }
-
 
         /// <summary>
         /// Children get and set method

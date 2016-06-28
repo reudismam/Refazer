@@ -45,7 +45,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
                 var from = editOperation.T1Node;
-                var result = new Node(from, from.Parent);
+                var result = new Node(from);
                 kExamples[input] = result;
             }
             return new ExampleSpec(kExamples);
@@ -64,7 +64,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return new ExampleSpec(kExamples);
         }
 
-        public static ExampleSpec InsertAST(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)

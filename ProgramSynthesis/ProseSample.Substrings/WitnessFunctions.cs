@@ -419,7 +419,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Insert", 1)]
         public static ExampleSpec InsertParent(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.InsertAST(rule, parameter, spec);
+            return EditOperation.Insertast(rule, parameter, spec);
         }
 
         /// <summary>
