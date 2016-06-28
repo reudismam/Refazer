@@ -42,7 +42,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var matches = new List<Node>();
                 foreach (var v in edits)
                 {
-                    if (!(v.EditOperation is Delete<SyntaxNodeOrToken>))
+                    if (v.EditOperation is Insert<SyntaxNodeOrToken> || v.EditOperation is Move<SyntaxNodeOrToken>)
                     {
                         matches.Add(new Node(v.EditOperation.Parent));
                     }
@@ -56,7 +56,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (var edit in edits)
                 {
                     //var key = input[rule.Body[0]];
-                    var treeUp = WitnessFunctions.TreeUpdateDictionary[edit.EditOperation.Parent];
+                    var treeUp = WitnessFunctions.TreeUpdateDictionary[edit.EditOperation.Parent.SyntaxTree];
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(edit.EditOperation);
                     

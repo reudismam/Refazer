@@ -4,6 +4,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Script;
+using TreeEdit.Spg.TreeEdit.Update;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -45,7 +46,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
                 var from = editOperation.T1Node;
-                var result = new Node(from);
+                var fromNode = TreeUpdate.FindNode(from.SyntaxTree, from.Value);
+                fromNode.SyntaxTree = from.SyntaxTree;
+                var result = new Node(fromNode);
                 kExamples[input] = result;
             }
             return new ExampleSpec(kExamples);

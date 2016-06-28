@@ -50,6 +50,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var lsot = ExtractChildren(sot);
                     var childList = lsot.Select(item => new Node(item)).ToList();
+                    childList.ForEach(item => item.Value.SyntaxTree = sot.SyntaxTree);
                     matches.Add(childList);
                 }
                 eExamples[input] = matches;

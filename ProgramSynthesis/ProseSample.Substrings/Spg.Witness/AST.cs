@@ -45,6 +45,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     if (sot.Value.IsToken) return null;
                     var lsot = sot.Children;
+                    lsot.ForEach(o => o.SyntaxTree = sot.SyntaxTree);
                     matches.Add(lsot);
                 }
                 eExamples[input] = matches;
@@ -82,17 +83,12 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (!sot.Value.IsNode) return null;
-
                     var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);
                     var node = IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree.Value, subTree);
-
                     if (node == null) return null;
-
                     var result = new Node(sot);
-
                     mats.Add(result);
                 }
-
                 treeExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);

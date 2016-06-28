@@ -78,6 +78,8 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                     }              
                 }
+
+                kMatches = kMatches.GetRange(0, 5);
                 kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { kMatches };
             }
 
@@ -96,7 +98,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var regions = FindRegion(ccs, inpTree);
 
                 var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
-                var superClass = cc.First().EditOperation.Parent.Value;
+
                 cc.First().EditOperation.Parent = ConverterHelper.MakeACopy(tree);
 
                 for (int i = 0; i < regions.Count; i++)
@@ -113,11 +115,24 @@ namespace ProseSample.Substrings.Spg.Witness
                 var copy = ConverterHelper.MakeACopy(tree);
                 TreeUpdate treeUp = new TreeUpdate(copy);
 
-                foreach (var v in cc.Where(v => !WitnessFunctions.TreeUpdateDictionary.ContainsKey(v.EditOperation.Parent)))
+                foreach (var v in cc)
                 {
-                    WitnessFunctions.TreeUpdateDictionary.Add(v.EditOperation.Parent, treeUp);
-                    WitnessFunctions.CurrentTrees[v.EditOperation.Parent] = tree;
+                    v.EditOperation.T1Node.SyntaxTree = tree;
+                    if (v.EditOperation.Parent != null)
+                    {
+                        v.EditOperation.Parent.SyntaxTree = tree;
+                    }
+
+                    if (v.EditOperation is Update<SyntaxNodeOrToken>)
+                    {
+                        var update = (Update<SyntaxNodeOrToken>) v.EditOperation;
+                        update.To.SyntaxTree = tree;
+                    }
+
                 }
+
+                WitnessFunctions.TreeUpdateDictionary.Add(tree, treeUp);
+                WitnessFunctions.CurrentTrees[tree] = tree;
             }
         }
 

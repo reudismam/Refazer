@@ -20,6 +20,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var target = Target(sot);
                     if (sot.Value.IsToken || target == null) return null;
+                    target.SyntaxTree = sot.SyntaxTree;
                     mats.Add(new Node(target));
                 }
                 treeExamples[input] = mats;
