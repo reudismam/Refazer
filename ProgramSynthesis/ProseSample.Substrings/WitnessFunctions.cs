@@ -282,7 +282,7 @@ namespace ProseSample.Substrings
         }
 
         [WitnessFunction("Match", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kind)
         {
             return Match.MatchK(rule, parameter, spec, kind);
         }

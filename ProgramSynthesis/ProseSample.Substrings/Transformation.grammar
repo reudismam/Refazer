@@ -14,13 +14,12 @@ using System;
 using semantics ProseSample.Substrings.Semantics;
 using learners ProseSample.Substrings.WitnessFunctions;
 
-language Transformation;
-
+language Transformation
 @vardefault[VariableScore]
 feature double Score = RankingScore;
 @start  Node script := Script(node, patch);
-Patch patch := SE(editList) | EList(editList, patch);
 
+Patch patch := SE(editList) | EList(editList, patch);
 IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
 IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
 Node edit := Insert(target, ast, k) | Update(target, ast) | Move(target, match, k) | Delete(target, id);

@@ -342,6 +342,11 @@ namespace ProseSample.Substrings
             return IsValue(sx.Value, template.Tree);
         }
 
+        public static Pattern Match(Node target, Pattern kmatch, int k)
+        {
+            return null;
+        }
+
         public static IEnumerable<Node> Template(Node node, Pattern pattern)
         {
             var currentTree = node.Value;//ConverterHelper.ConvertCSharpToTreeNode(node);

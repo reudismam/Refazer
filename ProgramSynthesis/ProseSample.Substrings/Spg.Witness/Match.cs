@@ -100,9 +100,25 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kind)
         {
-            throw new NotImplementedException();
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var v = (Node) input[rule.Body[0]];
+                var rr = (Pattern) kind.DisjunctiveExamples[input];
+                var ks = new List<object>();
+                //foreach (uint pos in spec.DisjunctiveExamples[input])
+                //{
+                //    var ms = rr.Item1.Run(v).Where(m => rr.Item2.MatchesAt(v, m.Right)).ToArray();
+                //    int index = ms.BinarySearchBy(m => m.Right.CompareTo(pos));
+                //    if (index < 0) return null;
+                //    ks.Add(index + 1);
+                //    ks.Add(index - ms.Length);
+                //}
+                kExamples[input] = ks;
+            }
+            return DisjunctiveExamplesSpec.From(kExamples);
         }
     }
 }
