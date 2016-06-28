@@ -324,7 +324,7 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                treeExamples[input] = new List<string> {"PostOrder"};
+                treeExamples[input] = new List<string> { "PostOrder" };
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
         }

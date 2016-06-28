@@ -77,8 +77,7 @@ namespace ProseSample.Substrings.Spg.Witness
                                 kMatches.ElementAt(i).Add(v.ElementAt(i));
                             }
                         }
-                    }
-                    
+                    }              
                 }
                 kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { kMatches };
             }
