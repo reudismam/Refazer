@@ -62,6 +62,25 @@ namespace TreeElement.Spg.Node
             return tree;
         }
 
+        public static ITreeNode<T> TreeAtHeight<T>(ITreeNode<T> st, Dictionary<ITreeNode<T>, int> dist, int height)
+        {
+            var list = st.Children;
+            if (!list.Any() || dist[st] >= height)
+            {
+                return new TreeNode<T>(st.Value, st.Label);
+            }
+
+            List<ITreeNode<T>> children = new List<ITreeNode<T>>();
+            foreach (ITreeNode<T> sot in st.Children)
+            {
+                ITreeNode<T> node = TreeAtHeight(sot, dist, height);
+                children.Add(node);
+            }
+
+            ITreeNode<T> tree = new TreeNode<T>(st.Value, st.Label, children);
+            return tree;
+        }
+
 
 
         /// <summary>

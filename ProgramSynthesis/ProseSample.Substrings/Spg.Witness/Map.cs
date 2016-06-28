@@ -9,7 +9,9 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
+using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
+using TreeElement.Spg.Walker;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -42,14 +44,24 @@ namespace ProseSample.Substrings.Spg.Witness
                 var matches = new List<Node>();
                 foreach (var v in edits)
                 {
+                    ITreeNode<SyntaxNodeOrToken> target;
                     if (v.EditOperation is Insert<SyntaxNodeOrToken> || v.EditOperation is Move<SyntaxNodeOrToken>)
                     {
-                        matches.Add(new Node(v.EditOperation.Parent));
+                        //matches.Add(new Node(v.EditOperation.Parent));
+                        target = v.EditOperation.Parent;
                     }
                     else
                     {
-                        matches.Add(new Node(v.EditOperation.T1Node));
+                        //matches.Add(new Node(v.EditOperation.T1Node));
+                        target = v.EditOperation.T1Node;
                     }
+
+                    var currentTree = WitnessFunctions.TreeUpdateDictionary[target.SyntaxTree].CurrentTree;
+                    var targetNode = TreeUpdate.FindNode(currentTree, target.Value);
+                    var dist = BFSWalker<SyntaxNodeOrToken>.Dist(targetNode);
+                    var targetNodeHeight = ConverterHelper.TreeAtHeight(targetNode, dist, 1);
+                    targetNodeHeight.SyntaxTree = target.SyntaxTree;
+                    matches.Add(new Node(targetNodeHeight));
                 }
                 //var matches = edits.Select(e => new Node(e.EditOperation.Parent)).ToList();
 
