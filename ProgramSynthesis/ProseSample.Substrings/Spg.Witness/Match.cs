@@ -113,7 +113,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var commonPattern = BuildPattern(patterns.First(), patterns.Last());
             foreach(State input in spec.ProvidedInputs)
             {
-                eExamples[input] = new List<ITreeNode<Token>> {commonPattern.Tree};
+                eExamples[input] = new List<ITreeNode<Token>> {ConverterHelper.MakeACopy(commonPattern.Tree)};
             }
             
             return DisjunctiveExamplesSpec.From(eExamples);

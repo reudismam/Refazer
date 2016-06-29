@@ -152,8 +152,8 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("CList", 1)]
-        public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        [WitnessFunction("CList", 1, DependsOnParameters = new[] { 0 })]
+        public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec matchSpec)
         {
             return GList<ITreeNode<Token>>.List1(rule, parameter, spec);
         }
