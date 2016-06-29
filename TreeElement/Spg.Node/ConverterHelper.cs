@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using ProseSample.Substrings;
 
 namespace TreeElement.Spg.Node
 {
@@ -35,6 +36,25 @@ namespace TreeElement.Spg.Node
 
             ITreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()), children);
             tree.Start = st.SpanStart;
+            return tree;
+        }
+
+        public static ITreeNode<Token> ConvertITreeNodeToToken(ITreeNode<SyntaxNodeOrToken> st)
+        {
+            var token = new Token(st.Value.Kind());
+            if (!st.Children.Any())
+            {
+                var dtoken = new DynToken(st.Value.Kind(), st.Value);
+                var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
+                return dtreeNode;
+            }
+            var children = new List<ITreeNode<Token>>();
+            foreach (var sot in st.Children)
+            {
+                var node = ConvertITreeNodeToToken(sot);
+                children.Add(node);
+            }
+            var tree = new TreeNode<Token>(token, new TLabel(token.Kind), children);
             return tree;
         }
 
