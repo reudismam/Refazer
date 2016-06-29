@@ -22,10 +22,38 @@ namespace ProseSample.Substrings.Spg.Witness
                     var syntaxTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
                     var matches = MatchManager.AbstractMatches(syntaxTree, sot.Value.Kind());
 
-                    if (sot.Children.Any() && matches.Count > 1) continue;
+                    if (!sot.Children.Any()) continue;
                     if (!matches.Any()) continue;
 
-                    mats.Add(matches.First().Kind());
+                    mats.Add(matches.First().Value.Kind());
+                }
+
+                if (!mats.Any()) return null;
+
+                if (mats.Any(v => !v.Equals(mats.First()))) return null;
+                treeExamples[input] = mats.First();
+            }
+
+            return new ExampleSpec(treeExamples);
+        }
+
+
+        public static ExampleSpec LeafKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var treeExamples = new Dictionary<State, object>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var mats = new List<SyntaxKind>();
+                foreach (Node node in spec.DisjunctiveExamples[input])
+                {
+                    var sot = node.Value;
+                    var syntaxTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
+                    var matches = MatchManager.LeafAbstractMatches(syntaxTree, sot.Value.Kind());
+
+                    if (sot.Children.Any()) continue;
+                    if (!matches.Any()) continue;
+
+                    mats.Add(matches.First().Value.Kind());
                 }
 
                 if (!mats.Any()) return null;

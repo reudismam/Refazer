@@ -78,7 +78,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                     }              
                 }
-                //kMatches = kMatches.GetRange(0, 5);
+                //kMatches = kMatches.GetRange(0, 3);
                 kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { kMatches };
             }
             var subsequence = new SubsequenceSpec(kExamples);

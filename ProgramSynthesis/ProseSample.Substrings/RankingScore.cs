@@ -101,6 +101,9 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Variable")]
         public static double Score_Variable(double kindScore) => kindScore;
 
+        [FeatureCalculator("Leaf")]
+        public static double Score_Leaf(double kindScore) => kindScore;
+
         [FeatureCalculator("Abstract")]
         public static double Score_Abstract(double kindScore) => kindScore;
 

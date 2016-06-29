@@ -78,6 +78,19 @@ namespace ProseSample.Substrings
             return Variable.VariableKind(rule, parameter, spec);
         }
 
+        /// <summary>
+        /// KindRef witness function for parameter kind.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Leaf", 0)]
+        public static ExampleSpec LeafKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return Variable.LeafKind(rule, parameter, spec);
+        }
+
         ///// <summary>
         ///// KindRef witness function for parameter k.
         ///// </summary>

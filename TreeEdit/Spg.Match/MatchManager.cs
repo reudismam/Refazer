@@ -29,9 +29,22 @@ namespace TreeEdit.Spg.Match
         /// <param name="inpTree">Input tree</param>
         /// <param name="kind">Syntax node or token to be matched.</param>
         /// <returns>Abstract match</returns>
-        public static List<SyntaxNodeOrToken> AbstractMatches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
+        public static List<ITreeNode<SyntaxNodeOrToken>> AbstractMatches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
         {
-            return (from item in inpTree.DescendantNodes() where item.Value.IsKind(kind) select item.Value).ToList();
+            return (from item in inpTree.DescendantNodes() where item.Value.IsKind(kind) select item).ToList();
+        }
+
+        /// <summary>
+        /// Abstract match
+        /// </summary>
+        /// <param name="inpTree">Input tree</param>
+        /// <param name="kind">Syntax node or token to be matched.</param>
+        /// <returns>Abstract match</returns>
+        public static List<ITreeNode<SyntaxNodeOrToken>> LeafAbstractMatches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
+        {
+            var nodes = from item in inpTree.DescendantNodes() where item.Value.IsKind(kind) select item;
+            var result = nodes.Where(v => !v.Children.Any()).ToList();
+            return result;
         }
     }
 }

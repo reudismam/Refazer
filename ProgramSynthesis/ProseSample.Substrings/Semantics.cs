@@ -68,6 +68,17 @@ namespace ProseSample.Substrings
             return SemanticMatch.Variable(kind);
         }
 
+
+        /// <summary>
+        /// Searches a node with with kind and occurrence
+        /// </summary>
+        /// <param name="kind">Kind</param>
+        /// <returns>Search result</returns>
+        public static Pattern Leaf(SyntaxKind kind)
+        {
+            return SemanticMatch.Leaf(kind);
+        }
+
         public static Pattern Parent(Pattern variable, int k)
         {
             //var currentTree = GetCurrentTree(node);

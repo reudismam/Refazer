@@ -173,7 +173,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings.cs" />
-    <Compile Include="DynToken.cs" />
+    <Compile Include="Token\LeafToken.cs" />
+    <Compile Include="Token\DynToken.cs" />
     <Compile Include="List\GList.cs" />
     <Compile Include="Spg.Bean\Pattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -197,7 +198,7 @@
     <Compile Include="Spg.Witness\Template.cs" />
     <Compile Include="Spg.Witness\Transformation.cs" />
     <Compile Include="Spg.Witness\Variable.cs" />
-    <Compile Include="Token.cs" />
+    <Compile Include="Token\Token.cs" />
     <Compile Include="WitnessFunctions.cs" />
   </ItemGroup>
   <ItemGroup>

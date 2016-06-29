@@ -43,5 +43,18 @@ namespace ProseSample.Substrings.Spg.Semantic
             var pattern = new Pattern(inode);
             return pattern;
         }
+
+        /// <summary>
+        /// Variable
+        /// </summary>
+        /// <param name="kind">Kind</param>
+        /// <returns>Variable pattern</returns>
+        public static Pattern Leaf(SyntaxKind kind)
+        {
+            var token = new LeafToken(kind);
+            var inode = new TreeNode<Token>(token, null);
+            var pattern = new Pattern(inode);
+            return pattern;
+        }
     }
 }
