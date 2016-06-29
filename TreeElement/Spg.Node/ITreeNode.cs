@@ -8,7 +8,6 @@ namespace TreeElement.Spg.Node
     /// <typeparam name="T">The type of the value associated with this node.</typeparam>
     public interface ITreeNode<T>
     {
-
         ITreeNode<T> Parent { get; set; }
         /// <summary>
         /// Gets or sets the value.

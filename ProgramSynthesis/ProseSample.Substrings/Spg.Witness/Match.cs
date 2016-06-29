@@ -19,7 +19,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         public static ExampleSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var pattern = MatchPattern(rule, parameter, spec);
+            //var pattern = MatchPattern(rule, parameter, spec);
             var kdExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -85,6 +85,7 @@ namespace ProseSample.Substrings.Spg.Witness
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
+            var patterns = new List<ITreeNode<Token>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<ITreeNode<SyntaxNodeOrToken>>();
@@ -93,10 +94,16 @@ namespace ProseSample.Substrings.Spg.Witness
                     var sot = node.Value;
                     matches.Add(sot);
                 }
-
-                var pattern = BuildPattern(ConverterHelper.ConvertITreeNodeToToken(matches.First()), ConverterHelper.ConvertITreeNodeToToken(matches.Last()));
-                eExamples[input] = new List<ITreeNode<Token>> {pattern.Tree};
+                var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
+                patterns.Add(pattern);
             }
+
+            var commonPattern = BuildPattern(patterns.First(), patterns.Last());
+            foreach(State input in spec.ProvidedInputs)
+            {
+                eExamples[input] = new List<ITreeNode<Token>> {commonPattern.Tree};
+            }
+            
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
