@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -6,6 +7,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using TreeEdit.Spg.Isomorphic;
+using TreeEdit.Spg.Match;
+using TreeElement;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -24,13 +28,11 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var syntaxKinds = new List<SyntaxKind>();
-                foreach (Node node in spec.DisjunctiveExamples[input])
+                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
-                    if (sot.Value.IsToken) return null;
-
-                    syntaxKinds.Add(sot.Value.Kind());
-                    if (!sot.Value.Kind().Equals(syntaxKinds.First())) return null;
+                    syntaxKinds.Add(sot.Kind);
+                    if (!sot.Kind.Equals(syntaxKinds.First())) return null;
                 }
                 kdExamples[input] = syntaxKinds.First();
             }
@@ -42,17 +44,17 @@ namespace ProseSample.Substrings.Spg.Witness
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<List<Node>>();
-                foreach (Node node in spec.DisjunctiveExamples[input])
+                var matches = new List<List<ITreeNode<Token>>>();
+                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = node.Value;
-                    if (sot.Value.IsToken) return null;
-                    if (!sot.Children.Any()) return null;
+                    //var sot = node.Value;
+                    //if (sot.Value.IsToken) return null;
+                    if (!node.Children.Any()) return null;
 
-                    var lsot = ExtractChildren(sot);
-                    var childList = lsot.Select(item => new Node(item)).ToList();
-                    childList.ForEach(item => item.Value.SyntaxTree = sot.SyntaxTree);
-                    matches.Add(childList);
+                    var lsot = ExtractChildren(node);
+                    //var childList = lsot.Select(item => new Node(item)).ToList();
+                    //childList.ForEach(item => item.Value.SyntaxTree = sot.SyntaxTree);
+                    matches.Add(lsot);
                 }
                 eExamples[input] = matches;
             }
@@ -80,6 +82,16 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
             }
             return lsot;
+        }
+
+        /// <summary>
+        /// Extract relevant child
+        /// </summary>
+        /// <param name="parent">Parent</param>
+        /// <returns>Relevant child</returns>
+        private static List<ITreeNode<Token>> ExtractChildren(ITreeNode<Token> parent)
+        {
+            return parent.Children;
         }
 
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
@@ -115,19 +127,18 @@ namespace ProseSample.Substrings.Spg.Witness
             if (t1.Value.Kind != t2.Value.Kind) return null;
             if (!t1.Children.Any() || !t2.Children.Any())
             {
-                if (t1.Children.Any() && !t2.Children.Any() && t1 is DynToken && t2 is DynToken)
+                if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)
                 {
-                    if (t1.ToString().Equals(t2.ToString()))
+                    var node1 = ConverterHelper.ConvertCSharpToTreeNode((t1.Value as DynToken).Value);
+                    var node2 = ConverterHelper.ConvertCSharpToTreeNode((t2.Value as DynToken).Value);
+                    if (IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(node1, node2))
                     {
-                        var dtoken = new DynToken(t1.Value.Kind, ((DynToken) t1.Value).Value);
+                        var dtoken = new DynToken(t1.Value.Kind, node1.Value);
                         var ditreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
                         return new Pattern(ditreeNode);
                     }
-                }
-                else
-                {
-                    return pattern;
-                }
+                }         
+                return pattern;
             }
 
 
@@ -196,20 +207,43 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var v = (Node)input[rule.Body[0]];
-                var rr = (Pattern)kind.DisjunctiveExamples[input];
-                var ks = new List<object>();
-                //foreach (uint pos in spec.DisjunctiveExamples[input])
-                //{
-                //    var ms = rr.Item1.Run(v).Where(m => rr.Item2.MatchesAt(v, m.Right)).ToArray();
-                //    int index = ms.BinarySearchBy(m => m.Right.CompareTo(pos));
-                //    if (index < 0) return null;
-                //    ks.Add(index + 1);
-                //    ks.Add(index - ms.Length);
-                //}
-                kExamples[input] = ks;
+                
+                var pattern = (ITreeNode<Token>) kind.DisjunctiveExamples[input].First();
+                var mats = new List<object>();
+                foreach (Node node in spec.DisjunctiveExamples[input])
+                {
+                    var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
+                    var matches = PatterMatches(currentTree, pattern);
+
+                    for (int i = 0; i < matches.Count; i++)
+                    {
+                        var item = matches[i];
+                        if (node.Value.Equals(item))
+                        {
+                            mats.Add(i + 1);
+                        }
+                    }
+
+                }
+
+                if (!mats.All(o => o.Equals(mats.First()))) return null;
+                kExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
+        }
+
+
+        /// <summary>
+        /// Abstract match
+        /// </summary>
+        /// <param name="inpTree">Input tree</param>
+        /// <param name="pattern">Syntax node or token to be matched.</param>
+        /// <returns>Abstract match</returns>
+        public static List<ITreeNode<SyntaxNodeOrToken>> PatterMatches(ITreeNode<SyntaxNodeOrToken> inpTree, ITreeNode<Token> pattern)
+        {
+            //todo Refactor this method
+            var nodes = from item in inpTree.DescendantNodes() where Semantics.IsValue(item, pattern) select item;
+            return nodes.ToList();
         }
     }
 }

@@ -142,7 +142,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 0)]
         public static DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<Node>.List0(rule, parameter, spec);
+            return GList<ITreeNode<Token>>.List0(rule, parameter, spec);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 1)]
         public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<Node>.List1(rule, parameter, spec);
+            return GList<ITreeNode<Token>>.List1(rule, parameter, spec);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("SC", 0)]
         public static DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<Node>.Single(rule, parameter, spec);
+            return GList<ITreeNode<Token>>.Single(rule, parameter, spec);
         }
 
         /// <summary>

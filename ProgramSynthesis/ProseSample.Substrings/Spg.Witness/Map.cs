@@ -59,7 +59,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var currentTree = WitnessFunctions.TreeUpdateDictionary[target.SyntaxTree].CurrentTree;
                     var targetNode = TreeUpdate.FindNode(currentTree, target.Value);
                     var dist = BFSWalker<SyntaxNodeOrToken>.Dist(targetNode);
-                    var targetNodeHeight = ConverterHelper.TreeAtHeight(targetNode, dist, 1);
+                    var targetNodeHeight = ConverterHelper.TreeAtHeight(targetNode, dist, 2);
                     targetNodeHeight.SyntaxTree = target.SyntaxTree;
                     matches.Add(new Node(targetNodeHeight));
                 }

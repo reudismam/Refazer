@@ -78,7 +78,8 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                     }              
                 }
-                kMatches = kMatches.GetRange(0, 2);
+                //kMatches = kMatches.GetRange(0, 2);
+                kMatches.ForEach(o => PrintScript(o));
                 kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { kMatches };
             }
             var subsequence = new SubsequenceSpec(kExamples);
@@ -308,7 +309,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return script;
         }
 
-        private static void PrintScript(List<EditOperation<SyntaxNodeOrToken>> script)
+        private static void PrintScript(List<Edit<SyntaxNodeOrToken>> script)
         {
             string s = script.Aggregate("", (current, v) => current + (v + "\n"));
         }
