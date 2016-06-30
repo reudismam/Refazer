@@ -25,7 +25,7 @@ IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\x: Node => 
 bool nodematch := NodeMatch(x, kmatch);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
-Node edit := Edit(edits);
+Node edit := Edit(target, edits);
 IEnumerable<Node> edits:= SO(operation) | SL(operation, edits);
 Node operation := Insert(match, ast, k) | Update(match, ast) | Move(match, match, k) | Delete(match);
 

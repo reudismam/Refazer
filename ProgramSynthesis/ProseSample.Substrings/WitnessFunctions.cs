@@ -345,7 +345,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Edit", 0)]
+        [WitnessFunction("Edit", 1)]
         public static DisjunctiveExamplesSpec Edit(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Transformation.ScriptEdits(rule, parameter, spec);

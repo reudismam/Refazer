@@ -167,18 +167,17 @@ namespace ProseSample.Substrings
         /// <param name="node">Node</param>
         /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static Node Edit(IEnumerable<Node> edits)
+        public static Node Edit(Node node, IEnumerable<Node> edits)
         {
-            //var current = node.Value;
-            //var afterFlorest = current.Children.Select(ReconstructTree).ToList();
-            //MappingRegions[node] = afterFlorest;
+            var current = node.Value;
+            var afterFlorest = current.Children.Select(ReconstructTree).ToList();
+            MappingRegions[node] = afterFlorest;
 
-            //var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
+            var beforeFlorest = edits.Select(o => o.Value).ToList();
 
-            ////node.Value.AddChild(ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement()), 0);
+            //node.Value.AddChild(ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement()), 0);
 
-            //return node;
-            return null;
+            return node;
         }
 
         /// <summary>
@@ -278,21 +277,14 @@ namespace ProseSample.Substrings
         }
 
 
-        public static Patch SL(Node node, IEnumerable<Node> child1)
+        public static IEnumerable<Node> SL(Node child1, IEnumerable<Node> cList)
         {
-            //var editList = GList<Node>.List(node, child1).ToList();
-            //var patch = new Patch(editList);
-            //return patch;
-            return null;
+            return GList<Node>.List(child1, cList);
         }
 
         public static IEnumerable<Node> SO(Node child)
         {
-            //var editList = GList<IEnumerable<Node>>.Single(child).ToList();
-            //var list = editList.ToList();
-            //var patch = new Patch(editList);
-            //return patch;
-            return null;
+            return GList<Node>.Single(child);
         }
 
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
@@ -388,7 +380,8 @@ namespace ProseSample.Substrings
 
         public static bool NodeMatch(Node sx, Pattern template)
         {
-            return IsValue(sx.Value, template.Tree);
+            var isValue = IsValue(sx.Value, template.Tree);
+            return isValue;
         }
 
         public static Pattern Match(Node target, Pattern kmatch, int k)

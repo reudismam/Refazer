@@ -14,7 +14,7 @@ namespace ProseSample.Substrings.Spg.Semantic
     {
         public static Node Insert(Pattern node, Node ast, int k)
         {
-            //TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
+            //TreeUpdate update = new TreeUpdate(node.Tree);
             //var parent = node.Value;
             //var child = ast.Value;
             //var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
