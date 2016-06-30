@@ -21,7 +21,7 @@ namespace ProseSample.Substrings.Spg.Witness.Target
                 var editOperation = edit.EditOperation;
 
                 var from = Target(edit);
-                var result = new Node(from);
+                var result = EditOperation.GetNode(from);
                 kExamples[input] = result;
 
                 var key = editOperation.T1Node.SyntaxTree;
@@ -36,7 +36,6 @@ namespace ProseSample.Substrings.Spg.Witness.Target
                 Console.WriteLine("UPDATED TREE\n\n");
                 PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
             }
-
             return new ExampleSpec(kExamples);
         }
 

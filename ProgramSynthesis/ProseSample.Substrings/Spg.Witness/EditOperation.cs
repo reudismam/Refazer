@@ -5,6 +5,9 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Witness.Target;
 using TreeEdit.Spg.Script;
+using TreeEdit.Spg.TreeEdit.Update;
+using TreeElement.Spg.Node;
+using TreeElement.Spg.Walker;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -92,6 +95,17 @@ namespace ProseSample.Substrings.Spg.Witness
                 kExamples[input] = editOperation.T1Node;
             }
             return new ExampleSpec(kExamples);
+        }
+
+
+        public static Node GetNode(ITreeNode<SyntaxNodeOrToken> target)
+        {
+            var currentTree = WitnessFunctions.TreeUpdateDictionary[target.SyntaxTree].CurrentTree;
+            var targetNode = TreeUpdate.FindNode(currentTree, target.Value);
+            var dist = BFSWalker<SyntaxNodeOrToken>.Dist(targetNode);
+            var targetNodeHeight = ConverterHelper.TreeAtHeight(targetNode, dist, 2);
+            targetNodeHeight.SyntaxTree = target.SyntaxTree;
+            return new Node(targetNodeHeight);
         }
     }
 }

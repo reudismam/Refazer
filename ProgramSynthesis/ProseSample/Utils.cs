@@ -50,13 +50,12 @@ namespace ProseSample
                 LogListener = new LogListener(),
             });
 
-            ProgramSet consistentPrograms = engine.LearnGrammar(spec);
-
+            var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 10;
-            var topK = consistentPrograms.TopK("Score");
-            var b =  (ulong) topK.Count();
+            var topK = consistentPrograms.TopK("Score").ToList();
+            var b =  (ulong) topK.Count;
             topK = topK.ToList().GetRange(0, (int) Math.Min(a, b));
-            string programs = "";
+            var programs = "";
             foreach (ProgramNode p in topK)
             {
                 programs += p + "\n\n";
