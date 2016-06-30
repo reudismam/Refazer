@@ -22,7 +22,7 @@ feature double Score = RankingScore;
 Patch patch := SE(editList) | EList(editList, patch);
 IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
 IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
-bool nodematch := NodeMatch(x, match);
+bool nodematch := NodeMatch(x, kmatch);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
 Node edit := Edit(edits);

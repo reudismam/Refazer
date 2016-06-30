@@ -544,16 +544,35 @@ namespace ProseSample.Substrings
         } 
 
         [WitnessFunction("NodeMatch", 1)]
-        public static ExampleSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var editExamples = new Dictionary<State, object>();
+            //var editExamples = new Dictionary<State, object>();
+            //foreach (State input in spec.ProvidedInputs)
+            //{
+            //    var inpTree = (Node)input[rule.Body[0]];
+            //    editExamples[input] = inpTree;
+            //}
+
+            //return new ExampleSpec(editExamples);
+
+            var eExamples = new Dictionary<State, IEnumerable<object>>();
+            var patterns = new List<ITreeNode<Token>>();
             foreach (State input in spec.ProvidedInputs)
             {
+                var matches = new List<ITreeNode<SyntaxNodeOrToken>>();
                 var inpTree = (Node)input[rule.Body[0]];
-                editExamples[input] = inpTree;
+                matches.Add(inpTree.Value);
+                
+                var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
+                patterns.Add(pattern);
             }
 
-            return new ExampleSpec(editExamples);
+            var commonPattern = Match.BuildPattern(patterns.First(), patterns.Last());
+            foreach (State input in spec.ProvidedInputs)
+            {
+                eExamples[input] = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
+            }
+            return DisjunctiveExamplesSpec.From(eExamples);
         }
 
         public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)

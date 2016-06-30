@@ -118,7 +118,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        private static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2)
+        public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2)
         {
             var token = new Token(t1.Value.Kind);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
