@@ -52,7 +52,7 @@ namespace ProseSample
 
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 10;
-            var topK = consistentPrograms.TopK("Score").ToList();
+            var topK = consistentPrograms./*RealizedPrograms.ToList();*/TopK("Score").ToList();
             var b =  (ulong) topK.Count;
             topK = topK.ToList().GetRange(0, (int) Math.Min(a, b));
             var programs = "";
@@ -63,7 +63,7 @@ namespace ProseSample
             }
 
             File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
-            ProgramNode bestProgram = topK.Last();
+            ProgramNode bestProgram = topK.First();
             if (bestProgram == null)
             {
                 WriteColored(ConsoleColor.Red, "No program :(");

@@ -97,10 +97,9 @@ namespace ProseSample.Substrings.Spg.Witness
             return new ExampleSpec(kExamples);
         }
 
-
         public static Node GetNode(ITreeNode<SyntaxNodeOrToken> target)
         {
-            var currentTree = WitnessFunctions.TreeUpdateDictionary[target.SyntaxTree].CurrentTree;
+            var currentTree = WitnessFunctions.GetCurrentTree(target.SyntaxTree);
             var targetNode = TreeUpdate.FindNode(currentTree, target.Value);
             var dist = BFSWalker<SyntaxNodeOrToken>.Dist(targetNode);
             var targetNodeHeight = ConverterHelper.TreeAtHeight(targetNode, dist, 2);

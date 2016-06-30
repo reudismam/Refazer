@@ -25,7 +25,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
-                //script = script.GetRange(0, 5);
+                //script = script.GetRange(0, 3);
                 editsExamples[input] = script;
             }
             return new ExampleSpec(editsExamples);

@@ -114,8 +114,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach(State input in spec.ProvidedInputs)
             {
                 eExamples[input] = new List<ITreeNode<Token>> {ConverterHelper.MakeACopy(commonPattern.Tree)};
-            }
-            
+            }        
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
@@ -137,7 +136,10 @@ namespace ProseSample.Substrings.Spg.Witness
                         var ditreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
                         return new Pattern(ditreeNode);
                     }
-                }         
+                }
+                //var ltoken = new LeafToken(t1.Value.Kind);
+                //var litreenode = new TreeNode<Token>(ltoken, new TLabel(token.Kind));
+                //return new Pattern(litreenode);
                 return pattern;
             }
 
@@ -153,54 +155,6 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return pattern;
         }
-
-        //private static List<Pattern> BuildPattern(List<ITreeNode<SyntaxNodeOrToken>> values)
-        //{
-        //    if (!values.Any()) return null;
-
-        //    var patterns = new List<Pattern>();
-        //    bool childrenEmpty = values.All(v => v.Children.Any());        
-        //    if (childrenEmpty)
-        //    {
-        //        if (values.All(v => v.Value.IsKind(values.First().Value.Kind())))
-        //        {
-        //            var token = new Token(values.First().Value.Kind());
-        //            var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
-        //            patterns.Add(new Pattern(itreeNode));
-
-        //            if (values.All(v => v.Value.ToString().Equals(values.First().Value.ToString())))
-        //            {
-        //                var dtoken = new DynToken(values.First().Value.Kind(), values.First().Value);
-        //                var ditreeNode = new TreeNode<Token>(dtoken, new TLabel(token.Kind));
-        //                patterns.Add(new Pattern(ditreeNode));
-        //            }
-        //        }
-
-        //        return patterns;
-        //    }
-
-        //    if (values.All(v => v.Children.Count == values.First().Children.Count))
-        //    {
-        //        var children = values.First().Children.Select(i => new List<ITreeNode<SyntaxNodeOrToken>>()).ToList();
-
-        //        foreach (var i in values)
-        //        {
-        //            for (int j = 0; j < i.Children.Count; j++)
-        //            {
-        //                children.ElementAt(j).Add(i.Children[j]);
-        //            }
-        //        }
-
-        //        foreach (var v in children)
-        //        {
-        //            List<Pattern> patternList = BuildPattern(v);
-        //            if (patternList == null) return null;
-
-
-        //        }
-        //    }
-        //    return null;
-        //}
 
         public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kind)
         {
@@ -223,7 +177,6 @@ namespace ProseSample.Substrings.Spg.Witness
                             mats.Add(i + 1);
                         }
                     }
-
                 }
 
                 if (!mats.All(o => o.Equals(mats.First()))) return null;
