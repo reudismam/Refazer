@@ -5,7 +5,6 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Witness.Target;
 using TreeEdit.Spg.Script;
-using TreeEdit.Spg.TreeEdit.Update;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -38,31 +37,31 @@ namespace ProseSample.Substrings.Spg.Witness
             return new ExampleSpec(kExamples);
         }
 
-        public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            var kExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-                var editOperation = edit.EditOperation;
-                if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
-                var from = editOperation.T1Node;
-                var fromNode = TreeUpdate.FindNode(from.SyntaxTree, from.Value);
-                fromNode.SyntaxTree = from.SyntaxTree;
-                var result = new Node(fromNode);
-                kExamples[input] = result;
-            }
-            return new ExampleSpec(kExamples);
-        }
+        //public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    var kExamples = new Dictionary<State, object>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+        //        var editOperation = edit.EditOperation;
+        //        if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
+        //        var from = editOperation.T1Node;
+        //        var fromNode = TreeUpdate.FindNode(from.SyntaxTree, from.Value);
+        //        fromNode.SyntaxTree = from.SyntaxTree;
+        //        var result = new Node(fromNode);
+        //        kExamples[input] = result;
+        //    }
+        //    return new ExampleSpec(kExamples);
+        //}
 
-        public static ExampleSpec MoveK(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec LearnK<T>(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
-                if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
+                if (!(editOperation is T)) return null;
                 kExamples[input] = editOperation.K;
             }
             return new ExampleSpec(kExamples);
@@ -91,20 +90,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                 kExamples[input] = editOperation.T1Node;
-            }
-            return new ExampleSpec(kExamples);
-        }
-
-        public static ExampleSpec InsertK(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            var kExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-                var editOperation = edit.EditOperation;
-                if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-
-                kExamples[input] = editOperation.K;
             }
             return new ExampleSpec(kExamples);
         }
