@@ -26,11 +26,6 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
                 //script = script.GetRange(0, 5);
-
-                //var editsExample = new List<List<Edit<SyntaxNodeOrToken>>>();
-
-                //script.ForEach(e => editsExample.Add(new List<Edit<SyntaxNodeOrToken>> { e }));
-                //editsExamples[input] = editsExample;
                 editsExamples[input] = script;
             }
             return new ExampleSpec(editsExamples);
@@ -73,96 +68,10 @@ namespace ProseSample.Substrings.Spg.Witness
             return subsequence;
         }
 
-        //private static void AddContext(List<List<Edit<SyntaxNodeOrToken>>> scripts, SyntaxNodeOrToken inpTree)
-        //{
-        //    foreach (List<Edit<SyntaxNodeOrToken>> cc in scripts)
-        //    {
-        //        var editOperations = cc.Select(o => o.EditOperation).ToList();
-        //        var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(editOperations);
-        //        ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
-
-        //        var regions = FindRegion(ccs, inpTree);
-
-        //        var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
-
-        //        cc.First().EditOperation.Parent = ConverterHelper.MakeACopy(tree);
-
-        //        for (int i = 0; i < regions.Count; i++)
-        //        {
-        //            var region = regions[i];
-        //            if (region.Children.Count == 1)
-        //            {
-        //                region = region.Children.First();
-        //            }
-        //            var r = ConverterHelper.ConvertCSharpToTreeNode(region.Value);
-        //            tree.AddChild(r, i);
-        //        }
-
-        //        var copy = ConverterHelper.MakeACopy(tree);
-        //        TreeUpdate treeUp = new TreeUpdate(copy);
-
-        //        foreach (var v in cc)
-        //        {
-        //            v.EditOperation.T1Node.SyntaxTree = tree;
-        //            if (v.EditOperation.Parent != null)
-        //            {
-        //                v.EditOperation.Parent.SyntaxTree = tree;
-        //            }
-
-        //            if (v.EditOperation is Update<SyntaxNodeOrToken>)
-        //            {
-        //                var update = (Update<SyntaxNodeOrToken>) v.EditOperation;
-        //                update.To.SyntaxTree = tree;
-        //            }
-
-        //        }
-
-        //        WitnessFunctions.TreeUpdateDictionary.Add(tree, treeUp);
-        //        WitnessFunctions.CurrentTrees[tree] = tree;
-        //    }
-        //}
-
-        //public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    var kExamples = new Dictionary<State, IEnumerable<object>>();
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        var kMatches = new List<object>();
-        //        var inpTreeNode = (Node)input[rule.Body[0]];
-        //        var inpTree = inpTreeNode.Value.Value;
-        //        foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
-        //        {
-        //            var script = Script(inpTree, outTree);
-
-        //            var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
-        //            ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
-
-        //            var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
-        //            foreach (var cc in ccs)
-        //            {
-        //                var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
-        //                var newScript = Compact(editionConnected);
-        //                newccs.Add(newScript);
-        //            }
-
-        //            if (ccs.Any())
-        //            {
-        //                var list = ClusterConnectedComponentsInRegions(newccs);
-        //                kMatches.AddRange(list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
-        //            }
-        //        }
-        //        kExamples[input] = kMatches;
-        //    }
-
-        //    var subsequenceSpec = new SubsequenceSpec(kExamples);
-        //    return subsequenceSpec;
-        //}
-
         private static List<EditOperation<SyntaxNodeOrToken>> Compact(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
             var newList = new List<EditOperation<SyntaxNodeOrToken>>();
             var removes = new List<EditOperation<SyntaxNodeOrToken>>();
-
             foreach (var editOperations in connectedComponents)
             {
                 foreach (var editI in editOperations)
@@ -179,9 +88,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
                 newList.AddRange(editOperations);
             }
-
             newList.RemoveAll(o => removes.Contains(o));
-
             return newList;
         }
 
@@ -248,14 +155,6 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     var copy = ConverterHelper.MakeACopy(tree);
                     TreeUpdate treeUp = new TreeUpdate(copy);
-
-                    //foreach ( //todo BUG correct to add to the dictionary only the tree instead of all the parents.
-                    //    var v in
-                    //        cc.Where(v => !WitnessFunctions.TreeUpdateDictionary.ContainsKey(v.EditOperation.Parent)))
-                    //{
-                    //    WitnessFunctions.TreeUpdateDictionary.Add(v.EditOperation.Parent, treeUp);
-                    //    WitnessFunctions.CurrentTrees[v.EditOperation.Parent] = tree;
-                    //}
 
                     foreach (var v in cc)
                     {

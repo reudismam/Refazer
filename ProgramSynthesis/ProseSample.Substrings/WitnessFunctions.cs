@@ -19,7 +19,6 @@ namespace ProseSample.Substrings
         /// Current trees.
         /// </summary>
         public static Dictionary<object, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<object, ITreeNode<SyntaxNodeOrToken>>();
-
         /// <summary>
         /// TreeUpdate mapping.
         /// </summary>
@@ -37,20 +36,6 @@ namespace ProseSample.Substrings
         {
             return Literal.LiteralTree(rule, parameter, spec);
         }
-
-        ///// <summary>
-        ///// Literal witness function for parameter tree.
-        ///// </summary>
-        ///// <param name="rule">Literal rule</param>
-        ///// <param name="parameter">Parameter number</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <param name="treeBinding">TreeBinding</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("Literal", 2, DependsOnParameters = new[] { 1 })]
-        //public static DisjunctiveExamplesSpec LiteralK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec treeBinding)
-        //{
-        //    return Literal.LiteralK(rule, parameter, spec, treeBinding);
-        //}
 
         /// <summary>
         /// Tree witness function for parameter tree.
@@ -89,21 +74,7 @@ namespace ProseSample.Substrings
         public static ExampleSpec LeafKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Variable.LeafKind(rule, parameter, spec);
-        }
-
-        ///// <summary>
-        ///// KindRef witness function for parameter k.
-        ///// </summary>
-        ///// <param name="rule">Literal rule</param>
-        ///// <param name="parameter">Parameter number</param>
-        ///// <param name="spec">Example specification</param>
-        ///// <param name="kindBinding">kind binding</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("Variable", 2, DependsOnParameters = new[] { 1 })]
-        //public static DisjunctiveExamplesSpec VariableK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
-        //{
-        //    return Variable.VariableK(rule, parameter, spec, kindBinding);
-        //}
+        }  
 
         /// <summary>
         /// Parent witness function for parameter kindRef
@@ -170,7 +141,6 @@ namespace ProseSample.Substrings
         {
             return GList<ITreeNode<Token>>.Single(rule, parameter, spec);
         }
-
 
         /// <summary>
         /// NList witness function for parameter 0
@@ -573,12 +543,6 @@ namespace ProseSample.Substrings
             return AST.Ref(rule, parameter, spec);
         } 
 
-        //[WitnessFunction("EditMap", 1)]
-        //public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
-        //{
-        //    return Map.EditMap(rule, parameter, spec);
-        //}
-
         [WitnessFunction("NodeMatch", 1)]
         public static ExampleSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
@@ -586,7 +550,7 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node)input[rule.Body[0]];
-                editExamples[input] = inpTree; //new Node(inpTree, CurrentTrees[inpTree]);
+                editExamples[input] = inpTree;
             }
 
             return new ExampleSpec(editExamples);

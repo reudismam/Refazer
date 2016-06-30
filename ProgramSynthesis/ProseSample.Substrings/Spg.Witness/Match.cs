@@ -241,7 +241,7 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <returns>Abstract match</returns>
         public static List<ITreeNode<SyntaxNodeOrToken>> PatterMatches(ITreeNode<SyntaxNodeOrToken> inpTree, ITreeNode<Token> pattern)
         {
-            //todo Refactor this method
+            //todo Refactor this method putting it on a adequate class.
             var nodes = from item in inpTree.DescendantNodes() where Semantics.IsValue(item, pattern) select item;
             return nodes.ToList();
         }
