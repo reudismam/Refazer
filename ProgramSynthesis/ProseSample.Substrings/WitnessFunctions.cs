@@ -171,6 +171,46 @@ namespace ProseSample.Substrings
             return GList<ITreeNode<Token>>.Single(rule, parameter, spec);
         }
 
+
+        /// <summary>
+        /// NList witness function for parameter 0
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("SL", 0)]
+        public static DisjunctiveExamplesSpec WitnessSl1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return GList<Edit<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// NList witness function for parameter 1
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("SL", 1)]
+        public static DisjunctiveExamplesSpec WitnessSl2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return GList<Edit<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// SN witness function for parameter 0
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("SO", 0)]
+        public static DisjunctiveExamplesSpec WitnessSoChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return GList<Edit<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
+        }
+
         /// <summary>
         /// NList witness function for parameter 0
         /// </summary>
@@ -223,8 +263,8 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
+                var matches = new List<List<Edit<SyntaxNodeOrToken>>>();
+                foreach (List<List<List<Edit<SyntaxNodeOrToken>>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -249,8 +289,8 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var newPatch = new List<List<Edit<SyntaxNodeOrToken>>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
+                var newPatch = new List<List<List<Edit<SyntaxNodeOrToken>>>>();
+                foreach (List<List<List<Edit<SyntaxNodeOrToken>>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -258,7 +298,7 @@ namespace ProseSample.Substrings
                     editList.RemoveAt(0);
                     newPatch = editList;
                 }
-                treeExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> {newPatch};
+                treeExamples[input] = new List<List<List<List<Edit<SyntaxNodeOrToken>>>>> {newPatch};
             }
             return new SubsequenceSpec(treeExamples);
         }
@@ -276,8 +316,8 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
+                var matches = new List<List<Edit<SyntaxNodeOrToken>>>();
+                foreach (List<List<List<Edit<SyntaxNodeOrToken>>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count != 1) return null;
@@ -328,18 +368,18 @@ namespace ProseSample.Substrings
             return Match.MatchK(rule, parameter, spec, kind);
         }
 
-        ///// <summary>
-        ///// Witness function for script rule
-        ///// </summary>
-        ///// <param name="rule">Grammar rule</param>
-        ///// <param name="parameter">Rule parameter</param>
-        ///// <param name="spec">Examples specification</param>
-        ///// <returns>Disjunctive example specification</returns>
-        //[WitnessFunction("Script", 1)]
-        //public static DisjunctiveExamplesSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return Transformation.ScriptEdits(rule, parameter, spec);
-        //}
+        /// <summary>
+        /// Witness function for script rule
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Rule parameter</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Edit", 0)]
+        public static DisjunctiveExamplesSpec Edit(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return Transformation.ScriptEdits(rule, parameter, spec);
+        }
 
         [WitnessFunction("Script", 1)]
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
@@ -347,7 +387,7 @@ namespace ProseSample.Substrings
             return Transformation.TransformationLoop(rule, parameter, spec);
         }
 
-        [WitnessFunction("RegionMap", 1)]
+        [WitnessFunction("EditMap", 1)]
         public static SubsequenceSpec RegionMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             return Transformation.Loop(rule, parameter, spec);
@@ -377,7 +417,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Delete", 1)]
+        [WitnessFunction("Delete", 0)]
         public static ExampleSpec DeleteFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.DeleteFrom(rule, parameter, spec);
@@ -390,11 +430,50 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Update", 1)]
+        [WitnessFunction("Delete", 1)]
+        public static ExampleSpec DeleteString(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return EditOperation.DeleteString(rule, parameter, spec); //todo Bug Remover this
+        }
+
+        /// <summary>
+        /// Witness function for parater k in the insert operator
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns></returns>
+        [WitnessFunction("Update", 0)]
         public static ExampleSpec UpdateFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {
+            return EditOperation.UpdateFrom(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// Witness function for parater k in the insert operator
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns></returns>
+        [WitnessFunction("Update", 1)]
+        public static ExampleSpec UpdateTo(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
             return EditOperation.UpdateTo(rule, parameter, spec);
-        }  
+        }
+
+        /// <summary>
+        /// Witness function for parater k in the insert operator
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns></returns>
+        [WitnessFunction("Move", 0)]
+        public static ExampleSpec MoveFrom(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return EditOperation.MoveFrom(rule, parameter, spec);
+        }
 
         /// <summary>
         /// Witness function for parater k in the insert operator
@@ -404,7 +483,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Move", 1)]
-        public static ExampleSpec MoveFrom(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.MoveTo(rule, parameter, spec);
         }
@@ -417,7 +496,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Move", 2, DependsOnParameters = new[] { 1 })]
-        public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec MoveK(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.MoveK(rule, parameter, spec);
         }
@@ -429,8 +508,21 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Insert", 1)]
+        [WitnessFunction("Insert", 0)]
         public static ExampleSpec InsertParent(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return EditOperation.InsertFrom(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// Witness function for parater k in the insert operator
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns></returns>
+        [WitnessFunction("Insert", 1)]
+        public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.Insertast(rule, parameter, spec);
         }
@@ -443,7 +535,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Insert", 2, DependsOnParameters = new[] { 1 })]
-        public static ExampleSpec InsertAST(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec InsertK(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.InsertK(rule, parameter, spec);
         }
@@ -494,11 +586,11 @@ namespace ProseSample.Substrings
             return AST.Ref(rule, parameter, spec);
         } 
 
-        [WitnessFunction("EditMap", 1)]
-        public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
-        {
-            return Map.EditMap(rule, parameter, spec);
-        }
+        //[WitnessFunction("EditMap", 1)]
+        //public static SubsequenceSpec EditMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        //{
+        //    return Map.EditMap(rule, parameter, spec);
+        //}
 
         [WitnessFunction("NodeMatch", 1)]
         public static ExampleSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)

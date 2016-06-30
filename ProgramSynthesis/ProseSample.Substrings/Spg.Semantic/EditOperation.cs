@@ -12,59 +12,63 @@ namespace ProseSample.Substrings.Spg.Semantic
 {
     public class EditOperation
     {
-        public static Node Insert(Node node, Node ast, int k)
+        public static Node Insert(Pattern node, Node ast, int k)
         {
-            TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
-            var parent = node.Value;
-            var child = ast.Value;
-            var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
-            update.ProcessEditOperation(insert);
+            //TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
+            //var parent = node.Value;
+            //var child = ast.Value;
+            //var insert = new Insert<SyntaxNodeOrToken>(child, parent, k);
+            //update.ProcessEditOperation(insert);
 
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return new Node(update.CurrentTree);
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            //return new Node(update.CurrentTree);
+            return null;
         }
 
-        public static Node Move(Node node, Pattern pattern, int k)
+        public static Node Move(Pattern node, Pattern pattern, int k)
         {
-            TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
-            var parent = node.Value;
-            var matches = Matches(node.Value.SyntaxTree, pattern);
+            //TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
+            //var parent = node.Value;
+            //var matches = Matches(node.Value.SyntaxTree, pattern);
 
-            if (matches.Count > 1) throw new Exception("More than one match.");
+            //if (matches.Count > 1) throw new Exception("More than one match.");
 
-            var child = matches.First();
-            var move = new Move<SyntaxNodeOrToken>(child, parent, k);
-            update.ProcessEditOperation(move);
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return new Node(update.CurrentTree);
+            //var child = matches.First();
+            //var move = new Move<SyntaxNodeOrToken>(child, parent, k);
+            //update.ProcessEditOperation(move);
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            //return new Node(update.CurrentTree);
+            return null;
         }
 
-        public static Node Update(Node node, Node to)
+        public static Node Update(Pattern node, Node to)
         {
-            TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
-            var parent = node.Value;
-            var toTreeNode = to.Value;
+            //TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
+            //var parent = node.Value;
+            //var toTreeNode = to.Value;
 
-            var updateEdit = new Update<SyntaxNodeOrToken>(parent, toTreeNode, null);
-            update.ProcessEditOperation(updateEdit);
+            //var updateEdit = new Update<SyntaxNodeOrToken>(parent, toTreeNode, null);
+            //update.ProcessEditOperation(updateEdit);
 
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return new Node(update.CurrentTree);
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            //return new Node(update.CurrentTree);
+            return null;
         }
 
-        public static Node Delete(Node node)
+        public static Node Delete(Pattern node)
         {
-            TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
-            var t1Node = node.Value;
-            var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
-            update.ProcessEditOperation(updateEdit);
+            //TreeUpdate update = new TreeUpdate(node.Value.SyntaxTree);
+            //var t1Node = node.Value;
+            //var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
+            //update.ProcessEditOperation(updateEdit);
 
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-            return new Node(update.CurrentTree);
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+            //return new Node(update.CurrentTree);
+            return null;
         }
 
         public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, Pattern pattern)

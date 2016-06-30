@@ -44,6 +44,12 @@ namespace ProseSample.Substrings
         [FeatureCalculator("PList")]
         public static double Score_PList(double childScore, double childrenScore) => (childScore + childrenScore) > 0 ? -(childScore + childrenScore) : (childScore + childrenScore);
 
+        [FeatureCalculator("SO")]
+        public static double Score_SO(double childScore) => childScore;
+
+        [FeatureCalculator("SL")]
+        public static double Score_SL(double childScore, double childrenScore) => (childScore + childrenScore) > 0 ? -(childScore + childrenScore) : (childScore + childrenScore);
+
         [FeatureCalculator("SN")]
         public static double Score_SN(double childScore) => childScore;
 
@@ -64,6 +70,9 @@ namespace ProseSample.Substrings
 
         [FeatureCalculator("Script")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
+
+        [FeatureCalculator("Edit")]
+        public static double Score_Edit(double edit) => edit;
 
         [FeatureCalculator("Transformation")]
         public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;

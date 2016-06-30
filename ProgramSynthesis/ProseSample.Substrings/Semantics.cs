@@ -105,7 +105,7 @@ namespace ProseSample.Substrings
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static Node Insert(Node node, Node newNode, int k)
+        public static Node Insert(Pattern node, Node newNode, int k)
         {
             return EditOperation.Insert(node, newNode, k);
         }
@@ -116,7 +116,7 @@ namespace ProseSample.Substrings
         /// <param name="k">Child index</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static Node Move(Node node, Pattern from, int k)
+        public static Node Move(Pattern node, Pattern from, int k)
         {
             return EditOperation.Move(node, from, k);
         }
@@ -127,7 +127,7 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
         /// <returns></returns>
-        public static Node Update(Node node, Node to)
+        public static Node Update(Pattern node, Node to)
         {
             return EditOperation.Update(node, to);
         }
@@ -137,7 +137,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="node">Input node</param>
         /// <returns>Result of the edit opration</returns>
-        public static Node Delete(Node node, string from)
+        public static Node Delete(Pattern node, string from)
         {
             return EditOperation.Delete(node);
         }
@@ -159,6 +159,26 @@ namespace ProseSample.Substrings
             //node.Value.AddChild(ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement()), 0);
 
             return node;
+        }
+
+        /// <summary>
+        /// Script semantic function
+        /// </summary>
+        /// <param name="node">Node</param>
+        /// <param name="patch">Edit operations</param>
+        /// <returns>Transformed node.</returns>
+        public static Node Edit(IEnumerable<Node> edits)
+        {
+            //var current = node.Value;
+            //var afterFlorest = current.Children.Select(ReconstructTree).ToList();
+            //MappingRegions[node] = afterFlorest;
+
+            //var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
+
+            ////node.Value.AddChild(ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement()), 0);
+
+            //return node;
+            return null;
         }
 
         /// <summary>
@@ -255,6 +275,24 @@ namespace ProseSample.Substrings
             var list = editList.ToList();
             var patch = new Patch(editList);
             return patch;
+        }
+
+
+        public static Patch SL(Node node, IEnumerable<Node> child1)
+        {
+            //var editList = GList<Node>.List(node, child1).ToList();
+            //var patch = new Patch(editList);
+            //return patch;
+            return null;
+        }
+
+        public static IEnumerable<Node> SO(Node child)
+        {
+            //var editList = GList<IEnumerable<Node>>.Single(child).ToList();
+            //var list = editList.ToList();
+            //var patch = new Patch(editList);
+            //return patch;
+            return null;
         }
 
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
