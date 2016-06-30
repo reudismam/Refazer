@@ -107,7 +107,7 @@ namespace ProseSample.Substrings
         /// <returns>New node with the newNode node inserted as the k child</returns>
         public static Node Insert(Pattern node, Node newNode, int k)
         {
-            return EditOperation.Insert(node, newNode, k);
+            return SemanticEditOperation.Insert(node, newNode, k);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace ProseSample.Substrings
         /// <returns></returns>
         public static Node Move(Pattern node, Pattern from, int k)
         {
-            return EditOperation.Move(node, from, k);
+            return SemanticEditOperation.Move(node, from, k);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace ProseSample.Substrings
         /// <returns></returns>
         public static Node Update(Pattern node, Node to)
         {
-            return EditOperation.Update(node, to);
+            return SemanticEditOperation.Update(node, to);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace ProseSample.Substrings
         /// <returns>Result of the edit opration</returns>
         public static Node Delete(Pattern node)
         {
-            return EditOperation.Delete(node);
+            return SemanticEditOperation.Delete(node);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace ProseSample.Substrings
         /// <returns>Result of the pattern</returns>
         public static Node Ref(Node node, Pattern result)
         {
-            var nodes = EditOperation.Matches(node.Value, result);
+            var nodes = SemanticEditOperation.Matches(node.Value, result);
             if (nodes.Count > 1) throw new Exception("More than one element is not allowed.");
             return new Node(nodes.First());
         }

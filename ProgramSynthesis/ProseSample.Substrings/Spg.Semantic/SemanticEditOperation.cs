@@ -10,7 +10,7 @@ using TreeElement;
 
 namespace ProseSample.Substrings.Spg.Semantic
 {
-    public class EditOperation
+    public class SemanticEditOperation
     {
         public static Node Insert(Pattern node, Node ast, int k)
         {

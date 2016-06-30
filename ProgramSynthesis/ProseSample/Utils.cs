@@ -10,7 +10,6 @@ using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
 using Microsoft.ProgramSynthesis.Specifications;
-using Microsoft.ProgramSynthesis.VersionSpace;
 
 namespace ProseSample
 {
@@ -49,7 +48,6 @@ namespace ProseSample
                 UseThreads = false,
                 LogListener = new LogListener(),
             });
-
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 10;
             var topK = consistentPrograms./*RealizedPrograms.ToList();*/TopK("Score").ToList();
@@ -61,14 +59,8 @@ namespace ProseSample
                 programs += p + "\n\n";
                 Console.WriteLine(p + "\n");
             }
-
             File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
             ProgramNode bestProgram = topK.First();
-            if (bestProgram == null)
-            {
-                WriteColored(ConsoleColor.Red, "No program :(");
-                return null;
-            }
             string stringprogram = bestProgram.ToString();
             var score = bestProgram["Score"];
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
