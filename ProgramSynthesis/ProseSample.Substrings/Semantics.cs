@@ -137,7 +137,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="node">Input node</param>
         /// <returns>Result of the edit opration</returns>
-        public static Node Delete(Pattern node, string from)
+        public static Node Delete(Pattern node)
         {
             return EditOperation.Delete(node);
         }

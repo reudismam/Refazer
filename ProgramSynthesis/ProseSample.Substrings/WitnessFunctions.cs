@@ -430,19 +430,6 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Delete", 1)]
-        public static ExampleSpec DeleteString(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return EditOperation.DeleteString(rule, parameter, spec); //todo Bug Remover this
-        }
-
-        /// <summary>
-        /// Witness function for parater k in the insert operator
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
-        /// <param name="spec">Examples specification</param>
-        /// <returns></returns>
         [WitnessFunction("Update", 0)]
         public static ExampleSpec UpdateFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {

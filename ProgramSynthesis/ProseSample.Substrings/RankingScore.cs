@@ -93,7 +93,7 @@ namespace ProseSample.Substrings
         public static double Score_Update(double inScore, double toScore) => inScore + toScore;
 
         [FeatureCalculator("Delete")]
-        public static double Score_Delete(double inScore, double fromScore) => inScore + fromScore;
+        public static double Score_Delete(double inScore) => inScore;
 
         [FeatureCalculator("Node")]
         public static double Score_Node1(double kScore, double astScore) => kScore +  astScore;

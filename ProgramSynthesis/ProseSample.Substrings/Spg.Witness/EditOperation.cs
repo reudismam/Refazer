@@ -11,19 +11,6 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class EditOperation
     {
-        public static ExampleSpec DeleteString(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            var kExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-                var editOperation = edit.EditOperation;
-                if (!(editOperation is Delete<SyntaxNodeOrToken>)) return null;
-                kExamples[input] = "Delete";
-            }
-            return new ExampleSpec(kExamples);
-        }
-
         public static ExampleSpec DeleteFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             foreach (State input in spec.ProvidedInputs)
@@ -49,7 +36,6 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return null;
         }
-
 
         public static ExampleSpec UpdateTo(GrammarRule rule, int parameter, ExampleSpec spec)
         {

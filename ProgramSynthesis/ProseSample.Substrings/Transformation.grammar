@@ -27,7 +27,7 @@ IEnumerable<Node> fnodes := Traversal(node, id);
 
 Node edit := Edit(edits);
 IEnumerable<Node> edits:= SO(operation) | SL(operation, edits);
-Node operation := Insert(match, ast, k) | Update(match, ast) | Move(match, match, k) | Delete(match, id);
+Node operation := Insert(match, ast, k) | Update(match, ast) | Move(match, match, k) | Delete(match);
 
 Pattern match := Match(node, kmatch, k);
 Pattern kmatch := C(kind, children) | Tree(kindRef);
