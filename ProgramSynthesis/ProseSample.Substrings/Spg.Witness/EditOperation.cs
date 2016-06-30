@@ -11,26 +11,13 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class EditOperation
     {
-        public static ExampleSpec DeleteFrom(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec T1Learner<T>(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             foreach (State input in spec.ProvidedInputs)
             {
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
-                if (!(editOperation is Delete<SyntaxNodeOrToken>)) return null;
-
-                return new T1TargetLearner().NodeLearner(rule, parameter, spec);
-            }
-            return null;
-        }
-
-        public static ExampleSpec UpdateFrom(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-                var editOperation = edit.EditOperation;
-                if (!(editOperation is Update<SyntaxNodeOrToken>)) return null;
+                if (!(editOperation is T)) return null;
 
                 return new T1TargetLearner().NodeLearner(rule, parameter, spec);
             }
@@ -49,19 +36,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 kExamples[input] = update.To;
             }
             return new ExampleSpec(kExamples);
-        }
-
-        public static ExampleSpec MoveFrom(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-                var editOperation = edit.EditOperation;
-                if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
-
-                return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
-            }
-            return null;
         }
 
         public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
@@ -94,18 +68,19 @@ namespace ProseSample.Substrings.Spg.Witness
             return new ExampleSpec(kExamples);
         }
 
-        public static ExampleSpec InsertFrom(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec ParentLearner<T>(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             foreach (State input in spec.ProvidedInputs)
             {
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
-                if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+                if (!(editOperation is T)) return null;
 
                 return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
             }
             return null;
         }
+
         public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();

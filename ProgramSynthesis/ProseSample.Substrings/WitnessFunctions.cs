@@ -390,7 +390,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Delete", 0)]
         public static ExampleSpec DeleteFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.DeleteFrom(rule, parameter, spec);
+            return EditOperation.T1Learner<Delete<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
 
         /// <summary>
@@ -403,7 +403,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Update", 0)]
         public static ExampleSpec UpdateFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.UpdateFrom(rule, parameter, spec);
+            return EditOperation.T1Learner<Update<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
 
         /// <summary>
@@ -429,7 +429,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Move", 0)]
         public static ExampleSpec MoveFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.MoveFrom(rule, parameter, spec);
+            return EditOperation.ParentLearner<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
 
         /// <summary>
@@ -442,7 +442,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Move", 1)]
         public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.MoveTo(rule, parameter, spec);
+            return EditOperation.T1Learner<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
 
         /// <summary>
@@ -468,7 +468,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Insert", 0)]
         public static ExampleSpec InsertParent(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.InsertFrom(rule, parameter, spec);
+            return EditOperation.ParentLearner<Insert<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
 
         /// <summary>
