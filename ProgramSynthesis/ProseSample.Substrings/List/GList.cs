@@ -37,8 +37,9 @@ namespace ProseSample.Substrings.List
                     if (!matchResult.Any()) return null;
                     if (matchResult.Count == 1) return null;
 
-                    matchResult.RemoveAt(0);
-                    matches.Add(matchResult);
+                    var copy = new List<T>(matchResult);
+                    copy.RemoveAt(0);
+                    matches.Add(copy);
                 }
                 treeExamples[input] = matches;
             }
