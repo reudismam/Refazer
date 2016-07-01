@@ -36,8 +36,8 @@ namespace ProseSample
             SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
 
             //Getting examples methods
-            var examplesInput = GetNodesByType(inpTree, SyntaxKind.LogicalAndExpression);
-            var examplesOutput = GetNodesByType(outTree, SyntaxKind.LogicalAndExpression);
+            var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration);
+            var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration);
 
             //building example methods
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
@@ -49,20 +49,13 @@ namespace ProseSample
             }
 
             //Learn program
-
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Learn(grammar, spec);
 
             //Run program
-            var itreeNodeTarget = ConverterHelper.ConvertCSharpToTreeNode(examplesInput.First());
-            var emptyTarget = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-            emptyTarget.Children = itreeNodeTarget.Children;
-            var target = State.Create(grammar.InputSymbol, new Node(emptyTarget));
-
-            object[] output = program.Invoke(target).ToEnumerable().ToArray();
+            object[] output = program.Invoke(ioExamples.First().Key).ToEnumerable().ToArray();
             WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
         }
-
         
         private static List<SyntaxNodeOrToken> GetNodesByType(SyntaxNodeOrToken outTree, SyntaxKind kind)
         {
@@ -72,7 +65,7 @@ namespace ProseSample
                                       select inode;
 
             //Select two examples
-            var examplesSotInput = exampleMethodsInput.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 2);
+            var examplesSotInput = exampleMethodsInput.Select(sot => (SyntaxNodeOrToken)sot).ToList().GetRange(0, 1);
             //var examplesInput = examplesSotInput.Select(o => (object)o).ToList();
             return examplesSotInput;
         }
