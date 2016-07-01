@@ -51,7 +51,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <returns>Variable pattern</returns>
         public static Pattern Leaf(SyntaxKind kind)
         {
-            var token = new LeafToken(kind);
+            var token = new Token(kind);
             var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;

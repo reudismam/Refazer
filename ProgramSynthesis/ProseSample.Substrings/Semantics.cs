@@ -105,7 +105,7 @@ namespace ProseSample.Substrings
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static Node Insert(Pattern node, Node newNode, int k)
+        public static Node Insert(Node node, Node newNode, int k)
         {
             return SemanticEditOperation.Insert(node, newNode, k);
         }
@@ -116,7 +116,7 @@ namespace ProseSample.Substrings
         /// <param name="k">Child index</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static Node Move(Pattern node, Pattern from, int k)
+        public static Node Move(Node node, Node from, int k)
         {
             return SemanticEditOperation.Move(node, from, k);
         }
@@ -127,7 +127,7 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
         /// <returns></returns>
-        public static Node Update(Pattern node, Node to)
+        public static Node Update(Node node, Node to)
         {
             return SemanticEditOperation.Update(node, to);
         }
@@ -137,7 +137,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="node">Input node</param>
         /// <returns>Result of the edit opration</returns>
-        public static Node Delete(Pattern node)
+        public static Node Delete(Node node)
         {
             return SemanticEditOperation.Delete(node);
         }
@@ -224,11 +224,9 @@ namespace ProseSample.Substrings
         /// <param name="node">Node</param>
         /// <param name="result">Result of the pattern</param>
         /// <returns>Result of the pattern</returns>
-        public static Node Ref(Node node, Pattern result)
+        public static Node Ref(Node node, Node result)
         {
-            var nodes = SemanticEditOperation.Matches(node.Value, result);
-            if (nodes.Count > 1) throw new Exception("More than one element is not allowed.");
-            return new Node(nodes.First());
+            return result;
         }
 
         public static IEnumerable<Pattern> CList(Pattern child1, IEnumerable<Pattern> cList)
@@ -384,9 +382,11 @@ namespace ProseSample.Substrings
             return isValue;
         }
 
-        public static Pattern Match(Node target, Pattern kmatch, int k)
+        public static Node Match(Node target, Pattern kmatch, int k)
         {
-            return null;
+            var nodes = SemanticEditOperation.Matches(target.Value, kmatch);
+            //if (nodes.Count > 1) throw new Exception("More than one element is not allowed.");
+            return new Node(nodes.ElementAt(k - 1));
         }
 
         public static IEnumerable<Node> Template(Node node, Pattern pattern)

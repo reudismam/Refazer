@@ -50,6 +50,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     //var sot = node.Value;
                     //var syntaxTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
                     //var matches = MatchManager.LeafAbstractMatches(syntaxTree, sot.Value.Kind());
+
+                    if (node.Value is DynToken) continue;
                     if (node.Children.Any()) continue;
                     //if (!matches.Any()) continue;
 

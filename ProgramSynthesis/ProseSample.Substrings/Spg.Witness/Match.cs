@@ -156,19 +156,17 @@ namespace ProseSample.Substrings.Spg.Witness
             return pattern;
         }
 
-        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kind)
+        public static ExampleSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kind)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
-            {
-                
+            {           
                 var pattern = (ITreeNode<Token>) kind.DisjunctiveExamples[input].First();
                 var mats = new List<object>();
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
                     var matches = PatterMatches(currentTree, pattern);
-
                     for (int i = 0; i < matches.Count; i++)
                     {
                         var item = matches[i];
@@ -178,11 +176,10 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                     }
                 }
-
                 if (!mats.All(o => o.Equals(mats.First()))) return null;
-                kExamples[input] = mats;
+                kExamples[input] = mats.First();
             }
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return new ExampleSpec(kExamples);
         }
 
 

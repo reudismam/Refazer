@@ -47,6 +47,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
                     ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
 
+                    //PrintScript(ccs.First());
+
                     var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
                     foreach (var cc in ccs)
                     {
@@ -225,6 +227,11 @@ namespace ProseSample.Substrings.Spg.Witness
         }
 
         private static void PrintScript(List<Edit<SyntaxNodeOrToken>> script)
+        {
+            string s = script.Aggregate("", (current, v) => current + (v + "\n"));
+        }
+
+        private static void PrintScript(List<EditOperation<SyntaxNodeOrToken>> script)
         {
             string s = script.Aggregate("", (current, v) => current + (v + "\n"));
         }
