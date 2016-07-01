@@ -139,6 +139,7 @@
     <Compile Include="Spg.Node\TreeNode.cs" />
     <Compile Include="Spg.Walker\BFSWalker.cs" />
     <Compile Include="Token\DynToken.cs" />
+    <Compile Include="Token\EmptyToken.cs" />
     <Compile Include="Token\LeafToken.cs" />
     <Compile Include="Token\Token.cs" />
     <Compile Include="TreeTraversal.cs" />

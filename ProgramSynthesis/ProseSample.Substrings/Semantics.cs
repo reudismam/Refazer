@@ -150,9 +150,9 @@ namespace ProseSample.Substrings
         /// <returns>Transformed node.</returns>
         public static Node Script(Node node, Patch patch)
         {
-            var current = node.Value;
-            var afterFlorest = current.Children.Select(ReconstructTree).ToList();
-            MappingRegions[node] = afterFlorest;
+            //var current = node.Value;
+            //var afterFlorest = current.Children.Select(ReconstructTree).ToList();
+            //MappingRegions[node] = afterFlorest;
 
             var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
 
@@ -321,7 +321,7 @@ namespace ProseSample.Substrings
             for (int i = 0; i < traversalIndices.Count; i++)
             {
                 var index = traversalIndices[i];
-                var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}");
+                var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}").ToList();
                 if (snode.Any())
                 {
                     var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
@@ -385,7 +385,6 @@ namespace ProseSample.Substrings
         public static Node Match(Node target, Pattern kmatch, int k)
         {
             var nodes = SemanticEditOperation.Matches(target.Value, kmatch);
-            //if (nodes.Count > 1) throw new Exception("More than one element is not allowed.");
             return new Node(nodes.ElementAt(k - 1));
         }
 
@@ -399,7 +398,6 @@ namespace ProseSample.Substrings
 
                 if (list.Any()) res = CreateRegions(list);
             }
-
             res = SingleLocations(res);
             return res;
         }

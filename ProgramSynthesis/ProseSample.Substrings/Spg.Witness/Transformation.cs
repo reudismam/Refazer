@@ -143,7 +143,6 @@ namespace ProseSample.Substrings.Spg.Witness
                     tree.SyntaxTree = tree;
 
                     for (int i = 0; i < regions.Count; i++)
-                        //todo BUG: correct this method to return the number of nodes corresponding to the number of regions.
                     {
                         var region = regions[i];
                         if (region.Children.Count == 1)
