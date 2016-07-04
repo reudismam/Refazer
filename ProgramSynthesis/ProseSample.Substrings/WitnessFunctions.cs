@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
@@ -546,15 +547,6 @@ namespace ProseSample.Substrings
         [WitnessFunction("NodeMatch", 1)]
         public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            //var editExamples = new Dictionary<State, object>();
-            //foreach (State input in spec.ProvidedInputs)
-            //{
-            //    var inpTree = (Node)input[rule.Body[0]];
-            //    editExamples[input] = inpTree;
-            //}
-
-            //return new ExampleSpec(editExamples);
-
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             var patterns = new List<ITreeNode<Token>>();
             foreach (State input in spec.ProvidedInputs)
@@ -564,7 +556,10 @@ namespace ProseSample.Substrings
                 matches.Add(inpTree.Value);
                 
                 var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
-                patterns.Add(pattern);
+                var emptyStatement = SyntaxFactory.EmptyStatement();
+                var emptyPattern = ConverterHelper.ConvertITreeNodeToToken(ConverterHelper.ConvertCSharpToTreeNode(emptyStatement));
+                emptyPattern.Children = pattern.Children;
+                patterns.Add(emptyPattern);
             }
 
             var commonPattern = Match.BuildPattern(patterns.First(), patterns.Last());

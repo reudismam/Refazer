@@ -126,34 +126,24 @@ namespace ProseSample.Substrings.Spg.Witness
             //todo REFACTOR loop method
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
-            {
-                var kMatches = new List<Node>(); //todo refactor: put the correct referred object.
+            {       
                 var inpTreeNode = (Node)input[rule.Grammar.InputSymbol];
-                var inpTree = inpTreeNode.Value.Value;
-                var ocurrences = new List<Node>();
-
+                var inpTree = inpTreeNode.Value.Value;             
                 foreach (List<Edit<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
+                    var kMatches = new List<Node>();
+                    //var ocurrences = new List<Node>();
                     var ccs = ComputeConnectedComponents(cc);
-
                     var regions = FindRegion(ccs, inpTree);
-                    var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(),
-                        new TLabel(SyntaxKind.EmptyStatement));
+                    var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(),new TLabel(SyntaxKind.EmptyStatement));
                     cc.First().EditOperation.Parent = ConverterHelper.MakeACopy(tree);
                     tree.SyntaxTree = tree;
 
-                    for (int i = 0; i < regions.Count; i++)
+                    foreach (var region in regions)
                     {
-                        var region = regions[i];
-                        if (region.Children.Count == 1)
-                        {
-                            region = region.Children.First();
-                        }
-                        var r = ConverterHelper.ConvertCSharpToTreeNode(region.Value);
-                        tree.AddChild(r, i);
+                        kMatches.Add(new Node(region));
                     }
-                    ocurrences.Add(new Node(tree));
-
+                    
                     var copy = ConverterHelper.MakeACopy(tree);
                     TreeUpdate treeUp = new TreeUpdate(copy);
 
@@ -172,16 +162,14 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
 
                     }
-
                     WitnessFunctions.TreeUpdateDictionary.Add(tree, treeUp);
                     WitnessFunctions.CurrentTrees[tree] = tree;
-                }
 
-                if (ocurrences.Any())
-                {
-                    kMatches.AddRange(ocurrences);
-                    kExamples[input] = kMatches;
-                }
+                    if (kMatches.Any())
+                    {
+                        kExamples[input] = kMatches;
+                    }
+                }               
             }
             return new SubsequenceSpec(kExamples);
         }
