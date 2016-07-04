@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Script;
@@ -19,57 +20,87 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Transformation
     {
+        /// <summary>
+        /// Witness function to segment the script in a list of edit operations
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Grammar parameter</param>
+        /// <param name="spec">Example specification</param>
         public static ExampleSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var editsExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var script = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
-                //script = script.GetRange(0, 3);
-                editsExamples[input] = script;
+                var script = (Script)spec.Examples[input];
+                var edits = script.Edits;
+                editsExamples[input] = edits;
             }
             return new ExampleSpec(editsExamples);
         }
 
-        public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
+        /// <summary>
+        /// Cluster edit operations and return list of clustered elements.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Grammar parameter</param>
+        /// <param name="spec">Example specification</param>
+        public static SubsequenceSpec ApplyPatch(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            //TODO Refactor the code TransformationLoop
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<List<List<Edit<SyntaxNodeOrToken>>>>();
+                var kMatches = new List<List<Script>>();
                 var inpTreeNode = (Node)input[rule.Body[0]];
                 var inpTree = inpTreeNode.Value.Value;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
-
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
-                    ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
-
-                    //PrintScript(ccs.First());
-
-                    var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
-                    foreach (var cc in ccs)
-                    {
-                        var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
-                        var newScript = Compact(editionConnected);
-                        newccs.Add(newScript);
-                    }
-
-                    if (ccs.Any())
-                    {
-                        var list = ClusterConnectedComponentsInRegions(newccs);
-                        var listEdit = list.Select(cc => cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()).ToList();
-                        kMatches = new List<List<List<Edit<SyntaxNodeOrToken>>>> { listEdit };
-                    }
+                    var newccs = CompactScript(ccs);
+                    kMatches = ClusterScript(newccs);
                 }
-                kExamples[input] = new List<List<List<List<Edit<SyntaxNodeOrToken>>>>> { kMatches };
+                kExamples[input] = new List<List<List<Script>>> { kMatches };
             }
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
         }
 
+        /// <summary>
+        /// Cluster edit script in regions
+        /// </summary>
+        /// <param name="clusteredEdits">Clustered edit operations</param>
+        private static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> clusteredEdits)
+        {
+            var kMatches = new List<List<Script>>();
+            if (clusteredEdits.Any())
+            {
+                var list = ClusterConnectedComponents(clusteredEdits);
+                var listEdit = list.Select(cc => new Script(cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
+                kMatches = new List<List<Script>> { listEdit };
+            }
+            return kMatches;
+        }
+
+        /// <summary>
+        /// Compact edit operations with similar semantic in compacted edit operations
+        /// </summary>
+        /// <param name="connectedComponents">Uncompacted edit operations</param>
+        private static List<List<EditOperation<SyntaxNodeOrToken>>> CompactScript(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
+        {
+            var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+            foreach (var cc in connectedComponents)
+            {
+                var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
+                var newScript = Compact(editionConnected);
+                newccs.Add(newScript);
+            }
+            return newccs;
+        }
+
+        /// <summary>
+        /// Compact similar edit operations in a single edit operation
+        /// </summary>
+        /// <param name="connectedComponents">Uncompacted edit operations</param>
         private static List<EditOperation<SyntaxNodeOrToken>> Compact(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
             var newList = new List<EditOperation<SyntaxNodeOrToken>>();
@@ -94,78 +125,83 @@ namespace ProseSample.Substrings.Spg.Witness
             return newList;
         }
 
-        private static List<List<EditOperation<SyntaxNodeOrToken>>> ClusterConnectedComponentsInRegions(List<List<EditOperation<SyntaxNodeOrToken>>> ccs)
+        /// <summary>
+        /// Cluster connected components
+        /// </summary>
+        /// <param name="connectedComponents">Connected components</param>
+        private static List<List<EditOperation<SyntaxNodeOrToken>>> ClusterConnectedComponents(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
-            var clusters = Clusters(ccs);
-
+            var clusters = Clusters(connectedComponents);
             var list = new List<List<EditOperation<SyntaxNodeOrToken>>>();
-            for (int i = 0; i < clusters.First().Length; i++) list.Add(new List<EditOperation<SyntaxNodeOrToken>>());
-            foreach (var v in clusters)
+            foreach (var cluster in clusters)
             {
-                var editOperationDatasetItems = v.OrderBy(o => o.Operations.First().T1Node.Value.Span);
-                for (int i = 0; i < editOperationDatasetItems.Count(); i++)
-                {
-                    list[i].AddRange(v.ElementAt(i).Operations);
-                }
+                list.AddRange(cluster.Select(item => item.Operations));
             }
             return list;
         }
 
-        private static HashSet<EditOperationDatasetItem[]> Clusters(List<List<EditOperation<SyntaxNodeOrToken>>> ccs)
+        /// <summary>
+        /// Cluster connected components
+        /// </summary>
+        /// <param name="connectedComponents">Connected components</param>
+        private static HashSet<EditOperationDatasetItem[]> Clusters(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
             HashSet<EditOperationDatasetItem[]> clusters;
             var lcc = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
-            var featureData = ccs.Select(x => new EditOperationDatasetItem(x)).ToArray();
+            var featureData = connectedComponents.Select(x => new EditOperationDatasetItem(x)).ToArray();
             var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => 1.0 - (2 * (double)lcc.FindCommon(x.Operations, y.Operations).Count) / ((double)x.Operations.Count + (double)y.Operations.Count));
             dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.5, minPts: 1, clusters: out clusters);
             return clusters;
         }
 
-        public static SubsequenceSpec Loop(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        /// <summary>
+        /// Segment the edit script in nodes
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Rule parameter</param>
+        /// <param name="spec">Example specification</param>
+        public static SubsequenceSpec EditMapTNode(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
-            //todo REFACTOR loop method
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
-            {       
+            {
                 var inpTreeNode = (Node)input[rule.Grammar.InputSymbol];
                 var inpTree = inpTreeNode.Value.Value;
                 var kMatches = new List<Node>();
-                foreach (List<Edit<SyntaxNodeOrToken>> cc in spec.Examples[input])
+                foreach (Script script in spec.Examples[input])
                 {
-                    var ccs = ComputeConnectedComponents(cc);
-                    var regions = FindRegion(ccs, inpTree);
-                    //cc.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                    
-                    foreach (var region in regions)
+                    var connectedComponents = ComputeConnectedComponents(script.Edits);
+                    var trees = BuildTree(connectedComponents, inpTree);
+                    foreach (var region in trees)
                     {
                         kMatches.Add(new Node(region));
                         var treeUp = new TreeUpdate(region);
-                        foreach (var v in cc)
-                        {                            
-                            v.EditOperation.T1Node.SyntaxTree = region;
-                            if (v.EditOperation.Parent != null)
-                            {
-                                v.EditOperation.Parent.SyntaxTree = region;
-                            }
-
-                            if (v.EditOperation is Update<SyntaxNodeOrToken>)
-                            {
-                                var update = (Update<SyntaxNodeOrToken>) v.EditOperation;
-                                update.To.SyntaxTree = region;
-                            }
-                        }
-
+                        ConfigureParentSyntaxTree(script, region);
                         WitnessFunctions.TreeUpdateDictionary.Add(region, treeUp);
                         WitnessFunctions.CurrentTrees[region] = region;
                     }
-                   
-                    if (kMatches.Any())
-                    {
-                        kExamples[input] = kMatches;
-                    }
-                }               
+                    kExamples[input] = kMatches;
+                }
             }
             return new SubsequenceSpec(kExamples);
+        }
+
+        private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> region)
+        {
+            foreach (var edit in script.Edits)
+            {
+                edit.EditOperation.T1Node.SyntaxTree = region;
+                if (edit.EditOperation.Parent != null)
+                {
+                    edit.EditOperation.Parent.SyntaxTree = region;
+                }
+
+                if (edit.EditOperation is Update<SyntaxNodeOrToken>)
+                {
+                    var update = (Update<SyntaxNodeOrToken>)edit.EditOperation;
+                    update.To.SyntaxTree = region;
+                }
+            }
         }
 
         private static List<List<EditOperation<SyntaxNodeOrToken>>> ComputeConnectedComponents(List<Edit<SyntaxNodeOrToken>> cc)
@@ -217,7 +253,7 @@ namespace ProseSample.Substrings.Spg.Witness
             string s = script.Aggregate("", (current, v) => current + (v + "\n"));
         }
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> FindRegion(List<List<EditOperation<SyntaxNodeOrToken>>> ccs, SyntaxNodeOrToken inpTree)
+        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTree(List<List<EditOperation<SyntaxNodeOrToken>>> ccs, SyntaxNodeOrToken inpTree)
         {
             return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).OrderBy(o => o.Value.SpanStart).ToList();
         }

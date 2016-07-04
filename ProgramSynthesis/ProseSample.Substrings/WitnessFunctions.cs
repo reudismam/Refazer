@@ -7,6 +7,7 @@ using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.List;
+using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using ProseSample.Substrings.Spg.Witness;
@@ -234,8 +235,8 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<List<Edit<SyntaxNodeOrToken>>>();
-                foreach (List<List<List<Edit<SyntaxNodeOrToken>>>> editList in spec.Examples[input])
+                var matches = new List<Script>();
+                foreach (List<List<Script>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -260,8 +261,8 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var newPatch = new List<List<List<Edit<SyntaxNodeOrToken>>>>();
-                foreach (List<List<List<Edit<SyntaxNodeOrToken>>>> editList in spec.Examples[input])
+                var newPatch = new List<List<Script>>();
+                foreach (List<List<Script>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -269,7 +270,7 @@ namespace ProseSample.Substrings
                     editList.RemoveAt(0);
                     newPatch = editList;
                 }
-                treeExamples[input] = new List<List<List<List<Edit<SyntaxNodeOrToken>>>>> {newPatch};
+                treeExamples[input] = new List<List<List<Script>>> {newPatch};
             }
             return new SubsequenceSpec(treeExamples);
         }
@@ -287,8 +288,8 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<List<Edit<SyntaxNodeOrToken>>>();
-                foreach (List<List<List<Edit<SyntaxNodeOrToken>>>> editList in spec.Examples[input])
+                var matches = new List<Script>();
+                foreach (List<List<Script>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count != 1) return null;
@@ -355,13 +356,13 @@ namespace ProseSample.Substrings
         [WitnessFunction("Apply", 1)]
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return Transformation.TransformationLoop(rule, parameter, spec);
+            return Transformation.ApplyPatch(rule, parameter, spec);
         }
 
         [WitnessFunction("EditMap", 1)]
         public static SubsequenceSpec RegionMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
-            return Transformation.Loop(rule, parameter, spec);
+            return Transformation.EditMapTNode(rule, parameter, spec);
         }
 
         [WitnessFunction("Template", 1)]
