@@ -11,7 +11,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         public static Pattern C(SyntaxKind kind, IEnumerable<Pattern> children)
         {
             var pchildren = children.Select(child => child.Tree).ToList();
-            var token = new Token(kind);
+            var token = (kind == SyntaxKind.EmptyStatement) ? new EmptyToken() : new Token(kind);
             var inode = new TreeNode<Token>(token, null, pchildren);
             var pattern = new Pattern(inode);
             return pattern;

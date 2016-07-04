@@ -390,7 +390,7 @@ namespace ProseSample.Substrings
 
         public static IEnumerable<Node> Template(Node node, Pattern pattern)
         {
-            var currentTree = node.Value;//ConverterHelper.ConvertCSharpToTreeNode(node);
+            var currentTree = node.Value;
             var res = new List<Node>();
             if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
             {
