@@ -15,10 +15,10 @@ namespace ProseSample.Substrings
     public static class Semantics
     {
         //Before transformation mapping
-        private static readonly Dictionary<Node, List<SyntaxNodeOrToken>> BeforeAfterMapping = new Dictionary<Node, List<SyntaxNodeOrToken>>();
+        private static readonly Dictionary<Node, SyntaxNodeOrToken> BeforeAfterMapping = new Dictionary<Node, SyntaxNodeOrToken>();
 
         //After transformation mapping
-        private static readonly Dictionary<Node, List<SyntaxNodeOrToken>> MappingRegions = new Dictionary<Node, List<SyntaxNodeOrToken>>();
+        private static readonly Dictionary<Node, SyntaxNodeOrToken> MappingRegions = new Dictionary<Node, SyntaxNodeOrToken>();
 
         /// <summary>
         /// Matches the element on the tree with specified kind and child nodes.
@@ -105,9 +105,9 @@ namespace ProseSample.Substrings
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static Node Insert(Node node, Node newNode, int k)
+        public static Node Insert(Node target, Node node, Node newNode, int k)
         {
-            return SemanticEditOperation.Insert(node, newNode, k);
+            return SemanticEditOperation.Insert(target, node, newNode, k);
         }
 
         /// <summary>
@@ -116,9 +116,9 @@ namespace ProseSample.Substrings
         /// <param name="k">Child index</param>
         /// <param name="from">Moved node</param>
         /// <returns></returns>
-        public static Node Move(Node node, Node from, int k)
+        public static Node Move(Node target, Node node, Node from, int k)
         {
-            return SemanticEditOperation.Move(node, from, k);
+            return SemanticEditOperation.Move(target, node, from, k);
         }
 
         /// <summary>
@@ -127,19 +127,20 @@ namespace ProseSample.Substrings
         /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
         /// <returns></returns>
-        public static Node Update(Node node, Node to)
+        public static Node Update(Node target, Node node, Node to)
         {
-            return SemanticEditOperation.Update(node, to);
+            return SemanticEditOperation.Update(target, node, to);
         }
 
         /// <summary>
         /// Delete edit operation
         /// </summary>
+        /// <param name="target">target</param>
         /// <param name="node">Input node</param>
         /// <returns>Result of the edit opration</returns>
-        public static Node Delete(Node node)
+        public static Node Delete(Node target, Node node)
         {
-            return SemanticEditOperation.Delete(node);
+            return SemanticEditOperation.Delete(target, node);
         }
 
         /// <summary>
@@ -150,13 +151,7 @@ namespace ProseSample.Substrings
         /// <returns>Transformed node.</returns>
         public static Node Script(Node node, Patch patch)
         {
-            //var current = node.Value;
-            //var afterFlorest = current.Children.Select(ReconstructTree).ToList();
-            //MappingRegions[node] = afterFlorest;
-
-            var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
-
-            //node.Value.AddChild(ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement()), 0);
+            var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList().ToList();
 
             return node;
         }
@@ -164,20 +159,15 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Script semantic function
         /// </summary>
-        /// <param name="node">Node</param>
-        /// <param name="patch">Edit operations</param>
+        /// <param name="target">Node</param>
+        /// <param name="edits">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static Node Edit(Node node, IEnumerable<Node> edits)
+        public static Node Edit(Node target, IEnumerable<Node> edits)
         {
-            var current = node.Value;
-            var afterFlorest = current.Children.Select(ReconstructTree).ToList();
-            MappingRegions[node] = afterFlorest;
-
-            var beforeFlorest = edits.Select(o => o.Value).ToList();
-
-            //node.Value.AddChild(ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement()), 0);
-
-            return node;
+            var current = edits.Last().Value.Children.First();
+            var node = ReconstructTree(current);
+            MappingRegions[target] = node;
+            return target;
         }
 
         /// <summary>
@@ -351,8 +341,8 @@ namespace ProseSample.Substrings
             var list = loop.ToList();
             foreach (var snode in list)
             {
-                afterNodeList.AddRange(MappingRegions[snode]);
-                beforeNodeList.AddRange(BeforeAfterMapping[snode]);
+                //afterNodeList.AddRange(MappingRegions[snode]);
+                //beforeNodeList.AddRange(BeforeAfterMapping[snode]);
             }
         }
 
@@ -460,7 +450,7 @@ namespace ProseSample.Substrings
                 var newtree = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement));
                 newtree.AddChild(iTree.Children.First(), 0);
                 var newNode = new Node(newtree);
-                BeforeAfterMapping[newNode] = beforeFlorest;
+                //BeforeAfterMapping[newNode] = beforeFlorest;
 
                 regions.Add(newNode);
             }

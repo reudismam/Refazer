@@ -12,9 +12,9 @@ namespace ProseSample.Substrings.Spg.Semantic
 {
     public class SemanticEditOperation
     {
-        public static Node Insert(Node parent, Node ast, int k)
+        public static Node Insert(Node target, Node parent, Node ast, int k)
         {
-            TreeUpdate update = new TreeUpdate(parent.Value);
+            TreeUpdate update = new TreeUpdate(target.Value);
             var child = ast.Value;
             var insert = new Insert<SyntaxNodeOrToken>(child, parent.Value, k);
             update.ProcessEditOperation(insert);
@@ -23,9 +23,9 @@ namespace ProseSample.Substrings.Spg.Semantic
             return new Node(update.CurrentTree);
         }
 
-        public static Node Move(Node parent, Node moved, int k)
+        public static Node Move(Node target, Node parent, Node moved, int k)
         {
-            TreeUpdate update = new TreeUpdate(parent.Value);
+            TreeUpdate update = new TreeUpdate(target.Value);
             var child = moved.Value;
             var move = new Move<SyntaxNodeOrToken>(child, parent.Value, k);
             update.ProcessEditOperation(move);
@@ -34,9 +34,9 @@ namespace ProseSample.Substrings.Spg.Semantic
             return new Node(update.CurrentTree);
         }
 
-        public static Node Update(Node fromNode, Node to)
+        public static Node Update(Node target, Node fromNode, Node to)
         {
-            TreeUpdate update = new TreeUpdate(fromNode.Value.Parent);
+            TreeUpdate update = new TreeUpdate(target.Value);
             var toTreeNode = to.Value;
             var updateEdit = new Update<SyntaxNodeOrToken>(fromNode.Value, toTreeNode, null);
             update.ProcessEditOperation(updateEdit);
@@ -45,9 +45,9 @@ namespace ProseSample.Substrings.Spg.Semantic
             return new Node(update.CurrentTree);
         }
 
-        public static Node Delete(Node fromNode)
+        public static Node Delete(Node target, Node fromNode)
         {
-            TreeUpdate update = new TreeUpdate(fromNode.Value);
+            TreeUpdate update = new TreeUpdate(target.Value);
             var t1Node = fromNode.Value;
             var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
             update.ProcessEditOperation(updateEdit);
