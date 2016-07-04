@@ -100,27 +100,38 @@ namespace ProseSample.Substrings.Spg.Witness
             var patterns = new List<ITreeNode<Token>>();
             foreach (State input in spec.ProvidedInputs)
             {
+                var inpTree = (Node)input[rule.Body[0]];
                 var matches = new List<ITreeNode<SyntaxNodeOrToken>>();
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
-                    matches.Add(sot);
+
+                    if (sot.Value.Equals(inpTree.Value.Value))
+                    {
+                        var empty = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                        empty.Children = sot.Children;
+                        matches.Add(empty);
+                    }
+                    else
+                    {
+                        matches.Add(sot);
+                    }
                 }
-                var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
+                var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());        
                 patterns.Add(pattern);
             }
 
             var commonPattern = BuildPattern(patterns.First(), patterns.Last());
-            foreach(State input in spec.ProvidedInputs)
+            foreach (State input in spec.ProvidedInputs)
             {
-                eExamples[input] = new List<ITreeNode<Token>> {ConverterHelper.MakeACopy(commonPattern.Tree)};
-            }        
+                eExamples[input] = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
+            }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
         public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2)
         {
-            var token = t1.Value.Kind == SyntaxKind.EmptyStatement && t2.Value.Kind == SyntaxKind.EmptyStatement ? new EmptyToken(): new Token(t1.Value.Kind);
+            var token = t1.Value.Kind == SyntaxKind.EmptyStatement && t2.Value.Kind == SyntaxKind.EmptyStatement ? new EmptyToken() : new Token(t1.Value.Kind);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
             Pattern pattern = new Pattern(itreeNode);
             if (t1.Value.Kind != t2.Value.Kind) return null;
@@ -160,8 +171,8 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
-            {           
-                var pattern = (ITreeNode<Token>) kind.DisjunctiveExamples[input].First();
+            {
+                var pattern = (ITreeNode<Token>)kind.DisjunctiveExamples[input].First();
                 var mats = new List<object>();
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
@@ -176,6 +187,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                     }
                 }
+                if (!mats.Any()) return null;
                 if (!mats.All(o => o.Equals(mats.First()))) return null;
                 kExamples[input] = mats.First();
             }

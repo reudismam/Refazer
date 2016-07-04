@@ -18,7 +18,7 @@ namespace ProseSample.Substrings
 
         public override string ToString()
         {
-            return "EmmptyToken";
+            return "EmptyToken";
         }
     }
 }

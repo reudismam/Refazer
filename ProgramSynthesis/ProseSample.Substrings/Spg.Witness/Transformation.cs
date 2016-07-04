@@ -128,13 +128,13 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {       
                 var inpTreeNode = (Node)input[rule.Grammar.InputSymbol];
-                var inpTree = inpTreeNode.Value.Value;             
+                var inpTree = inpTreeNode.Value.Value;
+                var kMatches = new List<Node>();
                 foreach (List<Edit<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
-                    var kMatches = new List<Node>();
                     var ccs = ComputeConnectedComponents(cc);
                     var regions = FindRegion(ccs, inpTree);
-                    cc.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    //cc.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                     
                     foreach (var region in regions)
                     {
