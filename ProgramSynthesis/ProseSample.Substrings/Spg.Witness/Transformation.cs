@@ -132,39 +132,33 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (List<Edit<SyntaxNodeOrToken>> cc in spec.Examples[input])
                 {
                     var kMatches = new List<Node>();
-                    //var ocurrences = new List<Node>();
                     var ccs = ComputeConnectedComponents(cc);
                     var regions = FindRegion(ccs, inpTree);
-                    var tree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(),new TLabel(SyntaxKind.EmptyStatement));
-                    cc.First().EditOperation.Parent = ConverterHelper.MakeACopy(tree);
-                    tree.SyntaxTree = tree;
-
+                    cc.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    
                     foreach (var region in regions)
                     {
                         kMatches.Add(new Node(region));
-                    }
-                    
-                    var copy = ConverterHelper.MakeACopy(tree);
-                    TreeUpdate treeUp = new TreeUpdate(copy);
+                        var treeUp = new TreeUpdate(region);
+                        foreach (var v in cc)
+                        {                            
+                            v.EditOperation.T1Node.SyntaxTree = region;
+                            if (v.EditOperation.Parent != null)
+                            {
+                                v.EditOperation.Parent.SyntaxTree = region;
+                            }
 
-                    foreach (var v in cc)
-                    {
-                        v.EditOperation.T1Node.SyntaxTree = tree;
-                        if (v.EditOperation.Parent != null)
-                        {
-                            v.EditOperation.Parent.SyntaxTree = tree;
+                            if (v.EditOperation is Update<SyntaxNodeOrToken>)
+                            {
+                                var update = (Update<SyntaxNodeOrToken>) v.EditOperation;
+                                update.To.SyntaxTree = region;
+                            }
                         }
 
-                        if (v.EditOperation is Update<SyntaxNodeOrToken>)
-                        {
-                            var update = (Update<SyntaxNodeOrToken>)v.EditOperation;
-                            update.To.SyntaxTree = tree;
-                        }
-
+                        WitnessFunctions.TreeUpdateDictionary.Add(region, treeUp);
+                        WitnessFunctions.CurrentTrees[region] = region;
                     }
-                    WitnessFunctions.TreeUpdateDictionary.Add(tree, treeUp);
-                    WitnessFunctions.CurrentTrees[tree] = tree;
-
+                   
                     if (kMatches.Any())
                     {
                         kExamples[input] = kMatches;

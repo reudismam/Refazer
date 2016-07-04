@@ -13,7 +13,7 @@ namespace ProseSample.Substrings
 
         public override bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)
         {
-            return base.IsMatch(node) && !node.Children.Any();
+            return true;
         }
 
         public override string ToString()

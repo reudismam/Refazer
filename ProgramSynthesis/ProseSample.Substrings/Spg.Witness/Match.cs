@@ -120,7 +120,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2)
         {
-            var token = new Token(t1.Value.Kind);
+            var token = t1.Value.Kind == SyntaxKind.EmptyStatement && t2.Value.Kind == SyntaxKind.EmptyStatement ? new EmptyToken(): new Token(t1.Value.Kind);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
             Pattern pattern = new Pattern(itreeNode);
             if (t1.Value.Kind != t2.Value.Kind) return null;
@@ -166,7 +166,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
-                    var matches = PatterMatches(currentTree, pattern);
+                    var matches = PatternMatches(currentTree, pattern);
                     for (int i = 0; i < matches.Count; i++)
                     {
                         var item = matches[i];
@@ -189,7 +189,7 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <param name="inpTree">Input tree</param>
         /// <param name="pattern">Syntax node or token to be matched.</param>
         /// <returns>Abstract match</returns>
-        public static List<ITreeNode<SyntaxNodeOrToken>> PatterMatches(ITreeNode<SyntaxNodeOrToken> inpTree, ITreeNode<Token> pattern)
+        public static List<ITreeNode<SyntaxNodeOrToken>> PatternMatches(ITreeNode<SyntaxNodeOrToken> inpTree, ITreeNode<Token> pattern)
         {
             //todo Refactor this method putting it on a adequate class.
             var nodes = from item in inpTree.DescendantNodes() where Semantics.IsValue(item, pattern) select item;
