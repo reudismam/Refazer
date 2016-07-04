@@ -17,7 +17,7 @@ using learners ProseSample.Substrings.WitnessFunctions;
 language Transformation;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
-@start  Node script := Script(node, patch);
+@start IEnumerable<Node>  script := Script(node, patch);
 
 Patch patch := SE(editList) | EList(editList, patch);
 IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);

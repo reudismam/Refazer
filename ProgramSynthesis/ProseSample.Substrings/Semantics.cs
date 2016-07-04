@@ -101,6 +101,7 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Insert the newNode node as in the k position of the node in the matching result 
         /// </summary>
+        /// <param name="target">Target node</param>
         /// <param name="node">Input data</param>
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="newNode">Node that will be insert</param>
@@ -115,6 +116,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="k">Child index</param>
         /// <param name="from">Moved node</param>
+        /// <param name="target">Target node</param>
         /// <returns></returns>
         public static Node Move(Node target, Node node, Node from, int k)
         {
@@ -124,6 +126,7 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Update edit operation
         /// </summary>
+        /// <param name="target">Target node</param>
         /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
         /// <returns></returns>
@@ -149,11 +152,12 @@ namespace ProseSample.Substrings
         /// <param name="node">Node</param>
         /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static Node Script(Node node, Patch patch)
+        public static IEnumerable<Node> Script(Node node, Patch patch)
         {
-            var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList().ToList();
+            var beforeFlorest = patch.Edits.Select(o => o.ToList()).First();
 
-            return node;
+            return beforeFlorest;
+            //return node;
         }
 
         /// <summary>
