@@ -64,7 +64,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     //if (!matches.Any()) return null;
 
                     //literalExamples.Add(matches.First());
-                    literalExamples.Add(dyn.Value);
+                    literalExamples.Add(dyn.Value.Value);
 
                     //var first = literalExamples.First();
                     //if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(sot, first)) return null;

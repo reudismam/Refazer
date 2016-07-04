@@ -3,7 +3,6 @@ using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;

@@ -41,10 +41,10 @@ namespace TreeElement.Spg.Node
 
         public static ITreeNode<Token> ConvertITreeNodeToToken(ITreeNode<SyntaxNodeOrToken> st)
         {
-            var token = new Token(st.Value.Kind());
+            var token = new Token(st.Value.Kind(), st);
             if (!st.Children.Any())
             {
-                var dtoken = new DynToken(st.Value.Kind(), st.Value);
+                var dtoken = new DynToken(st.Value.Kind(), st);
                 var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
                 return dtreeNode;
             }

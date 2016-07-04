@@ -8,9 +8,17 @@ namespace ProseSample.Substrings
     {
         public SyntaxKind Kind { get; set; }
 
-        public Token(SyntaxKind kind)
+        public ITreeNode<SyntaxNodeOrToken> Value;
+
+        /// <summary>
+        /// Create a new token
+        /// </summary>
+        /// <param name="kind">Syntax Kind</param>
+        /// <param name="value">Node</param>
+        public Token(SyntaxKind kind, ITreeNode<SyntaxNodeOrToken> value)
         {
             Kind = kind;
+            Value = value;
         }
 
         public virtual bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)

@@ -7,7 +7,7 @@ namespace ProseSample.Substrings
 {
     public class EmptyToken : Token 
     {
-        public EmptyToken() : base(SyntaxKind.EmptyStatement)
+        public EmptyToken() : base(SyntaxKind.EmptyStatement, null)
         {
         }
 

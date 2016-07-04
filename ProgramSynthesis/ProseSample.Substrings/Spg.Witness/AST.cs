@@ -9,6 +9,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Isomorphic;
+using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -78,13 +79,13 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node) input[rule.Body[0]];
-                //var inpTree = WitnessFunctions.GetCurrentTree(key);
+                var currentTree = WitnessFunctions.GetCurrentTree(inpTree.Value);
                 var mats = new List<object>();
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (!sot.Value.IsNode) return null;
-                    var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);
-                    var node = IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree.Value, subTree);
+                    //var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);
+                    var node = TreeUpdate.FindNode(currentTree, sot.Value);//IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree.Value, subTree);
                     if (node == null) return null;
                     var result = new Node(sot);
                     mats.Add(result);

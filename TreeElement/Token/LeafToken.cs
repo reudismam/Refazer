@@ -7,7 +7,7 @@ namespace ProseSample.Substrings
 {
     public class LeafToken : Token 
     {
-        public LeafToken(SyntaxKind kind) : base(kind)
+        public LeafToken(SyntaxKind kind, ITreeNode<SyntaxNodeOrToken> value) : base(kind, value)
         {
             Kind = kind;
         }

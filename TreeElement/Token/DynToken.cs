@@ -6,9 +6,7 @@ namespace ProseSample.Substrings
 {
     public class DynToken : Token
     {
-        public SyntaxNodeOrToken Value;
-
-        public DynToken(SyntaxKind kind, SyntaxNodeOrToken value) : base(kind)
+        public DynToken(SyntaxKind kind, ITreeNode<SyntaxNodeOrToken> value) : base(kind, value)
         {
             Value = value;
         }

@@ -11,7 +11,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         public static Pattern C(SyntaxKind kind, IEnumerable<Pattern> children)
         {
             var pchildren = children.Select(child => child.Tree).ToList();
-            var token = (kind == SyntaxKind.EmptyStatement) ? new EmptyToken() : new Token(kind);
+            var token = (kind == SyntaxKind.EmptyStatement) ? new EmptyToken() : new Token(kind, null);
             var inode = new TreeNode<Token>(token, null, pchildren);
             var pattern = new Pattern(inode);
             return pattern;
@@ -24,7 +24,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <returns>Literal</returns>
         public static Pattern Literal(SyntaxNodeOrToken tree)
         {
-            var token = new DynToken(tree.Kind(), tree);
+            var token = new DynToken(tree.Kind(), ConverterHelper.ConvertCSharpToTreeNode(tree));
             var label = new TLabel(tree.Kind());
             var inode = new TreeNode<Token>(token, label);
             var pattern = new Pattern(inode);
@@ -38,7 +38,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <returns>Variable pattern</returns>
         public static Pattern Variable(SyntaxKind kind)
         {
-            var token = new Token(kind);
+            var token = new Token(kind, null);
             var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;
@@ -51,7 +51,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <returns>Variable pattern</returns>
         public static Pattern Leaf(SyntaxKind kind)
         {
-            var token = new Token(kind);
+            var token = new Token(kind, null);
             var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;
