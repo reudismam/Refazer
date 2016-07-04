@@ -346,13 +346,13 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Edit", 1)]
+        [WitnessFunction("Script", 1)]
         public static DisjunctiveExamplesSpec Edit(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Transformation.ScriptEdits(rule, parameter, spec);
         }
 
-        [WitnessFunction("Script", 1)]
+        [WitnessFunction("Apply", 1)]
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Transformation.TransformationLoop(rule, parameter, spec);

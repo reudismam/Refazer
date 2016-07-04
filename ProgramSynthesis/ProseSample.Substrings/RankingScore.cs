@@ -68,10 +68,10 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Template")]
         public static double Score_Template(double inScore, double kind) => inScore + kind;
 
-        [FeatureCalculator("Script")]
+        [FeatureCalculator("Apply")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
-        [FeatureCalculator("Edit")]
+        [FeatureCalculator("Script")]
         public static double Score_Edit(double edit) => edit;
 
         [FeatureCalculator("Transformation")]

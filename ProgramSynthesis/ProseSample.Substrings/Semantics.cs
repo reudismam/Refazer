@@ -152,12 +152,10 @@ namespace ProseSample.Substrings
         /// <param name="node">Node</param>
         /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static IEnumerable<Node> Script(Node node, Patch patch)
+        public static IEnumerable<Node> Apply(Node node, Patch patch)
         {
             var beforeFlorest = patch.Edits.Select(o => o.ToList()).First();
-
             return beforeFlorest;
-            //return node;
         }
 
         /// <summary>
@@ -166,7 +164,7 @@ namespace ProseSample.Substrings
         /// <param name="target">Node</param>
         /// <param name="edits">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static Node Edit(Node target, IEnumerable<Node> edits)
+        public static Node Script(Node target, IEnumerable<Node> edits)
         {
             var current = edits.Last().Value.Children.First();
             var node = ReconstructTree(current);
@@ -183,17 +181,13 @@ namespace ProseSample.Substrings
         public static Node Node(SyntaxKind kind, IEnumerable<Node> childrenNodes)
         {
             var childrenList = (List<Node>) childrenNodes;
-
             if (!childrenList.Any()) return null;
-
             var parent = childrenNodes.First().Value.Parent;
-
             for (int i = 0; i < childrenList.Count(); i++)
             {
                 var child = childrenList.ElementAt(i).Value;
                 parent.AddChild(child, i);
             }
-
             var node = new Node(parent);
             return node;
         }
