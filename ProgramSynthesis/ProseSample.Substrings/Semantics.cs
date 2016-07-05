@@ -79,7 +79,7 @@ namespace ProseSample.Substrings
             return SemanticMatch.Leaf(kind);
         }
 
-        public static Pattern Parent(Pattern variable, int k)
+        public static Node Parent(Node match, int k)
         {
             //var currentTree = GetCurrentTree(node);
             //var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value).Children.ElementAt(k - 1);

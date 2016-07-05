@@ -136,7 +136,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var token = t1.Value.Kind == SyntaxKind.EmptyStatement && t2.Value.Kind == SyntaxKind.EmptyStatement ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
             Pattern pattern = new Pattern(itreeNode);
-            if (t1.Value.Kind != t2.Value.Kind) return null;
+            if (t1.Value.Kind != t2.Value.Kind) return new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(SyntaxKind.EmptyStatement))); //EmptyToken pattern.
             if (!t1.Children.Any() || !t2.Children.Any())
             {
                 if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)
@@ -163,9 +163,19 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 for (int j = 0; j < t1.Children.Count; j++)
                 {
-                    Pattern patternChild = BuildPattern(t1.Children.ElementAt(j), t2.Children.ElementAt(j));
-                    if (patternChild == null) return null;
-                    pattern.Tree.AddChild(patternChild.Tree, j);
+                    var t1Child = t1.Children.ElementAt(j);
+                    var t2Child = t2.Children.ElementAt(j);
+                    Pattern patternChild = BuildPattern(t1Child, t2Child);
+                    //if (patternChild == null)
+                    //{
+                    //    var empty = new EmptyToken();
+                    //    var itreeEmpty = new TreeNode<Token>(empty, new TLabel(empty.Kind));
+                    //    pattern.Tree.AddChild(itreeEmpty, j);
+                    //}
+                    //else
+                    //{
+                        pattern.Tree.AddChild(patternChild.Tree, j);
+                    //}
                 }
             }
             return pattern;

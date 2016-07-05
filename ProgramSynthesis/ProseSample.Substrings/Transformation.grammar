@@ -29,9 +29,9 @@ Node edit := Script(target, edits);
 IEnumerable<Node> edits:= SO(operation) | SL(operation, edits);
 Node operation := Insert(target, match, ast, k) | Update(target, match, ast) | Move(target, match, match, k) | Delete(target, match);
 
-Node match := Match(target, kmatch, k);
-Pattern kmatch := C(kind, children) | Tree(kindRef);
-Pattern kindRef :=  Literal(tree) | Leaf(kind) | Variable(kind);
+Node match := pattern | Parent(pattern, k);
+Node pattern := Match(target, kmatch, k);
+Pattern kmatch := C(kind, children) | Literal(tree) | Leaf(kind) | Variable(kind);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
 
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, match);

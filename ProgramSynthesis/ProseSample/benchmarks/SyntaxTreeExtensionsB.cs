@@ -35,6 +35,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Extensions.ContextQuery
             {
                 return true;
             }
+
+
+            // cases:
+            //   [Foo(2), |
+            if (token.CSharpKind() == algumobjecto.AlgumMetodo() &&
+                token.Parent.IsKind(SyntaxKind.AttributeList))
+            {
+                return true;
+            }
             
             // cases:
             //   [Namespace.|

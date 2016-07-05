@@ -16,8 +16,9 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
-                foreach (var sot in from Node node in spec.DisjunctiveExamples[input] select node.Value)
+                foreach (Node node in spec.DisjunctiveExamples[input])
                 {
+                    var sot = node.Value;
                     var target = Target(sot);
                     if (sot.Value.IsToken || target == null) return null;
                     target.SyntaxTree = sot.SyntaxTree;
@@ -28,25 +29,27 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        public DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kindBinding)
+        /// <summary>
+        /// Find the index of the child in the parent node.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Rule parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <param name="kindBinding">Parent binding</param>
+        public ExampleSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kindBinding)
         {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                //var key = input[rule.Body[0]];
-                //var inpTree = WitnessFunctions.GetCurrentTree(key);
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
                     var target = Target(sot);
                     if (target == null) return null;
-                    var parent = target;//TreeUpdate.FindNode(inpTree, target);
-
-                    if (sot.Value.IsToken || parent == null) return null;
-
+                    var parent = target;
+                    if (sot.Value.IsToken) return null;
                     var children = parent.Children;
-
                     for (int i = 0; i < children.Count; i++)
                     {
                         var item = children.ElementAt(i);
@@ -55,15 +58,11 @@ namespace ProseSample.Substrings.Spg.Witness
                             matches.Add(i + 1);
                         }
                     }
-                }
-
-                kExamples[input] = matches;
-                var value = kExamples.Values;
-
-                if (value.Any(sequence => !sequence.SequenceEqual(value.First()))) return null;
-
+                }        
+                if (matches.Any(sequence => !sequence.Equals(matches.First()))) return null;
+                kExamples[input] = matches.First();
             }
-            return DisjunctiveExamplesSpec.From(kExamples);
+            return new ExampleSpec(kExamples);
         }
 
         public abstract ITreeNode<SyntaxNodeOrToken> Target(ITreeNode<SyntaxNodeOrToken> sot);

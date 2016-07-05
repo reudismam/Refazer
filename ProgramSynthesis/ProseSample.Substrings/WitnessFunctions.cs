@@ -563,6 +563,7 @@ namespace ProseSample.Substrings
                 patterns.Add(emptyPattern);
             }
 
+            //Todo Bug: please consider all the patterns.
             var commonPattern = Match.BuildPattern(patterns.First(), patterns.Last());
             foreach (State input in spec.ProvidedInputs)
             {
