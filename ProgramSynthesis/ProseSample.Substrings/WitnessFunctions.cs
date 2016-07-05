@@ -442,7 +442,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("Move", 2, DependsOnParameters = new int [] {1})]
-        public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec fromSpec)
+        public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.T1Learner<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
@@ -454,7 +454,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Move", 3, DependsOnParameters = new[] { 1 })]
+        [WitnessFunction("Move", 3, DependsOnParameters = new[] { 1, 2 })]
         public static ExampleSpec MoveK(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.LearnK<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
@@ -493,7 +493,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Insert", 3, DependsOnParameters = new[] { 1 })]
+        [WitnessFunction("Insert", 3, DependsOnParameters = new[] { 1, 2 })]
         public static ExampleSpec InsertK(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.LearnK<Insert<SyntaxNodeOrToken>>(rule, parameter, spec);
