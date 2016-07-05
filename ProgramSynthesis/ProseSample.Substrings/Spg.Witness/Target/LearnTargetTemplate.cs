@@ -20,25 +20,30 @@ namespace ProseSample.Substrings.Spg.Witness.Target
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
 
+                if (ProcessEditOperation())
+                {
+                    var key = editOperation.T1Node.SyntaxTree;
+                    var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+
+                    var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
+                    treeUp.ProcessEditOperation(editOperation);
+                    WitnessFunctions.CurrentTrees[key] = previousTree;
+
+                    Console.WriteLine("PREVIOUS TREE\n\n");
+                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
+                    Console.WriteLine("UPDATED TREE\n\n");
+                    PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
+                }
+
                 var from = Target(edit);
                 var result = EditOperation.GetNode(from);
                 kExamples[input] = result;
-
-                var key = editOperation.T1Node.SyntaxTree;
-                var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
-
-                var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                treeUp.ProcessEditOperation(editOperation);
-                WitnessFunctions.CurrentTrees[key] = previousTree;
-
-                Console.WriteLine("PREVIOUS TREE\n\n");
-                PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
-                Console.WriteLine("UPDATED TREE\n\n");
-                PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
             }
             return new ExampleSpec(kExamples);
         }
 
         protected abstract ITreeNode<SyntaxNodeOrToken> Target(Edit<SyntaxNodeOrToken> edit);
+
+        protected abstract bool ProcessEditOperation();
     }
 }

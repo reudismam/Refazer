@@ -10,5 +10,8 @@ namespace ProseSample.Substrings.Spg.Witness.Target
         {
             return edit.EditOperation.Parent;
         }
+
+        protected override bool ProcessEditOperation() => true;
+
     }
 }

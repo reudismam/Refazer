@@ -441,8 +441,8 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Move", 2)]
-        public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
+        [WitnessFunction("Move", 2, DependsOnParameters = new int [] {1})]
+        public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec fromSpec)
         {
             return EditOperation.T1Learner<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
         }

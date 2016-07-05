@@ -23,6 +23,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     //var syntaxTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
                     //var matches = MatchManager.AbstractMatches(syntaxTree, sot.Value.Kind());
 
+                    if ((node.Value is LeafToken) || (node.Value is DynToken)) continue;
                     if (!node.Children.Any()) continue;
                     //if (!matches.Any()) continue;
 
@@ -51,7 +52,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     //var syntaxTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
                     //var matches = MatchManager.LeafAbstractMatches(syntaxTree, sot.Value.Kind());
 
-                    if (node.Value is DynToken) continue;
+                    if (!(node.Value is LeafToken)) continue;
                     if (node.Children.Any()) continue;
                     //if (!matches.Any()) continue;
 

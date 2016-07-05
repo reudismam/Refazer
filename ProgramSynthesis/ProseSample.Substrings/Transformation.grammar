@@ -31,7 +31,7 @@ Node operation := Insert(target, match, ast, k) | Update(target, match, ast) | M
 
 Node match := Match(target, kmatch, k);
 Pattern kmatch := C(kind, children) | Tree(kindRef);
-Pattern kindRef :=  Literal(tree) | Leaf(kind);
+Pattern kindRef :=  Literal(tree) | Leaf(kind) | Variable(kind);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
 
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, match);

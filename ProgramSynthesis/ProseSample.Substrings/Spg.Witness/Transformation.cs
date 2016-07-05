@@ -32,6 +32,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var script = (Script)spec.Examples[input];
                 var edits = script.Edits;
+                edits = edits.GetRange(0, 2);
                 editsExamples[input] = edits;
             }
             return new ExampleSpec(editsExamples);
