@@ -11,7 +11,7 @@ namespace ProseSample.Substrings.Spg.Witness.Target
             return edit.EditOperation.Parent;
         }
 
-        protected override bool ProcessEditOperation() => true;
+        protected override bool ProcessEditOperation(Edit<SyntaxNodeOrToken> edit) => true;
 
     }
 }

@@ -24,7 +24,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     //var matches = MatchManager.AbstractMatches(syntaxTree, sot.Value.Kind());
 
                     if ((node.Value is LeafToken) || (node.Value is DynToken)) continue;
-                    if (!node.Children.Any()) continue;
+                    if (node.Children.Any()) continue;
                     //if (!matches.Any()) continue;
 
                     mats.Add(node.Value.Kind);

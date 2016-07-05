@@ -20,7 +20,7 @@ namespace ProseSample.Substrings.Spg.Witness.Target
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
 
-                if (ProcessEditOperation())
+                if (ProcessEditOperation(edit))
                 {
                     var key = editOperation.T1Node.SyntaxTree;
                     var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
@@ -44,6 +44,6 @@ namespace ProseSample.Substrings.Spg.Witness.Target
 
         protected abstract ITreeNode<SyntaxNodeOrToken> Target(Edit<SyntaxNodeOrToken> edit);
 
-        protected abstract bool ProcessEditOperation();
+        protected abstract bool ProcessEditOperation(Edit<SyntaxNodeOrToken> edit);
     }
 }
