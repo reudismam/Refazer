@@ -194,6 +194,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var connectedComponents = ComputeConnectedComponents(script.Edits);
                     var trees = BuildTree(connectedComponents, inpTree);
+                    script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
                     foreach (var region in trees)
                     {
                         kMatches.Add(new Node(region));

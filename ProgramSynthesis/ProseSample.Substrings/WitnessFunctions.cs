@@ -560,7 +560,14 @@ namespace ProseSample.Substrings
                 var emptyStatement = SyntaxFactory.EmptyStatement();
                 var emptyPattern = ConverterHelper.ConvertITreeNodeToToken(ConverterHelper.ConvertCSharpToTreeNode(emptyStatement));
                 emptyPattern.Children = pattern.Children;
-                patterns.Add(emptyPattern);
+                if (pattern.Children.Any())
+                {
+                    patterns.Add(emptyPattern);
+                }
+                else
+                {
+                    patterns.Add(pattern);
+                }
             }
             var commonPattern = Match.BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
