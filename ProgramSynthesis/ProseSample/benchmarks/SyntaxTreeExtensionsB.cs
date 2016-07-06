@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Extensions.ContextQuery
 
             // cases:
             //   [Foo(2), |
-            if (token.CSharpKind() == algumobjecto.AlgumMetodo() &&
+            if (token.Parent.CSharpKind() == algumobjecto.AlgumMetodo() &&
                 token.Parent.IsKind(SyntaxKind.AttributeList))
             {
                 return true;
