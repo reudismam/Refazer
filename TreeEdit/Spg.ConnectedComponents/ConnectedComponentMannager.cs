@@ -129,18 +129,18 @@ namespace TreeEdit.Spg.ConnectedComponents
                 var editJ = Script[indexJ];
 
                 //Two nodes have the same parent
-                if (editI.Parent.DescendantNodesAndSelf().Contains(editJ.Parent) && !editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))) return true;        
+                if (editI.Parent.Equals(editJ.Parent) && !editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))) return true;        
 
                 //T1Node from an operation is the parent in another edit operation 
-                if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
+                if (editI.T1Node.Equals(editJ.Parent)) return true;
 
-                if (editI.Parent.Parent != null && editI.Parent.Parent.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
+                if (editI.Parent.Parent != null && editI.Parent.Parent.Equals(editJ.T1Node)) return true;
 
                 if (editI is Move<T>)
                 {
                     var move = editI as Move<T>;
                     //Specific case for move nodes
-                    if (move.PreviousParent.DescendantNodesAndSelf().Contains(editJ.Parent)) return false;
+                    if (move.PreviousParent.Equals(editJ.Parent)) return false;
                 }
                 return false;
             }     
