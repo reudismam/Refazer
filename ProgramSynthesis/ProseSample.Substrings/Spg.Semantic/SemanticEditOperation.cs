@@ -55,6 +55,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             TreeUpdate update = new TreeUpdate(target.Value);
             var t1Node = fromNode.Value;
+
             var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
             update.ProcessEditOperation(updateEdit);
 #if DEBUG

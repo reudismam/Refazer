@@ -19,7 +19,7 @@ namespace ProseSample
     {
         private static void Main(string[] args)
         {
-            LoadAndRunRepetitiveChangeMultipleEditions();
+            LoadAndRunRepetitiveChangeMultipleEditions4();
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace ProseSample
             ProgramNode program = Learn(grammar, spec);
 
             //Run program
-            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration);
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(4, 1); ;
 
             foreach (var method in methods)
             {

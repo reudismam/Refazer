@@ -153,8 +153,14 @@ namespace ProseSample.Substrings
         /// <returns>Transformed node.</returns>
         public static IEnumerable<Node> Apply(Node node, Patch patch)
         {
-            var beforeFlorest = patch.Edits.Select(o => o.ToList()).First();
-            return beforeFlorest;
+            var beforeFlorest = patch.Edits.Select(o => o.ToList());
+
+            var resultList = new List<Node>();
+            foreach (var edited in beforeFlorest)
+            {
+                resultList.AddRange(edited);
+            }
+            return resultList;
         }
 
         /// <summary>
@@ -165,7 +171,15 @@ namespace ProseSample.Substrings
         /// <returns>Transformed node.</returns>
         public static Node Script(Node target, IEnumerable<Node> edits)
         {
-            var current = edits.Last().Value.Children.First();
+            ITreeNode<SyntaxNodeOrToken> current;
+            if (edits.Last().Value.Children.Any())
+            {
+                current = edits.Last().Value.Children.First();
+            }
+            else
+            {
+                current = edits.Last().Value;
+            }
             var node = ReconstructTree(current);
             MappingRegions[target] = node;
             Console.WriteLine(node.ToString());
@@ -582,6 +596,12 @@ namespace ProseSample.Substrings
                     var equalsExpression = SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, left, right);
                     return equalsExpression;
                 }
+            case SyntaxKind.EqualsValueClause:
+                {
+                    var expressionSyntax = (ExpressionSyntax) children[0];
+                    var equalsValueClause = SyntaxFactory.EqualsValueClause(expressionSyntax);
+                    return equalsValueClause;
+                }
             case SyntaxKind.IfStatement:
                 {
                     var condition = (ExpressionSyntax)children[0];
@@ -589,6 +609,10 @@ namespace ProseSample.Substrings
                     var ifStatement = SyntaxFactory.IfStatement(condition, statementSyntax);
                     return ifStatement;
                 }
+            //case SyntaxKind.VariableDeclaration:
+            //    {
+            //        var variableDeclarator = SyntaxFactory.VariableDeclarator();
+            //    }
             case SyntaxKind.UnaryMinusExpression:
                 {
                     ExpressionSyntax expression = (ExpressionSyntax)children[0];

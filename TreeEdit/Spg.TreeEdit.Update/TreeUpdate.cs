@@ -59,7 +59,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 var parent = FindNode(CurrentTree, editOperation.Parent.Value);
                 if (parent == null) parent = CurrentTree;
-                RemoveNode(CurrentTree, editOperation.T1Node.Value);
+                CurrentTree = RemoveNode(CurrentTree, editOperation.T1Node);
 
                 ITreeNode<SyntaxNodeOrToken> treeNode = editOperation.T1Node;//ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
                 parent.AddChild(treeNode, editOperation.K - 1);
@@ -70,21 +70,27 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 //Console.WriteLine("PREVIOUS TREE\n\n");
                 //PrintUtil<SyntaxNodeOrToken>.PrintPretty(CurrentTree, "", true);
-                RemoveNode(CurrentTree, editOperation.T1Node.Value);
+                CurrentTree = RemoveNode(CurrentTree, editOperation.T1Node);
                 //Console.WriteLine("UPDATED TREE\n\n");
                 //PrintUtil<SyntaxNodeOrToken>.PrintPretty(CurrentTree, "", true);               
             }
         }
 
-        private void RemoveNode(ITreeNode<SyntaxNodeOrToken> iTree, SyntaxNodeOrToken oldNode)
+        private ITreeNode<SyntaxNodeOrToken> RemoveNode(ITreeNode<SyntaxNodeOrToken> iTree, ITreeNode<SyntaxNodeOrToken> oldNode)
         {
-            if (!iTree.Children.Any()) return;
+            if (!iTree.Children.Any()) return iTree;
+
+            if (IsEquals(iTree, oldNode))
+            {
+                iTree = new TreeNode<SyntaxNodeOrToken>(null, null);
+                return iTree;
+            }
 
             int count = 0;
             bool found = false;
             foreach (var item in iTree.Children)
             {
-                if (oldNode.Span.Contains(item.Value.Span) && item.Value.Span.Contains(oldNode.Span) && oldNode.IsKind(item.Value.Kind()))
+                if (oldNode.Value.Span.Contains(item.Value.Span) && item.Value.Span.Contains(oldNode.Value.Span) && oldNode.Value.IsKind(item.Value.Kind()))
                 {
                     found = true;
                     break;
@@ -97,7 +103,29 @@ namespace TreeEdit.Spg.TreeEdit.Update
             if (found)
             {
                 iTree.RemoveNode(count);
+                return iTree;
             }
+            return iTree;
+        }
+
+        private bool IsEquals(ITreeNode<SyntaxNodeOrToken> iTree, ITreeNode<SyntaxNodeOrToken> oldNode)
+        {
+            if (!iTree.Value.IsKind(oldNode.Value.Kind()))
+            {
+                return false;
+            }
+
+            if (iTree.Children.Count != oldNode.Children.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < iTree.Children.Count; i++)
+            {
+                var equals = IsEquals(iTree.Children.ElementAt(i), oldNode.Children.ElementAt(i));
+                if (!equals) return false;
+            }
+            return true;
         }
 
         private void ReplaceNode(ITreeNode<SyntaxNodeOrToken> iTree, SyntaxNodeOrToken oldNode, ITreeNode<SyntaxNodeOrToken> newNode)
