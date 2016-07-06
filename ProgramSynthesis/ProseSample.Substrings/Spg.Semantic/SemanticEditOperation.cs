@@ -18,8 +18,10 @@ namespace ProseSample.Substrings.Spg.Semantic
             var child = ast.Value;
             var insert = new Insert<SyntaxNodeOrToken>(child, parent.Value, k);
             update.ProcessEditOperation(insert);
+#if DEBUG
             Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+#endif
             return new Node(update.CurrentTree);
         }
 
@@ -29,8 +31,10 @@ namespace ProseSample.Substrings.Spg.Semantic
             var child = moved.Value;
             var move = new Move<SyntaxNodeOrToken>(child, parent.Value, k);
             update.ProcessEditOperation(move);
+#if DEBUG
             Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+#endif
             return new Node(update.CurrentTree);
         }
 
@@ -40,8 +44,10 @@ namespace ProseSample.Substrings.Spg.Semantic
             var toTreeNode = to.Value;
             var updateEdit = new Update<SyntaxNodeOrToken>(fromNode.Value, toTreeNode, null);
             update.ProcessEditOperation(updateEdit);
+#if DEBUG
             Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+#endif
             return new Node(update.CurrentTree);
         }
 
@@ -51,8 +57,10 @@ namespace ProseSample.Substrings.Spg.Semantic
             var t1Node = fromNode.Value;
             var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
             update.ProcessEditOperation(updateEdit);
+#if DEBUG
             Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+#endif
             return new Node(update.CurrentTree);
         }
 

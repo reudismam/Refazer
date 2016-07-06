@@ -562,9 +562,7 @@ namespace ProseSample.Substrings
                 emptyPattern.Children = pattern.Children;
                 patterns.Add(emptyPattern);
             }
-
-            //Todo Bug: please consider all the patterns.
-            var commonPattern = Match.BuildPattern(patterns.First(), patterns.Last());
+            var commonPattern = Match.BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
             {
                 eExamples[input] = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };

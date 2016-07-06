@@ -123,12 +123,22 @@ namespace ProseSample.Substrings.Spg.Witness
                 patterns.Add(pattern);
             }
 
-            var commonPattern = BuildPattern(patterns.First(), patterns.Last());
+            var commonPattern = BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
             {
                 eExamples[input] = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
             }
             return DisjunctiveExamplesSpec.From(eExamples);
+        }
+
+        public static Pattern BuildPattern(List<ITreeNode<Token>> patterns)
+        {
+            var pattern = patterns.First();
+            for (int i = 1; i < patterns.Count; i++)
+            {
+                pattern = BuildPattern(pattern, patterns[i]).Tree;
+            }
+            return new Pattern(pattern);
         }
 
         public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2)
