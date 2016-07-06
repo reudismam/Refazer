@@ -55,9 +55,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
-                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
+                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);                 
+                    kMatches = ClusterScript(ccs);
                     var newccs = CompactScript(ccs);
-                    kMatches = ClusterScript(newccs);
                 }
                 kExamples[input] = new List<List<List<Script>>> { kMatches };
             }
