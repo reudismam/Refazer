@@ -38,7 +38,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         /// <returns>Variable pattern</returns>
         public static Pattern Variable(SyntaxKind kind)
         {
-            var token = new Token(kind, null);
+            var token = (kind == SyntaxKind.EmptyStatement) ? new EmptyToken() : new Token(kind, null);
             var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;

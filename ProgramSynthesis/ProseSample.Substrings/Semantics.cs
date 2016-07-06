@@ -82,10 +82,9 @@ namespace ProseSample.Substrings
         public static Node Parent(Node match, int k)
         {
             //var currentTree = GetCurrentTree(node);
-            //var child = TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value).Children.ElementAt(k - 1);
-            //var result = new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
-            //return result;
-            return null;
+            var child = /*TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value).Children*/match.Value.Children.ElementAt(k - 1);
+            var result = new Node(child);//new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
+            return result;
         }
 
         /// <summary>
