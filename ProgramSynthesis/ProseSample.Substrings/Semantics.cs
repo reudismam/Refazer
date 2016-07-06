@@ -408,7 +408,7 @@ namespace ProseSample.Substrings
         {
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = node.Value;
-            var nodes = traversal.PostOrderTraversal(itreenode);
+            var nodes = traversal.PostOrderTraversal(itreenode).ToList();
             var result = nodes.Select(o => new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement), new List<ITreeNode<SyntaxNodeOrToken>> {o}))).ToList();
             return result;
         }

@@ -76,7 +76,7 @@ namespace ProseSample.Substrings
         public static ExampleSpec LeafKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Variable.LeafKind(rule, parameter, spec);
-        }  
+        }
 
         /// <summary>
         /// Parent witness function for parameter kindRef
@@ -270,7 +270,7 @@ namespace ProseSample.Substrings
                     editList.RemoveAt(0);
                     newPatch = editList;
                 }
-                treeExamples[input] = new List<List<List<Script>>> {newPatch};
+                treeExamples[input] = new List<List<List<Script>>> { newPatch };
             }
             return new SubsequenceSpec(treeExamples);
         }
@@ -441,7 +441,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Move", 2, DependsOnParameters = new int [] {1})]
+        [WitnessFunction("Move", 2, DependsOnParameters = new int[] { 1 })]
         public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec FromSpec)
         {
             return EditOperation.T1Learner<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
@@ -480,7 +480,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Insert", 2, DependsOnParameters = new int [] {1})]
+        [WitnessFunction("Insert", 2, DependsOnParameters = new int[] { 1 })]
         public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec ParentSpec)
         {
             return EditOperation.Insertast(rule, parameter, spec);
@@ -498,7 +498,7 @@ namespace ProseSample.Substrings
         {
             return EditOperation.LearnK<Insert<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
-      
+
         /// <summary>
         /// Node witness function for expression parameter with one child
         /// </summary>
@@ -543,7 +543,7 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec Ref(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return AST.Ref(rule, parameter, spec);
-        } 
+        }
 
         [WitnessFunction("NodeMatch", 1)]
         public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
@@ -552,22 +552,19 @@ namespace ProseSample.Substrings
             var patterns = new List<ITreeNode<Token>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<ITreeNode<SyntaxNodeOrToken>>();
                 var inpTree = (Node)input[rule.Body[0]];
-                matches.Add(inpTree.Value);
-                
-                var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
+                var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
                 var emptyStatement = SyntaxFactory.EmptyStatement();
-                var emptyPattern = ConverterHelper.ConvertITreeNodeToToken(ConverterHelper.ConvertCSharpToTreeNode(emptyStatement));
+                var emptyToken = new Token(SyntaxKind.EmptyStatement, new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement)));
+                ITreeNode<Token> emptyPattern = new TreeNode<Token>(emptyToken, new TLabel(SyntaxKind.EmptyStatement));
                 emptyPattern.Children = pattern.Children;
-                if (pattern.Children.Any())
+                if (!pattern.Children.Any())
                 {
-                    patterns.Add(emptyPattern);
+                    emptyPattern.AddChild(pattern, 0);
+                    pattern.Children = new List<ITreeNode<Token>>();
                 }
-                else
-                {
-                    patterns.Add(pattern);
-                }
+                patterns.Add(emptyPattern);
+
             }
             var commonPattern = Match.BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
