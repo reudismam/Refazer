@@ -57,7 +57,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     var script = Script(inpTree, outTree);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);                 
                     kMatches = ClusterScript(ccs);
-                    var newccs = CompactScript(ccs);
+                    //var newccs = CompactScript(ccs);
+                    kMatches = kMatches.Select(CompactScript).ToList();
                 }
                 kExamples[input] = new List<List<List<Script>>> { kMatches };
             }
@@ -71,14 +72,17 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <param name="clusteredEdits">Clustered edit operations</param>
         private static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> clusteredEdits)
         {
-            var kMatches = new List<List<Script>>();
+            var clusteredList = new List<List<Script>>();
             if (clusteredEdits.Any())
             {
-                var list = ClusterConnectedComponents(clusteredEdits);
-                var listEdit = list.Select(cc => new Script(cc.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
-                kMatches = new List<List<Script>> { listEdit };
+                var clusters = ClusterConnectedComponents(clusteredEdits);
+                foreach (var cluster in clusters)
+                {
+                    var listEdit = cluster.Select(clusterList => new Script(clusterList.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
+                    clusteredList.Add(listEdit);
+                }          
             }
-            return kMatches;
+            return clusteredList;
         }
 
         /// <summary>
@@ -93,6 +97,24 @@ namespace ProseSample.Substrings.Spg.Witness
                 var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
                 var newScript = Compact(editionConnected);
                 newccs.Add(newScript);
+            }
+            return newccs;
+        }
+
+
+        /// <summary>
+        /// Compact edit operations with similar semantic in compacted edit operations
+        /// </summary>
+        /// <param name="connectedComponents">Uncompacted edit operations</param>
+        private static List<Script> CompactScript(List<Script> connectedComponents)
+        {
+            //TODO refactor this code.
+            var newccs = new List<Script>();
+            foreach (var cc in connectedComponents)
+            {
+                var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc.Edits.Select(o => o.EditOperation).ToList());
+                var newScript = Compact(editionConnected);
+                newccs.Add(new Script(newScript.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
             }
             return newccs;
         }
@@ -129,13 +151,13 @@ namespace ProseSample.Substrings.Spg.Witness
         /// Cluster connected components
         /// </summary>
         /// <param name="connectedComponents">Connected components</param>
-        private static List<List<EditOperation<SyntaxNodeOrToken>>> ClusterConnectedComponents(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
+        private static List<List<List<EditOperation<SyntaxNodeOrToken>>>> ClusterConnectedComponents(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
             var clusters = Clusters(connectedComponents);
-            var list = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+            var list = new List<List<List<EditOperation<SyntaxNodeOrToken>>>>();
             foreach (var cluster in clusters)
             {
-                list.AddRange(cluster.Select(item => item.Operations));
+                list.Add(cluster.Select(item => item.Operations).ToList());
             }
             return list;
         }
@@ -207,7 +229,7 @@ namespace ProseSample.Substrings.Spg.Witness
         private static List<List<EditOperation<SyntaxNodeOrToken>>> ComputeConnectedComponents(List<Edit<SyntaxNodeOrToken>> cc)
         {
             var editOperations = cc.Select(o => o.EditOperation).ToList();
-            var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(editOperations);
+            var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.DescendantsConnectedComponents(editOperations);
             ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
             return ccs;
         }

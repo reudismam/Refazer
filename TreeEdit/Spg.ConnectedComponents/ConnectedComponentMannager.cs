@@ -68,6 +68,13 @@ namespace TreeEdit.Spg.ConnectedComponents
             return ConnectedComponentsBase(script);
         }
 
+        public static List<List<EditOperation<T>>> DescendantsConnectedComponents(List<EditOperation<T>> script)
+        {
+            ConnectionComparer = new DescendantsConnected(script);
+            BuildGraph(script);
+            return ConnectedComponentsBase(script);
+        }
+
         private static void DepthFirstSearch(EditOperation<T> editOperation, int i)
         {
             var t = Tuple.Create(editOperation.T1Node.Value, editOperation.Parent.Value, editOperation.K);
@@ -167,10 +174,36 @@ namespace TreeEdit.Spg.ConnectedComponents
                     if (!(Script[i] is Update<T>) && type != typeI) return false;
                 }
 
-                return new FullConnected(Script).IsConnected(indexI, indexJ);
+                return new DescendantsConnected(Script).IsConnected(indexI, indexJ);
             }
+        }
 
-            
+        private class DescendantsConnected : ConnectionComparer<T>
+        {
+            public DescendantsConnected(List<EditOperation<T>> script) : base(script)
+            {
+            }
+            public override bool IsConnected(int indexI, int indexJ)
+            {
+                var editI = Script[indexI];
+                var editJ = Script[indexJ];
+
+                //Two nodes have the same parent
+                if (editI.Parent.DescendantNodesAndSelf().Contains(editJ.Parent) && !editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))) return true;
+
+                //T1Node from an operation is the parent in another edit operation 
+                if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
+
+                if (editI.Parent.Parent != null && editI.Parent.Parent.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
+
+                if (editI is Move<T>)
+                {
+                    var move = editI as Move<T>;
+                    //Specific case for move nodes
+                    if (move.PreviousParent.DescendantNodesAndSelf().Contains(editJ.Parent)) return false;
+                }
+                return false;
+            }          
         }
     }
 }
