@@ -168,6 +168,7 @@ namespace ProseSample.Substrings
             var current = edits.Last().Value.Children.First();
             var node = ReconstructTree(current);
             MappingRegions[target] = node;
+            Console.WriteLine(node.ToString());
             return target;
         }
 
