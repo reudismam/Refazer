@@ -3,6 +3,7 @@ using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -195,6 +196,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var connectedComponents = ComputeConnectedComponents(script.Edits);
                     var trees = BuildTree(connectedComponents, inpTree);
 
+                    trees = trees.Select(o => BuildPattern(o)).ToList();
                     //if (trees.Any() && !trees.First().Children.Any())
                     //{
                     //    //In this specific case the transformation is executed on the node itself
@@ -215,6 +217,42 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
             }
             return new SubsequenceSpec(kExamples);
+        }
+
+        private static ITreeNode<SyntaxNodeOrToken> BuildPattern(ITreeNode<SyntaxNodeOrToken> inpTree)
+        {
+            if (!inpTree.Children.Any())
+            {
+                var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value);
+                //var pattern = ConverterHelper.ConvertITreeNodeToToken(itreeNode);
+                //return pattern;
+                return itreeNode;
+            }
+
+            if (inpTree.Children.Count() != ((SyntaxNode)inpTree.Value).ChildNodes().Count())
+            {
+                //var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
+                //return pattern;
+                return inpTree;
+            }
+            else
+            {
+                //var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
+                var emptyKind = SyntaxKind.EmptyStatement;
+                var emptyStatement = SyntaxFactory.EmptyStatement();
+                var emptyNode = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind));
+                emptyNode.AddChild(inpTree, 0);
+                //var emptyToken = new Token(emptyKind, new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind)));
+                //ITreeNode<Token> emptyPattern = new TreeNode<Token>(emptyToken, new TLabel(emptyKind));
+                //emptyPattern.Children = pattern.Children;
+                //if (!pattern.Children.Any())
+                //{
+                //    emptyPattern.AddChild(pattern, 0);
+                //    pattern.Children = new List<ITreeNode<Token>>();
+                //}
+                //return emptyPattern;
+                return emptyNode;
+            }
         }
 
         private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> region)

@@ -107,16 +107,16 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
-                    if (sot.Value.Equals(currentTree.Value) && currentTree.Children.Any())
-                    {
-                        var empty = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                        empty.Children = sot.Children;
-                        matches.Add(empty);
-                    }
-                    else
-                    {
+                    //if (sot.Value.Equals(currentTree.Value) && currentTree.Children.Any())
+                    //{
+                    //    var empty = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    //    empty.Children = sot.Children;
+                    //    matches.Add(empty);
+                    //}
+                    //else
+                    //{
                         matches.Add(sot);
-                    }
+                    //}
                 }
                 var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
                 pattern.DescendantNodesAndSelf().ForEach(o => o.Value.Value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value));

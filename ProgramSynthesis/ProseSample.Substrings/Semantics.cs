@@ -409,10 +409,19 @@ namespace ProseSample.Substrings
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = node.Value;
             var nodes = traversal.PostOrderTraversal(itreenode).ToList();
-            var result = nodes.Select(o => new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement), new List<ITreeNode<SyntaxNodeOrToken>> {o}))).ToList();
+            var result = new List<Node>();
+            foreach (var n in nodes)
+            {
+                var emptyKind = SyntaxKind.EmptyStatement;
+                result.Add(new Node(n));
+                var parentEmpty = new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(emptyKind), new List<ITreeNode<SyntaxNodeOrToken>> {n}));
+                result.Add(parentEmpty);
+            }
             return result;
+            //var result = nodes.Select(o => new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement), new List<ITreeNode<SyntaxNodeOrToken>> {o}))).ToList();
+            //return result;
         }
-
+         
         private static List<Node> SingleLocations(List<Node> res)
         {
             var list = new List<Node>();
