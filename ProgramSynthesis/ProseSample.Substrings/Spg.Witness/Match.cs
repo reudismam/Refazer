@@ -141,7 +141,17 @@ namespace ProseSample.Substrings.Spg.Witness
             return new Pattern(pattern);
         }
 
-        public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2, bool considerLeafToken = true)
+        public static Pattern BuildPattern2(List<ITreeNode<Token>> patterns)
+        {
+            var pattern = patterns.First();
+            for (int i = 1; i < patterns.Count; i++)
+            {
+                pattern = BuildPattern(pattern, patterns[i], false).Tree;
+            }
+            return new Pattern(pattern);
+        }
+
+        public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2, bool considerLeafToken)
         {
             var token = t1.Value.Kind == SyntaxKind.EmptyStatement && t2.Value.Kind == SyntaxKind.EmptyStatement ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
@@ -175,7 +185,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var t1Child = t1.Children.ElementAt(j);
                     var t2Child = t2.Children.ElementAt(j);
-                    Pattern patternChild = BuildPattern(t1Child, t2Child);
+                    Pattern patternChild = BuildPattern(t1Child, t2Child, considerLeafToken);
                     //if (patternChild == null)
                     //{
                     //    var empty = new EmptyToken();
