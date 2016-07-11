@@ -488,11 +488,17 @@ namespace ProseSample.Substrings
         public static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
         {
             //if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root pattern
-            if (!pattern.Value.IsMatch(snode)) return false;
+            if (!pattern.Value.IsMatch(snode))
+            {
+                return false;
+            }
             foreach (var child in pattern.Children)
             {
                 var valid = snode.Children.Any(tchild => IsValue(tchild, child));
-                if (!valid) return false;
+                if (!valid)
+                {
+                    return false;
+                }
             }
             return true;
         }

@@ -131,17 +131,17 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        public static Pattern BuildPattern(List<ITreeNode<Token>> patterns)
+        public static Pattern BuildPattern(List<ITreeNode<Token>> patterns, bool leafToken = true)
         {
             var pattern = patterns.First();
             for (int i = 1; i < patterns.Count; i++)
             {
-                pattern = BuildPattern(pattern, patterns[i]).Tree;
+                pattern = BuildPattern(pattern, patterns[i], leafToken).Tree;
             }
             return new Pattern(pattern);
         }
 
-        public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2)
+        public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2, bool considerLeafToken = true)
         {
             var token = t1.Value.Kind == SyntaxKind.EmptyStatement && t2.Value.Kind == SyntaxKind.EmptyStatement ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
@@ -159,7 +159,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                 }
 
-                if (!t1.Value.Value.Children.Any() && !t2.Value.Value.Children.Any())
+                if (!t1.Value.Value.Children.Any() && !t2.Value.Value.Children.Any() && considerLeafToken)
                 {
                     var ltoken = new LeafToken(t1.Value.Kind, t1.Value.Value);
                     var litreenode = new TreeNode<Token>(ltoken, new TLabel(token.Kind));

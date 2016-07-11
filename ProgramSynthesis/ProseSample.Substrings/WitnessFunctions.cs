@@ -564,9 +564,8 @@ namespace ProseSample.Substrings
                     pattern.Children = new List<ITreeNode<Token>>();
                 }
                 patterns.Add(emptyPattern);
-
             }
-            var commonPattern = Match.BuildPattern(patterns);
+            var commonPattern = Match.BuildPattern(patterns, false);
             foreach (State input in spec.ProvidedInputs)
             {
                 eExamples[input] = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
