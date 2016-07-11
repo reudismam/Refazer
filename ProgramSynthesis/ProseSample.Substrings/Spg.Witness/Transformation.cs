@@ -85,21 +85,21 @@ namespace ProseSample.Substrings.Spg.Witness
             return clusteredList;
         }
 
-        /// <summary>
-        /// Compact edit operations with similar semantic in compacted edit operations
-        /// </summary>
-        /// <param name="connectedComponents">Uncompacted edit operations</param>
-        private static List<List<EditOperation<SyntaxNodeOrToken>>> CompactScript(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
-        {
-            var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
-            foreach (var cc in connectedComponents)
-            {
-                var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
-                var newScript = Compact(editionConnected);
-                newccs.Add(newScript);
-            }
-            return newccs;
-        }
+        ///// <summary>
+        ///// Compact edit operations with similar semantic in compacted edit operations
+        ///// </summary>
+        ///// <param name="connectedComponents">Uncompacted edit operations</param>
+        //private static List<List<EditOperation<SyntaxNodeOrToken>>> CompactScript(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
+        //{
+        //    var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+        //    foreach (var cc in connectedComponents)
+        //    {
+        //        var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
+        //        var newScript = Compact(editionConnected);
+        //        newccs.Add(newScript);
+        //    }
+        //    return newccs;
+        //}
 
 
         /// <summary>
@@ -194,6 +194,14 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var connectedComponents = ComputeConnectedComponents(script.Edits);
                     var trees = BuildTree(connectedComponents, inpTree);
+
+                    if (trees.Any() && !trees.First().Children.Any())
+                    {
+                        //In this specific case the transformation is executed on the node itself
+                        //not in specified parent.
+                        trees = trees.Select(o => ConverterHelper.ConvertCSharpToTreeNode(o.Value)).ToList();
+                    }
+
                     script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
                     foreach (var region in trees)
                     {

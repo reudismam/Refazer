@@ -34,6 +34,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Formatting
                     break;
 
                 case SyntaxKind.CloseBraceToken:
+                if (currentToken.IsInterpolation())
+                {
+                    return null;
+                }
                     return CreateAdjustNewLinesOperation(1, AdjustNewLinesOption.PreserveLines);
             }
 
@@ -47,10 +51,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Formatting
             switch (previousToken.Kind())
             {
                 case SyntaxKind.CloseBraceToken:
-                if (currentToken.IsInterpolation())
-                {
-                    return null;
-                }
                     if (!previousToken.IsCloseBraceOfExpression())
                     {
                         if (currentToken.Kind() != SyntaxKind.SemicolonToken &&
