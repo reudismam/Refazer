@@ -2,7 +2,7 @@
 {
     public class TLabel
     {
-        object Label { get; set; }
+        public object Label { get; set; }
 
         public TLabel(object label)
         {

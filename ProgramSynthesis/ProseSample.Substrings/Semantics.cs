@@ -172,7 +172,7 @@ namespace ProseSample.Substrings
         public static Node Script(Node target, IEnumerable<Node> edits)
         {
             ITreeNode<SyntaxNodeOrToken> current;
-            if (edits.Last().Value.Children.Any())
+            if (edits.Last().Value.Value.IsKind(SyntaxKind.EmptyStatement))
             {
                 current = edits.Last().Value.Children.First();
             }
@@ -196,7 +196,8 @@ namespace ProseSample.Substrings
         {
             var childrenList = (List<Node>) childrenNodes;
             if (!childrenList.Any()) return null;
-            var parent = childrenNodes.First().Value.Parent;
+            //var parent = childrenNodes.First().Value.Parent;
+            var parent = new TreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
             for (int i = 0; i < childrenList.Count(); i++)
             {
                 var child = childrenList.ElementAt(i).Value;
@@ -523,6 +524,21 @@ namespace ProseSample.Substrings
         {
             switch (kind)
             {
+            case SyntaxKind.SwitchSection:
+                {
+                    var labels = children.Where(o => o.IsKind(SyntaxKind.CaseSwitchLabel)).Select(o => (SwitchLabelSyntax) o).ToList();
+                    var values = children.Where(o => !o.IsKind(SyntaxKind.CaseSwitchLabel)).Select(o => (StatementSyntax)o).ToList();
+                    var labelList = SyntaxFactory.List(labels);
+                    var valueList = SyntaxFactory.List(values);
+                    var switchSection = SyntaxFactory.SwitchSection(labelList, valueList);
+                    return switchSection;
+                }
+            case SyntaxKind.CaseSwitchLabel:
+                {
+                    var expressionSyntax = (ExpressionSyntax) children.First();
+                    var caseSwitchLabel = SyntaxFactory.CaseSwitchLabel(expressionSyntax);
+                    return caseSwitchLabel;
+                }
             case SyntaxKind.NameColon:
                 {
                     var identifier = (IdentifierNameSyntax)children[0];
@@ -628,6 +644,7 @@ namespace ProseSample.Substrings
             //    {
             //        var variableDeclarator = SyntaxFactory.VariableDeclarator();
             //    }
+            case SyntaxKind.LogicalNotExpression:
             case SyntaxKind.UnaryMinusExpression:
                 {
                     ExpressionSyntax expression = (ExpressionSyntax)children[0];
@@ -693,7 +710,7 @@ namespace ProseSample.Substrings
             }
 
             var children = tree.Children.Select(ReconstructTree).ToList();
-            var node = GetSyntaxElement(tree.Value.Kind(), children, tree.Value);
+            var node = GetSyntaxElement((SyntaxKind) tree.Label.Label, children, tree.Value);
             return node;
         }
     }
