@@ -141,15 +141,15 @@ namespace ProseSample.Substrings.Spg.Witness
             return new Pattern(pattern);
         }
 
-        public static Pattern BuildPattern2(List<ITreeNode<Token>> patterns)
-        {
-            var pattern = patterns.First();
-            for (int i = 1; i < patterns.Count; i++)
-            {
-                pattern = BuildPattern(pattern, patterns[i], false).Tree;
-            }
-            return new Pattern(pattern);
-        }
+        //public static Pattern BuildPattern2(List<ITreeNode<Token>> patterns)
+        //{
+        //    var pattern = patterns.First();
+        //    for (int i = 1; i < patterns.Count; i++)
+        //    {
+        //        pattern = BuildPattern(pattern, patterns[i], false).Tree;
+        //    }
+        //    return new Pattern(pattern);
+        //}
 
         public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2, bool considerLeafToken)
         {
