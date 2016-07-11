@@ -553,17 +553,8 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node)input[rule.Body[0]];
-                var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
-                var emptyStatement = SyntaxFactory.EmptyStatement();
-                var emptyToken = new Token(SyntaxKind.EmptyStatement, new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement)));
-                ITreeNode<Token> emptyPattern = new TreeNode<Token>(emptyToken, new TLabel(SyntaxKind.EmptyStatement));
-                emptyPattern.Children = pattern.Children;
-                if (!pattern.Children.Any())
-                {
-                    emptyPattern.AddChild(pattern, 0);
-                    pattern.Children = new List<ITreeNode<Token>>();
-                }
-                patterns.Add(emptyPattern);
+                var pattern = BuildPattern(inpTree);
+                patterns.Add(pattern);
             }
             var commonPattern = Match.BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
@@ -571,6 +562,37 @@ namespace ProseSample.Substrings
                 eExamples[input] = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
             }
             return DisjunctiveExamplesSpec.From(eExamples);
+        }
+
+        private static ITreeNode<Token> BuildPattern(Node inpTree)
+        {
+            if (!inpTree.Value.Children.Any())
+            {
+                var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value.Value);
+                var pattern = ConverterHelper.ConvertITreeNodeToToken(itreeNode);
+                return pattern;
+            }
+
+            if (inpTree.Value.Children.Count() != ((SyntaxNode) inpTree.Value.Value).ChildNodes().Count())
+            {
+                var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
+                return pattern;
+            }
+            else
+            {
+                var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
+                var emptyKind = SyntaxKind.EmptyStatement;
+                var emptyStatement = SyntaxFactory.EmptyStatement();
+                var emptyToken = new Token(emptyKind, new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind)));
+                ITreeNode<Token> emptyPattern = new TreeNode<Token>(emptyToken, new TLabel(emptyKind));
+                emptyPattern.Children = pattern.Children;
+                //if (!pattern.Children.Any())
+                //{
+                //    emptyPattern.AddChild(pattern, 0);
+                //    pattern.Children = new List<ITreeNode<Token>>();
+                //}
+                return emptyPattern;
+            }
         }
 
         public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)

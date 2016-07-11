@@ -153,10 +153,11 @@ namespace ProseSample.Substrings.Spg.Witness
 
         public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2, bool considerLeafToken)
         {
-            var token = t1.Value.Kind == SyntaxKind.EmptyStatement && t2.Value.Kind == SyntaxKind.EmptyStatement ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
+            var emptyKind = SyntaxKind.EmptyStatement;
+            var token = t1.Value.Kind == emptyKind && t2.Value.Kind == emptyKind ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
             Pattern pattern = new Pattern(itreeNode);
-            if (t1.Value.Kind != t2.Value.Kind) return new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(SyntaxKind.EmptyStatement))); //EmptyToken pattern.
+            if (t1.Value.Kind != t2.Value.Kind) return new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))); //EmptyToken pattern.
             if (!t1.Children.Any() || !t2.Children.Any())
             {
                 if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)

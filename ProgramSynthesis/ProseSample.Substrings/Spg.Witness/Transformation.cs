@@ -195,12 +195,12 @@ namespace ProseSample.Substrings.Spg.Witness
                     var connectedComponents = ComputeConnectedComponents(script.Edits);
                     var trees = BuildTree(connectedComponents, inpTree);
 
-                    if (trees.Any() && !trees.First().Children.Any())
-                    {
-                        //In this specific case the transformation is executed on the node itself
-                        //not in specified parent.
-                        trees = trees.Select(o => ConverterHelper.ConvertCSharpToTreeNode(o.Value)).ToList();
-                    }
+                    //if (trees.Any() && !trees.First().Children.Any())
+                    //{
+                    //    //In this specific case the transformation is executed on the node itself
+                    //    //not in specified parent.
+                    //    trees = trees.Select(o => ConverterHelper.ConvertCSharpToTreeNode(o.Value)).ToList();
+                    //}
 
                     script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
                     foreach (var region in trees)
