@@ -197,13 +197,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var trees = BuildTree(connectedComponents, inpTree);
 
                     trees = trees.Select(o => BuildPattern(o)).ToList();
-                    //if (trees.Any() && !trees.First().Children.Any())
-                    //{
-                    //    //In this specific case the transformation is executed on the node itself
-                    //    //not in specified parent.
-                    //    trees = trees.Select(o => ConverterHelper.ConvertCSharpToTreeNode(o.Value)).ToList();
-                    //}
-
+                   
                     script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
                     if (trees.First().Value.IsKind(SyntaxKind.EmptyStatement))
                     {
@@ -225,33 +219,18 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static ITreeNode<SyntaxNodeOrToken> BuildPattern(ITreeNode<SyntaxNodeOrToken> inpTree)
         {
-            if (!inpTree.Children.Any())
-            {
-                var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value);
-                //var pattern = ConverterHelper.ConvertITreeNodeToToken(itreeNode);
-                //return pattern;
-                return itreeNode;
-            }
-
+            
             if (inpTree.Children.Count() == 1 && ((SyntaxNode)inpTree.Value).ChildNodes().Count() > 1)
             {
-                //var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
-                //return pattern;
-                //var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
                 var emptyKind = SyntaxKind.EmptyStatement;
                 var emptyStatement = SyntaxFactory.EmptyStatement();
                 var emptyNode = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind));
                 emptyNode.AddChild(inpTree.Children.Single(), 0);
-                //var emptyToken = new Token(emptyKind, new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind)));
-                //ITreeNode<Token> emptyPattern = new TreeNode<Token>(emptyToken, new TLabel(emptyKind));
-                //emptyPattern.Children = pattern.Children;
-                //if (!pattern.Children.Any())
-                //{
-                //    emptyPattern.AddChild(pattern, 0);
-                //    pattern.Children = new List<ITreeNode<Token>>();
-                //}
-                //return emptyPattern;
                 return emptyNode;
+            }else if (!inpTree.Children.Any() && !inpTree.Value.IsKind(SyntaxKind.Block))
+            {
+                var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value);
+                return itreeNode;
             }
             else
             {
