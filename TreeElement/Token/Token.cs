@@ -23,7 +23,7 @@ namespace ProseSample.Substrings
 
         public virtual bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)
         {
-            return node.Value.IsKind(Kind);
+            return node.IsLabel(new TLabel(Kind));
         }
 
         public override string ToString()

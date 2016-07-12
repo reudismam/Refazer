@@ -568,8 +568,8 @@ namespace ProseSample.Substrings
         {
             //if (!inpTree.Value.Children.Any())
             //{
-            var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value.Value);
-            var pattern = ConverterHelper.ConvertITreeNodeToToken(itreeNode);
+            //var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value);
+            var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
             return pattern;
             //}
 

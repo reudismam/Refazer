@@ -205,6 +205,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     //}
 
                     script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
+                    if (trees.First().Value.IsKind(SyntaxKind.EmptyStatement))
+                    {
+                        script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    }
                     foreach (var region in trees)
                     {
                         kMatches.Add(new Node(region));
@@ -229,19 +233,15 @@ namespace ProseSample.Substrings.Spg.Witness
                 return itreeNode;
             }
 
-            if (inpTree.Children.Count() != ((SyntaxNode)inpTree.Value).ChildNodes().Count())
+            if (inpTree.Children.Count() == 1 && ((SyntaxNode)inpTree.Value).ChildNodes().Count() > 1)
             {
                 //var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
                 //return pattern;
-                return inpTree;
-            }
-            else
-            {
                 //var pattern = ConverterHelper.ConvertITreeNodeToToken(inpTree.Value);
                 var emptyKind = SyntaxKind.EmptyStatement;
                 var emptyStatement = SyntaxFactory.EmptyStatement();
                 var emptyNode = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind));
-                emptyNode.AddChild(inpTree, 0);
+                emptyNode.AddChild(inpTree.Children.Single(), 0);
                 //var emptyToken = new Token(emptyKind, new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind)));
                 //ITreeNode<Token> emptyPattern = new TreeNode<Token>(emptyToken, new TLabel(emptyKind));
                 //emptyPattern.Children = pattern.Children;
@@ -252,6 +252,10 @@ namespace ProseSample.Substrings.Spg.Witness
                 //}
                 //return emptyPattern;
                 return emptyNode;
+            }
+            else
+            {
+                return inpTree;
             }
         }
 
