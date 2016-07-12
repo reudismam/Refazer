@@ -1,0 +1,42 @@
+﻿reference 'Microsoft.ProgramSynthesis.Extraction.Text.Semantics.dll';
+reference 'ProseSample.Substrings.dll';
+reference 'Microsoft.CodeAnalysis.CSharp.dll';
+reference 'Microsoft.CodeAnalysis.dll';
+reference 'TreeElement.dll';
+
+using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
+using ProseSample.Substrings;
+using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using System;
+
+using semantics ProseSample.Substrings.Semantics;
+using learners ProseSample.Substrings.WitnessFunctions;
+
+language Transformation;
+@vardefault[VariableScore]
+feature double Score = RankingScore;
+@start IEnumerable<Node>  trans := Apply(node, patch);
+
+Patch patch := SE(editList) | EList(editList, patch);
+IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
+IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
+bool nodematch := NodeMatch(x, kmatch);
+IEnumerable<Node> fnodes := Traversal(node, id);
+
+Node edit := Script(target, edits);
+IEnumerable<Node> edits:= SO(operation) | SL(operation, edits);
+Node operation := Insert(target, match, ast, k) | Update(target, match, ast) | Move(target, match, match, k) | Delete(target, match);
+
+Node match := pattern | Parent(pattern, k);
+Node pattern := Match(target, kmatch, k);
+Pattern kmatch := C(kind, children) | Literal(tree) | Leaf(kind) | Variable(kind);
+IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
+
+Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, match);
+IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
+
+@feature[Score=KindScore] SyntaxKind kind;                     @input Node node;
+@feature[Score=KDScore] string id;                             @feature[Score=KScore] int k;
+@feature[Score=NodeScore] SyntaxNodeOrToken tree;

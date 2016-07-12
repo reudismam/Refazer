@@ -24,6 +24,9 @@ ProgramSynthesis/ProseSample.TextExtraction/obj/*
 TreeElement/bin/*
 TreeElement/obj/*
 
+UnitTests/bin/*
+UnitTests/obj/*
+
 LongestCommonAncestor/bin/*
 LongestCommonAncestor/obj/*
 

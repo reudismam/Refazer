@@ -13,7 +13,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 
 namespace ProseSample
 {
-    static class Utils
+    public static class Utils
     {
         public static Grammar LoadGrammar(string grammarFile, params string[] prerequisiteGrammars)
         {
@@ -65,7 +65,7 @@ namespace ProseSample
             var score = bestProgram["Score"];
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
             return bestProgram;
-        }   
+        }
 
         #region Auxiliary methods
 

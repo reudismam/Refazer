@@ -19,7 +19,7 @@ namespace ProseSample
     {
         private static void Main(string[] args)
         {
-            LoadAndRunRepetitiveChangeMultipleEditions7();
+            LoadAndRunRepetitiveChangeMultipleEditions();
         }
 
         /// <summary>
@@ -31,11 +31,11 @@ namespace ProseSample
             var grammar = LoadGrammar();
 
             //input data
-            string inputText = File.ReadAllText(@"..\..\benchmarks\SyntaxTreeExtensionsB.cs");
+            string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\SyntaxTreeExtensionsB.cs");
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
 
             //output with some code fragments edited.
-            string outputText = File.ReadAllText(@"..\..\benchmarks\SyntaxTreeExtensionsA.cs");
+            string outputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\SyntaxTreeExtensionsA.cs");
             SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
 
             //Getting examples methods
@@ -84,11 +84,11 @@ namespace ProseSample
             var grammar = LoadGrammar();
 
             //input data
-            string inputText = File.ReadAllText(@"..\..\benchmarks\CommonCommandLineParserTestsB.cs");
+            string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\CommonCommandLineParserTestsB.cs");
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
 
             //output with some code fragments edited.
-            string outputText = File.ReadAllText(@"..\..\benchmarks\CommonCommandLineParserTestsA.cs");
+            string outputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\CommonCommandLineParserTestsA.cs");
             SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
 
             //Examples
@@ -124,11 +124,11 @@ namespace ProseSample
             var grammar = LoadGrammar();
 
             //input data
-            string inputText = File.ReadAllText(@"..\..\benchmarks\TokenBasedFormattingRuleB.cs");
+            string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\TokenBasedFormattingRuleB.cs");
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
 
             //output with some code fragments edited.
-            string outputText = File.ReadAllText(@"..\..\benchmarks\TokenBasedFormattingRuleA.cs");
+            string outputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\TokenBasedFormattingRuleA.cs");
             SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
 
             //Examples
@@ -170,11 +170,11 @@ namespace ProseSample
             var grammar = LoadGrammar();
 
             //input data
-            string inputText = File.ReadAllText(@"..\..\benchmarks\ObjectDisplayB.cs");
+            string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\ObjectDisplayB.cs");
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
 
             //output with some code fragments edited.
-            string outputText = File.ReadAllText(@"..\..\benchmarks\ObjectDisplayA.cs");
+            string outputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\ObjectDisplayA.cs");
             SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
 
             //Examples
@@ -202,6 +202,11 @@ namespace ProseSample
                 object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
                 WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
             }
+        }
+
+        public static string BaseRelativePath()
+        {
+            return @"..\..\..\";
         }
         /*
         //public String bar(int i)

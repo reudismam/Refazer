@@ -186,6 +186,8 @@ namespace TreeEdit.Spg.Print
         {
             _currentIndex = 0;
             _dic = new Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int>();
+            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            path = startupPath + path;
             _prettyPrint = new StreamWriter(path);
             PrettyPrintKey(t1, "", true, M);
             _prettyPrint.Close();
