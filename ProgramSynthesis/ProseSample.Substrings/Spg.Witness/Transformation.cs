@@ -197,20 +197,21 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var connectedComponents = ComputeConnectedComponents(script.Edits);
                     var trees = BuildTree(connectedComponents, inpTree);
-
-                    var keys = mapping.Keys;
-                    trees = trees.Select(o => BuildPattern(o)).ToList();
+                    trees = trees.Select(o => BuildPattern(o)).ToList(); //TODO refactor: trees has only a node, therefore, do not need to be a list.
                    
                     script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
                     if (trees.First().Value.IsKind(SyntaxKind.Block))
                     {
                         var keynode = script.Edits.First().EditOperation.T1Node;
                         var node = mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
+                        var anchorNode = AnchorNode(node);
+                        trees = new List<ITreeNode<SyntaxNodeOrToken>> {anchorNode};
                     }
                     else if (trees.First().Value.IsKind(SyntaxKind.EmptyStatement))
                     {
                         script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                     }
+
                     foreach (var region in trees)
                     {
                         kMatches.Add(new Node(region));
@@ -223,6 +224,20 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
             }
             return new SubsequenceSpec(kExamples);
+        }
+
+        private static ITreeNode<SyntaxNodeOrToken> AnchorNode(ITreeNode<SyntaxNodeOrToken> node)
+        {
+            for (int i = 0; i < node.Parent.Children.Count; i++)
+            {
+                var child = node.Parent.Children[i];
+                if (child.Equals(node))
+                {
+                    var nnode = node.Parent.Children[i + 1];
+                    return nnode; //Todo this piece of code will produces bugs.
+                }
+            }
+            return null;
         }
 
         private static ITreeNode<SyntaxNodeOrToken> BuildPattern(ITreeNode<SyntaxNodeOrToken> inpTree)
