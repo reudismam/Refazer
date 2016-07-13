@@ -20,6 +20,8 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Transformation
     {
+
+        public static Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> mapping { get; set; }
         /// <summary>
         /// Witness function to segment the script in a list of edit operations
         /// </summary>
@@ -196,10 +198,16 @@ namespace ProseSample.Substrings.Spg.Witness
                     var connectedComponents = ComputeConnectedComponents(script.Edits);
                     var trees = BuildTree(connectedComponents, inpTree);
 
+                    var keys = mapping.Keys;
                     trees = trees.Select(o => BuildPattern(o)).ToList();
                    
                     script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
-                    if (trees.First().Value.IsKind(SyntaxKind.EmptyStatement))
+                    if (trees.First().Value.IsKind(SyntaxKind.Block))
+                    {
+                        var keynode = script.Edits.First().EditOperation.T1Node;
+                        var node = mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
+                    }
+                    else if (trees.First().Value.IsKind(SyntaxKind.EmptyStatement))
                     {
                         script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                     }
@@ -288,7 +296,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
             var inpNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
             var outNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
-            var mapping = gumTreeMapping.Mapping(inpNode, outNode);
+            mapping = gumTreeMapping.Mapping(inpNode, outNode);
 
             var generator = new EditScriptGenerator<SyntaxNodeOrToken>();
             var script = generator.EditScript(inpNode, outNode, mapping);

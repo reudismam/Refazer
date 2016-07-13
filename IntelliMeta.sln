@@ -15,7 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LongestCommonSubsequence", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeElement", "TreeElement\TreeElement.csproj", "{FE305989-4148-4861-A351-D9DE83F5428B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{5740E984-648D-4B84-9704-D0D8416CE26D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "ProgramSynthesis\UnitTests\UnitTests.csproj", "{5740E984-648D-4B84-9704-D0D8416CE26D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82715A84-FFDA-4E90-A8F0-0CC052A19D90}"
+	ProjectSection(SolutionItems) = preProject
+		ProgramSynthesis\grammar\Transformation.grammar = ProgramSynthesis\grammar\Transformation.grammar
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

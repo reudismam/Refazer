@@ -240,7 +240,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
 
-            string cmd = $"/c java -jar ../../libs/RTED_v1.1.jar -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
+            string cmd = @"/c java -jar """ + GetTestDataFolder(@"\libs") +$@"\RTED_v1.1.jar"" -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
             Process proc = new Process();
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.Arguments = cmd;
@@ -290,6 +290,15 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             }
 
             return dictionary;
+        }
+
+        static string GetTestDataFolder(string testDataLocation)
+        {
+            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            var pathItems = startupPath.Split(Path.DirectorySeparatorChar);
+            string projectPath = String.Join(Path.DirectorySeparatorChar.ToString(), pathItems.Take(pathItems.Length - 4));
+            string result = projectPath + testDataLocation;
+            return result;
         }
 
         /// <summary>
