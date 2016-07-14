@@ -49,10 +49,15 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             if (editOperation is InsertBefore<SyntaxNodeOrToken>)
             {
-                var parent = FindNode(CurrentTree, editOperation.Parent.Value) ?? CurrentTree;
-                var treeNode = editOperation.T1Node;
-                parent.AddChild(editOperation.T1Node, 0);
-                treeNode.Parent = parent;
+                var before = FindNode(CurrentTree, editOperation.Parent.Value);
+                int i;
+                for (i = 0; i < before.Parent.Children.Count; i++)
+                {
+                    var child = before.Parent.Children[i];
+                    if (child.Equals(before)) break;
+                }
+                var parent = FindNode(CurrentTree, before.Parent.Value);
+                parent.AddChild(editOperation.T1Node, i);
             }
 
             if (editOperation is Update<SyntaxNodeOrToken>)

@@ -25,6 +25,19 @@ namespace ProseSample.Substrings.Spg.Semantic
             return new Node(update.CurrentTree);
         }
 
+        public static Node InsertBefore(Node target, Node parent, Node ast)
+        {
+            TreeUpdate update = new TreeUpdate(target.Value);
+            var child = ast.Value;
+            var insert = new InsertBefore<SyntaxNodeOrToken>(child, parent.Value);
+            update.ProcessEditOperation(insert);
+#if DEBUG
+            Console.WriteLine("TREE UPDATE!!");
+            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+#endif
+            return new Node(update.CurrentTree);
+        }
+
         public static Node Move(Node target, Node parent, Node moved, int k)
         {
             TreeUpdate update = new TreeUpdate(target.Value);

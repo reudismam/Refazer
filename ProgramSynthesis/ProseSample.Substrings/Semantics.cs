@@ -119,8 +119,7 @@ namespace ProseSample.Substrings
         /// <returns>New node with the newNode node inserted as the k child</returns>
         public static Node InsertBefore(Node target, Node node, Node newNode)
         {
-            //return SemanticEditOperation.Insert(target, node, newNode, k);
-            throw new Exception("Does not implemented yet.");
+            return SemanticEditOperation.InsertBefore(target, node, newNode);
         }
 
         /// <summary>

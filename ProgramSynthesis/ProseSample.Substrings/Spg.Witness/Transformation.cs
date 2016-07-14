@@ -214,7 +214,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     {
                         var keynode = script.Edits.First().EditOperation.T1Node;
                         var node = mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
-                        var anchorNode = AnchorNode(node);
+                        var anchor = AnchorNode(node);
+                        var anchorNode = TreeUpdate.FindNode(inpTreeNode.Value, anchor.Value);
                         var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                         anchorNode.SyntaxTree = emptyNode;
                         emptyNode.AddChild(anchorNode, 0);

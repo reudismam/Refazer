@@ -136,7 +136,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
 
                 var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                var insertBefore = new InsertBefore<SyntaxNodeOrToken>(editOperation.T1Node, editOperation.Parent);
+                //todo bug: this code will generate bugs.
+                var insertBefore = new InsertBefore<SyntaxNodeOrToken>(editOperation.T1Node, inpTree.Value.Children[0]);
                 treeUp.ProcessEditOperation(insertBefore);
                 WitnessFunctions.CurrentTrees[key] = previousTree;
 
@@ -172,7 +173,7 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             var currentTree = WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
-            var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode);
+            var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 2);
 
             targetNodeHeight.SyntaxTree = searchedNode.SyntaxTree;
             targetNodeHeight.Parent = targetNode.Parent;
