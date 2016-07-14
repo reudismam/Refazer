@@ -146,8 +146,18 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
                 newList.AddRange(editOperations);
             }
-            newList.RemoveAll(o => removes.Contains(o));
+
+            newList.RemoveAll(o => ContainsNode(removes, o));
             return newList;
+        }
+
+        private static bool ContainsNode(List<EditOperation<SyntaxNodeOrToken>> removes, EditOperation<SyntaxNodeOrToken> editOperation)
+        {
+            foreach (var node in removes)
+            {
+                if (node == editOperation) return true; //the same object itself.
+            }
+            return false;
         }
 
         /// <summary>
