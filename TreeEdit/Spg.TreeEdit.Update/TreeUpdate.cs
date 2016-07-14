@@ -49,19 +49,8 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             if (editOperation is InsertBefore<SyntaxNodeOrToken>)
             {
-                var parent = FindNode(CurrentTree, editOperation.Parent.Value);
-                if (parent == null) parent = CurrentTree;
+                var parent = FindNode(CurrentTree, editOperation.Parent.Value) ?? CurrentTree;
                 var treeNode = editOperation.T1Node;
-
-                //int i;
-                //for (i = 0; i < parent.Children.Count; i++)
-                //{
-                //    var child = parent.Children[i];
-                //    if (treeNode.Equals(child))
-                //    {
-                //        break;
-                //    }
-                //}
                 parent.AddChild(editOperation.T1Node, 0);
                 treeNode.Parent = parent;
             }
@@ -79,18 +68,14 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 if (parent == null) parent = CurrentTree;
                 CurrentTree = RemoveNode(CurrentTree, editOperation.T1Node);
 
-                ITreeNode<SyntaxNodeOrToken> treeNode = editOperation.T1Node;//ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
+                ITreeNode<SyntaxNodeOrToken> treeNode = editOperation.T1Node;
                 parent.AddChild(treeNode, editOperation.K - 1);
                 treeNode.Parent = parent;
             }
 
             if (editOperation is Delete<SyntaxNodeOrToken>)
             {
-                //Console.WriteLine("PREVIOUS TREE\n\n");
-                //PrintUtil<SyntaxNodeOrToken>.PrintPretty(CurrentTree, "", true);
-                CurrentTree = RemoveNode(CurrentTree, editOperation.T1Node);
-                //Console.WriteLine("UPDATED TREE\n\n");
-                //PrintUtil<SyntaxNodeOrToken>.PrintPretty(CurrentTree, "", true);               
+                CurrentTree = RemoveNode(CurrentTree, editOperation.T1Node);             
             }
         }
 
@@ -113,7 +98,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                     found = true;
                     break;
                 }
-
                 RemoveNode(item, oldNode);
                 count++;
             }

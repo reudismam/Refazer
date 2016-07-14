@@ -171,15 +171,9 @@ namespace ProseSample.Substrings.Spg.Witness
         public static Node GetNode(ITreeNode<SyntaxNodeOrToken> searchedNode)
         {
             var currentTree = WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
-            var targetNode = /*searchedNode.Value.IsKind(SyntaxKind.EmptyStatement) ? currentTree :*/ TreeUpdate.FindNode(currentTree, searchedNode.Value);
-            var dist = BFSWalker<SyntaxNodeOrToken>.Dist(targetNode);
-            var targetNodeHeight = ConverterHelper.TreeAtHeight(targetNode, dist, 2);
-            //if (searchedNode.Value.IsKind(SyntaxKind.EmptyStatement))
-            //{
-            //    var empty = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-            //    empty.Children = targetNodeHeight.Children;
-            //    targetNodeHeight = empty;
-            //} 
+            var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
+            var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode);
+
             targetNodeHeight.SyntaxTree = searchedNode.SyntaxTree;
             targetNodeHeight.Parent = targetNode.Parent;
             return new Node(targetNodeHeight);
