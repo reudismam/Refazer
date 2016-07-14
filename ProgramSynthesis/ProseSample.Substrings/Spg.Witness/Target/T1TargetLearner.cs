@@ -11,7 +11,7 @@ namespace ProseSample.Substrings.Spg.Witness.Target
             return edit.EditOperation.T1Node;
         }
 
-        protected override bool ProcessEditOperation(Edit<SyntaxNodeOrToken> edit) => edit.EditOperation is Delete<SyntaxNodeOrToken> ? true : false;
+        protected override bool ProcessEditOperation(Edit<SyntaxNodeOrToken> edit) => edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>? true : false;
 
     }
 }
