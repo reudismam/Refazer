@@ -537,6 +537,13 @@ namespace ProseSample.Substrings
         {
             switch (kind)
             {
+            case SyntaxKind.CastExpression:
+                {
+                    var typeSyntax = (TypeSyntax) children[0];
+                    var expressionSyntax = (ExpressionSyntax) children[1];
+                    var castExpression = SyntaxFactory.CastExpression(typeSyntax, expressionSyntax);
+                    return castExpression;
+                }
             case SyntaxKind.SwitchSection:
                 {
                     var labels = children.Where(o => o.IsKind(SyntaxKind.CaseSwitchLabel)).Select(o => (SwitchLabelSyntax) o).ToList();
@@ -558,11 +565,13 @@ namespace ProseSample.Substrings
                     var nameColon = SyntaxFactory.NameColon(identifier);
                     return nameColon;
                 }
+            case SyntaxKind.AddExpression:
+            case SyntaxKind.GreaterThanOrEqualExpression:
             case SyntaxKind.LogicalAndExpression:
                 {
                     var leftExpression = (ExpressionSyntax)children[0];
                     var rightExpresssion = (ExpressionSyntax)children[1];
-                    var logicalAndExpression = SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression,
+                    var logicalAndExpression = SyntaxFactory.BinaryExpression(kind,
                         leftExpression, rightExpresssion);
                     return logicalAndExpression;
                 }
@@ -626,6 +635,12 @@ namespace ProseSample.Substrings
                     var argument = SyntaxFactory.Argument(ncolon, default(SyntaxToken), expression);
                     return argument;
                 }
+            case SyntaxKind.ParenthesizedExpression:
+                {
+                    var expressionSyntax = (ExpressionSyntax) children[0];
+                    var parenthizedExpression = SyntaxFactory.ParenthesizedExpression(expressionSyntax);
+                    return parenthizedExpression;
+                }
             case SyntaxKind.ParenthesizedLambdaExpression:
                 {
                     var parameterList = (ParameterListSyntax)children[0];
@@ -645,6 +660,14 @@ namespace ProseSample.Substrings
                     var expressionSyntax = (ExpressionSyntax) children[0];
                     var equalsValueClause = SyntaxFactory.EqualsValueClause(expressionSyntax);
                     return equalsValueClause;
+                }
+            case SyntaxKind.ConditionalExpression:
+                {
+                    var condition = (ExpressionSyntax) children[0];
+                    var whenTrue = (ExpressionSyntax) children[1];
+                    var whenFalse = (ExpressionSyntax) children[2];
+                    var conditionalExpression = SyntaxFactory.ConditionalExpression(condition, whenTrue, whenFalse);
+                    return conditionalExpression;
                 }
             case SyntaxKind.IfStatement:
                 {
