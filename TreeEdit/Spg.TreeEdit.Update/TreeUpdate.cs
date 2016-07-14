@@ -41,10 +41,28 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 var parent = FindNode(CurrentTree, editOperation.Parent.Value);
                 if (parent == null) parent = CurrentTree;
-                var treeNode = editOperation.T1Node;//ConverterHelper.ConvertCSharpToTreeNode(editOperation.T1Node.Value);
+                var treeNode = editOperation.T1Node;
 
-                //treeNode.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
                 parent.AddChild(treeNode, editOperation.K - 1);
+                treeNode.Parent = parent;
+            }
+
+            if (editOperation is InsertBefore<SyntaxNodeOrToken>)
+            {
+                var parent = FindNode(CurrentTree, editOperation.Parent.Value);
+                if (parent == null) parent = CurrentTree;
+                var treeNode = editOperation.T1Node;
+
+                //int i;
+                //for (i = 0; i < parent.Children.Count; i++)
+                //{
+                //    var child = parent.Children[i];
+                //    if (treeNode.Equals(child))
+                //    {
+                //        break;
+                //    }
+                //}
+                parent.AddChild(editOperation.T1Node, 0);
                 treeNode.Parent = parent;
             }
 

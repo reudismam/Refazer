@@ -470,7 +470,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Insert", 1)]
         public static ExampleSpec InsertParent(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.ParentLearner<Insert<SyntaxNodeOrToken>>(rule, parameter, spec);
+            return EditOperation.InsertParentLearner(rule, parameter, spec);
         }
 
         /// <summary>
@@ -482,6 +482,33 @@ namespace ProseSample.Substrings
         /// <returns></returns>
         [WitnessFunction("Insert", 2, DependsOnParameters = new int[] { 1 })]
         public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec ParentSpec)
+        {
+            return EditOperation.Insertast(rule, parameter, spec);
+        }
+
+
+        /// <summary>
+        /// Witness function for parater k in the insert operator
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns></returns>
+        [WitnessFunction("InsertBefore", 1)]
+        public static ExampleSpec InsertBeforeParent(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return EditOperation.InsertBeforeParentLearner(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// Witness function for parater k in the insert operator
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns></returns>
+        [WitnessFunction("InsertBefore", 2, DependsOnParameters = new int[] { 1 })]
+        public static ExampleSpec InsertBeforeast(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec ParentSpec)
         {
             return EditOperation.Insertast(rule, parameter, spec);
         }

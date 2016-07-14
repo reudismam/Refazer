@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Witness.Target;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
@@ -84,6 +86,27 @@ namespace ProseSample.Substrings.Spg.Witness
             return null;
         }
 
+        public static ExampleSpec InsertParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+                var editOperation = edit.EditOperation;
+                if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+                var inpTree = (Node)input[rule.Body[0]];
+                if (!NodeContains(inpTree.Value, edit.EditOperation.Parent)) return null;
+
+                return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
+            }
+            return null;
+        }
+
+        private static bool NodeContains(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<SyntaxNodeOrToken> lookfor)
+        {
+            var no = TreeUpdate.FindNode(node, lookfor.Value);
+            return no != null;
+        }
+
         public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
@@ -97,6 +120,53 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return new ExampleSpec(kExamples);
         }
+
+        public static ExampleSpec InsertBeforeParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var kExamples = new Dictionary<State, object>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+                var editOperation = edit.EditOperation;
+                if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+                var inpTree = (Node)input[rule.Body[0]];
+                if (NodeContains(inpTree.Value, edit.EditOperation.Parent)) return null;
+
+                var key = editOperation.T1Node.SyntaxTree;
+                var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+
+                var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
+                var insertBefore = new InsertBefore<SyntaxNodeOrToken>(editOperation.T1Node, editOperation.Parent);
+                treeUp.ProcessEditOperation(insertBefore);
+                WitnessFunctions.CurrentTrees[key] = previousTree;
+
+                Console.WriteLine("PREVIOUS TREE\n\n");
+                PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
+                Console.WriteLine("UPDATED TREE\n\n");
+                PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
+
+                var from = previousTree.Children[0];
+                from.SyntaxTree = editOperation.T1Node.SyntaxTree;
+                var result = EditOperation.GetNode(from);
+                kExamples[input] = result; //Todo refactor this. The InsertBefore operation could occurs in many parts of the edit operation not only on the first operation.
+            }
+            return new ExampleSpec(kExamples);
+        }
+
+        public static ExampleSpec InsertBeforeast(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var kExamples = new Dictionary<State, object>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+                var editOperation = edit.EditOperation;
+                if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+
+                kExamples[input] = editOperation.T1Node;
+            }
+            return new ExampleSpec(kExamples);
+        }
+
 
         public static Node GetNode(ITreeNode<SyntaxNodeOrToken> searchedNode)
         {

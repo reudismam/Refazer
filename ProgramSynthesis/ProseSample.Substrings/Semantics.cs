@@ -111,6 +111,19 @@ namespace ProseSample.Substrings
         }
 
         /// <summary>
+        /// Insert the newNode node as in the k position of the node in the matching result 
+        /// </summary>
+        /// <param name="target">Target node</param>
+        /// <param name="node">Input data</param>
+        /// <param name="newNode">Node that will be insert</param>
+        /// <returns>New node with the newNode node inserted as the k child</returns>
+        public static Node InsertBefore(Node target, Node node, Node newNode)
+        {
+            //return SemanticEditOperation.Insert(target, node, newNode, k);
+            throw new Exception("Does not implemented yet.");
+        }
+
+        /// <summary>
         /// Move edit operation
         /// </summary>
         /// <param name="k">Child index</param>

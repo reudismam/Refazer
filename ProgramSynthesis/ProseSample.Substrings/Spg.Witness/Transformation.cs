@@ -205,7 +205,10 @@ namespace ProseSample.Substrings.Spg.Witness
                         var keynode = script.Edits.First().EditOperation.T1Node;
                         var node = mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
                         var anchorNode = AnchorNode(node);
-                        trees = new List<ITreeNode<SyntaxNodeOrToken>> {anchorNode};
+                        var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                        anchorNode.SyntaxTree = emptyNode;
+                        emptyNode.AddChild(anchorNode, 0);
+                        trees = new List<ITreeNode<SyntaxNodeOrToken>> {emptyNode};
                     }
                     else if (trees.First().Value.IsKind(SyntaxKind.EmptyStatement))
                     {

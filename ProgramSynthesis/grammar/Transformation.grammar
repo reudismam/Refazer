@@ -27,7 +27,7 @@ IEnumerable<Node> fnodes := Traversal(node, id);
 
 Node edit := Script(target, edits);
 IEnumerable<Node> edits:= SO(operation) | SL(operation, edits);
-Node operation := Insert(target, match, ast, k) | Update(target, match, ast) | Move(target, match, match, k) | Delete(target, match);
+Node operation := Insert(target, match, ast, k) | InsertBefore(target, match, ast) |  Update(target, match, ast) | Move(target, match, match, k) | Delete(target, match);
 
 Node match := pattern | Parent(pattern, k);
 Node pattern := Match(target, kmatch, k);

@@ -19,7 +19,7 @@ namespace ProseSample
     {
         private static void Main(string[] args)
         {
-            LoadAndRunRepetitiveChangeMultipleEditions();
+            LoadAndRunRepetitiveChangeMultipleEditions7();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace ProseSample
         private static void LoadAndRunRepetitiveChangeMultipleEditions()
         {
             //Load grammar
-            var grammar = LoadGrammar();
+            var grammar = GetGrammar();
 
             //input data
             string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\SyntaxTreeExtensionsB.cs");
@@ -81,7 +81,7 @@ namespace ProseSample
         private static void LoadAndRunRepetitiveChangeMultipleEditions4()
         {
             //Load grammar
-            var grammar = LoadGrammar();
+            var grammar = GetGrammar();
 
             //input data
             string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\CommonCommandLineParserTestsB.cs");
@@ -121,7 +121,7 @@ namespace ProseSample
         private static void LoadAndRunRepetitiveChangeMultipleEditions6()
         {
             //Load grammar
-            var grammar = LoadGrammar();
+            var grammar = GetGrammar();
 
             //input data
             string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\TokenBasedFormattingRuleB.cs");
@@ -139,8 +139,9 @@ namespace ProseSample
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
             for (int i = 0; i < examplesInput.Count; i++)
             {
-                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+                var inputState = State.Create(grammar.InputSymbol,
+                    new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken) examplesInput.ElementAt(i))));
+                ioExamples.Add(inputState, new List<object> {examplesOutput.ElementAt(i)});
             }
 
             //Learn program
@@ -148,26 +149,23 @@ namespace ProseSample
             ProgramNode program = Learn(grammar, spec);
 
             //Run program
-            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+            ;
 
             foreach (var method in methods)
             {
-                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                var newInputState = State.Create(grammar.InputSymbol,
+                    new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
                 object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-                WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+                WriteColored(ConsoleColor.DarkCyan,
+                    output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
             }
-        }
-
-        private static Grammar LoadGrammar()
-        {
-            var grammar = Utils.LoadGrammar("Transformation.grammar");
-            return grammar;
         }
 
         private static void LoadAndRunRepetitiveChangeMultipleEditions7()
         {
             //Load grammar
-            var grammar = LoadGrammar();
+            var grammar = GetGrammar();
 
             //input data
             string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\ObjectDisplayB.cs");
@@ -202,6 +200,29 @@ namespace ProseSample
                 object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
                 WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
             }
+        }
+
+        static string GetTestDataFolder(string testDataLocation)
+        {
+            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            var pathItems = startupPath.Split(Path.DirectorySeparatorChar);
+            string projectPath = String.Join(Path.DirectorySeparatorChar.ToString(), pathItems.Take(pathItems.Length - 4));
+            string result = projectPath + testDataLocation;
+            return result;
+        }
+
+
+        public static string GetBasePath()
+        {
+            string path = GetTestDataFolder(@"\");
+            return path;
+        }
+
+        public static Grammar GetGrammar()
+        {
+            string path = GetBasePath();
+            var grammar = Utils.LoadGrammar(path + @"grammar\Transformation.grammar");
+            return grammar;
         }
 
         public static string BaseRelativePath()
@@ -239,7 +260,7 @@ namespace ProseSample
         private static void LoadAndRunRepetitiveChangeMultipleEditions2()
         {
             //Load grammar
-            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            var grammar = GetGrammar("ProseSample.Edit.Code.grammar");
 
             //input data
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
@@ -323,7 +344,7 @@ namespace ProseSample
         private static void LoadAndRunRepetitiveChangeMultipleEditions()
         {
             //Load grammar
-            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            var grammar = GetGrammar("ProseSample.Edit.Code.grammar");
 
             //input data
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
@@ -397,7 +418,7 @@ namespace ProseSample
         private static void LoadAndRunRepetitiveChange()
         {
             //Load grammar
-            var grammar = LoadGrammar("ProseSample.Edit.Code.grammar");
+            var grammar = GetGrammar("ProseSample.Edit.Code.grammar");
 
             //input data
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(
