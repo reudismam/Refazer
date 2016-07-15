@@ -181,35 +181,44 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var connectedComponents = ComputeConnectedComponents(script);
                     var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                    tree = GetAnchor(tree);
+                    var anchor = GetAnchor(tree);
 
-                    if (tree.Value.IsKind(SyntaxKind.Block))
-                    {
-                        var keynode = script.Edits.First().EditOperation.T1Node;
-                        var node = Mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
-                        var newAnchor = AnchorNode(node);
-                        var anchorNode = TreeUpdate.FindNode(inputTree.Value, newAnchor.Value);
-                        var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                        anchorNode.SyntaxTree = emptyNode;
-                        emptyNode.AddChild(anchorNode, 0);
-                        tree = emptyNode;
-                    }
-                    else if (tree.Value.IsKind(SyntaxKind.EmptyStatement))
+                    if (anchor.Value.IsKind(SyntaxKind.EmptyStatement))
                     {
                         script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                     }
 
+                    if (anchor.Value.IsKind(SyntaxKind.Block))
+                    {
+                        anchor = GetAfterNode(script.Edits.First().EditOperation.T1Node, inputTree);
+                    }
 
-                    kMatches.Add(new Node(tree));
-                    var treeUp = new TreeUpdate(tree);
-                    ConfigureParentSyntaxTree(script, tree);
-                    WitnessFunctions.TreeUpdateDictionary.Add(tree, treeUp);
-                    WitnessFunctions.CurrentTrees[tree] = tree;
-
+                    ConfigureContext(anchor, script);
+                    kMatches.Add(new Node(anchor));
                     kExamples[input] = kMatches;
                 }
             }
             return new SubsequenceSpec(kExamples);
+        }
+
+        private static void ConfigureContext(ITreeNode<SyntaxNodeOrToken> anchor, Script script)
+        {
+            var treeUp = new TreeUpdate(anchor);
+            ConfigureParentSyntaxTree(script, anchor);
+            WitnessFunctions.TreeUpdateDictionary.Add(anchor, treeUp);
+            WitnessFunctions.CurrentTrees[anchor] = anchor;
+        }
+
+        private static ITreeNode<SyntaxNodeOrToken> GetAfterNode(ITreeNode<SyntaxNodeOrToken> keynode, Node inputTree)
+        {
+            var node = Mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
+            var newAnchor = AnchorNode(node);
+            var anchorNode = TreeUpdate.FindNode(inputTree.Value, newAnchor.Value);
+            var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+            anchorNode.SyntaxTree = emptyNode;
+            emptyNode.AddChild(anchorNode, 0);
+            var anchor = emptyNode;
+            return anchor;
         }
 
         private static ITreeNode<SyntaxNodeOrToken> AnchorNode(ITreeNode<SyntaxNodeOrToken> node)
@@ -242,7 +251,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value);
                 return itreeNode;
             }
-
             return inpTree;
         }
 
