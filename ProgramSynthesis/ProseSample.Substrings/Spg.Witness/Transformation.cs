@@ -20,8 +20,11 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Transformation
     {
+        /// <summary>
+        /// Mapped nodes on the before after tree
+        /// </summary>
+        public static Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> Mapping { get; set; }
 
-        public static Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> mapping { get; set; }
         /// <summary>
         /// Witness function to segment the script in a list of edit operations
         /// </summary>
@@ -88,30 +91,12 @@ namespace ProseSample.Substrings.Spg.Witness
             return clusteredList;
         }
 
-        ///// <summary>
-        ///// Compact edit operations with similar semantic in compacted edit operations
-        ///// </summary>
-        ///// <param name="connectedComponents">Uncompacted edit operations</param>
-        //private static List<List<EditOperation<SyntaxNodeOrToken>>> CompactScript(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
-        //{
-        //    var newccs = new List<List<EditOperation<SyntaxNodeOrToken>>>();
-        //    foreach (var cc in connectedComponents)
-        //    {
-        //        var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc);
-        //        var newScript = Compact(editionConnected);
-        //        newccs.Add(newScript);
-        //    }
-        //    return newccs;
-        //}
-
-
         /// <summary>
         /// Compact edit operations with similar semantic in compacted edit operations
         /// </summary>
         /// <param name="connectedComponents">Uncompacted edit operations</param>
         private static List<Script> CompactScript(List<Script> connectedComponents)
         {
-            //TODO refactor this code.
             var newccs = new List<Script>();
             foreach (var cc in connectedComponents)
             {
@@ -146,18 +131,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
                 newList.AddRange(editOperations);
             }
-
-            newList.RemoveAll(o => ContainsNode(removes, o));
+            newList.RemoveAll(editOperation => removes.Any(node => node == editOperation));
             return newList;
-        }
-
-        private static bool ContainsNode(List<EditOperation<SyntaxNodeOrToken>> removes, EditOperation<SyntaxNodeOrToken> editOperation)
-        {
-            foreach (var node in removes)
-            {
-                if (node == editOperation) return true; //the same object itself.
-            }
-            return false;
         }
 
         /// <summary>
@@ -213,7 +188,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (trees.First().Value.IsKind(SyntaxKind.Block))
                     {
                         var keynode = script.Edits.First().EditOperation.T1Node;
-                        var node = mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
+                        var node = Mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
                         var anchor = AnchorNode(node);
                         var anchorNode = TreeUpdate.FindNode(inpTreeNode.Value, anchor.Value);
                         var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
@@ -256,23 +231,22 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static ITreeNode<SyntaxNodeOrToken> BuildPattern(ITreeNode<SyntaxNodeOrToken> inpTree)
         {
-            
-            if (inpTree.Children.Count() == 1 && ((SyntaxNode)inpTree.Value).ChildNodes().Count() > 1)
+            if (inpTree.Children.Count == 1 && ((SyntaxNode)inpTree.Value).ChildNodes().Count() > 1)
             {
                 var emptyKind = SyntaxKind.EmptyStatement;
                 var emptyStatement = SyntaxFactory.EmptyStatement();
                 var emptyNode = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind));
                 emptyNode.AddChild(inpTree.Children.Single(), 0);
                 return emptyNode;
-            }else if (!inpTree.Children.Any() && !inpTree.Value.IsKind(SyntaxKind.Block))
+            }
+
+            if (!inpTree.Children.Any() && !inpTree.Value.IsKind(SyntaxKind.Block))
             {
                 var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value);
                 return itreeNode;
             }
-            else
-            {
-                return inpTree;
-            }
+
+            return inpTree;
         }
 
         private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> region)
@@ -293,12 +267,13 @@ namespace ProseSample.Substrings.Spg.Witness
             }
         }
 
-        private static List<List<EditOperation<SyntaxNodeOrToken>>> ComputeConnectedComponents(List<Edit<SyntaxNodeOrToken>> cc)
+        private static List<Script> ComputeConnectedComponents(List<Edit<SyntaxNodeOrToken>> cc)
         {
             var editOperations = cc.Select(o => o.EditOperation).ToList();
             var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.DescendantsConnectedComponents(editOperations);
             ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
-            return ccs;
+            var scripts = ccs.Select(component => new Script(component.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
+            return scripts;
         }
 
         public static DisjunctiveExamplesSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
@@ -322,32 +297,21 @@ namespace ProseSample.Substrings.Spg.Witness
         private static List<EditOperation<SyntaxNodeOrToken>> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree)
         {
             var gumTreeMapping = new GumTreeMapping<SyntaxNodeOrToken>();
-
             var inpNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
             var outNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
-            mapping = gumTreeMapping.Mapping(inpNode, outNode);
+            Mapping = gumTreeMapping.Mapping(inpNode, outNode);
 
             var generator = new EditScriptGenerator<SyntaxNodeOrToken>();
-            var script = generator.EditScript(inpNode, outNode, mapping);
+            var script = generator.EditScript(inpNode, outNode, Mapping);
             return script;
         }
 
-        private static void PrintScript(List<Edit<SyntaxNodeOrToken>> script)
-        {
-            string s = script.Aggregate("", (current, v) => current + (v + "\n"));
-        }
-
-        private static void PrintScript(List<EditOperation<SyntaxNodeOrToken>> script)
-        {
-            string s = script.Aggregate("", (current, v) => current + (v + "\n"));
-        }
-
-        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTree(List<List<EditOperation<SyntaxNodeOrToken>>> ccs, SyntaxNodeOrToken inpTree)
+        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTree(List<Script> ccs, SyntaxNodeOrToken inpTree)
         {
             return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).OrderBy(o => o.Value.SpanStart).ToList();
         }
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(List<EditOperation<SyntaxNodeOrToken>> cc, SyntaxNodeOrToken inpTree)
+        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(Script cc, SyntaxNodeOrToken inpTree)
         {
             var input = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
             var nodes = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(input);
@@ -368,22 +332,21 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                 }
             }
-
             var tcc = new TemplateConnectedComponents<SyntaxNodeOrToken>();
             var cnodes = tcc.ConnectedNodes(list);
             return cnodes;
         }
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> EditNodes(List<EditOperation<SyntaxNodeOrToken>> cc)
+        private static List<ITreeNode<SyntaxNodeOrToken>> EditNodes(Script cc)
         {
             var nodes = new List<ITreeNode<SyntaxNodeOrToken>>();
-            foreach (var edit in cc)
+            foreach (var edit in cc.Edits)
             {
-                nodes.AddRange(edit.T1Node.DescendantNodesAndSelf());
+                nodes.AddRange(edit.EditOperation.T1Node.DescendantNodesAndSelf());
 
-                if (!(edit is Delete<SyntaxNodeOrToken>))
+                if (!(edit.EditOperation is Delete<SyntaxNodeOrToken>))
                 {
-                    nodes.AddRange(edit.Parent.DescendantNodesAndSelf());
+                    nodes.AddRange(edit.EditOperation.Parent.DescendantNodesAndSelf());
                 }
             }
             return nodes;
