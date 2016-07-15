@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseSample.Substrings.List;
 using ProseSample.Substrings.Spg.Semantic;
+using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement;
 using TreeElement.Spg.Node;
@@ -394,13 +395,13 @@ namespace ProseSample.Substrings
         public static bool NodeMatch(Node sx, Pattern template)
         {
             if (!sx.Value.Value.IsKind(template.Tree.Value.Kind)) return false;
-            var isValue = IsValue(sx.Value, template.Tree);
+            var isValue = MatchManager.IsValue(sx.Value, template.Tree);
             return isValue;
         }
 
         public static Node Match(Node target, Pattern kmatch, int k)
         {
-            var nodes = SemanticEditOperation.Matches(target.Value, kmatch);
+            var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
             return new Node(nodes.ElementAt(k - 1));
         }
 
@@ -498,7 +499,7 @@ namespace ProseSample.Substrings
             foreach (var child in match.Tree.Children)
             {
                 var nodeList = SplitToNodes(currentTree, child.Value.Kind);
-                var result = (from node in nodeList where IsValue(node, child) select node.Value).ToList();
+                var result = (from node in nodeList where MatchManager.IsValue(node, child) select node.Value).ToList();
 
                 if (result.Any())
                 {
@@ -508,23 +509,23 @@ namespace ProseSample.Substrings
             return list;
         }
 
-        public static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
-        {
-            //if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root pattern
-            if (!pattern.Value.IsMatch(snode))
-            {
-                return false;
-            }
-            foreach (var child in pattern.Children)
-            {
-                var valid = snode.Children.Any(tchild => IsValue(tchild, child));
-                if (!valid)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        //public static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
+        //{
+        //    //if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root pattern
+        //    if (!pattern.Value.IsMatch(snode))
+        //    {
+        //        return false;
+        //    }
+        //    foreach (var child in pattern.Children)
+        //    {
+        //        var valid = snode.Children.Any(tchild => IsValue(tchild, child));
+        //        if (!valid)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
 
         /// <summary>
         /// Syntax node factory. This method will be removed in future

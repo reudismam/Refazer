@@ -78,11 +78,11 @@ namespace ProseSample.Substrings.Spg.Semantic
             return new Node(update.CurrentTree);
         }
 
-        public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, Pattern pattern)
-        {
-            TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
-            var nodes = tree.PostOrderTraversal(node);
-            return nodes.Where(v => Semantics.IsValue(v, pattern.Tree)).ToList();
-        }
+        //public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, Pattern pattern)
+        //{
+        //    TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
+        //    var nodes = tree.PostOrderTraversal(node);
+        //    return nodes.Where(v => Semantics.IsValue(v, pattern.Tree)).ToList();
+        //}
     }
 }

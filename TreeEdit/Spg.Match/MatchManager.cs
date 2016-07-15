@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using ProseSample.Substrings;
+using TreeElement;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Match
@@ -46,6 +47,31 @@ namespace TreeEdit.Spg.Match
             var nodes = from item in inpTree.DescendantNodes() where item.Value.IsKind(kind) select item;
             var result = nodes.Where(v => !v.Children.Any()).ToList();
             return result;
+        }
+
+        public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
+        {
+            TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
+            var nodes = tree.PostOrderTraversal(node);
+            return nodes.Where(v => IsValue(v, pattern)).ToList();
+        }
+
+        public static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
+        {
+            //if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root pattern
+            if (!pattern.Value.IsMatch(snode))
+            {
+                return false;
+            }
+            foreach (var child in pattern.Children)
+            {
+                var valid = snode.Children.Any(tchild => IsValue(tchild, child));
+                if (!valid)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

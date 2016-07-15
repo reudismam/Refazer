@@ -212,7 +212,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
-                    var matches = PatternMatches(currentTree, pattern);
+                    var matches = MatchManager.Matches(currentTree, pattern);
                     for (int i = 0; i < matches.Count; i++)
                     {
                         var item = matches[i];
@@ -230,17 +230,17 @@ namespace ProseSample.Substrings.Spg.Witness
         }
 
 
-        /// <summary>
-        /// Abstract match
-        /// </summary>
-        /// <param name="inpTree">Input tree</param>
-        /// <param name="pattern">Syntax node or token to be matched.</param>
-        /// <returns>Abstract match</returns>
-        public static List<ITreeNode<SyntaxNodeOrToken>> PatternMatches(ITreeNode<SyntaxNodeOrToken> inpTree, ITreeNode<Token> pattern)
-        {
-            //todo Refactor this method putting it on a adequate class.
-            var nodes = from item in inpTree.DescendantNodes() where Semantics.IsValue(item, pattern) select item;
-            return nodes.ToList();
-        }
+        ///// <summary>
+        ///// Abstract match
+        ///// </summary>
+        ///// <param name="inpTree">Input tree</param>
+        ///// <param name="pattern">Syntax node or token to be matched.</param>
+        ///// <returns>Abstract match</returns>
+        //public static List<ITreeNode<SyntaxNodeOrToken>> PatternMatches(ITreeNode<SyntaxNodeOrToken> inpTree, ITreeNode<Token> pattern)
+        //{
+        //    //todo Refactor this method putting it on a adequate class.
+        //    var nodes = from item in inpTree.DescendantNodes() where MatchManager.IsValue(item, pattern) select item;
+        //    return nodes.ToList();
+        //}
     }
 }
