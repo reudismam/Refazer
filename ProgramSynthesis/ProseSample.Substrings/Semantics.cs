@@ -82,9 +82,8 @@ namespace ProseSample.Substrings
 
         public static Node Parent(Node match, int k)
         {
-            //var currentTree = GetCurrentTree(node);
-            var child = /*TreeUpdate.FindNode(currentTree, variable.Match.Item1.Value).Children*/match.Value.Children.ElementAt(k - 1);
-            var result = new Node(child);//new MatchResult(Tuple.Create(child, new Bindings(new List<SyntaxNodeOrToken> { child.Value })));
+            var child = match.Value.Children.ElementAt(k - 1);
+            var result = new Node(child);
             return result;
         }
 
@@ -129,7 +128,6 @@ namespace ProseSample.Substrings
         /// <param name="k">Child index</param>
         /// <param name="from">Moved node</param>
         /// <param name="target">Target node</param>
-        /// <returns></returns>
         public static Node Move(Node target, Node node, Node from, int k)
         {
             return SemanticEditOperation.Move(target, node, from, k);
@@ -141,7 +139,6 @@ namespace ProseSample.Substrings
         /// <param name="target">Target node</param>
         /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
-        /// <returns></returns>
         public static Node Update(Node target, Node node, Node to)
         {
             return SemanticEditOperation.Update(target, node, to);
@@ -209,7 +206,6 @@ namespace ProseSample.Substrings
         {
             var childrenList = (List<Node>) childrenNodes;
             if (!childrenList.Any()) return null;
-            //var parent = childrenNodes.First().Value.Parent;
             var parent = new TreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
             for (int i = 0; i < childrenList.Count(); i++)
             {
@@ -433,8 +429,6 @@ namespace ProseSample.Substrings
                 result.Add(parentEmpty);
             }
             return result;
-            //var result = nodes.Select(o => new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement), new List<ITreeNode<SyntaxNodeOrToken>> {o}))).ToList();
-            //return result;
         }
          
         private static List<Node> SingleLocations(List<Node> res)
@@ -509,24 +503,6 @@ namespace ProseSample.Substrings
             return list;
         }
 
-        //public static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
-        //{
-        //    //if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root pattern
-        //    if (!pattern.Value.IsMatch(snode))
-        //    {
-        //        return false;
-        //    }
-        //    foreach (var child in pattern.Children)
-        //    {
-        //        var valid = snode.Children.Any(tchild => IsValue(tchild, child));
-        //        if (!valid)
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //    return true;
-        //}
-
         /// <summary>
         /// Syntax node factory. This method will be removed in future
         /// </summary>
@@ -538,131 +514,140 @@ namespace ProseSample.Substrings
         {
             switch (kind)
             {
-            case SyntaxKind.CastExpression:
+                case SyntaxKind.CastExpression:
                 {
                     var typeSyntax = (TypeSyntax) children[0];
                     var expressionSyntax = (ExpressionSyntax) children[1];
                     var castExpression = SyntaxFactory.CastExpression(typeSyntax, expressionSyntax);
                     return castExpression;
                 }
-            case SyntaxKind.SwitchSection:
+                case SyntaxKind.SwitchSection:
                 {
-                    var labels = children.Where(o => o.IsKind(SyntaxKind.CaseSwitchLabel)).Select(o => (SwitchLabelSyntax) o).ToList();
-                    var values = children.Where(o => !o.IsKind(SyntaxKind.CaseSwitchLabel)).Select(o => (StatementSyntax)o).ToList();
+                    var labels =
+                        children.Where(o => o.IsKind(SyntaxKind.CaseSwitchLabel))
+                            .Select(o => (SwitchLabelSyntax) o)
+                            .ToList();
+                    var values =
+                        children.Where(o => !o.IsKind(SyntaxKind.CaseSwitchLabel))
+                            .Select(o => (StatementSyntax) o)
+                            .ToList();
                     var labelList = SyntaxFactory.List(labels);
                     var valueList = SyntaxFactory.List(values);
                     var switchSection = SyntaxFactory.SwitchSection(labelList, valueList);
                     return switchSection;
                 }
-            case SyntaxKind.CaseSwitchLabel:
+                case SyntaxKind.CaseSwitchLabel:
                 {
                     var expressionSyntax = (ExpressionSyntax) children.First();
                     var caseSwitchLabel = SyntaxFactory.CaseSwitchLabel(expressionSyntax);
                     return caseSwitchLabel;
                 }
-            case SyntaxKind.NameColon:
+                case SyntaxKind.NameColon:
                 {
-                    var identifier = (IdentifierNameSyntax)children[0];
+                    var identifier = (IdentifierNameSyntax) children[0];
                     var nameColon = SyntaxFactory.NameColon(identifier);
                     return nameColon;
                 }
-            case SyntaxKind.AddExpression:
-            case SyntaxKind.GreaterThanOrEqualExpression:
-            case SyntaxKind.LogicalAndExpression:
+                case SyntaxKind.AddExpression:
+                case SyntaxKind.GreaterThanOrEqualExpression:
+                case SyntaxKind.LogicalAndExpression:
                 {
-                    var leftExpression = (ExpressionSyntax)children[0];
-                    var rightExpresssion = (ExpressionSyntax)children[1];
+                    var leftExpression = (ExpressionSyntax) children[0];
+                    var rightExpresssion = (ExpressionSyntax) children[1];
                     var logicalAndExpression = SyntaxFactory.BinaryExpression(kind,
                         leftExpression, rightExpresssion);
                     return logicalAndExpression;
                 }
-            case SyntaxKind.ExpressionStatement:
+                case SyntaxKind.ExpressionStatement:
                 {
-                    ExpressionSyntax expression = (ExpressionSyntax)children.First();
+                    ExpressionSyntax expression = (ExpressionSyntax) children.First();
                     ExpressionStatementSyntax expressionStatement = SyntaxFactory.ExpressionStatement(expression);
                     return expressionStatement;
                 }
-            case SyntaxKind.Block:
+                case SyntaxKind.Block:
                 {
-                    var statetements = children.Select(child => (StatementSyntax)child).ToList();
+                    var statetements = children.Select(child => (StatementSyntax) child).ToList();
 
                     var block = SyntaxFactory.Block(statetements);
                     return block;
                 }
-            case SyntaxKind.InvocationExpression:
+                case SyntaxKind.InvocationExpression:
                 {
-                    var expressionSyntax = (ExpressionSyntax)children[0];
-                    ArgumentListSyntax argumentList = (ArgumentListSyntax)children[1];
+                    var expressionSyntax = (ExpressionSyntax) children[0];
+                    ArgumentListSyntax argumentList = (ArgumentListSyntax) children[1];
                     var invocation = SyntaxFactory.InvocationExpression(expressionSyntax, argumentList);
                     return invocation;
                 }
-            case SyntaxKind.SimpleMemberAccessExpression:
+                case SyntaxKind.SimpleMemberAccessExpression:
                 {
-                    var expressionSyntax = (ExpressionSyntax)children[0];
-                    var syntaxName = (SimpleNameSyntax)children[1];
-                    var simpleMemberExpression = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expressionSyntax, syntaxName);
+                    var expressionSyntax = (ExpressionSyntax) children[0];
+                    var syntaxName = (SimpleNameSyntax) children[1];
+                    var simpleMemberExpression =
+                        SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expressionSyntax,
+                            syntaxName);
                     return simpleMemberExpression;
                 }
-            case SyntaxKind.ParameterList:
+                case SyntaxKind.ParameterList:
                 {
-                    var parameter = (ParameterSyntax)children[0];
-                    var spal = SyntaxFactory.SeparatedList(new[] { parameter });
+                    var parameter = (ParameterSyntax) children[0];
+                    var spal = SyntaxFactory.SeparatedList(new[] {parameter});
                     var parameterList = SyntaxFactory.ParameterList(spal);
                     return parameterList;
                 }
-            case SyntaxKind.Parameter:
+                case SyntaxKind.Parameter:
                 {
                     return children.First().Parent;
                 }
-            case SyntaxKind.ArgumentList:
+                case SyntaxKind.ArgumentList:
                 {
-                    var listArguments = children.Select(child => (ArgumentSyntax)child).ToList();
+                    var listArguments = children.Select(child => (ArgumentSyntax) child).ToList();
 
                     var spal = SyntaxFactory.SeparatedList(listArguments);
                     var argumentList = SyntaxFactory.ArgumentList(spal);
                     return argumentList;
                 }
-            case SyntaxKind.Argument:
-                if (children.Count() == 1)
-                {
-                    ExpressionSyntax s = (ExpressionSyntax)children.First();
-                    var argument = SyntaxFactory.Argument(s);
-                    return argument;
-                }
-                else
-                {
-                    var ncolon = (NameColonSyntax)children[0];
-                    var expression = (ExpressionSyntax)children[1];
-                    var argument = SyntaxFactory.Argument(ncolon, default(SyntaxToken), expression);
-                    return argument;
-                }
-            case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.Argument:
+                    if (children.Count() == 1)
+                    {
+                        ExpressionSyntax s = (ExpressionSyntax) children.First();
+                        var argument = SyntaxFactory.Argument(s);
+                        return argument;
+                    }
+                    else
+                    {
+                        var ncolon = (NameColonSyntax) children[0];
+                        var expression = (ExpressionSyntax) children[1];
+                        var argument = SyntaxFactory.Argument(ncolon, default(SyntaxToken), expression);
+                        return argument;
+                    }
+                case SyntaxKind.ParenthesizedExpression:
                 {
                     var expressionSyntax = (ExpressionSyntax) children[0];
                     var parenthizedExpression = SyntaxFactory.ParenthesizedExpression(expressionSyntax);
                     return parenthizedExpression;
                 }
-            case SyntaxKind.ParenthesizedLambdaExpression:
+                case SyntaxKind.ParenthesizedLambdaExpression:
                 {
-                    var parameterList = (ParameterListSyntax)children[0];
-                    var csharpbody = (CSharpSyntaxNode)children[1];
-                    var parenthizedLambdaExpression = SyntaxFactory.ParenthesizedLambdaExpression(parameterList, csharpbody);
+                    var parameterList = (ParameterListSyntax) children[0];
+                    var csharpbody = (CSharpSyntaxNode) children[1];
+                    var parenthizedLambdaExpression = SyntaxFactory.ParenthesizedLambdaExpression(parameterList,
+                        csharpbody);
                     return parenthizedLambdaExpression;
                 }
-            case SyntaxKind.EqualsExpression:
+                case SyntaxKind.EqualsExpression:
                 {
-                    var left = (ExpressionSyntax)children[0];
-                    var right = (ExpressionSyntax)children[1];
+                    var left = (ExpressionSyntax) children[0];
+                    var right = (ExpressionSyntax) children[1];
                     var equalsExpression = SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, left, right);
                     return equalsExpression;
                 }
-            case SyntaxKind.EqualsValueClause:
+                case SyntaxKind.EqualsValueClause:
                 {
                     var expressionSyntax = (ExpressionSyntax) children[0];
                     var equalsValueClause = SyntaxFactory.EqualsValueClause(expressionSyntax);
                     return equalsValueClause;
                 }
-            case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.ConditionalExpression:
                 {
                     var condition = (ExpressionSyntax) children[0];
                     var whenTrue = (ExpressionSyntax) children[1];
@@ -670,67 +655,62 @@ namespace ProseSample.Substrings
                     var conditionalExpression = SyntaxFactory.ConditionalExpression(condition, whenTrue, whenFalse);
                     return conditionalExpression;
                 }
-            case SyntaxKind.IfStatement:
+                case SyntaxKind.IfStatement:
                 {
-                    var condition = (ExpressionSyntax)children[0];
-                    var statementSyntax = (StatementSyntax)children[1];
+                    var condition = (ExpressionSyntax) children[0];
+                    var statementSyntax = (StatementSyntax) children[1];
                     var ifStatement = SyntaxFactory.IfStatement(condition, statementSyntax);
                     return ifStatement;
                 }
-            //case SyntaxKind.VariableDeclaration:
-            //    {
-            //        var variableDeclarator = SyntaxFactory.VariableDeclarator();
-            //    }
-            case SyntaxKind.LogicalNotExpression:
-            case SyntaxKind.UnaryMinusExpression:
+                case SyntaxKind.LogicalNotExpression:
+                case SyntaxKind.UnaryMinusExpression:
                 {
-                    ExpressionSyntax expression = (ExpressionSyntax)children[0];
+                    ExpressionSyntax expression = (ExpressionSyntax) children[0];
                     var unary = SyntaxFactory.PrefixUnaryExpression(kind, expression);
                     return unary;
                 }
-            case SyntaxKind.ReturnStatement:
+                case SyntaxKind.ReturnStatement:
                 {
-                    ExpressionSyntax expression = (ExpressionSyntax)children[0];
+                    ExpressionSyntax expression = (ExpressionSyntax) children[0];
                     var returnStatement = SyntaxFactory.ReturnStatement(expression);
                     return returnStatement;
                 }
-            case SyntaxKind.ElseClause:
+                case SyntaxKind.ElseClause:
                 {
-                    var statatementSyntax = (StatementSyntax)children[0];
+                    var statatementSyntax = (StatementSyntax) children[0];
                     var elseClause = SyntaxFactory.ElseClause(statatementSyntax);
                     return elseClause;
                 }
-            case SyntaxKind.IdentifierName:
+                case SyntaxKind.IdentifierName:
                 {
-                    SyntaxToken stoken = (SyntaxToken)children.First();
+                    SyntaxToken stoken = (SyntaxToken) children.First();
                     var identifierName = SyntaxFactory.IdentifierName(stoken);
                     return identifierName;
                 }
-            case SyntaxKind.TypeArgumentList:
+                case SyntaxKind.TypeArgumentList:
                 {
-                    var listType = children.Select(child => (TypeSyntax)child).ToList();
+                    var listType = children.Select(child => (TypeSyntax) child).ToList();
 
                     var typespal = SyntaxFactory.SeparatedList(listType);
                     var typeArgument = SyntaxFactory.TypeArgumentList(typespal);
                     return typeArgument;
                 }
-            case SyntaxKind.GenericName:
+                case SyntaxKind.GenericName:
                 {
-                    var gName = (GenericNameSyntax)node;
-                    var typeArg = (TypeArgumentListSyntax)children[0];
+                    var gName = (GenericNameSyntax) node;
+                    var typeArg = (TypeArgumentListSyntax) children[0];
                     var genericName = SyntaxFactory.GenericName(gName.Identifier, typeArg);
                     return genericName;
                 }
-            case SyntaxKind.NotEqualsExpression:
+                case SyntaxKind.NotEqualsExpression:
                 {
-                    var leftExpression = (ExpressionSyntax)children[0];
-                    var rightExpression = (ExpressionSyntax)children[1];
+                    var leftExpression = (ExpressionSyntax) children[0];
+                    var rightExpression = (ExpressionSyntax) children[1];
                     var notEqualsExpression = SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression,
                         leftExpression, rightExpression);
                     return notEqualsExpression;
                 }
             }
-
             return null;
         }
 
@@ -745,7 +725,6 @@ namespace ProseSample.Substrings
             {
                 return tree.Value;
             }
-
             var children = tree.Children.Select(ReconstructTree).ToList();
             var node = GetSyntaxElement((SyntaxKind) tree.Label.Label, children, tree.Value);
             return node;

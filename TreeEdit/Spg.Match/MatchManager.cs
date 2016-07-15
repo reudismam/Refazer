@@ -49,6 +49,11 @@ namespace TreeEdit.Spg.Match
             return result;
         }
 
+        /// <summary>
+        /// Return all matches of the pattern on node.
+        /// </summary>
+        /// <param name="node">Node</param>
+        /// <param name="pattern">Pattern</param>
         public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
         {
             TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
@@ -56,16 +61,21 @@ namespace TreeEdit.Spg.Match
             return nodes.Where(v => IsValue(v, pattern)).ToList();
         }
 
-        public static bool IsValue(ITreeNode<SyntaxNodeOrToken> snode, ITreeNode<Token> pattern)
+
+        /// <summary>
+        /// Verify if the node match the pattern
+        /// </summary>
+        /// <param name="node">Node</param>
+        /// <param name="pattern">Pattern</param>
+        public static bool IsValue(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
         {
-            //if (!snode.Value.IsKind(pattern.Value.Kind)) return false; //root pattern
-            if (!pattern.Value.IsMatch(snode))
+            if (!pattern.Value.IsMatch(node))
             {
                 return false;
             }
             foreach (var child in pattern.Children)
             {
-                var valid = snode.Children.Any(tchild => IsValue(tchild, child));
+                var valid = node.Children.Any(tchild => IsValue(tchild, child));
                 if (!valid)
                 {
                     return false;

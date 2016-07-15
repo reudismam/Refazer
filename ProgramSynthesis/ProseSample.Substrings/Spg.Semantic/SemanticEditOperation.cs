@@ -3,10 +3,6 @@ using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using TreeElement.Spg.Node;
-using System.Collections.Generic;
-using System.Linq;
-using TreeElement;
 
 namespace ProseSample.Substrings.Spg.Semantic
 {
@@ -77,12 +73,5 @@ namespace ProseSample.Substrings.Spg.Semantic
 #endif
             return new Node(update.CurrentTree);
         }
-
-        //public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, Pattern pattern)
-        //{
-        //    TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
-        //    var nodes = tree.PostOrderTraversal(node);
-        //    return nodes.Where(v => Semantics.IsValue(v, pattern.Tree)).ToList();
-        //}
     }
 }
