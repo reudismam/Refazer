@@ -61,7 +61,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
-                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);                 
+                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
                     kMatches = ClusterScript(ccs);
                     //var newccs = CompactScript(ccs);
                     kMatches = kMatches.Select(CompactScript).ToList();
@@ -86,7 +86,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var listEdit = cluster.Select(clusterList => new Script(clusterList.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
                     clusteredList.Add(listEdit);
-                }          
+                }
             }
             return clusteredList;
         }
@@ -180,34 +180,32 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (Script script in spec.Examples[input])
                 {
                     var connectedComponents = ComputeConnectedComponents(script);
-                    var trees = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                    trees = trees.Select(o => BuildPattern(o)).ToList(); //TODO refactor: trees has only a node, therefore, do not need to be a list.
-                   
-                    script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
-                    if (trees.First().Value.IsKind(SyntaxKind.Block))
+                    var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
+                    tree = GetAnchor(tree);
+
+                    if (tree.Value.IsKind(SyntaxKind.Block))
                     {
                         var keynode = script.Edits.First().EditOperation.T1Node;
                         var node = Mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
-                        var anchor = AnchorNode(node);
-                        var anchorNode = TreeUpdate.FindNode(inputTree.Value, anchor.Value);
+                        var newAnchor = AnchorNode(node);
+                        var anchorNode = TreeUpdate.FindNode(inputTree.Value, newAnchor.Value);
                         var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                         anchorNode.SyntaxTree = emptyNode;
                         emptyNode.AddChild(anchorNode, 0);
-                        trees = new List<ITreeNode<SyntaxNodeOrToken>> {emptyNode};
+                        tree = emptyNode;
                     }
-                    else if (trees.First().Value.IsKind(SyntaxKind.EmptyStatement))
+                    else if (tree.Value.IsKind(SyntaxKind.EmptyStatement))
                     {
                         script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                     }
 
-                    foreach (var region in trees)
-                    {
-                        kMatches.Add(new Node(region));
-                        var treeUp = new TreeUpdate(region);
-                        ConfigureParentSyntaxTree(script, region);
-                        WitnessFunctions.TreeUpdateDictionary.Add(region, treeUp);
-                        WitnessFunctions.CurrentTrees[region] = region;
-                    }
+
+                    kMatches.Add(new Node(tree));
+                    var treeUp = new TreeUpdate(tree);
+                    ConfigureParentSyntaxTree(script, tree);
+                    WitnessFunctions.TreeUpdateDictionary.Add(tree, treeUp);
+                    WitnessFunctions.CurrentTrees[tree] = tree;
+
                     kExamples[input] = kMatches;
                 }
             }
@@ -228,7 +226,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return null;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> BuildPattern(ITreeNode<SyntaxNodeOrToken> inpTree)
+        private static ITreeNode<SyntaxNodeOrToken> GetAnchor(ITreeNode<SyntaxNodeOrToken> inpTree)
         {
             if (inpTree.Children.Count == 1 && ((SyntaxNode)inpTree.Value).ChildNodes().Count() > 1)
             {
@@ -309,9 +307,9 @@ namespace ProseSample.Substrings.Spg.Witness
             return script;
         }
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTree(List<Script> ccs, ITreeNode<SyntaxNodeOrToken> inpTree)
+        private static ITreeNode<SyntaxNodeOrToken> BuildTree(List<Script> ccs, ITreeNode<SyntaxNodeOrToken> inpTree)
         {
-            return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).OrderBy(o => o.Value.SpanStart).ToList();
+            return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).OrderBy(o => o.Value.SpanStart).Single();
         }
 
         private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(Script script, ITreeNode<SyntaxNodeOrToken> tree)
