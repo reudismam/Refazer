@@ -175,13 +175,12 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTreeNode = (Node)input[rule.Grammar.InputSymbol];
-                var inpTree = inpTreeNode.Value.Value;
+                var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var kMatches = new List<Node>();
                 foreach (Script script in spec.Examples[input])
                 {
-                    var connectedComponents = ComputeConnectedComponents(script.Edits);
-                    var trees = BuildTree(connectedComponents, inpTree);
+                    var connectedComponents = ComputeConnectedComponents(script);
+                    var trees = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
                     trees = trees.Select(o => BuildPattern(o)).ToList(); //TODO refactor: trees has only a node, therefore, do not need to be a list.
                    
                     script.Edits.First().EditOperation.K = 1; //Todo Bug: this peace of code will genenate many falts.
@@ -190,7 +189,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         var keynode = script.Edits.First().EditOperation.T1Node;
                         var node = Mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
                         var anchor = AnchorNode(node);
-                        var anchorNode = TreeUpdate.FindNode(inpTreeNode.Value, anchor.Value);
+                        var anchorNode = TreeUpdate.FindNode(inputTree.Value, anchor.Value);
                         var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                         anchorNode.SyntaxTree = emptyNode;
                         emptyNode.AddChild(anchorNode, 0);
@@ -267,12 +266,16 @@ namespace ProseSample.Substrings.Spg.Witness
             }
         }
 
-        private static List<Script> ComputeConnectedComponents(List<Edit<SyntaxNodeOrToken>> cc)
+        /// <summary>
+        /// Compute connected components from the script
+        /// </summary>
+        /// <param name="script">Script</param>
+        private static List<Script> ComputeConnectedComponents(Script script)
         {
-            var editOperations = cc.Select(o => o.EditOperation).ToList();
-            var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.DescendantsConnectedComponents(editOperations);
-            ccs = ccs.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
-            var scripts = ccs.Select(component => new Script(component.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
+            var editOperations = script.Edits.Select(o => o.EditOperation).ToList();
+            var connectedComponents = ConnectedComponentMannager<SyntaxNodeOrToken>.DescendantsConnectedComponents(editOperations);
+            connectedComponents = connectedComponents.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
+            var scripts = connectedComponents.Select(component => new Script(component.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
             return scripts;
         }
 
@@ -306,19 +309,16 @@ namespace ProseSample.Substrings.Spg.Witness
             return script;
         }
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTree(List<Script> ccs, SyntaxNodeOrToken inpTree)
+        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTree(List<Script> ccs, ITreeNode<SyntaxNodeOrToken> inpTree)
         {
             return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).OrderBy(o => o.Value.SpanStart).ToList();
         }
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(Script cc, SyntaxNodeOrToken inpTree)
+        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(Script script, ITreeNode<SyntaxNodeOrToken> tree)
         {
-            var input = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
-            var nodes = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(input);
-
+            var nodes = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(tree);
             var list = new List<ITreeNode<SyntaxNodeOrToken>>();
-
-            var editNodes = EditNodes(cc);
+            var editNodes = EditNodes(script);
             foreach (var node in nodes)
             {
                 foreach (var t1Node in editNodes)
@@ -337,10 +337,10 @@ namespace ProseSample.Substrings.Spg.Witness
             return cnodes;
         }
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> EditNodes(Script cc)
+        private static List<ITreeNode<SyntaxNodeOrToken>> EditNodes(Script script)
         {
             var nodes = new List<ITreeNode<SyntaxNodeOrToken>>();
-            foreach (var edit in cc.Edits)
+            foreach (var edit in script.Edits)
             {
                 nodes.AddRange(edit.EditOperation.T1Node.DescendantNodesAndSelf());
 
