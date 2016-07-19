@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
@@ -363,12 +362,6 @@ namespace ProseSample.Substrings
         public static SubsequenceSpec RegionMap(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             return Transformation.EditMapTNode(rule, parameter, spec);
-        }
-
-        [WitnessFunction("Template", 1)]
-        public static DisjunctiveExamplesSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
-        {
-            return Transformation.TemplateTemplate(rule, parameter, spec);
         }
 
         [WitnessFunction("Traversal", 1)]

@@ -285,18 +285,6 @@ namespace ProseSample.Substrings.Spg.Witness
             return scripts;
         }
 
-        public static DisjunctiveExamplesSpec TemplateTemplate(GrammarRule rule, int parameter, SubsequenceSpec spec)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var kMatches = (from ITreeNode<SyntaxNodeOrToken> cc in spec.Examples[input] select new Node(cc)).ToList();
-                kExamples[input] = kMatches;
-            }
-
-            return DisjunctiveExamplesSpec.From(kExamples);
-        }
-
         /// <summary>
         /// Compute the edition script
         /// </summary>
