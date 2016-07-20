@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
@@ -100,7 +101,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     if (anchor.Value.IsKind(SyntaxKind.Block))
                     {
-                        anchor = GetAfterNode(script.Edits.First().EditOperation.T1Node, inputTree);
+                        anchor = ConfigAnchorBeforeAfterNode(script.Edits.First().EditOperation.T1Node, inputTree);
                     }
 
                     ConfigureContext(anchor, script);
@@ -214,27 +215,45 @@ namespace ProseSample.Substrings.Spg.Witness
             WitnessFunctions.CurrentTrees[anchor] = anchor;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> GetAfterNode(ITreeNode<SyntaxNodeOrToken> keynode, Node inputTree)
+        private static ITreeNode<SyntaxNodeOrToken> ConfigAnchorBeforeAfterNode(ITreeNode<SyntaxNodeOrToken> keynode, Node inputTree)
         {
-            var node = Mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
-            var newAnchor = AnchorNode(node);
-            var anchorNode = TreeUpdate.FindNode(inputTree.Value, newAnchor.Value);
+            //Get a reference for the node that was modified on the T1 tree.
+            var inputNode = Mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
+
+            //Get the nodes before and after the input node.
+            var beforeAfterAnchorNode = GetBeforeAfterAnchorNode(inputNode);
+
+            //Location of the left, right, and after node.
+            var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(inputTree.Value, beforeAfterAnchorNode.Item2.Value) : null;
+            var treeNode = TreeUpdate.FindNode(inputTree.Value, inputNode.Value);
+            var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(inputTree.Value, beforeAfterAnchorNode.Item2.Value) : null;
             var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-            anchorNode.SyntaxTree = emptyNode;
-            emptyNode.AddChild(anchorNode, 0);
+
+            //Configure the parent node.
+            int i = 0;
+            if (leftNode != null) emptyNode.AddChild(leftNode, i++);
+            if (treeNode != null) emptyNode.AddChild(treeNode, i++);
+            if (rightNode != null) emptyNode.AddChild(rightNode, i); 
+
             var anchor = emptyNode;
             return anchor;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> AnchorNode(ITreeNode<SyntaxNodeOrToken> node)
+        private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> GetBeforeAfterAnchorNode(ITreeNode<SyntaxNodeOrToken> node)
         {
             for (int i = 0; i < node.Parent.Children.Count; i++)
             {
                 var child = node.Parent.Children[i];
                 if (child.Equals(node))
                 {
-                    var nnode = node.Parent.Children[i + 1];
-                    return nnode; //Todo this piece of code will produces bugs.
+                    var left = i > 0 ? node.Parent.Children[i - 1] : null;
+                    var right = node.Parent.Children.Count > i + 1 ? node.Parent.Children[i + 1] : null;
+
+                    if (left != null || right != null)
+                    {
+                        var tuple = Tuple.Create(left, right);
+                        return tuple;
+                    }
                 }
             }
             return null;
