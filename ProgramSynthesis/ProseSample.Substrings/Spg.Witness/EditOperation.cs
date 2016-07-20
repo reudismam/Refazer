@@ -94,7 +94,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
                 var inpTree = (Node)input[rule.Body[0]];
-                if (!NodeContains(inpTree.Value, edit.EditOperation.Parent)) return null;
+                var currentTree = WitnessFunctions.GetCurrentTree(inpTree.Value);
+                if (!NodeContains(currentTree, edit.EditOperation.Parent)) return null;
 
                 return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
             }
@@ -130,7 +131,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
                 var inpTree = (Node)input[rule.Body[0]];
-                if (NodeContains(inpTree.Value, edit.EditOperation.Parent)) return null;
+                var currentTree = WitnessFunctions.GetCurrentTree(inpTree.Value);
+                if (NodeContains(currentTree, edit.EditOperation.Parent)) return null;
 
                 var key = editOperation.T1Node.SyntaxTree;
                 var treeUp = WitnessFunctions.TreeUpdateDictionary[key];

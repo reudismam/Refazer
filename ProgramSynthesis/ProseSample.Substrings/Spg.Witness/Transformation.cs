@@ -72,6 +72,46 @@ namespace ProseSample.Substrings.Spg.Witness
             return subsequence;
         }
 
+        
+
+        /// <summary>
+        /// Segment the edit script in nodes
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Rule parameter</param>
+        /// <param name="spec">Example specification</param>
+        public static SubsequenceSpec EditMapTNode(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        {
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var inputTree = (Node)input[rule.Grammar.InputSymbol];
+                var kMatches = new List<Node>();
+                foreach (Script script in spec.Examples[input])
+                {
+                    var connectedComponents = ComputeConnectedComponents(script);
+                    var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
+                    var anchor = GetAnchor(tree);
+
+                    if (anchor.Value.IsKind(SyntaxKind.EmptyStatement))
+                    {
+                        script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    }
+
+                    if (anchor.Value.IsKind(SyntaxKind.Block))
+                    {
+                        anchor = GetAfterNode(script.Edits.First().EditOperation.T1Node, inputTree);
+                    }
+
+                    ConfigureContext(anchor, script);
+                    kMatches.Add(new Node(anchor));
+                    kExamples[input] = kMatches;
+                }
+            }
+            return new SubsequenceSpec(kExamples);
+        }
+
+
         /// <summary>
         /// Cluster edit script in regions
         /// </summary>
@@ -164,45 +204,10 @@ namespace ProseSample.Substrings.Spg.Witness
             return clusters;
         }
 
-        /// <summary>
-        /// Segment the edit script in nodes
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Rule parameter</param>
-        /// <param name="spec">Example specification</param>
-        public static SubsequenceSpec EditMapTNode(GrammarRule rule, int parameter, SubsequenceSpec spec)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var kMatches = new List<Node>();
-                foreach (Script script in spec.Examples[input])
-                {
-                    var connectedComponents = ComputeConnectedComponents(script);
-                    var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                    var anchor = GetAnchor(tree);
-
-                    if (anchor.Value.IsKind(SyntaxKind.EmptyStatement))
-                    {
-                        script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                    }
-
-                    if (anchor.Value.IsKind(SyntaxKind.Block))
-                    {
-                        anchor = GetAfterNode(script.Edits.First().EditOperation.T1Node, inputTree);
-                    }
-
-                    ConfigureContext(anchor, script);
-                    kMatches.Add(new Node(anchor));
-                    kExamples[input] = kMatches;
-                }
-            }
-            return new SubsequenceSpec(kExamples);
-        }
-
         private static void ConfigureContext(ITreeNode<SyntaxNodeOrToken> anchor, Script script)
         {
+            //var newAnchor = new TreeNode<SyntaxNodeOrToken>(anchor.Parent.Value, new TLabel(anchor.Parent.Label), new List<ITreeNode<SyntaxNodeOrToken>> {anchor});
+            //anchor.SyntaxTree = newAnchor;
             var treeUp = new TreeUpdate(anchor);
             ConfigureParentSyntaxTree(script, anchor);
             WitnessFunctions.TreeUpdateDictionary.Add(anchor, treeUp);
