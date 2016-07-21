@@ -37,21 +37,9 @@ namespace ProseSample.Substrings
             LeftNode = leftNode;
             RightNode = rightNode;
 
-            if (rightNode != null)
-            {
-                Parent = rightNode.Parent;
-            }
-
-            if (leftNode != null)
-            {
-                Parent = leftNode.Parent;
-            }
-
-            if (value != null)
-            {
-                Parent = value.Parent;
-            }
-
+            if (rightNode != null) Parent = rightNode.Parent;
+            if (leftNode != null)  Parent = leftNode.Parent;
+            if (value != null) Parent = value.Parent;
         }
 
         public override string ToString()

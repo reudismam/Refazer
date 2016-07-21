@@ -40,19 +40,6 @@ namespace ProseSample.Substrings
         }
 
         /// <summary>
-        /// Tree witness function for parameter tree.
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
-        /// <param name="spec">Example specificaiton</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Tree", 0)]
-        public static DisjunctiveExamplesSpec TreeKindRef(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return Match.TreeKindRef(rule, parameter, spec);
-        }
-
-        /// <summary>
         /// KindRef witness function for parameter kind.
         /// </summary>
         /// <param name="rule">Literal rule</param>
