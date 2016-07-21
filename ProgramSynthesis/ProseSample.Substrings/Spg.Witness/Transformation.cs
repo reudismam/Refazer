@@ -94,12 +94,13 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var script = (Script)spec.Examples[input].ElementAt(i);
                     var node = nodes[i];
-                    var emptyNode = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                    var parentNode = ConverterHelper.MakeACopy(node.Parent);
+                    parentNode.Children.RemoveRange(0, parentNode.Children.Count());
 
                     int j = 0;
                     if (node.LeftNode != null)
                     {
-                        emptyNode.AddChild(node.LeftNode, j++);
+                        parentNode.AddChild(node.LeftNode, j++);
                         script.Edits.First().EditOperation.K = 2;
                     }
                     else
@@ -107,14 +108,14 @@ namespace ProseSample.Substrings.Spg.Witness
                         script.Edits.First().EditOperation.K = 1;
                     }
 
-                    if (node.Value != null) emptyNode.AddChild(node.Value, j++);
-                    if (node.RightNode != null) emptyNode.AddChild(node.RightNode, j);
+                    if (node.Value != null) parentNode.AddChild(node.Value, j++);
+                    if (node.RightNode != null) parentNode.AddChild(node.RightNode, j);
 
                     //Todo refactor this code.
-                    script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    script.Edits.First().EditOperation.Parent = node.Parent;
                     
-                    kMatches.Add(new Node(emptyNode));
-                    ConfigureContext(emptyNode, script);
+                    kMatches.Add(new Node(parentNode));
+                    ConfigureContext(parentNode, script);
                 }
                 kExamples[input] = kMatches;
             }
@@ -273,13 +274,6 @@ namespace ProseSample.Substrings.Spg.Witness
             //Location of the left, right, and after node.
             var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(inputTree, beforeAfterAnchorNode.Item1.Value) : null;
             var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(inputTree, beforeAfterAnchorNode.Item2.Value) : null;
-            var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-
-            //Configure the parent node.
-            int i = 0;
-            if (leftNode != null) emptyNode.AddChild(leftNode, i++);
-            if (treeNode != null) emptyNode.AddChild(treeNode, i++);
-            if (rightNode != null) emptyNode.AddChild(rightNode, i);
 
             var node = new AnchorNode(treeNode, leftNode, rightNode);
             return node;

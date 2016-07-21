@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
@@ -580,7 +581,16 @@ namespace ProseSample.Substrings
             var commonPattern = Match.BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
             {
-                eExamples[input] = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
+                var list = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
+                if (commonPattern.Tree.Children.Any())
+                {
+                    var copy = ConverterHelper.MakeACopy(commonPattern.Tree);
+                    var empty = new EmptyToken();
+                    ITreeNode<Token> itreeNodeToken = new TreeNode<Token>(empty, new TLabel(SyntaxKind.EmptyStatement));
+                    itreeNodeToken.Children = copy.Children;
+                    list.Add(itreeNodeToken);
+                }
+                eExamples[input] = list;
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
