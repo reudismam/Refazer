@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Witness.Target;
-using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
-using TreeElement.Spg.Walker;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -42,23 +38,6 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return new ExampleSpec(kExamples);
         }
-
-        //public static ExampleSpec MoveTo(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    var kExamples = new Dictionary<State, object>();
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-        //        var editOperation = edit.EditOperation;
-        //        if (!(editOperation is Move<SyntaxNodeOrToken>)) return null;
-        //        var from = editOperation.T1Node;
-        //        var fromNode = TreeUpdate.FindNode(from.SyntaxTree, from.Value);
-        //        fromNode.SyntaxTree = from.SyntaxTree;
-        //        var result = new Node(fromNode);
-        //        kExamples[input] = result;
-        //    }
-        //    return new ExampleSpec(kExamples);
-        //}
 
         public static ExampleSpec LearnK<T>(GrammarRule rule, int parameter, ExampleSpec spec)
         {
@@ -179,7 +158,6 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return new ExampleSpec(kExamples);
         }
-
 
         public static Node GetNode(ITreeNode<SyntaxNodeOrToken> searchedNode)
         {
