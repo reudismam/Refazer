@@ -88,6 +88,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var kMatches = new List<Node>();
+                var nodes = new List<Node>();
                 foreach (Script script in spec.Examples[input])
                 {
                     var connectedComponents = ComputeConnectedComponents(script);
@@ -101,13 +102,38 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     if (anchor.Value.IsKind(SyntaxKind.Block))
                     {
-                        anchor = ConfigAnchorBeforeAfterNode(script.Edits.First().EditOperation.T1Node, inputTree);
+                        var t = ConfigAnchorBeforeAfterNode(script.Edits.First().EditOperation.T1Node, inputTree);
+                        anchor = t.Item1;
+                        nodes.Add(t.Item2);
                     }
 
-                    ConfigureContext(anchor, script);
                     kMatches.Add(new Node(anchor));
-                    kExamples[input] = kMatches;
+                    ConfigureContext(anchor, script);           
                 }
+
+                if (nodes.Any())
+                {
+                    kMatches = new List<Node>();
+                    if (nodes.Any(node => node.LeftNode == null)) nodes.ForEach(node => node.LeftNode = null);
+                    if (nodes.Any(node => node.RightNode == null)) nodes.ForEach(node => node.RightNode = null);
+                    //if (nodes.Any(node => node.Value != null)) nodes.ForEach(node => node.Value = null); //todo refactor: this will never happens.
+
+                    for (int i = 0; i < spec.Examples[input].Count(); i++)
+                    {
+                        var script = (Script) spec.Examples[input].ElementAt(i);
+                        var node = nodes[i];
+                        var emptyNode = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+
+                        int j = 0;
+                        if (node.LeftNode != null) emptyNode.AddChild(node.LeftNode, j++);
+                        if (node.Value != null) emptyNode.AddChild(node.Value, j++);
+                        if (node.RightNode != null) emptyNode.AddChild(node.RightNode, j);
+
+                        kMatches.Add(new Node(emptyNode));
+                        ConfigureContext(emptyNode, script);
+                    }
+                }
+                kExamples[input] = kMatches;
             }
             return new SubsequenceSpec(kExamples);
         }
@@ -215,7 +241,7 @@ namespace ProseSample.Substrings.Spg.Witness
             WitnessFunctions.CurrentTrees[anchor] = anchor;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> ConfigAnchorBeforeAfterNode(ITreeNode<SyntaxNodeOrToken> keynode, Node inputTree)
+        private static Tuple<ITreeNode<SyntaxNodeOrToken>, Node> ConfigAnchorBeforeAfterNode(ITreeNode<SyntaxNodeOrToken> keynode, Node inputTree)
         {
             //Get a reference for the node that was modified on the T1 tree.
             var inputNode = Mapping.ToList().Find(o => o.Value.Equals(keynode)).Key;
@@ -236,7 +262,8 @@ namespace ProseSample.Substrings.Spg.Witness
             if (rightNode != null) emptyNode.AddChild(rightNode, i); 
 
             var anchor = emptyNode;
-            return anchor;
+            var node = new Node(treeNode, leftNode, rightNode);
+            return Tuple.Create(anchor, node);
         }
 
         private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> GetBeforeAfterAnchorNode(ITreeNode<SyntaxNodeOrToken> node)
