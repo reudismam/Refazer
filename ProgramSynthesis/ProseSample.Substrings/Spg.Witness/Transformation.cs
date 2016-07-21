@@ -86,22 +86,12 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var inputTreeCopy = ConverterHelper.MakeACopy(inputTree.Value);
-                var nodes = new List<Node>();
 
-                foreach (Script script in spec.Examples[input])
-                {
-                    var connectedComponents = ComputeConnectedComponents(script);
-                    var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                    var centroid = GetCentroid(tree);
-
-                    var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), centroid, inputTreeCopy);
-                    nodes.Add(node);
-                }
+                //Get the anchor nodes
+                var nodes = GetAnchorNodes(spec, input, inputTree, inputTreeCopy);
 
                 var kMatches = new List<Node>();
-                if (nodes.Any(node => node.LeftNode == null)) nodes.ForEach(node => node.LeftNode = null);
-                if (nodes.Any(node => node.RightNode == null)) nodes.ForEach(node => node.RightNode = null);
-               
+                ConfigureAnchorNodes(nodes);
                 for (int i = 0; i < spec.Examples[input].Count(); i++)
                 {
                     var script = (Script)spec.Examples[input].ElementAt(i);
@@ -131,6 +121,28 @@ namespace ProseSample.Substrings.Spg.Witness
                 kExamples[input] = kMatches;
             }
             return new SubsequenceSpec(kExamples);
+        }
+
+        private static void ConfigureAnchorNodes(List<AnchorNode> nodes)
+        {
+            if (nodes.Any(node => node.LeftNode == null)) nodes.ForEach(node => node.LeftNode = null);
+            if (nodes.Any(node => node.RightNode == null)) nodes.ForEach(node => node.RightNode = null);
+        }
+
+        private static List<AnchorNode> GetAnchorNodes(SubsequenceSpec spec, State input, Node inputTree, ITreeNode<SyntaxNodeOrToken> inputTreeCopy)
+        {
+            var nodes = new List<AnchorNode>();
+
+            foreach (Script script in spec.Examples[input])
+            {
+                var connectedComponents = ComputeConnectedComponents(script);
+                var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
+                var centroid = GetCentroid(tree);
+
+                var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), centroid, inputTreeCopy);
+                nodes.Add(node);
+            }
+            return nodes;
         }
 
 
@@ -236,7 +248,7 @@ namespace ProseSample.Substrings.Spg.Witness
             WitnessFunctions.CurrentTrees[anchor] = anchor;
         }
 
-        private static Node ConfigAnchorBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> anchorNode, ITreeNode<SyntaxNodeOrToken> inputTree)
+        private static AnchorNode ConfigAnchorBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> anchorNode, ITreeNode<SyntaxNodeOrToken> inputTree)
         {
             //Get a reference for the node that was modified on the T1 tree.
             ITreeNode<SyntaxNodeOrToken> inputNode = null;
@@ -275,7 +287,7 @@ namespace ProseSample.Substrings.Spg.Witness
             if (treeNode != null) emptyNode.AddChild(treeNode, i++);
             if (rightNode != null) emptyNode.AddChild(rightNode, i);
 
-            var node = new Node(treeNode, leftNode, rightNode);
+            var node = new AnchorNode(treeNode, leftNode, rightNode);
             return node;
         }
 
