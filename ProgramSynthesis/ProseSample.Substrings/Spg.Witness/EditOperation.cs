@@ -127,33 +127,43 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
+                //edit opration
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-                var inpTree = (Node)input[rule.Body[0]];
-                var currentTree = WitnessFunctions.GetCurrentTree(inpTree.Value);
-                if (NodeContains(currentTree, edit.EditOperation.Parent)) return null;
 
+                //Current tree
                 var key = editOperation.T1Node.SyntaxTree;
                 var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
 
-                var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
-                //todo bug: this code will generate bugs.
-                var insertBefore = new InsertBefore<SyntaxNodeOrToken>(editOperation.T1Node, inpTree.Value.Children[0]);
-                treeUp.ProcessEditOperation(insertBefore);
-                WitnessFunctions.CurrentTrees[key] = previousTree;
+                //Compute after node
+                var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
+                if (from == null) return null;
 
-                Console.WriteLine("PREVIOUS TREE\n\n");
-                PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
-                Console.WriteLine("UPDATED TREE\n\n");
-                PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
-
-                var from = previousTree.Children[0];
+                //Get nodes with a predefined depth
                 from.SyntaxTree = editOperation.T1Node.SyntaxTree;
                 var result = EditOperation.GetNode(from);
-                kExamples[input] = result; //Todo refactor this. The InsertBefore operation could occurs in many parts of the edit operation not only on the first operation.
+                kExamples[input] = result;
             }
             return new ExampleSpec(kExamples);
+        }
+
+        private static ITreeNode<SyntaxNodeOrToken> GetAfterNode(ITreeNode<SyntaxNodeOrToken> currentTree, ITreeNode<SyntaxNodeOrToken> t1Node)
+        {
+            var node = TreeUpdate.FindNode(currentTree, t1Node.Value);
+            var parent = node.Parent;
+            for (int i = 0; i < parent.Children.Count; i++)
+            {
+                var child = parent.Children[i];
+                if (child.Equals(node))
+                {
+                    if (i + 1 < parent.Children.Count)
+                    {
+                        return parent.Children[i + 1];
+                    }
+                }
+            }
+            return null;
         }
 
         public static ExampleSpec InsertBeforeast(GrammarRule rule, int parameter, ExampleSpec spec)
