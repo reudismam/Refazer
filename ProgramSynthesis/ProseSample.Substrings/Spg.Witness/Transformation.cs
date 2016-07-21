@@ -94,7 +94,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var script = (Script)spec.Examples[input].ElementAt(i);
                     var node = nodes[i];
-                    var parentNode = ConverterHelper.MakeACopy(node.Parent);
+                    var parentNode =  !node.Parent.Value.IsKind(SyntaxKind.Block) ? ConverterHelper.MakeACopy(node.Parent) : ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                     parentNode.Children.RemoveRange(0, parentNode.Children.Count());
 
                     int j = 0;
@@ -112,7 +112,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (node.RightNode != null) parentNode.AddChild(node.RightNode, j);
 
                     //Todo refactor this code.
-                    script.Edits.First().EditOperation.Parent = node.Parent;
+                    script.Edits.First().EditOperation.Parent = parentNode;
                     
                     kMatches.Add(new Node(parentNode));
                     ConfigureContext(parentNode, script);

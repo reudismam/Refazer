@@ -22,22 +22,22 @@ namespace ProseSample.Substrings.Spg.Witness
             return spec;
         }
 
-        public static ExampleSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             //var pattern = MatchPattern(rule, parameter, spec);
-            var kdExamples = new Dictionary<State, object>();
+            var kdExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var syntaxKinds = new List<SyntaxKind>();
+                var syntaxKinds = new List<object>();
                 foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
                     syntaxKinds.Add(sot.Kind);
-                    if (!sot.Kind.Equals(syntaxKinds.First())) return null;
+                    //if (!sot.Kind.Equals(syntaxKinds.First())) return null;
                 }
-                kdExamples[input] = syntaxKinds.First();
+                kdExamples[input] = syntaxKinds;
             }
-            return new ExampleSpec(kdExamples);
+            return DisjunctiveExamplesSpec.From(kdExamples);
         }
 
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
