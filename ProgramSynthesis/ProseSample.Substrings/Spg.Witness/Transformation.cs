@@ -85,25 +85,20 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var kMatches = new List<Node>();
+                var inputTreeCopy = ConverterHelper.MakeACopy(inputTree.Value);
                 var nodes = new List<Node>();
+
                 foreach (Script script in spec.Examples[input])
                 {
                     var connectedComponents = ComputeConnectedComponents(script);
                     var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                    var anchor = GetAnchor(tree);
+                    var centroid = GetCentroid(tree);
 
-                    var t = ConfigAnchorBeforeAfterNode(script.Edits.First(), anchor, inputTree);
-                    nodes.Add(t.Item2);
-
-                    script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                    script.Edits.First().EditOperation.K = 1;
-
-                    kMatches.Add(new Node(anchor));
-                    ConfigureContext(anchor, script);
+                    var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), centroid, inputTreeCopy);
+                    nodes.Add(node);
                 }
 
-                kMatches = new List<Node>();
+                var kMatches = new List<Node>();
                 if (nodes.Any(node => node.LeftNode == null)) nodes.ForEach(node => node.LeftNode = null);
                 if (nodes.Any(node => node.RightNode == null)) nodes.ForEach(node => node.RightNode = null);
                
@@ -114,10 +109,22 @@ namespace ProseSample.Substrings.Spg.Witness
                     var emptyNode = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
 
                     int j = 0;
-                    if (node.LeftNode != null) emptyNode.AddChild(node.LeftNode, j++);
+                    if (node.LeftNode != null)
+                    {
+                        emptyNode.AddChild(node.LeftNode, j++);
+                        script.Edits.First().EditOperation.K = 2;
+                    }
+                    else
+                    {
+                        script.Edits.First().EditOperation.K = 1;
+                    }
+
                     if (node.Value != null) emptyNode.AddChild(node.Value, j++);
                     if (node.RightNode != null) emptyNode.AddChild(node.RightNode, j);
 
+                    //Todo refactor this code.
+                    script.Edits.First().EditOperation.Parent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    
                     kMatches.Add(new Node(emptyNode));
                     ConfigureContext(emptyNode, script);
                 }
@@ -229,30 +236,37 @@ namespace ProseSample.Substrings.Spg.Witness
             WitnessFunctions.CurrentTrees[anchor] = anchor;
         }
 
-        private static Tuple<ITreeNode<SyntaxNodeOrToken>, Node> ConfigAnchorBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> anchorNode, Node inputTree)
+        private static Node ConfigAnchorBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> anchorNode, ITreeNode<SyntaxNodeOrToken> inputTree)
         {
             //Get a reference for the node that was modified on the T1 tree.
             ITreeNode<SyntaxNodeOrToken> inputNode = null;
-            if (TreeUpdate.FindNode(inputTree.Value, edit.EditOperation.T1Node.Value) != null)
+            if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
             {
-                //    inputNode = Mapping.ToList().Find(o => o.Value.Equals(edit)).Key;
-                //}
-                //else
-                //{
-                inputNode = TreeUpdate.FindNode(inputTree.Value, anchorNode.Value);
+                inputNode = anchorNode;
             }
 
-            var previousTree = new TreeUpdate(ConverterHelper.MakeACopy(inputTree.Value));
-            previousTree.ProcessEditOperation(edit.EditOperation);
+            var previousTree = new TreeUpdate(inputTree);
 
-            var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+            Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
+            ITreeNode<SyntaxNodeOrToken> treeNode = null;
+            if (inputNode == null)
+            {
+                previousTree.ProcessEditOperation(edit.EditOperation);
+                var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+                beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
+            }
+            else
+            {
+                var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+                beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
+                treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
+                previousTree.ProcessEditOperation(edit.EditOperation);
+            }
+
             //Get the nodes before and after the input node.
-            var beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
-
             //Location of the left, right, and after node.
-            var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(inputTree.Value, beforeAfterAnchorNode.Item1.Value) : null;
-            var treeNode = TreeUpdate.FindNode(inputTree.Value, inputNode.Value);
-            var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(inputTree.Value, beforeAfterAnchorNode.Item2.Value) : null;
+            var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(inputTree, beforeAfterAnchorNode.Item1.Value) : null;
+            var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(inputTree, beforeAfterAnchorNode.Item2.Value) : null;
             var emptyNode = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
 
             //Configure the parent node.
@@ -261,9 +275,8 @@ namespace ProseSample.Substrings.Spg.Witness
             if (treeNode != null) emptyNode.AddChild(treeNode, i++);
             if (rightNode != null) emptyNode.AddChild(rightNode, i);
 
-            var anchor = emptyNode;
             var node = new Node(treeNode, leftNode, rightNode);
-            return Tuple.Create(anchor, node);
+            return node;
         }
 
         private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> GetBeforeAfterAnchorNode(ITreeNode<SyntaxNodeOrToken> node)
@@ -286,18 +299,12 @@ namespace ProseSample.Substrings.Spg.Witness
             return null;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> GetAnchor(ITreeNode<SyntaxNodeOrToken> inpTree)
+        private static ITreeNode<SyntaxNodeOrToken> GetCentroid(ITreeNode<SyntaxNodeOrToken> inpTree)
         {
             if (inpTree.Children.Count == 1 && ((SyntaxNode)inpTree.Value).ChildNodes().Count() > 1)
             {
-                //var emptyKind = SyntaxKind.EmptyStatement;
-                //var emptyStatement = SyntaxFactory.EmptyStatement();
-                //var emptyNode = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(emptyKind));
-                //emptyNode.AddChild(inpTree.Children.Single(), 0);
-                //return emptyNode;
                 return inpTree.Children.Single();
             }
-
             if (!inpTree.Children.Any() && !inpTree.Value.IsKind(SyntaxKind.Block))
             {
                 var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value);
