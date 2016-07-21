@@ -86,8 +86,6 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var inputTreeCopy = ConverterHelper.MakeACopy(inputTree.Value);
-
-                //Get the anchor nodes
                 var nodes = GetAnchorNodes(spec, input, inputTree, inputTreeCopy);
 
                 var kMatches = new List<Node>();
@@ -137,9 +135,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var connectedComponents = ComputeConnectedComponents(script);
                 var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                var centroid = GetCentroid(tree);
-
-                var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), centroid, inputTreeCopy);
+                var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
                 nodes.Add(node);
             }
             return nodes;
@@ -240,8 +236,6 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static void ConfigureContext(ITreeNode<SyntaxNodeOrToken> anchor, Script script)
         {
-            //var newAnchor = new TreeNode<SyntaxNodeOrToken>(anchor.Parent.Value, new TLabel(anchor.Parent.Label), new List<ITreeNode<SyntaxNodeOrToken>> {anchor});
-            //anchor.SyntaxTree = newAnchor;
             var treeUp = new TreeUpdate(anchor);
             ConfigureParentSyntaxTree(script, anchor);
             WitnessFunctions.TreeUpdateDictionary.Add(anchor, treeUp);
@@ -309,20 +303,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
             }
             return null;
-        }
-
-        private static ITreeNode<SyntaxNodeOrToken> GetCentroid(ITreeNode<SyntaxNodeOrToken> inpTree)
-        {
-            if (inpTree.Children.Count == 1 && ((SyntaxNode)inpTree.Value).ChildNodes().Count() > 1)
-            {
-                return inpTree.Children.Single();
-            }
-            if (!inpTree.Children.Any() && !inpTree.Value.IsKind(SyntaxKind.Block))
-            {
-                var itreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree.Value);
-                return itreeNode;
-            }
-            return inpTree;
         }
 
         private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> region)
