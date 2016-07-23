@@ -72,19 +72,10 @@ namespace ProseSample.Substrings.Spg.Witness
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
-                var inpTree = (Node)input[rule.Body[0]];
-                var currentTree = WitnessFunctions.GetCurrentTree(inpTree.Value);
-                if (!NodeContains(currentTree, edit.EditOperation.Parent)) return null;
 
                 return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
             }
             return null;
-        }
-
-        private static bool NodeContains(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<SyntaxNodeOrToken> lookfor)
-        {
-            var no = TreeUpdate.FindNode(node, lookfor.Value);
-            return no != null;
         }
 
         public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec)

@@ -203,12 +203,12 @@ namespace TreeEdit.Spg.Print
             return null;
         }
 
-        private static void PrintScript(List<Edit<T>> script)
+        public static void PrintScript(List<Edit<T>> script)
         {
             string s = script.Aggregate("", (current, v) => current + (v + "\n"));
         }
 
-        private static void PrintScript(List<EditOperation<T>> script)
+        public static void PrintScript(List<EditOperation<T>> script)
         {
             string s = script.Aggregate("", (current, v) => current + (v + "\n"));
         }

@@ -37,7 +37,6 @@ namespace ProseSample
             {
                 WriteColored(ConsoleColor.Yellow, compilationResult.TraceDiagnostics);
             }
-
             return compilationResult.Value;
         }
 
