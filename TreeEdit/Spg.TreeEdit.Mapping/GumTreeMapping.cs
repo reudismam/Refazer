@@ -120,7 +120,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             }
 
             var list = A.ToList();
-            var sortList = list.OrderByDescending(o => Dice(o.Item1, o.Item2, M)).ToList();
+            var sortList = list.OrderByDescending(o => Dice(o.Item1.Parent, o.Item2.Parent, M)).ToList();
 
             while (sortList.Any())
             {
@@ -346,20 +346,20 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         private static double Dice(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
             if (t2 == null) return 0.0;
-
-            var t2DescendantsAndSelf = t2.DescendantNodesAndSelf();
+      
+            var t2Descendants = t2.DescendantNodes();
             var t1Descendants = t1.DescendantNodes();
 
             double count = 0.0;
             foreach (var item in t1Descendants)
             {
-                if (M.ContainsKey(item) && t2DescendantsAndSelf.Contains(M[item]))
+                if (M.ContainsKey(item) && t2Descendants.Contains(M[item]))
                 {
                     count++;
                 }
             }
 
-            double den = t1Descendants.Count + t2DescendantsAndSelf.Count - 1;
+            double den = t1Descendants.Count + t2Descendants.Count;
 
             double dice = 2.0 * count / den;
             return dice;
@@ -373,6 +373,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <returns>Mapping between two trees.</returns>
         public Dictionary<ITreeNode<T>, ITreeNode<T>> Mapping(ITreeNode<T> t1, ITreeNode<T> t2)
         {
+            //return Opt(t1, t2);
             var M = TopDown(t1, t2);
             M = BottomUp(t1, t2, M);
             return M;

@@ -30,6 +30,7 @@ namespace TreeEdit.Spg.Script
 
                 if (w == null)
                 {
+                    //if (!M.ContainsKey(x)) continue;
                     int k = FindPos(x, M);
 
                     var xnode = new TreeNode<T>(x.Value, x.Label);

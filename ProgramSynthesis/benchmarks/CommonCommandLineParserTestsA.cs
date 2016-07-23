@@ -98,10 +98,11 @@ namespace Microsoft.CodeAnalysis.UnitTests
     <Rule Id=""CA1014"" Action=""None"" />
   </Rules>
 </RuleSet>";
+            string paranment = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint.");
 
-            VerifyRuleSetError(source, () => string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint."));
+            VerifyRuleSetError(source, () => parameter);
 
-            VerifyRuleSetError(source, () => string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint."));
+            VerifyRuleSetError(source, () => parameter);
         }
 
         [Fact]
