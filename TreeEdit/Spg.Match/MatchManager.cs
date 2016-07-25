@@ -58,7 +58,41 @@ namespace TreeEdit.Spg.Match
         {
             TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
             var nodes = tree.PostOrderTraversal(node);
-            return nodes.Where(v => IsValue(v, pattern)).ToList();
+            var matchNodes = nodes.Where(v => IsValue(v, pattern)).ToList();
+
+            //var removes = new List<ITreeNode<SyntaxNodeOrToken>>();
+            //foreach (var match in matchNodes)
+            //{
+            //    var children = match.Children;
+            //    var list = new List<List<ITreeNode<SyntaxNodeOrToken>>>();
+            //    foreach (var p in pattern.Children)
+            //    {
+            //        var ns = children.Where(v => IsValue(v, p)).ToList();
+            //        list.Add(ns);
+            //    }
+
+            //    if (list.Count() > 1)
+            //    {
+            //        removes.Add(match);
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
+
+            //    for (int i = 0; i < list.First().Count; i++)
+            //    {
+            //        var parent = ConverterHelper.MakeACopy(match);
+            //        parent.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
+            //        foreach (var c in list)
+            //        {
+            //            parent.AddChild(c[i], parent.Children.Count());
+            //        }
+            //        nodes.Add(parent);
+            //    }
+            //}
+
+            return matchNodes;
         }
 
 

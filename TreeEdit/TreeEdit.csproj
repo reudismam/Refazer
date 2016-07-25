@@ -110,15 +110,8 @@
     <Compile Include="Spg.ConnectedComponents\TemplateConnectedComponents.cs" />
     <Compile Include="Spg.ConnectedComponents\ConnectedComponentMannager.cs" />
     <Compile Include="Spg.Match\MatchManager.cs" />
-    <Compile Include="Spg.Print\PrintUtil.cs" />
-    <Compile Include="Spg.Isomorphic\IsomorphicManager.cs" />
     <Compile Include="Spg.Script\Edit.cs" />
     <Compile Include="Spg.Script\InsertBefore.cs" />
-    <Compile Include="Spg.TreeEdit.Mapping\GumTreeMapping.cs" />
-    <Compile Include="Spg.Isomorphic\IsomorphicPairs.cs" />
-    <Compile Include="Spg.TreeEdit.Mapping\ITreeMapping.cs" />
-    <Compile Include="Spg.TreeEdit.Mapping\TreeAlignment.cs" />
-    <Compile Include="Spg.TreeEdit.PQ\PriotityQueue.cs" />
     <Compile Include="Spg.Script\CSharpTreeComparer.cs" />
     <Compile Include="Spg.Script\Delete.cs" />
     <Compile Include="Spg.Script\EditScriptGenerator.cs" />

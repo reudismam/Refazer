@@ -95,7 +95,9 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)
                 {
-                    if (IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(t1.Value.Value, t2.Value.Value))
+                    var v1 =/* ConverterHelper.ConvertCSharpToTreeNode(*/t1.Value.Value/*.Value)*/;
+                    var v2 =/* ConverterHelper.ConvertCSharpToTreeNode(*/t2.Value.Value/*.Value)*/;
+                    if (IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(v1, v2))
                     {
                         var dtoken = new DynToken(t1.Value.Kind, t1.Value.Value);
                         var ditreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
@@ -132,6 +134,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var pattern = (ITreeNode<Token>)kind.DisjunctiveExamples[input].First();
                 var target = (Node)input[rule.Body[0]];
+                var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var mats = new List<object>();
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {

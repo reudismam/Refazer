@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
@@ -13,7 +14,7 @@ namespace ProseSample.Substrings
 
         public override bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)
         {
-            return node.Value.IsKind(Kind) && node.ToString().Equals(Value.ToString());
+            return node.Value.IsKind(Kind) && node.ToString().Equals(Value.ToString())/*IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(Value, node)*/;
         }
 
         public override string ToString()
