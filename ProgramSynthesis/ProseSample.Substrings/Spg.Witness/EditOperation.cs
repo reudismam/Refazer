@@ -154,7 +154,7 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             var currentTree = WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
-            var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 2);
+            var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 3);
 
             targetNodeHeight.SyntaxTree = searchedNode.SyntaxTree;
             targetNodeHeight.Parent = targetNode.Parent;

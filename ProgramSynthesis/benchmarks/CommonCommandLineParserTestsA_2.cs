@@ -99,12 +99,10 @@ namespace Microsoft.CodeAnalysis.UnitTests
   </Rules>
 </RuleSet>";
             string paranment = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint.");
-            string locMessage = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "");
-            VerifyRuleSetError(source, string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint."), locMessage: locMessage);
 
-            string paranment2 = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint.");
-            string locMessage = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "");
-            VerifyRuleSetError(source, string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint."), locMessage: locMessage);
+            VerifyRuleSetError(source, () => parameter);
+
+            VerifyRuleSetError(source, () => parameter);
         }
 
         [Fact]
@@ -282,8 +280,8 @@ namespace Microsoft.CodeAnalysis.UnitTests
   </Rules>
 </RuleSet>
 ";
-            string locMessage = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "");
-            VerifyRuleSetError(source, string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "The 'Action' attribute is invalid - The value 'Default' is invalid according to its datatype 'TIncludeAllAction' - The Enumeration constraint failed."), locMessage: locMessage);
+
+            VerifyRuleSetError(source, () => string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "The 'Action' attribute is invalid - The value 'Default' is invalid according to its datatype 'TIncludeAllAction' - The Enumeration constraint failed."), locMessage: locMessage);
         }
 
         [Fact]

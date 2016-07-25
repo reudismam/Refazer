@@ -40,7 +40,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var script = (Script)spec.Examples[input];
                 var edits = script.Edits;
-                //edits = edits.GetRange(0, 2);
+                //edits = edits.GetRange(0, 1);
                 editsExamples[input] = edits;
             }
             return new ExampleSpec(editsExamples);
@@ -71,6 +71,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     kMatches = kMatches.Select(CompactScript).ToList();
                     //kMatches.ForEach(cc => cc.ForEach(s => PrintUtil<SyntaxNodeOrToken>.PrintScript(s.Edits)));
                 }
+                //kMatches = kMatches.GetRange(0, 1);
                 kExamples[input] = new List<List<List<Script>>> { kMatches };
             }
             var subsequence = new SubsequenceSpec(kExamples);
@@ -116,7 +117,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (node.RightNode != null) parentNode.AddChild(node.RightNode, j);
 
                     //Todo refactor this code.
-                    script.Edits.First().EditOperation.Parent = parentNode;
+                    script.Edits.First().EditOperation.Parent = ConverterHelper.MakeACopy(parentNode);
                     
                     kMatches.Add(new Node(parentNode));
                     ConfigureContext(parentNode, script);
@@ -138,10 +139,25 @@ namespace ProseSample.Substrings.Spg.Witness
 
             foreach (Script script in spec.Examples[input])
             {
-                var connectedComponents = ComputeConnectedComponents(script);
-                var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
-                nodes.Add(node);
+                var parent = script.Edits.First().EditOperation.Parent;
+                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+                if (children.Count > 1)
+                {
+                    var iTreeParent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+                    var anchorParent = new AnchorNode(value);
+                    anchorParent.Parent = iTreeParent;
+                    //anchorParent.Parent = iTreeParent;
+                    
+                    nodes.Add(anchorParent);
+                }
+                else
+                {
+                    var connectedComponents = ComputeConnectedComponents(script);
+                    var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
+                    var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
+                    nodes.Add(node);
+                }
             }
             return nodes;
         }
@@ -235,7 +251,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var lcc = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
             var featureData = connectedComponents.Select(x => new EditOperationDatasetItem(x)).ToArray();
             var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => 1.0 - (2 * (double)lcc.FindCommon(x.Operations, y.Operations).Count) / ((double)x.Operations.Count + (double)y.Operations.Count));
-            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.5, minPts: 1, clusters: out clusters);
+            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.4, minPts: 1, clusters: out clusters);
             return clusters;
         }
 
@@ -251,12 +267,14 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             //Get a reference for the node that was modified on the T1 tree.
             ITreeNode<SyntaxNodeOrToken> inputNode = null;
-            if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
+            //if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
+            if(edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>)
             {
                 inputNode = anchorNode;
             }
 
             var previousTree = new TreeUpdate(inputTree);
+            var copy = ConverterHelper.MakeACopy(inputTree);
 
             Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
             ITreeNode<SyntaxNodeOrToken> treeNode = null;
@@ -273,11 +291,10 @@ namespace ProseSample.Substrings.Spg.Witness
                 treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
                 previousTree.ProcessEditOperation(edit.EditOperation);
             }
-
             //Get the nodes before and after the input node.
             //Location of the left, right, and after node.
-            var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(inputTree, beforeAfterAnchorNode.Item1.Value) : null;
-            var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(inputTree, beforeAfterAnchorNode.Item2.Value) : null;
+            var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item1.Value) : null;
+            var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item2.Value) : null;
 
             var node = new AnchorNode(treeNode, leftNode, rightNode);
             return node;

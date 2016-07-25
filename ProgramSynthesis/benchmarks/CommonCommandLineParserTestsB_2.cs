@@ -100,9 +100,8 @@ namespace Microsoft.CodeAnalysis.UnitTests
 </RuleSet>";
             string paranment = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint.");
             string locMessage = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "");
-            VerifyRuleSetError(source, string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint."), locMessage: locMessage);
+            VerifyRuleSetError(source, string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint."), locMessage:  locMessage);
 
-            string paranment2 = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint.");
             string locMessage = string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "");
             VerifyRuleSetError(source, string.Format(CodeAnalysisResources.RuleSetSchemaViolation, "There is a duplicate key sequence 'CA1012' for the 'UniqueRuleName' key or unique identity constraint."), locMessage: locMessage);
         }

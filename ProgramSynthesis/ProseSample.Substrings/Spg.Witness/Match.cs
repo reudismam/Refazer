@@ -45,6 +45,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var lsot = node.Children;
                     matches.Add(lsot);
                 }
+                if (!matches.Any()) return null;
                 eExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(eExamples);

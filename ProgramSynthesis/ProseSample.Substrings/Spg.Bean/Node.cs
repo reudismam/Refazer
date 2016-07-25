@@ -7,15 +7,15 @@ namespace ProseSample.Substrings
     {
         public ITreeNode<SyntaxNodeOrToken> Value { get; set; }
         
-        public ITreeNode<SyntaxNodeOrToken> LeftNode { get; set; }
+        //public ITreeNode<SyntaxNodeOrToken> LeftNode { get; set; }
 
-        public ITreeNode<SyntaxNodeOrToken> RightNode { get; set; }
+        //public ITreeNode<SyntaxNodeOrToken> RightNode { get; set; }
 
-        public Node(ITreeNode<SyntaxNodeOrToken> value, ITreeNode<SyntaxNodeOrToken> leftNode = null, ITreeNode<SyntaxNodeOrToken> rightNode = null)
+        public Node(ITreeNode<SyntaxNodeOrToken> value/*, ITreeNode<SyntaxNodeOrToken> leftNode = null, ITreeNode<SyntaxNodeOrToken> rightNode = null*/)
         {
             Value = value;
-            LeftNode = leftNode;
-            RightNode = rightNode;
+            //LeftNode = leftNode;
+            //RightNode = rightNode;
         }
 
         public override string ToString()
