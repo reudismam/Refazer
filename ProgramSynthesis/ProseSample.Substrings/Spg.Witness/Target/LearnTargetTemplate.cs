@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -36,6 +37,7 @@ namespace ProseSample.Substrings.Spg.Witness.Target
                 }
 
                 var from = Target(edit);
+                //if (from.Value.IsKind(SyntaxKind.EmptyStatement)) continue;
                 var result = EditOperation.GetNode(from);
                 kExamples[input] = result;
             }

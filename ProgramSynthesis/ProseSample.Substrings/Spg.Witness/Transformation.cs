@@ -99,7 +99,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var script = (Script)spec.Examples[input].ElementAt(i);
                     var node = nodes[i];
-                    var parentNode =  !node.Parent.Value.IsKind(SyntaxKind.Block) ? ConverterHelper.MakeACopy(node.Parent) : ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    var parentNode = !node.Parent.Value.IsKind(SyntaxKind.Block) ? ConverterHelper.MakeACopy(node.Parent) : ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
                     parentNode.Children.RemoveRange(0, parentNode.Children.Count());
 
                     int j = 0;
@@ -118,14 +118,16 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     //Todo refactor this code.
                     script.Edits.First().EditOperation.Parent = ConverterHelper.MakeACopy(parentNode);
-                    
-                    kMatches.Add(new Node(parentNode));
+
+                    var anode = new Node(parentNode);
+                    kMatches.Add(anode);
                     ConfigureContext(parentNode, script);
                 }
                 kExamples[input] = kMatches;
             }
             return new SubsequenceSpec(kExamples);
         }
+
 
         private static void ConfigureAnchorNodes(List<AnchorNode> nodes)
         {
@@ -320,20 +322,20 @@ namespace ProseSample.Substrings.Spg.Witness
             return null;
         }
 
-        private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> region)
+        private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> syntaxTree)
         {
             foreach (var edit in script.Edits)
             {
-                edit.EditOperation.T1Node.SyntaxTree = region;
+                edit.EditOperation.T1Node.SyntaxTree = syntaxTree;
                 if (edit.EditOperation.Parent != null)
                 {
-                    edit.EditOperation.Parent.SyntaxTree = region;
+                    edit.EditOperation.Parent.SyntaxTree = syntaxTree;
                 }
 
                 if (edit.EditOperation is Update<SyntaxNodeOrToken>)
                 {
                     var update = (Update<SyntaxNodeOrToken>)edit.EditOperation;
-                    update.To.SyntaxTree = region;
+                    update.To.SyntaxTree = syntaxTree;
                 }
             }
         }

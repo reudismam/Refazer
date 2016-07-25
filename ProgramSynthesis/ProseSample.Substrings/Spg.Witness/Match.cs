@@ -131,6 +131,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var pattern = (ITreeNode<Token>)kind.DisjunctiveExamples[input].First();
+                var target = (Node)input[rule.Body[0]];
                 var mats = new List<object>();
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
