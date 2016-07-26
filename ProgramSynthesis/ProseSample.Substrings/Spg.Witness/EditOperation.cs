@@ -154,6 +154,19 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             var currentTree = WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
+
+            if (targetNode == null) return null;
+
+            var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 3);
+
+            targetNodeHeight.SyntaxTree = searchedNode.SyntaxTree;
+            targetNodeHeight.Parent = targetNode.Parent;
+            return new Node(targetNodeHeight);
+        }
+
+        public static Node GetNode(ITreeNode<SyntaxNodeOrToken> currentTree, ITreeNode<SyntaxNodeOrToken> searchedNode)
+        {
+            var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
             var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 3);
 
             targetNodeHeight.SyntaxTree = searchedNode.SyntaxTree;

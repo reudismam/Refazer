@@ -14,7 +14,7 @@ namespace ProseSample.Substrings
 
         public override bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)
         {
-            return node.Value.IsKind(Kind) && node.ToString().Equals(Value.ToString())/*IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(Value, node)*/;
+            return node.Value.IsKind(Kind) && IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(Value, node);
         }
 
         public override string ToString()

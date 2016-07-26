@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -60,26 +61,15 @@ namespace TreeEdit.Spg.Match
             var nodes = tree.PostOrderTraversal(node);
             var matchNodes = nodes.Where(v => IsValue(v, pattern)).ToList();
 
-            //var removes = new List<ITreeNode<SyntaxNodeOrToken>>();
+            //var edited = new List<Tuple<ITreeNode<SyntaxNodeOrToken>, List<ITreeNode<SyntaxNodeOrToken>>>>();
             //foreach (var match in matchNodes)
             //{
             //    var children = match.Children;
-            //    var list = new List<List<ITreeNode<SyntaxNodeOrToken>>>();
-            //    foreach (var p in pattern.Children)
-            //    {
-            //        var ns = children.Where(v => IsValue(v, p)).ToList();
-            //        list.Add(ns);
-            //    }
+            //    var list = pattern.Children.Select(p => children.Where(v => IsValue(v, p)).ToList()).ToList();
 
-            //    if (list.Count() > 1)
-            //    {
-            //        removes.Add(match);
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
+            //    if (list.Count <= 1) continue;
 
+            //    var added = new List<ITreeNode<SyntaxNodeOrToken>>();
             //    for (int i = 0; i < list.First().Count; i++)
             //    {
             //        var parent = ConverterHelper.MakeACopy(match);
@@ -88,8 +78,17 @@ namespace TreeEdit.Spg.Match
             //        {
             //            parent.AddChild(c[i], parent.Children.Count());
             //        }
-            //        nodes.Add(parent);
+            //        //matchNodes.Add(parent);
+            //        added.Add(parent);
             //    }
+            //    edited.Add(Tuple.Create(match, added));
+            //}
+
+            //foreach (var e in edited)
+            //{
+            //    int position = matchNodes.FindIndex(o => o.Equals(e.Item1));
+            //    matchNodes.InsertRange(position, e.Item2); 
+            //    matchNodes.RemoveAll(o => o.Equals(e.Item1));
             //}
 
             return matchNodes;

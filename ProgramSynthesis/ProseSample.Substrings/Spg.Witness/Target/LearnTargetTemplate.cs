@@ -37,8 +37,13 @@ namespace ProseSample.Substrings.Spg.Witness.Target
                 }
 
                 var from = Target(edit);
-                //if (from.Value.IsKind(SyntaxKind.EmptyStatement)) continue;
                 var result = EditOperation.GetNode(from);
+                if (result == null)
+                {
+                    var inputTree = (Node)input[rule.Grammar.InputSymbol];
+                   result = EditOperation.GetNode(inputTree.Value, from);
+                }
+
                 kExamples[input] = result;
             }
             return new ExampleSpec(kExamples);
