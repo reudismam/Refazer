@@ -60,6 +60,11 @@ namespace ProseSample.Substrings.Spg.Witness
                 var target = (Node)input[rule.Body[0]];
                 var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
                 var matches = (from Node node in spec.DisjunctiveExamples[input] select node.Value).ToList();
+                if (TreeUpdate.FindNode(currentTree, matches.First().Value) == null)
+                {
+                    var inputTree = (Node)input[rule.Grammar.InputSymbol];
+                    currentTree = inputTree.Value;
+                }
 
                 var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
                 pattern.DescendantNodesAndSelf().ForEach(o => o.Value.Value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value));
@@ -133,7 +138,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var pattern = (ITreeNode<Token>)kind.DisjunctiveExamples[input].First();
-                //var target = (Node)input[rule.Body[0]];
+                var target = (Node)input[rule.Body[0]];
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var mats = new List<object>();
                 foreach (Node node in spec.DisjunctiveExamples[input])
@@ -144,6 +149,26 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (!matches.Any())
                     {
                         matches = MatchManager.Matches(inputTree.Value, pattern);
+                        //todo refactor this
+                        for (int i = 0; i < matches.Count; i++)
+                        {
+                            var item = matches[i];
+                            if (node.Value.Equals(item))
+                            {
+                                var beforeafter = SegmentElementsBeforeAfter(target, matches);
+                                var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
+                                var aIndex = beforeafter.Item2.FindIndex(o => o.Equals(item));
+
+                                if (bIndex != -1)
+                                {
+                                    mats.Add(-(bIndex + 1));
+                                }
+                                else
+                                {
+                                    mats.Add(aIndex + 1);
+                                }
+                            }
+                        }
                     }
                     else
                     {
@@ -162,6 +187,35 @@ namespace ProseSample.Substrings.Spg.Witness
                 kExamples[input] = mats.First();
             }
             return new ExampleSpec(kExamples);
+        }
+
+        private static Tuple<List<ITreeNode<SyntaxNodeOrToken>>, List<ITreeNode<SyntaxNodeOrToken>>> SegmentElementsBeforeAfter(Node target, List<ITreeNode<SyntaxNodeOrToken>> matches)
+        {
+            ITreeNode<SyntaxNodeOrToken> node = null;
+            if (target.Value.Children.Any())
+            {
+                node = target.Value.Children.First();
+            }
+            else
+            {
+                node = target.Value;
+            }
+            var listBefore = new List<ITreeNode<SyntaxNodeOrToken>>();
+            var listAfter = new List<ITreeNode<SyntaxNodeOrToken>>();
+            foreach (var match in matches)
+            {
+                if (match.Value.SpanStart < node.Value.SpanStart)
+                {
+                    listBefore.Add(match);
+                }
+                else
+                {
+                    listAfter.Add(match);
+                }
+            }
+
+            var tuple = Tuple.Create(listBefore, listAfter);
+            return tuple;
         }
     }
 }
