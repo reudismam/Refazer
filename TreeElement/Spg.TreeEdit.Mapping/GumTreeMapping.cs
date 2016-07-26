@@ -167,11 +167,17 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                         var t2descendants = t2Node.DescendantNodes();
                         if (Math.Max(t1descendants.Count, t2descendants.Count) < 100)
                         {
-                            RemoveFromM(t1Node, M);
                             var R = Opt(t1Node, t2Node);
-                            foreach (var edt in R.Where(edt => !M.ContainsKey(edt.Key)).Where(edt => edt.Key.IsLabel(edt.Value.Label)))
+                            if (R.Any())
                             {
-                                M.Add(edt.Key, edt.Value);
+                                RemoveFromM(t1Node, M);
+                                foreach (
+                                    var edt in
+                                        R.Where(edt => !M.ContainsKey(edt.Key))
+                                            .Where(edt => edt.Key.IsLabel(edt.Value.Label)))
+                                {
+                                    M.Add(edt.Key, edt.Value);
+                                }
                             }
                         }
                     }
