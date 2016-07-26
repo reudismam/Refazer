@@ -319,7 +319,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                 }
             }
-            return null;
+            return Tuple.Create<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>>(null, null);
         }
 
         private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> syntaxTree)
