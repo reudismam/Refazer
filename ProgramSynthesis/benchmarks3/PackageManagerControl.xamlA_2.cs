@@ -116,7 +116,7 @@ namespace NuGet.Client.VisualStudio.UI
 
             // Get the minimum version installed in any target project/solution
             var minimumInstalledPackage = target.GetAllTargetsRecursively()
-                .Select(t => t.InstalledPackages.GetInstalledPackage(package.Id))
+                .Select(t => t.InstalledPackages.GetInstalledPackage(Id))
                 .Where(p => p != null)
                 .OrderBy(r => r.Identity.Version)
                 .FirstOrDefault();
@@ -142,7 +142,7 @@ namespace NuGet.Client.VisualStudio.UI
 
             if (!Target.IsSolution)
                 {
-                    var installedPackage = Target.InstalledPackages.GetInstalledPackage(selectedPackage.Id);
+                    var installedPackage = Target.InstalledPackages.GetInstalledPackage(Id);
                     var installedVersion = installedPackage == null ? null : installedPackage.Identity.Version;
                     _packageDetail.DataContext = new PackageDetailControlModel(selectedPackage, installedVersion);
                 }

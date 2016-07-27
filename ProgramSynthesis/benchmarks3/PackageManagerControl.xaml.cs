@@ -105,53 +105,6 @@ namespace NuGet.Client.VisualStudio.UI
             Model.Sources.PackageSourcesChanged += Sources_PackageSourcesChanged;
         }
 
-        // Set the PackageStatus property of the given package.
-        private static void SetPackageStatus(
-            UiSearchResultPackage package,
-            InstallationTarget target)
-        {
-            var latestStableVersion = package.AllVersions
-                .Where(p => !p.Version.IsPrerelease)
-                .Max(p => p.Version);
-
-            // Get the minimum version installed in any target project/solution
-            var minimumInstalledPackage = target.GetAllTargetsRecursively()
-                .Select(t => t.InstalledPackages.GetInstalledPackage(package.Id))
-                .Where(p => p != null)
-                .OrderBy(r => r.Identity.Version)
-                .FirstOrDefault();
-
-            PackageStatus status;
-            if (minimumInstalledPackage != null)
-            {
-                if (minimumInstalledPackage.Identity.Version < latestStableVersion)
-                {
-                    status = PackageStatus.UpdateAvailable;
-                }
-                else
-                {
-                    status = PackageStatus.Installed;
-                }
-            }
-            else
-            {
-                status = PackageStatus.NotInstalled;
-            }
-
-            package.Status = status;
-
-            if (!Target.IsSolution)
-                {
-                    var installedPackage = Target.InstalledPackages.GetInstalledPackage(selectedPackage.Id);
-                    var installedVersion = installedPackage == null ? null : installedPackage.Identity.Version;
-                    _packageDetail.DataContext = new PackageDetailControlModel(selectedPackage, installedVersion);
-                }
-                else
-                {
-                    _packageSolutionDetail.DataContext = new PackageSolutionDetailControlModel(selectedPackage, (VsSolution)Target);
-                }
-        }
-
         private void Sources_PackageSourcesChanged(object sender, EventArgs e)
         {
             // Set _dontStartNewSearch to true to prevent a new search started in
@@ -688,6 +641,42 @@ namespace NuGet.Client.VisualStudio.UI
                     SetPackageStatus(package, Target);
                 }
             }
+        }
+
+        // Set the PackageStatus property of the given package.
+        private static void SetPackageStatus(
+            UiSearchResultPackage package,
+            InstallationTarget target)
+        {
+            var latestStableVersion = package.AllVersions
+                .Where(p => !p.Version.IsPrerelease)
+                .Max(p => p.Version);
+
+            // Get the minimum version installed in any target project/solution
+            var minimumInstalledPackage = target.GetAllTargetsRecursively()
+                .Select(t => t.InstalledPackages.GetInstalledPackage(package.Id))
+                .Where(p => p != null)
+                .OrderBy(r => r.Identity.Version)
+                .FirstOrDefault();
+
+            PackageStatus status;
+            if (minimumInstalledPackage != null)
+            {
+                if (minimumInstalledPackage.Identity.Version < latestStableVersion)
+                {
+                    status = PackageStatus.UpdateAvailable;
+                }
+                else
+                {
+                    status = PackageStatus.Installed;
+                }
+            }
+            else
+            {
+                status = PackageStatus.NotInstalled;
+            }
+
+            package.Status = status;
         }
 
         public bool ShowLicenseAgreement(IEnumerable<PackageAction> operations)
