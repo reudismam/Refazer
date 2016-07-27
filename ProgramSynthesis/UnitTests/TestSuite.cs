@@ -1194,6 +1194,180 @@ namespace UnitTests
             //}
         }
 
+        [Test]
+        public void E4_14623da()
+        {
+            //Load grammar
+            var grammar = GetGrammar();
+
+            string path = GetBasePath();
+
+            //input data
+            string inputText = File.ReadAllText(path + @"benchmarks2\HistoryRepositoryTestsB_1.cs");
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = File.ReadAllText(path + @"benchmarks2\HistoryRepositoryTestsA_1.cs");
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //Examples
+            var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+            var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            for (int i = 0; i < examplesInput.Count; i++)
+            {
+                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
+                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+            }
+
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            ProgramNode program = Utils.Learn(grammar, spec);
+
+            ////Run program
+            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+
+            //foreach (var method in methods)
+            //{
+            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            //}
+        }
+
+        [Test]
+        public void E4_1571862()
+        {
+            //todo create more than one cluster when it would create only one.
+            //Load grammar
+            var grammar = GetGrammar();
+
+            string path = GetBasePath();
+
+            //input data
+            string inputText = File.ReadAllText(path + @"benchmarks2\CommitFailureTestsB_1.cs");
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = File.ReadAllText(path + @"benchmarks2\CommitFailureTestsA_1.cs");
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //Examples
+            var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+            var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            for (int i = 0; i < examplesInput.Count; i++)
+            {
+                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
+                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+            }
+
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            ProgramNode program = Utils.Learn(grammar, spec);
+
+            ////Run program
+            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+
+            //foreach (var method in methods)
+            //{
+            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            //}
+        }
+
+        [Test]
+        public void E5_1571862()
+        {
+            //todo create more than one cluster when it would create only one.
+            //Load grammar
+            var grammar = GetGrammar();
+
+            string path = GetBasePath();
+
+            //input data
+            string inputText = File.ReadAllText(path + @"benchmarks2\CommitFailureTestsB_2.cs");
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = File.ReadAllText(path + @"benchmarks2\CommitFailureTestsA_2.cs");
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //Examples
+            var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+            var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            for (int i = 0; i < examplesInput.Count; i++)
+            {
+                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
+                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+            }
+
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            ProgramNode program = Utils.Learn(grammar, spec);
+
+            ////Run program
+            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+
+            //foreach (var method in methods)
+            //{
+            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            //}
+        }
+
+        [Test]
+        public void E829dec5()
+        {
+            //Load grammar
+            var grammar = GetGrammar();
+
+            string path = GetBasePath();
+
+            //input data
+            string inputText = File.ReadAllText(path + @"benchmarks2\AssociationSetMappingTestsB.cs");
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = File.ReadAllText(path + @"benchmarks2\AssociationSetMappingTestsA.cs");
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //Examples
+            var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+            var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            for (int i = 0; i < examplesInput.Count; i++)
+            {
+                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
+                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+            }
+
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            ProgramNode program = Utils.Learn(grammar, spec);
+
+            ////Run program
+            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+
+            //foreach (var method in methods)
+            //{
+            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            //}
+        }
+
 
         static string GetTestDataFolder(string testDataLocation)
         {
