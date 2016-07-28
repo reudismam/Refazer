@@ -19,7 +19,7 @@ namespace ProseSample
     {
         private static void Main(string[] args)
         {
-            LoadAndRunRepetitiveChangeMultipleEditions4();
+            LoadAndRunRepetitiveChangeMultipleEditionsM();
         }
 
         /// <summary>
@@ -64,7 +64,50 @@ namespace ProseSample
                 WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
             }
         }
-        
+
+        /// <summary>
+        /// Transformation to reprace the call to CSharpKind to a call to IsKind method.
+        /// </summary>
+        private static void LoadAndRunRepetitiveChangeMultipleEditionsM()
+        {
+            //Load grammar
+            var grammar = GetGrammar();
+
+            //input data
+            string inputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\SyntaxTreeExtensionsBM.cs");
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = File.ReadAllText(BaseRelativePath() + @"benchmarks\SyntaxTreeExtensionsAM.cs");
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //Getting examples methods
+            var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
+            var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
+
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            for (int i = 0; i < examplesInput.Count; i++)
+            {
+                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
+                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+            }
+
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            ProgramNode program = Learn(grammar, spec);
+
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration);
+
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
+        }
+
         private static List<SyntaxNodeOrToken> GetNodesByType(SyntaxNodeOrToken outTree, SyntaxKind kind)
         {
             //select nodes of type method declaration
