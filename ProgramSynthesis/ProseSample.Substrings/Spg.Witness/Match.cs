@@ -65,7 +65,15 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
 
                 var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
-                pattern.DescendantNodesAndSelf().ForEach(o => o.Value.Value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value));
+                //pattern.DescendantNodesAndSelf().ForEach(o => o.Value.Value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value));
+                foreach (var o in pattern.DescendantNodesAndSelf())
+                {
+                    var value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value);
+                    if (value != null)
+                    {
+                        o.Value.Value = value;
+                    }
+                }
                 patterns.Add(pattern);
             }
 

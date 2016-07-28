@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
@@ -9,7 +10,8 @@ namespace ProseSample.Substrings
     {
         public DynToken(SyntaxKind kind, ITreeNode<SyntaxNodeOrToken> value) : base(kind, value)
         {
-            Value = value;
+            //Value = value;
+            if (value == null) throw new ArgumentException("value cannot be null");
         }
 
         public override bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)
