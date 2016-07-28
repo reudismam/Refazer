@@ -11,7 +11,6 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
-using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -63,15 +62,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
-                    //PrintUtil<SyntaxNodeOrToken>.PrintScript(script);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
-                    //ccs.ForEach(PrintUtil<SyntaxNodeOrToken>.PrintScript);
                     kMatches = ClusterScript(ccs);
-                    //var newccs = CompactScript(ccs);
                     kMatches = kMatches.Select(CompactScript).ToList();
-                    //kMatches.Sort(Less);
-                    //kMatches.OrderBy(o => );
-                    //kMatches.ForEach(cc => cc.ForEach(s => PrintUtil<SyntaxNodeOrToken>.PrintScript(s.Edits)));
                 }
                 //kMatches = kMatches.GetRange(0, 1);
                 kExamples[input] = new List<List<List<Script>>> { kMatches };
