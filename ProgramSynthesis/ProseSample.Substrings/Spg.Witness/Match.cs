@@ -69,10 +69,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (var o in pattern.DescendantNodesAndSelf())
                 {
                     var value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value);
-                    if (value != null)
-                    {
-                        o.Value.Value = value;
-                    }
+                    if (value == null) return null;
+                   o.Value.Value = value;
                 }
                 patterns.Add(pattern);
             }

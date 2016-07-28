@@ -69,6 +69,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     kMatches = ClusterScript(ccs);
                     //var newccs = CompactScript(ccs);
                     kMatches = kMatches.Select(CompactScript).ToList();
+                    //kMatches.Sort(Less);
+                    //kMatches.OrderBy(o => );
                     //kMatches.ForEach(cc => cc.ForEach(s => PrintUtil<SyntaxNodeOrToken>.PrintScript(s.Edits)));
                 }
                 //kMatches = kMatches.GetRange(0, 1);
@@ -76,6 +78,16 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
+        }
+
+        private static int Less(List<Script> scripts1, List<Script> scripts2)
+        {
+            var s1First = scripts1.First().Edits.First().EditOperation;
+            var s2First = scripts2.First().Edits.First().EditOperation;
+            var aToComapre = s1First.Parent ?? s1First.T1Node;
+            var bToCompare = s2First.Parent ?? s2First.T1Node;
+            if (aToComapre.Value.SpanStart < bToCompare.Value.SpanStart) return -1;
+            return aToComapre.Value.SpanStart > bToCompare.Value.SpanStart ? 1 : 0;
         }
 
         /// <summary>
