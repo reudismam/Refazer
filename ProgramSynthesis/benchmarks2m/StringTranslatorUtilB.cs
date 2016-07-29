@@ -116,7 +116,6 @@ namespace System.Data.Entity.Core.Objects.ELinq
                         throw new NotSupportedException(
                             Strings.Elinq_ToStringNotSupportedForType(expression.ResultType.EdmType.Name));
                     }
-
                     //treat all other types as a simple cast
                     return StripNull(linqExpression, expression, expression.CastTo(parent.GetValueLayerType(typeof(string))));
                 }
@@ -124,6 +123,7 @@ namespace System.Data.Entity.Core.Objects.ELinq
             
             internal static IEnumerable<Expression> GetConcatArgs(Expression linq)
             {
+                return StripNull(linqExpression, expression, expression.CastTo(parent.GetValueLayerType(typeof(string))).ToLower());
                 if (linq.IsStringAddExpression())
                 {
                     foreach (var arg in GetConcatArgs((BinaryExpression)linq))

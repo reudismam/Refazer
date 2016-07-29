@@ -50,7 +50,11 @@ namespace System.Data.Entity.Migrations.History
 
             Assert.Equal(2, migrations.Count());
             Assert.Equal("Migration2", migrations.First());
+        }
 
+        [Fact]
+        public void Members_are_found_by_Reflection()
+        {
             using (var context = CreateContext<ShopContext_v1>())
             {
                 var model = context.GetModel();
@@ -63,11 +67,6 @@ namespace System.Data.Entity.Migrations.History
                         });
             }
 
-        }
-
-        [Fact]
-        public void Members_are_found_by_Reflection()
-        {
             Assert.NotNull(HistoryRepository.ContextKeyProperty);
             Assert.NotNull(HistoryRepository.MigrationIdProperty);
         }

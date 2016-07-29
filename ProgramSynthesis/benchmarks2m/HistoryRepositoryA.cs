@@ -145,25 +145,6 @@ namespace System.Data.Entity.Migrations.History
                             commandTracer.CommandTrees.OfType<DbModificationCommandTree>().ToList());
                     }
                 }
-
-                 using (var context = CreateContext(connection))
-                {
-                    context.Database.ExecuteSqlCommand(
-                        ((IObjectContextAdapter)context).ObjectContext.CreateDatabaseScript());
-
-                    context.History.Add(
-                        new HistoryRow
-                            {
-                                MigrationId = MigrationAssembly
-                                    .CreateMigrationId(Strings.InitialCreate)
-                                    .RestrictTo(_migrationIdMaxLength),
-                                ContextKey = _contextKey,
-                                Model = new ModelCompressor().Compress(versionedModel.Model),
-                                ProductVersion = _productVersion
-                            });
-
-                    context.SaveChanges();
-                }
             }
             finally
             {
@@ -194,6 +175,25 @@ namespace System.Data.Entity.Migrations.History
 
         public virtual XDocument GetLastModel(out string migrationId, out string productVersion, string contextKey = null)
         {
+            using (var context = CreateContext(connection))
+                {
+                    context.Database.ExecuteSqlCommand(
+                        ((IObjectContextAdapter)context).ObjectContext.CreateDatabaseScript());
+
+                    context.History.Add(
+                        new HistoryRow
+                            {
+                                MigrationId = MigrationAssembly
+                                    .CreateMigrationId(Strings.InitialCreate)
+                                    .RestrictTo(_migrationIdMaxLength),
+                                ContextKey = _contextKey,
+                                Model = new ModelCompressor().Compress(versionedModel.Model),
+                                ProductVersion = _productVersion
+                            });
+
+                    context.SaveChanges();
+                }
+                
             migrationId = null;
             productVersion = null;
 

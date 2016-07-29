@@ -93,14 +93,6 @@ namespace System.Data.Entity.Core.Objects.DataClasses
                     yield return (assocSet.ElementType).AssociationEndMembers[1];
                 }
             }
-
-            var entitySet = ownerKey.GetEntitySet(wrappedOwner.Context.MetadataWorkspace);
-            Debug.Assert(entitySet != null, "Unable to find entity set");
-
-            // Get association types in which current entity's type is one of the ends.
-            var associations = MetadataHelper.GetAssociationsForEntitySet(entitySet);
-
-            var skippedFK = false;
         }
 
         // <summary>
@@ -108,6 +100,14 @@ namespace System.Data.Entity.Core.Objects.DataClasses
         // </summary>
         internal void SetExpensiveLoader(ExpensiveOSpaceLoader loader)
         {
+            var entitySet = ownerKey.GetEntitySet(wrappedOwner.Context.MetadataWorkspace);
+            Debug.Assert(entitySet != null, "Unable to find entity set");
+
+            // Get association types in which current entity's type is one of the ends.
+            var associations = MetadataHelper.GetAssociationsForEntitySet(entitySet);
+
+            var skippedFK = false;
+            
             DebugCheck.NotNull(loader);
 
             _expensiveLoader = loader;

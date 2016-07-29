@@ -81,8 +81,20 @@ namespace System.Data.Entity.Interception
                             ? Times.AtLeast(expectedCommitCount)
                             : Times.Exactly(expectedCommitCount));
                 }
+            }
+            finally
+            {
+                DbInterception.Remove(failingTransactionInterceptor);
+                MutableResolver.ClearResolvers();
+            }
 
-                using (var context = new BlogContextCommit())
+            DbDispatchersHelpers.AssertNoInterceptors();
+        }
+        
+        [Fact]
+        public void No_TransactionHandler_and_no_ExecutionStrategy_throws_CommitFailedException_on_commit_fail()
+        {
+            using (var context = new BlogContextCommit())
                 {
                     ExtendedSqlAzureExecutionStrategy.ExecuteNew(
                         () =>
@@ -100,19 +112,7 @@ namespace System.Data.Entity.Interception
                         }
                     }
                 }
-            }
-            finally
-            {
-                DbInterception.Remove(failingTransactionInterceptor);
-                MutableResolver.ClearResolvers();
-            }
-
-            DbDispatchersHelpers.AssertNoInterceptors();
-        }
-        
-        [Fact]
-        public void No_TransactionHandler_and_no_ExecutionStrategy_throws_CommitFailedException_on_commit_fail()
-        {
+                
             Execute_commit_failure_test(
                 c => Assert.Throws<DataException>(() => c()).InnerException.ValidateMessage("CommitFailed"),
                 c => Assert.Throws<CommitFailedException>(() => c()).ValidateMessage("CommitFailed"),

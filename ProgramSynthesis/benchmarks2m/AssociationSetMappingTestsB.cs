@@ -30,7 +30,11 @@ namespace System.Data.Entity.Core.Mapping
             associationSetMapping.RemoveCondition(conditionPropertyMapping);
 
             Assert.Empty(associationSetMapping.Conditions);
+        }
 
+        [Fact]
+        public void Can_initialize_with_entity_set()
+        {
             var entitySet = new EntitySet();
             var associationSet = new AssociationSet("AS", new AssociationType("A", XmlConstants.ModelNamespace_3, false, DataSpace.CSpace));
             var associationSetMapping
@@ -39,11 +43,7 @@ namespace System.Data.Entity.Core.Mapping
                 = new ConditionPropertyMapping(null, new EdmProperty("C", TypeUsage.Create(new PrimitiveType() { DataSpace = DataSpace.SSpace })), 42, null);
 
             associationSetMapping.SetReadOnly();
-        }
-
-        [Fact]
-        public void Can_initialize_with_entity_set()
-        {
+            
             var entitySet = new EntitySet();
             var associationSet = new AssociationSet("AS", new AssociationType("A", XmlConstants.ModelNamespace_3, false, DataSpace.CSpace));
 

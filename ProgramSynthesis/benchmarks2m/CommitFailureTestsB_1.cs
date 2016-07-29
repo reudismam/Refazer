@@ -77,21 +77,6 @@ namespace System.Data.Entity.Interception
                             ? Times.AtLeast(expectedCommitCount)
                             : Times.Exactly(expectedCommitCount));
                 }
-
-                using (var context = new BlogContextCommit())
-                {
-                    Assert.Equal(expectedBlogs, context.Blogs.Count());
-
-                    using (var transactionContext = new TransactionContext(context.Database.Connection))
-                    {
-                        using (var infoContext = GetInfoContext(transactionContext))
-                        {
-                            Assert.True(
-                                !infoContext.TableExists("__Transactions")
-                                || !transactionContext.Transactions.Any());
-                        }
-                    }
-                }
             }
             finally
             {
@@ -105,6 +90,21 @@ namespace System.Data.Entity.Interception
         [Fact]
         public void No_TransactionHandler_and_no_ExecutionStrategy_throws_CommitFailedException_on_commit_fail()
         {
+            using (var context = new BlogContextCommit())
+                {
+                    Assert.Equal(expectedBlogs, context.Blogs.Count());
+
+                    using (var transactionContext = new TransactionContext(context.Database.Connection))
+                    {
+                        using (var infoContext = GetInfoContext(transactionContext))
+                        {
+                            Assert.True(
+                                !infoContext.TableExists("__Transactions")
+                                || !transactionContext.Transactions.Any());
+                        }
+                    }
+                }
+            
             Execute_commit_failure_test(
                 c => Assert.Throws<DataException>(() => c()).InnerException.ValidateMessage("CommitFailed"),
                 c => Assert.Throws<CommitFailedException>(() => c()).ValidateMessage("CommitFailed"),

@@ -29,8 +29,6 @@ namespace System.Data.Entity
         private static MethodInfo GetMethod(string methodName, Func<Type[]> getParameterTypes)
         {
             return GetMethod(methodName, getParameterTypes.Method, 0);
-
-            return GetMethod(methodName, getParameterTypes.Method, 2);
         }
 
         private static MethodInfo GetMethod(string methodName, Func<Type, Type, Type[]> getParameterTypes)

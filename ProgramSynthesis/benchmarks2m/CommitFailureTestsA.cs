@@ -53,7 +53,11 @@ namespace System.Data.Entity.Interception
             {
                 DbInterception.Remove(failingTransactionInterceptor);
             }
+        }
 
+        [Fact]
+        public void No_TransactionHandler_and_no_ExecutionStrategy_throws_CommitFailedException_on_commit_fail()
+        {
             try
             {
                 CommitFailureHandler_with_ExecutionStrategy_test(
@@ -80,11 +84,7 @@ namespace System.Data.Entity.Interception
             {
                 DbInterception.Remove(failingTransactionInterceptor);
             }
-        }
-
-        [Fact]
-        public void No_TransactionHandler_and_no_ExecutionStrategy_throws_CommitFailedException_on_commit_fail()
-        {
+            
             Execute_commit_failure_test(
                 c => Assert.Throws<DataException>(() => c()).InnerException.ValidateMessage("CommitFailed"),
                 c => Assert.Throws<CommitFailedException>(() => c()).ValidateMessage("CommitFailed"),

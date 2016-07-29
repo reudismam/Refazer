@@ -48,15 +48,15 @@ namespace System.Data.Entity.SqlServer
                 Assert.True(context.InitializerCalled);
                 Assert.False(context.Exists);
             }
-
-            context.Database.Initialize(force: false);
-
-            Assert.True(context.InitializerCalled);
-            Assert.True(context.Exists);
         }
 
         public void Dispose()
         {
+            context.Database.Initialize(force: false);
+
+            Assert.True(context.InitializerCalled);
+            Assert.True(context.Exists);
+            
             MutableResolver.ClearResolvers();
         }
 

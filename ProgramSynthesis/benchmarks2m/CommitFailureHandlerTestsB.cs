@@ -34,18 +34,6 @@ namespace System.Data.Entity.Infrastructure
                     Assert.Same(((EntityConnection)context.Connection).StoreConnection, handler.Connection);
                     Assert.IsType<TransactionContext>(handler.TransactionContext);
                 }
-
-                var context = new DbContext("c");
-
-                using (var handler = new CommitFailureHandler())
-                {
-                    handler.Initialize(context, context.Database.Connection);
-
-                    Assert.Null(handler.ObjectContext);
-                    Assert.Same(context, handler.DbContext);
-                    Assert.Same(context.Database.Connection, handler.Connection);
-                    Assert.IsType<TransactionContext>(handler.TransactionContext);
-                }
             }
 
             [Fact]

@@ -43,8 +43,13 @@ namespace System.Data.Entity.Migrations.History
 
                 var historyRepository2
                     = new HistoryRepository(Mock.Of<InternalContextForMock>(), ConnectionString, ProviderFactory, "Key2", null, HistoryContext.DefaultFactory);
+            }
+        }
 
-                ExecuteOperations(
+        [Fact]
+        public void Members_are_found_by_Reflection()
+        {
+            ExecuteOperations(
                     new[] { historyRepository2.CreateInsertOperation("Migration 2", versionedModel) });
 
                 string migrationId, _;
@@ -57,12 +62,7 @@ namespace System.Data.Entity.Migrations.History
 
                 Assert.NotNull(model);
                 Assert.Equal("Migration 2", migrationId);
-            }
-        }
-
-        [Fact]
-        public void Members_are_found_by_Reflection()
-        {
+                
             Assert.NotNull(HistoryRepository.ContextKeyProperty);
             Assert.NotNull(HistoryRepository.MigrationIdProperty);
         }

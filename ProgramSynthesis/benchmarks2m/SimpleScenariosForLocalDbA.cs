@@ -50,7 +50,10 @@ namespace ProductivityApiTests
 
                 Assert.Equal(@"(localdb)\" + _localDbType, context.Database.Connection.DataSource);
             }
+        }
 
+        public void Dispose()
+        {
             using (var context = new SimpleLocalDbModelContext())
             {
                 var product = new Product
@@ -66,10 +69,7 @@ namespace ProductivityApiTests
 
                 Assert.Equal(@"(localdb)\" + _localDbType, context.Database.Connection.DataSource);
             }
-        }
-
-        public void Dispose()
-        {
+            
             try
             {
                 // Ensure LocalDb databases are deleted after use so that LocalDb doesn't throw if

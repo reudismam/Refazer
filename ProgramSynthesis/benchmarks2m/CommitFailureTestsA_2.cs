@@ -26,7 +26,7 @@ namespace System.Data.Entity.Interception
         {
             Execute_commit_failure_test(
                 c => Assert.Throws<DataException>(() => ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)).InnerException.ValidateMessage("CommitFailed"),
-                c => Assert.Throws<CommitFailedException>(() => ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)).ValidateMessage("CommitFailed"),
+                c => Assert.Throws<CommitFailedException>(() => c()).ValidateMessage("CommitFailed"),
                 expectedBlogs: 1,
                 useTransactionHandler: false,
                 useExecutionStrategy: false,
@@ -38,7 +38,7 @@ namespace System.Data.Entity.Interception
         {
             Execute_commit_failure_test(
                 c => Assert.Throws<DataException>(() => c()).InnerException.ValidateMessage("CommitFailed"),
-                c => Assert.Throws<CommitFailedException>(() => c()).ValidateMessage("CommitFailed"),
+                c => Assert.Throws<CommitFailedException>(() => ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)).ValidateMessage("CommitFailed"),
                 expectedBlogs: 2,
                 useTransactionHandler: false,
                 useExecutionStrategy: false,
