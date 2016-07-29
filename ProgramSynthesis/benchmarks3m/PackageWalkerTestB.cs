@@ -47,7 +47,11 @@ namespace NuGet.Test
                                                                   NullLogger.Instance,
                                                                   updateDependencies: true,
                                                                   allowPrereleaseVersions: false) { AcceptedTargets = PackageTargets.Project };
+        }
 
+        [Fact]
+        public void ReverseDependencyWalkerUsersVersionAndIdToDetermineVisited()
+        {
             // Act
             var packages = resolver.ResolveOperations(B101).ToList();
 
@@ -67,11 +71,7 @@ namespace NuGet.Test
                                                                           allowPrereleaseVersions: false);
 
             var operations = resolver.ResolveOperations(packageA2).ToList();
-        }
-
-        [Fact]
-        public void ReverseDependencyWalkerUsersVersionAndIdToDetermineVisited()
-        {
+            
             // Arrange
             // A 1.0 -> B 1.0
             IPackage packageA1 = PackageUtility.CreatePackage("A",

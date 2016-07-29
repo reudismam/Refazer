@@ -137,7 +137,12 @@ namespace NuGet.Client.VisualStudio.UI
             }
             else
             {
-                // search in active package source
+            }
+        }
+
+        private void Sources_PackageSourcesChanged(object sender, EventArgs e)
+        {
+            // search in active package source
                 if (activeSource == null)
                 {
                     var loader = new PackageLoader(
@@ -170,11 +175,7 @@ namespace NuGet.Client.VisualStudio.UI
                         option);
                     _packageList.Loader = loader;
                 }
-            }
-        }
-
-        private void Sources_PackageSourcesChanged(object sender, EventArgs e)
-        {
+                
             // Set _dontStartNewSearch to true to prevent a new search started in
             // _sourceRepoList_SelectionChanged(). This method will start the new
             // search when needed by itself.

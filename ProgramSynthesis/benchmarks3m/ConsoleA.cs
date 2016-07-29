@@ -93,9 +93,6 @@ namespace NuGet.Common
                 case Client.MessageLevel.Info:
                     WriteLine(message, args);
                     break;
-                case Client.MessageLevel.Warning:
-                    WriteWarning(message, args);
-                    break;
                 case MessageLevel.Debug:
                     WriteColor(Out, ConsoleColor.Gray, message, args);
                     break;
@@ -104,6 +101,15 @@ namespace NuGet.Common
 
         public void Write(object value)
         {
+            switch (level)
+            {
+                case Client.MessageLevel.Warning:
+                    WriteWarning(message, args);
+                    break;
+                case MessageLevel.Debug:
+                    WriteColor(Out, ConsoleColor.Gray, message, args);
+                    break;
+            }
             Out.Write(value);
         }
 

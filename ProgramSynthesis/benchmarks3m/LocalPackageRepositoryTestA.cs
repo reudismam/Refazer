@@ -29,12 +29,12 @@ namespace NuGet.Test
             Assert.Equal(3, mockFileSystem.Deleted.Count);
             Assert.True(mockFileSystem.Deleted.Contains(""));
             Assert.True(mockFileSystem.Deleted.Contains(Path.Combine(mockFileSystem.Root, "A.1.0")));
-            Assert.True(mockFileSystem.Deleted.Contains(Path.Combine(mockFileSystem.Root, PathFixUtility.FixPath(@"A.1.0\A.1.0.nupkg"))));
         }
         
         [Fact]
         public void GetPackageFilesOnlyDetectsFilesWithPackageExtension()
         {
+            Assert.True(mockFileSystem.Deleted.Contains(Path.Combine(mockFileSystem.Root, PathFixUtility.FixPath(@"A.1.0\A.1.0.nupkg"))));
             // Arrange
             var mockFileSystem = new MockProjectSystem();
             mockFileSystem.AddFile("foo.nupkg");

@@ -78,18 +78,17 @@ namespace NuGet
             }
 
             return packages.FirstOrDefault();
+        }
 
+        public static IDisposable StartOperation(this IPackageRepository self, string operation, string mainPackageId, string mainPackageVersion)
+        {
             var packages = repository.FindPackages(packageId, versionSpec, allowPrereleaseVersions, allowUnlisted);
 
             if (constraintProvider != null)
             {
                 packages = FilterPackagesByConstraints(constraintProvider, packages, packageId, allowPrereleaseVersions);
             }
-
-        }
-
-        public static IDisposable StartOperation(this IPackageRepository self, string operation, string mainPackageId, string mainPackageVersion)
-        {
+            
             IOperationAwareRepository repo = self as IOperationAwareRepository;
             if (repo != null)
             {

@@ -44,13 +44,13 @@ namespace NuGet.Client
         {
             await DetectVersionWhenNeccessary();
             return await _repo.Search(searchTerm, filters, skip, take, cancellationToken);
-
-            await DetectVersionWhenNeccessary();
-            return await _repo.GetPackageMetadata(id, version);
         }
 
         private async Task DetectVersionWhenNeccessary(CancellationToken cancellationToken)
         {
+            await DetectVersionWhenNeccessary();
+            return await _repo.GetPackageMetadata(id, version);
+
             await _lock.WaitAsync();
             try
             {

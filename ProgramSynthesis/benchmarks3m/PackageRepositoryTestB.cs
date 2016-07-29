@@ -44,9 +44,6 @@ namespace NuGet.Test
             IPackage package1 = repository.ResolveDependency(
                 dependency1, constraintProvider: null, allowPrereleaseVersions: false, 
                 preferListedPackages: false, dependencyVersion: DependencyVersion.Lowest);
-            IPackage package2 = repository.ResolveDependency(
-                dependency2, constraintProvider: null, allowPrereleaseVersions: false,
-                preferListedPackages: false, dependencyVersion: DependencyVersion.Lowest);
             IPackage package3 = repository.ResolveDependency(
                 dependency3, constraintProvider: null, allowPrereleaseVersions: false,
                 preferListedPackages: false, dependencyVersion: DependencyVersion.Lowest);
@@ -73,6 +70,10 @@ namespace NuGet.Test
         [Fact]
         public void FindByIdReturnsPackage()
         {
+            IPackage package2 = repository.ResolveDependency(
+                dependency2, constraintProvider: null, allowPrereleaseVersions: false,
+                preferListedPackages: false, dependencyVersion: DependencyVersion.Lowest);
+            
             // Arrange
             var repo = GetLocalRepository();
 

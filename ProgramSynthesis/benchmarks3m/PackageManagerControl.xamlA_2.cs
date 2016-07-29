@@ -137,7 +137,10 @@ namespace NuGet.Client.VisualStudio.UI
             {
                 status = PackageStatus.NotInstalled;
             }
+        }
 
+        private void Sources_PackageSourcesChanged(object sender, EventArgs e)
+        {
             package.Status = status;
 
             if (!Target.IsSolution)
@@ -150,10 +153,7 @@ namespace NuGet.Client.VisualStudio.UI
                 {
                     _packageSolutionDetail.DataContext = new PackageSolutionDetailControlModel(selectedPackage, (VsSolution)Target);
                 }
-        }
-
-        private void Sources_PackageSourcesChanged(object sender, EventArgs e)
-        {
+                
             // Set _dontStartNewSearch to true to prevent a new search started in
             // _sourceRepoList_SelectionChanged(). This method will start the new
             // search when needed by itself.

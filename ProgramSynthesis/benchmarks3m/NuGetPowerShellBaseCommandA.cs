@@ -128,11 +128,7 @@ namespace NuGet.Client.VisualStudio.PowerShell
                 case MessageLevel.Debug:
                     WriteVerbose(formattedMessage);
                     break;
-
-                case MessageLevel.Warning:
-                    WriteWarning(formattedMessage);
-                    break;
-
+                    
                 case Client.MessageLevel.Info:
                     WriteLine(formattedMessage);
                     break;
@@ -145,6 +141,20 @@ namespace NuGet.Client.VisualStudio.PowerShell
 
         internal void Execute()
         {
+            switch (level)
+            {
+                case MessageLevel.Warning:
+                    WriteWarning(formattedMessage);
+                    break;
+
+                case Client.MessageLevel.Info:
+                    WriteLine(formattedMessage);
+                    break;
+
+                case Client.MessageLevel.Error:
+                    WriteError(formattedMessage);
+                    break;
+            }
             BeginProcessing();
             ProcessRecord();
             EndProcessing();

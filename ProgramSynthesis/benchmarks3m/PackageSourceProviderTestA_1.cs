@@ -50,7 +50,11 @@ namespace NuGet.Test
             Assert.Equal("urlB", values[2].Source);
             Assert.Equal("B", values[2].Name);
             Assert.False(values[2].IsEnabled);
+        }
 
+        [Fact]
+        public void TestNoPackageSourcesAreReturnedIfUserSettingsIsEmpty()
+        {
             // Arrange
             var expectedSources = new[] { new PackageSource("one", "one"), new PackageSource("two", "two"), new PackageSource("three", "three") };
             var settings = new Mock<ISettings>(MockBehavior.Strict);
@@ -77,11 +81,7 @@ namespace NuGet.Test
                         Assert.Equal("three", values[2].Value);
                     })
                     .Verifiable();
-        }
-
-        [Fact]
-        public void TestNoPackageSourcesAreReturnedIfUserSettingsIsEmpty()
-        {
+                    
             // Arrange
             var provider = CreatePackageSourceProvider();
 

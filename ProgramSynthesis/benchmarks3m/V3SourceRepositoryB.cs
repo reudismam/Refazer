@@ -85,7 +85,11 @@ namespace NuGet.Client
                 "Received {1} hits from {0}",
                 queryUrl.ToString(),
                 data.Count);
+        }
 
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The HttpClient can be left open until VS shuts down.")]
+        public void V3SourceRepository1(PackageSource source, string host)
+        {
             // Resolve all the objects
             List<JObject> outputs = new List<JObject>(take);
             foreach (var result in data.Take(take).Cast<JObject>())
@@ -106,6 +110,32 @@ namespace NuGet.Client
             }
 
             return outputs;
+            
+            _source = source;
+            _root = new Uri(source.Url);
+
+            // TODO: Get context from current UI activity (PowerShell, Dialog, etc.)
+            _userAgent = UserAgentUtil.GetUserAgent("NuGet.Client", host);
+
+            _http = new System.Net.Http.HttpClient(
+                new TracingHttpHandler(
+                    NuGetTraceSources.V3SourceRepository,
+                    new SetUserAgentHandler(
+                        _userAgent,
+                        new HttpClientHandler())));
+
+            // Check if we should disable the browser file cache
+            FileCacheBase cache = new BrowserFileCache();
+            if (String.Equals(Environment.GetEnvironmentVariable("NUGET_DISABLE_IE_CACHE"), "true", StringComparison.OrdinalIgnoreCase))
+            {
+                cache = new NullFileCache();
+            }
+
+            cache = new NullFileCache(); // +++ Disable caching for testing
+
+            _client = new DataClient(
+                _http,
+                cache);
         }
 
         private static readonly Uri[] ResultItemRequiredProperties = new Uri[] {
@@ -140,36 +170,6 @@ namespace NuGet.Client
         public override PackageSource Source
         {
             get { return _source; }
-        }
-
-        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The HttpClient can be left open until VS shuts down.")]
-        public V3SourceRepository(PackageSource source, string host)
-        {
-            _source = source;
-            _root = new Uri(source.Url);
-
-            // TODO: Get context from current UI activity (PowerShell, Dialog, etc.)
-            _userAgent = UserAgentUtil.GetUserAgent("NuGet.Client", host);
-
-            _http = new System.Net.Http.HttpClient(
-                new TracingHttpHandler(
-                    NuGetTraceSources.V3SourceRepository,
-                    new SetUserAgentHandler(
-                        _userAgent,
-                        new HttpClientHandler())));
-
-            // Check if we should disable the browser file cache
-            FileCacheBase cache = new BrowserFileCache();
-            if (String.Equals(Environment.GetEnvironmentVariable("NUGET_DISABLE_IE_CACHE"), "true", StringComparison.OrdinalIgnoreCase))
-            {
-                cache = new NullFileCache();
-            }
-
-            cache = new NullFileCache(); // +++ Disable caching for testing
-
-            _client = new DataClient(
-                _http,
-                cache);
         }
 
         public DataClient DataClient

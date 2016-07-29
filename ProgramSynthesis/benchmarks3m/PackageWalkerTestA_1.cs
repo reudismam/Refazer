@@ -26,7 +26,11 @@ namespace NuGet.Test
                                                              ignoreDependencies: false,
                                                              allowPrereleaseVersions: false,
                                                              dependencyVersion: DependencyVersion.Lowest);
+        }
 
+        [Fact]
+        public void ReverseDependencyWalkerUsersVersionAndIdToDetermineVisited()
+        {
             // Act & Assert
             ExceptionAssert.Throws<InvalidOperationException>(() => resolver.ResolveOperations(package), "Unable to resolve dependency 'B'.");
 
@@ -40,11 +44,7 @@ namespace NuGet.Test
 
             // Act
             var operations = resolver.ResolveOperations(packageA).ToList();
-        }
-
-        [Fact]
-        public void ReverseDependencyWalkerUsersVersionAndIdToDetermineVisited()
-        {
+            
             // Arrange
             // A 1.0 -> B 1.0
             IPackage packageA1 = PackageUtility.CreatePackage("A",
