@@ -95,6 +95,8 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
+
+                //var nodes = ContextNodes(spec, input, inputTree);
                 var inputTreeCopy = ConverterHelper.MakeACopy(inputTree.Value);
                 var nodes = GetAnchorNodes(spec, input, inputTree, inputTreeCopy);
 
@@ -127,7 +129,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var anode = new Node(parentNode);
                     kMatches.Add(anode);
                     ConfigureContext(parentNode, script);
-                }
+            }
                 kExamples[input] = kMatches;
             }
             return new SubsequenceSpec(kExamples);
@@ -165,6 +167,67 @@ namespace ProseSample.Substrings.Spg.Witness
                     var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
                     nodes.Add(node);
                 }
+            }
+            return nodes;
+        }
+
+        private static List<Node> ContextNodes(SubsequenceSpec spec, State input, Node inputTree)
+        {
+            var nodes = new List<Node>();
+
+            foreach (Script script in spec.Examples[input])
+            {
+                var parent = script.Edits.First().EditOperation.Parent;
+                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+
+                /*if more than one operation occurs if more than an edit operation in the parent.
+                For instance, an insert and an move with the parent as target.
+                */
+                if (children.Count > 1)
+                {
+                    var iTreeParent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+                    var anchorParent = new AnchorNode(value);
+                    anchorParent.Parent = iTreeParent;
+                    //anchorParent.Parent = iTreeParent;
+
+                    nodes.Add(new Node(value));
+                }
+                else
+                {
+                    var firstOperation = script.Edits.First();
+                    //In these cases, the edit node that the technique is putting is new on the context node.
+                    if (firstOperation.EditOperation is Insert<SyntaxNodeOrToken> ||
+                        firstOperation.EditOperation is Move<SyntaxNodeOrToken>)
+                    {
+                        var tuple = ConfigContextBeforeAfterNode(firstOperation, inputTree.Value);
+                        if (tuple.Item2 != null)
+                        {
+                            nodes.Add(new Node(tuple.Item2));
+                        }
+                        else if (tuple.Item1 != null)
+                        {
+                            nodes.Add(new Node(tuple.Item1));
+                        }
+                        else
+                        {
+                            var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+                            nodes.Add(new Node(value));
+                        }
+                    }
+                    else
+                    {
+                        var node = TreeUpdate.FindNode(inputTree.Value, script.Edits.First().EditOperation.T1Node.Value);
+                        nodes.Add(new Node(node));
+                    }
+                }
+                /*else
+                {
+                    var connectedComponents = ComputeConnectedComponents(script);
+                    var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
+                    var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
+                    nodes.Add(node);
+                }*/
             }
             return nodes;
         }
@@ -268,6 +331,45 @@ namespace ProseSample.Substrings.Spg.Witness
             ConfigureParentSyntaxTree(script, anchor);
             WitnessFunctions.TreeUpdateDictionary.Add(anchor, treeUp);
             WitnessFunctions.CurrentTrees[anchor] = anchor;
+        }
+
+        private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> ConfigContextBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> inputTree)
+        {
+            //Get a reference for the node that was modified on the T1 tree.
+            ITreeNode<SyntaxNodeOrToken> inputNode = null;
+            //if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
+            if (edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>)
+            {
+                inputNode = edit.EditOperation.T1Node;
+            }
+
+            var previousTree = new TreeUpdate(inputTree);
+            var copy = ConverterHelper.MakeACopy(inputTree);
+
+            Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
+            ITreeNode<SyntaxNodeOrToken> treeNode = null;
+            if (inputNode == null)
+            {
+                previousTree.ProcessEditOperation(edit.EditOperation);
+                var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+                beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
+            }
+            else
+            {
+                var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+                beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
+                treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
+                previousTree.ProcessEditOperation(edit.EditOperation);
+            }
+
+            return beforeAfterAnchorNode;
+            //Get the nodes before and after the input node.
+            //Location of the left, right, and after node.
+            /*var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item1.Value) : null;
+            var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item2.Value) : null;
+
+            var node = new AnchorNode(treeNode, leftNode, rightNode);
+            return node;*/
         }
 
         private static AnchorNode ConfigAnchorBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> anchorNode, ITreeNode<SyntaxNodeOrToken> inputTree)

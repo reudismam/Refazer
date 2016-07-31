@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TreeEdit.Spg.Print;
 using TreeElement;
@@ -105,6 +106,25 @@ namespace TreeEdit.Spg.Script
                     editScript[i] = insert;
                 }
             }
+
+            var removes = new List<Tuple<EditOperation<T>, EditOperation<T>>>();
+            var deletes = new List<EditOperation<T>>();
+            foreach (var v in editScript)
+            {
+                if (v is Move<T>)
+                {
+                    EditOperation<T> insert = new Insert<T>(v.T1Node, v.Parent, v.K);
+                    removes.Add(Tuple.Create(v, v));
+                    deletes.Add(new Delete<T>(v.T1Node));
+                }
+            }
+
+            //editScript.AddRange(deletes);
+            foreach (var v in deletes)
+            {
+                
+            }
+
 
             return editScript;
         }
