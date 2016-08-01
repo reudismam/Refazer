@@ -80,7 +80,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             if (editOperation is Delete<SyntaxNodeOrToken>)
             {
-                CurrentTree = RemoveNode(CurrentTree, editOperation.T1Node);             
+                CurrentTree = RemoveNode(CurrentTree, editOperation.T1Node);
             }
         }
 
@@ -160,11 +160,15 @@ namespace TreeEdit.Spg.TreeEdit.Update
             }
         }
 
-        public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree,  SyntaxNodeOrToken node)
+        public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree, SyntaxNodeOrToken node)
         {
-            return tree.DescendantNodesAndSelf().FirstOrDefault(item => node.IsKind(item.Value.Kind()) 
-                                                                        && item.Value.Span.Contains(node.Span) 
-                                                                        && node.Span.Contains(item.Value.Span));
+            var nodes = from item in tree.DescendantNodesAndSelf()
+                        where node.IsKind(item.Value.Kind())
+                              && item.Value.Span.Contains(node.Span)
+                              && node.Span.Contains(item.Value.Span)
+                        select item;
+            var nodesList = nodes.ToList();
+            return nodes.FirstOrDefault();
         }
     }
 }

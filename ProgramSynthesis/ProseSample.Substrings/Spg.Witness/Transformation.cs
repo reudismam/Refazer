@@ -39,7 +39,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var script = (Script)spec.Examples[input];
                 var edits = script.Edits;
-                //edits = edits.GetRange(0, 2);
+                //edits = edits.GetRange(0, 1);
                 editsExamples[input] = edits;
             }
             return new ExampleSpec(editsExamples);
@@ -285,9 +285,25 @@ namespace ProseSample.Substrings.Spg.Witness
                         if (editI.Equals(editJ)) continue;
                         if (editI.T1Node.Equals(editJ.Parent))
                         {
-                            editI.T1Node.AddChild(editJ.T1Node, editI.T1Node.Children.Count);
+                            if (!(editJ is Update<SyntaxNodeOrToken>))
+                            {
+                                editI.T1Node.AddChild(editJ.T1Node, editI.T1Node.Children.Count);
+                            }
+                            else
+                            {
+                                TreeUpdate update = new TreeUpdate(editI.T1Node);
+                                update.ProcessEditOperation(editJ);
+                            }
                             removes.Add(editJ);
                         }
+
+                        //if (editI is Insert<SyntaxNodeOrToken> && editJ is Update<SyntaxNodeOrToken>)
+                        //{
+                        //    if (editI.T1Node.Equals(editJ.Parent))
+                        //    {
+                                
+                        //    }
+                        //}
                     }
                 }
                 newList.AddRange(editOperations);

@@ -166,7 +166,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                 var typeI = editI.GetType();
                 var typeJ = editJ.GetType();
 
-                if (typeI != typeJ) return false;
+                if (!(editJ is Update<T>) && typeI != typeJ) return false;
 
                 for (int i = Math.Min(indexI, indexJ) + 1; i < Math.Max(indexI, indexJ); i++)
                 {

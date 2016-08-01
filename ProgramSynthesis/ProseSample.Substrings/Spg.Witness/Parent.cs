@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -11,7 +12,9 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 return null;
             }
-            return sot.Parent;
+            var currentTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
+            var node = TreeUpdate.FindNode(currentTree, sot.Value);
+            return node.Parent;
         }
     }
 }
