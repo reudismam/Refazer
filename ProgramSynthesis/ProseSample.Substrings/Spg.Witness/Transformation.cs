@@ -39,7 +39,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var script = (Script)spec.Examples[input];
                 var edits = script.Edits;
-                //edits = edits.GetRange(0, 1);
+                //edits = edits.GetRange(0, 2);
                 editsExamples[input] = edits;
             }
             return new ExampleSpec(editsExamples);
@@ -149,7 +149,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (Script script in spec.Examples[input])
             {
                 var parent = script.Edits.First().EditOperation.Parent;
-                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value) && !(o.EditOperation is Delete<SyntaxNodeOrToken>)).ToList();
                 if (children.Count > 1)
                 {
                     var iTreeParent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());

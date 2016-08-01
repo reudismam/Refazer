@@ -107,25 +107,31 @@ namespace TreeEdit.Spg.Script
                 }
             }
 
-            var removes = new List<Tuple<EditOperation<T>, EditOperation<T>>>();
-            var deletes = new List<EditOperation<T>>();
-            foreach (var v in editScript)
-            {
-                if (v is Move<T>)
-                {
-                    EditOperation<T> insert = new Insert<T>(v.T1Node, v.Parent, v.K);
-                    removes.Add(Tuple.Create(v, v));
-                    deletes.Add(new Delete<T>(v.T1Node));
-                }
-            }
+            //var removes = new List<Tuple<EditOperation<T>, EditOperation<T>>>();
+            //var deletes = new List<EditOperation<T>>();
+            //foreach (var v in editScript)
+            //{
+            //    if (v is Move<T>)
+            //    {
+            //        var move = (Move<T>) v;
+            //        var t1copy = ConverterHelper.MakeACopy(v.T1Node);
+            //        var parentcopy = ConverterHelper.MakeACopy(v.Parent);
+            //        var previousParentCopy = ConverterHelper.MakeACopy(move.PreviousParent);
+            //        EditOperation<T> insert = new Insert<T>(t1copy, parentcopy, v.K);
+            //        removes.Add(Tuple.Create(v, insert));
+            //        var delete = new Delete<T>(ConverterHelper.MakeACopy(t1copy));
+            //        delete.Parent = previousParentCopy;
+            //        deletes.Add(delete);
+            //    }
+            //}
 
             //editScript.AddRange(deletes);
-            foreach (var v in deletes)
-            {
-                
-            }
-
-
+            //foreach (var v in removes)
+            //{
+            //    var index = editScript.FindIndex(o => o.Equals(v.Item1));
+            //    editScript.Insert(index, v.Item2);
+            //    editScript.Remove(v.Item1);
+            //}
             return editScript;
         }
 

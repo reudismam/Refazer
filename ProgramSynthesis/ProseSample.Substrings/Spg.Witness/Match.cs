@@ -139,12 +139,12 @@ namespace ProseSample.Substrings.Spg.Witness
         public static ExampleSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kind)
         {
             var kExamples = new Dictionary<State, object>();
+                            var mats = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var pattern = (ITreeNode<Token>)kind.DisjunctiveExamples[input].First();
                 var target = (Node)input[rule.Body[0]];
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var mats = new List<object>();
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
