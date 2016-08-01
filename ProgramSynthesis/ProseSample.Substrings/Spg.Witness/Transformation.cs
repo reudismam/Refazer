@@ -414,7 +414,10 @@ namespace ProseSample.Substrings.Spg.Witness
                 var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
                 beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
                 treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
-                previousTree.ProcessEditOperation(edit.EditOperation);
+                if (edit.EditOperation is Delete<SyntaxNodeOrToken>)
+                {
+                    previousTree.ProcessEditOperation(edit.EditOperation);
+                }
             }
             //Get the nodes before and after the input node.
             //Location of the left, right, and after node.
