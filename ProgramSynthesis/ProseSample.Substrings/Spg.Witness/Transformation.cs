@@ -149,7 +149,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (Script script in spec.Examples[input])
             {
                 var parent = script.Edits.First().EditOperation.Parent;
-                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value) && !(o.EditOperation is Delete<SyntaxNodeOrToken>)).ToList();
+                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value) /*&& !(o.EditOperation is Delete<SyntaxNodeOrToken>)*/).ToList();
                 if (children.Count > 1)
                 {
                     var iTreeParent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());

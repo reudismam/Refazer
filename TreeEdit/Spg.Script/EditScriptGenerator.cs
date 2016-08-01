@@ -132,6 +132,17 @@ namespace TreeEdit.Spg.Script
                 editScript.Insert(index, v.Item2);
                 editScript.Remove(v.Item1);
             }
+            foreach (var s in editScript)
+            {
+                var t1copy = ConverterHelper.MakeACopy(s.T1Node);
+                t1copy.Children = new List<ITreeNode<T>>();
+                var parentcopy = ConverterHelper.MakeACopy(s.Parent);
+                parentcopy.Children = new List<ITreeNode<T>>();
+
+                s.T1Node = t1copy;
+                s.Parent = parentcopy;
+            }
+
             return editScript;
         }
 
