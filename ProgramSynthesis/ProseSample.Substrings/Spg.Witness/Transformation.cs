@@ -484,7 +484,10 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             var treeUp = new TreeUpdate(anchor);
             ConfigureParentSyntaxTree(script, anchor);
-            WitnessFunctions.TreeUpdateDictionary.Add(anchor, treeUp);
+            if (!WitnessFunctions.TreeUpdateDictionary.ContainsKey(anchor))
+            {
+                WitnessFunctions.TreeUpdateDictionary.Add(anchor, treeUp);
+            }
             WitnessFunctions.CurrentTrees[anchor] = anchor;
         }
 
