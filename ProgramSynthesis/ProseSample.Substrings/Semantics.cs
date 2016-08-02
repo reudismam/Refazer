@@ -181,15 +181,15 @@ namespace ProseSample.Substrings
         /// <returns>Transformed node.</returns>
         public static Node Script(Node target, IEnumerable<Node> edits)
         {
-            ITreeNode<SyntaxNodeOrToken> current;
-            if (edits.Last().Value.Value.IsKind(SyntaxKind.EmptyStatement))
-            {
-                current = edits.Last().Value.Children.First();
-            }
-            else
-            {
-                current = edits.Last().Value;
-            }
+            ITreeNode<SyntaxNodeOrToken> current = edits.Last().Value;
+            //if (edits.Last().Value.Value.IsKind(SyntaxKind.EmptyStatement))
+            //{
+            //    current = edits.Last().Value.Children.First();
+            //}
+            //else
+            //{
+            //    current = edits.Last().Value;
+            //}
             var node = ReconstructTree(current);
             MappingRegions[target] = node;
             Console.WriteLine(node.ToString());

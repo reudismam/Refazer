@@ -351,9 +351,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     {
                         //todo we need to work more here.
                         var toNode = treeUpdate.CurrentTree;
-
-                        var update = new Update<SyntaxNodeOrToken>(parent, toNode,
-                            ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
+                        var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+                        var update = new Update<SyntaxNodeOrToken>(@from, toNode, ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
                         newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
                         newccs.Add(newScript);
                         //return newccs;
