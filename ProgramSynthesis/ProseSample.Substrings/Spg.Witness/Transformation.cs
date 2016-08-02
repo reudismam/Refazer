@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -15,7 +13,6 @@ using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
-using TreeElement.Spg.Walker;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -146,18 +143,12 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                //var nodes = ContextNodes(spec, input, inputTree);
-                //var inputTreeCopy = ConverterHelper.MakeACopy(inputTree.Value);
-                //var nodes = GetAnchorNodes(spec, input, inputTree, inputTreeCopy);
-
                 var kMatches = new List<Node>();
-                //ConfigureAnchorNodes(nodes);
                 for (int i = 0; i < spec.Examples[input].Count(); i++)
                 {
-                   
-                   var script = (Script)spec.Examples[input].ElementAt(i);
-                   var editOperation = script.Edits.Single().EditOperation;
+
+                    var script = (Script)spec.Examples[input].ElementAt(i);
+                    var editOperation = script.Edits.Single().EditOperation;
                     Node node = null;
                     if (editOperation is Update<SyntaxNodeOrToken> || editOperation is Delete<SyntaxNodeOrToken>)
                     {
@@ -169,30 +160,6 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                     kMatches.Add(node);
                     ConfigureContext(node.Value, script);
-                    //    var node = nodes[i];
-                    //    var parentNode = !node.Parent.Value.IsKind(SyntaxKind.Block) ? ConverterHelper.MakeACopy(node.Parent) : ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                    //    parentNode.Children.RemoveRange(0, parentNode.Children.Count());
-
-                    //    int j = 0;
-                    //    if (node.LeftNode != null)
-                    //    {
-                    //        parentNode.AddChild(node.LeftNode, j++);
-                    //        script.Edits.First().EditOperation.K = 2;
-                    //    }
-                    //    else
-                    //    {
-                    //        script.Edits.First().EditOperation.K = 1;
-                    //    }
-
-                    //    if (node.Value != null) parentNode.AddChild(node.Value, j++);
-                    //    if (node.RightNode != null) parentNode.AddChild(node.RightNode, j);
-
-                    //    //Todo refactor this code.
-                    //    script.Edits.First().EditOperation.Parent = ConverterHelper.MakeACopy(parentNode);
-
-                    //    var anode = new Node(parentNode);
-                    //    kMatches.Add(anode);
-                    //    ConfigureContext(parentNode, script);
                 }
                 kExamples[input] = kMatches;
             }
@@ -200,102 +167,101 @@ namespace ProseSample.Substrings.Spg.Witness
         }
 
 
-        private static void ConfigureAnchorNodes(List<AnchorNode> nodes)
-        {
-            if (nodes.Any(node => node.LeftNode == null)) nodes.ForEach(node => node.LeftNode = null);
-            if (nodes.Any(node => node.RightNode == null)) nodes.ForEach(node => node.RightNode = null);
-        }
+        //private static void ConfigureAnchorNodes(List<AnchorNode> nodes)
+        //{
+        //    if (nodes.Any(node => node.LeftNode == null)) nodes.ForEach(node => node.LeftNode = null);
+        //    if (nodes.Any(node => node.RightNode == null)) nodes.ForEach(node => node.RightNode = null);
+        //}
 
-        private static List<AnchorNode> GetAnchorNodes(SubsequenceSpec spec, State input, Node inputTree, ITreeNode<SyntaxNodeOrToken> inputTreeCopy)
-        {
-            var nodes = new List<AnchorNode>();
+        //private static List<AnchorNode> GetAnchorNodes(SubsequenceSpec spec, State input, Node inputTree, ITreeNode<SyntaxNodeOrToken> inputTreeCopy)
+        //{
+        //    var nodes = new List<AnchorNode>();
 
-            foreach (Script script in spec.Examples[input])
-            {
-                var parent = script.Edits.First().EditOperation.Parent;
-                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value) /*&& !(o.EditOperation is Delete<SyntaxNodeOrToken>)*/).ToList();
-                if (children.Count > 1)
-                {
-                    var iTreeParent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                    var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
-                    var anchorParent = new AnchorNode(value);
-                    anchorParent.Parent = iTreeParent;
-                    //anchorParent.Parent = iTreeParent;
-                    
-                    nodes.Add(anchorParent);
-                }
-                else
-                {
-                    var connectedComponents = ComputeConnectedComponents(script);
-                    var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                    var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
-                    nodes.Add(node);
-                }
-            }
-            return nodes;
-        }
+        //    foreach (Script script in spec.Examples[input])
+        //    {
+        //        var parent = script.Edits.First().EditOperation.Parent;
+        //        var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value) /*&& !(o.EditOperation is Delete<SyntaxNodeOrToken>)*/).ToList();
+        //        if (children.Count > 1)
+        //        {
+        //            var iTreeParent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+        //            var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+        //            var anchorParent = new AnchorNode(value);
+        //            anchorParent.Parent = iTreeParent;
+        //            //anchorParent.Parent = iTreeParent;
 
-        private static List<Node> ContextNodes(SubsequenceSpec spec, State input, Node inputTree)
-        {
-            var nodes = new List<Node>();
+        //            nodes.Add(anchorParent);
+        //        }
+        //        else
+        //        {
+        //            var connectedComponents = ComputeConnectedComponents(script);
+        //            var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
+        //            var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
+        //            nodes.Add(node);
+        //        }
+        //    }
+        //    return nodes;
+        //}
 
-            foreach (Script script in spec.Examples[input])
-            {
-                var parent = script.Edits.First().EditOperation.Parent;
-                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+        //private static List<Node> ContextNodes(SubsequenceSpec spec, State input, Node inputTree)
+        //{
+        //    var nodes = new List<Node>();
 
-                /*if more than one operation occurs if more than an edit operation in the parent.
-                For instance, an insert and an move with the parent as target.
-                */
-                if (children.Count > 1)
-                {
-                    var iTreeParent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                    var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
-                    var anchorParent = new AnchorNode(value);
-                    anchorParent.Parent = iTreeParent;
-                    //anchorParent.Parent = iTreeParent;
+        //    foreach (Script script in spec.Examples[input])
+        //    {
+        //        var parent = script.Edits.First().EditOperation.Parent;
+        //        var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
 
-                    nodes.Add(new Node(value));
-                }
-                else
-                {
-                    var firstOperation = script.Edits.First();
-                    //In these cases, the edit node that the technique is putting is new on the context node.
-                    if (firstOperation.EditOperation is Insert<SyntaxNodeOrToken> ||
-                        firstOperation.EditOperation is Move<SyntaxNodeOrToken>)
-                    {
-                        var tuple = ConfigContextBeforeAfterNode(firstOperation, inputTree.Value);
-                        if (tuple.Item2 != null)
-                        {
-                            nodes.Add(new Node(tuple.Item2));
-                        }
-                        else if (tuple.Item1 != null)
-                        {
-                            nodes.Add(new Node(tuple.Item1));
-                        }
-                        else
-                        {
-                            var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
-                            nodes.Add(new Node(value));
-                        }
-                    }
-                    else
-                    {
-                        var node = TreeUpdate.FindNode(inputTree.Value, script.Edits.First().EditOperation.T1Node.Value);
-                        nodes.Add(new Node(node));
-                    }
-                }
-                /*else
-                {
-                    var connectedComponents = ComputeConnectedComponents(script);
-                    var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
-                    var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
-                    nodes.Add(node);
-                }*/
-            }
-            return nodes;
-        }
+        //        /*if more than one operation occurs if more than an edit operation in the parent.
+        //        For instance, an insert and an move with the parent as target.
+        //        */
+        //        if (children.Count > 1)
+        //        {
+        //            var iTreeParent = ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+        //            var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+        //            var anchorParent = new AnchorNode(value);
+        //            anchorParent.Parent = iTreeParent;
+        //            //anchorParent.Parent = iTreeParent;
 
+        //            nodes.Add(new Node(value));
+        //        }
+        //        else
+        //        {
+        //            var firstOperation = script.Edits.First();
+        //            //In these cases, the edit node that the technique is putting is new on the context node.
+        //            if (firstOperation.EditOperation is Insert<SyntaxNodeOrToken> ||
+        //                firstOperation.EditOperation is Move<SyntaxNodeOrToken>)
+        //            {
+        //                var tuple = ConfigContextBeforeAfterNode(firstOperation, inputTree.Value);
+        //                if (tuple.Item2 != null)
+        //                {
+        //                    nodes.Add(new Node(tuple.Item2));
+        //                }
+        //                else if (tuple.Item1 != null)
+        //                {
+        //                    nodes.Add(new Node(tuple.Item1));
+        //                }
+        //                else
+        //                {
+        //                    var value = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+        //                    nodes.Add(new Node(value));
+        //                }
+        //            }
+        //            else
+        //            {
+        //                var node = TreeUpdate.FindNode(inputTree.Value, script.Edits.First().EditOperation.T1Node.Value);
+        //                nodes.Add(new Node(node));
+        //            }
+        //        }
+        //        /*else
+        //        {
+        //            var connectedComponents = ComputeConnectedComponents(script);
+        //            var tree = BuildTree(connectedComponents, ConverterHelper.MakeACopy(inputTree.Value));
+        //            var node = ConfigAnchorBeforeAfterNode(script.Edits.First(), tree, inputTreeCopy);
+        //            nodes.Add(node);
+        //        }*/
+        //    }
+        //    return nodes;
+        //}
 
         /// <summary>
         /// Cluster edit script in regions
@@ -316,7 +282,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return clusteredList;
         }
 
-        
+
         /// <summary>
         /// Compact edit operations with similar semantic in compacted edit operations
         /// </summary>
@@ -342,7 +308,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     //var t1node = treeUpdate.CurrentTree;
                     //var t1parent = ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent);
                     var edits = script.Edits.Select(o => o.EditOperation).ToList();
-                    var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> {edits});
+                    var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> { edits });
                     var t1node = list.First();
                     var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
                     delete.Parent = t1node.Parent;
@@ -360,14 +326,14 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> && children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
                     {
                         var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
-                        var to = treeUpdate.CurrentTree.Children.First();
+                        var to = children.First().EditOperation.T1Node;
                         foreach (var v in @from.DescendantNodesAndSelf())
                         {
                             foreach (var edit in script.Edits)
                             {
                                 if (edit.EditOperation is Update<SyntaxNodeOrToken>)
                                 {
-                                    var up = (Update<SyntaxNodeOrToken>) edit.EditOperation;
+                                    var up = (Update<SyntaxNodeOrToken>)edit.EditOperation;
                                     if (v.Equals(up.To))
                                     {
                                         v.Value = up.T1Node.Value;
@@ -394,7 +360,8 @@ namespace ProseSample.Substrings.Spg.Witness
                         //return newccs;
                         continue;
                     }
-                }else if (firstOperation is Insert<SyntaxNodeOrToken>)
+                }
+                else if (firstOperation is Insert<SyntaxNodeOrToken>)
                 {
                     var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, firstOperation.T1Node.Value);
                     var insert = new Insert<SyntaxNodeOrToken>(inserted, parent, firstOperation.K);
@@ -402,7 +369,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     newccs.Add(newScript);
                     //return newccs;
                     continue;
-                }else if (firstOperation is Update<SyntaxNodeOrToken>)
+                }
+                else if (firstOperation is Update<SyntaxNodeOrToken>)
                 {
                     newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
                     newccs.Add(newScript);
@@ -464,7 +432,6 @@ namespace ProseSample.Substrings.Spg.Witness
             newList.RemoveAll(editOperation => removes.Any(node => node == editOperation));
             return newList;
         }
-
 
         ///// <summary>
         ///// Compact similar edit operations in a single edit operation
@@ -560,104 +527,104 @@ namespace ProseSample.Substrings.Spg.Witness
             WitnessFunctions.CurrentTrees[anchor] = anchor;
         }
 
-        private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> ConfigContextBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> inputTree)
-        {
-            //Get a reference for the node that was modified on the T1 tree.
-            ITreeNode<SyntaxNodeOrToken> inputNode = null;
-            //if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
-            if (edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>)
-            {
-                inputNode = edit.EditOperation.T1Node;
-            }
+        //private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> ConfigContextBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> inputTree)
+        //{
+        //    //Get a reference for the node that was modified on the T1 tree.
+        //    ITreeNode<SyntaxNodeOrToken> inputNode = null;
+        //    //if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
+        //    if (edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>)
+        //    {
+        //        inputNode = edit.EditOperation.T1Node;
+        //    }
 
-            var previousTree = new TreeUpdate(inputTree);
-            var copy = ConverterHelper.MakeACopy(inputTree);
+        //    var previousTree = new TreeUpdate(inputTree);
+        //    var copy = ConverterHelper.MakeACopy(inputTree);
 
-            Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
-            ITreeNode<SyntaxNodeOrToken> treeNode = null;
-            if (inputNode == null)
-            {
-                previousTree.ProcessEditOperation(edit.EditOperation);
-                var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
-                beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
-            }
-            else
-            {
-                var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
-                beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
-                treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
-                previousTree.ProcessEditOperation(edit.EditOperation);
-            }
+        //    Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
+        //    ITreeNode<SyntaxNodeOrToken> treeNode = null;
+        //    if (inputNode == null)
+        //    {
+        //        previousTree.ProcessEditOperation(edit.EditOperation);
+        //        var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+        //        beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
+        //    }
+        //    else
+        //    {
+        //        var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+        //        beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
+        //        treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
+        //        previousTree.ProcessEditOperation(edit.EditOperation);
+        //    }
 
-            return beforeAfterAnchorNode;
-            //Get the nodes before and after the input node.
-            //Location of the left, right, and after node.
-            /*var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item1.Value) : null;
-            var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item2.Value) : null;
+        //    return beforeAfterAnchorNode;
+        //    //Get the nodes before and after the input node.
+        //    //Location of the left, right, and after node.
+        //    /*var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item1.Value) : null;
+        //    var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item2.Value) : null;
 
-            var node = new AnchorNode(treeNode, leftNode, rightNode);
-            return node;*/
-        }
+        //    var node = new AnchorNode(treeNode, leftNode, rightNode);
+        //    return node;*/
+        //}
 
-        private static AnchorNode ConfigAnchorBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> anchorNode, ITreeNode<SyntaxNodeOrToken> inputTree)
-        {
-            //Get a reference for the node that was modified on the T1 tree.
-            ITreeNode<SyntaxNodeOrToken> inputNode = null;
-            //if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
-            if(edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>)
-            {
-                inputNode = anchorNode;
-            }
+        //private static AnchorNode ConfigAnchorBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> anchorNode, ITreeNode<SyntaxNodeOrToken> inputTree)
+        //{
+        //    //Get a reference for the node that was modified on the T1 tree.
+        //    ITreeNode<SyntaxNodeOrToken> inputNode = null;
+        //    //if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
+        //    if(edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>)
+        //    {
+        //        inputNode = anchorNode;
+        //    }
 
-            var previousTree = new TreeUpdate(inputTree);
-            var copy = ConverterHelper.MakeACopy(inputTree);
+        //    var previousTree = new TreeUpdate(inputTree);
+        //    var copy = ConverterHelper.MakeACopy(inputTree);
 
-            Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
-            ITreeNode<SyntaxNodeOrToken> treeNode = null;
-            if (inputNode == null)
-            {
-                previousTree.ProcessEditOperation(edit.EditOperation);
-                var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
-                beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
-            }
-            else
-            {
-                var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
-                beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
-                treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
-                if (edit.EditOperation is Delete<SyntaxNodeOrToken>)
-                {
-                    previousTree.ProcessEditOperation(edit.EditOperation);
-                }
-            }
-            //Get the nodes before and after the input node.
-            //Location of the left, right, and after node.
-            var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item1.Value) : null;
-            var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item2.Value) : null;
+        //    Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
+        //    ITreeNode<SyntaxNodeOrToken> treeNode = null;
+        //    if (inputNode == null)
+        //    {
+        //        previousTree.ProcessEditOperation(edit.EditOperation);
+        //        var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+        //        beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
+        //    }
+        //    else
+        //    {
+        //        var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
+        //        beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
+        //        treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
+        //        if (edit.EditOperation is Delete<SyntaxNodeOrToken>)
+        //        {
+        //            previousTree.ProcessEditOperation(edit.EditOperation);
+        //        }
+        //    }
+        //    //Get the nodes before and after the input node.
+        //    //Location of the left, right, and after node.
+        //    var leftNode = beforeAfterAnchorNode.Item1 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item1.Value) : null;
+        //    var rightNode = beforeAfterAnchorNode.Item2 != null ? TreeUpdate.FindNode(copy, beforeAfterAnchorNode.Item2.Value) : null;
 
-            var node = new AnchorNode(treeNode, leftNode, rightNode);
-            return node;
-        }
+        //    var node = new AnchorNode(treeNode, leftNode, rightNode);
+        //    return node;
+        //}
 
-        private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> GetBeforeAfterAnchorNode(ITreeNode<SyntaxNodeOrToken> node)
-        {
-            for (int i = 0; i < node.Parent.Children.Count; i++)
-            {
-                var child = node.Parent.Children[i];
-                if (child.Equals(node))
-                {
-                    var left = i > 0 ? node.Parent.Children[i - 1] : null;
-                    var right = node.Parent.Children.Count > i + 1 ? node.Parent.Children[i + 1] : null;
+        //private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> GetBeforeAfterAnchorNode(ITreeNode<SyntaxNodeOrToken> node)
+        //{
+        //    for (int i = 0; i < node.Parent.Children.Count; i++)
+        //    {
+        //        var child = node.Parent.Children[i];
+        //        if (child.Equals(node))
+        //        {
+        //            var left = i > 0 ? node.Parent.Children[i - 1] : null;
+        //            var right = node.Parent.Children.Count > i + 1 ? node.Parent.Children[i + 1] : null;
 
-                    if (left != null || right != null)
-                    {
-                        var tuple = Tuple.Create(left, right);
-                        return tuple;
-                    }
-                }
-            }
-            return Tuple.Create<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>>(null, null);
-        }
+        //            if (left != null || right != null)
+        //            {
+        //                var tuple = Tuple.Create(left, right);
+        //                return tuple;
+        //            }
+        //        }
+        //    }
+        //    return Tuple.Create<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>>(null, null);
+        //}
 
         private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> syntaxTree)
         {
@@ -677,18 +644,18 @@ namespace ProseSample.Substrings.Spg.Witness
             }
         }
 
-        /// <summary>
-        /// Compute connected components from the script
-        /// </summary>
-        /// <param name="script">Script</param>
-        private static List<Script> ComputeConnectedComponents(Script script)
-        {
-            var editOperations = script.Edits.Select(o => o.EditOperation).ToList();
-            var connectedComponents = ConnectedComponentMannager<SyntaxNodeOrToken>.DescendantsConnectedComponents(editOperations);
-            connectedComponents = connectedComponents.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
-            var scripts = connectedComponents.Select(component => new Script(component.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
-            return scripts;
-        }
+        ///// <summary>
+        ///// Compute connected components from the script
+        ///// </summary>
+        ///// <param name="script">Script</param>
+        //private static List<Script> ComputeConnectedComponents(Script script)
+        //{
+        //    var editOperations = script.Edits.Select(o => o.EditOperation).ToList();
+        //    var connectedComponents = ConnectedComponentMannager<SyntaxNodeOrToken>.DescendantsConnectedComponents(editOperations);
+        //    connectedComponents = connectedComponents.OrderBy(o => o.First().T1Node.Value.SpanStart).ToList();
+        //    var scripts = connectedComponents.Select(component => new Script(component.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
+        //    return scripts;
+        //}
 
         /// <summary>
         /// Compute the edition script
@@ -708,47 +675,47 @@ namespace ProseSample.Substrings.Spg.Witness
             return script;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> BuildTree(List<Script> ccs, ITreeNode<SyntaxNodeOrToken> inpTree)
-        {
-            return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).OrderBy(o => o.Value.SpanStart).Single();
-        }
+        //private static ITreeNode<SyntaxNodeOrToken> BuildTree(List<Script> ccs, ITreeNode<SyntaxNodeOrToken> inpTree)
+        //{
+        //    return ccs.Select(cc => BuildTemplate(cc, inpTree)).Select(template => template.First()).OrderBy(o => o.Value.SpanStart).Single();
+        //}
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(Script script, ITreeNode<SyntaxNodeOrToken> tree)
-        {
-            var nodes = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(tree);
-            var list = new List<ITreeNode<SyntaxNodeOrToken>>();
-            var editNodes = EditNodes(script);
-            foreach (var node in nodes)
-            {
-                foreach (var t1Node in editNodes)
-                {
-                    if (node.Equals(t1Node))
-                    {
-                        if (!list.Contains(node))
-                        {
-                            list.Add(node);
-                        }
-                    }
-                }
-            }
-            var tcc = new TemplateConnectedComponents<SyntaxNodeOrToken>();
-            var cnodes = tcc.ConnectedNodes(list);
-            return cnodes;
-        }
+        //private static List<ITreeNode<SyntaxNodeOrToken>> BuildTemplate(Script script, ITreeNode<SyntaxNodeOrToken> tree)
+        //{
+        //    var nodes = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(tree);
+        //    var list = new List<ITreeNode<SyntaxNodeOrToken>>();
+        //    var editNodes = EditNodes(script);
+        //    foreach (var node in nodes)
+        //    {
+        //        foreach (var t1Node in editNodes)
+        //        {
+        //            if (node.Equals(t1Node))
+        //            {
+        //                if (!list.Contains(node))
+        //                {
+        //                    list.Add(node);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    var tcc = new TemplateConnectedComponents<SyntaxNodeOrToken>();
+        //    var cnodes = tcc.ConnectedNodes(list);
+        //    return cnodes;
+        //}
 
-        private static List<ITreeNode<SyntaxNodeOrToken>> EditNodes(Script script)
-        {
-            var nodes = new List<ITreeNode<SyntaxNodeOrToken>>();
-            foreach (var edit in script.Edits)
-            {
-                nodes.AddRange(edit.EditOperation.T1Node.DescendantNodesAndSelf());
+        //private static List<ITreeNode<SyntaxNodeOrToken>> EditNodes(Script script)
+        //{
+        //    var nodes = new List<ITreeNode<SyntaxNodeOrToken>>();
+        //    foreach (var edit in script.Edits)
+        //    {
+        //        nodes.AddRange(edit.EditOperation.T1Node.DescendantNodesAndSelf());
 
-                if (!(edit.EditOperation is Delete<SyntaxNodeOrToken>))
-                {
-                    nodes.AddRange(edit.EditOperation.Parent.DescendantNodesAndSelf());
-                }
-            }
-            return nodes;
-        }
+        //        if (!(edit.EditOperation is Delete<SyntaxNodeOrToken>))
+        //        {
+        //            nodes.AddRange(edit.EditOperation.Parent.DescendantNodesAndSelf());
+        //        }
+        //    }
+        //    return nodes;
+        //}
     }
 }
