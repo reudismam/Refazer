@@ -287,8 +287,11 @@ namespace ProseSample.Substrings.Spg.Witness
                     return newccs;
                 }
 
+                var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
+
                 if (children.Count > 1)
                 {
+                    //todo correct the children.First children.second
                     if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> && children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
                     {
                         var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
@@ -310,10 +313,10 @@ namespace ProseSample.Substrings.Spg.Witness
                         newccs.Add(newScript);
                         return newccs;
                     }
-                }else if (script.Edits.First().EditOperation is Insert<SyntaxNodeOrToken>)
+                }else if (firstOperation is Insert<SyntaxNodeOrToken>)
                 {
-                    var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, script.Edits.First().EditOperation.T1Node.Value);
-                    var insert = new Insert<SyntaxNodeOrToken>(inserted, parent, script.Edits.First().EditOperation.K);
+                    var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, firstOperation.T1Node.Value);
+                    var insert = new Insert<SyntaxNodeOrToken>(inserted, parent, firstOperation.K);
                     newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(insert));
                     newccs.Add(newScript);
                     return newccs;
