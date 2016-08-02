@@ -120,7 +120,7 @@ namespace TreeEdit.Spg.Script
                 }
             }
 
-            var removes = new List<Tuple<EditOperation<T>, EditOperation<T>>>();
+            var removes = new List<Tuple<EditOperation<T>, List<EditOperation<T>>>>();
             var deletes = new List<EditOperation<T>>();
             foreach (var v in editScript)
             {
@@ -131,18 +131,20 @@ namespace TreeEdit.Spg.Script
                     var parentcopy = ConverterHelper.MakeACopy(v.Parent);
                     var previousParentCopy = ConverterHelper.MakeACopy(move.PreviousParent);
                     EditOperation<T> insert = new Insert<T>(t1copy, parentcopy, v.K);
-                    removes.Add(Tuple.Create(v, insert));
                     var delete = new Delete<T>(ConverterHelper.MakeACopy(t1copy));
                     delete.Parent = previousParentCopy;
-                    deletes.Add(delete);
+                    var list = new List<EditOperation<T>>();
+                    list.Add(delete);
+                    list.Add(insert);
+                    removes.Add(Tuple.Create(v, list));           
+                    //deletes.Add(delete);
                 }
             }
-
-            editScript.InsertRange(0, deletes);
+            //editScript.InsertRange(0, deletes);
             foreach (var v in removes)
             {
                 var index = editScript.FindIndex(o => o.Equals(v.Item1));
-                editScript.Insert(index, v.Item2);
+                editScript.InsertRange(index, v.Item2);
                 editScript.Remove(v.Item1);
             }
 

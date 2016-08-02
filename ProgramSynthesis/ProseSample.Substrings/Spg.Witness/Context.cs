@@ -58,7 +58,8 @@ namespace ProseSample.Substrings.Spg.Witness
                             matches.Add(i + 1);
                         }
                     }
-                }        
+                }
+                if (!matches.Any()) return null;    
                 if (matches.Any(sequence => !sequence.Equals(matches.First()))) return null;
                 kExamples[input] = matches.First();
             }
