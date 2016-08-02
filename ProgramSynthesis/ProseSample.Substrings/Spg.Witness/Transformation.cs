@@ -341,7 +341,6 @@ namespace ProseSample.Substrings.Spg.Witness
                                 }
                             }
                         }
-
                         var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
                         newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
                         newccs.Add(newScript);

@@ -152,7 +152,7 @@ namespace TreeElement.Spg.Node
                 return false;
             }
             TreeNode<T> compare = (TreeNode<T>)obj;
-            return Value.Equals(compare.Value);
+            return /*IsEqual(this, compare);*/ Value.Equals(compare.Value);
         }
 
         /// <summary>
@@ -162,6 +162,26 @@ namespace TreeElement.Spg.Node
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
+        }
+
+        public static bool IsEqual(ITreeNode<T> t1, ITreeNode<T> compare)
+        {
+            if (!t1.IsLabel(compare.Label)) return false;
+            if (!t1.Value.Equals(compare.Value)) return false;
+
+            var t1Children = t1.Children;
+            var compChildren = compare.Children;
+
+            if (t1Children.Count != compChildren.Count) return false;
+
+            for (int i = 0; i < t1Children.Count; i++)
+            {
+                var t1Child = t1Children[i];
+                var compChild = compChildren[i];
+                var issame = IsEqual(t1Child, compChild);
+                if (!issame) return false;
+            }
+            return true;
         }
     }
 }

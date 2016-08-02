@@ -53,7 +53,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     for (int i = 0; i < children.Count; i++)
                     {
                         var item = children.ElementAt(i);
-                        if (item.Equals(sot))
+                        if (TreeNode<SyntaxNodeOrToken>.IsEqual(item, sot))
                         {
                             matches.Add(i + 1);
                         }

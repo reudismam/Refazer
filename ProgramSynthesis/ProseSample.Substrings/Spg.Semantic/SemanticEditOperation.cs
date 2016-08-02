@@ -47,17 +47,18 @@ namespace ProseSample.Substrings.Spg.Semantic
             return new Node(update.CurrentTree);
         }
 
-        public static Node Update(Node target, Node fromNode, Node to)
+        public static Node Update(Node target, Node toNode, Node to)
         {
-            TreeUpdate update = new TreeUpdate(target.Value);
+            /*TreeUpdate update = new TreeUpdate(target.Value);
             var toTreeNode = to.Value;
             var updateEdit = new Update<SyntaxNodeOrToken>(target.Value, toTreeNode, null);
-            update.ProcessEditOperation(updateEdit);
-#if DEBUG
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-#endif
-            return new Node(update.CurrentTree);
+            update.ProcessEditOperation(updateEdit);*/
+//#if DEBUG
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+//#endif
+            //return new Node(update.CurrentTree);
+            return to;
         }
 
         public static Node Delete(Node target, Node fromNode)
