@@ -105,9 +105,9 @@ namespace ProseSample.Substrings
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static Node Insert(Node target, Node node, Node newNode, int k)
+        public static Node Insert(Node target, Node newNode, int k)
         {
-            return SemanticEditOperation.Insert(target, node, newNode, k);
+            return SemanticEditOperation.Insert(target, null, newNode, k);
         }
 
         /// <summary>
@@ -117,9 +117,9 @@ namespace ProseSample.Substrings
         /// <param name="node">Input data</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static Node InsertBefore(Node target, Node node, Node newNode)
+        public static Node InsertBefore(Node target, Node newNode)
         {
-            return SemanticEditOperation.InsertBefore(target, node, newNode);
+            return SemanticEditOperation.InsertBefore(target, null, newNode);
         }
 
         /// <summary>
@@ -128,9 +128,9 @@ namespace ProseSample.Substrings
         /// <param name="k">Child index</param>
         /// <param name="from">Moved node</param>
         /// <param name="target">Target node</param>
-        public static Node Move(Node target, Node node, Node from, int k)
+        public static Node Move(Node target, Node from, int k)
         {
-            return SemanticEditOperation.Move(target, node, from, k);
+            return SemanticEditOperation.Move(target, null, from, k);
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace ProseSample.Substrings
         /// <param name="target">Target node</param>
         /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
-        public static Node Update(Node target, Node node, Node to)
+        public static Node Update(Node target, Node to)
         {
-            return SemanticEditOperation.Update(target, node, to);
+            return SemanticEditOperation.Update(target, null, to);
         }
 
         /// <summary>

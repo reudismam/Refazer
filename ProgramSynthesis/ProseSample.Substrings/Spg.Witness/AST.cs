@@ -78,8 +78,8 @@ namespace ProseSample.Substrings.Spg.Witness
             //Todo Bug correct the witness function Ref
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTree = (Node) input[rule.Body[0]];
-                var currentTree = WitnessFunctions.GetCurrentTree(inpTree.Value);
+                var target = (Node) input[rule.Body[0]];
+                var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
                 var mats = new List<object>();
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {

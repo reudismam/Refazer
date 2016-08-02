@@ -73,15 +73,67 @@ namespace ProseSample.Substrings.Spg.Witness
             return subsequence;
         }
 
-        private static int Less(List<Script> scripts1, List<Script> scripts2)
-        {
-            var s1First = scripts1.First().Edits.First().EditOperation;
-            var s2First = scripts2.First().Edits.First().EditOperation;
-            var aToComapre = s1First.Parent ?? s1First.T1Node;
-            var bToCompare = s2First.Parent ?? s2First.T1Node;
-            if (aToComapre.Value.SpanStart < bToCompare.Value.SpanStart) return -1;
-            return aToComapre.Value.SpanStart > bToCompare.Value.SpanStart ? 1 : 0;
-        }
+        //private static int Less(List<Script> scripts1, List<Script> scripts2)
+        //{
+        //    var s1First = scripts1.First().Edits.First().EditOperation;
+        //    var s2First = scripts2.First().Edits.First().EditOperation;
+        //    var aToComapre = s1First.Parent ?? s1First.T1Node;
+        //    var bToCompare = s2First.Parent ?? s2First.T1Node;
+        //    if (aToComapre.Value.SpanStart < bToCompare.Value.SpanStart) return -1;
+        //    return aToComapre.Value.SpanStart > bToCompare.Value.SpanStart ? 1 : 0;
+        //}
+
+        ///// <summary>
+        ///// Segment the edit script in nodes
+        ///// </summary>
+        ///// <param name="rule">Grammar rule</param>
+        ///// <param name="parameter">Rule parameter</param>
+        ///// <param name="spec">Example specification</param>
+        //public static SubsequenceSpec EditMapTNode(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        //{
+        //    var kExamples = new Dictionary<State, IEnumerable<object>>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var inputTree = (Node)input[rule.Grammar.InputSymbol];
+
+        //        //var nodes = ContextNodes(spec, input, inputTree);
+        //        var inputTreeCopy = ConverterHelper.MakeACopy(inputTree.Value);
+        //        var nodes = GetAnchorNodes(spec, input, inputTree, inputTreeCopy);
+
+        //        var kMatches = new List<Node>();
+        //        ConfigureAnchorNodes(nodes);
+        //        for (int i = 0; i < spec.Examples[input].Count(); i++)
+        //        {
+        //            var script = (Script)spec.Examples[input].ElementAt(i);
+        //            var node = nodes[i];
+        //            var parentNode = !node.Parent.Value.IsKind(SyntaxKind.Block) ? ConverterHelper.MakeACopy(node.Parent) : ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+        //            parentNode.Children.RemoveRange(0, parentNode.Children.Count());
+
+        //            int j = 0;
+        //            if (node.LeftNode != null)
+        //            {
+        //                parentNode.AddChild(node.LeftNode, j++);
+        //                script.Edits.First().EditOperation.K = 2;
+        //            }
+        //            else
+        //            {
+        //                script.Edits.First().EditOperation.K = 1;
+        //            }
+
+        //            if (node.Value != null) parentNode.AddChild(node.Value, j++);
+        //            if (node.RightNode != null) parentNode.AddChild(node.RightNode, j);
+
+        //            //Todo refactor this code.
+        //            script.Edits.First().EditOperation.Parent = ConverterHelper.MakeACopy(parentNode);
+
+        //            var anode = new Node(parentNode);
+        //            kMatches.Add(anode);
+        //            ConfigureContext(parentNode, script);
+        //        }
+        //        kExamples[input] = kMatches;
+        //    }
+        //    return new SubsequenceSpec(kExamples);
+        //}
 
         /// <summary>
         /// Segment the edit script in nodes
@@ -94,42 +146,54 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inputTree = (Node)input[rule.Grammar.InputSymbol];
-
+                //var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 //var nodes = ContextNodes(spec, input, inputTree);
-                var inputTreeCopy = ConverterHelper.MakeACopy(inputTree.Value);
-                var nodes = GetAnchorNodes(spec, input, inputTree, inputTreeCopy);
+                //var inputTreeCopy = ConverterHelper.MakeACopy(inputTree.Value);
+                //var nodes = GetAnchorNodes(spec, input, inputTree, inputTreeCopy);
 
                 var kMatches = new List<Node>();
-                ConfigureAnchorNodes(nodes);
+                //ConfigureAnchorNodes(nodes);
                 for (int i = 0; i < spec.Examples[input].Count(); i++)
                 {
-                    var script = (Script)spec.Examples[input].ElementAt(i);
-                    var node = nodes[i];
-                    var parentNode = !node.Parent.Value.IsKind(SyntaxKind.Block) ? ConverterHelper.MakeACopy(node.Parent) : ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
-                    parentNode.Children.RemoveRange(0, parentNode.Children.Count());
-
-                    int j = 0;
-                    if (node.LeftNode != null)
+                   
+                   var script = (Script)spec.Examples[input].ElementAt(i);
+                   var editOperation = script.Edits.Single().EditOperation;
+                    Node node = null;
+                    if (editOperation is Update<SyntaxNodeOrToken> || editOperation is Delete<SyntaxNodeOrToken>)
                     {
-                        parentNode.AddChild(node.LeftNode, j++);
-                        script.Edits.First().EditOperation.K = 2;
+                        node = new Node(editOperation.T1Node);
                     }
                     else
                     {
-                        script.Edits.First().EditOperation.K = 1;
+                        node = new Node(editOperation.Parent);
                     }
+                    kMatches.Add(node);
+                    ConfigureContext(node.Value, script);
+                    //    var node = nodes[i];
+                    //    var parentNode = !node.Parent.Value.IsKind(SyntaxKind.Block) ? ConverterHelper.MakeACopy(node.Parent) : ConverterHelper.ConvertCSharpToTreeNode(SyntaxFactory.EmptyStatement());
+                    //    parentNode.Children.RemoveRange(0, parentNode.Children.Count());
 
-                    if (node.Value != null) parentNode.AddChild(node.Value, j++);
-                    if (node.RightNode != null) parentNode.AddChild(node.RightNode, j);
+                    //    int j = 0;
+                    //    if (node.LeftNode != null)
+                    //    {
+                    //        parentNode.AddChild(node.LeftNode, j++);
+                    //        script.Edits.First().EditOperation.K = 2;
+                    //    }
+                    //    else
+                    //    {
+                    //        script.Edits.First().EditOperation.K = 1;
+                    //    }
 
-                    //Todo refactor this code.
-                    script.Edits.First().EditOperation.Parent = ConverterHelper.MakeACopy(parentNode);
+                    //    if (node.Value != null) parentNode.AddChild(node.Value, j++);
+                    //    if (node.RightNode != null) parentNode.AddChild(node.RightNode, j);
 
-                    var anode = new Node(parentNode);
-                    kMatches.Add(anode);
-                    ConfigureContext(parentNode, script);
-            }
+                    //    //Todo refactor this code.
+                    //    script.Edits.First().EditOperation.Parent = ConverterHelper.MakeACopy(parentNode);
+
+                    //    var anode = new Node(parentNode);
+                    //    kMatches.Add(anode);
+                    //    ConfigureContext(parentNode, script);
+                }
                 kExamples[input] = kMatches;
             }
             return new SubsequenceSpec(kExamples);
@@ -284,7 +348,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     delete.Parent = t1node.Parent;
                     newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(delete));
                     newccs.Add(newScript);
-                    return newccs;
+                    //return newccs;
+                    continue;
                 }
 
                 var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
@@ -314,7 +379,8 @@ namespace ProseSample.Substrings.Spg.Witness
                         var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
                         newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
                         newccs.Add(newScript);
-                        return newccs;
+                        //return newccs;
+                        continue;
                     }
                     else
                     {
@@ -325,7 +391,8 @@ namespace ProseSample.Substrings.Spg.Witness
                             ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
                         newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
                         newccs.Add(newScript);
-                        return newccs;
+                        //return newccs;
+                        continue;
                     }
                 }else if (firstOperation is Insert<SyntaxNodeOrToken>)
                 {
@@ -333,12 +400,14 @@ namespace ProseSample.Substrings.Spg.Witness
                     var insert = new Insert<SyntaxNodeOrToken>(inserted, parent, firstOperation.K);
                     newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(insert));
                     newccs.Add(newScript);
-                    return newccs;
+                    //return newccs;
+                    continue;
                 }else if (firstOperation is Update<SyntaxNodeOrToken>)
                 {
                     newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
                     newccs.Add(newScript);
-                    return newccs;
+                    //return newccs;
+                    continue;
                 }
             }
             return newccs;
