@@ -320,6 +320,11 @@ namespace ProseSample.Substrings.Spg.Witness
                     newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(insert));
                     newccs.Add(newScript);
                     return newccs;
+                }else if (firstOperation is Update<SyntaxNodeOrToken>)
+                {
+                    newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
+                    newccs.Add(newScript);
+                    return newccs;
                 }
             }
             return newccs;
