@@ -296,6 +296,20 @@ namespace ProseSample.Substrings.Spg.Witness
                     {
                         var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
                         var to = treeUpdate.CurrentTree.Children.First();
+                        foreach (var v in @from.DescendantNodesAndSelf())
+                        {
+                            foreach (var edit in script.Edits)
+                            {
+                                if (edit.EditOperation is Update<SyntaxNodeOrToken>)
+                                {
+                                    var up = (Update<SyntaxNodeOrToken>) edit.EditOperation;
+                                    if (v.Equals(up.To))
+                                    {
+                                        v.Value = up.T1Node.Value;
+                                    }
+                                }
+                            }
+                        }
 
                         var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
                         newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
