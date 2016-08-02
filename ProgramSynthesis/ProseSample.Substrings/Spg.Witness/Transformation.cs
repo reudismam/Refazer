@@ -252,6 +252,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return clusteredList;
         }
 
+        
         /// <summary>
         /// Compact edit operations with similar semantic in compacted edit operations
         /// </summary>
@@ -259,14 +260,83 @@ namespace ProseSample.Substrings.Spg.Witness
         private static List<Script> CompactScript(List<Script> connectedComponents)
         {
             var newccs = new List<Script>();
-            foreach (var cc in connectedComponents)
+            foreach (var script in connectedComponents)
             {
-                var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc.Edits.Select(o => o.EditOperation).ToList());
-                var newScript = Compact(editionConnected);
-                newccs.Add(new Script(newScript.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
+                var newScript = new Script(new List<Edit<SyntaxNodeOrToken>>());
+                //var parent = ;
+                var parent = ConverterHelper.ConvertCSharpToTreeNode(script.Edits.First().EditOperation.Parent.Value);
+                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+
+                var treeUpdate = new TreeUpdate(parent);
+                foreach (var s in script.Edits)
+                {
+                    treeUpdate.ProcessEditOperation(s.EditOperation);
+                }
+
+                if (children.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
+                {
+                    //var t1node = treeUpdate.CurrentTree;
+                    //var t1parent = ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent);
+                    var edits = script.Edits.Select(o => o.EditOperation).ToList();
+                    var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> {edits});
+                    var t1node = list.First();
+                    var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
+                    delete.Parent = t1node.Parent;
+                    newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(delete));
+                    newccs.Add(newScript);
+                    return newccs;
+                }
+
+                if (children.Count > 1)
+                {
+                    if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> && children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
+                    {
+                        var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
+                        var to = treeUpdate.CurrentTree.Children.First();
+
+                        var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
+                        newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
+                        newccs.Add(newScript);
+                        return newccs;
+                    }
+                    else
+                    {
+                        //todo we need to work more here.
+                        var toNode = treeUpdate.CurrentTree;
+
+                        var update = new Update<SyntaxNodeOrToken>(parent, toNode,
+                            ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
+                        newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
+                        newccs.Add(newScript);
+                        return newccs;
+                    }
+                }else if (script.Edits.First().EditOperation is Insert<SyntaxNodeOrToken>)
+                {
+                    var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, script.Edits.First().EditOperation.T1Node.Value);
+                    var insert = new Insert<SyntaxNodeOrToken>(inserted, parent, script.Edits.First().EditOperation.K);
+                    newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(insert));
+                    newccs.Add(newScript);
+                    return newccs;
+                }
             }
             return newccs;
         }
+
+        ///// <summary>
+        ///// Compact edit operations with similar semantic in compacted edit operations
+        ///// </summary>
+        ///// <param name="connectedComponents">Uncompacted edit operations</param>
+        //private static List<Script> CompactScript(List<Script> connectedComponents)
+        //{
+        //    var newccs = new List<Script>();
+        //    foreach (var cc in connectedComponents)
+        //    {
+        //        var editionConnected = ConnectedComponentMannager<SyntaxNodeOrToken>.EditConnectedComponents(cc.Edits.Select(o => o.EditOperation).ToList());
+        //        var newScript = Compact(editionConnected);
+        //        newccs.Add(new Script(newScript.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList()));
+        //    }
+        //    return newccs;
+        //}
 
         /// <summary>
         /// Compact similar edit operations in a single edit operation
@@ -296,14 +366,6 @@ namespace ProseSample.Substrings.Spg.Witness
                             }
                             removes.Add(editJ);
                         }
-
-                        //if (editI is Insert<SyntaxNodeOrToken> && editJ is Update<SyntaxNodeOrToken>)
-                        //{
-                        //    if (editI.T1Node.Equals(editJ.Parent))
-                        //    {
-                                
-                        //    }
-                        //}
                     }
                 }
                 newList.AddRange(editOperations);
@@ -311,6 +373,61 @@ namespace ProseSample.Substrings.Spg.Witness
             newList.RemoveAll(editOperation => removes.Any(node => node == editOperation));
             return newList;
         }
+
+
+        ///// <summary>
+        ///// Compact similar edit operations in a single edit operation
+        ///// </summary>
+        ///// <param name="connectedComponents">Uncompacted edit operations</param>
+        //private static List<EditOperation<SyntaxNodeOrToken>> Compact(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
+        //{
+        //    var newList = new List<EditOperation<SyntaxNodeOrToken>>();
+        //    var removes = new List<EditOperation<SyntaxNodeOrToken>>();
+        //    foreach (var editOperations in connectedComponents)
+        //    {
+        //        foreach (var editI in editOperations)
+        //        {
+        //            foreach (var editJ in editOperations)
+        //            {
+        //                if (editI.Equals(editJ)) continue;
+        //                if (editI.T1Node.Equals(editJ.Parent))
+        //                {
+        //                    if (!(editJ is Update<SyntaxNodeOrToken>))
+        //                    {
+        //                        editI.T1Node.AddChild(editJ.T1Node, editI.T1Node.Children.Count);
+        //                    }
+        //                    else
+        //                    {
+        //                        TreeUpdate update = new TreeUpdate(editI.T1Node);
+        //                        update.ProcessEditOperation(editJ);
+        //                    }
+        //                    removes.Add(editJ);
+        //                }            
+        //            }
+        //        }
+        //        newList.AddRange(editOperations);
+        //    }
+        //    newList.RemoveAll(editOperation => removes.Any(node => node == editOperation));
+        //    //var updateRemoves = new List<EditOperation<SyntaxNodeOrToken>>();
+        //    //var newNodes = new List<Tuple<EditOperation<SyntaxNodeOrToken>, EditOperation<SyntaxNodeOrToken>>>();
+        //    //foreach (var si in newList)
+        //    //{
+        //    //    foreach (var sj in newList)
+        //    //    {
+        //    //        if (si.Parent.Equals(sj.Parent))
+        //    //        {
+        //    //            updateRemoves.Add(si);
+        //    //            updateRemoves.Add(sj);
+        //    //            var newParent = ConverterHelper.ConvertCSharpToTreeNode(si.Parent.Value);
+        //    //            var treeUpdate = new TreeUpdate(newParent);
+        //    //            treeUpdate.ProcessEditOperation(si);
+        //    //            treeUpdate.ProcessEditOperation(sj);
+        //    //            var updateEdit = new Update<SyntaxNodeOrToken>(si.Parent, treeUpdate.CurrentTree, si.Parent.Parent);
+        //    //        }
+        //    //    }
+        //    //}
+        //    return newList;
+        //}
 
         /// <summary>
         /// Cluster connected components
