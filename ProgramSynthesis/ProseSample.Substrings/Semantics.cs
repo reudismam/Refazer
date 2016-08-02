@@ -425,8 +425,8 @@ namespace ProseSample.Substrings
             {
                 var emptyKind = SyntaxKind.EmptyStatement;
                 result.Add(new Node(n));
-                var parentEmpty = new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(emptyKind), new List<ITreeNode<SyntaxNodeOrToken>> {n}));
-                result.Add(parentEmpty);
+                //var parentEmpty = new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(emptyKind), new List<ITreeNode<SyntaxNodeOrToken>> {n}));
+                //result.Add(parentEmpty);
             }
             return result;
         }

@@ -25,7 +25,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             TreeUpdate update = new TreeUpdate(target.Value);
             var child = ast.Value;
-            var insert = new InsertBefore<SyntaxNodeOrToken>(child, parent.Value);
+            var insert = new InsertBefore<SyntaxNodeOrToken>(child, target.Value);
             update.ProcessEditOperation(insert);
 #if DEBUG
             Console.WriteLine("TREE UPDATE!!");
@@ -38,7 +38,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             TreeUpdate update = new TreeUpdate(target.Value);
             var child = moved.Value;
-            var move = new Move<SyntaxNodeOrToken>(child, parent.Value, k);
+            var move = new Move<SyntaxNodeOrToken>(child, target.Value, k);
             update.ProcessEditOperation(move);
 #if DEBUG
             Console.WriteLine("TREE UPDATE!!");
@@ -51,7 +51,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             TreeUpdate update = new TreeUpdate(target.Value);
             var toTreeNode = to.Value;
-            var updateEdit = new Update<SyntaxNodeOrToken>(fromNode.Value, toTreeNode, null);
+            var updateEdit = new Update<SyntaxNodeOrToken>(target.Value, toTreeNode, null);
             update.ProcessEditOperation(updateEdit);
 #if DEBUG
             Console.WriteLine("TREE UPDATE!!");
@@ -63,7 +63,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         public static Node Delete(Node target, Node fromNode)
         {
             TreeUpdate update = new TreeUpdate(target.Value);
-            var t1Node = fromNode.Value;
+            var t1Node = target.Value;
 
             var updateEdit = new Delete<SyntaxNodeOrToken>(t1Node);
             update.ProcessEditOperation(updateEdit);

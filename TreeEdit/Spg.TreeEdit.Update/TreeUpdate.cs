@@ -63,8 +63,8 @@ namespace TreeEdit.Spg.TreeEdit.Update
             if (editOperation is Update<SyntaxNodeOrToken>)
             {
                 var update = (Update<SyntaxNodeOrToken>)editOperation;
-                var treeNode = ConverterHelper.ConvertCSharpToTreeNode(update.To.Value);
-                ReplaceNode(CurrentTree, editOperation.T1Node.Value, treeNode);
+                //var treeNode = ConverterHelper.ConvertCSharpToTreeNode(update.To.Value);
+                ReplaceNode(CurrentTree, editOperation.T1Node.Value, update.To);
             }
 
             if (editOperation is Move<SyntaxNodeOrToken>)
