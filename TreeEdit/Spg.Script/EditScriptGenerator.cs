@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.Print;
 using TreeElement;
 using TreeElement.Spg.Node;
@@ -94,6 +95,18 @@ namespace TreeEdit.Spg.Script
                 }
             }
 
+            foreach (var s in editScript)
+            {
+                if (s is Move<T>) continue;
+                var t1copy = ConverterHelper.MakeACopy(s.T1Node);
+                t1copy.Children = new List<ITreeNode<T>>();
+                var parentcopy = ConverterHelper.MakeACopy(s.Parent);
+                parentcopy.Children = new List<ITreeNode<T>>();
+
+                s.T1Node = t1copy;
+                s.Parent = parentcopy;
+            }
+
             for (int i = 0; i < editScript.Count; i++)
             {
                 var v = editScript[i];
@@ -125,22 +138,12 @@ namespace TreeEdit.Spg.Script
                 }
             }
 
-            editScript.AddRange(deletes);
+            editScript.InsertRange(0, deletes);
             foreach (var v in removes)
             {
                 var index = editScript.FindIndex(o => o.Equals(v.Item1));
                 editScript.Insert(index, v.Item2);
                 editScript.Remove(v.Item1);
-            }
-            foreach (var s in editScript)
-            {
-                var t1copy = ConverterHelper.MakeACopy(s.T1Node);
-                t1copy.Children = new List<ITreeNode<T>>();
-                var parentcopy = ConverterHelper.MakeACopy(s.Parent);
-                parentcopy.Children = new List<ITreeNode<T>>();
-
-                s.T1Node = t1copy;
-                s.Parent = parentcopy;
             }
 
             return editScript;

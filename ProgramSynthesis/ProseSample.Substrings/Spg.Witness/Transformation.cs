@@ -273,7 +273,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     treeUpdate.ProcessEditOperation(s.EditOperation);
                 }
 
-                if (children.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
+                if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
                 {
                     //var t1node = treeUpdate.CurrentTree;
                     //var t1parent = ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent);
