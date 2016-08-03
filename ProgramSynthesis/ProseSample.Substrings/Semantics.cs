@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 using ProseSample.Substrings.List;
 using ProseSample.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
@@ -586,6 +587,14 @@ namespace ProseSample.Substrings
                         SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expressionSyntax,
                             syntaxName);
                     return simpleMemberExpression;
+                }
+                case SyntaxKind.ObjectCreationExpression:
+                {
+                    var typeSyntax = (TypeSyntax) children[0];
+                    var argumentList = (ArgumentListSyntax) children[1];
+                    var objectcreation = SyntaxFactory.ObjectCreationExpression(typeSyntax, argumentList, null);
+                    objectcreation = objectcreation.WithAdditionalAnnotations(Formatter.Annotation);
+                    return objectcreation;
                 }
                 case SyntaxKind.ParameterList:
                 {

@@ -96,15 +96,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(4, 1); ;
+            ///Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -139,15 +139,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(4, 1); ;
+            ///Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -182,15 +182,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(4, 1); ;
+            ///Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -225,15 +225,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -268,15 +268,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -486,15 +486,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -703,15 +703,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -746,15 +746,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
 
@@ -790,15 +790,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -834,15 +834,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -877,15 +877,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -921,15 +921,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -964,15 +964,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1051,15 +1051,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1095,15 +1095,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1139,15 +1139,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1183,15 +1183,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1226,15 +1226,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1270,15 +1270,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1314,15 +1314,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1357,15 +1357,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1400,15 +1400,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1443,15 +1443,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1486,15 +1486,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1529,15 +1529,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1573,15 +1573,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1616,15 +1616,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1660,15 +1660,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1704,15 +1704,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1747,15 +1747,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1790,15 +1790,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1833,15 +1833,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1876,15 +1876,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1919,15 +1919,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -1963,15 +1963,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -2006,15 +2006,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -2049,15 +2049,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -2092,15 +2092,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -2135,15 +2135,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         [Test]
@@ -2178,15 +2178,15 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(grammar, spec);
 
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+            //Run program
+            var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
 
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+            }
         }
 
         static string GetTestDataFolder(string testDataLocation)
