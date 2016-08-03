@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Semantic
 {
@@ -24,7 +25,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         public static Node InsertBefore(Node target, Node parent, Node ast)
         {
             TreeUpdate update = new TreeUpdate(target.Value);
-            var child = ast.Value;
+            var child = /*ConverterHelper.ConvertCSharpToTreeNode(Semantics.ReconstructTree(*/ast.Value/*)*/;
             var insert = new InsertBefore<SyntaxNodeOrToken>(child, target.Value);
             update.ProcessEditOperation(insert);
 #if DEBUG

@@ -362,7 +362,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 else if (firstOperation is Insert<SyntaxNodeOrToken>)
                 {
                     var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, firstOperation.T1Node.Value);
-                    var insert = new Insert<SyntaxNodeOrToken>(inserted, parent, firstOperation.K);
+                    var parentcopy = ConverterHelper.ConvertCSharpToTreeNode(treeUpdate.CurrentTree.Value);
+                    var insert = new Insert<SyntaxNodeOrToken>(inserted, parentcopy, firstOperation.K);
                     newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(insert));
                     newccs.Add(newScript);
                     //return newccs;
