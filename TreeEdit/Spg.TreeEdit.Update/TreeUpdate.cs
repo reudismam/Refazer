@@ -88,6 +88,12 @@ namespace TreeEdit.Spg.TreeEdit.Update
         {
             if (!iTree.Children.Any()) return iTree;
 
+            if (iTree.Value.Equals(oldNode.Value))
+            {
+                iTree = iTree.Children.Single();
+                return iTree;
+            }
+
             if (IsEquals(iTree, oldNode))
             {
                 iTree = new TreeNode<SyntaxNodeOrToken>(null, null);

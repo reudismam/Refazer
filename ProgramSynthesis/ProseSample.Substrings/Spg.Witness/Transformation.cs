@@ -61,7 +61,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var script = Script(inpTree, outTree);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
                     kMatches = ClusterScript(ccs);
-                    kMatches = kMatches.Select(CompactScript).ToList();
+                    kMatches = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
                 }
                 //kMatches = kMatches.GetRange(0, 1);
                 kExamples[input] = new List<List<List<Script>>> { kMatches };
@@ -287,14 +287,14 @@ namespace ProseSample.Substrings.Spg.Witness
         /// Compact edit operations with similar semantic in compacted edit operations
         /// </summary>
         /// <param name="connectedComponents">Uncompacted edit operations</param>
-        private static List<Script> CompactScript(List<Script> connectedComponents)
+        private static List<Script> CompactScript(List<Script> connectedComponents, ITreeNode<SyntaxNodeOrToken> inpTree)
         {
             var newccs = new List<Script>();
             foreach (var script in connectedComponents)
             {
                 var newScript = new Script(new List<Edit<SyntaxNodeOrToken>>());
                 //var parent = ;
-                var parent = ConverterHelper.ConvertCSharpToTreeNode(script.Edits.First().EditOperation.Parent.Value);
+                var parent = GetParent(script, inpTree); //ConverterHelper.ConvertCSharpToTreeNode(script.Edits.First().EditOperation.Parent.Value);
                 var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
 
                 var treeUpdate = new TreeUpdate(parent);
@@ -377,6 +377,33 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
             }
             return newccs;
+        }
+
+        private static ITreeNode<SyntaxNodeOrToken> GetParent(Script script, ITreeNode<SyntaxNodeOrToken> inpTree)
+        {
+            ITreeNode<SyntaxNodeOrToken> root = null;
+            foreach (var v in script.Edits)
+            {
+                ITreeNode<SyntaxNodeOrToken> tocompare = null;
+                if (v.EditOperation is Update<SyntaxNodeOrToken> || v.EditOperation is Delete<SyntaxNodeOrToken>)
+                {
+                    tocompare = v.EditOperation.T1Node;
+                }
+                else
+                {
+                    tocompare = v.EditOperation.Parent;
+                }
+
+                if (root == null)
+                {
+                    root = tocompare;
+                }
+                else if (TreeUpdate.FindNode(inpTree, tocompare.Value) != null  && root.Value.SpanStart > tocompare.Value.SpanStart)
+                {
+                    root = tocompare;
+                }
+            }
+            return root;
         }
 
         ///// <summary>
