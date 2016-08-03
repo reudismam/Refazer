@@ -390,7 +390,7 @@ namespace ProseSample.Substrings
 
         public static bool NodeMatch(Node sx, Pattern template)
         {
-            if (!sx.Value.Value.IsKind(template.Tree.Value.Kind)) return false;
+            //if (!sx.Value.Value.IsKind(template.Tree.Value.Kind)) return false;
             var isValue = MatchManager.IsValue(sx.Value, template.Tree);
             return isValue;
         }
