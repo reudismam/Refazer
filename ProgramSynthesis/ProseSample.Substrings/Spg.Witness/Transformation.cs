@@ -398,9 +398,19 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     root = tocompare;
                 }
-                else if (TreeUpdate.FindNode(inpTree, tocompare.Value) != null  && root.Value.SpanStart > tocompare.Value.SpanStart)
+                else if (TreeUpdate.FindNode(inpTree, tocompare.Value) != null)
                 {
-                    root = tocompare;
+                    if (root.Value.SpanStart > tocompare.Value.SpanStart)
+                    {
+                        root = tocompare;
+                    }else if (root.Value.SpanStart == tocompare.Value.SpanStart)
+                    {
+                        if (root.Value.Span.End < tocompare.Value.Span.End)
+                        {
+                            root = tocompare;
+                        }
+                    }
+                    
                 }
             }
             return root;

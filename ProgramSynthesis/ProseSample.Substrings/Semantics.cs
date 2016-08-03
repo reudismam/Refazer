@@ -513,7 +513,7 @@ namespace ProseSample.Substrings
         private static SyntaxNodeOrToken GetSyntaxElement(SyntaxKind kind, List<SyntaxNodeOrToken> children, SyntaxNodeOrToken node = default(SyntaxNodeOrToken))
         {
             switch (kind)
-            {
+            { 
                 case SyntaxKind.CastExpression:
                 {
                     var typeSyntax = (TypeSyntax) children[0];
@@ -593,6 +593,13 @@ namespace ProseSample.Substrings
                     var spal = SyntaxFactory.SeparatedList(new[] {parameter});
                     var parameterList = SyntaxFactory.ParameterList(spal);
                     return parameterList;
+                }
+                case SyntaxKind.ArrayInitializerExpression:
+                {
+                    var expressionSyntaxs = children.Select(child => (ExpressionSyntax)child).ToList();
+                    var spal = SyntaxFactory.SeparatedList(expressionSyntaxs);
+                    var arrayInitializer = SyntaxFactory.InitializerExpression(kind, spal);
+                    return arrayInitializer;
                 }
                 case SyntaxKind.Parameter:
                 {
