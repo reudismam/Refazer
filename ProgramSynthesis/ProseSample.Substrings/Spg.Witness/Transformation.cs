@@ -294,7 +294,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var newScript = new Script(new List<Edit<SyntaxNodeOrToken>>());
                 //var parent = ;
-                var parent = GetParent(script, inpTree); //ConverterHelper.ConvertCSharpToTreeNode(script.Edits.First().EditOperation.Parent.Value);
+                var parent = ConverterHelper.ConvertCSharpToTreeNode(GetParent(script, inpTree).Value); //ConverterHelper.ConvertCSharpToTreeNode(script.Edits.First().EditOperation.Parent.Value);
                 var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
 
                 var treeUpdate = new TreeUpdate(parent);
