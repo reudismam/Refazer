@@ -114,12 +114,12 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                 }
 
-                if (!t1.Value.Value.Children.Any() && !t2.Value.Value.Children.Any() && considerLeafToken)
-                {
-                    var ltoken = new LeafToken(t1.Value.Kind, t1.Value.Value);
-                    var litreenode = new TreeNode<Token>(ltoken, new TLabel(token.Kind));
-                    return new Pattern(litreenode);
-                }
+                //if (!t1.Value.Value.Children.Any() && !t2.Value.Value.Children.Any() && considerLeafToken)
+                //{
+                //    var ltoken = new LeafToken(t1.Value.Kind, t1.Value.Value);
+                //    var litreenode = new TreeNode<Token>(ltoken, new TLabel(token.Kind));
+                //    return new Pattern(litreenode);
+                //}
                 return pattern;
             }
 
