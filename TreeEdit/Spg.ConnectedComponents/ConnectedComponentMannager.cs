@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
 using TreeElement.Spg.Node;
@@ -58,7 +59,8 @@ namespace TreeEdit.Spg.ConnectedComponents
         {
             ConnectionComparer = new FullConnected(script);
             BuildGraph(script);        
-            return ConnectedComponentsBase(script);
+            var ccs =  ConnectedComponentsBase(script);
+            return ccs;
         }
 
         public static List<List<EditOperation<T>>> EditConnectedComponents(List<EditOperation<T>> script)
@@ -136,10 +138,12 @@ namespace TreeEdit.Spg.ConnectedComponents
                 var editJ = Script[indexJ];
 
                 //Two nodes have the same parent
-                if (editI.Parent.Equals(editJ.Parent) /*&& !editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))*/) return true;        
+                if (editI.Parent.Equals(editJ.Parent) && IsValidBlock(editI.Parent)/*!editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))*/) return true;        
 
                 //T1Node from an operation is the parent in another edit operation 
                 if (editI.T1Node.Equals(editJ.Parent)) return true;
+
+                if (editI.T1Node.Equals(editJ.T1Node)) return true;
 
                 if (editI.Parent.Parent != null && editI.Parent.Parent.Equals(editJ.T1Node)) return true;
 
@@ -150,7 +154,20 @@ namespace TreeEdit.Spg.ConnectedComponents
                     if (move.PreviousParent.Equals(editJ.Parent)) return false;
                 }
                 return false;
-            }     
+            }
+        }
+
+        private static bool IsValidBlock(ITreeNode<T> parent)
+        {
+            if (!parent.IsLabel(new TLabel(SyntaxKind.Block))) return true;
+
+            //T newT1 = (T)(object) parent.Value;
+            SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object)parent.Value;
+            if (newT2.Parent.IsKind(SyntaxKind.MethodDeclaration))
+            {
+                return false;
+            }
+            return true;
         }
 
         private class EditConnected : ConnectionComparer<T>
@@ -189,7 +206,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                 var editJ = Script[indexJ];
 
                 //Two nodes have the same parent
-                if (editI.Parent.DescendantNodesAndSelf().Contains(editJ.Parent) && !editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))) return true;
+                if (editI.Parent.DescendantNodesAndSelf().Contains(editJ.Parent) && IsValidBlock(editI.Parent)) return true;
 
                 //T1Node from an operation is the parent in another edit operation 
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
