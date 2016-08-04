@@ -218,14 +218,29 @@ namespace ProseSample.Substrings
         {
             var childrenList = (List<Node>) childrenNodes;
             if (!childrenList.Any()) return null;
-            var parent = new TreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
+            ITreeNode<SyntaxNodeOrToken> parent = new TreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
+            SyntaxNodeOrToken nodevalue = null;
             for (int i = 0; i < childrenList.Count(); i++)
             {
                 var child = childrenList.ElementAt(i).Value;
                 parent.AddChild(child, i);
+                if (child.Value.Parent.IsKind(kind))
+                {
+                    nodevalue = child.Value.Parent;
+                }
             }
-            var node = new Node(parent);
-            return node;
+            if (nodevalue != null)
+            {
+                var copy = ConverterHelper.MakeACopy(ConverterHelper.ConvertCSharpToTreeNode(nodevalue));
+                copy.Children = parent.Children;
+                var node = new Node(copy);
+                return node;
+            }
+            else
+            {
+                var node = new Node(parent);
+                return node;
+            }
         }
 
         /// <summary>
