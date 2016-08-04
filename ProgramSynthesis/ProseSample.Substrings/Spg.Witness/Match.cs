@@ -58,13 +58,14 @@ namespace ProseSample.Substrings.Spg.Witness
                 var target = (Node)input[rule.Body[0]];
                 var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
                 var matches = (from Node node in spec.DisjunctiveExamples[input] select node.Value).ToList();
-                if (TreeUpdate.FindNode(currentTree, matches.First().Value) == null)
+                var matchInInputTree = TreeUpdate.FindNode(currentTree, matches.First().Value);
+                if (matchInInputTree == null)
                 {
                     var inputTree = (Node)input[rule.Grammar.InputSymbol];
                     currentTree = inputTree.Value;
                 }
 
-                var pattern = ConverterHelper.ConvertITreeNodeToToken(matches.First());
+                var pattern = ConverterHelper.ConvertITreeNodeToToken(matchInInputTree);
                 //pattern.DescendantNodesAndSelf().ForEach(o => o.Value.Value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value));
                 foreach (var o in pattern.DescendantNodesAndSelf())
                 {
