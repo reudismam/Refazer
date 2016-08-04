@@ -13,7 +13,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             TreeUpdate update = new TreeUpdate(target.Value);
             var child = ast.Value;
-            var insert = new Insert<SyntaxNodeOrToken>(child, parent.Value, k);
+            var insert = new Insert<SyntaxNodeOrToken>(child, target.Value, k);
             update.ProcessEditOperation(insert);
 #if DEBUG
             Console.WriteLine("TREE UPDATE!!");

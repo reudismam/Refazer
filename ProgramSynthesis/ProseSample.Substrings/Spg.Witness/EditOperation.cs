@@ -97,14 +97,19 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
+                //input tree
+                var inputTree = (Node)input[rule.Grammar.InputSymbol];
+
                 //edit opration
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                 //Current tree
-                var key = editOperation.T1Node.SyntaxTree;
-                var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+                //var key = editOperation.T1Node.SyntaxTree;
+                //var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+                var treeUp = new TreeUpdate(inputTree.Value);
+                treeUp.ProcessEditOperation(editOperation);
 
                 //Compute after node
                 var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
