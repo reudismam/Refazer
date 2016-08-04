@@ -26,13 +26,15 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             TreeUpdate update = new TreeUpdate(target.Value);
             var child = /*ConverterHelper.ConvertCSharpToTreeNode(Semantics.ReconstructTree(*/ast.Value/*)*/;
-            var insert = new InsertBefore<SyntaxNodeOrToken>(child, target.Value);
-            update.ProcessEditOperation(insert);
-#if DEBUG
-            Console.WriteLine("TREE UPDATE!!");
-            PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
-#endif
-            return new Node(update.CurrentTree);
+            //var insert = new InsertBefore<SyntaxNodeOrToken>(child, target.Value);
+            //update.ProcessEditOperation(insert);
+//#if DEBUG
+            //Console.WriteLine("TREE UPDATE!!");
+            //PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);
+//#endif
+            //return new Node(update.CurrentTree);
+            parent.LeftNode = ast;
+            return parent;
         }
 
         public static Node Move(Node target, Node parent, Node moved, int k)

@@ -146,8 +146,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<Node>();
                 for (int i = 0; i < spec.Examples[input].Count(); i++)
                 {
-
-                    var script = (Script)spec.Examples[input].ElementAt(i);
+                    var examples = (List<Script>) spec.Examples[input];
+                    var script = examples.ElementAt(i);
                     var editOperation = script.Edits.Single().EditOperation;
                     Node node = null;
                     if (editOperation is Update<SyntaxNodeOrToken> || editOperation is Delete<SyntaxNodeOrToken>)
@@ -156,7 +156,16 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                     else
                     {
-                        node = new Node(editOperation.Parent);
+                        //if (editOperation is Insert<SyntaxNodeOrToken> &&
+                        //    examples.All(
+                        //        o => o.Edits.First().EditOperation.K == examples.First().Edits.First().EditOperation.K))
+                        //{
+                            node = new Node(editOperation.Parent);
+                        //}
+                        //else
+                        //{
+                        //    node = new Node(editOperation.T1Node)
+                        //}
                     }
                     kMatches.Add(node);
                     ConfigureContext(node.Value, script);

@@ -118,9 +118,9 @@ namespace ProseSample.Substrings
         /// <param name="node">Input data</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
-        public static Node InsertBefore(Node target, Node newNode)
+        public static Node InsertBefore(Node target, Node node, Node newNode)
         {
-            return SemanticEditOperation.InsertBefore(target, null, newNode);
+            return SemanticEditOperation.InsertBefore(target, node, newNode);
         }
 
         /// <summary>
@@ -191,6 +191,16 @@ namespace ProseSample.Substrings
             //{
             //    current = edits.Last().Value;
             //}
+            if (edits.Last().LeftNode != null)
+            {
+                var leftnode = ReconstructTree(edits.First().LeftNode.Value);
+            }
+
+            if (edits.Last().RightNode != null)
+            {
+                var rightnode = ReconstructTree(edits.First().RightNode.Value);
+            }
+
             var node = ReconstructTree(current);
             MappingRegions[target] = node;
             Console.WriteLine(node.ToString());

@@ -468,19 +468,6 @@ namespace ProseSample.Substrings
         }
 
 
-        ///// <summary>
-        ///// Witness function for parater k in the insert operator
-        ///// </summary>
-        ///// <param name="rule">Grammar rule</param>
-        ///// <param name="parameter">Parameter</param>
-        ///// <param name="spec">Examples specification</param>
-        ///// <returns></returns>
-        //[WitnessFunction("InsertBefore", 1)]
-        //public static ExampleSpec InsertBeforeParent(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return EditOperation.InsertBeforeParentLearner(rule, parameter, spec);
-        //}
-
         /// <summary>
         /// Witness function for parater k in the insert operator
         /// </summary>
@@ -489,9 +476,22 @@ namespace ProseSample.Substrings
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
         [WitnessFunction("InsertBefore", 1)]
+        public static ExampleSpec InsertBeforeParent(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            return EditOperation.InsertBeforeParentLearner(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// Witness function for parater k in the insert operator
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns></returns>
+        [WitnessFunction("InsertBefore", 2, DependsOnParameters = new [] {1})]
         public static ExampleSpec InsertBeforeast(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.InsertBeforeast(rule, parameter, spec);
+            return EditOperation.Insertast(rule, parameter, spec);
         }
 
         /// <summary>

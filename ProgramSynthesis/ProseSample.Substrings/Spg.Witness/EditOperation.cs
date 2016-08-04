@@ -128,14 +128,19 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
+                //input tree
+                var inputTree = (Node)input[rule.Grammar.InputSymbol];
+
                 //edit opration
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
                 //Current tree
-                var key = editOperation.T1Node.SyntaxTree;
-                var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+                //var key = editOperation.T1Node.SyntaxTree;
+                //var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+                var treeUp = new TreeUpdate(inputTree.Value);
+                treeUp.ProcessEditOperation(editOperation);
 
                 //Compute after node
                 var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
@@ -144,10 +149,36 @@ namespace ProseSample.Substrings.Spg.Witness
                 //Get nodes with a predefined depth
                 from.SyntaxTree = editOperation.T1Node.SyntaxTree;
                 var result = EditOperation.GetNode(from);
-                kExamples[input] = editOperation.T1Node;
+                kExamples[input] = result;
             }
             return new ExampleSpec(kExamples);
         }
+
+        //public static ExampleSpec InsertBeforeParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    var kExamples = new Dictionary<State, object>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        //edit opration
+        //        var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+        //        var editOperation = edit.EditOperation;
+        //        if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+
+        //        //Current tree
+        //        var key = editOperation.T1Node.SyntaxTree;
+        //        var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+
+        //        //Compute after node
+        //        var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
+        //        if (from == null) return null;
+
+        //        //Get nodes with a predefined depth
+        //        from.SyntaxTree = editOperation.T1Node.SyntaxTree;
+        //        var result = EditOperation.GetNode(from);
+        //        kExamples[input] = result;
+        //    }
+        //    return new ExampleSpec(kExamples);
+        //}
 
         private static ITreeNode<SyntaxNodeOrToken> GetAfterNode(ITreeNode<SyntaxNodeOrToken> currentTree, ITreeNode<SyntaxNodeOrToken> t1Node)
         {
