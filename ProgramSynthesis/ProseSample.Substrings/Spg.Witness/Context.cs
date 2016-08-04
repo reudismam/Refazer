@@ -20,7 +20,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var sot = node.Value;
                     var target = Target(sot);
-                    if (sot.Value.IsToken || target == null) return null;
+                    if (!ConverterHelper.Valid(sot.Value) || target == null) return null;
                     target.SyntaxTree = sot.SyntaxTree;
                     mats.Add(new Node(target));
                 }
@@ -48,7 +48,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var target = Target(sot);
                     if (target == null) return null;
                     var parent = target;
-                    if (sot.Value.IsToken) return null;
+                    if (!ConverterHelper.Valid(sot.Value)) return null;
                     var children = parent.Children;
                     for (int i = 0; i < children.Count; i++)
                     {

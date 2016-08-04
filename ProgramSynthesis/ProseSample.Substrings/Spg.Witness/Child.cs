@@ -6,6 +6,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.TreeEdit.Update;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -24,7 +25,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var sot = node.Value;
                     var treeNode = TreeUpdate.FindNode(inpTree, sot.Value);
 
-                    if (sot.Value.IsToken || treeNode != null) return null;
+                    if (!ConverterHelper.Valid(sot.Value) || treeNode != null) return null;
 
                     var child = inpTree.Children.Single();
 

@@ -44,7 +44,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     foreach (var matchResult in matchResultList)
                     {
                         var sot = matchResult;
-                        if (sot.Value.IsToken || !sot.Children.Any()) return null;
+                        if (!ConverterHelper.Valid(sot.Value) || !sot.Children.Any()) return null;
 
                         for (int i = 0; i < sot.Children.Count; i++)
                         {
@@ -75,7 +75,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     foreach (var sot in treeNodes)
                     {
-                        if (sot.Value.IsToken || sot.Children.Any() || sot.Value.AsNode().ChildNodes().Any()) return null;
+                        if (!ConverterHelper.Valid(sot.Value) || sot.Children.Any() || sot.Value.AsNode().ChildNodes().Any()) return null;
 
                         if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(tree, sot)) return null;
                     }

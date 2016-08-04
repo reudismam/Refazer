@@ -16,9 +16,9 @@ namespace TreeElement.Spg.Node
         /// <returns>TreeNode</returns>
         public static ITreeNode<SyntaxNodeOrToken> ConvertCSharpToTreeNode(SyntaxNodeOrToken st)
         {
-            if (!st.IsNode) return null;
+            if (!Valid(st)) return null;
 
-            var list = st.AsNode().ChildNodes();
+            var list = GetChildren(st); //st.AsNode().ChildNodes();
             if (!list.Any())
             {
                 var treeNode = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
@@ -27,7 +27,7 @@ namespace TreeElement.Spg.Node
             }
 
             List<ITreeNode<SyntaxNodeOrToken>> children = new List<ITreeNode<SyntaxNodeOrToken>>();
-            foreach (SyntaxNodeOrToken sot in st.AsNode().ChildNodes())
+            foreach (SyntaxNodeOrToken sot in list)
             {
                 ITreeNode<SyntaxNodeOrToken> node = ConvertCSharpToTreeNode(sot);
                 node.Start = sot.SpanStart;
@@ -37,6 +37,24 @@ namespace TreeElement.Spg.Node
             ITreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()), children);
             tree.Start = st.SpanStart;
             return tree;
+        }
+
+        public static bool Valid(SyntaxNodeOrToken st)
+        {
+            return st.IsNode /*|| st.IsKind(SyntaxKind.IdentifierToken)*/;
+        }
+
+        private static List<SyntaxNodeOrToken> GetChildren(SyntaxNodeOrToken st)
+        {
+            var list = new List<SyntaxNodeOrToken>();
+            foreach (var v in st.ChildNodesAndTokens())
+            {
+                if(Valid(v))
+                { 
+                    list.Add(v);
+                }
+            }
+            return list;
         }
 
         public static ITreeNode<Token> ConvertITreeNodeToToken(ITreeNode<SyntaxNodeOrToken> st)
@@ -100,8 +118,6 @@ namespace TreeElement.Spg.Node
             ITreeNode<T> tree = new TreeNode<T>(st.Value, st.Label, children);
             return tree;
         }
-
-
 
         /// <summary>
         /// Convert a syntax tree to a TreeNode

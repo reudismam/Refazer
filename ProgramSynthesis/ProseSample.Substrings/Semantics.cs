@@ -522,7 +522,7 @@ namespace ProseSample.Substrings
         /// <param name="children">Children nodes.</param>
         /// <param name="node">Node</param>
         /// <returns>A SyntaxNode with specific king and children</returns>
-        private static SyntaxNodeOrToken GetSyntaxElement(SyntaxKind kind, List<SyntaxNodeOrToken> children, SyntaxNodeOrToken node = default(SyntaxNodeOrToken))
+        private static SyntaxNodeOrToken GetSyntaxElement(SyntaxKind kind, List<SyntaxNodeOrToken> children, SyntaxNodeOrToken node = default(SyntaxNodeOrToken), List<SyntaxNodeOrToken> identifiers = null)
         {
             switch (kind)
             { 
@@ -823,13 +823,21 @@ namespace ProseSample.Substrings
                 return tree.Value;
             }
             List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken>();
+            List<SyntaxNodeOrToken> identifier = new List<SyntaxNodeOrToken>();
             foreach (var v in tree.Children)
             {
-                var result = ReconstructTree(v);
-                children.Add(result);
+                if (v.Value.IsNode)
+                {
+                    var result = ReconstructTree(v);
+                    children.Add(result);
+                }
+                else
+                {
+                    identifier.Add(v.Value);
+                }
             }
             //children = tree.Children.Select(ReconstructTree).ToList();
-            var node = GetSyntaxElement((SyntaxKind) tree.Label.Label, children, tree.Value);
+            var node = GetSyntaxElement((SyntaxKind) tree.Label.Label, children, tree.Value, identifier);
             return node;
         }
     }

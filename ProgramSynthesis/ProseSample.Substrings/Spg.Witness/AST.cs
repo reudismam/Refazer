@@ -25,7 +25,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<object>();
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
-                    if (sot.Value.IsToken) return null;
+                    if (!ConverterHelper.Valid(sot.Value)) return null;
                     if (!sot.Children.Any()) return null;
                     kMatches.Add(sot.Value.Kind());
                 }
@@ -44,7 +44,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
-                    if (sot.Value.IsToken) return null;
+                    if (!ConverterHelper.Valid(sot.Value)) return null;
                     var lsot = sot.Children;
                     lsot.ForEach(o => o.SyntaxTree = sot.SyntaxTree);
                     matches.Add(lsot);
@@ -83,7 +83,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var mats = new List<object>();
                 foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
-                    if (!sot.Value.IsNode) return null;
+                    if (!ConverterHelper.Valid(sot.Value)) return null;
                     //var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);
                     var node = TreeUpdate.FindNode(currentTree, sot.Value);//IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree.Value, subTree);
                     if (node == null) return null;
