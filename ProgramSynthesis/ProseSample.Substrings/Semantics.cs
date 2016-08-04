@@ -204,7 +204,7 @@ namespace ProseSample.Substrings
             var node = ReconstructTree(current);
             MappingRegions[target] = node;
             Console.WriteLine(node.ToString());
-            throw new ArgumentException("exception");
+            //throw new ArgumentException("exception");
             return target;
         }
 
