@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using ProseSample.Substrings;
 using TreeElement;
 using TreeElement.Spg.Node;
+using TreeElement.Spg.Walker;
 
 namespace TreeEdit.Spg.Match
 {
@@ -57,8 +58,10 @@ namespace TreeEdit.Spg.Match
         /// <param name="pattern">Pattern</param>
         public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
         {
-            TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
-            var nodes = tree.PostOrderTraversal(node);
+            //TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
+            //var nodes = tree.PostOrderTraversal(node);
+            var nodes =  BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(node);
+            nodes.Insert(0, node);
             var matchNodes = nodes.Where(v => IsValue(v, pattern)).ToList();
 
             //var edited = new List<Tuple<ITreeNode<SyntaxNodeOrToken>, List<ITreeNode<SyntaxNodeOrToken>>>>();

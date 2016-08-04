@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TreeElement.Spg.Walker;
 
 namespace TreeElement.Spg.Node
 {
@@ -72,6 +73,16 @@ namespace TreeElement.Spg.Node
             }
         }
 
+        ///// <summary>
+        ///// Get descendants nodes
+        ///// </summary>
+        ///// <returns></returns>
+        //public List<ITreeNode<T>> DescendantNodes()
+        //{
+        //    var list = BFSWalker<T>.BreadFirstSearch(this);
+        //    return list;
+        //}
+
         /// <summary>
         /// Get descendants nodes
         /// </summary>
@@ -94,7 +105,7 @@ namespace TreeElement.Spg.Node
             //return list;
             //return BFSWalker<T>.BreadFirstSearch(this);
             var traversal = new TreeTraversal<T>();
-            var list =  traversal.PostOrderTraversal(this);
+            var list = traversal.PostOrderTraversal(this);
             //list.RemoveAt(list.Count - 1);
             return list;
         }

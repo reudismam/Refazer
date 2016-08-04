@@ -25,70 +25,9 @@ namespace System.Data.Entity.Interception
             Action<Action> verifyInitialization, Action<Action> verifySaveChanges, int expectedBlogs, bool useTransactionHandler,
             bool useExecutionStrategy, bool rollbackOnFail)
         {
-            var failingTransactionInterceptorMock = new Mock<FailingTransactionInterceptor> { CallBase = true };
-            var failingTransactionInterceptor = failingTransactionInterceptorMock.Object;
-            DbInterception.Add(failingTransactionInterceptor);
-
-            if (useTransactionHandler)
-            {
-                MutableResolver.AddResolver<Func<TransactionHandler>>(
-                    new TransactionHandlerResolver(() => new CommitFailureHandler(), null, null));
-            }
-
-            var isSqlAzure = DatabaseTestHelpers.IsSqlAzure(ModelHelpers.BaseConnectionString);
-            if (useExecutionStrategy)
-            {
-                MutableResolver.AddResolver<Func<IDbExecutionStrategy>>(
-                    key =>
-                        (Func<IDbExecutionStrategy>)
-                            (() => isSqlAzure
-                                ? new TestSqlAzureExecutionStrategy()
-                                : (IDbExecutionStrategy)
-                                    new SqlAzureExecutionStrategy(maxRetryCount: 2, maxDelay: TimeSpan.FromMilliseconds(1))));
-            }
-
-            try
-            {
                 using (var context = new BlogContextCommit())
                 {
-                    context.Database.Delete();
-                    failingTransactionInterceptor.ShouldFailTimes = 1;
-                    failingTransactionInterceptor.ShouldRollBack = rollbackOnFail;
-                    verifyInitialization(() => context.Blogs.Count());
-
-                    failingTransactionInterceptor.ShouldFailTimes = 0;
-                    ExtendedSqlAzureExecutionStrategy.ExecuteNew(
-                        () =>
-                        {
-                            Assert.Equal(1, context.Blogs.Count());
-                        });
-
-                    failingTransactionInterceptor.ShouldFailTimes = 1;
-                    context.Blogs.Add(new BlogContext.Blog());
-                    verifySaveChanges(() => context.SaveChanges());
-
-                    var expectedCommitCount = useTransactionHandler
-                        ? useExecutionStrategy
-                            ? 6
-                            : rollbackOnFail
-                                ? 4
-                                : 3
-                        : 4;
-
-                    failingTransactionInterceptorMock.Verify(
-                        m => m.Committing(It.IsAny<DbTransaction>(), It.IsAny<DbTransactionInterceptionContext>()),
-                        isSqlAzure
-                            ? Times.AtLeast(expectedCommitCount)
-                            : Times.Exactly(expectedCommitCount));
-                }
-
-                using (var context = new BlogContextCommit())
-                {
-                    ExtendedSqlAzureExecutionStrategy.ExecuteNew(
-                        () =>
-                        {
-                            Assert.Equal(expectedBlogs, context.Blogs.Count());
-                        });
+                    Assert.Equal(expectedBlogs, context.Blogs.Count());
 
                     using (var transactionContext = new TransactionContext(context.Database.Connection))
                     {
