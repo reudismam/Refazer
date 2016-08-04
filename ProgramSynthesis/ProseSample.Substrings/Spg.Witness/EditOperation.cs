@@ -92,6 +92,32 @@ namespace ProseSample.Substrings.Spg.Witness
             return new ExampleSpec(kExamples);
         }
 
+        public static ExampleSpec InsertBeforeast(GrammarRule rule, int parameter, ExampleSpec spec)
+        {
+            var kExamples = new Dictionary<State, object>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                //edit opration
+                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+                var editOperation = edit.EditOperation;
+                if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+
+                //Current tree
+                var key = editOperation.T1Node.SyntaxTree;
+                var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+
+                //Compute after node
+                var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
+                if (from == null) return null;
+
+                ////Get nodes with a predefined depth
+                //from.SyntaxTree = editOperation.T1Node.SyntaxTree;
+                //var result = EditOperation.GetNode(from);
+                kExamples[input] = editOperation.T1Node;
+            }
+            return new ExampleSpec(kExamples);
+        }
+
         public static ExampleSpec InsertBeforeParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
@@ -113,7 +139,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 //Get nodes with a predefined depth
                 from.SyntaxTree = editOperation.T1Node.SyntaxTree;
                 var result = EditOperation.GetNode(from);
-                kExamples[input] = result;
+                kExamples[input] = editOperation.T1Node;
             }
             return new ExampleSpec(kExamples);
         }
@@ -121,6 +147,7 @@ namespace ProseSample.Substrings.Spg.Witness
         private static ITreeNode<SyntaxNodeOrToken> GetAfterNode(ITreeNode<SyntaxNodeOrToken> currentTree, ITreeNode<SyntaxNodeOrToken> t1Node)
         {
             var node = TreeUpdate.FindNode(currentTree, t1Node.Value);
+            if (node == null) return null;
             var parent = node.Parent;
             for (int i = 0; i < parent.Children.Count; i++)
             {
@@ -136,19 +163,19 @@ namespace ProseSample.Substrings.Spg.Witness
             return null;
         }
 
-        public static ExampleSpec InsertBeforeast(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            var kExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-                var editOperation = edit.EditOperation;
-                if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+        //public static ExampleSpec InsertBeforeast(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    var kExamples = new Dictionary<State, object>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+        //        var editOperation = edit.EditOperation;
+        //        if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
-                kExamples[input] = editOperation.T1Node;
-            }
-            return new ExampleSpec(kExamples);
-        }
+        //        kExamples[input] = editOperation.T1Node;
+        //    }
+        //    return new ExampleSpec(kExamples);
+        //}
 
         public static Node GetNode(ITreeNode<SyntaxNodeOrToken> searchedNode)
         {

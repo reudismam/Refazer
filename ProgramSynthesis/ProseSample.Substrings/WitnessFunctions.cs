@@ -491,7 +491,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("InsertBefore", 1)]
         public static ExampleSpec InsertBeforeast(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return EditOperation.Insertast(rule, parameter, spec);
+            return EditOperation.InsertBeforeast(rule, parameter, spec);
         }
 
         /// <summary>
