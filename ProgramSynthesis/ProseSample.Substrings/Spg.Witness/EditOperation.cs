@@ -146,9 +146,17 @@ namespace ProseSample.Substrings.Spg.Witness
                 var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
                 if (from == null) return null;
 
-                //Get nodes with a predefined depth
                 from.SyntaxTree = editOperation.T1Node.SyntaxTree;
                 var result = EditOperation.GetNode(from);
+                if (result == null)
+                {
+                    result = EditOperation.GetNode(inputTree.Value, from);
+                }
+
+                if (result == null) return null;
+                ////Get nodes with a predefined depth
+                //from.SyntaxTree = editOperation.T1Node.SyntaxTree;
+                //var result = EditOperation.GetNode(from);
                 kExamples[input] = result;
             }
             return new ExampleSpec(kExamples);

@@ -14,7 +14,7 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             var currentTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
             var node = TreeUpdate.FindNode(currentTree, sot.Value);
-            return node.Parent;
+            return node?.Parent;
         }
     }
 }

@@ -63,8 +63,10 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var inputTree = (Node)input[rule.Grammar.InputSymbol];
                     currentTree = inputTree.Value;
+                    matchInInputTree = TreeUpdate.FindNode(currentTree, matches.First().Value);
                 }
 
+                if (matchInInputTree == null) return null;
                 var pattern = ConverterHelper.ConvertITreeNodeToToken(matchInInputTree);
                 //pattern.DescendantNodesAndSelf().ForEach(o => o.Value.Value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value));
                 foreach (var o in pattern.DescendantNodesAndSelf())
