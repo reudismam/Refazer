@@ -90,7 +90,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
             if (iTree.Value.Equals(oldNode.Value))
             {
-                iTree = iTree.Children.Single();
+                //iTree = iTree.Children.Single();
+                //return iTree;
+                iTree = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
                 return iTree;
             }
 
