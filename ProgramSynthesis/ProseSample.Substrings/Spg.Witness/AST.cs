@@ -64,8 +64,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     if (sot.Children.Any()) return null;
                     mats.Add(sot);
-                    //var first = mats.First();
-                    //if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot)) return null;
+
+                    var first = mats.First();
+                    if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot)) return null;
                 }
                 treeExamples[input] = mats.First().Value;
             }
