@@ -145,6 +145,10 @@ namespace TreeEdit.Spg.ConnectedComponents
 
                 if (editI.T1Node.Equals(editJ.T1Node)) return true;
 
+                //var parentNodes = GetNodes(editI.Parent.Value);
+                //if (parentNodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
+                //if (parentNodes.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
+
                 if (editI.Parent.Parent != null && editI.Parent.Parent.Equals(editJ.T1Node)) return true;
 
                 if (editI is Move<T>)
@@ -154,6 +158,14 @@ namespace TreeEdit.Spg.ConnectedComponents
                     if (move.PreviousParent.Equals(editJ.Parent)) return false;
                 }
                 return false;
+            }
+
+            private ITreeNode<T> GetNodes(T value)
+            {
+                SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object) value;
+                var newnode = ConverterHelper.ConvertCSharpToTreeNode(newT2.Parent.Parent.Parent.Parent);
+                ITreeNode<T> newT1 = (ITreeNode<T>)(object) newnode;
+                return newT1;
             }
         }
 

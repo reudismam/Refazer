@@ -109,9 +109,43 @@ namespace TreeEdit.Spg.Match
             {
                 return false;
             }
+
+            //if (node.Children.Count <= pattern.Children.Count) return false;
+
             foreach (var child in pattern.Children)
             {
                 var valid = node.Children.Any(tchild => IsValue(tchild, child));
+                if (!valid)
+                {
+                    return false;
+                }
+            }
+            //var child = pattern.Children[index];
+            //var pchild = node.Children[index];
+            //var valid = IsValue(pchild, child);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Verify if the node match the pattern
+        /// </summary>
+        /// <param name="node">Node</param>
+        /// <param name="pattern">Pattern</param>
+        public static bool IsValueEachChild(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
+        {
+            if (!pattern.Value.IsMatch(node))
+            {
+                return false;
+            }
+
+            if (node.Children.Count != pattern.Children.Count) return false;
+
+            for (int i = 0; i < pattern.Children.Count; i++)
+            {
+                var nodechild = node.Children[i];
+                var child = pattern.Children[i];
+                var valid = IsValueEachChild(nodechild, child);
                 if (!valid)
                 {
                     return false;
