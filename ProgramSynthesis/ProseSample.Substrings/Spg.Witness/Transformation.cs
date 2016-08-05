@@ -156,16 +156,14 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                     else
                     {
-                        //if (editOperation is Insert<SyntaxNodeOrToken> &&
-                        //    examples.All(
-                        //        o => o.Edits.First().EditOperation.K == examples.First().Edits.First().EditOperation.K))
-                        //{
+                        if (ConnectedComponentMannager<SyntaxNodeOrToken>.IsValidBlock(editOperation.Parent))
+                        {
                             node = new Node(editOperation.Parent);
-                        //}
-                        //else
-                        //{
-                        //    node = new Node(editOperation.T1Node)
-                        //}
+                        }
+                        else
+                        {
+                            node = new Node(editOperation.T1Node);
+                        }
                     }
                     kMatches.Add(node);
                     ConfigureContext(node.Value, script);

@@ -157,7 +157,7 @@ namespace TreeEdit.Spg.ConnectedComponents
             }
         }
 
-        private static bool IsValidBlock(ITreeNode<T> parent)
+        public static bool IsValidBlock(ITreeNode<T> parent)
         {
             if (!parent.IsLabel(new TLabel(SyntaxKind.Block))) return true;
 
