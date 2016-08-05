@@ -108,7 +108,7 @@ namespace ProseSample.Substrings
         /// <returns>New node with the newNode node inserted as the k child</returns>
         public static Node Insert(Node target, Node newNode, int k)
         {
-            return SemanticEditOperation.Insert(target, null, newNode, k);
+            return SemanticEditOperation.Insert(target, newNode, k);
         }
 
         /// <summary>
@@ -124,17 +124,6 @@ namespace ProseSample.Substrings
         }
 
         /// <summary>
-        /// Move edit operation
-        /// </summary>
-        /// <param name="k">Child index</param>
-        /// <param name="from">Moved node</param>
-        /// <param name="target">Target node</param>
-        public static Node Move(Node target, Node from, int k)
-        {
-            return SemanticEditOperation.Move(target, null, from, k);
-        }
-
-        /// <summary>
         /// Update edit operation
         /// </summary>
         /// <param name="target">Target node</param>
@@ -142,7 +131,7 @@ namespace ProseSample.Substrings
         /// <param name="to">New value</param>
         public static Node Update(Node target, Node to)
         {
-            return SemanticEditOperation.Update(target, null, to);
+            return SemanticEditOperation.Update(target, to);
         }
 
         /// <summary>
