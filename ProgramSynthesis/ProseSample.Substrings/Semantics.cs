@@ -626,19 +626,38 @@ namespace ProseSample.Substrings
                 }
                 case SyntaxKind.InvocationExpression:
                 {
-                    var expressionSyntax = (ExpressionSyntax) children[0];
-                    ArgumentListSyntax argumentList = (ArgumentListSyntax) children[1];
-                    var invocation = SyntaxFactory.InvocationExpression(expressionSyntax, argumentList);
-                    return invocation;
+                    if (!identifiers.Any())
+                    {
+                        var expressionSyntax = (ExpressionSyntax) children[0];
+                        ArgumentListSyntax argumentList = (ArgumentListSyntax) children[1];
+                        var invocation = SyntaxFactory.InvocationExpression(expressionSyntax, argumentList);
+                        return invocation;
+                    }
+                    else
+                    {
+                        var expressionSyntax = (ExpressionSyntax) GetSyntaxElement(SyntaxKind.IdentifierName, null, null, identifiers);
+                        ArgumentListSyntax argumentList = (ArgumentListSyntax) children[0];
+                        var invocation = SyntaxFactory.InvocationExpression(expressionSyntax, argumentList);
+                        return invocation;
+                    }
+
                 }
                 case SyntaxKind.SimpleMemberAccessExpression:
                 {
-                    var expressionSyntax = (ExpressionSyntax) children[0];
-                    var syntaxName = (SimpleNameSyntax) children[1];
-                    var simpleMemberExpression =
-                        SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expressionSyntax,
-                            syntaxName);
-                    return simpleMemberExpression;
+                    if (!identifiers.Any())
+                    {
+                        var expressionSyntax = (ExpressionSyntax) children[0];
+                        var syntaxName = (SimpleNameSyntax) children[1];
+                        var simpleMemberExpression = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expressionSyntax, syntaxName);
+                        return simpleMemberExpression;
+                    }
+                    else
+                    {
+                        var expressionSyntax = (ExpressionSyntax)children[0];
+                        var syntaxName = (SimpleNameSyntax) GetSyntaxElement(SyntaxKind.IdentifierName, null, null, identifiers);
+                        var simpleMemberExpression = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expressionSyntax, syntaxName);
+                        return simpleMemberExpression;
+                    }
                 }
                 case SyntaxKind.ElementAccessExpression:
                 {
@@ -784,7 +803,7 @@ namespace ProseSample.Substrings
                 }
                 case SyntaxKind.IdentifierName:
                 {
-                    SyntaxToken stoken = (SyntaxToken) children.First();
+                    SyntaxToken stoken = (SyntaxToken) identifiers.First();
                     var identifierName = SyntaxFactory.IdentifierName(stoken);
                     return identifierName;
                 }

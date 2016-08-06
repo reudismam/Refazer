@@ -41,7 +41,7 @@ namespace TreeElement.Spg.Node
 
         public static bool Valid(SyntaxNodeOrToken st)
         {
-            return st.IsNode /*|| st.IsKind(SyntaxKind.IdentifierToken)*/;
+            return st.IsNode || st.IsKind(SyntaxKind.IdentifierToken);
         }
 
         private static List<SyntaxNodeOrToken> GetChildren(SyntaxNodeOrToken st)
