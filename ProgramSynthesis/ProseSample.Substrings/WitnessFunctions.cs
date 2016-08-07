@@ -558,6 +558,43 @@ namespace ProseSample.Substrings
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             var patterns = new List<ITreeNode<Token>>();
+            var indexChildList = new Dictionary<State, int>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var target = (Node)input[rule.Body[0]];
+                var parent = target.Value.Value.Parent;
+                if (parent.IsKind(SyntaxKind.Block)) return NodeMatchBasic(rule, parameter, spec);
+
+                var topattern = ConverterHelper.ConvertCSharpToTreeNode(parent);
+                var targetIndex = topattern.Children.FindIndex(o => o.Equals(target.Value));
+                var hinpTree = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(topattern, 4);
+                var pattern = BuildPattern(hinpTree);
+                patterns.Add(pattern);
+                indexChildList[input] = targetIndex;
+            }
+            var commonPattern = Match.BuildPattern(patterns);
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var copyPattern = ConverterHelper.MakeACopy(commonPattern.Tree);
+                var targetPattern = copyPattern.Children.ElementAt(indexChildList[input]);
+                var list = new List<ITreeNode<Token>> { targetPattern  };
+                if (targetPattern.Children.Any())
+                {
+                    var copy = ConverterHelper.MakeACopy(commonPattern.Tree);
+                    var empty = new EmptyToken();
+                    ITreeNode<Token> itreeNodeToken = new TreeNode<Token>(empty, new TLabel(SyntaxKind.EmptyStatement));
+                    itreeNodeToken.Children = copy.Children.ElementAt(indexChildList[input]).Children;
+                    list.Add(itreeNodeToken);
+                }
+                eExamples[input] = list;
+            }
+            return DisjunctiveExamplesSpec.From(eExamples);
+        }
+
+        public static DisjunctiveExamplesSpec NodeMatchBasic(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var eExamples = new Dictionary<State, IEnumerable<object>>();
+            var patterns = new List<ITreeNode<Token>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node)input[rule.Body[0]];

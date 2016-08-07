@@ -6,15 +6,16 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Parent: Context
     {
-        public override ITreeNode<SyntaxNodeOrToken> Target(ITreeNode<SyntaxNodeOrToken> sot)
+        public override ITreeNode<Token> Target(ITreeNode<Token> sot)
         {
             if (sot.Parent == null)
             {
                 return null;
             }
-            var currentTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
-            var node = TreeUpdate.FindNode(currentTree, sot.Value);
-            return node?.Parent;
+            //var currentTree = WitnessFunctions.GetCurrentTree(sot.SyntaxTree);
+            //var node = TreeUpdate.FindNode(currentTree, sot.Value);
+            //return node?.Parent;
+            return sot.Parent;
         }
     }
 }

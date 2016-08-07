@@ -81,11 +81,13 @@ namespace ProseSample.Substrings
             return SemanticMatch.Leaf(kind);
         }
 
-        public static Node Parent(Node match, int k)
+        public static Pattern Parent(Pattern match, int k)
         {
-            var child = match.Value.Children.ElementAt(k - 1);
-            var result = new Node(child);
-            return result;
+            var patternP = new PatternP(match.Tree, k);
+            return patternP;
+            //var child = match.Value.Children.ElementAt(k - 1);
+            //var result = new Node(child);
+            //return result;
         }
 
         /// <summary>
@@ -406,15 +408,38 @@ namespace ProseSample.Substrings
 
         public static bool NodeMatch(Node sx, Pattern template)
         {
-            //if (!sx.Value.Value.IsKind(template.Tree.Value.Kind)) return false;
-            var isValue = MatchManager.IsValueEachChild(sx.Value, template.Tree);
-            return isValue;
+            //if (!sx.Value.Value.IsKind(template.Tree.Value.Kind)) return false
+            if (template is PatternP)
+            {
+                var patternP = (PatternP) template;
+                var parent = sx.Value.Parent;
+                if (parent == null) return false;
+                var isValue = MatchManager.IsValueEachChild(parent, template.Tree);
+                var isValid = isValue && parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1;
+                return isValid;
+            }
+            else
+            {
+                var isValue = MatchManager.IsValueEachChild(sx.Value, template.Tree);
+                return isValue;
+            }
         }
 
         public static Node Match(Node target, Pattern kmatch, int k)
         {
-            var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
-            return new Node(nodes.ElementAt(k - 1));
+            if (kmatch is PatternP)
+            {
+                var patternP = (PatternP) kmatch;
+                //var pattern = target.Value.Parent.Children.ElementAt(patternP.K - 1);
+                var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
+                //nodes = nodes.Select(o => o.Children.ElementAt(patternP.K - 1)).ToList();
+                return new Node(nodes.ElementAt(k - 1).Children.ElementAt(patternP.K - 1));
+            }
+            else
+            {
+                var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
+                return new Node(nodes.ElementAt(k - 1));      
+            }
         }
 
         public static IEnumerable<Node> Template(Node node, Pattern pattern)
@@ -439,7 +464,7 @@ namespace ProseSample.Substrings
             var result = new List<Node>();
             foreach (var n in nodes)
             {
-                var emptyKind = SyntaxKind.EmptyStatement;
+                //var emptyKind = SyntaxKind.EmptyStatement;
                 result.Add(new Node(n));
                 //var parentEmpty = new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(emptyKind), new List<ITreeNode<SyntaxNodeOrToken>> {n}));
                 //result.Add(parentEmpty);

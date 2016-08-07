@@ -15,15 +15,14 @@ namespace ProseSample.Substrings.Spg.Witness
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var mats = new List<object>();
-                foreach (Node node in spec.DisjunctiveExamples[input])
+                var mats = new List<ITreeNode<Token>>();
+                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = node.Value;
-                    var target = Target(sot);
-                    if (!ConverterHelper.Valid(sot.Value) || target == null) return null;
-                    target.SyntaxTree = sot.SyntaxTree;
-                    mats.Add(new Node(target));
+                    var target = Target(node);
+                    if (target == null) continue;
+                    mats.Add(target);
                 }
+                if (!mats.Any()) return null;
                 treeExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
@@ -42,22 +41,26 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (Node node in spec.DisjunctiveExamples[input])
+                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = node.Value;
-                    var target = Target(sot);
-                    if (target == null) return null;
+                    var target = Target(node);
+                    if (target == null) continue;
                     var parent = target;
-                    if (!ConverterHelper.Valid(sot.Value)) return null;
                     var children = parent.Children;
-                    for (int i = 0; i < children.Count; i++)
-                    {
-                        var item = children.ElementAt(i);
-                        if (TreeNode<SyntaxNodeOrToken>.IsEqual(item, sot))
-                        {
-                            matches.Add(i + 1);
-                        }
-                    }
+                    var targetIndex = children.FindIndex(o => o.Equals(node));
+
+                    if (targetIndex == -1) continue;
+                    matches.Add(targetIndex + 1);
+                    //if (!ConverterHelper.Valid(sot.Value)) return null;
+
+                    //for (int i = 0; i < children.Count; i++)
+                    //{
+                    //    var item = children.ElementAt(i);
+                    //    if (TreeNode<SyntaxNodeOrToken>.IsEqual(item, sot))
+                    //    {
+                    //        matches.Add(i + 1);
+                    //    }
+                    //}
                 }
                 if (!matches.Any()) return null;    
                 if (matches.Any(sequence => !sequence.Equals(matches.First()))) return null;
@@ -66,6 +69,6 @@ namespace ProseSample.Substrings.Spg.Witness
             return new ExampleSpec(kExamples);
         }
 
-        public abstract ITreeNode<SyntaxNodeOrToken> Target(ITreeNode<SyntaxNodeOrToken> sot);
+        public abstract ITreeNode<Token> Target(ITreeNode<Token> sot);
     }
 }

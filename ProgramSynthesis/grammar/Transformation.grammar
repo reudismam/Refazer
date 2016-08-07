@@ -22,15 +22,15 @@ feature double Score = RankingScore;
 Patch patch := SE(editList) | EList(editList, patch);
 IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
 IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
-bool nodematch := NodeMatch(x, kmatch);
+bool nodematch := NodeMatch(x, pattern);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
 Node edit := Script(target, edits);
 IEnumerable<Node> edits:= SO(operation) | SL(operation, edits);
 Node operation := Insert(target, ast, k) | InsertBefore(target, match, ast) |  Update(target, ast) | Delete(target, match);
 
-Node match := Parent(pattern, k) | pattern;
-Node pattern := Match(target, kmatch, k);
+Node match := Match(target, pattern, k);
+Pattern pattern := Parent(kmatch, k) | kmatch;
 Pattern kmatch := C(kind, children) | Literal(tree) | Leaf(kind) | Variable(kind);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
 

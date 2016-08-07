@@ -49,6 +49,55 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
+        //public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        //{
+        //    var eExamples = new Dictionary<State, IEnumerable<object>>();
+        //    var patterns = new List<ITreeNode<Token>>();
+        //    var indexChildList = new Dictionary<State, int>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var target = (Node)input[rule.Body[0]];
+        //        var inputTree = (Node)input[rule.Grammar.InputSymbol];
+        //        var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
+        //        var matches = (from Node node in spec.DisjunctiveExamples[input] select node.Value).ToList();
+        //        var matchInInputTree = TreeUpdate.FindNode(currentTree, matches.First().Value);
+        //        if (matchInInputTree == null)
+        //        {
+        //            currentTree = inputTree.Value;
+        //            matchInInputTree = TreeUpdate.FindNode(currentTree, matches.First().Value);
+        //        }
+
+        //        if (matchInInputTree == null) return null;
+
+        //        var parent = matchInInputTree.Value.Parent;
+        //        var topattern = ConverterHelper.ConvertCSharpToTreeNode(parent);
+        //        var targetIndex = topattern.Children.FindIndex(o => o.Equals(matchInInputTree));
+
+        //        if (targetIndex == -1) return null;
+        //        indexChildList.Add(input, targetIndex);
+
+        //        var pattern = ConverterHelper.ConvertITreeNodeToToken(topattern);
+        //        foreach (var o in pattern.DescendantNodesAndSelf())
+        //        {
+        //            var value = TreeUpdate.FindNode(inputTree.Value, o.Value.Value.Value);
+        //            if (value == null) return null;
+        //           o.Value.Value = value;
+        //        }
+        //        patterns.Add(pattern);
+        //    }
+
+        //    if (!indexChildList.Values.Any()) return null;
+        //    if (indexChildList.Values.Any(o => !o.Equals(indexChildList.Values.First()))) return null;
+
+        //    var commonPattern = BuildPattern(patterns);
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var patterncopy = ConverterHelper.MakeACopy(commonPattern.Tree);
+        //        eExamples[input] = new List<ITreeNode<Token>> { patterncopy.Children.ElementAt(indexChildList[input]) };
+        //    }
+        //    return DisjunctiveExamplesSpec.From(eExamples);
+        //}
+
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
@@ -73,7 +122,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value);
                     if (value == null) return null;
-                   o.Value.Value = value;
+                    o.Value.Value = value;
                 }
                 patterns.Add(pattern);
             }
@@ -85,6 +134,7 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
+
 
         public static Pattern BuildPattern(List<ITreeNode<Token>> patterns, bool leafToken = true)
         {
@@ -101,8 +151,8 @@ namespace ProseSample.Substrings.Spg.Witness
             var emptyKind = SyntaxKind.EmptyStatement;
             var token = t1.Value.Kind == emptyKind && t2.Value.Kind == emptyKind ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
-            Pattern pattern = new Pattern(itreeNode);
-            if (t1.Value.Kind != t2.Value.Kind) return new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))); //EmptyToken pattern.
+            //Pattern pattern = new Pattern(itreeNode);
+            Pattern pattern = (t1.Value.Kind != t2.Value.Kind) ? new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))) : new Pattern(itreeNode); //EmptyToken pattern.
             if (!t1.Children.Any() || !t2.Children.Any())
             {
                 if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)

@@ -6,18 +6,18 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class RightChild : Context
     {
-        public override ITreeNode<SyntaxNodeOrToken> Target(ITreeNode<SyntaxNodeOrToken> sot)
+        public override ITreeNode<Token> Target(ITreeNode<Token> sot)
         {
             var rchild = RChild(sot);
             return rchild != null ? rchild : null;
         }
 
-        public static int NodePosition(ITreeNode<SyntaxNodeOrToken> sot)
+        public static int NodePosition(ITreeNode<Token> sot)
         {
             return sot.Parent.Children.TakeWhile(node => !node.Equals(sot)).Count();
         }
 
-        public static ITreeNode<SyntaxNodeOrToken> RChild(ITreeNode<SyntaxNodeOrToken> sot)
+        public static ITreeNode<Token> RChild(ITreeNode<Token> sot)
         {
             int position = NodePosition(sot);
 
