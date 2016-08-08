@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
@@ -12,7 +10,6 @@ using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
 using NUnit.Framework;
 using ProseSample;
-//using static ProseSample.Utils;
 using ProseSample.Substrings;
 using TreeElement.Spg.Node;
 

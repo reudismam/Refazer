@@ -30,6 +30,9 @@ ProgramSynthesis/UnitTests/obj/*
 LongestCommonAncestor/bin/*
 LongestCommonAncestor/obj/*
 
+LCA/bin/*
+LCA/obj/*
+
 TreeEdit/bin/*
 TreeEdit/obj/*
 
