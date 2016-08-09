@@ -127,7 +127,6 @@ namespace ProseSample.Substrings.Spg.Witness
 
                 if (matchInInputTree == null) return null;
                 var pattern = ConverterHelper.ConvertITreeNodeToToken(matchInInputTree);
-                //pattern.DescendantNodesAndSelf().ForEach(o => o.Value.Value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value));
                 foreach (var o in pattern.DescendantNodesAndSelf())
                 {
                     var value = TreeUpdate.FindNode(currentTree, o.Value.Value.Value);
@@ -161,7 +160,6 @@ namespace ProseSample.Substrings.Spg.Witness
             var emptyKind = SyntaxKind.EmptyStatement;
             var token = t1.Value.Kind == emptyKind && t2.Value.Kind == emptyKind ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
             var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
-            //Pattern pattern = new Pattern(itreeNode);
             Pattern pattern = (t1.Value.Kind != t2.Value.Kind) ? new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))) : new Pattern(itreeNode); //EmptyToken pattern.
             if (!t1.Children.Any() || !t2.Children.Any())
             {

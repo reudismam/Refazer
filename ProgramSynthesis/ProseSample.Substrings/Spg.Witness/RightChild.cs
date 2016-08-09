@@ -1,16 +1,15 @@
 ﻿using System.Linq;
-using Microsoft.CodeAnalysis;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
     public class RightChild : Context
     {
-        public override ITreeNode<Token> Target(ITreeNode<Token> sot)
-        {
-            var rchild = RChild(sot);
-            return rchild != null ? rchild : null;
-        }
+        //public override ITreeNode<Token> Target(ITreeNode<Token> sot)
+        //{
+        //    var rchild = RChild(sot);
+        //    return rchild != null ? rchild : null;
+        //}
 
         public static int NodePosition(ITreeNode<Token> sot)
         {

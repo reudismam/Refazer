@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -16,12 +15,11 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<ITreeNode<Token>>();
-                foreach (Pattern node in spec.DisjunctiveExamples[input])
+                foreach(Pattern node in spec.DisjunctiveExamples[input])
                 {
                     if (!(node is PatternP)) continue;
-                    var target = node.Tree;//Target(node);
-                    if (target == null) continue;
-                    mats.Add(target);
+                    if (node.Tree == null) continue;
+                    mats.Add(node.Tree);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
@@ -45,26 +43,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (Pattern node in spec.DisjunctiveExamples[input])
                 {
                     if (!(node is PatternP)) continue;
-
                     var patternP = (PatternP) node;
-                    //var target = node.Tree;//Target(node);
-                    //if (target == null) continue;
-                    //var parent = target;
-                    //var children = parent.Children;
-                    //var targetIndex = children.FindIndex(o => o.Equals(node));
-                    var targetIndex = patternP.K;
-                    if (targetIndex == -1) continue;
-                    matches.Add(targetIndex + 1);
-                    //if (!ConverterHelper.Valid(sot.Value)) return null;
-
-                    //for (int i = 0; i < children.Count; i++)
-                    //{
-                    //    var item = children.ElementAt(i);
-                    //    if (TreeNode<SyntaxNodeOrToken>.IsEqual(item, sot))
-                    //    {
-                    //        matches.Add(i + 1);
-                    //    }
-                    //}
+                    if (patternP.K == -1) continue;
+                    matches.Add(patternP.K + 1);
                 }
                 if (!matches.Any()) return null;    
                 if (matches.Any(sequence => !sequence.Equals(matches.First()))) return null;
@@ -72,7 +53,5 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return new ExampleSpec(kExamples);
         }
-
-        public abstract ITreeNode<Token> Target(ITreeNode<Token> sot);
     }
 }
