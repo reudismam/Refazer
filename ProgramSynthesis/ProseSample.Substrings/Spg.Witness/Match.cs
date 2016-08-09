@@ -63,7 +63,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                 if (matches.First().Equals(target.Value))
                 {
-                    throw new Exception("Usefull exception");
+                    //throw new Exception("Usefull exception");
                     return MatchPatternBasic(rule, parameter, spec);
                 }
 
@@ -139,7 +139,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var commonPattern = BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
             {
-                eExamples[input] = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
+                eExamples[input] = new List<Pattern> { new Pattern(ConverterHelper.MakeACopy(commonPattern.Tree)) };
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }

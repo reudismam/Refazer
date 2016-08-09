@@ -638,14 +638,14 @@ namespace ProseSample.Substrings
             var commonPattern = Match.BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
             {
-                var list = new List<ITreeNode<Token>> { ConverterHelper.MakeACopy(commonPattern.Tree) };
+                var list = new List<Pattern> { new Pattern(ConverterHelper.MakeACopy(commonPattern.Tree)) };
                 if (commonPattern.Tree.Children.Any())
                 {
                     var copy = ConverterHelper.MakeACopy(commonPattern.Tree);
                     var empty = new EmptyToken();
                     ITreeNode<Token> itreeNodeToken = new TreeNode<Token>(empty, new TLabel(SyntaxKind.EmptyStatement));
                     itreeNodeToken.Children = copy.Children;
-                    list.Add(itreeNodeToken);
+                    list.Add(new Pattern(itreeNodeToken));
                 }
                 eExamples[input] = list;
             }
