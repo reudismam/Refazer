@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TreeElement.Spg.Node;
+﻿using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {
@@ -13,6 +8,11 @@ namespace ProseSample.Substrings
         public PatternP(ITreeNode<Token> tree, int k) : base(tree)
         {
             K = k;
+        }
+
+        public override string ToString()
+        {
+            return $"PatternP({Tree}, {K})";
         }
     }
 }

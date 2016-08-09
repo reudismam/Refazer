@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using TreeElement.Spg.Node;
+﻿using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {
@@ -10,6 +9,11 @@ namespace ProseSample.Substrings
         public Pattern(ITreeNode<Token> tree)
         {
             Tree = tree;
+        }
+
+        public override string ToString()
+        {
+            return $"Pattern({Tree})";
         }
     }
 }

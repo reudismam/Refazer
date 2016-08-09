@@ -16,9 +16,10 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<ITreeNode<Token>>();
-                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
+                foreach (Pattern node in spec.DisjunctiveExamples[input])
                 {
-                    var target = Target(node);
+                    if (!(node is PatternP)) continue;
+                    var target = node.Tree;//Target(node);
                     if (target == null) continue;
                     mats.Add(target);
                 }
@@ -41,14 +42,17 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
+                foreach (Pattern node in spec.DisjunctiveExamples[input])
                 {
-                    var target = Target(node);
-                    if (target == null) continue;
-                    var parent = target;
-                    var children = parent.Children;
-                    var targetIndex = children.FindIndex(o => o.Equals(node));
+                    if (!(node is PatternP)) continue;
 
+                    var patternP = (PatternP) node;
+                    //var target = node.Tree;//Target(node);
+                    //if (target == null) continue;
+                    //var parent = target;
+                    //var children = parent.Children;
+                    //var targetIndex = children.FindIndex(o => o.Equals(node));
+                    var targetIndex = patternP.K;
                     if (targetIndex == -1) continue;
                     matches.Add(targetIndex + 1);
                     //if (!ConverterHelper.Valid(sot.Value)) return null;

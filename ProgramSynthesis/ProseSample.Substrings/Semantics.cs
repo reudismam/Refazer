@@ -442,6 +442,11 @@ namespace ProseSample.Substrings
             }
         }
 
+        public static Pattern NMatch(Pattern kmatch, string id)
+        {
+            return kmatch;
+        }
+
         public static IEnumerable<Node> Template(Node node, Pattern pattern)
         {
             var currentTree = node.Value;

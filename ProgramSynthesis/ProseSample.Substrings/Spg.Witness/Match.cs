@@ -102,7 +102,8 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var patterncopy = ConverterHelper.MakeACopy(commonPattern.Tree);
-                eExamples[input] = new List<ITreeNode<Token>> { patterncopy.Children.ElementAt(indexChildList[input]) };
+                var patternP = new PatternP(patterncopy, indexChildList[input]);
+                eExamples[input] = new List<Pattern> { patternP, new Pattern(patterncopy.Children.ElementAt(indexChildList[input])) };
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
@@ -198,13 +199,14 @@ namespace ProseSample.Substrings.Spg.Witness
             return pattern;
         }
 
-        public static ExampleSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kind)
+        public static ExampleSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var kExamples = new Dictionary<State, object>();
                             var mats = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var pattern = (ITreeNode<Token>)kind.DisjunctiveExamples[input].First();
+                var patternExample = (Pattern) kind.Examples[input];
+                var pattern = patternExample.Tree;
                 var target = (Node)input[rule.Body[0]];
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 foreach (Node node in spec.DisjunctiveExamples[input])
@@ -241,9 +243,19 @@ namespace ProseSample.Substrings.Spg.Witness
                         for (int i = 0; i < matches.Count; i++)
                         {
                             var item = matches[i];
-                            if (node.Value.Equals(item))
+                            if (patternExample is PatternP)
                             {
-                                mats.Add(i + 1);
+                                if (item.Children.Contains(node.Value))
+                                {
+                                    mats.Add(i + 1);
+                                }
+                            }
+                            else{
+                                
+                                if (node.Value.Equals(item))
+                                {
+                                    mats.Add(i + 1);
+                                }
                             }
                         }
                     }

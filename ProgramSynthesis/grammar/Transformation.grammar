@@ -30,7 +30,7 @@ IEnumerable<Node> edits:= SO(operation) | SL(operation, edits);
 Node operation := Insert(target, ast, k) | InsertBefore(target, match, ast) |  Update(target, ast) | Delete(target, match);
 
 Node match := Match(target, pattern, k);
-Pattern pattern := Parent(kmatch, k) | kmatch;
+Pattern pattern := Parent(kmatch, k) | NMatch(kmatch, id);
 Pattern kmatch := C(kind, children) | Literal(tree) | Leaf(kind) | Variable(kind);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
 

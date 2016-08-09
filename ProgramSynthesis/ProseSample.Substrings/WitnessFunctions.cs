@@ -322,9 +322,40 @@ namespace ProseSample.Substrings
         }
 
         [WitnessFunction("Match", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kind)
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             return Match.MatchK(rule, parameter, spec, kind);
+        }
+
+        [WitnessFunction("NMatch", 0)]
+        public static DisjunctiveExamplesSpec NMatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var mats = new List<ITreeNode<Token>>();
+                foreach (Pattern node in spec.DisjunctiveExamples[input])
+                {
+                    if (node.GetType().IsSubclassOf(typeof(Pattern))) continue;
+                    var target = node.Tree;//Target(node);
+                    if (target == null) continue;
+                    mats.Add(target);
+                }
+                if (!mats.Any()) return null;
+                treeExamples[input] = mats;
+            }
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+        [WitnessFunction("NMatch", 1)]
+        public static DisjunctiveExamplesSpec NMatchId(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                treeExamples[input] = new List<string> { "NMatch" };
+            }
+            return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
         /// <summary>
@@ -576,20 +607,22 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var copyPattern = ConverterHelper.MakeACopy(commonPattern.Tree);
+                var patternP = new PatternP(commonPattern.Tree, indexChildList[input]);
                 var targetPattern = copyPattern.Children.ElementAt(indexChildList[input]);
-                var list = new List<ITreeNode<Token>> { targetPattern  };
+                var list = new List<Pattern> { patternP, new Pattern(targetPattern)  };
                 if (targetPattern.Children.Any())
                 {
                     var copy = ConverterHelper.MakeACopy(commonPattern.Tree);
                     var empty = new EmptyToken();
                     ITreeNode<Token> itreeNodeToken = new TreeNode<Token>(empty, new TLabel(SyntaxKind.EmptyStatement));
                     itreeNodeToken.Children = copy.Children.ElementAt(indexChildList[input]).Children;
-                    list.Add(itreeNodeToken);
+                    list.Add(new Pattern(itreeNodeToken));
                 }
                 eExamples[input] = list;
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
+
 
         public static DisjunctiveExamplesSpec NodeMatchBasic(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
