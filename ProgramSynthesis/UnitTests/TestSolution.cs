@@ -282,48 +282,12 @@ namespace UnitTests
         //    //}
         //}
 
-        //[Test]
-        //public void R5_c96d9ce()
-        //{
-        //    //Load grammar
-        //    var grammar = GetGrammar();
-
-        //    string path = GetBasePath();
-
-        //    //input data
-        //    string inputText = File.ReadAllText(path + @"benchmarksm\ObjectDisplayB_1.cs");
-        //    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
-        //    //output with some code fragments edited.
-        //    string outputText = File.ReadAllText(path + @"benchmarksm\ObjectDisplayA_1.cs");
-        //    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-        //    //Examples
-        //    var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-        //    var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-
-        //    //building example methods
-        //    var ioExamples = new Dictionary<State, IEnumerable<object>>();
-        //    for (int i = 0; i < examplesInput.Count; i++)
-        //    {
-        //        var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-        //        ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-        //    }
-
-        //    //Learn program
-        //    var spec = DisjunctiveExamplesSpec.From(ioExamples);
-        //    ProgramNode program = Utils.Learn(grammar, spec);
-
-        //    ////Run program
-        //    //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
-
-        //    //foreach (var method in methods)
-        //    //{
-        //    //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-        //    //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-        //    //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        //    //}
-        //}
+        [Test]
+        public void R5_c96d9ce()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\5_c96d9ce");
+            Assert.IsTrue(false);
+        }
 
 
         //[Test]
@@ -369,12 +333,12 @@ namespace UnitTests
         //    //}
         //}
 
-        [Test]
-        public void R3_8c14644()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\3_8c14644");
-            Assert.IsTrue(isCorrect);
-        }
+        //[Test]
+        //public void R3_8c14644()
+        //{
+        //    var isCorrect = CompleteTestBase(@"Roslyn\3_8c14644");
+        //    Assert.IsTrue(isCorrect);
+        //}
 
         [Test]
         public void R00552fc()
@@ -476,221 +440,41 @@ namespace UnitTests
         //    //}
         //}
 
-        //[Test]
-        //public void R5_673f18e()
-        //{
-        //    //Load grammar
-        //    var grammar = GetGrammar();
+        [Test]
+        public void R5_673f18e()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\5_673f18e");
+            Assert.IsTrue(isCorrect);
+        }
 
-        //    string path = GetBasePath();
+        [Test]
+        public void R673f18e()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\673f18e");
+            Assert.IsTrue(isCorrect);
+        }
 
-        //    //input data
-        //    string inputText = File.ReadAllText(path + @"benchmarksm\ParsingErrorRecoveryTestsB.cs");
-        //    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+        [Test]
+        public void R6_673f18e()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\6_673f18e");
+            Assert.IsTrue(isCorrect);
+        }
 
-        //    //output with some code fragments edited.
-        //    string outputText = File.ReadAllText(path + @"benchmarksm\ParsingErrorRecoveryTestsA.cs");
-        //    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-        //    //Examples
-        //    var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-        //    var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-
-        //    //building example methods
-        //    var ioExamples = new Dictionary<State, IEnumerable<object>>();
-        //    for (int i = 0; i < examplesInput.Count; i++)
-        //    {
-        //        var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-        //        ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-        //    }
-
-        //    //Learn program
-        //    var spec = DisjunctiveExamplesSpec.From(ioExamples);
-        //    ProgramNode program = Utils.Learn(grammar, spec);
-
-        //    ////Run program
-        //    //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
-
-        //    //foreach (var method in methods)
-        //    //{
-        //    //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-        //    //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-        //    //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        //    //}
-        //}
-
-        //[Test]
-        //public void R673f18e()
-        //{
-        //    //Load grammar
-        //    var grammar = GetGrammar();
-
-        //    string path = GetBasePath();
-
-        //    //input data
-        //    string inputText = File.ReadAllText(path + @"benchmarksm\DiagnosticFormatterB.cs");
-        //    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
-        //    //output with some code fragments edited.
-        //    string outputText = File.ReadAllText(path + @"benchmarksm\DiagnosticFormatterA.cs");
-        //    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-        //    //Examples
-        //    var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-        //    var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-
-        //    //building example methods
-        //    var ioExamples = new Dictionary<State, IEnumerable<object>>();
-        //    for (int i = 0; i < examplesInput.Count; i++)
-        //    {
-        //        var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-        //        ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-        //    }
-
-        //    //Learn program
-        //    var spec = DisjunctiveExamplesSpec.From(ioExamples);
-        //    ProgramNode program = Utils.Learn(grammar, spec);
-
-        //    ////Run program
-        //    //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
-
-        //    //foreach (var method in methods)
-        //    //{
-        //    //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-        //    //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-        //    //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        //    //}
-        //}
-
-        //[Test]
-        //public void R6_673f18e()
-        //{
-        //    //Load grammar
-        //    var grammar = GetGrammar();
-
-        //    string path = GetBasePath();
-
-        //    //input data
-        //    string inputText = File.ReadAllText(path + @"benchmarksm\BaseClassTestsB.cs");
-        //    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
-        //    //output with some code fragments edited.
-        //    string outputText = File.ReadAllText(path + @"benchmarksm\BaseClassTestsA.cs");
-        //    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-        //    //Examples
-        //    var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-        //    var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-
-        //    //building example methods
-        //    var ioExamples = new Dictionary<State, IEnumerable<object>>();
-        //    for (int i = 0; i < examplesInput.Count; i++)
-        //    {
-        //        var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-        //        ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-        //    }
-
-        //    //Learn program
-        //    var spec = DisjunctiveExamplesSpec.From(ioExamples);
-        //    ProgramNode program = Utils.Learn(grammar, spec);
-
-        //    ////Run program
-        //    //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
-
-        //    //foreach (var method in methods)
-        //    //{
-        //    //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-        //    //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-        //    //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        //    //}
-        //}
-
-        //[Test]
-        //public void R83e4349()
-        //{
-        //    //Load grammar
-        //    var grammar = GetGrammar();
-
-        //    string path = GetBasePath();
-
-        //    //input data
-        //    string inputText = File.ReadAllText(path + @"benchmarksm\UserDefinedImplicitConversionsB.cs");
-        //    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
-        //    //output with some code fragments edited.
-        //    string outputText = File.ReadAllText(path + @"benchmarksm\UserDefinedImplicitConversionsA.cs");
-        //    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-        //    //Examples
-        //    var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-        //    var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-
-        //    //building example methods
-        //    var ioExamples = new Dictionary<State, IEnumerable<object>>();
-        //    for (int i = 0; i < examplesInput.Count; i++)
-        //    {
-        //        var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-        //        ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-        //    }
-
-        //    //Learn program
-        //    var spec = DisjunctiveExamplesSpec.From(ioExamples);
-        //    ProgramNode program = Utils.Learn(grammar, spec);
-
-        //    ////Run program
-        //    //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
-
-        //    //foreach (var method in methods)
-        //    //{
-        //    //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-        //    //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-        //    //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        //    //}
-        //}
+        [Test]
+        public void R83e4349()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\83e4349");
+            Assert.IsTrue(isCorrect);
+        }
 
 
-        //[Test]
-        //public void R8_673f18e()
-        //{
-        //    //Load grammar
-        //    var grammar = GetGrammar();
-
-        //    string path = GetBasePath();
-
-        //    //input data
-        //    string inputText = File.ReadAllText(path + @"benchmarksm\CSharpCompilationOptionsTestsB.cs");
-        //    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
-        //    //output with some code fragments edited.
-        //    string outputText = File.ReadAllText(path + @"benchmarksm\CSharpCompilationOptionsTestsA.cs");
-        //    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-        //    //Examples
-        //    var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-        //    var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-
-        //    //building example methods
-        //    var ioExamples = new Dictionary<State, IEnumerable<object>>();
-        //    for (int i = 0; i < examplesInput.Count; i++)
-        //    {
-        //        var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-        //        ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-        //    }
-
-        //    //Learn program
-        //    var spec = DisjunctiveExamplesSpec.From(ioExamples);
-        //    ProgramNode program = Utils.Learn(grammar, spec);
-
-        //    ////Run program
-        //    //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
-
-        //    //foreach (var method in methods)
-        //    //{
-        //    //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-        //    //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-        //    //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        //    //}
-        //}
+        [Test]
+        public void R8_673f18e()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\8_673f18e");
+            Assert.IsTrue(isCorrect);
+        }
 
         //[Test]
         //public void R8ecd058()
@@ -2381,9 +2165,11 @@ namespace UnitTests
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
             List<CodeTransformation> codeTransformations = JsonUtil<List<CodeTransformation>>.Read(expHome + @"cprose\" + commit + @"\metadata\transformed_locations.json");
             List<TRegion> regions = codeTransformations.Select(entry => entry.Trans).ToList();
+            var locations = codeTransformations.Select(entry => entry.Location).ToList();
 
-            List<TRegion> metadataRegions = new List<TRegion>();
-            metadataRegions.AddRange(regions.GetRange(0, 2));
+            var metadataRegions = regions.GetRange(0, 2).ToList();
+            var locationRegions = locations.GetRange(0, 2).ToList();
+
             var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
 
             for (int i = 0; i < regions.Count; i++)
@@ -2401,7 +2187,7 @@ namespace UnitTests
                     var allMethodsInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration);
                     var allMethodsOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration);
                     var inputMethods = new List<int>();
-                    foreach (var region in metadataRegions)
+                    foreach (var region in locationRegions)
                     {
                         for (int index = 0; index < allMethodsInput.Count; index++)
                         {
@@ -2412,7 +2198,7 @@ namespace UnitTests
                                 Length = method.Span.Length
                             };
 
-                            if (region.IsInside(tRegion))
+                            if (region.Region.IsInside(tRegion))
                             {
                                 inputMethods.Add(index);
                             }
