@@ -142,6 +142,7 @@ namespace TreeEdit.Spg.Match
 
             if (node.Children.Count != pattern.Children.Count)
             {
+                if (pattern.Children.Any()) return false;
                 return pattern.Value.IsMatch(node);
             }
 
