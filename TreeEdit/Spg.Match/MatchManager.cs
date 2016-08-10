@@ -31,7 +31,7 @@ namespace TreeEdit.Spg.Match
         /// Abstract match
         /// </summary>
         /// <param name="inpTree">Input tree</param>
-        /// <param name="kind">Syntax node or token to be matched.</param>
+        /// <param name="kind">Syntax tree or token to be matched.</param>
         /// <returns>Abstract match</returns>
         public static List<ITreeNode<SyntaxNodeOrToken>> AbstractMatches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
         {
@@ -42,7 +42,7 @@ namespace TreeEdit.Spg.Match
         /// Abstract match
         /// </summary>
         /// <param name="inpTree">Input tree</param>
-        /// <param name="kind">Syntax node or token to be matched.</param>
+        /// <param name="kind">Syntax tree or token to be matched.</param>
         /// <returns>Abstract match</returns>
         public static List<ITreeNode<SyntaxNodeOrToken>> LeafAbstractMatches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
         {
@@ -52,14 +52,14 @@ namespace TreeEdit.Spg.Match
         }
 
         /// <summary>
-        /// Return all matches of the pattern on node.
+        /// Return all matches of the pattern on tree.
         /// </summary>
         /// <param name="node">Node</param>
         /// <param name="pattern">Pattern</param>
         public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
         {
             //TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
-            //var nodes = tree.PostOrderTraversal(node);
+            //var nodes = tree.PostOrderTraversal(tree);
             var nodes =  BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(node);
             nodes.Insert(0, node);
             var matchNodes = nodes.Where(v => IsValue(v, pattern)).ToList();
@@ -99,7 +99,7 @@ namespace TreeEdit.Spg.Match
 
 
         /// <summary>
-        /// Verify if the node match the pattern
+        /// Verify if the tree match the pattern
         /// </summary>
         /// <param name="node">Node</param>
         /// <param name="pattern">Pattern</param>
@@ -110,7 +110,7 @@ namespace TreeEdit.Spg.Match
                 return false;
             }
 
-            //if (node.Children.Count <= pattern.Children.Count) return false;
+            //if (tree.Children.Count <= pattern.Children.Count) return false;
 
             foreach (var child in pattern.Children)
             {
@@ -121,14 +121,14 @@ namespace TreeEdit.Spg.Match
                 }
             }
             //var child = pattern.Children[index];
-            //var pchild = node.Children[index];
+            //var pchild = tree.Children[index];
             //var valid = IsValue(pchild, child);
 
             return true;
         }
 
         /// <summary>
-        /// Verify if the node match the pattern
+        /// Verify if the tree match the pattern
         /// </summary>
         /// <param name="node">Node</param>
         /// <param name="pattern">Pattern</param>
@@ -145,6 +145,33 @@ namespace TreeEdit.Spg.Match
             {
                 var nodechild = node.Children[i];
                 var child = pattern.Children[i];
+                var valid = IsValueEachChild(nodechild, child);
+                if (!valid)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Verify if the tree match the pattern
+        /// </summary>
+        /// <param name="tree">Node</param>
+        /// <param name="node">Pattern</param>
+        public static bool IsValueEachChild(ITreeNode<SyntaxNodeOrToken> tree, ITreeNode<SyntaxNodeOrToken> node)
+        {
+            if (!node.Value.Equals(tree.Value))
+            {
+                return false;
+            }
+
+            if (tree.Children.Count != node.Children.Count) return false;
+
+            for (int i = 0; i < node.Children.Count; i++)
+            {
+                var nodechild = tree.Children[i];
+                var child = node.Children[i];
                 var valid = IsValueEachChild(nodechild, child);
                 if (!valid)
                 {

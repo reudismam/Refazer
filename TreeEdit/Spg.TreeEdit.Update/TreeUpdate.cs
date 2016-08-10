@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Script;
 using TreeElement.Spg.Node;
 
@@ -174,6 +175,15 @@ namespace TreeEdit.Spg.TreeEdit.Update
                         where node.IsKind(item.Value.Kind())
                               && item.Value.Span.Contains(node.Span)
                               && node.Span.Contains(item.Value.Span)
+                        select item;
+            var nodesList = nodes.ToList();
+            return nodes.FirstOrDefault();
+        }
+
+        public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree, ITreeNode<SyntaxNodeOrToken> node)
+        {
+            var nodes = from item in tree.DescendantNodesAndSelf()
+                        where MatchManager.IsValueEachChild(item, node)
                         select item;
             var nodesList = nodes.ToList();
             return nodes.FirstOrDefault();
