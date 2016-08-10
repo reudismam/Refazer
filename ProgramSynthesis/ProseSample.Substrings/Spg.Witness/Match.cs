@@ -59,19 +59,18 @@ namespace ProseSample.Substrings.Spg.Witness
                 var target = (Node)input[rule.Body[0]];
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
-                var matches = (from Node node in spec.DisjunctiveExamples[input] select node.Value).ToList();
+                var examples = (from Node node in spec.DisjunctiveExamples[input] select node.Value).ToList();
 
-                if (matches.First().Equals(target.Value))
+                if (examples.First().Equals(target.Value))
                 {
-                    //throw new Exception("Usefull exception");
                     return MatchPatternBasic(rule, parameter, spec);
                 }
 
-                var matchInInputTree = TreeUpdate.FindNode(currentTree, matches.First().Value);
+                var matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
                 if (matchInInputTree == null)
                 {
                     currentTree = inputTree.Value;
-                    matchInInputTree = TreeUpdate.FindNode(currentTree, matches.First().Value);
+                    matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
                 }
 
                 if (matchInInputTree == null) return null;

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using ProseSample.Substrings;
+using TreeEdit.Spg.Isomorphic;
 using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
@@ -139,7 +140,10 @@ namespace TreeEdit.Spg.Match
                 return false;
             }
 
-            if (node.Children.Count != pattern.Children.Count) return false;
+            if (node.Children.Count != pattern.Children.Count)
+            {
+                return pattern.Value.IsMatch(node);
+            }
 
             for (int i = 0; i < pattern.Children.Count; i++)
             {
@@ -161,7 +165,7 @@ namespace TreeEdit.Spg.Match
         /// <param name="node">Pattern</param>
         public static bool IsValueEachChild(ITreeNode<SyntaxNodeOrToken> tree, ITreeNode<SyntaxNodeOrToken> node)
         {
-            if (!node.Value.Equals(tree.Value))
+            if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(tree, node))
             {
                 return false;
             }
@@ -180,5 +184,32 @@ namespace TreeEdit.Spg.Match
             }
             return true;
         }
+
+        ///// <summary>
+        ///// Verify if the tree match the pattern
+        ///// </summary>
+        ///// <param name="tree">Node</param>
+        ///// <param name="node">Pattern</param>
+        //public static bool IsValueEachChild(ITreeNode<SyntaxNodeOrToken> tree, ITreeNode<SyntaxNodeOrToken> node)
+        //{
+        //    if (!node.Value.Equals(tree.Value))
+        //    {
+        //        return false;
+        //    }
+
+        //    if (tree.Children.Count != node.Children.Count) return false;
+
+        //    for (int i = 0; i < node.Children.Count; i++)
+        //    {
+        //        var nodechild = tree.Children[i];
+        //        var child = node.Children[i];
+        //        var valid = IsValueEachChild(nodechild, child);
+        //        if (!valid)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
     }
 }

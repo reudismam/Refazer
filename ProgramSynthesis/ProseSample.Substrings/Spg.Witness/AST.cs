@@ -83,7 +83,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     if (!ConverterHelper.Valid(sot.Value)) return null;
                     //var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);
-                    var node = TreeUpdate.FindNode(currentTree, sot.Value);//IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree.Value, subTree);
+                    /*var node = TreeUpdate.FindNode(currentTree, sot.Value);//IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree.Value, subTree);
                     if (node == null)
                     {
                         var inputTree = (Node)input[rule.Grammar.InputSymbol];
@@ -91,7 +91,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         node = TreeUpdate.FindNode(currentTree, sot.Value);
                     }
 
-                    if (node == null) return null;
+                    if (node == null) return null;*/
                     var result = new Node(sot);
                     mats.Add(result);
                 }
