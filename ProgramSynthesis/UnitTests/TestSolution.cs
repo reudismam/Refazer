@@ -2512,10 +2512,12 @@ namespace UnitTests
                     //Run program
                     var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration);
 
+                    var transformed = new List<object>();
                     foreach (var method in methods)
                     {
                         var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
                         object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                        transformed.AddRange(output);
                         Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
                     }
                 }
@@ -2548,43 +2550,44 @@ namespace UnitTests
                 //controller.DocumentsBeforeAndAfter = documents;
                 //controller.EditedLocations = dicSelections;
 
-                millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                //controller.Refact();
-                //controller.Undo();
-                CodeTransformation tregion = MatchesLocationsOnCommit(codeTransformations);
-                if (tregion == null)
-                {
-                    break;
-                }
+                //millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                ////controller.Refact();
+                ////controller.Undo();
+                //CodeTransformation tregion = MatchesLocationsOnCommit(codeTransformations);
+                //if (tregion == null)
+                //{
+                //    break;
+                //}
 
-                if (ContainsTRegion(metadataRegions, tregion))
-                {
-                    return false;
-                }
-                metadataRegions.Add(tregion.Trans);
+                //if (ContainsTRegion(metadataRegions, tregion))
+                //{
+                //    return false;
+                //}
+                //metadataRegions.Add(tregion.Trans);
+                break;
             }
 
             long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTime = (millAfer - millBefore);
             //List<CodeTransformation> transformationsList = controller.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
 
-            long timeToLearnEdit = long.Parse(FileUtil.ReadFile("edit_learn.t"));
-            long timeToTransformEdit = long.Parse(FileUtil.ReadFile("edit_transform.t"));
+            //long timeToLearnEdit = long.Parse(FileUtil.ReadFile("edit_learn.t"));
+            //long timeToTransformEdit = long.Parse(FileUtil.ReadFile("edit_transform.t"));
 
             //Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count, controller.Program.ToString(), timeToLearnEdit, timeToTransformEdit);
 
-            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
+            //FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
 
-            try
-            {
-                string transformations = FileUtil.ReadFile("transformed_locations.json");
-                FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
-                FileUtil.DeleteFile("transformed_locations.json");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Cold not log transformed_locations.json");
-            }
+            //try
+            //{
+            //    string transformations = FileUtil.ReadFile("transformed_locations.json");
+            //    FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
+            //    FileUtil.DeleteFile("transformed_locations.json");
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine("Cold not log transformed_locations.json");
+            //}
             return true;
         }
 
