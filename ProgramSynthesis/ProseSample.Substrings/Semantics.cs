@@ -174,14 +174,6 @@ namespace ProseSample.Substrings
         public static Node Script(Node target, IEnumerable<Node> edits)
         {
             ITreeNode<SyntaxNodeOrToken> current = edits.Last().Value;
-            //if (edits.Last().Value.Value.IsKind(SyntaxKind.EmptyStatement))
-            //{
-            //    current = edits.Last().Value.Children.First();
-            //}
-            //else
-            //{
-            //    current = edits.Last().Value;
-            //}
             if (edits.Last().LeftNode != null)
             {
                 var leftnode = ReconstructTree(edits.First().LeftNode.Value);
@@ -195,8 +187,8 @@ namespace ProseSample.Substrings
             var node = ReconstructTree(current);
             MappingRegions[target] = node;
             Console.WriteLine(node.ToString());
-            //throw new ArgumentException("exception");
-            return target;
+            var itree = ConverterHelper.ConvertCSharpToTreeNode(node);
+            return new Node(itree);
         }
 
         /// <summary>

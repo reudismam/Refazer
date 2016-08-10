@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
+using Microsoft.ProgramSynthesis.Utils;
 using NUnit.Framework;
 using NUnitTests.Spg.NUnitTests.Util;
 using ProseSample;
@@ -414,45 +415,8 @@ namespace UnitTests
         [Test]
         public void R00552fc()
         {
-            CompleteTestBase("00552fc");
-            //Load grammar
-            var grammar = GetGrammar();
-
-            string path = GetBasePath();
-
-            //input data
-            string inputText = File.ReadAllText(path + @"benchmarksm\LanguageParserB.cs");
-            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
-            //output with some code fragments edited.
-            string outputText = File.ReadAllText(path + @"benchmarksm\LanguageParserA.cs");
-            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-            //Examples
-            var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-            var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 2);
-
-            //building example methods
-            var ioExamples = new Dictionary<State, IEnumerable<object>>();
-            for (int i = 0; i < examplesInput.Count; i++)
-            {
-                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-            }
-
-            //Learn program
-            var spec = DisjunctiveExamplesSpec.From(ioExamples);
-            ProgramNode program = Utils.Learn(grammar, spec);
-
-            ////Run program
-            //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
-
-            //foreach (var method in methods)
-            //{
-            //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-            //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-            //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-            //}
+            var isCorrect = CompleteTestBase(@"Roslyn\00552fc");
+            Assert.IsTrue(isCorrect);
         }
 
 
@@ -2484,95 +2448,243 @@ namespace UnitTests
         public static bool CompleteTestBase(string commit)
         {
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            //EditorController controller = EditorController.GetInstance();
+
+            //Load grammar
+            var grammar = GetGrammar();
 
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-
-            //remove
-            List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"commit\" + commit + @"\metadata\locations_on_commit.json");
-            //List<CodeLocation> locations = TestUtil.GetAllLocationsOnCommit(selections, controller.Locations);
-            //controller.Locations = locations;
-            //remove
-
-            List<TRegion> regions = new List<TRegion>();
             List<CodeTransformation> codeTransformations = JsonUtil<List<CodeTransformation>>.Read(expHome + @"cprose\" + commit + @"\metadata\transformed_locations.json");
-            foreach (var entry in codeTransformations)
-            {
-                regions.Add(entry.Trans);
-            }
+            List<TRegion> regions = codeTransformations.Select(entry => entry.Trans).ToList();
 
             List<TRegion> metadataRegions = new List<TRegion>();
             metadataRegions.AddRange(regions.GetRange(0, 2));
-
             var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
-            //for (int i = 0; i < regions.Count; i++)
-            //{
-            //    var dicionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
 
-            //    List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
-            //    Dictionary<string, List<Selection>> dicSelections = new Dictionary<string, List<Selection>>();
-            //    foreach (KeyValuePair<string, List<TRegion>> entry in dicionarySelection)
-            //    {
-            //        string sourceCode = FileUtil.ReadFile(entry.Key);
-            //        Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
-            //        string sourceCodeAfter = tu.Item1;
-            //        List<Selection> selectionsList = new List<Selection>();
-            //        foreach (TRegion region in tu.Item2)
-            //        {
-            //            Selection selectionRegion = new Selection(region.Start, region.Length, region.Path, sourceCodeAfter, region.Text);
-            //            selectionsList.Add(selectionRegion);
-            //        }
+            for (int i = 0; i < regions.Count; i++)
+            {
+                var dicionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
+                foreach (KeyValuePair<string, List<TRegion>> entry in dicionarySelection)
+                {
+                    string sourceCode = FileUtil.ReadFile(entry.Key);             
+                    Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
+                    string sourceCodeAfter = tu.Item1;
 
-            //        controller.CurrentViewCodeAfter = sourceCodeAfter;
+                    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(sourceCode).GetRoot();
+                    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
 
-            //        Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
-            //        documents.Add(tuple);
-            //        controller.FilesOpened[entry.Key.ToUpperInvariant()] = true;
-            //        dicSelections.Add(entry.Key.ToUpperInvariant(), selectionsList);
-            //    }
+                    var allMethodsInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration);
+                    var allMethodsOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration);
+                    var inputMethods = new List<int>();
+                    foreach (var region in metadataRegions)
+                    {
+                        for (int index = 0; index < allMethodsInput.Count; index++)
+                        {
+                            var method = allMethodsInput[index];
+                            var tRegion = new TRegion
+                            {
+                                Start = method.SpanStart,
+                                Length = method.Span.Length
+                            };
 
-            //    controller.DocumentsBeforeAndAfter = documents;
-            //    controller.EditedLocations = dicSelections;
+                            if (region.IsInside(tRegion))
+                            {
+                                inputMethods.Add(index);
+                            }
+                        }
+                    }
 
-            //    millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            //    controller.Refact();
-            //    //controller.Undo();
-            //    CodeTransformation tregion = MatchesLocationsOnCommit(codeTransformations);
-            //    if (tregion == null)
-            //    {
-            //        break;
-            //    }
+                    //Examples
+                    var examplesInput = inputMethods.Distinct().Select(index => allMethodsInput[index]).ToList();
+                    var examplesOutput = inputMethods.Distinct().Select(index => allMethodsOutput[index]).ToList();
 
-            //    if (ContainsTRegion(metadataRegions, tregion))
-            //    {
-            //        return false;
-            //    }
-            //    metadataRegions.Add(tregion.Trans);
-            //}
+                    //building example methods
+                    var ioExamples = new Dictionary<State, IEnumerable<object>>();
+                    for (int index = 0; index < examplesInput.Count; index++)
+                    {
+                        var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
+                        ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+                    }
 
-            //long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            //long totalTime = (millAfer - millBefore);
+                    //Learn program
+                    var spec = DisjunctiveExamplesSpec.From(ioExamples);
+                    ProgramNode program = Utils.Learn(grammar, spec);
+
+                    //Run program
+                    var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration);
+
+                    foreach (var method in methods)
+                    {
+                        var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                        object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                        Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+                    }
+                }
+
+                //var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+
+                ////building example methods
+                //var ioExamples = new Dictionary<State, IEnumerable<object>>();
+                //for (int i = 0; i < examplesInput.Count; i++)
+                //{
+                //    var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
+                //    ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
+                //}
+
+                ////Learn program
+                //var spec = DisjunctiveExamplesSpec.From(ioExamples);
+                //ProgramNode program = Utils.Learn(grammar, spec);
+
+                ////Run program
+                //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
+
+                //foreach (var method in methods)
+                //{
+                //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+                //}
+                //to be removed
+
+                //controller.DocumentsBeforeAndAfter = documents;
+                //controller.EditedLocations = dicSelections;
+
+                millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                //controller.Refact();
+                //controller.Undo();
+                CodeTransformation tregion = MatchesLocationsOnCommit(codeTransformations);
+                if (tregion == null)
+                {
+                    break;
+                }
+
+                if (ContainsTRegion(metadataRegions, tregion))
+                {
+                    return false;
+                }
+                metadataRegions.Add(tregion.Trans);
+            }
+
+            long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTime = (millAfer - millBefore);
             //List<CodeTransformation> transformationsList = controller.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
 
-            //long timeToLearnEdit = long.Parse(FileUtil.ReadFile("edit_learn.t"));
-            //long timeToTransformEdit = long.Parse(FileUtil.ReadFile("edit_transform.t"));
+            long timeToLearnEdit = long.Parse(FileUtil.ReadFile("edit_learn.t"));
+            long timeToTransformEdit = long.Parse(FileUtil.ReadFile("edit_transform.t"));
 
             //Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count, controller.Program.ToString(), timeToLearnEdit, timeToTransformEdit);
 
-            //FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
+            FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
 
-            //try
-            //{
-            //    string transformations = FileUtil.ReadFile("transformed_locations.json");
-            //    FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
-            //    FileUtil.DeleteFile("transformed_locations.json");
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine("Cold not log transformed_locations.json");
-            //}
+            try
+            {
+                string transformations = FileUtil.ReadFile("transformed_locations.json");
+                FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
+                FileUtil.DeleteFile("transformed_locations.json");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cold not log transformed_locations.json");
+            }
             return true;
         }
+
+        ///// <summary>
+        ///// Complete test
+        ///// </summary>
+        ///// <param name="commit">Commit where the change occurs</param>
+        ///// <returns>True if pass test</returns>
+        //public static bool CompleteTestBase(string commit)
+        //{
+        //    long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //    //EditorController controller = EditorController.GetInstance();
+
+        //    string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+
+        //    //remove
+        //    //List<TRegion> selections = JsonUtil<List<TRegion>>.Read(expHome + @"cprose\" + commit + @"\metadata\locations_on_commit.json");
+        //    //List<CodeLocation> locations = TestUtil.GetAllLocationsOnCommit(selections, controller.Locations);
+        //    //controller.Locations = locations;
+        //    //remove
+
+        //    List<TRegion> regions = new List<TRegion>();
+        //    List<CodeTransformation> codeTransformations = JsonUtil<List<CodeTransformation>>.Read(expHome + @"cprose\" + commit + @"\metadata\transformed_locations.json");
+        //    foreach (var entry in codeTransformations)
+        //    {
+        //        regions.Add(entry.Trans);
+        //    }
+
+        //    List<TRegion> metadataRegions = new List<TRegion>();
+        //    metadataRegions.AddRange(regions.GetRange(0, 2));
+
+        //    var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
+        //    for (int i = 0; i < regions.Count; i++)
+        //    {
+        //        var dicionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
+
+        //        List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
+        //        //Dictionary<string, List<Selection>> dicSelections = new Dictionary<string, List<Selection>>();
+        //        foreach (KeyValuePair<string, List<TRegion>> entry in dicionarySelection)
+        //        {
+        //            string sourceCode = FileUtil.ReadFile(entry.Key);
+        //            Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
+        //            string sourceCodeAfter = tu.Item1;
+        //            //List<Selection> selectionsList = new List<Selection>();
+        //            //foreach (TRegion region in tu.Item2)
+        //            //{
+        //            //    Selection selectionRegion = new Selection(region.Start, region.Length, region.Path, sourceCodeAfter, region.Text);
+        //            //    selectionsList.Add(selectionRegion);
+        //            //}
+
+        //            //controller.CurrentViewCodeAfter = sourceCodeAfter;
+
+        //            Tuple<string, string> tuple = Tuple.Create(sourceCode, sourceCodeAfter);
+        //            documents.Add(tuple);
+        //            //controller.FilesOpened[entry.Key.ToUpperInvariant()] = true;
+        //            //dicSelections.Add(entry.Key.ToUpperInvariant(), selectionsList);
+        //        }
+
+        //        //controller.DocumentsBeforeAndAfter = documents;
+        //        //controller.EditedLocations = dicSelections;
+
+        //        millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //        //controller.Refact();
+        //        //controller.Undo();
+        //        CodeTransformation tregion = MatchesLocationsOnCommit(codeTransformations);
+        //        if (tregion == null)
+        //        {
+        //            break;
+        //        }
+
+        //        if (ContainsTRegion(metadataRegions, tregion))
+        //        {
+        //            return false;
+        //        }
+        //        metadataRegions.Add(tregion.Trans);
+        //    }
+
+        //    long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //    long totalTime = (millAfer - millBefore);
+        //    //List<CodeTransformation> transformationsList = controller.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
+
+        //    long timeToLearnEdit = long.Parse(FileUtil.ReadFile("edit_learn.t"));
+        //    long timeToTransformEdit = long.Parse(FileUtil.ReadFile("edit_transform.t"));
+
+        //    //Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count, controller.Program.ToString(), timeToLearnEdit, timeToTransformEdit);
+
+        //    FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
+
+        //    try
+        //    {
+        //        string transformations = FileUtil.ReadFile("transformed_locations.json");
+        //        FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
+        //        FileUtil.DeleteFile("transformed_locations.json");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine("Cold not log transformed_locations.json");
+        //    }
+        //    return true;
+        //}
 
         //public static void Log(string commit, double time, int exTransformations, int acTrasnformation, int documents, string program, double timeToLearnEdit, double timeToTransformEdit)
         //{
