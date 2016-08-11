@@ -634,6 +634,13 @@ namespace ProseSample.Substrings
                         leftExpression, rightExpresssion);
                     return logicalAndExpression;
                 }
+                case SyntaxKind.SimpleAssignmentExpression:
+                {
+                    var leftExpression = (ExpressionSyntax) children[0];
+                    var rightExpression = (ExpressionSyntax) children[1];
+                    var simpleAssignment = SyntaxFactory.AssignmentExpression(kind, leftExpression, rightExpression);
+                    return simpleAssignment;
+                }
                 case SyntaxKind.LocalDeclarationStatement:
                 {
                     var variableDeclation = (Microsoft.CodeAnalysis.CSharp.Syntax.VariableDeclarationSyntax) children[0];
@@ -649,6 +656,23 @@ namespace ProseSample.Substrings
                     var statementSyntax = (StatementSyntax) children[2];
                     var foreachstatement = SyntaxFactory.ForEachStatement(typesyntax, identifier, expressionSyntax, statementSyntax);
                     return foreachstatement;
+                }
+                case SyntaxKind.UsingStatement:
+                {
+
+                    VariableDeclarationSyntax variableDeclaration = null;
+                    ExpressionSyntax expression = null;
+                    if (children[0].IsKind(SyntaxKind.VariableDeclaration))
+                    {
+                        variableDeclaration = (VariableDeclarationSyntax) children[0];
+                    }
+                    else
+                    {
+                        expression = (ExpressionSyntax) children[0];
+                    }
+                    var statementSyntax = (StatementSyntax) children[1];
+                    var usingStatement = SyntaxFactory.UsingStatement(variableDeclaration, expression, statementSyntax);
+                    return usingStatement;
                 }
                 case SyntaxKind.VariableDeclaration:
                 {
@@ -735,8 +759,17 @@ namespace ProseSample.Substrings
                 case SyntaxKind.ObjectCreationExpression:
                 {
                     var typeSyntax = (TypeSyntax) children[0];
-                    var argumentList = (ArgumentListSyntax) children[1];
-                    var objectcreation = SyntaxFactory.ObjectCreationExpression(typeSyntax, argumentList, null);
+                    ArgumentListSyntax argumentList = null;
+                    InitializerExpressionSyntax initializer = null;
+                    if (children[1].IsKind(SyntaxKind.ArgumentList))
+                    {
+                        argumentList = (ArgumentListSyntax) children[1];
+                    }
+                    else
+                    {
+                        initializer = (InitializerExpressionSyntax) children[1];
+                    }
+                    var objectcreation = SyntaxFactory.ObjectCreationExpression(typeSyntax, argumentList, initializer);
                     objectcreation = objectcreation.WithAdditionalAnnotations(Formatter.Annotation);
                     return objectcreation;
                 }
@@ -747,6 +780,7 @@ namespace ProseSample.Substrings
                     var parameterList = SyntaxFactory.ParameterList(spal);
                     return parameterList;
                 }
+                case SyntaxKind.ObjectInitializerExpression:
                 case SyntaxKind.ArrayInitializerExpression:
                 {
                     var expressionSyntaxs = children.Select(child => (ExpressionSyntax)child).ToList();

@@ -594,7 +594,7 @@ namespace ProseSample.Substrings
             {
                 var target = (Node)input[rule.Body[0]];
                 var parent = target.Value.Value.Parent;
-                if (parent.IsKind(SyntaxKind.Block)) return NodeMatchBasic(rule, parameter, spec);
+                if (parent.IsKind(SyntaxKind.Block) || parent.DescendantNodesAndSelf().Count() > 100) return NodeMatchBasic(rule, parameter, spec);
 
                 var topattern = ConverterHelper.ConvertCSharpToTreeNode(parent);
                 var targetIndex = topattern.Children.FindIndex(o => o.Equals(target.Value));

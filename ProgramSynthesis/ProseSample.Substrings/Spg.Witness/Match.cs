@@ -61,7 +61,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
                 var examples = (from Node node in spec.DisjunctiveExamples[input] select node.Value).ToList();
 
-                if (examples.First().Equals(target.Value))
+                if (examples.First().Equals(target.Value) || target.Value.Value.AsNode() != null && target.Value.Value.AsNode().DescendantNodesAndSelf().Count() >= 100)
                 {
                     return MatchPatternBasic(rule, parameter, spec);
                 }
