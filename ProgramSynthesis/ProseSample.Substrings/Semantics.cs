@@ -551,7 +551,39 @@ namespace ProseSample.Substrings
         private static SyntaxNodeOrToken GetSyntaxElement(SyntaxKind kind, List<SyntaxNodeOrToken> children, SyntaxNodeOrToken node = default(SyntaxNodeOrToken), List<SyntaxNodeOrToken> identifiers = null)
         {
             switch (kind)
-            { 
+            {
+                case SyntaxKind.MethodDeclaration:
+                {
+                    var method = (MethodDeclarationSyntax)node;
+                    if (children.Any(o => o.IsKind(SyntaxKind.AttributeList)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.AttributeList));
+                        var syntaList = new SyntaxList<AttributeListSyntax>();
+                        var attributeListSyntax = (AttributeListSyntax) children[index];
+                        //syntaList.Insert(0, attributeListSyntax);
+                        method = method.WithAttributeLists(syntaList);
+                        method = method.AddAttributeLists(attributeListSyntax);
+                    }
+
+                    if (children.Any(o => o.IsKind(SyntaxKind.PredefinedType)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.PredefinedType));
+                        method = method.WithReturnType((TypeSyntax) children[index]);
+                    }
+
+                    if (children.Any(o => o.IsKind(SyntaxKind.ParameterList)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.ParameterList));
+                        method = method.WithParameterList((ParameterListSyntax)children[index]);
+                    }
+
+                    if (children.Any(o => o.IsKind(SyntaxKind.Block)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.Block));
+                        method = method.WithBody((BlockSyntax)children[index]);
+                    }
+                    return method;
+                }
                 case SyntaxKind.CastExpression:
                 {
                     var typeSyntax = (TypeSyntax) children[0];
@@ -579,6 +611,12 @@ namespace ProseSample.Substrings
                     var expressionSyntax = (ExpressionSyntax) children.First();
                     var caseSwitchLabel = SyntaxFactory.CaseSwitchLabel(expressionSyntax);
                     return caseSwitchLabel;
+                }
+                case SyntaxKind.NameEquals:
+                {
+                    var identifierNameSyntax = (IdentifierNameSyntax) children[0];
+                    var nameEquals = SyntaxFactory.NameEquals(identifierNameSyntax);
+                    return nameEquals;
                 }
                 case SyntaxKind.NameColon:
                 {
@@ -727,6 +765,57 @@ namespace ProseSample.Substrings
                     var bracketedArgumentList = SyntaxFactory.BracketedArgumentList(spal);
                     return bracketedArgumentList;
                 }
+                case SyntaxKind.Attribute:
+                {
+                    var name = (NameSyntax) children[0];
+                    var atributeListSyntax = new List<AttributeArgumentSyntax>();
+                    for (int i = 1; i < children.Count; i++)
+                    {
+                        try
+                        {
+                            atributeListSyntax.Add((AttributeArgumentSyntax) children[i]);
+                        }
+                        catch (Exception e)
+                        {
+                            var attributeListArgument = (AttributeArgumentListSyntax) children[1];
+                            var att = SyntaxFactory.Attribute(name, attributeListArgument);
+                            return att;
+                        }
+                    }
+                    var spal = SyntaxFactory.SeparatedList(atributeListSyntax);
+                    var atributeListArgument = SyntaxFactory.AttributeArgumentList(spal);
+                    var attribute = SyntaxFactory.Attribute(name, atributeListArgument);
+                    return attribute;
+                }
+                case SyntaxKind.AttributeArgument:
+                {
+                    var nameEqualsSyntax = (NameEqualsSyntax) children[0];
+                    var expressionSyntax = (ExpressionSyntax) children[1];
+                    var attributeArgument = SyntaxFactory.AttributeArgument(nameEqualsSyntax, null, expressionSyntax);
+                    return attributeArgument;
+                }
+                case SyntaxKind.AttributeArgumentList:
+                {
+                    var atributeListSyntax = new List<AttributeArgumentSyntax>();
+                    for (int i = 0; i < children.Count; i++)
+                    {
+                        atributeListSyntax.Add((AttributeArgumentSyntax)children[i]);
+                    }
+                    var spal = SyntaxFactory.SeparatedList(atributeListSyntax);
+                    var atributeListArgument = SyntaxFactory.AttributeArgumentList(spal);
+                    return atributeListArgument;
+                }
+                case SyntaxKind.AttributeList:
+                {
+                    var attributeSyntaxList = new List<AttributeSyntax>();
+                    foreach (var v in children)
+                    {
+                        attributeSyntaxList.Add((AttributeSyntax) v);
+                    }
+                    var spal = SyntaxFactory.SeparatedList(attributeSyntaxList);
+                    var attibuteList = SyntaxFactory.AttributeList(spal);
+                    return attibuteList;
+                }
                 case SyntaxKind.ArgumentList:
                 {
                     var listArguments = children.Select(child => (ArgumentSyntax) child).ToList();
@@ -867,6 +956,7 @@ namespace ProseSample.Substrings
             {
                 return tree.Value;
             }
+
             List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken>();
             List<SyntaxNodeOrToken> identifier = new List<SyntaxNodeOrToken>();
             foreach (var v in tree.Children)
