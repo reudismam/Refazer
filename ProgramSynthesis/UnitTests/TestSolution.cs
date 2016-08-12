@@ -67,48 +67,12 @@ namespace UnitTests
         //    //}
         //}
 
-        //[Test]
-        //public void R2_673f18e()
-        //{
-        //    //Load grammar
-        //    var grammar = GetGrammar();
-
-        //    string path = GetBasePath();
-
-        //    //input data
-        //    string inputText = File.ReadAllText(path + @"benchmarksm\CommonCommandLineParserTestsB.cs");
-        //    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
-        //    //output with some code fragments edited.
-        //    string outputText = File.ReadAllText(path + @"benchmarksm\CommonCommandLineParserTestsA.cs");
-        //    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
-
-        //    //Examples
-        //    var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(4, 2);
-        //    var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(4, 2);
-
-        //    //building example methods
-        //    var ioExamples = new Dictionary<State, IEnumerable<object>>();
-        //    for (int i = 0; i < examplesInput.Count; i++)
-        //    {
-        //        var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(i))));
-        //        ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(i) });
-        //    }
-
-        //    //Learn program
-        //    var spec = DisjunctiveExamplesSpec.From(ioExamples);
-        //    ProgramNode program = Utils.Learn(grammar, spec);
-
-        //    ////Run program
-        //    //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(4, 1); ;
-
-        //    //foreach (var method in methods)
-        //    //{
-        //    //    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-        //    //    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-        //    //    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-        //    //}
-        //}
+        [Test]
+        public void R2_673f18e()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\2_673f18e");
+            Assert.IsTrue(isCorrect);
+        }
 
         //[Test]
         //public void R2_673f18e_1()
