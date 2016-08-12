@@ -4,6 +4,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Witness.Target;
+using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
@@ -87,6 +88,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
+                //if (!ConnectedComponentMannager<SyntaxNodeOrToken>.IsValidBlock(editOperation.Parent)) return null;
                 kExamples[input] = editOperation.T1Node;
             }
             return new ExampleSpec(kExamples);
@@ -140,18 +142,24 @@ namespace ProseSample.Substrings.Spg.Witness
                 //var key = editOperation.T1Node.SyntaxTree;
                 //var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
                 var treeUp = new TreeUpdate(inputTree.Value);
-                treeUp.ProcessEditOperation(editOperation);
+                //treeUp.ProcessEditOperation(editOperation);
 
                 //Compute after node
-                var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
+                //var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
+                var beforeAfter = Transformation.ConfigContextBeforeAfterNode(edit, ConverterHelper.MakeACopy(treeUp.CurrentTree));
+                //if (beforeAfter.Item2 == null) return null;
+
+                //from.SyntaxTree = editOperation.T1Node.SyntaxTree;
+                //var result = EditOperation.GetNode(from);
+                var from = beforeAfter.Item2;
                 if (from == null) return null;
 
                 from.SyntaxTree = editOperation.T1Node.SyntaxTree;
                 var result = EditOperation.GetNode(from);
-                if (result == null)
-                {
-                    result = EditOperation.GetNode(inputTree.Value, from);
-                }
+                //if (result == null)
+                //{
+                //    result = EditOperation.GetNode(inputTree.Value, from);
+                //}
 
                 if (result == null) return null;
                 ////Get nodes with a predefined depth
@@ -161,6 +169,45 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return new ExampleSpec(kExamples);
         }
+
+        //public static ExampleSpec InsertBeforeParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    var kExamples = new Dictionary<State, object>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        //input tree
+        //        var inputTree = (Node)input[rule.Grammar.InputSymbol];
+
+        //        //edit opration
+        //        var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+        //        var editOperation = edit.EditOperation;
+        //        if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+
+        //        //Current tree
+        //        //var key = editOperation.T1Node.SyntaxTree;
+        //        //var treeUp = WitnessFunctions.TreeUpdateDictionary[key];
+        //        var treeUp = new TreeUpdate(inputTree.Value);
+        //        treeUp.ProcessEditOperation(editOperation);
+
+        //        //Compute after node
+        //        var from = GetAfterNode(treeUp.CurrentTree, editOperation.T1Node);
+        //        if (from == null) return null;
+
+        //        from.SyntaxTree = editOperation.T1Node.SyntaxTree;
+        //        var result = EditOperation.GetNode(from);
+        //        if (result == null)
+        //        {
+        //            result = EditOperation.GetNode(inputTree.Value, from);
+        //        }
+
+        //        if (result == null) return null;
+        //        ////Get nodes with a predefined depth
+        //        //from.SyntaxTree = editOperation.T1Node.SyntaxTree;
+        //        //var result = EditOperation.GetNode(from);
+        //        kExamples[input] = result;
+        //    }
+        //    return new ExampleSpec(kExamples);
+        //}
 
         //public static ExampleSpec InsertBeforeParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
         //{
@@ -228,7 +275,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
             if (targetNode == null) return null;
 
-            var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 3);
+            var targetNodeHeight = targetNode;
+            //var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 3);
 
             targetNodeHeight.SyntaxTree = searchedNode.SyntaxTree;
             targetNodeHeight.Parent = targetNode.Parent;

@@ -38,7 +38,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var script = (Script)spec.Examples[input];
                 var edits = script.Edits;
-                //edits = edits.GetRange(0, 1);
+                edits = edits.GetRange(0, 1);
                 editsExamples[input] = edits;
             }
             return new ExampleSpec(editsExamples);
@@ -174,16 +174,16 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                     else
                     {
-                        if (ConnectedComponentMannager<SyntaxNodeOrToken>.IsValidBlock(editOperation.Parent))
-                        {
+                        //if (ConnectedComponentMannager<SyntaxNodeOrToken>.IsValidBlock(editOperation.Parent))
+                        //{
                             node = new Node(editOperation.Parent);
-                        }
-                        else
-                        {
-                            var beforeAfter = ConfigContextBeforeAfterNode(script.Edits.First(), copyInput);
-                            var context = beforeAfter.Item2 ?? beforeAfter.Item1;
-                            node = new Node(context);
-                        }
+                        //}
+                        //else
+                        //{
+                        //    var beforeAfter = ConfigContextBeforeAfterNode(script.Edits.First(), copyInput);
+                        //    var context = beforeAfter.Item2 ?? beforeAfter.Item1;
+                        //    node = new Node(context);
+                        //}
                     }
                     kMatches.Add(node);
                     ConfigureContext(node.Value, script);
@@ -590,7 +590,7 @@ namespace ProseSample.Substrings.Spg.Witness
             WitnessFunctions.CurrentTrees[anchor] = anchor;
         }
 
-        private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> ConfigContextBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> inputTree)
+        public static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> ConfigContextBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> inputTree)
         {
             //Get a reference for the node that was modified on the T1 tree.
             ITreeNode<SyntaxNodeOrToken> inputNode = null;

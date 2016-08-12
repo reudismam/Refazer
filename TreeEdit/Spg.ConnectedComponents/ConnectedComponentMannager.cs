@@ -141,9 +141,9 @@ namespace TreeEdit.Spg.ConnectedComponents
                 if (editI.Parent.Equals(editJ.Parent) && IsValidBlock(editI.Parent)/*!editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))*/) return true;        
 
                 //T1Node from an operation is the parent in another edit operation 
-                if (editI.T1Node.Equals(editJ.Parent)) return true;
+                if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
 
-                if (editI.T1Node.Equals(editJ.T1Node)) return true;
+                if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
 
                 //var parentNodes = GetNodes(editI.Parent.Value);
                 //if (parentNodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
