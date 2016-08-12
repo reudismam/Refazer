@@ -257,7 +257,7 @@ namespace UnitTests
         [Test]
         public void R2_cfd9b46()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\2_cfd9b46", new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"Roslyn\2_cfd9b46", new List<int> {0, 1, 3});
             Assert.IsTrue(isCorrect);
         }
 
@@ -834,8 +834,8 @@ namespace UnitTests
         [Test]
         public void N3_a883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\3_a883600");
-            Assert.IsTrue(false);
+            var isCorrect = CompleteTestBase(@"NuGet\3_a883600", new List<int> {0, 1, 2, 3});
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -883,7 +883,7 @@ namespace UnitTests
         [Test]
         public void Na883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\a883600");
+            var isCorrect = CompleteTestBase(@"NuGet\a883600", new List<int> {0, 1, 3, 12});
             Assert.IsTrue(false);
         }
 
@@ -1152,15 +1152,15 @@ namespace UnitTests
         [Test]
         public void Rf66696e()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\f66696e");
-            Assert.IsTrue(false);
+            var isCorrect = CompleteTestBase(@"Roslyn\f66696e", new List<int> {0, 1, 3});
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
         public void E1571862()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\1571862");
-            Assert.IsTrue(false);
+            var isCorrect = CompleteTestBase(@"EntityFramewok\1571862", new List<int> {0, 1, 8});
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
