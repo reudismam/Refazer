@@ -10,6 +10,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -60,15 +61,28 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
+                    PrintScript(script);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
                     kMatches = ClusterScript(ccs);
+                    kMatches.First().ForEach(o => PrintScript(o.Edits));
                     kMatches = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
+                    kMatches.First().ForEach(o => PrintScript(o.Edits));
                 }
                 //kMatches = kMatches.GetRange(0, 1);
                 kExamples[input] = new List<List<List<Script>>> { kMatches };
             }
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
+        }
+
+        public static void PrintScript(List<Edit<SyntaxNodeOrToken>> script)
+        {
+            string s = script.Aggregate("", (current, v) => current + (v + "\n"));
+        }
+
+        public static void PrintScript(List<EditOperation<SyntaxNodeOrToken>> script)
+        {
+            string s = script.Aggregate("", (current, v) => current + (v + "\n"));
         }
 
         //private static int Less(List<Script> scripts1, List<Script> scripts2)

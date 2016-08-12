@@ -188,7 +188,7 @@ namespace ProseSample.Substrings
             MappingRegions[target] = node;
             Console.WriteLine(node.ToString());
             var itree = ConverterHelper.ConvertCSharpToTreeNode(node);
-            return new Node(itree);
+            return itree != null ? new Node(itree) : new Node(new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None)));
         }
 
         /// <summary>
@@ -612,6 +612,13 @@ namespace ProseSample.Substrings
                     var caseSwitchLabel = SyntaxFactory.CaseSwitchLabel(expressionSyntax);
                     return caseSwitchLabel;
                 }
+                case SyntaxKind.QualifiedName:
+                {
+                    var leftSyntax = (NameSyntax) children[0];
+                    var rightSyntax = (SimpleNameSyntax) children[1];
+                    var qualifiedName = SyntaxFactory.QualifiedName(leftSyntax, rightSyntax);
+                    return qualifiedName;
+                }
                 case SyntaxKind.NameEquals:
                 {
                     var identifierNameSyntax = (IdentifierNameSyntax) children[0];
@@ -823,10 +830,19 @@ namespace ProseSample.Substrings
                 }
                 case SyntaxKind.AttributeArgument:
                 {
-                    var nameEqualsSyntax = (NameEqualsSyntax) children[0];
-                    var expressionSyntax = (ExpressionSyntax) children[1];
-                    var attributeArgument = SyntaxFactory.AttributeArgument(nameEqualsSyntax, null, expressionSyntax);
-                    return attributeArgument;
+                    if (children[0].IsKind(SyntaxKind.NameEquals))
+                    {
+                        var nameEqualsSyntax = (NameEqualsSyntax) children[0];
+                        var expressionSyntax = (ExpressionSyntax) children[1];
+                        var attributeArgument = SyntaxFactory.AttributeArgument(nameEqualsSyntax, null, expressionSyntax);
+                        return attributeArgument;
+                    }
+                    else
+                    {
+                        var expressionSyntax = (ExpressionSyntax)children[0];
+                        var attributeArgument = SyntaxFactory.AttributeArgument(null, null, expressionSyntax);
+                        return attributeArgument;
+                    }
                 }
                 case SyntaxKind.AttributeArgumentList:
                 {

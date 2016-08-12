@@ -22,15 +22,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Extensions.ContextQuery
 
             // cases:
             //   [ |
-            while (receiver.Parent.CSharpKind() == SyntaxKind.ParenthesizedExpression)
+            while (receiver.Parent.IsKind(SyntaxKind.ParenthesizedExpression))
             {
                 return true;
             }
 
             // cases:
             //   [Foo(1), |
-            foreach (var m in modifiers) {if (m.CSharpKind() == modifier) return true; } 
-            
+            foreach (var m in modifiers) {if (m.IsKind(modifier)) return true; };
+
             // cases:
             //   [Namespace.|
             if (token.Parent.IsKind(SyntaxKind.QualifiedName) &&

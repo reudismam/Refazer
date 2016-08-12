@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Extensions.ContextQuery
 
             // cases:
             //   [Foo(1), |
-            foreach (var m in modifiers) {if (m.CSharpKind() == modifier) return true; } 
+            foreach (var m in modifiers) {if (m.CSharpKind() == modifier) return true; }; 
             
             // cases:
             //   [Namespace.|

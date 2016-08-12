@@ -163,7 +163,7 @@ namespace TreeEdit.Spg.ConnectedComponents
             private ITreeNode<T> GetNodes(T value)
             {
                 SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object) value;
-                var newnode = ConverterHelper.ConvertCSharpToTreeNode(newT2.Parent.Parent.Parent.Parent);
+                var newnode = ConverterHelper.ConvertCSharpToTreeNode(newT2);
                 ITreeNode<T> newT1 = (ITreeNode<T>)(object) newnode;
                 return newT1;
             }

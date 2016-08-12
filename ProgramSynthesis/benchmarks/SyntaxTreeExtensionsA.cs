@@ -22,27 +22,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Extensions.ContextQuery
 
             // cases:
             //   [ |
-            if (token1.IsKind(SyntaxKind.OpenBracketToken) &&
-                token1.Parent.IsKind(SyntaxKind.AttributeList))
+            while (receiver.Parent.IsKind(SyntaxKind.ParenthesizedExpression))
             {
                 return true;
             }
 
             // cases:
             //   [Foo(1), |
-            if (token.IsKind(SyntaxKind.CommaToken) &&
-                token.Parent.IsKind(SyntaxKind.AttributeList))
-            {
-                return true;
-            }
-
-            // cases:
-            //   [Foo(2), |
-            if (token.Parent.IsKind(algumobjecto.AlgumMetodo()) &&
-                token.Parent.IsKind(SyntaxKind.AttributeList))
-            {
-                return true;
-            }
+            foreach (var m in modifiers) {if (m.IsKind(modifier)) return true; }
 
             // cases:
             //   [Namespace.|

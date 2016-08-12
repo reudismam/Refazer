@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.CodeAnalysis.Differencing;
 //using TreeEdit.Spg.Script;
 using TreeElement.Spg.Node;
 
@@ -202,15 +203,5 @@ namespace TreeEdit.Spg.Print
 
             return null;
         }
-
-        //public static void PrintScript(List<Edit<T>> script)
-        //{
-        //    string s = script.Aggregate("", (current, v) => current + (v + "\n"));
-        //}
-
-        //public static void PrintScript(List<EditOperation<T>> script)
-        //{
-        //    string s = script.Aggregate("", (current, v) => current + (v + "\n"));
-        //}
     }
 }
