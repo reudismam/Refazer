@@ -182,10 +182,15 @@ namespace TreeEdit.Spg.TreeEdit.Update
 
         public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree, ITreeNode<SyntaxNodeOrToken> node)
         {
-            var nodes = from item in tree.DescendantNodesAndSelf()
-                        where MatchManager.IsValueEachChild(item, node)
-                        select item;
-            var nodesList = nodes.ToList();
+            var nodes = new List<ITreeNode<SyntaxNodeOrToken>>();
+            var descendantsNodesAndSelf = tree.DescendantNodesAndSelf();
+            foreach (var item in descendantsNodesAndSelf)
+            {
+                if (MatchManager.IsValueEachChild(item, node))
+                {
+                    nodes.Add(item);
+                }
+            }
             return nodes.FirstOrDefault();
         }
     }

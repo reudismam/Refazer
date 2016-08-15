@@ -189,6 +189,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TRegion.cs" />
+    <Compile Include="WorkspaceManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProseSample.Substrings\ProseSample.Substrings.csproj">
