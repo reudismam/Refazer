@@ -102,6 +102,8 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var patterncopy = ConverterHelper.MakeACopy(commonPattern.Tree);
                 var patternP = new PatternP(patterncopy, indexChildList[input]);
+                if (indexChildList[input] >= patterncopy.Children.Count) return MatchPatternBasic(rule, parameter, spec);
+
                 eExamples[input] = new List<Pattern> { patternP, new Pattern(patterncopy.Children.ElementAt(indexChildList[input])) };
             }
             return DisjunctiveExamplesSpec.From(eExamples);

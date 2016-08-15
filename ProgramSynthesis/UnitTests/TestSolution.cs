@@ -199,7 +199,7 @@ namespace UnitTests
         [Test]
         public void R7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.AttributeList});
+            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.ClassDeclaration});
             Assert.IsTrue(isCorrect);
         }
 
@@ -1139,8 +1139,9 @@ namespace UnitTests
 
                 int start = nextStart + region.Start;
                 int end = start + region.Length;
-                sourceCode = sourceCode.Substring(0, start) + transformation +
-                sourceCode.Substring(end);
+                var sourceCodeUntilStart = sourceCode.Substring(0, start);
+                var sourceCodeAfterSelection = sourceCode.Substring(end);
+                sourceCode = sourceCodeUntilStart + transformation + sourceCodeAfterSelection;
 
                 TRegion tr = new TRegion();
                 tr.Start = start - 1;

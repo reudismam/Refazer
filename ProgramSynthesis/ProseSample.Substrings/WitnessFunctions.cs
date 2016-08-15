@@ -608,6 +608,8 @@ namespace ProseSample.Substrings
             {
                 var copyPattern = ConverterHelper.MakeACopy(commonPattern.Tree);
                 var patternP = new PatternP(commonPattern.Tree, indexChildList[input]);
+
+                if (indexChildList[input] > copyPattern.Children.Count) return NodeMatchBasic(rule, parameter, spec);
                 var targetPattern = copyPattern.Children.ElementAt(indexChildList[input]);
                 var list = new List<Pattern> { patternP, new Pattern(targetPattern)  };
                 if (targetPattern.Children.Any())
