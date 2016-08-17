@@ -27,14 +27,14 @@ IEnumerable<Node> fnodes := Traversal(node, id);
 
 Node edit := Script(target, edits);
 IEnumerable<Node> edits:= SO(operation) | SL(operation, edits);
-Node operation := Insert(target, ast, k) | InsertBefore(target, match, ast) |  Update(target, ast) | Delete(target, match);
+Node operation := Insert(target, ast, k) | InsertBefore(target, r, ast) |  Update(target, ast) | Delete(target, r);
 
-Node match := Match(target, pattern, k);
+Node r := ReferenceNode(target, pattern, k);
 Pattern pattern := Parent(kmatch, k) | NMatch(kmatch, id);
 Pattern kmatch := C(kind, children) | Literal(tree) | Leaf(kind) | Variable(kind);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
 
-Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, match);
+Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, r);
 IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 
 @feature[Score=KindScore] SyntaxKind kind;                     @input Node node;
