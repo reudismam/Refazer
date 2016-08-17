@@ -48,7 +48,7 @@ namespace TreeEdit.Spg.Script
                     var v = w.Parent;
                     if (!w.Children.Any() && !w.ToString().Equals(x.ToString()))
                     {
-                        var update = new Update<T>(w, x, z);
+                        var update = new Update<T>(w, x, z, y);
                         int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
                         v.RemoveNode(index);
                         var xnode = new TreeNode<T>(x.Value, x.Label);

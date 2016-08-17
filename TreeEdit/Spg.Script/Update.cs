@@ -6,15 +6,18 @@ namespace TreeEdit.Spg.Script
     {
         public ITreeNode<T> To { get; internal set; }
 
+        public ITreeNode<T> ToParent { get; set; }
+
         /// <summary>
         /// Construct a update object
         /// </summary>
         /// <param name="from">Node that will be moved</param>
         /// <param name="to">Update node</param>
         /// <param name="parent">Where the node will go</param>
-        public Update(ITreeNode<T> from, ITreeNode<T> to, ITreeNode<T> parent) : base(from, parent, -1)
+        public Update(ITreeNode<T> from, ITreeNode<T> to, ITreeNode<T> parent, ITreeNode<T> toParent = null) : base(from, parent, -1)
         {
             To = to;
+            ToParent = toParent;
         }
 
         /// <summary>

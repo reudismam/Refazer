@@ -10,7 +10,6 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
-using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -63,6 +62,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     var script = Script(inpTree, outTree);
                     PrintScript(script);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
+                    //ccs = CompactConnectedComponentsBasedOnAncestor(script, inpTreeNode.Value);
+
                     kMatches = ClusterScript(ccs);
                     kMatches.First().ForEach(o => PrintScript(o.Edits));
                     kMatches = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
@@ -74,6 +75,19 @@ namespace ProseSample.Substrings.Spg.Witness
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
         }
+
+        //private static List<List<EditOperation<SyntaxNodeOrToken>>> CompactConnectedComponentsBasedOnAncestor(List<EditOperation<SyntaxNodeOrToken>> script, ITreeNode<SyntaxNodeOrToken> inpTree)
+        //{
+        //    var tree = ConverterHelper.MakeACopy(inpTree);
+        //    var treeUpdate = new TreeUpdate(tree);
+        //    foreach (var s in script)
+        //    {
+        //        treeUpdate.ProcessEditOperation(s);
+        //    }
+
+        //    foreach(var v )
+        //}
+
 
         public static void PrintScript(List<Edit<SyntaxNodeOrToken>> script)
         {

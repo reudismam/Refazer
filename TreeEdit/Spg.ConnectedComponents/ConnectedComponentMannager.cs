@@ -157,6 +157,22 @@ namespace TreeEdit.Spg.ConnectedComponents
                     //Specific case for move nodes
                     if (move.PreviousParent.Equals(editJ.Parent)) return false;
                 }
+
+                if (editI is Update<T>)
+                {
+                    var update = editI as Update<T>;
+                    var toNodeParent = GetNodes(update.ToParent.Value);
+                    if (toNodeParent.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
+                }
+
+                if (editJ is Update<T>)
+                {
+                    var update = editJ as Update<T>;
+                    var parentNodes = GetNodes(editI.Parent.Value);
+                    if (parentNodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
+
+                    if (parentNodes.DescendantNodesAndSelf().Contains(update.To)) return true;
+                }
                 return false;
             }
 

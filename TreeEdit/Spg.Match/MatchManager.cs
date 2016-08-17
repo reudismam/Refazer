@@ -63,7 +63,7 @@ namespace TreeEdit.Spg.Match
             //var nodes = tree.PostOrderTraversal(tree);
             var nodes =  BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(node);
             nodes.Insert(0, node);
-            var matchNodes = nodes.Where(v => IsValue(v, pattern)).ToList();
+            var matchNodes = nodes.Where(v => IsValueEachChild(v, pattern)).ToList();
 
             //var edited = new List<Tuple<ITreeNode<SyntaxNodeOrToken>, List<ITreeNode<SyntaxNodeOrToken>>>>();
             //foreach (var match in matchNodes)

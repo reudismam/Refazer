@@ -483,7 +483,7 @@ namespace UnitTests
         public void N2_a883600()
         {
             var isCorrect = CompleteTestBase(@"NuGet\2_a883600", @"NuGet\nuget4\NuGet.sln");
-            Assert.IsTrue(isCorrect);
+            Assert.IsTrue(false);
         }
 
         [Test]
@@ -503,7 +503,7 @@ namespace UnitTests
         [Test]
         public void Ndfc4e3d()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\dfc4e3d", solutionPath: @"NuGet\nuget6\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"NuGet\dfc4e3d", solutionPath: @"NuGet\nuget6\NuGet.sln", kinds: new List<SyntaxKind> {SyntaxKind.AttributeList});
             Assert.IsTrue(false);
         }
 

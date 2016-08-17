@@ -85,7 +85,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var pattern = ConverterHelper.ConvertITreeNodeToToken(topattern);
                 foreach (var o in pattern.DescendantNodesAndSelf())
                 {
-                    var value = TreeUpdate.FindNode(inputTree.Value, o.Value.Value.Value);
+                    var value = TreeUpdate.FindNode(inputTree.Value, o.Value.Value);
                     if (value == null) return null;
                     o.Value.Value = value;
                 }
@@ -199,41 +199,66 @@ namespace ProseSample.Substrings.Spg.Witness
             return pattern;
         }
 
-        public static ExampleSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
-            var kExamples = new Dictionary<State, object>();
-                            var mats = new List<object>();
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            var isFullTree = IsFullTree(spec, kind);
+
+            //var intersectMatches = new List<int>();
             foreach (State input in spec.ProvidedInputs)
             {
+                var mats = new List<object>();
                 var patternExample = (Pattern) kind.Examples[input];
                 var pattern = patternExample.Tree;
                 var target = (Node)input[rule.Body[0]];
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
+
                 foreach (Node node in spec.DisjunctiveExamples[input])
                 {
                     var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
                     var matches = MatchManager.Matches(currentTree, pattern);
 
-                    if (!matches.Any())
+                    if (isFullTree)
                     {
                         matches = MatchManager.Matches(inputTree.Value, pattern);
                         //todo refactor this
                         for (int i = 0; i < matches.Count; i++)
                         {
                             var item = matches[i];
-                            if (node.Value.Equals(item))
+                            if (patternExample is PatternP)
                             {
-                                var beforeafter = SegmentElementsBeforeAfter(target, matches);
-                                var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
-                                var aIndex = beforeafter.Item2.FindIndex(o => o.Equals(item));
+                                if (item.Children.Any(o => MatchManager.IsValueEachChild(node.Value, o)))
+                                {
+                                    var beforeafter = SegmentElementsBeforeAfter(target, matches);
+                                    var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
+                                    var aIndex = beforeafter.Item2.FindIndex(o => o.Equals(item));
 
-                                if (bIndex != -1)
-                                {
-                                    mats.Add(-(bIndex + 1));
+                                    if (bIndex != -1)
+                                    {
+                                        mats.Add(-(bIndex + 1));
+                                    }
+                                    else
+                                    {
+                                        mats.Add(aIndex + 1);
+                                    }
                                 }
-                                else
+                            }
+                            else
+                            {
+                                if (MatchManager.IsValueEachChild(node.Value, item))
                                 {
-                                    mats.Add(aIndex + 1);
+                                    var beforeafter = SegmentElementsBeforeAfter(target, matches);
+                                    var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
+                                    var aIndex = beforeafter.Item2.FindIndex(o => o.Equals(item));
+
+                                    if (bIndex != -1)
+                                    {
+                                        mats.Add(-(bIndex + 1));
+                                    }
+                                    else
+                                    {
+                                        mats.Add(aIndex + 1);
+                                    }
                                 }
                             }
                         }
@@ -245,14 +270,14 @@ namespace ProseSample.Substrings.Spg.Witness
                             var item = matches[i];
                             if (patternExample is PatternP)
                             {
-                                if (item.Children.Contains(node.Value))
+                                if (item.Children.Any(o => MatchManager.IsValueEachChild(node.Value, o)))
                                 {
                                     mats.Add(i + 1);
                                 }
                             }
                             else{
                                 
-                                if (node.Value.Equals(item))
+                                if (MatchManager.IsValueEachChild(node.Value, item))
                                 {
                                     mats.Add(i + 1);
                                 }
@@ -260,11 +285,30 @@ namespace ProseSample.Substrings.Spg.Witness
                         }
                     }
                 }
-                if (!mats.Any()) return null;
-                if (!mats.All(o => o.Equals(mats.First()))) return null;
-                kExamples[input] = mats.First();
+                if (!mats.Any()) return null;          
+                kExamples[input] = mats;
             }
-            return new ExampleSpec(kExamples);
+            return DisjunctiveExamplesSpec.From(kExamples);
+        }
+
+        private static bool IsFullTree(DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        {
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var patternExample = (Pattern) kind.Examples[input];
+                var pattern = patternExample.Tree;
+                foreach (Node node in spec.DisjunctiveExamples[input])
+                {
+                    var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
+                    var matches = MatchManager.Matches(currentTree, pattern);
+
+                    if (!matches.Any())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private static Tuple<List<ITreeNode<SyntaxNodeOrToken>>, List<ITreeNode<SyntaxNodeOrToken>>> SegmentElementsBeforeAfter(Node target, List<ITreeNode<SyntaxNodeOrToken>> matches)
