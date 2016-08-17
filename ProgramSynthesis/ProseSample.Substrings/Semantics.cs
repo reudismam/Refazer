@@ -417,7 +417,7 @@ namespace ProseSample.Substrings
             }
         }
 
-        public static Node Match(Node target, Pattern kmatch, int k)
+        public static Node ReferenceNode(Node target, Pattern kmatch, int k)
         {
             if (kmatch is PatternP)
             {

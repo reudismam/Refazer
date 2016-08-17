@@ -28,14 +28,14 @@ namespace UnitTests
         [Test]
         public void R2_8c14644()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\2_8c14644", solutionPath: @"Roslyn\roslyn\src\Roslyn.sln", examples: new List<int> {0, 1, 3, 18});
+            var isCorrect = CompleteTestBase(@"Roslyn\2_8c14644", solutionPath: @"Roslyn\roslyn\src\Roslyn.sln", examples: new List<int> { 0, 1, 3, 18 });
             Assert.IsTrue(isCorrect);
         }
 
         [Test]
         public void R2_7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\2_7c885ca", solutionPath: @"Roslyn\roslyn14\src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.AttributeList});
+            var isCorrect = CompleteTestBase(@"Roslyn\2_7c885ca", solutionPath: @"Roslyn\roslyn14\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.AttributeList });
             Assert.IsTrue(isCorrect);
         }
 
@@ -157,7 +157,7 @@ namespace UnitTests
         [Test]
         public void R2_cfd9b46()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\2_cfd9b46", examples: new List<int> {0, 1, 3});
+            var isCorrect = CompleteTestBase(@"Roslyn\2_cfd9b46", examples: new List<int> { 0, 1, 3 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -171,7 +171,7 @@ namespace UnitTests
         [Test]
         public void R00552fc()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\00552fc");
+            var isCorrect = CompleteTestBase(@"Roslyn\00552fc", examples: new List<int> { 0, 1, 2 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -199,7 +199,7 @@ namespace UnitTests
         [Test]
         public void R7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.ClassDeclaration});
+            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration });
             Assert.IsTrue(isCorrect);
         }
 
@@ -256,7 +256,7 @@ namespace UnitTests
         [Test]
         public void R8ecd058()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\8ecd058", examples: new List<int> {0, 1, 2, 10});
+            var isCorrect = CompleteTestBase(@"Roslyn\8ecd058", examples: new List<int> { 0, 1, 2, 10 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -277,14 +277,14 @@ namespace UnitTests
         [Test]
         public void Rc96d9ce()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\c96d9ce", examples: new List<int> {0, 1, 3});
+            var isCorrect = CompleteTestBase(@"Roslyn\c96d9ce", examples: new List<int> { 0, 1, 3 });
             Assert.IsTrue(false);
         }
 
         [Test]
         public void Rcfd9b46()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\cfd9b46", examples: new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"Roslyn\cfd9b46", examples: new List<int> { 0, 1, 2 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -461,7 +461,7 @@ namespace UnitTests
         [Test]
         public void N2_7d11ddd()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\2_7d11ddd", kinds: new List<SyntaxKind> { SyntaxKind.PropertyDeclaration} );
+            var isCorrect = CompleteTestBase(@"NuGet\2_7d11ddd", kinds: new List<SyntaxKind> { SyntaxKind.PropertyDeclaration });
             Assert.IsTrue(isCorrect);
         }
 
@@ -503,14 +503,14 @@ namespace UnitTests
         [Test]
         public void Ndfc4e3d()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\dfc4e3d", solutionPath: @"NuGet\nuget6\NuGet.sln", kinds: new List<SyntaxKind> {SyntaxKind.AttributeList});
+            var isCorrect = CompleteTestBase(@"NuGet\dfc4e3d", solutionPath: @"NuGet\nuget6\NuGet.sln", kinds: new List<SyntaxKind> { SyntaxKind.AttributeList });
             Assert.IsTrue(false);
         }
 
         [Test]
         public void N3_a883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\3_a883600", examples: new List<int> {0, 1, 2, 3});
+            var isCorrect = CompleteTestBase(@"NuGet\3_a883600", examples: new List<int> { 0, 1, 2, 3 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -559,7 +559,7 @@ namespace UnitTests
         [Test]
         public void Na883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> {0, 1, 3, 12});
+            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3, 12 });
             Assert.IsTrue(false);
         }
 
@@ -756,14 +756,14 @@ namespace UnitTests
         [Test]
         public void Rf66696e()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\f66696e", examples: new List<int> {0, 1, 3});
+            var isCorrect = CompleteTestBase(@"Roslyn\f66696e", examples: new List<int> { 0, 1, 3 });
             Assert.IsTrue(isCorrect);
         }
 
         [Test]
         public void E1571862()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\1571862", examples: new List<int> {0, 1, 8});
+            var isCorrect = CompleteTestBase(@"EntityFramewok\1571862", examples: new List<int> { 0, 1, 8 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -825,8 +825,8 @@ namespace UnitTests
         /// <returns>True if pass test</returns>
         public static bool CompleteTestBase(string commit, string solutionPath = null, List<int> examples = null, List<SyntaxKind> kinds = null)
         {
-            if (examples == null) examples = new List<int> {0, 1};
-            if (kinds == null) kinds = new List<SyntaxKind> {SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration};
+            if (examples == null) examples = new List<int> { 0, 1 };
+            if (kinds == null) kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
 
             long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
@@ -855,11 +855,11 @@ namespace UnitTests
                 var ioExamples = new Dictionary<State, IEnumerable<object>>();
                 foreach (KeyValuePair<string, List<TRegion>> entry in dicionarySelection)
                 {
-                    string sourceCode = FileUtil.ReadFile(entry.Key);             
+                    string sourceCode = FileUtil.ReadFile(entry.Key);
                     Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
                     string sourceCodeAfter = tu.Item1;
 
-                    inpTree = CSharpSyntaxTree.ParseText(sourceCode).GetRoot();
+                    inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
                     SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
 
                     var allMethodsInput = GetNodesByType(inpTree, kinds);
@@ -922,16 +922,36 @@ namespace UnitTests
                 }
 
                 var transformed = new List<object>();
-                string s= "";
-                    foreach (var method in methods)
+
+                var dicTrans = new Dictionary<string, List<object>>();
+                string s = "";
+                foreach (var method in methods)
+                {
+                    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                    transformed.AddRange(output);
+                    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+
+                    if (output.Any())
                     {
-                        var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-                        object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-                        transformed.AddRange(output);
-                        Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-                        output.ForEach(o => s += $"{o} \n");
-                        //s += $"{output} \n";
+                        if (dicTrans.ContainsKey(method.SyntaxTree.FilePath.ToUpperInvariant()))
+                        {
+                            dicTrans[method.SyntaxTree.FilePath.ToUpperInvariant()].AddRange(output);
+                        }
+                        else
+                        {
+                            dicTrans[method.SyntaxTree.FilePath.ToUpperInvariant()] = output.ToList();
+                        }
                     }
+                    //output.ForEach(o => s += $"{o} \n");
+                    //s += $"{output} \n";
+                }
+
+                foreach(var v in dicTrans)
+                {
+                    s += $"{v.Key} \n====================\n";
+                    v.Value.ForEach(o => s += $"{o}\n");
+                }
 
                 Console.WriteLine($"Count: \n {transformed.Count}");
                 s += $"Count: \n {transformed.Count}";

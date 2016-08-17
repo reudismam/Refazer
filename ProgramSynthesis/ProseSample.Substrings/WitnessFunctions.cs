@@ -315,13 +315,13 @@ namespace ProseSample.Substrings
             return Match.CChildren(rule, parameter, spec, kind);
         }
 
-        [WitnessFunction("Match", 1)]
+        [WitnessFunction("ReferenceNode", 1)]
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Match.MatchPattern(rule, parameter, spec);
         }
 
-        [WitnessFunction("Match", 2, DependsOnParameters = new[] { 1 })]
+        [WitnessFunction("ReferenceNode", 2, DependsOnParameters = new[] { 1 })]
         public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             return Match.MatchK(rule, parameter, spec, kind);

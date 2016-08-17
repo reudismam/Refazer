@@ -152,7 +152,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             bool found = false;
             foreach (var item in iTree.Children)
             {
-                if (oldNode.Span.Contains(item.Value.Span) && item.Value.Span.Contains(oldNode.Span))
+                if (oldNode.Span.Contains(item.Value.Span) && item.Value.Span.Contains(oldNode.Span) && oldNode.IsKind(item.Value.Kind()))
                 {
                     found = true;
                     break;

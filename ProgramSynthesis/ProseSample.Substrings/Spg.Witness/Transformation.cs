@@ -10,6 +10,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -342,6 +343,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (var s in script.Edits)
                 {
                     treeUpdate.ProcessEditOperation(s.EditOperation);
+                    string str = PrintUtil<SyntaxNodeOrToken>.PrettyPrintString(treeUpdate.CurrentTree, @"C:\Users\SPG-04\Desktop\out.txt");
                 }
 
                 if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
