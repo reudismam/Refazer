@@ -103,7 +103,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var patterncopy = ConverterHelper.MakeACopy(commonPattern.Tree);
-                var patternP = new PatternP(patterncopy, $"{indexChildList[input]}");
+                var patternP = new PatternP(patterncopy, $"/[{indexChildList[input]}]");
                 if (indexChildList[input] >= patterncopy.Children.Count) return MatchPatternBasic(rule, parameter, spec);
 
                 eExamples[input] = new List<Pattern> { patternP, new Pattern(patterncopy.Children.ElementAt(indexChildList[input])) };
@@ -151,25 +151,27 @@ namespace ProseSample.Substrings.Spg.Witness
         //XPath
         public static string GetPath(ITreeNode<SyntaxNodeOrToken> navigator)
         {
-            StringBuilder path = new StringBuilder();
+            string path = "";
             for (ITreeNode<SyntaxNodeOrToken> node = navigator; node != null; node = node.Parent)
             {
-                string append = "/" + path;
+                string append = "/";
 
                 if (node.Parent != null && node.Parent.Children.Count > 1)
                 {
                     append += "[";
 
                     int index = 1;
-                    while (PreviousSibling(node) != null)
+                    var previousSibling = PreviousSibling(node);
+                    while (previousSibling != null)
                     {
                         index++;
+                        previousSibling = PreviousSibling(previousSibling);
                     }
 
-                    append += "]";
-                }
-
-                path.Insert(0, append);
+                    append += $"{index}]";
+                    //path.Insert(0, append);
+                    path = append + path;
+                }                
             }
 
             return path.ToString();
@@ -180,7 +182,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var parent = node.Parent;
             var parentIndex = parent.Children.FindIndex(o => o.Equals(node));
             if (parentIndex == 0) return null;
-            return parent.Children[parentIndex];
+            return parent.Children[parentIndex - 1];
         }
 
 

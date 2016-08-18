@@ -45,7 +45,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     if (!(node is PatternP)) continue;
                     var patternP = (PatternP) node;
-                    throw new Exception("Must be implemented.");
+                    //throw new Exception("Must be implemented.");
                     //if (patternP.K == -1) continue;
                     matches.Add(patternP.K + 1);
                 }
