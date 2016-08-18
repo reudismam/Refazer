@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
@@ -101,7 +103,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var patterncopy = ConverterHelper.MakeACopy(commonPattern.Tree);
-                var patternP = new PatternP(patterncopy, indexChildList[input]);
+                var patternP = new PatternP(patterncopy, $"{indexChildList[input]}");
                 if (indexChildList[input] >= patterncopy.Children.Count) return MatchPatternBasic(rule, parameter, spec);
 
                 eExamples[input] = new List<Pattern> { patternP, new Pattern(patterncopy.Children.ElementAt(indexChildList[input])) };
@@ -145,6 +147,68 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
+
+        //XPath
+        public static string GetPath(ITreeNode<SyntaxNodeOrToken> navigator)
+        {
+            StringBuilder path = new StringBuilder();
+            for (ITreeNode<SyntaxNodeOrToken> node = navigator; node != null; node = node.Parent)
+            {
+                string append = "/" + path;
+
+                if (node.Parent != null && node.Parent.Children.Count > 1)
+                {
+                    append += "[";
+
+                    int index = 1;
+                    while (PreviousSibling(node) != null)
+                    {
+                        index++;
+                    }
+
+                    append += "]";
+                }
+
+                path.Insert(0, append);
+            }
+
+            return path.ToString();
+        }
+
+        private static ITreeNode<SyntaxNodeOrToken> PreviousSibling(ITreeNode<SyntaxNodeOrToken> node)
+        {
+            var parent = node.Parent;
+            var parentIndex = parent.Children.FindIndex(o => o.Equals(node));
+            if (parentIndex == 0) return null;
+            return parent.Children[parentIndex];
+        }
+
+
+        public static List<string> GetXpaths(ITreeNode<SyntaxNodeOrToken> doc, SyntaxNodeOrToken stop)
+        {
+            var xpathList = new List<string>();
+            var xpath = "";
+            foreach (var child in doc.Children)
+            {
+                if (child.Value.Equals(stop)) return xpathList;
+                GetXPaths(child, ref xpathList, xpath, stop);
+            }
+            return xpathList;
+        }
+
+        public static void GetXPaths(ITreeNode<SyntaxNodeOrToken> node, ref List<string> xpathList, string xpath, SyntaxNodeOrToken stop)
+        {
+            xpath += "/" + node.Label;
+            if (!xpathList.Contains(xpath))
+                xpathList.Add(xpath);
+
+            foreach (ITreeNode<SyntaxNodeOrToken> child in node.Children)
+            {
+                if (child.Value.Equals(stop)) return;
+                GetXPaths(child, ref xpathList, xpath, stop);
+            }
+        }
+        //EndXPath
 
 
         public static Pattern BuildPattern(List<ITreeNode<Token>> patterns, bool leafToken = true)

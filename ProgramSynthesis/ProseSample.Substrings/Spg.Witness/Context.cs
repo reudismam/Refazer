@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
@@ -44,7 +45,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     if (!(node is PatternP)) continue;
                     var patternP = (PatternP) node;
-                    if (patternP.K == -1) continue;
+                    throw new Exception("Must be implemented.");
+                    //if (patternP.K == -1) continue;
                     matches.Add(patternP.K + 1);
                 }
                 if (!matches.Any()) return null;    

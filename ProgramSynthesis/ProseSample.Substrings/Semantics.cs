@@ -81,7 +81,7 @@ namespace ProseSample.Substrings
             return SemanticMatch.Leaf(kind);
         }
 
-        public static Pattern Parent(Pattern match, int k)
+        public static Pattern Parent(Pattern match, string k)
         {
             var patternP = new PatternP(match.Tree, k);
             return patternP;
@@ -407,7 +407,8 @@ namespace ProseSample.Substrings
                 var parent = sx.Value.Parent;
                 if (parent == null) return false;
                 var isValue = MatchManager.IsValueEachChild(parent, template.Tree);
-                var isValid = isValue && parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1;
+                var isValid = true;//isValue && parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1;
+                throw new Exception("Seamantic must be implemented.");
                 return isValid;
             }
             else
@@ -425,7 +426,8 @@ namespace ProseSample.Substrings
                 //var pattern = target.Value.Parent.Children.ElementAt(patternP.K - 1);
                 var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
                 //nodes = nodes.Select(o => o.Children.ElementAt(patternP.K - 1)).ToList();
-                return new Node(nodes.ElementAt(k - 1).Children.ElementAt(patternP.K - 1));
+                throw new Exception("Semantic must be implemented.");
+                return null; /*new Node(nodes.ElementAt(k - 1).Children.ElementAt(patternP.K - 1));*/
             }
             else
             {

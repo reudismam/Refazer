@@ -613,8 +613,17 @@ namespace ProseSample.Substrings
             var commonPattern = Match.BuildPattern(patterns);
             foreach (State input in spec.ProvidedInputs)
             {
+                var target = (Node)input[rule.Body[0]];
+                //var parentd1 = target.Value.Value.Parent;
+                //var parentd1iTree = ConverterHelper.ConvertCSharpToTreeNode(parentd1);
+                var parentd2 = target.Value.Value.Parent;
+                var parentd2iTree = ConverterHelper.ConvertCSharpToTreeNode(parentd2);
+
+                var targetNode = TreeUpdate.FindNode(parentd2iTree, target.Value.Value);
+                var str1 = Match.GetPath(targetNode);
+                //var str = Match.GetXpaths(ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent), target.Value.Value);
                 var copyPattern = ConverterHelper.MakeACopy(commonPattern.Tree);
-                var patternP = new PatternP(commonPattern.Tree, indexChildList[input]);
+                var patternP = new PatternP(commonPattern.Tree, $"{indexChildList[input]}");
 
                 if (indexChildList.Any(o => o.Value != indexChildList.Values.First())) return NodeMatchBasic(rule, parameter, spec);
                 if (indexChildList[input] >= copyPattern.Children.Count) return NodeMatchBasic(rule, parameter, spec);
