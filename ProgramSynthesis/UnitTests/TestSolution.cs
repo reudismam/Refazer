@@ -192,14 +192,14 @@ namespace UnitTests
         [Test]
         public void R4b40293()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\4b40293");
-            Assert.IsTrue(false);
+            var isCorrect = CompleteTestBase(@"Roslyn\4b40293", examples: new List<int> {1, 2});
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
         public void R7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration });
+            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.AttributeList});
             Assert.IsTrue(isCorrect);
         }
 
@@ -214,7 +214,7 @@ namespace UnitTests
         public void E14623da()
         {
             var isCorrect = CompleteTestBase(@"EntityFramewok\14623da", solutionPath: @"EntityFramework\entityframework10\EntityFramework.sln");
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -278,7 +278,7 @@ namespace UnitTests
         public void Rc96d9ce()
         {
             var isCorrect = CompleteTestBase(@"Roslyn\c96d9ce", examples: new List<int> { 0, 1, 3 });
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -334,8 +334,8 @@ namespace UnitTests
         [Test]
         public void E2_14323da()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\2_14623da", solutionPath: @"EntityFramework\entityframework10\EntityFramework.sln");
-            Assert.IsTrue(false);
+            var isCorrect = CompleteTestBase(@"EntityFramewok\2_14623da", solutionPath: @"EntityFramework\entityframework10\EntityFramework.sln", examples: new List<int> {0, 1});
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -366,12 +366,12 @@ namespace UnitTests
             Assert.IsTrue(isCorrect);
         }
 
-        [Test]
-        public void E4_1571862()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\4_1571862");
-            Assert.IsTrue(isCorrect);
-        }
+        //[Test]
+        //public void E4_1571862()
+        //{
+        //    var isCorrect = CompleteTestBase(@"EntityFramewok\4_1571862");
+        //    Assert.IsTrue(isCorrect);
+        //}
 
         [Test]
         public void E5_1571862()
@@ -404,7 +404,7 @@ namespace UnitTests
         [Test]
         public void Ebc42e49()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\bc42e49", solutionPath: @"EntityFramework\entityframework2\EntityFramework.sln");
+            var isCorrect = CompleteTestBase(@"EntityFramewok\bc42e49", solutionPath: @"EntityFramework\entityframework2\EntityFramework.sln", examples: new List<int> {1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -496,7 +496,7 @@ namespace UnitTests
         [Test]
         public void N2dea84e()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\2dea84e", solutionPath: @"NuGet\nuget2\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"NuGet\2dea84e", solutionPath: @"NuGet\nuget2\NuGet.sln", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(false);
         }
 
@@ -504,7 +504,7 @@ namespace UnitTests
         public void Ndfc4e3d()
         {
             var isCorrect = CompleteTestBase(@"NuGet\dfc4e3d", solutionPath: @"NuGet\nuget6\NuGet.sln", kinds: new List<SyntaxKind> { SyntaxKind.AttributeList });
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -538,8 +538,8 @@ namespace UnitTests
         [Test]
         public void N74d4d32()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\74d4d32");
-            Assert.IsTrue(false);
+            var isCorrect = CompleteTestBase(@"NuGet\74d4d32", examples: new List<int> {0, 1, 2});
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -559,8 +559,8 @@ namespace UnitTests
         [Test]
         public void Na883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3, 12 });
-            Assert.IsTrue(false);
+            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3});
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
