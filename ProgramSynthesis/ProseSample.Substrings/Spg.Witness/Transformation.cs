@@ -53,9 +53,11 @@ namespace ProseSample.Substrings.Spg.Witness
         public static SubsequenceSpec ApplyPatch(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
+            var dicCluster = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
+            var ccsList = new List<List<EditOperation<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<List<Script>>();
+                //var kMatches = new List<List<Script>>();
                 var inpTreeNode = (Node)input[rule.Body[0]];
                 var inpTree = inpTreeNode.Value.Value;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
@@ -65,16 +67,65 @@ namespace ProseSample.Substrings.Spg.Witness
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
                     //ccs = CompactConnectedComponentsBasedOnAncestor(script, inpTreeNode.Value);
 
-                    kMatches = ClusterScript(ccs);
-                    kMatches.First().ForEach(o => PrintScript(o.Edits));
-                    kMatches = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
-                    kMatches.First().ForEach(o => PrintScript(o.Edits));
+                    //kMatches = ClusterScript(ccs);
+                    //kMatches.First().ForEach(o => PrintScript(o.Edits));
+                    //kMatches = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
+                    //kMatches.First().ForEach(o => PrintScript(o.Edits));
+                    //kMatches.Add(ccs);
+                    dicCluster[input] = ccs;
+                    ccsList.AddRange(ccs);
                 }
                 //kMatches = kMatches.GetRange(0, 1);
+                //kExamples[input] = new List<List<List<List<EditOperation<SyntaxNodeOrToken>>>>> { kMatches };
+            }
+
+            var clusters = ClusterScript(ccsList);
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var inpTreeNode = (Node)input[rule.Body[0]];
+                var kMatches = new List<List<Script>>();
+                foreach (var cluster in clusters)
+                {
+                    var listItem = new List<Script>();
+                    foreach (var item in cluster)
+                    {
+                        if (dicCluster[input].Any(e => IsEquals(item.Edits.Select(o => o.EditOperation).ToList(), e)))
+                        { 
+                            listItem.Add(item);
+                        }
+                    }
+                    kMatches.Add(listItem);
+                }
+                kMatches = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
                 kExamples[input] = new List<List<List<Script>>> { kMatches };
             }
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
+        }
+
+        private static bool IsEquals(List<EditOperation<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
+        {
+            if (item1.Count() != item2.Count()) return false;
+
+            for (int i = 0; i < item1.Count(); i++)
+            {
+                var editI = item1[i];
+                var editj = item2[i];
+
+
+                if (!(editI.GetType() == editj.GetType())) return false;
+                if (!editI.T1Node.Value.Equals(editj.T1Node.Value)) return false;
+                if (!editI.Parent.Value.Equals(editj.Parent.Value)) return false;
+                if (editI.K != editj.K) return false;
+
+                if (editI is Update<SyntaxNodeOrToken>)
+                {
+                    var upi = (Update<SyntaxNodeOrToken>) editI;
+                    var upj = (Update<SyntaxNodeOrToken>) editj;
+                    if (!upi.To.Value.Equals(upj.To.Value)) return false;
+                }
+            }
+            return true;
         }
 
         //private static List<List<EditOperation<SyntaxNodeOrToken>>> CompactConnectedComponentsBasedOnAncestor(List<EditOperation<SyntaxNodeOrToken>> script, ITreeNode<SyntaxNodeOrToken> inpTree)
@@ -309,7 +360,7 @@ namespace ProseSample.Substrings.Spg.Witness
         /// Cluster edit script in regions
         /// </summary>
         /// <param name="clusteredEdits">Clustered edit operations</param>
-        private static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> clusteredEdits)
+        public static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> clusteredEdits)
         {
             var clusteredList = new List<List<Script>>();
             if (clusteredEdits.Any())
@@ -591,7 +642,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var lcc = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
             var featureData = connectedComponents.Select(x => new EditOperationDatasetItem(x)).ToArray();
             var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => 1.0 - (2 * (double)lcc.FindCommon(x.Operations, y.Operations).Count) / ((double)x.Operations.Count + (double)y.Operations.Count));
-            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.4, minPts: 1, clusters: out clusters);
+            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.3, minPts: 1, clusters: out clusters);
             return clusters;
         }
 

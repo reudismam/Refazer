@@ -150,7 +150,7 @@ namespace UnitTests
         public void R5_c96d9ce()
         {
             var isCorrect = CompleteTestBase(@"Roslyn\5_c96d9ce");
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
 
@@ -161,12 +161,12 @@ namespace UnitTests
             Assert.IsTrue(isCorrect);
         }
 
-        //[Test]
-        //public void R3_8c14644()
-        //{
-        //    var isCorrect = CompleteTestBase(@"Roslyn\3_8c14644");
-        //    Assert.IsTrue(isCorrect);
-        //}
+        [Test]
+        public void R3_8c14644()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\3_8c14644");
+            Assert.IsTrue(isCorrect);
+        }
 
         [Test]
         public void R00552fc()
@@ -199,7 +199,7 @@ namespace UnitTests
         [Test]
         public void R7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.AttributeList});
+            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration});
             Assert.IsTrue(isCorrect);
         }
 
@@ -497,7 +497,7 @@ namespace UnitTests
         public void N2dea84e()
         {
             var isCorrect = CompleteTestBase(@"NuGet\2dea84e", solutionPath: @"NuGet\nuget2\NuGet.sln", examples: new List<int> {0, 1, 2});
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -891,6 +891,7 @@ namespace UnitTests
                     examplesOutput.AddRange(outExs);
                 }
 
+                examplesInput = RemoveDuplicates(examplesInput);
                 for (int index = 0; index < examplesInput.Count; index++)
                 {
                     var inps = examplesInput.ElementAt(index).ToFullString();
@@ -1005,6 +1006,24 @@ namespace UnitTests
             //    Console.WriteLine("Cold not log transformed_locations.json");
             //}
             return true;
+        }
+
+        private static List<SyntaxNodeOrToken> RemoveDuplicates(List<SyntaxNodeOrToken> methods)
+        {
+            var removes = new List<SyntaxNodeOrToken>();
+            for (int i = 0; i < methods.Count; i++)
+            {
+                for (int j = 0; j < methods.Count; j++)
+                {
+                    if (i != j && methods[i].Span.Contains(methods[j].Span))
+                    {
+                        removes.Add(methods[j]);
+                    }
+                }
+            }
+
+            var result = methods.Except(removes).ToList();
+            return result;
         }
 
         ///// <summary>

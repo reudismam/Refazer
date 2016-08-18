@@ -220,6 +220,7 @@ namespace ProseSample.Substrings
         public static SubsequenceSpec WitnessEList1(GrammarRule rule, int parameter, SubsequenceSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
+
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<Script>();
@@ -230,7 +231,10 @@ namespace ProseSample.Substrings
 
                     matches = editList.First();
                 }
-                treeExamples[input] = matches;
+                if (matches.Any())
+                {
+                    treeExamples[input] = matches;
+                }
             }
             return new SubsequenceSpec(treeExamples);
         }
@@ -283,7 +287,10 @@ namespace ProseSample.Substrings
 
                     matches = editList.First();
                 }
-                treeExamples[input] = matches;
+                if (matches.Any())
+                {
+                    treeExamples[input] = matches;
+                }
             }
             return new SubsequenceSpec(treeExamples);
         }
