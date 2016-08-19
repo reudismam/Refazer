@@ -595,22 +595,6 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
-            //var patterns = new List<ITreeNode<Token>>();
-            //var indexChildList = new Dictionary<State, int>();
-            //foreach (State input in spec.ProvidedInputs)
-            //{
-            //    var target = (Node)input[rule.Body[0]];
-            //    var parent = target.Value.Value.Parent;
-            //    if (parent.IsKind(SyntaxKind.Block) || parent.DescendantNodesAndSelf().Count() > 100) return NodeMatchBasic(rule, parameter, spec);
-
-            //    var topattern = ConverterHelper.ConvertCSharpToTreeNode(parent);
-            //    var targetIndex = topattern.Children.FindIndex(o => o.Equals(target.Value));
-            //    var hinpTree = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(topattern, 4);
-            //    var pattern = BuildPattern(hinpTree);
-            //    patterns.Add(pattern);
-            //    indexChildList[input] = targetIndex;
-            //}
-            //var commonPattern = Match.BuildPattern(patterns);
             var dic = new Dictionary<int, List<ITreeNode<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -662,35 +646,14 @@ namespace ProseSample.Substrings
             }
 
             foreach(var input in spec.ProvidedInputs)
-            { 
+            {
+                var resultList = new List<Pattern>();
                 var list = dicPattern.OrderByDescending(o => o.Key).Select(item => item.Value).ToList();
-                eExamples[input] = list;
+                resultList.Add(list.First());
+                resultList.Add(list.Last());
+                eExamples[input] = resultList;
             }
             //end get parent
-
-                //var parentd2 = target.Value.Value.Parent;
-                //var parentd2iTree = ConverterHelper.ConvertCSharpToTreeNode(parentd2);
-
-                //var targetNode = TreeUpdate.FindNode(parentd2iTree, target.Value.Value);
-                //var str1 = Match.GetPath(targetNode);
-                ////var str = Match.GetXpaths(ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent), target.Value.Value);
-                //var copyPattern = ConverterHelper.MakeACopy(commonPattern.Tree);
-                //var patternP = new PatternP(commonPattern.Tree, $"{indexChildList[input]}");
-
-                //if (indexChildList.Any(o => o.Value != indexChildList.Values.First())) return NodeMatchBasic(rule, parameter, spec);
-                //if (indexChildList[input] >= copyPattern.Children.Count) return NodeMatchBasic(rule, parameter, spec);
-                //var targetPattern = copyPattern.Children.ElementAt(indexChildList[input]);
-                //var list = new List<Pattern> { patternP, new Pattern(targetPattern)  };
-                //if (targetPattern.Children.Any())
-                //{
-                //    var copy = ConverterHelper.MakeACopy(commonPattern.Tree);
-                //    var empty = new EmptyToken();
-                //    ITreeNode<Token> itreeNodeToken = new TreeNode<Token>(empty, new TLabel(SyntaxKind.EmptyStatement));
-                //    itreeNodeToken.Children = copy.Children.ElementAt(indexChildList[input]).Children;
-                //    list.Add(new Pattern(itreeNodeToken));
-                //}
-                //eExamples[input] = list;
-            //}
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 

@@ -38,16 +38,16 @@ namespace ProseSample.Substrings.Spg.Witness
         public ExampleSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kindBinding)
         {
             var kExamples = new Dictionary<State, object>();
+            var matches = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<object>();
                 foreach (Pattern node in spec.DisjunctiveExamples[input])
                 {
                     if (!(node is PatternP)) continue;
                     var patternP = (PatternP) node;
                     //throw new Exception("Must be implemented.");
                     //if (patternP.K == -1) continue;
-                    matches.Add(patternP.K + 1);
+                    matches.Add(patternP.K);
                 }
                 if (!matches.Any()) return null;    
                 if (matches.Any(sequence => !sequence.Equals(matches.First()))) return null;

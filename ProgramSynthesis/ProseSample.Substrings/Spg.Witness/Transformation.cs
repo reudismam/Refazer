@@ -642,7 +642,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var lcc = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
             var featureData = connectedComponents.Select(x => new EditOperationDatasetItem(x)).ToArray();
             var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => 1.0 - (2 * (double)lcc.FindCommon(x.Operations, y.Operations).Count) / ((double)x.Operations.Count + (double)y.Operations.Count));
-            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.3, minPts: 1, clusters: out clusters);
+            dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.4, minPts: 1, clusters: out clusters);
             return clusters;
         }
 
