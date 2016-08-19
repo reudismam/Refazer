@@ -605,7 +605,7 @@ namespace ProseSample.Substrings
                 {
                     if (parent.IsKind(SyntaxKind.Block) || parent.DescendantNodesAndSelf().Count() > 100)
                     {
-                        break;
+                        if(i != 0) break;
                     }
 
                     if (!dic.ContainsKey(i))

@@ -384,7 +384,7 @@ namespace UnitTests
         public void E829dec5()
         {
             var isCorrect = CompleteTestBase(@"EntityFramewok\829dec5", solutionPath: @"EntityFramework\entityframework7\EntityFramework.sln");
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -469,7 +469,7 @@ namespace UnitTests
         public void N2_8da9f0e()
         {
             var isCorrect = CompleteTestBase(@"NuGet\2_8da9f0e", solutionPath: @"NuGet\nuget3\NuGet.sln");
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -546,7 +546,7 @@ namespace UnitTests
         public void N8da9f0e()
         {
             var isCorrect = CompleteTestBase(@"NuGet\8da9f0e");
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -664,7 +664,7 @@ namespace UnitTests
         public void R3_c96d9ce()
         {
             var isCorrect = CompleteTestBase(@"Roslyn\3_c96d9ce");
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         //[Test]
