@@ -641,9 +641,19 @@ namespace ProseSample.Substrings.Spg.Witness
             HashSet<EditOperationDatasetItem[]> clusters;
             var lcc = new LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>>();
             var featureData = connectedComponents.Select(x => new EditOperationDatasetItem(x)).ToArray();
-            var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => 1.0 - (2 * (double)lcc.FindCommon(x.Operations, y.Operations).Count) / ((double)x.Operations.Count + (double)y.Operations.Count));
+            var dbs = new DbscanAlgorithm<EditOperationDatasetItem>((x, y) => Distance(lcc, x, y));
             dbs.ComputeClusterDbscan(allPoints: featureData, epsilon: 0.4, minPts: 1, clusters: out clusters);
             return clusters;
+        }
+
+        private static double Distance(LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>> lcc, EditOperationDatasetItem x, EditOperationDatasetItem y)
+        {
+            var common = (double) lcc.FindCommon(x.Operations, y.Operations).Count;
+            //var tuple = Tuple.Create(common / (double)x.Operations.Count, common / (double)y.Operations.Count);
+            var dist = 1.0 - (2 *  common) / ((double)x.Operations.Count + (double)y.Operations.Count);
+            //var squares = (tuple.Item1*tuple.Item1 + tuple.Item2*tuple.Item2)/2;
+            //var dist = 1.0 - Math.Sqrt(squares);
+            return dist;
         }
 
         private static void ConfigureContext(ITreeNode<SyntaxNodeOrToken> anchor, Script script)

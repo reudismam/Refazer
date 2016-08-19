@@ -665,7 +665,9 @@ namespace ProseSample.Substrings
             {
                 var patternP = list[i] as PatternP;
                 var child = Semantics.FindChild(patternP.Tree, patternP.K);
-                if (child != null) valids.Add(patternP);
+                if (child == null) continue;
+                if (patternP.Tree.DescendantNodesAndSelf().Any(o => o.Value.Kind != SyntaxKind.EmptyStatement))
+                    valids.Add(patternP);
             }
             return valids;
         }
