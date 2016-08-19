@@ -601,7 +601,7 @@ namespace ProseSample.Substrings
                 //get parent
                 var target = (Node)input[rule.Body[0]];
                 var parent = target.Value.Value.AsNode();
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     if (parent.IsKind(SyntaxKind.Block) || parent.DescendantNodesAndSelf().Count() > 100)
                     {
