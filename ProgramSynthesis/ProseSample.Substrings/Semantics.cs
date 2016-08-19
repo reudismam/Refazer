@@ -411,7 +411,7 @@ namespace ProseSample.Substrings
                 if (!isValue) return false;
 
                 var node = FindChild(parent, patternP.K);
-                var isValid = node != null;/*&& parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1*/;
+                var isValid = node.Equals(sx.Value);/*&& parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1*/;
                 return isValid;
             }
             else
