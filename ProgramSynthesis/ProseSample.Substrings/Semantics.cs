@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -404,11 +405,13 @@ namespace ProseSample.Substrings
             if (template is PatternP)
             {
                 var patternP = (PatternP) template;
-                var parent = sx.Value.Parent;
+                var parent = FindParent(sx.Value, patternP.K);
                 if (parent == null) return false;
                 var isValue = MatchManager.IsValueEachChild(parent, template.Tree);
-                var isValid = true;//isValue && parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1;
-                throw new Exception("Seamantic must be implemented.");
+                if (!isValue) return false;
+
+                var node = FindChild(parent, patternP.K);
+                var isValid = node != null;/*&& parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1*/;
                 return isValid;
             }
             else
@@ -416,6 +419,35 @@ namespace ProseSample.Substrings
                 var isValue = MatchManager.IsValueEachChild(sx.Value, template.Tree);
                 return isValue;
             }
+        }
+
+        private static ITreeNode<SyntaxNodeOrToken> FindParent(ITreeNode<SyntaxNodeOrToken> value, string s)
+        {
+            var matches = Regex.Matches(s, "[0-9]");
+            if (matches.Count == 0) return null;
+
+            var current = value;
+            foreach (var match in matches)
+            {
+                if (current == null) return null;
+                current = current.Parent;
+            }
+            return current;
+        }
+
+        public static ITreeNode<T> FindChild<T>(ITreeNode<T> parent, string s)
+        {
+            var matches = Regex.Matches(s, "[0-9]");
+            if (matches.Count == 0) return null;
+
+            var current = parent;
+            foreach (Match match in matches)
+            {
+                var index = Int32.Parse(match.Groups[0].Value);
+                if (index > current.Children.Count) return null;
+                current = current.Children[index - 1];
+            }
+            return current;
         }
 
         public static Node ReferenceNode(Node target, Pattern kmatch, int k)
@@ -426,8 +458,9 @@ namespace ProseSample.Substrings
                 //var pattern = target.Value.Parent.Children.ElementAt(patternP.K - 1);
                 var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
                 //nodes = nodes.Select(o => o.Children.ElementAt(patternP.K - 1)).ToList();
-                throw new Exception("Semantic must be implemented.");
-                return null; /*new Node(nodes.ElementAt(k - 1).Children.ElementAt(patternP.K - 1));*/
+                var match = nodes.ElementAt(k - 1);
+                var node = FindChild(match, patternP.K);
+                return new Node(node); /*new Node(nodes.ElementAt(k - 1).Children.ElementAt(patternP.K - 1));*/
             }
             else
             {
