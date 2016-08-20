@@ -26,6 +26,9 @@ namespace ProseSample.Substrings.Spg.Witness
 
         public static Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>> CurrentTrees =  new Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>>();
 
+        public static Dictionary<List<EditOperation<SyntaxNodeOrToken>>, EditOperation<SyntaxNodeOrToken>> Operations =
+            new Dictionary<List<EditOperation<SyntaxNodeOrToken>>, EditOperation<SyntaxNodeOrToken>>();
+
         /// <summary>
         /// Witness function to segment the script in a list of edit operations
         /// </summary>
@@ -387,17 +390,31 @@ namespace ProseSample.Substrings.Spg.Witness
             var common = (double) lcc.FindCommon(x.Operations, y.Operations).Count;
             //var tuple = Tuple.Create(common / (double)x.Operations.Count, common / (double)y.Operations.Count);
             var dist = 1.0 - (2 *  common) / ((double)x.Operations.Count + (double)y.Operations.Count);
-            //var squares = (tuple.Item1*tuple.Item1 + tuple.Item2*tuple.Item2)/2;
+            //var squares = (tuple.Item1 * tuple.Item1 + tuple.Item2 * tuple.Item2) / 2;
             //var dist = 1.0 - Math.Sqrt(squares);
-            //var xoperations = CurrentTrees[x.Operations];
-            //var yoperations = CurrentTrees[y.Operations];
-            //var editsx = new Script(x.Operations.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
-            //var editsy = new Script(y.Operations.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
-            //var compEditx = CompactScript(new List<Script> {editsx}, xoperations);
-            //var compEdity = CompactScript(new List<Script> { editsy }, yoperations);
+            //if (!Operations.ContainsKey(x.Operations))
+            //{
+            //    var xtree = CurrentTrees[x.Operations];
+            //    var editsx = new Script(x.Operations.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
+            //    var compEditx = CompactScript(new List<Script> {editsx}, ConverterHelper.MakeACopy(xtree));
+            //    Operations[x.Operations] = compEditx.First().Edits.Single().EditOperation;
+            //}
 
-            //todo refactor this method 
-            //if (compEditx.First().Edits.Single().EditOperation.GetType() != compEdity.First().Edits.Single().EditOperation.GetType()) return 1;
+            //if (!Operations.ContainsKey(y.Operations))
+            //{
+            //    var ytree = CurrentTrees[y.Operations];
+            //    var editsy = new Script(y.Operations.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
+            //    var compEdity = CompactScript(new List<Script> {editsy}, ConverterHelper.MakeACopy(ytree));
+            //    Operations[y.Operations] = compEdity.First().Edits.Single().EditOperation;
+            //}
+            
+
+            //var xeditOperation = Operations[x.Operations];
+            //var yeditOperation = Operations[y.Operations];
+
+
+            ////todo refactor this method 
+            //if (xeditOperation.GetType() != yeditOperation.GetType()) return 1;
 
             return dist;
         }

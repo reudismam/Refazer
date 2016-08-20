@@ -42,7 +42,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 var parent = FindNode(CurrentTree, editOperation.Parent.Value);
                 if (parent == null) parent = CurrentTree;
-                var treeNode = editOperation.T1Node;
+                var treeNode = /*ConverterHelper.MakeACopy(*/editOperation.T1Node/*)*/;
 
                 parent.AddChild(treeNode, editOperation.K - 1);
                 treeNode.Parent = parent;
@@ -58,7 +58,8 @@ namespace TreeEdit.Spg.TreeEdit.Update
                     if (child.Equals(before)) break;
                 }
                 var parent = FindNode(CurrentTree, before.Parent.Value);
-                parent.AddChild(editOperation.T1Node, i);
+                var treeNode = /*ConverterHelper.MakeACopy(*/editOperation.T1Node/*)*/;
+                parent.AddChild(treeNode, i);
             }
 
             if (editOperation is Update<SyntaxNodeOrToken>)
