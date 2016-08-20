@@ -24,6 +24,8 @@ namespace ProseSample.Substrings.Spg.Witness
         /// </summary>
         public static Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> Mapping { get; set; }
 
+        public static Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>> CurrentTrees =  new Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>>();
+
         /// <summary>
         /// Witness function to segment the script in a list of edit operations
         /// </summary>
@@ -63,6 +65,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     var script = Script(inpTree, outTree);
                     PrintScript(script);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
+                    //todo this need to be refactored.
+                    ccs.ForEach(o => CurrentTrees.Add(o, inpTreeNode.Value));
                     dicCluster[input] = ccs;
                     ccsList.AddRange(ccs);
                 }
@@ -385,6 +389,16 @@ namespace ProseSample.Substrings.Spg.Witness
             var dist = 1.0 - (2 *  common) / ((double)x.Operations.Count + (double)y.Operations.Count);
             //var squares = (tuple.Item1*tuple.Item1 + tuple.Item2*tuple.Item2)/2;
             //var dist = 1.0 - Math.Sqrt(squares);
+            var xoperations = CurrentTrees[x.Operations];
+            var yoperations = CurrentTrees[y.Operations];
+            var editsx = new Script(x.Operations.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
+            var editsy = new Script(y.Operations.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
+            var compEditx = CompactScript(new List<Script> {editsx}, xoperations);
+            var compEdity = CompactScript(new List<Script> { editsy }, yoperations);
+
+            //todo refactor this method 
+            if (compEditx.First().Edits.Single().EditOperation.GetType() != compEdity.First().Edits.Single().EditOperation.GetType()) return 1;
+
             return dist;
         }
 
