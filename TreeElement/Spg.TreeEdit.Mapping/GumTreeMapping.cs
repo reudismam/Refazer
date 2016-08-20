@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.TreeEdit.PQ;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Isomorphic;
@@ -128,7 +129,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 var dict = IsomorphicManager<T>.AllPairOfIsomorphic(item.Item1, item.Item2);
                 foreach (var v in dict)
                 {
-                    if(!M.ContainsKey(v.Item1))
+                    if (!M.ContainsKey(v.Item1))
                     {
                         M.Add(v.Item1, v.Item2);
                     }
@@ -161,7 +162,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                     double dice = Dice(t1Node, t2Node, M);
 
                     if (t2Node != null && dice > 0.25)
-                    {                                 
+                    {
                         M.Add(t1Node, t2Node);
                         var t1Descendants = t1Node.DescendantNodes();
                         var t2Descendants = t2Node.DescendantNodes();
@@ -171,12 +172,12 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                             if (R.Any())
                             {
                                 RemoveFromM(t1Node, M);
-                                foreach (
-                                    var edt in
-                                        R.Where(edt => !M.ContainsKey(edt.Key))
-                                            .Where(edt => edt.Key.IsLabel(edt.Value.Label)))
+                                foreach (var edt in R.Where(edt => !M.ContainsKey(edt.Key)))
                                 {
-                                    M.Add(edt.Key, edt.Value);
+                                    if (SameLabelOrEquivalent(edt.Key, edt.Value))
+                                    {
+                                        M.Add(edt.Key, edt.Value);
+                                    }
                                 }
                             }
                         }
@@ -185,6 +186,13 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             }
             PrintUtil<T>.PrettyPrintString(t1, t2, M);
             return M;
+        }
+
+        private static bool SameLabelOrEquivalent(ITreeNode<T> a, ITreeNode<T> b)
+        {
+            return a.IsLabel(b.Label) ||
+                   (a.IsLabel(new TLabel(SyntaxKind.MethodDeclaration)) && b.IsLabel(new TLabel(SyntaxKind.PropertyDeclaration))) ||
+                   (a.IsLabel(new TLabel(SyntaxKind.PropertyDeclaration)) && b.IsLabel(new TLabel(SyntaxKind.MethodDeclaration)));
         }
 
         /// <summary>
@@ -246,7 +254,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
 
-            string cmd = @"/c java -jar """ + GetTestDataFolder(@"\libs") +$@"\RTED_v1.1.jar"" -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
+            string cmd = @"/c java -jar """ + GetTestDataFolder(@"\libs") + $@"\RTED_v1.1.jar"" -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
             Process proc = new Process();
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.Arguments = cmd;
@@ -286,7 +294,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
                 int first = int.Parse(aLine.Substring(0, aLine.IndexOf("->", StringComparison.Ordinal)));
                 var substr = aLine.IndexOf("->", StringComparison.Ordinal) + 2;
-                
+
                 int second = int.Parse(aLine.Substring(substr));
                 if (first != 0 && second != 0)
                 {
@@ -320,10 +328,8 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
         private ITreeNode<T> Candidate(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
-            var label = t1.Label;
-
             var list = from i in t2.DescendantNodesAndSelf()
-                       where i.IsLabel(label)
+                       where SameLabelOrEquivalent(i, t1)
                        select i;
 
             double max = -1;
@@ -352,7 +358,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         private static double Dice(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
         {
             if (t2 == null) return 0.0;
-      
+
             var t2Descendants = t2.DescendantNodes();
             var t1Descendants = t1.DescendantNodes();
 

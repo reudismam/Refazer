@@ -33,6 +33,27 @@ namespace UnitTests
         }
 
         [Test]
+        public void R0086821()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\0086821", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [Test]
+        public void Rcd68d03()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\cd68d03", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [Test]
+        public void N3_d9f64ea()
+        {
+            var isCorrect = CompleteTestBase(@"Nuget\3_d9f64ea", solutionPath: @"NuGet\nuget7\NuGet.sln");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [Test]
         public void R2_7c885ca()
         {
             var isCorrect = CompleteTestBase(@"Roslyn\2_7c885ca", solutionPath: @"Roslyn\roslyn14\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.AttributeList });
@@ -43,6 +64,13 @@ namespace UnitTests
         public void R2_673f18e()
         {
             var isCorrect = CompleteTestBase(@"Roslyn\2_673f18e");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [Test]
+        public void R04d0604()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\04d0604", solutionPath: @"Roslyn\roslyn18\Src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.MethodDeclaration, SyntaxKind.PropertyDeclaration});
             Assert.IsTrue(isCorrect);
         }
 
@@ -132,12 +160,12 @@ namespace UnitTests
         //    //}
         //}
 
-        //[Test]
-        //public void Re817dab()
-        //{
-        //    var isCorrect = CompleteTestBase(@"Roslyn\e817dab");
-        //    Assert.IsTrue(isCorrect);
-        //}
+        [Test]
+        public void Re817dab()
+        {
+            var isCorrect = CompleteTestBase(@"Roslyn\e817dab");
+            Assert.IsTrue(isCorrect);
+        }
 
         [Test]
         public void R4_c96d9ce()
@@ -395,6 +423,13 @@ namespace UnitTests
         }
 
         [Test]
+        public void E2_8b9180b()
+        {
+            var isCorrect = CompleteTestBase(@"EntityFramewok\2_8b9180b");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [Test]
         public void E8d45249()
         {
             var isCorrect = CompleteTestBase(@"EntityFramewok\8d45249");
@@ -469,6 +504,20 @@ namespace UnitTests
         public void N2_8da9f0e()
         {
             var isCorrect = CompleteTestBase(@"NuGet\2_8da9f0e", solutionPath: @"NuGet\nuget3\NuGet.sln");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [Test]
+        public void N3_8da9f0e()
+        {
+            var isCorrect = CompleteTestBase(@"NuGet\3_8da9f0e", solutionPath: @"NuGet\nuget3\NuGet.sln");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [Test]
+        public void N4_8da9f0e()
+        {
+            var isCorrect = CompleteTestBase(@"NuGet\4_8da9f0e", solutionPath: @"NuGet\nuget3\NuGet.sln");
             Assert.IsTrue(isCorrect);
         }
 
