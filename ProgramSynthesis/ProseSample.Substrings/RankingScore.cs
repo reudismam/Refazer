@@ -33,7 +33,7 @@ namespace ProseSample.Substrings
         public static double Score_NodeMatch(double inSource, double matchScore) => matchScore;
 
         [FeatureCalculator("NMatch")]
-        public static double Score_NMatch(double inSource, double matchScore) => matchScore;
+        public static double Score_NMatch(double matchScore) => matchScore;
 
         [FeatureCalculator("SC")]
         public static double Score_CS(double childScore) => childScore;

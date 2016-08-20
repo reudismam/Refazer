@@ -354,16 +354,16 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        [WitnessFunction("NMatch", 1)]
-        public static DisjunctiveExamplesSpec NMatchId(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                treeExamples[input] = new List<string> { "NMatch" };
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
-        }
+        //[WitnessFunction("NMatch", 1)]
+        //public static DisjunctiveExamplesSpec NMatchId(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        //{
+        //    var treeExamples = new Dictionary<State, IEnumerable<object>>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        treeExamples[input] = new List<string> { "NMatch" };
+        //    }
+        //    return DisjunctiveExamplesSpec.From(treeExamples);
+        //}
 
         /// <summary>
         /// Witness function for script rule

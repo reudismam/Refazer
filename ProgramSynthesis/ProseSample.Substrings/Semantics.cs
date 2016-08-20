@@ -469,7 +469,7 @@ namespace ProseSample.Substrings
             }
         }
 
-        public static Pattern NMatch(Pattern kmatch, string id)
+        public static Pattern NMatch(Pattern kmatch)
         {
             return kmatch;
         }

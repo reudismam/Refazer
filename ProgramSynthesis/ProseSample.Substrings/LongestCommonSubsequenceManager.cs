@@ -134,23 +134,24 @@ namespace LongestCommonSubsequence
 
         private static bool IsPartialyEquals(T p, T q)
         {
-            var edita = (EditOperation<SyntaxNodeOrToken>)(object)p;
-            var editb = (EditOperation<SyntaxNodeOrToken>)(object)q;
+            //var edita = (EditOperation<SyntaxNodeOrToken>)(object)p;
+            //var editb = (EditOperation<SyntaxNodeOrToken>)(object)q;
 
-            var t1A = edita.T1Node;
-            var t1B = editb.T1Node;
-            var pa = edita.Parent;
-            var pb = editb.Parent;
+            //var t1A = edita.T1Node;
+            //var t1B = editb.T1Node;
+            //var pa = edita.Parent;
+            //var pb = editb.Parent;
 
-            if (CalcSimilarity(t1A, t1B) > 0.5 && CalcSimilarity(pa, pb) > 0.5 && edita.K == editb.K) return true;
+            //if (p.GetType() == q.GetType() && CalcSimilarity(t1A, t1B) > 0.5 && CalcSimilarity(pa, pb) > 0.5 && edita.K == editb.K) return true;
 
-            return false;
+
+            return p.Equals(q);
         }
 
         private static double CalcSimilarity(ITreeNode<SyntaxNodeOrToken> a, ITreeNode<SyntaxNodeOrToken> b)
         {
             if (a.Value.AsNode().DescendantNodesAndSelf().Count() < 20 &&
-                b.Value.AsNode().DescendantNodesAndSelf().Count() < 50)
+                b.Value.AsNode().DescendantNodesAndSelf().Count() < 20)
             {
                 var t1aitree = ConverterHelper.ConvertCSharpToTreeNode(a.Value);
                 var t1bitree = ConverterHelper.ConvertCSharpToTreeNode(b.Value);
