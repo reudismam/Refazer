@@ -510,7 +510,7 @@ namespace UnitTests
         [Test]
         public void N3_8da9f0e()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\3_8da9f0e", solutionPath: @"NuGet\nuget3\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"NuGet\3_8da9f0e");
             Assert.IsTrue(isCorrect);
         }
 

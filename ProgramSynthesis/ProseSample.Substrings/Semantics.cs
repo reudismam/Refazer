@@ -587,6 +587,66 @@ namespace ProseSample.Substrings
         {
             switch (kind)
             {
+            //case SyntaxKind.PostIncrementExpression:
+            //    {
+            //        var postt = SyntaxFactory.po
+            //    }
+                case SyntaxKind.ArrayRankSpecifier:
+                {
+                    var expressions = children.Select(o => (ExpressionSyntax) o);
+                    var spal = SyntaxFactory.SeparatedList<ExpressionSyntax>(expressions);
+                    var arrayRank = SyntaxFactory.ArrayRankSpecifier(spal);
+                    return arrayRank;
+                }
+                case SyntaxKind.ArrayType:
+                {
+                    var typeSyntax = (TypeSyntax) children[0];
+                    var arrayRankList = children.Where(o => o.IsKind(SyntaxKind.ArrayRankSpecifier)).Select(o => (ArrayRankSpecifierSyntax) o);
+                    var syntaxList = new SyntaxList<ArrayRankSpecifierSyntax>();
+                    syntaxList.AddRange(arrayRankList);
+                    var arrayType = SyntaxFactory.ArrayType(typeSyntax, syntaxList);
+                    return arrayType;
+                }
+                case SyntaxKind.CatchDeclaration:
+                {
+                    var typesyntax = (TypeSyntax) children[0];
+                    var catchDeclaration = SyntaxFactory.CatchDeclaration(typesyntax);
+                    return catchDeclaration;
+                }
+                case SyntaxKind.CatchClause:
+                {
+                    var catchDeclaration = (CatchDeclarationSyntax) children.SingleOrDefault(o => o.IsKind(SyntaxKind.CatchDeclaration));
+                    var catchFilter = (CatchFilterClauseSyntax) children.SingleOrDefault(o => o.IsKind(SyntaxKind.CatchFilterClause));
+                    var body = (BlockSyntax) children.SingleOrDefault(o => o.IsKind(SyntaxKind.Block));
+
+                    var catchClause = SyntaxFactory.CatchClause(catchDeclaration, catchFilter, body);
+                    return catchClause;
+                }
+                case SyntaxKind.TryStatement:
+                {
+                    var body = (BlockSyntax) children[0];
+                    var catches = children.Where(o => o.IsKind(SyntaxKind.CatchClause)).Select(o => (CatchClauseSyntax) o).ToList();
+                    var spal = new SyntaxList<CatchClauseSyntax>();
+                    spal.AddRange(catches);
+                    var finallyClause =
+                        children.Where(o => o.IsKind(SyntaxKind.FinallyClause))
+                            .Select(o => (FinallyClauseSyntax) o)
+                            .SingleOrDefault();
+                    var tryStatement = SyntaxFactory.TryStatement(body, spal, finallyClause);
+                    return tryStatement;
+                }
+                case SyntaxKind.FinallyClause:
+                {
+                    var blockSyntax = (BlockSyntax) children[0];
+                    var finallyClause = SyntaxFactory.FinallyClause(blockSyntax);
+                    return finallyClause;
+                }
+                case SyntaxKind.ThrowStatement:
+                {
+                    var expressionSyntax = (ExpressionSyntax) children[0];
+                    var throwStatement = SyntaxFactory.ThrowStatement(expressionSyntax);
+                    return throwStatement;
+                }
                 case SyntaxKind.MethodDeclaration:
                 {
                     var method = (MethodDeclarationSyntax)node;
@@ -666,8 +726,17 @@ namespace ProseSample.Substrings
                     var nameColon = SyntaxFactory.NameColon(identifier);
                     return nameColon;
                 }
+                case SyntaxKind.GreaterThanExpression:
+                case SyntaxKind.LessThanExpression:
+                case SyntaxKind.LessThanOrEqualExpression:
+                case SyntaxKind.DivideExpression:
+                case SyntaxKind.MultiplyExpression:
+                case SyntaxKind.BitwiseAndExpression:
+                case SyntaxKind.BitwiseOrExpression:
+                case SyntaxKind.AsExpression:
                 case SyntaxKind.AddExpression:
                 case SyntaxKind.GreaterThanOrEqualExpression:
+                case SyntaxKind.LogicalOrExpression:
                 case SyntaxKind.LogicalAndExpression:
                 {
                     var leftExpression = (ExpressionSyntax) children[0];
@@ -972,6 +1041,10 @@ namespace ProseSample.Substrings
                     var ifStatement = SyntaxFactory.IfStatement(condition, statementSyntax);
                     return ifStatement;
                 }
+                case SyntaxKind.PostIncrementExpression:
+                case SyntaxKind.PostDecrementExpression:
+                case SyntaxKind.PreIncrementExpression:
+                case SyntaxKind.PreDecrementExpression:
                 case SyntaxKind.LogicalNotExpression:
                 case SyntaxKind.UnaryMinusExpression:
                 {
