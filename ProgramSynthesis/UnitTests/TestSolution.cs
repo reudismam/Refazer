@@ -18,6 +18,7 @@ using Spg.ExampleRefactoring.Workspace;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
+using Taramon.Exceller;
 using TreeElement.Spg.Node;
 
 namespace UnitTests
@@ -35,7 +36,7 @@ namespace UnitTests
         [Test]
         public void R0086821()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\0086821", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln");
+            var isCorrect = CompleteTestBase(@"Roslyn\0086821", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.ClassDeclaration});
             Assert.IsTrue(isCorrect);
         }
 
@@ -70,7 +71,7 @@ namespace UnitTests
         [Test]
         public void R04d0604()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\04d0604", solutionPath: @"Roslyn\roslyn18\Src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.MethodDeclaration, SyntaxKind.PropertyDeclaration});
+            var isCorrect = CompleteTestBase(@"Roslyn\04d0604", solutionPath: @"Roslyn\roslyn18\Src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.PropertyDeclaration });
             Assert.IsTrue(isCorrect);
         }
 
@@ -220,14 +221,14 @@ namespace UnitTests
         [Test]
         public void R4b40293()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\4b40293", examples: new List<int> {1, 2});
+            var isCorrect = CompleteTestBase(@"Roslyn\4b40293", examples: new List<int> { 1, 2 });
             Assert.IsTrue(isCorrect);
         }
 
         [Test]
         public void R7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration});
+            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration });
             Assert.IsTrue(isCorrect);
         }
 
@@ -362,14 +363,14 @@ namespace UnitTests
         [Test]
         public void E2_14323da()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\2_14623da", solutionPath: @"EntityFramework\entityframework10\EntityFramework.sln", examples: new List<int> {0, 1});
+            var isCorrect = CompleteTestBase(@"EntityFramewok\2_14623da", solutionPath: @"EntityFramework\entityframework10\EntityFramework.sln", examples: new List<int> { 0, 1 });
             Assert.IsTrue(isCorrect);
         }
 
         [Test]
         public void E2_326d525()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\2_326d525");
+            var isCorrect = CompleteTestBase(@"EntityFramewok\2_326d525", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -439,7 +440,7 @@ namespace UnitTests
         [Test]
         public void Ebc42e49()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\bc42e49", solutionPath: @"EntityFramework\entityframework2\EntityFramework.sln", examples: new List<int> {1, 2});
+            var isCorrect = CompleteTestBase(@"EntityFramewok\bc42e49", solutionPath: @"EntityFramework\entityframework2\EntityFramework.sln", examples: new List<int> { 1, 2 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -524,7 +525,7 @@ namespace UnitTests
         [Test]
         public void N2_a569c55()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\2_a569c55");
+            var isCorrect = CompleteTestBase(@"NuGet\2_a569c55", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -545,7 +546,7 @@ namespace UnitTests
         [Test]
         public void N2dea84e()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\2dea84e", solutionPath: @"NuGet\nuget2\NuGet.sln", examples: new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"NuGet\2dea84e", solutionPath: @"NuGet\nuget2\NuGet.sln", examples: new List<int> { 0, 1, 2 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -587,7 +588,7 @@ namespace UnitTests
         [Test]
         public void N74d4d32()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\74d4d32", examples: new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"NuGet\74d4d32", examples: new List<int> { 0, 1, 2 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -608,7 +609,7 @@ namespace UnitTests
         [Test]
         public void Na883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3});
+            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -877,8 +878,6 @@ namespace UnitTests
             if (examples == null) examples = new List<int> { 0, 1 };
             if (kinds == null) kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
 
-            long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-
             //Load grammar
             var grammar = GetGrammar();
 
@@ -892,169 +891,175 @@ namespace UnitTests
 
             var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
 
-            for (int i = 0; i < regions.Count; i++)
+            //            for (int i = 0; i < regions.Count; i++)
+            //k            {
+            var dicionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
+            //Examples
+            var examplesInput = new List<SyntaxNodeOrToken>();
+            var examplesOutput = new List<SyntaxNodeOrToken>();
+
+            SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (KeyValuePair<string, List<TRegion>> entry in dicionarySelection)
             {
-                var dicionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
+                string sourceCode = FileUtil.ReadFile(entry.Key);
+                Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
+                string sourceCodeAfter = tu.Item1;
+
+                inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
+                SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
+
+                var allMethodsInput = GetNodesByType(inpTree, kinds);
+                var allMethodsOutput = GetNodesByType(outTree, kinds);
+                var inputMethods = new List<int>();
+                foreach (var region in locationRegions.Where(o => o.SourceClass.ToUpperInvariant().Equals(entry.Key.ToUpperInvariant())))
+                {
+                    for (int index = 0; index < allMethodsInput.Count; index++)
+                    {
+                        var method = allMethodsInput[index];
+                        var tRegion = new TRegion
+                        {
+                            Start = method.SpanStart,
+                            Length = method.Span.Length
+                        };
+
+                        if (region.Region.IsInside(tRegion))
+                        {
+                            inputMethods.Add(index);
+                        }
+                    }
+                }
+
                 //Examples
-                var examplesInput = new List<SyntaxNodeOrToken>();
-                var examplesOutput = new List<SyntaxNodeOrToken>();
+                var inpExs = inputMethods.Distinct().Select(index => allMethodsInput[index]).ToList();
+                var outExs = inputMethods.Distinct().Select(index => allMethodsOutput[index]).ToList();
 
-                SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
-                //building example methods
-                var ioExamples = new Dictionary<State, IEnumerable<object>>();
-                foreach (KeyValuePair<string, List<TRegion>> entry in dicionarySelection)
-                {
-                    string sourceCode = FileUtil.ReadFile(entry.Key);
-                    Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
-                    string sourceCodeAfter = tu.Item1;
-
-                    inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
-                    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
-
-                    var allMethodsInput = GetNodesByType(inpTree, kinds);
-                    var allMethodsOutput = GetNodesByType(outTree, kinds);
-                    var inputMethods = new List<int>();
-                    foreach (var region in locationRegions.Where(o => o.SourceClass.ToUpperInvariant().Equals(entry.Key.ToUpperInvariant())))
-                    {
-                        for (int index = 0; index < allMethodsInput.Count; index++)
-                        {
-                            var method = allMethodsInput[index];
-                            var tRegion = new TRegion
-                            {
-                                Start = method.SpanStart,
-                                Length = method.Span.Length
-                            };
-
-                            if (region.Region.IsInside(tRegion))
-                            {
-                                inputMethods.Add(index);
-                            }
-                        }
-                    }
-
-                    //Examples
-                    var inpExs = inputMethods.Distinct().Select(index => allMethodsInput[index]).ToList();
-                    var outExs = inputMethods.Distinct().Select(index => allMethodsOutput[index]).ToList();
-
-                    examplesInput.AddRange(inpExs);
-                    examplesOutput.AddRange(outExs);
-                }
-
-                examplesInput = RemoveDuplicates(examplesInput);
-                for (int index = 0; index < examplesInput.Count; index++)
-                {
-                    var inps = examplesInput.ElementAt(index).ToFullString();
-                    var outps = examplesOutput.ElementAt(index).ToFullString();
-                    var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(index))));
-                    ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(index) });
-                }
-
-                //Learn program
-                var spec = DisjunctiveExamplesSpec.From(ioExamples);
-                ProgramNode program = Utils.Learn(grammar, spec);
-
-                var methods = new List<SyntaxNodeOrToken>();
-                if (solutionPath == null)
-                {
-                    //Run program
-                    methods = GetNodesByType(inpTree, kinds);
-                }
-                else
-                {
-                    string path = expHome + solutionPath;
-                    var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
-                    foreach (var v in files)
-                    {
-                        var tree = CSharpSyntaxTree.ParseText(v.Item1).GetRoot();
-                        var vnodes = GetNodesByType(tree, kinds);
-                        methods.AddRange(vnodes);
-                    }
-                }
-
-                var transformed = new List<object>();
-
-                var dicTrans = new Dictionary<string, List<object>>();
-                string s = "";
-                foreach (var method in methods)
-                {
-                    var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
-                    object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
-                    transformed.AddRange(output);
-                    Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-
-                    if (output.Any())
-                    {
-                        if (dicTrans.ContainsKey(method.SyntaxTree.FilePath.ToUpperInvariant()))
-                        {
-                            dicTrans[method.SyntaxTree.FilePath.ToUpperInvariant()].AddRange(output);
-                        }
-                        else
-                        {
-                            dicTrans[method.SyntaxTree.FilePath.ToUpperInvariant()] = output.ToList();
-                        }
-                    }
-                    //output.ForEach(o => s += $"{o} \n");
-                    //s += $"{output} \n";
-                }
-
-                foreach(var v in dicTrans)
-                {
-                    s += $"{v.Key} \n====================\n";
-                    v.Value.ForEach(o => s += $"{o}\n");
-                }
-
-                Console.WriteLine($"Count: \n {transformed.Count}");
-                s += $"Count: \n {transformed.Count}";
-                FileUtil.WriteToFile(@"C:\Users\SPG-04\Desktop\result.res", s);
-                //foreach (var v in transformed)
-                //{
-                //    C
-                //}
-
-
-
-                //controller.DocumentsBeforeAndAfter = documents;
-                //controller.EditedLocations = dicSelections;
-
-                //millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                ////controller.Refact();
-                ////controller.Undo();
-                //CodeTransformation tregion = MatchesLocationsOnCommit(codeTransformations);
-                //if (tregion == null)
-                //{
-                //    break;
-                //}
-
-                //if (ContainsTRegion(metadataRegions, tregion))
-                //{
-                //    return false;
-                //}
-                //metadataRegions.Add(tregion.Trans);
-                break;
+                examplesInput.AddRange(inpExs);
+                examplesOutput.AddRange(outExs);
             }
 
-            long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            long totalTime = (millAfer - millBefore);
-            //List<CodeTransformation> transformationsList = controller.CodeTransformations;//JsonUtil<List<CodeTransformation>>.Read(@"transformed_locations.json");
+            examplesInput = RemoveDuplicates(examplesInput);
+            for (int index = 0; index < examplesInput.Count; index++)
+            {
+                //var inps = examplesInput.ElementAt(index).ToFullString();
+                //var outps = examplesOutput.ElementAt(index).ToFullString();
+                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)examplesInput.ElementAt(index))));
+                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(index) });
+            }
 
-            //long timeToLearnEdit = long.Parse(FileUtil.ReadFile("edit_learn.t"));
-            //long timeToTransformEdit = long.Parse(FileUtil.ReadFile("edit_transform.t"));
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
 
-            //Log(commit, totalTime, metadataRegions.Count, transformationsList.Count, globalTransformations.Count, controller.Program.ToString(), timeToLearnEdit, timeToTransformEdit);
+            long millBeforeLearn = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            ProgramNode program = Utils.Learn(grammar, spec);
+            long millAfterLearn = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long totalTimeToLearn = millAfterLearn - millBeforeLearn;
 
-            //FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\edit.t", totalTime.ToString());
+            var methods = new List<SyntaxNodeOrToken>();
+            if (solutionPath == null)
+            {
+                //Run program
+                methods = GetNodesByType(inpTree, kinds);
+            }
+            else
+            {
+                string path = expHome + solutionPath;
+                var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
+                foreach (var v in files)
+                {
+                    var tree = CSharpSyntaxTree.ParseText(v.Item1).GetRoot();
+                    var vnodes = GetNodesByType(tree, kinds);
+                    methods.AddRange(vnodes);
+                }
+            }
 
-            //try
-            //{
-            //    string transformations = FileUtil.ReadFile("transformed_locations.json");
-            //    FileUtil.WriteToFile(expHome + @"commit\" + commit + @"\" + "transformed_locations.json", transformations);
-            //    FileUtil.DeleteFile("transformed_locations.json");
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine("Cold not log transformed_locations.json");
-            //}
+            var transformed = new List<object>();
+            var dicTrans = new Dictionary<string, List<object>>();
+
+            long millBeforeExecution = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
+                transformed.AddRange(output);
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+
+                if (output.Any())
+                {
+                    if (dicTrans.ContainsKey(method.SyntaxTree.FilePath.ToUpperInvariant()))
+                    {
+                        dicTrans[method.SyntaxTree.FilePath.ToUpperInvariant()].AddRange(output);
+                    }
+                    else
+                    {
+                        dicTrans[method.SyntaxTree.FilePath.ToUpperInvariant()] = output.ToList();
+                    }
+                }
+            }
+            long millAfterExecution = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            var totalTimeToExecute = millAfterExecution - millBeforeExecution;
+
+            string s = "";
+            foreach (var v in dicTrans)
+            {
+                s += $"{v.Key} \n====================\n";
+                v.Value.ForEach(o => s += $"{o}\n");
+            }
+
+            Console.WriteLine($"Count: \n {transformed.Count}");
+            s += $"Count: \n {transformed.Count}";
+            FileUtil.WriteToFile(expHome + @"cprose\" + commit + @"\result.res", s);
+            //                break;
+            //            }
+
+            //long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            //long totalTime = (millAfer - millBefore);
+            Log(commit, totalTimeToLearn + totalTimeToExecute, examples.Count, regions.Count, transformed.Count,
+                dicionarySelection.Count, program.ToString(), totalTimeToLearn, totalTimeToExecute);
             return true;
+        }
+
+        public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation, int documents, string program, double timeToLearnEdit, double timeToTransformEdit)
+        {
+            string commitFirstLetter = commit.ElementAt(0).ToString();
+            string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+
+            commit = commitFirstLetter + "-" + commitId;
+
+            string path = TestUtil.LOG_PATH;
+            using (ExcelManager em = new ExcelManager())
+            {
+
+                em.Open(path);
+
+                int empty;
+                for (int i = 1; ; i++)
+                {
+                    if (em.GetValue("A" + i, Category.Formatted).ToString().Equals("") || em.GetValue("A" + i, Category.Formatted).ToString().Equals(commit))
+                    {
+                        empty = i;
+                        break;
+                    }
+                }
+
+                //if (empty != -1)
+                //{
+                em.SetValue("A" + empty, commit);
+                em.SetValue("B" + empty, time / 1000);
+                em.SetValue("C" + empty, exTransformations);
+                em.SetValue("D" + empty, locations);
+                em.SetValue("E" + empty, acTrasnformation);
+                em.SetValue("F" + empty, documents);
+                em.SetValue("G" + empty, program);
+                em.SetValue("H" + empty, timeToLearnEdit / 1000);
+                em.SetValue("I" + empty, timeToTransformEdit / 1000);
+                em.Save();
+                //}
+                //else {
+                //    Console.WriteLine("Could not write log to " + path);
+                //}
+            }
         }
 
         private static List<SyntaxNodeOrToken> RemoveDuplicates(List<SyntaxNodeOrToken> methods)
@@ -1173,46 +1178,7 @@ namespace UnitTests
         //    return true;
         //}
 
-        //public static void Log(string commit, double time, int exTransformations, int acTrasnformation, int documents, string program, double timeToLearnEdit, double timeToTransformEdit)
-        //{
-        //    string commitFirstLetter = commit.ElementAt(0).ToString();
-        //    string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
-        //    commit = commitFirstLetter + "-" + commitId;
-
-        //    string path = TestUtil.LOG_PATH;
-        //    using (ExcelManager em = new ExcelManager())
-        //    {
-
-        //        em.Open(path);
-
-        //        int empty = -1;
-        //        for (int i = 1; i < 1000; i++)
-        //        {
-        //            string comt = em.GetValue("A" + i, Category.Formatted).ToString();
-        //            if (comt.Equals(commit))
-        //            {
-        //                empty = i;
-        //                break;
-        //            }
-        //        }
-
-        //        if (empty != -1)
-        //        {
-        //            em.SetValue("K" + empty, time / 1000);
-        //            em.SetValue("L" + empty, exTransformations);
-        //            em.SetValue("M" + empty, acTrasnformation);
-        //            em.SetValue("N" + empty, documents);
-        //            em.SetValue("O" + empty, program);
-        //            em.SetValue("P" + empty, timeToLearnEdit / 1000);
-        //            em.SetValue("Q" + empty, timeToTransformEdit / 1000);
-        //            em.Save();
-        //        }
-        //        else {
-        //            Console.WriteLine("Could not write log to " + path);
-        //        }
-        //    }
-        //}
 
         public static Tuple<string, List<TRegion>> Transform(string source, List<CodeTransformation> transformations, List<TRegion> regions)
         {

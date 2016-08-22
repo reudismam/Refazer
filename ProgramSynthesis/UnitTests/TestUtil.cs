@@ -8,7 +8,7 @@ namespace NUnitTests.Spg.NUnitTests.Util
 {
     internal class TestUtil
     {
-        public const string LOG_PATH = @"C:\Users\SPG-04\Documents\Research\Log2.xlsx";
+        public const string LOG_PATH = @"C:\Users\SPG-04\Documents\Research\ICSE\LogICSE.xlsx";
         public static List<CodeLocation> GetAllLocationsOnCommit(List<TRegion> selections, List<CodeLocation> locations)
         {
             List<CodeLocation> metaLocList = new List<CodeLocation>();
