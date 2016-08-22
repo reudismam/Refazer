@@ -617,7 +617,12 @@ namespace ProseSample.Substrings
                 }
             }
 
-            var dicPattern = new Dictionary<int, Pattern>();
+            var dicPattern = new Dictionary<int, List<Pattern>>();
+            foreach (var item in dic)
+            {
+                dicPattern[item.Key] = new List<Pattern>();
+            }
+
             for (int i = 0; i < spec.ProvidedInputs.Count(); i++)
             {
                 var input = spec.ProvidedInputs.ElementAt(i);
@@ -632,14 +637,14 @@ namespace ProseSample.Substrings
                         if (item.Key == 0)
                         {
                             var p = new Pattern(commonPattern.Tree);
-                            dicPattern[item.Key] = p;
+                            dicPattern[item.Key].Add(p);
                         }
                         else
                         {
                             var targetNode = TreeUpdate.FindNode(item.Value[i], target.Value.Value);
                             var str1 = Match.GetPath(targetNode);
                             var p = new PatternP(commonPattern.Tree, str1);
-                            dicPattern[item.Key] = p;
+                            dicPattern[item.Key].Add(p);
                         }
                     }
                 }
@@ -649,7 +654,7 @@ namespace ProseSample.Substrings
             {
                 var resultList = new List<Pattern>();
                 var list = dicPattern.OrderByDescending(o => o.Key).Select(item => item.Value).ToList();
-                resultList.Add(list.Last());
+                resultList.Add(list.Last().First());
                 var valids = ValidPatterns(list);
                 if (valids.Any()) resultList.Add(valids.First());
                 eExamples[input] = resultList;
@@ -658,12 +663,16 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        private static List<Pattern> ValidPatterns(List<Pattern> list)
+        private static List<Pattern> ValidPatterns(List<List<Pattern>> list)
         {
             var valids = new List<Pattern>();
             for (int i = 0; i < list.Count - 1; i++)
             {
-                var patternP = list[i] as PatternP;
+                var patternPList = list[i].Select(o => (PatternP) o).ToList();
+                if (!patternPList.Any()) continue;
+                if (patternPList.Any(o => !o.K.Equals(patternPList.First().K))) continue;
+
+                var patternP = patternPList.First();
                 var child = Semantics.FindChild(patternP.Tree, patternP.K);
                 if (child == null) continue;
                 if (patternP.Tree.DescendantNodesAndSelf().Any(o => o.Value.Kind != SyntaxKind.EmptyStatement))
