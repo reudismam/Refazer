@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
@@ -412,11 +413,14 @@ namespace ProseSample.Substrings
 
                 var node = FindChild(parent, patternP.K);
                 var isValid = node.Equals(sx.Value);/*&& parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1*/;
+                if(isValid) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value} \n" + Environment.NewLine);
                 return isValid;
+
             }
             else
             {
                 var isValue = MatchManager.IsValueEachChild(sx.Value, template.Tree);
+                if(isValue) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{sx.Value.Value} \n" + Environment.NewLine);
                 return isValue;
             }
         }

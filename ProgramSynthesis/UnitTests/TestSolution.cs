@@ -36,7 +36,7 @@ namespace UnitTests
         [Test]
         public void R0086821()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\0086821", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.ClassDeclaration});
+            var isCorrect = CompleteTestBase(@"Roslyn\0086821", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> {SyntaxKind.ClassDeclaration}, examples: new List<int> {0, 1, 2, 6});
             Assert.IsTrue(isCorrect);
         }
 
@@ -412,7 +412,7 @@ namespace UnitTests
         [Test]
         public void E829dec5()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\829dec5", solutionPath: @"EntityFramework\entityframework7\EntityFramework.sln");
+            var isCorrect = CompleteTestBase(@"EntityFramewok\829dec5", solutionPath: @"EntityFramework\entityframework7\EntityFramework.sln", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -440,7 +440,7 @@ namespace UnitTests
         [Test]
         public void Ebc42e49()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\bc42e49", solutionPath: @"EntityFramework\entityframework2\EntityFramework.sln", examples: new List<int> { 1, 2 });
+            var isCorrect = CompleteTestBase(@"EntityFramewok\bc42e49", solutionPath: @"EntityFramework\entityframework2\EntityFramework.sln", examples: new List<int> { 0, 1, 2, 3, 4});
             Assert.IsTrue(isCorrect);
         }
 
@@ -968,7 +968,7 @@ namespace UnitTests
                 var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
                 foreach (var v in files)
                 {
-                    var tree = CSharpSyntaxTree.ParseText(v.Item1).GetRoot();
+                    var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
                     var vnodes = GetNodesByType(tree, kinds);
                     methods.AddRange(vnodes);
                 }
@@ -1069,7 +1069,7 @@ namespace UnitTests
             {
                 for (int j = 0; j < methods.Count; j++)
                 {
-                    if (i != j && methods[i].Span.Contains(methods[j].Span))
+                    if (i != j && methods[i].SyntaxTree.FilePath.ToUpperInvariant().Equals(methods[j].SyntaxTree.FilePath.ToUpperInvariant()) && methods[i].Span.Contains(methods[j].Span))
                     {
                         removes.Add(methods[j]);
                     }

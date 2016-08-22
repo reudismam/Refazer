@@ -138,7 +138,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                 var editJ = Script[indexJ];
 
                 //Two nodes have the same parent
-                if (editI.Parent.Equals(editJ.Parent) && IsValidBlock(editI.Parent)/*!editI.Parent.IsLabel(new TLabel(SyntaxKind.Block))*/) return true;        
+                if (editI.Parent.Equals(editJ.Parent) && IsValidBlock(editI.Parent) && !editI.Parent.IsLabel(new TLabel(SyntaxKind.ClassDeclaration))) return true;        
 
                 //T1Node from an operation is the parent in another edit operation 
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
