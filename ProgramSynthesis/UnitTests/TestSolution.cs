@@ -71,7 +71,7 @@ namespace UnitTests
         [Test]
         public void R04d0604()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\04d0604", solutionPath: @"Roslyn\roslyn18\Src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.PropertyDeclaration });
+            var isCorrect = CompleteTestBase(@"Roslyn\04d0604", solutionPath: @"Roslyn\roslyn18\Src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.PropertyDeclaration }, examples: new List<int> {0, 1, 3});
             Assert.IsTrue(isCorrect);
         }
 
@@ -511,7 +511,7 @@ namespace UnitTests
         [Test]
         public void N3_8da9f0e()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\3_8da9f0e");
+            var isCorrect = CompleteTestBase(@"NuGet\3_8da9f0e", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -546,7 +546,7 @@ namespace UnitTests
         [Test]
         public void N2dea84e()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\2dea84e", solutionPath: @"NuGet\nuget2\NuGet.sln", examples: new List<int> { 0, 1, 2 });
+            var isCorrect = CompleteTestBase(@"NuGet\2dea84e", solutionPath: @"NuGet\nuget2\NuGet.sln", examples: new List<int> { 0, 1, 2, 3, 7});
             Assert.IsTrue(isCorrect);
         }
 
@@ -574,7 +574,7 @@ namespace UnitTests
         [Test]
         public void N5_8da9f0e()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\5_8da9f0e");
+            var isCorrect = CompleteTestBase(@"NuGet\5_8da9f0e", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -609,7 +609,7 @@ namespace UnitTests
         [Test]
         public void Na883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3 });
+            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3, 11 });
             Assert.IsTrue(isCorrect);
         }
 
