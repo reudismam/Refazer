@@ -53,7 +53,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var eExamples = new Dictionary<State, IEnumerable<object>>();
+            /*var eExamples = new Dictionary<State, IEnumerable<object>>();
             var dic = new Dictionary<int, List<ITreeNode<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -120,9 +120,9 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             //end get parent
             return DisjunctiveExamplesSpec.From(eExamples);
-        }
+        }*/
 
-        /*var eExamples = new Dictionary<State, IEnumerable<object>>();
+        var eExamples = new Dictionary<State, IEnumerable<object>>();
             var patterns = new List<ITreeNode<Token>>();
             var indexChildList = new Dictionary<State, int>();
             foreach (State input in spec.ProvidedInputs)
@@ -177,8 +177,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
                 eExamples[input] = new List<Pattern> { patternP, new Pattern(patterncopy.Children.ElementAt(indexChildList[input])) };
             }
-            return DisjunctiveExamplesSpec.From(eExamples);*/
-        //}
+            return DisjunctiveExamplesSpec.From(eExamples);
+        }
 
 
         //[WitnessFunction("NodeMatch", 1)]

@@ -25,7 +25,7 @@ namespace ProseSample.Substrings.Spg.Witness
         /// </summary>
         public static Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> Mapping { get; set; }
 
-        public static Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>> CurrentTrees =  new Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>>();
+        public static Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>>();
 
         public static Dictionary<List<EditOperation<SyntaxNodeOrToken>>, EditOperation<SyntaxNodeOrToken>> Operations =
             new Dictionary<List<EditOperation<SyntaxNodeOrToken>>, EditOperation<SyntaxNodeOrToken>>();
@@ -88,7 +88,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     foreach (var item in cluster)
                     {
                         if (dicCluster[input].Any(e => IsEquals(item.Edits.Select(o => o.EditOperation).ToList(), e)))
-                        { 
+                        {
                             listItem.Add(item);
                         }
                     }
@@ -118,8 +118,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
                 if (editI is Update<SyntaxNodeOrToken>)
                 {
-                    var upi = (Update<SyntaxNodeOrToken>) editI;
-                    var upj = (Update<SyntaxNodeOrToken>) editj;
+                    var upi = (Update<SyntaxNodeOrToken>)editI;
+                    var upj = (Update<SyntaxNodeOrToken>)editj;
                     if (!upi.To.Value.Equals(upj.To.Value)) return false;
                 }
             }
@@ -134,7 +134,7 @@ namespace ProseSample.Substrings.Spg.Witness
         public static void PrintScript(List<EditOperation<SyntaxNodeOrToken>> script)
         {
             string s = script.Aggregate("", (current, v) => current + (v + "\n"));
-        } 
+        }
 
         /// <summary>
         /// Segment the edit script in nodes
@@ -153,7 +153,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     //input tree
                     var inputTree = (Node)input[rule.Grammar.InputSymbol];
                     var copyInput = ConverterHelper.MakeACopy(inputTree.Value);
-                    var examples = (List<Script>) spec.Examples[input];
+                    var examples = (List<Script>)spec.Examples[input];
                     var script = examples.ElementAt(i);
                     var editOperation = script.Edits.Single().EditOperation;
                     Node node = null;
@@ -163,7 +163,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                     else
                     {
-                            node = new Node(editOperation.Parent);
+                        node = new Node(editOperation.Parent);
                     }
                     kMatches.Add(node);
                     ConfigureContext(node.Value, script);
@@ -217,12 +217,30 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var edits = script.Edits.Select(o => o.EditOperation).ToList();
                     var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> { edits });
-                    var t1node = list.First();
-                    var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
-                    delete.Parent = t1node.Parent;
-                    newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(delete));
+
+                    if (list.Count == 1)
+                    {
+                        var t1node = list.Single();
+                        var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
+                        delete.Parent = t1node.Parent;
+                        newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(delete));
+                        newccs.Add(newScript);
+                        continue;
+                    }
+
+                    treeUpdate = new TreeUpdate(ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value));
+                    foreach (var s in script.Edits)
+                    {
+                        treeUpdate.ProcessEditOperation(s.EditOperation);
+                    }
+
+                    var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
+                    var to = ConverterHelper.MakeACopy(treeUpdate.CurrentTree);
+                    var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
+                    newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
                     newccs.Add(newScript);
                     continue;
+
                 }
 
                 var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
@@ -309,7 +327,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (root.Value.SpanStart > tocompare.Value.SpanStart)
                     {
                         root = tocompare;
-                    }else if (root.Value.SpanStart == tocompare.Value.SpanStart)
+                    }
+                    else if (root.Value.SpanStart == tocompare.Value.SpanStart)
                     {
                         if (root.Value.Span.End < tocompare.Value.Span.End)
                         {
@@ -323,7 +342,7 @@ namespace ProseSample.Substrings.Spg.Witness
                             }
                         }
                     }
-                    
+
                 }
             }
             return root;
@@ -396,9 +415,9 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static double Distance(LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>> lcc, EditOperationDatasetItem x, EditOperationDatasetItem y)
         {
-            var common = (double) lcc.FindCommon(x.Operations, y.Operations).Count;
+            var common = (double)lcc.FindCommon(x.Operations, y.Operations).Count;
             //var tuple = Tuple.Create(common / (double)x.Operations.Count, common / (double)y.Operations.Count);
-            var dist = 1.0 - (2 *  common) / ((double)x.Operations.Count + (double)y.Operations.Count);
+            var dist = 1.0 - (2 * common) / ((double)x.Operations.Count + (double)y.Operations.Count);
             //var squares = (tuple.Item1 * tuple.Item1 + tuple.Item2 * tuple.Item2) / 2;
             //var dist = 1.0 - Math.Sqrt(squares);
             //if (!Operations.ContainsKey(x.Operations))
@@ -416,7 +435,7 @@ namespace ProseSample.Substrings.Spg.Witness
             //    var compEdity = CompactScript(new List<Script> {editsy}, ConverterHelper.MakeACopy(ytree));
             //    Operations[y.Operations] = compEdity.First().Edits.Single().EditOperation;
             //}
-            
+
 
             //var xeditOperation = Operations[x.Operations];
             //var yeditOperation = Operations[y.Operations];

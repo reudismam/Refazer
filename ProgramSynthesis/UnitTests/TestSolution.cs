@@ -412,7 +412,7 @@ namespace UnitTests
         [Test]
         public void E829dec5()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\829dec5", solutionPath: @"EntityFramework\entityframework7\EntityFramework.sln", examples: new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"EntityFramewok\829dec5", solutionPath: @"EntityFramework\entityframework7\EntityFramework.sln", examples: new List<int> {0, 1, 2, 8});
             Assert.IsTrue(isCorrect);
         }
 
