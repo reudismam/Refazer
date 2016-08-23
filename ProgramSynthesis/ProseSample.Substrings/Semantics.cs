@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -413,7 +414,7 @@ namespace ProseSample.Substrings
 
                 var node = FindChild(parent, patternP.K);
                 var isValid = node.Equals(sx.Value);/*&& parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1*/;
-                if(isValid) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value} \n" + Environment.NewLine);
+                if(isValid) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
                 return isValid;
 
             }
@@ -462,6 +463,9 @@ namespace ProseSample.Substrings
                 //var pattern = target.Value.Parent.Children.ElementAt(patternP.K - 1);
                 var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
                 //nodes = nodes.Select(o => o.Children.ElementAt(patternP.K - 1)).ToList();
+                //MessageBox.Show(nodes.Count + "");
+                //MessageBox.Show(k + "");
+                //MessageBox.Show(target.Value.Value + "");
                 var match = nodes.ElementAt(k - 1);
                 var node = FindChild(match, patternP.K);
                 return new Node(node); /*new Node(nodes.ElementAt(k - 1).Children.ElementAt(patternP.K - 1));*/

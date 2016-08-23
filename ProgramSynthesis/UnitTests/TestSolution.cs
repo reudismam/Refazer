@@ -221,14 +221,14 @@ namespace UnitTests
         [Test]
         public void R4b40293()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\4b40293", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", examples: new List<int> {0, 1, 2, 8 });
+            var isCorrect = CompleteTestBase(@"Roslyn\4b40293", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", examples: new List<int> {0, 1, 2 });
             Assert.IsTrue(isCorrect);
         }
 
         [Test]
         public void R7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration });
+            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration }, examples: new List<int> {0, 1, 14});
             Assert.IsTrue(isCorrect);
         }
 
@@ -820,7 +820,7 @@ namespace UnitTests
         [Test]
         public void E2_1571862()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\2_1571862", examples: new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"EntityFramewok\2_1571862", examples: new List<int> {2, 3});
             Assert.IsTrue(false);
         }
 
@@ -966,7 +966,7 @@ namespace UnitTests
             {
                 string path = expHome + solutionPath;
                 var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
-                foreach (var v in files)
+                foreach (var v in files.Where(o => o.Item2.ToUpperInvariant().Equals(@"C:\Users\SPG-04\Documents\Exp\Roslyn\roslyn7\src\Compilers\Core\Portable\DiagnosticAnalyzer\DiagnosticAnalyzer.cs".ToUpperInvariant())))
                 {
                     var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
                     var vnodes = GetNodesByType(tree, kinds);

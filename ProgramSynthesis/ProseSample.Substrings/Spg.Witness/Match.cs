@@ -69,11 +69,11 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
 
                 var matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
-                if (matchInInputTree == null)
-                {
-                    currentTree = inputTree.Value;
-                    matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
-                }
+                //if (matchInInputTree == null)
+                //{
+                //    currentTree = inputTree.Value;
+                //    matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
+                //}
 
                 if (matchInInputTree == null) return null;
 
@@ -156,7 +156,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 string append = "/";
 
-                if (node.Parent != null && node.Parent.Children.Count > 1)
+                if (node.Parent != null && node.Parent.Children.Count >= 1)
                 {
                     append += "[";
 
@@ -301,7 +301,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                                     if (bIndex != -1)
                                     {
-                                        mats.Add(-(bIndex + 1));
+                                        //mats.Add(-(bIndex + 1));
                                     }
                                     else
                                     {
@@ -319,7 +319,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                                     if (bIndex != -1)
                                     {
-                                        mats.Add(-(bIndex + 1));
+                                        //mats.Add(-(bIndex + 1));
                                     }
                                     else
                                     {
