@@ -228,7 +228,7 @@ namespace UnitTests
         [Test]
         public void R7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration }, examples: new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration }, examples: new List<int> {0, 1, 4});
             Assert.IsTrue(isCorrect);
         }
 
@@ -533,7 +533,7 @@ namespace UnitTests
         public void N2_a883600()
         {
             var isCorrect = CompleteTestBase(@"NuGet\2_a883600", @"NuGet\nuget4\NuGet.sln");
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         [Test]
@@ -966,7 +966,7 @@ namespace UnitTests
             {
                 string path = expHome + solutionPath;
                 var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
-                foreach (var v in files.Where(o => o.Item2.ToUpperInvariant().Equals(@"C:\Users\SPG-04\Documents\Exp\Roslyn\roslyn7\src\Compilers\Core\Portable\DiagnosticAnalyzer\DiagnosticAnalyzer.cs".ToUpperInvariant())))
+                foreach (var v in files/*.Where(o => o.Item2.ToUpperInvariant().Equals(@"C:\Users\SPG-04\Documents\Exp\Roslyn\roslyn7\src\Compilers\Core\Portable\DiagnosticAnalyzer\DiagnosticAnalyzer.cs".ToUpperInvariant()))*/)
                 {
                     var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
                     var vnodes = GetNodesByType(tree, kinds);

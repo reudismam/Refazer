@@ -69,11 +69,11 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
 
                 var matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
-                //if (matchInInputTree == null)
-                //{
-                //    currentTree = inputTree.Value;
-                //    matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
-                //}
+                if (matchInInputTree == null)
+                {
+                    currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
+                    matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
+                }
 
                 if (matchInInputTree == null) return null;
 
@@ -124,8 +124,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
                 if (matchInInputTree == null)
                 {
-                    var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                    currentTree = inputTree.Value;
+                    currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
                     matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
                 }
 
@@ -286,7 +285,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
                     if (isFullTree)
                     {
-                        matches = MatchManager.Matches(inputTree.Value, pattern);
+                        currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
+                        matches = MatchManager.Matches(currentTree, pattern);
                         //todo refactor this
                         for (int i = 0; i < matches.Count; i++)
                         {
@@ -301,7 +301,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                                     if (bIndex != -1)
                                     {
-                                        //mats.Add(-(bIndex + 1));
+                                        mats.Add(-(bIndex + 1));
                                     }
                                     else
                                     {
@@ -319,7 +319,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
                                     if (bIndex != -1)
                                     {
-                                        //mats.Add(-(bIndex + 1));
+                                        mats.Add(-(bIndex + 1));
                                     }
                                     else
                                     {

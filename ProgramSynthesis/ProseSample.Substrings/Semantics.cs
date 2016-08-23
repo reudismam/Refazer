@@ -460,15 +460,23 @@ namespace ProseSample.Substrings
             if (kmatch is PatternP)
             {
                 var patternP = (PatternP) kmatch;
-                //var pattern = target.Value.Parent.Children.ElementAt(patternP.K - 1);
-                var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
-                //nodes = nodes.Select(o => o.Children.ElementAt(patternP.K - 1)).ToList();
-                //MessageBox.Show(nodes.Count + "");
-                //MessageBox.Show(k + "");
-                //MessageBox.Show(target.Value.Value + "");
-                var match = nodes.ElementAt(k - 1);
-                var node = FindChild(match, patternP.K);
-                return new Node(node); /*new Node(nodes.ElementAt(k - 1).Children.ElementAt(patternP.K - 1));*/
+
+                if (k >= 0)
+                {
+                    var nodes = MatchManager.Matches(target.Value, kmatch.Tree);           
+                    var match = nodes.ElementAt(k - 1);
+                    var node = FindChild(match, patternP.K);
+                    return new Node(node);
+                }
+                else
+                {
+                    var ancestor = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
+                    var nodes = MatchManager.Matches(ancestor, kmatch.Tree);
+                    nodes.Reverse();
+                    var match = nodes.ElementAt(Math.Abs(k) - 1);
+                    var node = FindChild(match, patternP.K);
+                    return new Node(node);
+                }
             }
             else
             {
