@@ -178,7 +178,7 @@ namespace UnitTests
         [Test]
         public void R5_c96d9ce()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\5_c96d9ce");
+            var isCorrect = CompleteTestBase(@"Roslyn\5_c96d9ce", examples: new List<int> {0, 1, 6, 11});
             Assert.IsTrue(isCorrect);
         }
 
@@ -214,14 +214,14 @@ namespace UnitTests
         [Test]
         public void R4_673f18e()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\4_673f18e");
+            var isCorrect = CompleteTestBase(@"Roslyn\4_673f18e", examples: new List<int> {0, 1, 4, 5, 6, 7});
             Assert.IsTrue(isCorrect);
         }
 
         [Test]
         public void R4b40293()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\4b40293", examples: new List<int> { 1, 2 });
+            var isCorrect = CompleteTestBase(@"Roslyn\4b40293", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", examples: new List<int> {0, 1, 2, 8 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -285,7 +285,7 @@ namespace UnitTests
         [Test]
         public void R8ecd058()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\8ecd058", examples: new List<int> { 0, 1, 2, 10 });
+            var isCorrect = CompleteTestBase(@"Roslyn\8ecd058", examples: new List<int> { 1, 2, 10 });
             Assert.IsTrue(isCorrect);
         }
 
@@ -820,7 +820,7 @@ namespace UnitTests
         [Test]
         public void E2_1571862()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\2_1571862");
+            var isCorrect = CompleteTestBase(@"EntityFramewok\2_1571862", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(false);
         }
 
