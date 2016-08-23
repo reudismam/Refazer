@@ -54,6 +54,75 @@ namespace ProseSample.Substrings.Spg.Witness
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
+            var dic = new Dictionary<int, List<ITreeNode<SyntaxNodeOrToken>>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                //get parent
+                var target = (Node)input[rule.Body[0]];
+                var parent = target.Value.Value.AsNode();
+                for (int i = 0; i < 3; i++)
+                {
+                    if (parent.IsKind(SyntaxKind.Block) || parent.DescendantNodesAndSelf().Count() > 100)
+                    {
+                        if (i != 0) break;
+                    }
+
+                    if (!dic.ContainsKey(i))
+                    {
+                        dic[i] = new List<ITreeNode<SyntaxNodeOrToken>>();
+                    }
+                    dic[i].Add(ConverterHelper.ConvertCSharpToTreeNode(parent));
+                    parent = parent.Parent;
+                }
+            }
+
+            var dicPattern = new Dictionary<int, List<Pattern>>();
+            foreach (var item in dic)
+            {
+                dicPattern[item.Key] = new List<Pattern>();
+            }
+
+            for (int i = 0; i < spec.ProvidedInputs.Count(); i++)
+            {
+                var input = spec.ProvidedInputs.ElementAt(i);
+                var target = (Node)input[rule.Body[0]];
+                foreach (var item in dic)
+                {
+                    if (item.Value.Count() == spec.ProvidedInputs.Count())
+                    {
+                        var patterns = item.Value.Select(ConverterHelper.ConvertITreeNodeToToken).ToList();
+                        var commonPattern = Match.BuildPattern(patterns);
+
+                        if (item.Key == 0)
+                        {
+                            var p = new Pattern(commonPattern.Tree);
+                            dicPattern[item.Key].Add(p);
+                        }
+                        else
+                        {
+                            var targetNode = TreeUpdate.FindNode(item.Value[i], target.Value.Value);
+                            var str1 = Match.GetPath(targetNode);
+                            var p = new PatternP(commonPattern.Tree, str1);
+                            dicPattern[item.Key].Add(p);
+                        }
+                    }
+                }
+            }
+
+            foreach (var input in spec.ProvidedInputs)
+            {
+                var resultList = new List<Pattern>();
+                var list = dicPattern.OrderByDescending(o => o.Key).Select(item => item.Value).ToList();
+                resultList.Add(list.Last().First());
+                var valids = WitnessFunctions.ValidPatterns(list);
+                if (valids.Any()) resultList.Add(valids.First());
+                eExamples[input] = resultList;
+            }
+            //end get parent
+            return DisjunctiveExamplesSpec.From(eExamples);
+        }
+
+        /*var eExamples = new Dictionary<State, IEnumerable<object>>();
             var patterns = new List<ITreeNode<Token>>();
             var indexChildList = new Dictionary<State, int>();
             foreach (State input in spec.ProvidedInputs)
@@ -108,8 +177,81 @@ namespace ProseSample.Substrings.Spg.Witness
 
                 eExamples[input] = new List<Pattern> { patternP, new Pattern(patterncopy.Children.ElementAt(indexChildList[input])) };
             }
-            return DisjunctiveExamplesSpec.From(eExamples);
-        }
+            return DisjunctiveExamplesSpec.From(eExamples);*/
+        //}
+
+
+        //[WitnessFunction("NodeMatch", 1)]
+        //public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        //{
+        //    var eExamples = new Dictionary<State, IEnumerable<object>>();
+        //    var dic = new Dictionary<int, List<ITreeNode<SyntaxNodeOrToken>>>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        //get parent
+        //        var target = (Node)input[rule.Body[0]];
+        //        var parent = target.Value.Value.AsNode();
+        //        for (int i = 0; i < 3; i++)
+        //        {
+        //            if (parent.IsKind(SyntaxKind.Block) || parent.DescendantNodesAndSelf().Count() > 100)
+        //            {
+        //                if (i != 0) break;
+        //            }
+
+        //            if (!dic.ContainsKey(i))
+        //            {
+        //                dic[i] = new List<ITreeNode<SyntaxNodeOrToken>>();
+        //            }
+        //            dic[i].Add(ConverterHelper.ConvertCSharpToTreeNode(parent));
+        //            parent = parent.Parent;
+        //        }
+        //    }
+
+        //    var dicPattern = new Dictionary<int, List<Pattern>>();
+        //    foreach (var item in dic)
+        //    {
+        //        dicPattern[item.Key] = new List<Pattern>();
+        //    }
+
+        //    for (int i = 0; i < spec.ProvidedInputs.Count(); i++)
+        //    {
+        //        var input = spec.ProvidedInputs.ElementAt(i);
+        //        var target = (Node)input[rule.Body[0]];
+        //        foreach (var item in dic)
+        //        {
+        //            if (item.Value.Count() == spec.ProvidedInputs.Count())
+        //            {
+        //                var patterns = item.Value.Select(ConverterHelper.ConvertITreeNodeToToken).ToList();
+        //                var commonPattern = Match.BuildPattern(patterns);
+
+        //                if (item.Key == 0)
+        //                {
+        //                    var p = new Pattern(commonPattern.Tree);
+        //                    dicPattern[item.Key].Add(p);
+        //                }
+        //                else
+        //                {
+        //                    var targetNode = TreeUpdate.FindNode(item.Value[i], target.Value.Value);
+        //                    var str1 = Match.GetPath(targetNode);
+        //                    var p = new PatternP(commonPattern.Tree, str1);
+        //                    dicPattern[item.Key].Add(p);
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    foreach (var input in spec.ProvidedInputs)
+        //    {
+        //        var resultList = new List<Pattern>();
+        //        var list = dicPattern.OrderByDescending(o => o.Key).Select(item => item.Value).ToList();
+        //        resultList.Add(list.Last().First());
+        //        var valids = ValidPatterns(list);
+        //        if (valids.Any()) resultList.Add(valids.First());
+        //        eExamples[input] = resultList;
+        //    }
+        //    //end get parent
+        //    return DisjunctiveExamplesSpec.From(eExamples);
+        //}
 
         public static DisjunctiveExamplesSpec MatchPatternBasic(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {

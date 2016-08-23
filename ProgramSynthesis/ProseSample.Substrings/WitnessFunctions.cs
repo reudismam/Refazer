@@ -663,7 +663,7 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        private static List<Pattern> ValidPatterns(List<List<Pattern>> list)
+        public static List<Pattern> ValidPatterns(List<List<Pattern>> list)
         {
             var valids = new List<Pattern>();
             for (int i = 0; i < list.Count - 1; i++)

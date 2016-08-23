@@ -603,10 +603,12 @@ namespace ProseSample.Substrings
         {
             switch (kind)
             {
-            //case SyntaxKind.PostIncrementExpression:
-            //    {
-            //        var postt = SyntaxFactory.po
-            //    }
+                case SyntaxKind.ImplicitArrayCreationExpression:
+                {
+                    var initializerExpression = (InitializerExpressionSyntax) children[0];
+                    var arrayCreation = SyntaxFactory.ImplicitArrayCreationExpression(initializerExpression);
+                    return arrayCreation;
+                }
                 case SyntaxKind.ArrayRankSpecifier:
                 {
                     var expressions = children.Select(o => (ExpressionSyntax) o);
