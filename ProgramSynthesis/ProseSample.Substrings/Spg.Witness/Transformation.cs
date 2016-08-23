@@ -314,9 +314,10 @@ namespace ProseSample.Substrings.Spg.Witness
                         if (root.Value.Span.End < tocompare.Value.Span.End)
                         {
                             root = tocompare;
-                        }else if (root.Value.Span.End == tocompare.Value.Span.End)
+                        }
+                        else if (root.Value.Span.End == tocompare.Value.Span.End)
                         {
-                            if (!tocompare.IsLabel(new TLabel(SyntaxKind.IdentifierName)))
+                            if (root.IsLabel(new TLabel(SyntaxKind.IdentifierName)))
                             {
                                 root = tocompare;
                             }
