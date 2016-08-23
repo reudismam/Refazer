@@ -228,7 +228,7 @@ namespace UnitTests
         [Test]
         public void R7c885ca()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration }, examples: new List<int> {0, 1, 14});
+            var isCorrect = CompleteTestBase(@"Roslyn\7c885ca", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration }, examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -821,7 +821,7 @@ namespace UnitTests
         public void E2_1571862()
         {
             var isCorrect = CompleteTestBase(@"EntityFramewok\2_1571862", examples: new List<int> {2, 3});
-            Assert.IsTrue(false);
+            Assert.IsTrue(isCorrect);
         }
 
         static string GetTestDataFolder(string testDataLocation)
