@@ -145,8 +145,8 @@ namespace TreeEdit.Spg.ConnectedComponents
 
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
 
-                //var parentNodes = GetNodes(editI.Parent.Value);
-                //if (parentNodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
+                var nodes = GetNodes(editI.Parent.Value);
+                if (nodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
                 //if (parentNodes.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
 
                 if (editI.Parent.Parent != null && editI.Parent.Parent.Equals(editJ.T1Node)) return true;

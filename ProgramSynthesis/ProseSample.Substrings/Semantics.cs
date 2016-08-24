@@ -414,14 +414,14 @@ namespace ProseSample.Substrings
 
                 var node = FindChild(parent, patternP.K);
                 var isValid = node.Equals(sx.Value);/*&& parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1*/;
-                if(isValid) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
+                if(isValid) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value.Parent} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
                 return isValid;
 
             }
             else
             {
                 var isValue = MatchManager.IsValueEachChild(sx.Value, template.Tree);
-                if(isValue) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{sx.Value.Value} \n" + Environment.NewLine);
+                if(isValue) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{sx.Value.Value.Parent} \n" + Environment.NewLine);
                 return isValue;
             }
         }

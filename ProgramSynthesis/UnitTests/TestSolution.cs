@@ -713,7 +713,7 @@ namespace UnitTests
         [Test]
         public void R3_c96d9ce()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\3_c96d9ce", examples: new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"Roslyn\3_c96d9ce", examples: new List<int> {0, 1, 2, 11, 12, 13});
             Assert.IsTrue(isCorrect);
         }
 

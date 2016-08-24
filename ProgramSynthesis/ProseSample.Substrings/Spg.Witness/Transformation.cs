@@ -150,9 +150,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<Node>();
                 for (int i = 0; i < spec.Examples[input].Count(); i++)
                 {
-                    //input tree
-                    var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                    var copyInput = ConverterHelper.MakeACopy(inputTree.Value);
                     var examples = (List<Script>)spec.Examples[input];
                     var script = examples.ElementAt(i);
                     var editOperation = script.Edits.Single().EditOperation;
@@ -309,7 +306,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (var v in script.Edits)
             {
                 ITreeNode<SyntaxNodeOrToken> tocompare = null;
-                if (v.EditOperation is Update<SyntaxNodeOrToken> || v.EditOperation is Delete<SyntaxNodeOrToken>)
+                if (v.EditOperation is Update<SyntaxNodeOrToken>/* || v.EditOperation is Delete<SyntaxNodeOrToken>*/)
                 {
                     tocompare = v.EditOperation.T1Node;
                 }
