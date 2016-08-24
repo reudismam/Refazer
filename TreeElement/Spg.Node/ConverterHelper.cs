@@ -129,11 +129,11 @@ namespace TreeElement.Spg.Node
             var list = st.Children;
             if (!list.Any())
             {
-                if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
-                {
-                    var tNode = "{" + st.Label + "}";
-                    return tNode;
-                }
+                //if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
+                //{
+                //    var tNode = "{" + st.Label + "}";
+                //    return tNode;
+                //}
                 var treeNode = "{"+st.Label+"("+st.Value.ToString().Trim()+")}";
                 return treeNode;
             }

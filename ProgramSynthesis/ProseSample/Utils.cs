@@ -49,7 +49,7 @@ namespace ProseSample
             });
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 10;
-            var topK = consistentPrograms/*.RealizedPrograms.ToList();*/.TopK("Score", 10).ToList();
+            var topK = consistentPrograms.RealizedPrograms.ToList();/*.TopK("Score", 1).ToList();*/
             var b =  (ulong) topK.Count;
             topK = topK.ToList().GetRange(0, (int) Math.Min(a, b));
             var programs = "";

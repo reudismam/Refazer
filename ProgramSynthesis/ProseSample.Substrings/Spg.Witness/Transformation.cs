@@ -110,7 +110,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 var editI = item1[i];
                 var editj = item2[i];
 
-
                 if (!(editI.GetType() == editj.GetType())) return false;
                 if (!editI.T1Node.Value.Equals(editj.T1Node.Value)) return false;
                 if (!editI.Parent.Value.Equals(editj.Parent.Value)) return false;

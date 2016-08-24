@@ -214,7 +214,7 @@ namespace UnitTests
         [Test]
         public void R4_673f18e()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\4_673f18e", examples: new List<int> {0, 1, 4, 5, 6});
+            var isCorrect = CompleteTestBase(@"Roslyn\4_673f18e", examples: new List<int> {0, 1, 4, 5, 6, 7});
             Assert.IsTrue(isCorrect);
         }
 
