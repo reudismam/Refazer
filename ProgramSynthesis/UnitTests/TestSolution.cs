@@ -43,7 +43,7 @@ namespace UnitTests
         [Test]
         public void Rcd68d03()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\cd68d03", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln");
+            var isCorrect = CompleteTestBase(@"Roslyn\cd68d03", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -609,7 +609,7 @@ namespace UnitTests
         [Test]
         public void Na883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3, 11, 12, 13});
+            var isCorrect = CompleteTestBase(@"NuGet\a883600", examples: new List<int> { 0, 1, 3, 11, 12});
             Assert.IsTrue(isCorrect);
         }
 
