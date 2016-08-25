@@ -616,7 +616,7 @@ namespace UnitTests
         [Test]
         public void Nee953e8()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\ee953e8", solutionPath: @"NuGet\nuget10\NuGet.sln", examples: new List<int> {0, 1, 9});
+            var isCorrect = CompleteTestBase(@"NuGet\ee953e8");
             Assert.IsTrue(true);
         }
 
