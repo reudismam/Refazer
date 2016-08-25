@@ -43,7 +43,7 @@ namespace UnitTests
         [Test]
         public void Rcd68d03()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\cd68d03", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", examples: new List<int> {0, 1, 2});
+            var isCorrect = CompleteTestBase(@"Roslyn\cd68d03", examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -532,7 +532,7 @@ namespace UnitTests
         [Test]
         public void N2_a883600()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\2_a883600", @"NuGet\nuget4\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"NuGet\2_a883600", solutionPath: @"NuGet\nuget4\NuGet.sln");
             Assert.IsTrue(isCorrect);
         }
 
@@ -553,7 +553,7 @@ namespace UnitTests
         [Test]
         public void Ndfc4e3d()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\dfc4e3d", solutionPath: @"NuGet\nuget6\NuGet.sln", kinds: new List<SyntaxKind> { SyntaxKind.AttributeList });
+            var isCorrect = CompleteTestBase(@"NuGet\dfc4e3d", solutionPath: @"NuGet\nuget6\NuGet.sln", kinds: new List<SyntaxKind> { SyntaxKind.AttributeList }, examples: new List<int> {0, 1, 2});
             Assert.IsTrue(isCorrect);
         }
 
@@ -616,7 +616,7 @@ namespace UnitTests
         [Test]
         public void Nee953e8()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\ee953e8", solutionPath: @"NuGet\nuget10\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"NuGet\ee953e8", solutionPath: @"NuGet\nuget10\NuGet.sln", examples: new List<int> {0, 1, 9});
             Assert.IsTrue(true);
         }
 
@@ -886,13 +886,11 @@ namespace UnitTests
             List<TRegion> regions = codeTransformations.Select(entry => entry.Trans).ToList();
             var locations = codeTransformations.Select(entry => entry.Location).ToList();
 
-            var metadataRegions = examples.Select(index => regions[index]).ToList();//regions.GetRange(0, examples).ToList();
-            var locationRegions = examples.Select(index => locations[index]).ToList();//locations.GetRange(0, examples).ToList();
+            var metadataRegions = examples.Select(index => regions[index]).ToList();
+            var locationRegions = examples.Select(index => locations[index]).ToList();
 
             var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
 
-            //            for (int i = 0; i < regions.Count; i++)
-            //k            {
             var dicionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
             //Examples
             var examplesInput = new List<SyntaxNodeOrToken>();
@@ -1010,11 +1008,7 @@ namespace UnitTests
             Console.WriteLine($"Count: \n {transformed.Count}");
             s += $"Count: \n {transformed.Count}";
             FileUtil.WriteToFile(expHome + @"cprose\" + commit + @"\result.res", s);
-            //                break;
-            //            }
 
-            //long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            //long totalTime = (millAfer - millBefore);
             Log(commit, totalTimeToLearn + totalTimeToExecute, examples.Count, regions.Count, transformed.Count,
                 dicionarySelection.Count, program.ToString(), totalTimeToLearn, totalTimeToExecute);
             return true;
@@ -1043,8 +1037,6 @@ namespace UnitTests
                     }
                 }
 
-                //if (empty != -1)
-                //{
                 em.SetValue("A" + empty, commit);
                 em.SetValue("B" + empty, time / 1000);
                 em.SetValue("C" + empty, exTransformations);
@@ -1055,10 +1047,6 @@ namespace UnitTests
                 em.SetValue("H" + empty, timeToLearnEdit / 1000);
                 em.SetValue("I" + empty, timeToTransformEdit / 1000);
                 em.Save();
-                //}
-                //else {
-                //    Console.WriteLine("Could not write log to " + path);
-                //}
             }
         }
 

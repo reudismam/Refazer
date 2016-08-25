@@ -77,7 +77,6 @@ namespace ProseSample.Substrings.Spg.Witness
             }
 
             var clusters = ClusterScript(ccsList);
-            //clusters.GetRange(0, 2);
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTreeNode = (Node)input[rule.Body[0]];
