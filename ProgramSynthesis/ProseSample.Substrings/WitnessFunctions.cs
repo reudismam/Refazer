@@ -15,6 +15,9 @@ using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {
+    /// <summary>
+    /// Witness functions for the grammar
+    /// </summary>
     public static class WitnessFunctions
     {
         /// <summary>
@@ -381,7 +384,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("Transformation", 1)]
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            return Transformation.ApplyPatch(rule, parameter, spec);
+            return Transformation.TransformationRule(rule, parameter, spec);
         }
 
         [WitnessFunction("EditMap", 1)]

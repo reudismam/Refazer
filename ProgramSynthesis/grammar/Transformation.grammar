@@ -17,9 +17,8 @@ using learners ProseSample.Substrings.WitnessFunctions;
 language Transformation;
 @vardefault[VariableScore]
 feature double Score = RankingScore;
-@start IEnumerable<Node>  trans := Transformation(node, patch);
-
-Patch patch := SE(editList) | EList(editList, patch);
+@start IEnumerable<Node>  trans := Transformation(node, rule);
+Patch rule := SE(editList) | EList(editList, rule);
 IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
 IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
 bool nodematch := NodeMatch(x, pattern);

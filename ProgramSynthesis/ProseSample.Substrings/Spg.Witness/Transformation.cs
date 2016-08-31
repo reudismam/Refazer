@@ -49,19 +49,18 @@ namespace ProseSample.Substrings.Spg.Witness
         }
 
         /// <summary>
-        /// Cluster edit operations and return list of clustered elements.
+        /// Transformation witness function for parameter rule.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Grammar parameter</param>
         /// <param name="spec">Example specification</param>
-        public static SubsequenceSpec ApplyPatch(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec TransformationRule(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var dicCluster = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
             var ccsList = new List<List<EditOperation<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //var kMatches = new List<List<Script>>();
                 var inpTreeNode = (Node)input[rule.Body[0]];
                 var inpTree = inpTreeNode.Value.Value;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
