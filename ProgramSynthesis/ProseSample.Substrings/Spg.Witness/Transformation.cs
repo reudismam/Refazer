@@ -304,7 +304,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (var v in script.Edits)
             {
                 ITreeNode<SyntaxNodeOrToken> tocompare = null;
-                if (v.EditOperation is Update<SyntaxNodeOrToken>/* || v.EditOperation is Delete<SyntaxNodeOrToken>*/)
+                if (v.EditOperation is Update<SyntaxNodeOrToken> || v.EditOperation is Delete<SyntaxNodeOrToken>)
                 {
                     tocompare = v.EditOperation.T1Node;
                 }

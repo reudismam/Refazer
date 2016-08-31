@@ -71,14 +71,14 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Template")]
         public static double Score_Template(double inScore, double kind) => inScore + kind;
 
-        [FeatureCalculator("Apply")]
+        [FeatureCalculator("Transformation")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
         [FeatureCalculator("Script")]
         public static double Score_Edit(double edit) => edit;
 
-        [FeatureCalculator("Transformation")]
-        public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;
+        //[FeatureCalculator("Transformation")]
+        //public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;
 
         [FeatureCalculator("RegionMap")]
         public static double Score_Loop(double inScore, double breaks) => inScore + breaks;

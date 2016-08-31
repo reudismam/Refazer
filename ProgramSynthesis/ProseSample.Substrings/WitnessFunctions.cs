@@ -378,7 +378,7 @@ namespace ProseSample.Substrings
             return Transformation.ScriptEdits(rule, parameter, spec);
         }
 
-        [WitnessFunction("Apply", 1)]
+        [WitnessFunction("Transformation", 1)]
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Transformation.ApplyPatch(rule, parameter, spec);

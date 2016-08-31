@@ -156,7 +156,7 @@ namespace ProseSample.Substrings
         /// <param name="node">Node</param>
         /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
-        public static IEnumerable<Node> Apply(Node node, Patch patch)
+        public static IEnumerable<Node> Transformation(Node node, Patch patch)
         {
             var beforeFlorest = patch.Edits.Select(o => o.ToList());
 
@@ -326,20 +326,20 @@ namespace ProseSample.Substrings
             return true;
         }
 
-        public static SyntaxNodeOrToken Transformation(SyntaxNodeOrToken node, IEnumerable<Node> loop)
-        {
-            List<SyntaxNodeOrToken> afterNodeList;
-            List<SyntaxNodeOrToken> beforeNodeList;
-            FillBeforeAfterList(out afterNodeList, loop, out beforeNodeList);
-            //traversal index of the nodes before the transformation
-            var traversalIndices = PostOrderTraversalIndices(node, beforeNodeList);
-            //Annotate edited nodes
-            node = AnnotateNodeEditedNodes(node, traversalIndices);
-            //Update annotated nodes
-            node = UpdateAnnotatedNodes(node, traversalIndices, afterNodeList);
-            var stringNode = node.ToFullString();
-            return node;
-        }
+        //public static SyntaxNodeOrToken Transformation(SyntaxNodeOrToken node, IEnumerable<Node> loop)
+        //{
+        //    List<SyntaxNodeOrToken> afterNodeList;
+        //    List<SyntaxNodeOrToken> beforeNodeList;
+        //    FillBeforeAfterList(out afterNodeList, loop, out beforeNodeList);
+        //    //traversal index of the nodes before the transformation
+        //    var traversalIndices = PostOrderTraversalIndices(node, beforeNodeList);
+        //    //Annotate edited nodes
+        //    node = AnnotateNodeEditedNodes(node, traversalIndices);
+        //    //Update annotated nodes
+        //    node = UpdateAnnotatedNodes(node, traversalIndices, afterNodeList);
+        //    var stringNode = node.ToFullString();
+        //    return node;
+        //}
 
         private static SyntaxNodeOrToken UpdateAnnotatedNodes(SyntaxNodeOrToken node, List<int> traversalIndices, List<SyntaxNodeOrToken> afterNodeList)
         {
