@@ -52,7 +52,7 @@ namespace ProseSample.Substrings.Spg.Witness
         public static SubsequenceSpec TransformationRule(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var dicCluster = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
+            var dicCcs = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
             var ccsList = new List<List<EditOperation<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -61,10 +61,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
-                    PrintScript(script);
                     var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.ComputePrimaryEditions(script);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script);
-                    dicCluster[input] = ccs;
+                    dicCcs[input] = ccs;
                     ccsList.AddRange(ccs);
                 }
             }
@@ -72,20 +71,13 @@ namespace ProseSample.Substrings.Spg.Witness
             var clusters = ClusterScript(ccsList);
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTreeNode = (Node)input[rule.Body[0]];
                 var kMatches = new List<List<Script>>();
-                foreach (var cluster in clusters)
+                foreach (var c in clusters)
                 {
-                    var listItem = new List<Script>();
-                    foreach (var item in cluster)
-                    {
-                        if (dicCluster[input].Any(e => IsEquals(item.Edits.Select(o => o.EditOperation).ToList(), e)))
-                        {
-                            listItem.Add(item);
-                        }
-                    }
+                    var listItem = c.Where(item => dicCcs[input].Any(e => IsEquals(item.Edits.Select(o => o.EditOperation).ToList(), e))).ToList();
                     kMatches.Add(listItem);
                 }
+                var inpTreeNode = (Node)input[rule.Body[0]];
                 kMatches = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
                 kExamples[input] = new List<List<List<Script>>> { kMatches };
             }
@@ -95,7 +87,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static bool IsEquals(List<EditOperation<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
         {
-            if (item1.Count() != item2.Count()) return false;
+            if (item1.Count != item2.Count) return false;
 
             for (int i = 0; i < item1.Count(); i++)
             {
@@ -115,16 +107,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
             }
             return true;
-        }
-
-        public static void PrintScript(List<Edit<SyntaxNodeOrToken>> script)
-        {
-            string s = script.Aggregate("", (current, v) => current + (v + "\n"));
-        }
-
-        public static void PrintScript(List<EditOperation<SyntaxNodeOrToken>> script)
-        {
-            string s = script.Aggregate("", (current, v) => current + (v + "\n"));
         }
 
         /// <summary>
