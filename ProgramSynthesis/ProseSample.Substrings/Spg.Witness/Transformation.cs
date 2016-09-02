@@ -43,6 +43,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var script = (Script)spec.Examples[input];
                 var edits = script.Edits;
+                edits = script.Edits.GetRange(0, 1);
                 editsExamples[input] = edits;
             }
             return new ExampleSpec(editsExamples);
@@ -67,7 +68,8 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var script = Script(inpTree, outTree);
                     PrintScript(script);
-                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(script);
+                    var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.ComputePrimaryEditions(script);
+                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script);
                     //todo this need to be refactored.
                     ccs.ForEach(o => CurrentTrees.Add(o, inpTreeNode.Value));
                     dicCluster[input] = ccs;
