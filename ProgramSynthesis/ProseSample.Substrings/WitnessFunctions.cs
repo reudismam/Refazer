@@ -141,45 +141,6 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("SL", 0)]
-        public static DisjunctiveExamplesSpec WitnessSl1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return GList<Edit<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// NList witness function for parameter 1
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("SL", 1)]
-        public static DisjunctiveExamplesSpec WitnessSl2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return GList<Edit<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// SN witness function for parameter 0
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("SO", 0)]
-        public static DisjunctiveExamplesSpec WitnessSoChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return GList<Edit<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// NList witness function for parameter 0
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("NList", 0)]
         public static DisjunctiveExamplesSpec WitnessNList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
@@ -355,30 +316,6 @@ namespace ProseSample.Substrings
                 treeExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
-        }
-
-        //[WitnessFunction("NMatch", 1)]
-        //public static DisjunctiveExamplesSpec NMatchId(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        //{
-        //    var treeExamples = new Dictionary<State, IEnumerable<object>>();
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        treeExamples[input] = new List<string> { "NMatch" };
-        //    }
-        //    return DisjunctiveExamplesSpec.From(treeExamples);
-        //}
-
-        /// <summary>
-        /// Witness function for script rule
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Rule parameter</param>
-        /// <param name="spec">Examples specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Script", 1)]
-        public static DisjunctiveExamplesSpec Edit(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return Transformation.ScriptEdits(rule, parameter, spec);
         }
 
         [WitnessFunction("Transformation", 1)]

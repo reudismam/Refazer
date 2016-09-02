@@ -26,24 +26,6 @@ namespace ProseSample.Substrings.Spg.Witness
         public static Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> Mapping { get; set; }
 
         /// <summary>
-        /// Witness function to segment the script in a list of edit operations
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Grammar parameter</param>
-        /// <param name="spec">Example specification</param>
-        public static ExampleSpec ScriptEdits(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            var editsExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var script = (Script)spec.Examples[input];
-                var edits = script.Edits;
-                editsExamples[input] = edits;
-            }
-            return new ExampleSpec(editsExamples);
-        }
-
-        /// <summary>
         /// Transformation witness function for parameter rule.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
@@ -72,9 +54,10 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<List<Script>>();
-                foreach (var c in clusters)
+                foreach (var cluster in clusters)
                 {
-                    var listItem = c.Where(item => dicCcs[input].Any(e => IsEquals(item.Edits.Select(o => o.EditOperation).ToList(), e))).ToList();
+                    var ccsInput = dicCcs[input];
+                    var listItem = cluster.Where(item => ccsInput.Any(e => IsEquals(item.Edits, e))).ToList();
                     kMatches.Add(listItem);
                 }
                 var inpTreeNode = (Node)input[rule.Body[0]];
@@ -83,30 +66,6 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
-        }
-
-        private static bool IsEquals(List<EditOperation<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
-        {
-            if (item1.Count != item2.Count) return false;
-
-            for (int i = 0; i < item1.Count(); i++)
-            {
-                var editI = item1[i];
-                var editj = item2[i];
-
-                if (!(editI.GetType() == editj.GetType())) return false;
-                if (!editI.T1Node.Value.Equals(editj.T1Node.Value)) return false;
-                if (!editI.Parent.Value.Equals(editj.Parent.Value)) return false;
-                if (editI.K != editj.K) return false;
-
-                if (editI is Update<SyntaxNodeOrToken>)
-                {
-                    var upi = (Update<SyntaxNodeOrToken>)editI;
-                    var upj = (Update<SyntaxNodeOrToken>)editj;
-                    if (!upi.To.Value.Equals(upj.To.Value)) return false;
-                }
-            }
-            return true;
         }
 
         /// <summary>
@@ -126,7 +85,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     var examples = (List<Script>)spec.Examples[input];
                     var script = examples.ElementAt(i);
                     var editOperation = script.Edits.Single().EditOperation;
-                    Node node = null;
+                    Node node;
                     if (editOperation is Update<SyntaxNodeOrToken> || editOperation is Delete<SyntaxNodeOrToken>)
                     {
                         node = new Node(editOperation.T1Node);
@@ -141,6 +100,30 @@ namespace ProseSample.Substrings.Spg.Witness
                 kExamples[input] = kMatches;
             }
             return new SubsequenceSpec(kExamples);
+        }
+
+        private static bool IsEquals(List<Edit<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
+        {
+            if (item1.Count != item2.Count) return false;
+
+            for (int i = 0; i < item1.Count(); i++)
+            {
+                var editI = item1[i];
+                var editj = item2[i];
+
+                if (!(editI.GetType() == editj.GetType())) return false;
+                if (!editI.EditOperation.T1Node.Value.Equals(editj.T1Node.Value)) return false;
+                if (!editI.EditOperation.Parent.Value.Equals(editj.Parent.Value)) return false;
+                if (editI.EditOperation.K != editj.K) return false;
+
+                if (editI.EditOperation is Update<SyntaxNodeOrToken>)
+                {
+                    var upi = (Update<SyntaxNodeOrToken>)editI.EditOperation;
+                    var upj = (Update<SyntaxNodeOrToken>)editj;
+                    if (!upi.To.Value.Equals(upj.To.Value)) return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>

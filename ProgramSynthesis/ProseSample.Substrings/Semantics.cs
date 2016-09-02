@@ -19,12 +19,7 @@ namespace ProseSample.Substrings
 {
     public static class Semantics
     {
-        //Before transformation mapping
-        private static readonly Dictionary<Node, SyntaxNodeOrToken> BeforeAfterMapping = new Dictionary<Node, SyntaxNodeOrToken>();
-
-        //After transformation mapping
-        private static readonly Dictionary<Node, SyntaxNodeOrToken> MappingRegions = new Dictionary<Node, SyntaxNodeOrToken>();
-
+       
         /// <summary>
         /// Matches the element on the tree with specified kind and child nodes.
         /// </summary>
@@ -188,7 +183,6 @@ namespace ProseSample.Substrings
             }
 
             var node = ReconstructTree(current);
-            MappingRegions[target] = node;
             Console.WriteLine(node.ToString());
             var itree = ConverterHelper.ConvertCSharpToTreeNode(node);
             return itree != null ? new Node(itree) : new Node(new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None)));
@@ -297,18 +291,7 @@ namespace ProseSample.Substrings
             var list = editList.ToList();
             var patch = new Patch(editList);
             return patch;
-        }
-
-
-        public static IEnumerable<Node> SL(Node child1, IEnumerable<Node> cList)
-        {
-            return GList<Node>.List(child1, cList);
-        }
-
-        public static IEnumerable<Node> SO(Node child)
-        {
-            return GList<Node>.Single(child);
-        }
+        }   
 
         public static IEnumerable<SyntaxNodeOrToken> SplitNodes(SyntaxNodeOrToken n)
         {
@@ -324,81 +307,6 @@ namespace ProseSample.Substrings
         public static bool FTrue()
         {
             return true;
-        }
-
-        //public static SyntaxNodeOrToken Transformation(SyntaxNodeOrToken node, IEnumerable<Node> loop)
-        //{
-        //    List<SyntaxNodeOrToken> afterNodeList;
-        //    List<SyntaxNodeOrToken> beforeNodeList;
-        //    FillBeforeAfterList(out afterNodeList, loop, out beforeNodeList);
-        //    //traversal index of the nodes before the transformation
-        //    var traversalIndices = PostOrderTraversalIndices(node, beforeNodeList);
-        //    //Annotate edited nodes
-        //    node = AnnotateNodeEditedNodes(node, traversalIndices);
-        //    //Update annotated nodes
-        //    node = UpdateAnnotatedNodes(node, traversalIndices, afterNodeList);
-        //    var stringNode = node.ToFullString();
-        //    return node;
-        //}
-
-        private static SyntaxNodeOrToken UpdateAnnotatedNodes(SyntaxNodeOrToken node, List<int> traversalIndices, List<SyntaxNodeOrToken> afterNodeList)
-        {
-            for (int i = 0; i < traversalIndices.Count; i++)
-            {
-                var index = traversalIndices[i];
-                var snode = node.AsNode().GetAnnotatedNodes($"ANN{index}").ToList();
-                if (snode.Any())
-                {
-                    var rewriter = new UpdateTreeRewriter(snode.First(), afterNodeList.ElementAt(i).AsNode());
-                    node = rewriter.Visit(node.AsNode());
-                }
-            }
-            return node;
-        }
-
-        private static SyntaxNodeOrToken AnnotateNodeEditedNodes(SyntaxNodeOrToken node, List<int> traversalIndices)
-        {
-            foreach (var index in traversalIndices)
-            {           
-                var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
-                var traversalNodes = treeNode.DescendantNodesAndSelf();
-                var ann = new AddAnnotationRewriter(traversalNodes.ElementAt(index).Value.AsNode(),
-                    new List<SyntaxAnnotation> {new SyntaxAnnotation($"ANN{index}")});
-                node = ann.Visit(node.AsNode());
-            }
-            return node;
-        }
-
-        private static void FillBeforeAfterList(out List<SyntaxNodeOrToken> afterNodeList, IEnumerable<Node> loop, out List<SyntaxNodeOrToken> beforeNodeList)
-        {
-            afterNodeList = new List<SyntaxNodeOrToken>();
-            beforeNodeList = new List<SyntaxNodeOrToken>();
-            var list = loop.ToList();
-            foreach (var snode in list)
-            {
-                //afterNodeList.AddRange(MappingRegions[snode]);
-                //beforeNodeList.AddRange(BeforeAfterMapping[snode]);
-            }
-        }
-
-        private static List<int> PostOrderTraversalIndices(SyntaxNodeOrToken node, List<SyntaxNodeOrToken> beforeNodeList)
-        {
-            var treeNode = ConverterHelper.ConvertCSharpToTreeNode(node);
-            var traversalNodes = treeNode.DescendantNodesAndSelf();
-            var traversalIndices = new List<int>();
-
-            for (int i = 0; i < traversalNodes.Count; i++)
-            {
-                var snode = traversalNodes[i];
-                foreach (var v in beforeNodeList)
-                {
-                    if (snode.Value.Equals(v))
-                    {
-                        traversalIndices.Add(i);
-                    }
-                }
-            }
-            return traversalIndices;
         }
 
         public static bool NodeMatch(Node sx, Pattern template)
