@@ -25,11 +25,6 @@ namespace ProseSample.Substrings.Spg.Witness
         /// </summary>
         public static Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> Mapping { get; set; }
 
-        public static Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<List<EditOperation<SyntaxNodeOrToken>>, ITreeNode<SyntaxNodeOrToken>>();
-
-        public static Dictionary<List<EditOperation<SyntaxNodeOrToken>>, EditOperation<SyntaxNodeOrToken>> Operations =
-            new Dictionary<List<EditOperation<SyntaxNodeOrToken>>, EditOperation<SyntaxNodeOrToken>>();
-
         /// <summary>
         /// Witness function to segment the script in a list of edit operations
         /// </summary>
@@ -43,7 +38,6 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var script = (Script)spec.Examples[input];
                 var edits = script.Edits;
-                edits = script.Edits.GetRange(0, 1);
                 editsExamples[input] = edits;
             }
             return new ExampleSpec(editsExamples);
@@ -70,8 +64,6 @@ namespace ProseSample.Substrings.Spg.Witness
                     PrintScript(script);
                     var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.ComputePrimaryEditions(script);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script);
-                    //todo this need to be refactored.
-                    ccs.ForEach(o => CurrentTrees.Add(o, inpTreeNode.Value));
                     dicCluster[input] = ccs;
                     ccsList.AddRange(ccs);
                 }

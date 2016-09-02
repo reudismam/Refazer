@@ -30,34 +30,6 @@ namespace TreeEdit.Spg.ConnectedComponents
         /// <summary>
         /// Compute connected components.
         /// </summary>
-        /// <param name="editOperations">edit script</param>
-        private static List<List<EditOperation<T>>> ComputeConnectedComponents(List<EditOperation<T>> editOperations)
-        {
-            _visited = new Dictionary<Tuple<T, T, int>, int>();
-            int i = 0;
-            var dic = new Dictionary<int, List<EditOperation<T>>>();
-            foreach (var edit in editOperations)
-            {
-                var t = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
-                if (!_visited.ContainsKey(t))
-                {
-                    dic.Add(i, new List<EditOperation<T>>());
-                    DepthFirstSearch(edit, i++);
-                }
-            }        
-            foreach (var edit in editOperations)
-            {
-                var t = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
-                int cc = _visited[t];
-                dic[cc].Add(edit);
-            }
-            var ccs = new List<List<EditOperation<T>>>(dic.Values);
-            return ccs;
-        }
-
-        /// <summary>
-        /// Compute connected components.
-        /// </summary>
         /// <param name="primaryEditions"></param>
         /// <param name="editOperations">edit script</param>
         private static List<List<EditOperation<T>>> ComputeConnectedComponents(List<EditOperation<T>> primaryEditions, List<EditOperation<T>> editOperations)
@@ -99,46 +71,6 @@ namespace TreeEdit.Spg.ConnectedComponents
                 if (!_visited.ContainsKey(te))
                 {
                     DepthFirstSearch(edit, i);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Compute connected components.
-        /// </summary>
-        /// <param name="editOperations">edit operations</param>
-        public static List<List<EditOperation<T>>> ConnectedComponents(List<EditOperation<T>> editOperations)
-        {
-            ConnectionComparer = new FullConnected(editOperations);
-            BuildGraph(editOperations);        
-            var ccs =  ComputeConnectedComponents(editOperations);
-            return ccs;
-        }
-
-        private static void BuildGraph(List<EditOperation<T>> script)
-        {         
-            Graph = new Dictionary<Tuple<T, T, int>, List<EditOperation<T>>>();
-            foreach (var edit in script)
-            {
-                var t = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
-                Graph[t] = new List<EditOperation<T>>();
-            }
-
-            for (int i = 0; i < script.Count; i++)
-            {
-                var editI = script[i];
-                var ti = Tuple.Create(editI.T1Node.Value, editI.Parent.Value, editI.K);
-
-                for (int j = i + 1; j < script.Count; j++)
-                {
-                    var editJ = script[j];
-                    var tj = Tuple.Create(editJ.T1Node.Value, editJ.Parent.Value, editJ.K);
-
-                    if (EditsAreConnected(i, j))
-                    {
-                        Graph[ti].Add(editJ);
-                        Graph[tj].Add(editI);
-                    }
                 }
             }
         }
@@ -185,16 +117,6 @@ namespace TreeEdit.Spg.ConnectedComponents
             }
         }
 
-        /// <summary>
-        /// Defines if editI and editJ are connected.
-        /// </summary>
-        /// <param name="editI">First edit</param>
-        /// <param name="editJ">Second edit</param>
-        private static bool EditsAreConnected(int editI, int editJ)
-        {
-            return ConnectionComparer.IsConnected(editI, editJ) || ConnectionComparer.IsConnected(editJ, editI);
-        }
-
         private class FullConnected : ConnectionComparer<T>
         {
             public FullConnected(List<EditOperation<T>> script) : base(script)
@@ -205,19 +127,12 @@ namespace TreeEdit.Spg.ConnectedComponents
             {
                 var editI = Script[indexI];
                 var editJ = Script[indexJ];
-
-                //Two nodes have the same parent
-                //if (editI.Parent.Equals(editJ.Parent) /*&& IsValidBlock(editI.Parent) && !editI.Parent.IsLabel(new TLabel(SyntaxKind.ClassDeclaration)) /*&& !editI.Parent.IsLabel(new TLabel(SyntaxKind.SwitchStatement))*/) return true;        
-
-                //T1Node from an operation is the parent in another edit operation 
+      
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
-
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
 
                 var nodes = GetNodes(editI.T1Node.Value);
                 if (nodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
-                //if (parentNodes.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
-
                 if (editI.Parent.Parent != null && editI.Parent.Parent.Equals(editJ.T1Node)) return true;
 
                 if (editI is Update<T>)
@@ -232,7 +147,6 @@ namespace TreeEdit.Spg.ConnectedComponents
                     var update = editJ as Update<T>;
                     var parentNodes = GetNodes(editI.Parent.Value);
                     if (parentNodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
-
                     if (parentNodes.DescendantNodesAndSelf().Contains(update.To)) return true;
                 }
                 return false;
@@ -260,7 +174,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                     var editJ = script[j];
                     if (!editI.Parent.Equals(editJ.Parent) && ConnectionComparer.IsConnected(i, j))
                     {
-                        primariesFlag[j] = false; //j is not a primary operation because it depends on other transformations
+                        primariesFlag[j] = false; //j is not a primary operation
                     }
                 }
             }
