@@ -21,11 +21,6 @@ namespace ProseSample.Substrings.Spg.Witness
     public class Transformation
     {
         /// <summary>
-        /// Mapped nodes on the before after tree
-        /// </summary>
-        public static Dictionary<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> Mapping { get; set; }
-
-        /// <summary>
         /// Transformation witness function for parameter rule.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
@@ -104,8 +99,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static bool IsEquals(List<Edit<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
         {
-            if (item1.Count() != item2.Count()) return false;
-
+            if (item1.Count != item2.Count) return false;
             for (int i = 0; i < item1.Count(); i++)
             {
                 var editI = item1[i].EditOperation;
@@ -145,20 +139,20 @@ namespace ProseSample.Substrings.Spg.Witness
             return clusteredList;
         }
 
-
         /// <summary>
         /// Compact edit operations with similar semantic in compacted edit operations
         /// </summary>
         /// <param name="connectedComponents">Uncompacted edit operations</param>
+        /// <param name="inpTree">Input tree</param>
         private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, ITreeNode<SyntaxNodeOrToken> inpTree)
         {
             var newccs = new List<Edit<SyntaxNodeOrToken>>();
             foreach (var script in connectedComponents)
             {
-                //var newScript = new Script(new List<Edit<SyntaxNodeOrToken>>());
-                //var parent = ;
-                var parent = ConverterHelper.ConvertCSharpToTreeNode(GetParent(script, inpTree).Value);
-                var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+                var parentSyntaxNode = GetParent(script, inpTree).Value;
+                var parent = ConverterHelper.ConvertCSharpToTreeNode(parentSyntaxNode);
+
+                 var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
 
                 var treeUpdate = new TreeUpdate(parent);
                 foreach (var s in script.Edits)
@@ -176,7 +170,6 @@ namespace ProseSample.Substrings.Spg.Witness
                         var t1node = list.Single();
                         var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
                         delete.Parent = t1node.Parent;
-                        //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(delete));
                         newccs.Add(new Edit<SyntaxNodeOrToken>(delete));
                         continue;
                     }
@@ -190,14 +183,12 @@ namespace ProseSample.Substrings.Spg.Witness
                     var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
                     var to = ConverterHelper.MakeACopy(treeUpdate.CurrentTree);
                     var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                    //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
                     newccs.Add(new Edit<SyntaxNodeOrToken>(update));
                     continue;
 
                 }
 
                 var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
-
                 if (children.Count > 1)
                 {
                     //todo correct the children.First children.second
@@ -220,9 +211,7 @@ namespace ProseSample.Substrings.Spg.Witness
                             }
                         }
                         var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                        //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
                         newccs.Add(new Edit<SyntaxNodeOrToken>(update));
-                        continue;
                     }
                     else
                     {
@@ -230,9 +219,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         var toNode = treeUpdate.CurrentTree;
                         var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
                         var update = new Update<SyntaxNodeOrToken>(@from, toNode, ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
-                        //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
                         newccs.Add(new Edit<SyntaxNodeOrToken>(update));
-                        continue;
                     }
                 }
                 else if (firstOperation is Insert<SyntaxNodeOrToken>)
@@ -240,22 +227,27 @@ namespace ProseSample.Substrings.Spg.Witness
                     var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, firstOperation.T1Node.Value);
                     var parentcopy = ConverterHelper.ConvertCSharpToTreeNode(treeUpdate.CurrentTree.Value);
                     var insert = new Insert<SyntaxNodeOrToken>(inserted, parentcopy, firstOperation.K);
-                    //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(insert));
                     newccs.Add(new Edit<SyntaxNodeOrToken>(insert));
-                    //return newccs;
-                    continue;
                 }
                 else if (firstOperation is Update<SyntaxNodeOrToken>)
                 {
-                    //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
                     newccs.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
-                    //return newccs;
-                    continue;
                 }
             }
             return newccs;
         }
 
+        /// <summary>
+        /// Get the not in which the operations are being executed.
+        /// The parent is computed based on the position of the nodes in the syntax tree.
+        /// If a particular node occurs first in the tree than another node.
+        /// Then, it is a candidate for the parent position, else the other node is a candidate for the parent position.
+        /// If two nodes occur in the same position of the syntax tree,
+        /// then the node that is an ancestor of another node is the candidate for the parent position.
+        /// </summary>
+        /// <param name="script">Edit script</param>
+        /// <param name="inpTree">Input tree</param>
+        /// <returns></returns>
         private static ITreeNode<SyntaxNodeOrToken> GetParent(Script script, ITreeNode<SyntaxNodeOrToken> inpTree)
         {
             ITreeNode<SyntaxNodeOrToken> root = null;
@@ -271,10 +263,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     tocompare = v.EditOperation.Parent;
                 }
 
-                if (root == null)
-                {
-                    root = tocompare;
-                }
+                if (root == null) root = tocompare;
+
                 else if (TreeUpdate.FindNode(inpTree, tocompare.Value) != null)
                 {
                     if (root.Value.SpanStart > tocompare.Value.SpanStart)
@@ -283,19 +273,15 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                     else if (root.Value.SpanStart == tocompare.Value.SpanStart)
                     {
-                        if (root.Value.Span.End < tocompare.Value.Span.End)
+                        var toCompareValue = tocompare.Value.AsNode();
+                        var rootValue = root.Value.AsNode();
+                        if (rootValue == null) root = tocompare;
+
+                        if (toCompareValue != null && toCompareValue.ChildNodes().Contains(rootValue))
                         {
                             root = tocompare;
                         }
-                        else if (root.Value.Span.End == tocompare.Value.Span.End)
-                        {
-                            if (root.IsLabel(new TLabel(SyntaxKind.IdentifierName)))
-                            {
-                                root = tocompare;
-                            }
-                        }
                     }
-
                 }
             }
             return root;
@@ -489,10 +475,10 @@ namespace ProseSample.Substrings.Spg.Witness
             var gumTreeMapping = new GumTreeMapping<SyntaxNodeOrToken>();
             var inpNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
             var outNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
-            Mapping = gumTreeMapping.Mapping(inpNode, outNode);
+            var mapping = gumTreeMapping.Mapping(inpNode, outNode);
 
             var generator = new EditScriptGenerator<SyntaxNodeOrToken>();
-            var script = generator.EditScript(inpNode, outNode, Mapping);
+            var script = generator.EditScript(inpNode, outNode, mapping);
             return script;
         }
     }
