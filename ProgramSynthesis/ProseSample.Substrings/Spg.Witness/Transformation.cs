@@ -57,7 +57,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (var cluster in clusters)
                 {
                     var ccsInput = dicCcs[input];
-                    var listItem = cluster.Where(item => ccsInput.Any(e => IsEquals(item.Edits, e))).ToList();
+                    var listItem = cluster.Where(item => ccsInput.Any(e => IsEquals(item.Edits.Select(o => o.EditOperation).ToList(), e))).ToList();
                     kMatches.Add(listItem);
                 }
                 var inpTreeNode = (Node)input[rule.Body[0]];
@@ -102,9 +102,9 @@ namespace ProseSample.Substrings.Spg.Witness
             return new SubsequenceSpec(kExamples);
         }
 
-        private static bool IsEquals(List<Edit<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
+        private static bool IsEquals(List<EditOperation<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
         {
-            if (item1.Count != item2.Count) return false;
+            if (item1.Count() != item2.Count()) return false;
 
             for (int i = 0; i < item1.Count(); i++)
             {
@@ -112,13 +112,13 @@ namespace ProseSample.Substrings.Spg.Witness
                 var editj = item2[i];
 
                 if (!(editI.GetType() == editj.GetType())) return false;
-                if (!editI.EditOperation.T1Node.Value.Equals(editj.T1Node.Value)) return false;
-                if (!editI.EditOperation.Parent.Value.Equals(editj.Parent.Value)) return false;
-                if (editI.EditOperation.K != editj.K) return false;
+                if (!editI.T1Node.Value.Equals(editj.T1Node.Value)) return false;
+                if (!editI.Parent.Value.Equals(editj.Parent.Value)) return false;
+                if (editI.K != editj.K) return false;
 
-                if (editI.EditOperation is Update<SyntaxNodeOrToken>)
+                if (editI is Update<SyntaxNodeOrToken>)
                 {
-                    var upi = (Update<SyntaxNodeOrToken>)editI.EditOperation;
+                    var upi = (Update<SyntaxNodeOrToken>)editI;
                     var upj = (Update<SyntaxNodeOrToken>)editj;
                     if (!upi.To.Value.Equals(upj.To.Value)) return false;
                 }
