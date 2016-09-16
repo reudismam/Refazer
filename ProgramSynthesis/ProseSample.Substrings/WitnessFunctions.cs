@@ -187,8 +187,8 @@ namespace ProseSample.Substrings
 
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<Script>();
-                foreach (List<List<Script>> editList in spec.Examples[input])
+                var matches = new List<Edit<SyntaxNodeOrToken>>();
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -216,8 +216,8 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var newPatch = new List<List<Script>>();
-                foreach (List<List<Script>> editList in spec.Examples[input])
+                var newPatch = new List<List<Edit<SyntaxNodeOrToken>>>();
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -225,7 +225,7 @@ namespace ProseSample.Substrings
                     editList.RemoveAt(0);
                     newPatch = editList;
                 }
-                treeExamples[input] = new List<List<List<Script>>> { newPatch };
+                treeExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { newPatch };
             }
             return new SubsequenceSpec(treeExamples);
         }
@@ -243,8 +243,8 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<Script>();
-                foreach (List<List<Script>> editList in spec.Examples[input])
+                var matches = new List<Edit<SyntaxNodeOrToken>>();
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count != 1) return null;

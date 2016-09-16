@@ -61,15 +61,15 @@ namespace ProseSample.Substrings.Spg.Witness
                     kMatches.Add(listItem);
                 }
                 var inpTreeNode = (Node)input[rule.Body[0]];
-                kMatches = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
-                kExamples[input] = new List<List<List<Script>>> { kMatches };
+                var edits = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
+                kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { edits };
             }
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
         }
 
         /// <summary>
-        /// Segment the edit script in nodes
+        /// Segment the edit edit in nodes
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Rule parameter</param>
@@ -82,9 +82,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 var kMatches = new List<Node>();
                 for (int i = 0; i < spec.Examples[input].Count(); i++)
                 {
-                    var examples = (List<Script>)spec.Examples[input];
-                    var script = examples.ElementAt(i);
-                    var editOperation = script.Edits.Single().EditOperation;
+                    var examples = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
+                    var edit = examples.ElementAt(i);
+                    var editOperation = edit.EditOperation;
                     Node node;
                     if (editOperation is Update<SyntaxNodeOrToken> || editOperation is Delete<SyntaxNodeOrToken>)
                     {
@@ -95,7 +95,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         node = new Node(editOperation.Parent);
                     }
                     kMatches.Add(node);
-                    ConfigureContext(node.Value, script);
+                    ConfigureContext(node.Value, edit);
                 }
                 kExamples[input] = kMatches;
             }
@@ -127,7 +127,7 @@ namespace ProseSample.Substrings.Spg.Witness
         }
 
         /// <summary>
-        /// Cluster edit script in regions
+        /// Cluster edit edit in regions
         /// </summary>
         /// <param name="clusteredEdits">Clustered edit operations</param>
         public static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> clusteredEdits)
@@ -150,12 +150,12 @@ namespace ProseSample.Substrings.Spg.Witness
         /// Compact edit operations with similar semantic in compacted edit operations
         /// </summary>
         /// <param name="connectedComponents">Uncompacted edit operations</param>
-        private static List<Script> CompactScript(List<Script> connectedComponents, ITreeNode<SyntaxNodeOrToken> inpTree)
+        private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, ITreeNode<SyntaxNodeOrToken> inpTree)
         {
-            var newccs = new List<Script>();
+            var newccs = new List<Edit<SyntaxNodeOrToken>>();
             foreach (var script in connectedComponents)
             {
-                var newScript = new Script(new List<Edit<SyntaxNodeOrToken>>());
+                //var newScript = new Script(new List<Edit<SyntaxNodeOrToken>>());
                 //var parent = ;
                 var parent = ConverterHelper.ConvertCSharpToTreeNode(GetParent(script, inpTree).Value);
                 var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
@@ -176,8 +176,8 @@ namespace ProseSample.Substrings.Spg.Witness
                         var t1node = list.Single();
                         var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
                         delete.Parent = t1node.Parent;
-                        newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(delete));
-                        newccs.Add(newScript);
+                        //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(delete));
+                        newccs.Add(new Edit<SyntaxNodeOrToken>(delete));
                         continue;
                     }
 
@@ -190,8 +190,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
                     var to = ConverterHelper.MakeACopy(treeUpdate.CurrentTree);
                     var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                    newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
-                    newccs.Add(newScript);
+                    //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
+                    newccs.Add(new Edit<SyntaxNodeOrToken>(update));
                     continue;
 
                 }
@@ -220,8 +220,8 @@ namespace ProseSample.Substrings.Spg.Witness
                             }
                         }
                         var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                        newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
-                        newccs.Add(newScript);
+                        //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
+                        newccs.Add(new Edit<SyntaxNodeOrToken>(update));
                         continue;
                     }
                     else
@@ -230,8 +230,8 @@ namespace ProseSample.Substrings.Spg.Witness
                         var toNode = treeUpdate.CurrentTree;
                         var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
                         var update = new Update<SyntaxNodeOrToken>(@from, toNode, ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
-                        newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
-                        newccs.Add(newScript);
+                        //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(update));
+                        newccs.Add(new Edit<SyntaxNodeOrToken>(update));
                         continue;
                     }
                 }
@@ -240,15 +240,15 @@ namespace ProseSample.Substrings.Spg.Witness
                     var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, firstOperation.T1Node.Value);
                     var parentcopy = ConverterHelper.ConvertCSharpToTreeNode(treeUpdate.CurrentTree.Value);
                     var insert = new Insert<SyntaxNodeOrToken>(inserted, parentcopy, firstOperation.K);
-                    newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(insert));
-                    newccs.Add(newScript);
+                    //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(insert));
+                    newccs.Add(new Edit<SyntaxNodeOrToken>(insert));
                     //return newccs;
                     continue;
                 }
                 else if (firstOperation is Update<SyntaxNodeOrToken>)
                 {
-                    newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
-                    newccs.Add(newScript);
+                    //newScript.Edits.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
+                    newccs.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
                     //return newccs;
                     continue;
                 }
@@ -400,10 +400,10 @@ namespace ProseSample.Substrings.Spg.Witness
             return dist;
         }
 
-        private static void ConfigureContext(ITreeNode<SyntaxNodeOrToken> anchor, Script script)
+        private static void ConfigureContext(ITreeNode<SyntaxNodeOrToken> anchor, Edit<SyntaxNodeOrToken> edit)
         {
             var treeUp = new TreeUpdate(anchor);
-            ConfigureParentSyntaxTree(script, anchor);
+            ConfigureParentSyntaxTree(edit, anchor);
             if (!WitnessFunctions.TreeUpdateDictionary.ContainsKey(anchor))
             {
                 WitnessFunctions.TreeUpdateDictionary.Add(anchor, treeUp);
@@ -463,30 +463,27 @@ namespace ProseSample.Substrings.Spg.Witness
             return Tuple.Create<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>>(null, null);
         }
 
-        private static void ConfigureParentSyntaxTree(Script script, ITreeNode<SyntaxNodeOrToken> syntaxTree)
+        private static void ConfigureParentSyntaxTree(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> syntaxTree)
         {
-            foreach (var edit in script.Edits)
+            edit.EditOperation.T1Node.SyntaxTree = syntaxTree;
+            if (edit.EditOperation.Parent != null)
             {
-                edit.EditOperation.T1Node.SyntaxTree = syntaxTree;
-                if (edit.EditOperation.Parent != null)
-                {
-                    edit.EditOperation.Parent.SyntaxTree = syntaxTree;
-                }
+                edit.EditOperation.Parent.SyntaxTree = syntaxTree;
+            }
 
-                if (edit.EditOperation is Update<SyntaxNodeOrToken>)
-                {
-                    var update = (Update<SyntaxNodeOrToken>)edit.EditOperation;
-                    update.To.SyntaxTree = syntaxTree;
-                }
+            if (edit.EditOperation is Update<SyntaxNodeOrToken>)
+            {
+                var update = (Update<SyntaxNodeOrToken>)edit.EditOperation;
+                update.To.SyntaxTree = syntaxTree;
             }
         }
 
         /// <summary>
-        /// Compute the edition script
+        /// Compute the edition edit
         /// </summary>
         /// <param name="inpTree">Input tree</param>
         /// <param name="outTree">Output tree</param>
-        /// <returns>Computed edit script</returns>
+        /// <returns>Computed edit edit</returns>
         private static List<EditOperation<SyntaxNodeOrToken>> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree)
         {
             var gumTreeMapping = new GumTreeMapping<SyntaxNodeOrToken>();
