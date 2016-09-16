@@ -57,7 +57,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (var cluster in clusters)
                 {
                     var ccsInput = dicCcs[input];
-                    var listItem = cluster.Where(item => ccsInput.Any(e => IsEquals(item.Edits.Select(o => o.EditOperation).ToList(), e))).ToList();
+                    var listItem = cluster.Where(item => ccsInput.Any(e => IsEquals(item.Edits, e))).ToList();
                     kMatches.Add(listItem);
                 }
                 var inpTreeNode = (Node)input[rule.Body[0]];
@@ -102,13 +102,13 @@ namespace ProseSample.Substrings.Spg.Witness
             return new SubsequenceSpec(kExamples);
         }
 
-        private static bool IsEquals(List<EditOperation<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
+        private static bool IsEquals(List<Edit<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
         {
             if (item1.Count() != item2.Count()) return false;
 
             for (int i = 0; i < item1.Count(); i++)
             {
-                var editI = item1[i];
+                var editI = item1[i].EditOperation;
                 var editj = item2[i];
 
                 if (!(editI.GetType() == editj.GetType())) return false;
