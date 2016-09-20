@@ -146,95 +146,104 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <param name="inpTree">Input tree</param>
         private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, ITreeNode<SyntaxNodeOrToken> inpTree)
         {
-            var newccs = new List<Edit<SyntaxNodeOrToken>>();
+            var newEditOperations = new List<Edit<SyntaxNodeOrToken>>();
             foreach (var script in connectedComponents)
             {
-                var parentSyntaxNode = GetParent(script, inpTree).Value;
-                var parent = ConverterHelper.ConvertCSharpToTreeNode(parentSyntaxNode);
+                var edit = CompactScriptIntoASingleOperation(inpTree, script);
+                if (edit != null)
+                {
+                    newEditOperations.Add(edit);
+                }
+            }
+            return newEditOperations;
+        }
 
-                 var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+        private static Edit<SyntaxNodeOrToken> CompactScriptIntoASingleOperation(ITreeNode<SyntaxNodeOrToken> inpTree, Script script)
+        {
+            var parentSyntaxNode = GetParent(script, inpTree).Value;
+            var parent = ConverterHelper.ConvertCSharpToTreeNode(parentSyntaxNode);
 
-                var treeUpdate = new TreeUpdate(parent);
+            var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+            var treeUpdate = new TreeUpdate(parent);
+            foreach (var s in script.Edits)
+            {
+                treeUpdate.ProcessEditOperation(s.EditOperation);
+            }
+
+            if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
+            {
+                var edits = script.Edits.Select(o => o.EditOperation).ToList();
+                var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> {edits});
+
+                if (list.Count == 1)
+                {
+                    var t1node = list.Single();
+                    var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
+                    delete.Parent = t1node.Parent;
+                    return new Edit<SyntaxNodeOrToken>(delete);
+                }
+
+                treeUpdate = new TreeUpdate(ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value));
                 foreach (var s in script.Edits)
                 {
                     treeUpdate.ProcessEditOperation(s.EditOperation);
                 }
 
-                if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
+                var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
+                var to = ConverterHelper.MakeACopy(treeUpdate.CurrentTree);
+                var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
+                return new Edit<SyntaxNodeOrToken>(update);
+            }
+
+            var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
+            if (children.Count > 1)
+            {
+                //todo correct the children.First children.second
+                if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> &&
+                    children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
                 {
-                    var edits = script.Edits.Select(o => o.EditOperation).ToList();
-                    var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> { edits });
-
-                    if (list.Count == 1)
+                    var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
+                    var to = children.First().EditOperation.T1Node;
+                    foreach (var v in @from.DescendantNodesAndSelf())
                     {
-                        var t1node = list.Single();
-                        var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
-                        delete.Parent = t1node.Parent;
-                        newccs.Add(new Edit<SyntaxNodeOrToken>(delete));
-                        continue;
-                    }
-
-                    treeUpdate = new TreeUpdate(ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value));
-                    foreach (var s in script.Edits)
-                    {
-                        treeUpdate.ProcessEditOperation(s.EditOperation);
-                    }
-
-                    var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
-                    var to = ConverterHelper.MakeACopy(treeUpdate.CurrentTree);
-                    var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                    newccs.Add(new Edit<SyntaxNodeOrToken>(update));
-                    continue;
-
-                }
-
-                var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
-                if (children.Count > 1)
-                {
-                    //todo correct the children.First children.second
-                    if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> && children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
-                    {
-                        var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
-                        var to = children.First().EditOperation.T1Node;
-                        foreach (var v in @from.DescendantNodesAndSelf())
+                        foreach (var edit in script.Edits)
                         {
-                            foreach (var edit in script.Edits)
+                            if (edit.EditOperation is Update<SyntaxNodeOrToken>)
                             {
-                                if (edit.EditOperation is Update<SyntaxNodeOrToken>)
+                                var up = (Update<SyntaxNodeOrToken>) edit.EditOperation;
+                                if (v.Equals(up.To))
                                 {
-                                    var up = (Update<SyntaxNodeOrToken>)edit.EditOperation;
-                                    if (v.Equals(up.To))
-                                    {
-                                        v.Value = up.T1Node.Value;
-                                    }
+                                    v.Value = up.T1Node.Value;
                                 }
                             }
                         }
-                        var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                        newccs.Add(new Edit<SyntaxNodeOrToken>(update));
                     }
-                    else
-                    {
-                        //todo we need to work more here.
-                        var toNode = treeUpdate.CurrentTree;
-                        var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
-                        var update = new Update<SyntaxNodeOrToken>(@from, toNode, ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
-                        newccs.Add(new Edit<SyntaxNodeOrToken>(update));
-                    }
+                    var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
+                    return new Edit<SyntaxNodeOrToken>(update);
                 }
-                else if (firstOperation is Insert<SyntaxNodeOrToken>)
+                else
                 {
-                    var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, firstOperation.T1Node.Value);
-                    var parentcopy = ConverterHelper.ConvertCSharpToTreeNode(treeUpdate.CurrentTree.Value);
-                    var insert = new Insert<SyntaxNodeOrToken>(inserted, parentcopy, firstOperation.K);
-                    newccs.Add(new Edit<SyntaxNodeOrToken>(insert));
-                }
-                else if (firstOperation is Update<SyntaxNodeOrToken>)
-                {
-                    newccs.Add(new Edit<SyntaxNodeOrToken>(firstOperation));
+                    //todo we need to work more here.
+                    var toNode = treeUpdate.CurrentTree;
+                    var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+                    var update = new Update<SyntaxNodeOrToken>(@from, toNode,
+                        ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
+                    return new Edit<SyntaxNodeOrToken>(update);
                 }
             }
-            return newccs;
+            else if (firstOperation is Insert<SyntaxNodeOrToken>)
+            {
+                var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, firstOperation.T1Node.Value);
+                var parentcopy = ConverterHelper.ConvertCSharpToTreeNode(treeUpdate.CurrentTree.Value);
+                var insert = new Insert<SyntaxNodeOrToken>(inserted, parentcopy, firstOperation.K);
+                return new Edit<SyntaxNodeOrToken>(insert);
+            }
+            else if (firstOperation is Update<SyntaxNodeOrToken>)
+            {
+                return new Edit<SyntaxNodeOrToken>(firstOperation);
+            }
+
+            return null;
         }
 
         /// <summary>
