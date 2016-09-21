@@ -160,9 +160,9 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static Edit<SyntaxNodeOrToken> CompactScriptIntoASingleOperation(ITreeNode<SyntaxNodeOrToken> inpTree, Script script)
         {
-            var parentSyntaxNode = GetParent(script, inpTree).Value;
-            var parent = ConverterHelper.ConvertCSharpToTreeNode(parentSyntaxNode);
+            if (script.Edits.Count == 1) return script.Edits.First();
 
+            var parent = GetParent(script, inpTree);
             var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
             var treeUpdate = new TreeUpdate(parent);
             foreach (var s in script.Edits)
@@ -172,27 +172,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
             if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
             {
-                var edits = script.Edits.Select(o => o.EditOperation).ToList();
-                var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> {edits});
-
-                if (list.Count == 1)
-                {
-                    var t1node = list.Single();
-                    var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
-                    delete.Parent = t1node.Parent;
-                    return new Edit<SyntaxNodeOrToken>(delete);
-                }
-
-                treeUpdate = new TreeUpdate(ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value));
-                foreach (var s in script.Edits)
-                {
-                    treeUpdate.ProcessEditOperation(s.EditOperation);
-                }
-
-                var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
-                var to = ConverterHelper.MakeACopy(treeUpdate.CurrentTree);
-                var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                return new Edit<SyntaxNodeOrToken>(update);
+                var edit =  ProcessSequenceOfDeleteOperations(script, parent);
+                return edit;
             }
 
             var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
@@ -238,12 +219,33 @@ namespace ProseSample.Substrings.Spg.Witness
                 var insert = new Insert<SyntaxNodeOrToken>(inserted, parentcopy, firstOperation.K);
                 return new Edit<SyntaxNodeOrToken>(insert);
             }
-            else if (firstOperation is Update<SyntaxNodeOrToken>)
-            {
-                return new Edit<SyntaxNodeOrToken>(firstOperation);
-            }
 
             return null;
+        }
+
+        private static Edit<SyntaxNodeOrToken> ProcessSequenceOfDeleteOperations(Script script, ITreeNode<SyntaxNodeOrToken> parent)
+        {
+            var edits = script.Edits.Select(o => o.EditOperation).ToList();
+            var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> {edits});
+
+            if (list.Count == 1)
+            {
+                var t1node = list.Single();
+                var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
+                delete.Parent = t1node.Parent;
+                return new Edit<SyntaxNodeOrToken>(delete);
+            }
+
+            var treeUpdate = new TreeUpdate(ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value));
+            foreach (var s in script.Edits)
+            {
+                treeUpdate.ProcessEditOperation(s.EditOperation);
+            }
+
+            var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
+            var to = ConverterHelper.MakeACopy(treeUpdate.CurrentTree);
+            var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
+            return new Edit<SyntaxNodeOrToken>(update);
         }
 
         /// <summary>
@@ -293,7 +295,8 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                 }
             }
-            return root;
+            var parent = ConverterHelper.ConvertCSharpToTreeNode(root.Value);
+            return parent;
         }
 
         /// <summary>
