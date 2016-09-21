@@ -363,7 +363,8 @@ namespace ProseSample.Substrings
             return current;
         }
 
-        public static Node ReferenceNode(Node target, Pattern kmatch, int k)
+
+        public static Node Reference(Node target, Pattern kmatch, int k)
         {
             if (kmatch is PatternP)
             {

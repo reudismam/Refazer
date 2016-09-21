@@ -19,14 +19,14 @@ language Transformation;
 feature double Score = RankingScore;
 @start IEnumerable<Node>  trans := Transformation(node, rule);
 Patch rule := SE(editList) | EList(editList, rule);
-IEnumerable<Node> editList := EditMap(edit, tnodes) = Map(\target: Node => edit, tnodes);
-IEnumerable<Node> tnodes := TargetNodes(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
+IEnumerable<Node> editList := EditMap(operation, locations) = Map(\target: Node => operation, locations);
+IEnumerable<Node> locations := TargetNodes(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
 bool nodematch := NodeMatch(x, pattern);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
-Node edit := Insert(target, ast, k) | InsertBefore(target, r, ast) |  Update(target, ast) | Delete(target, r);
+Node operation := Insert(target, ast, k) | InsertBefore(target, r, ast) |  Update(target, ast) | Delete(target, r);
 
-Node r := ReferenceNode(target, pattern, k);
+Node r := Reference(target, pattern, k);
 Pattern pattern := Parent(kmatch, id) | NMatch(kmatch);
 Pattern kmatch := C(kind, children) | Literal(tree) | Leaf(kind) | Variable(kind);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);

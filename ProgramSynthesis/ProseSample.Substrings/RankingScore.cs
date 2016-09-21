@@ -143,8 +143,8 @@ namespace ProseSample.Substrings
         [FeatureCalculator("C")]
         public static double Score_C1(double kindScore, double expression1Score) => kindScore + expression1Score;
 
-        [FeatureCalculator("ReferenceNode")]
-        public static double Score_Match(double inScore, double patternScore, double kScore) => patternScore + 30;
+        [FeatureCalculator("Reference")]
+        public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore + 30;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KScore(int k) => k >= 0 ? 1.0 : -30;
