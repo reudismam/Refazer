@@ -4,7 +4,6 @@ using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -164,19 +163,9 @@ namespace ProseSample.Substrings.Spg.Witness
 
             var parent = GetParent(script, inpTree);
             var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
-            var treeUpdate = new TreeUpdate(parent);
-            foreach (var s in script.Edits)
-            {
-                treeUpdate.ProcessEditOperation(s.EditOperation);
-            }
+            var transformed = ProcessScriptOnNode(script, parent);
+            if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>)) return ProcessSequenceOfDeleteOperations(script, parent);
 
-            if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
-            {
-                var edit =  ProcessSequenceOfDeleteOperations(script, parent);
-                return edit;
-            }
-
-            var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
             if (children.Count > 1)
             {
                 //todo correct the children.First children.second
@@ -205,22 +194,33 @@ namespace ProseSample.Substrings.Spg.Witness
                 else
                 {
                     //todo we need to work more here.
-                    var toNode = treeUpdate.CurrentTree;
+                    var toNode = transformed;
                     var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
                     var update = new Update<SyntaxNodeOrToken>(@from, toNode,
                         ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
                     return new Edit<SyntaxNodeOrToken>(update);
                 }
             }
-            else if (firstOperation is Insert<SyntaxNodeOrToken>)
+
+            var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
+            if (firstOperation is Insert<SyntaxNodeOrToken>)
             {
-                var inserted = TreeUpdate.FindNode(treeUpdate.CurrentTree, firstOperation.T1Node.Value);
-                var parentcopy = ConverterHelper.ConvertCSharpToTreeNode(treeUpdate.CurrentTree.Value);
+                var inserted = TreeUpdate.FindNode(transformed, firstOperation.T1Node.Value);
+                var parentcopy = ConverterHelper.ConvertCSharpToTreeNode(transformed.Value);
                 var insert = new Insert<SyntaxNodeOrToken>(inserted, parentcopy, firstOperation.K);
                 return new Edit<SyntaxNodeOrToken>(insert);
             }
-
             return null;
+        }
+
+        private static ITreeNode<SyntaxNodeOrToken> ProcessScriptOnNode(Script script, ITreeNode<SyntaxNodeOrToken> parent)
+        {
+            var treeUpdate = new TreeUpdate(parent);
+            foreach (var s in script.Edits)
+            {
+                treeUpdate.ProcessEditOperation(s.EditOperation);
+            }
+            return treeUpdate.CurrentTree;
         }
 
         private static Edit<SyntaxNodeOrToken> ProcessSequenceOfDeleteOperations(Script script, ITreeNode<SyntaxNodeOrToken> parent)
@@ -230,20 +230,17 @@ namespace ProseSample.Substrings.Spg.Witness
 
             if (list.Count == 1)
             {
-                var t1node = list.Single();
-                var delete = new Delete<SyntaxNodeOrToken>(t1node.T1Node);
-                delete.Parent = t1node.Parent;
+                var t1Node = list.Single();
+                var delete = new Delete<SyntaxNodeOrToken>(t1Node.T1Node);
+                delete.Parent = t1Node.Parent;
                 return new Edit<SyntaxNodeOrToken>(delete);
             }
 
-            var treeUpdate = new TreeUpdate(ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value));
-            foreach (var s in script.Edits)
-            {
-                treeUpdate.ProcessEditOperation(s.EditOperation);
-            }
-
+            var node = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
+            var transformed = ProcessScriptOnNode(script, node);
+           
             var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
-            var to = ConverterHelper.MakeACopy(treeUpdate.CurrentTree);
+            var to = ConverterHelper.MakeACopy(transformed);
             var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
             return new Edit<SyntaxNodeOrToken>(update);
         }
