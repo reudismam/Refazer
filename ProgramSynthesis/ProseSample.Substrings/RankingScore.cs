@@ -23,8 +23,8 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Breaks")]
         public static double Score_Breaks(double predScore, double splitScore) => predScore + splitScore;
 
-        [FeatureCalculator("TargetNodes")]
-        public static double Score_TargetNodes(double predScore, double splitScore) => predScore + splitScore;
+        [FeatureCalculator("EditFilter")]
+        public static double Score_EditFilter(double predScore, double splitScore) => predScore + splitScore;
 
         [FeatureCalculator("FTrue")]
         public static double Score_FTrue() => 1.1;
