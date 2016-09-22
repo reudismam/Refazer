@@ -32,7 +32,7 @@ IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
 Pattern token := Concrete(tree) | Abstract(kind);
 
 Node ast:= const | ref;
-Node const := Node(kind, childrenNodes) | ConstNode(tree) | Ref(target, ref);
+Node const := Node(kind, childrenNodes) | ConstNode(tree);
 IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 Node ref := Reference(target, pattern, k);
 
