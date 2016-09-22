@@ -4,10 +4,8 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Witness.Target;
-using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using ProseSample.Substrings;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
