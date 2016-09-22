@@ -94,13 +94,13 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 //iTree = iTree.Children.Single();
                 //return iTree;
-                iTree = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+                iTree = new ITreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
                 return iTree;
             }
 
             if (IsEquals(iTree, oldNode))
             {
-                iTree = new TreeNode<SyntaxNodeOrToken>(null, null);
+                iTree = new ITreeNode<SyntaxNodeOrToken>(null, null);
                 return iTree;
             }
 

@@ -35,7 +35,7 @@ namespace TreeEdit.Spg.Script
                     //if (!M.ContainsKey(x)) continue;
                     int k = FindPos(x, M);
 
-                    var xnode = new TreeNode<T>(x.Value, x.Label);
+                    var xnode = new ITreeNode<T>(x.Value, x.Label);
                     var insert = new Insert<T>(xnode, z, k);
                     z.AddChild(xnode, k - 1);
                     M.Add(xnode, x);
@@ -51,7 +51,7 @@ namespace TreeEdit.Spg.Script
                         var update = new Update<T>(w, x, z, y);
                         int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
                         v.RemoveNode(index);
-                        var xnode = new TreeNode<T>(x.Value, x.Label);
+                        var xnode = new ITreeNode<T>(x.Value, x.Label);
                         v.AddChild(xnode, index);
                         M.Add(xnode, x);
                         M.Remove(w);
@@ -112,8 +112,8 @@ namespace TreeEdit.Spg.Script
                 var v = editScript[i];
                 if (v is Insert<T>)
                 {
-                    var xnode = new TreeNode<T>(v.T1Node.Value, v.T1Node.Label);
-                    var znode = new TreeNode<T>(v.Parent.Value, v.Parent.Label);
+                    var xnode = new ITreeNode<T>(v.T1Node.Value, v.T1Node.Label);
+                    var znode = new ITreeNode<T>(v.Parent.Value, v.Parent.Label);
 
                     var insert = new Insert<T>(xnode, znode, v.K);
                     editScript[i] = insert;

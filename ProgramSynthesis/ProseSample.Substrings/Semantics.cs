@@ -175,7 +175,7 @@ namespace ProseSample.Substrings
             var node = ReconstructTree(current);
             Console.WriteLine(node.ToString());
             var itree = ConverterHelper.ConvertCSharpToTreeNode(node);
-            return itree != null ? new Node(itree) : new Node(new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None)));
+            return itree != null ? new Node(itree) : new Node(new ITreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None)));
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace ProseSample.Substrings
         {
             var childrenList = (List<Node>) childrenNodes;
             if (!childrenList.Any()) return null;
-            ITreeNode<SyntaxNodeOrToken> parent = new TreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
+            ITreeNode<SyntaxNodeOrToken> parent = new ITreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
             SyntaxNodeOrToken nodevalue = null;
             for (int i = 0; i < childrenList.Count(); i++)
             {
@@ -220,8 +220,8 @@ namespace ProseSample.Substrings
         /// <returns>A new constant node.</returns>
         public static Node ConstNode(SyntaxNodeOrToken cst)
         {
-            var parent = new TreeNode<SyntaxNodeOrToken>(cst.Parent, new TLabel(cst.Parent.Kind()));
-            var itreeNode = new TreeNode<SyntaxNodeOrToken>(cst, new TLabel(cst.Kind()));
+            var parent = new ITreeNode<SyntaxNodeOrToken>(cst.Parent, new TLabel(cst.Parent.Kind()));
+            var itreeNode = new ITreeNode<SyntaxNodeOrToken>(cst, new TLabel(cst.Kind()));
             itreeNode.Parent = parent;
             var node = new Node(itreeNode);
             return node;
@@ -455,7 +455,7 @@ namespace ProseSample.Substrings
             var regions = new List<Node>();
             for (int j = 0; j < list.First().Count; j++)
             {
-                ITreeNode<SyntaxNodeOrToken> iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                ITreeNode<SyntaxNodeOrToken> iTree = new ITreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
                 for (int i = 0; i < list.Count; i++)
                 {
                     var child = list[i][j];
@@ -465,7 +465,7 @@ namespace ProseSample.Substrings
 
                 var beforeFlorest = iTree.Children.Select(o => o.Value).ToList();
                 var emptyStatement = SyntaxFactory.EmptyStatement();
-                var newtree = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement));
+                var newtree = new ITreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement));
                 newtree.AddChild(iTree.Children.First(), 0);
                 var newNode = new Node(newtree);
                 //BeforeAfterMapping[newNode] = beforeFlorest;

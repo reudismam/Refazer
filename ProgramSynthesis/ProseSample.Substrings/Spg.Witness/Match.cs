@@ -299,8 +299,8 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             var emptyKind = SyntaxKind.EmptyStatement;
             var token = t1.Value.Kind == emptyKind && t2.Value.Kind == emptyKind ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
-            var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
-            Pattern pattern = (t1.Value.Kind != t2.Value.Kind) ? new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))) : new Pattern(itreeNode); //EmptyToken pattern.
+            var itreeNode = new ITreeNode<Token>(token, new TLabel(token.Kind));
+            Pattern pattern = (t1.Value.Kind != t2.Value.Kind) ? new Pattern(new ITreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))) : new Pattern(itreeNode); //EmptyToken pattern.
             if (!t1.Children.Any() || !t2.Children.Any())
             {
                 if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)
@@ -310,7 +310,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(v1, v2))
                     {
                         var dtoken = new DynToken(t1.Value.Kind, t1.Value.Value);
-                        var ditreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
+                        var ditreeNode = new ITreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
                         return new Pattern(ditreeNode);
                     }
                 }

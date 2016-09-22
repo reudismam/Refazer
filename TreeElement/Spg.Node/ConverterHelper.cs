@@ -21,7 +21,7 @@ namespace TreeElement.Spg.Node
             var list = GetChildren(st); //st.AsNode().ChildNodes();
             if (!list.Any())
             {
-                var treeNode = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
+                var treeNode = new ITreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
                 treeNode.Start = st.SpanStart;
                 return treeNode;
             }
@@ -34,7 +34,7 @@ namespace TreeElement.Spg.Node
                 children.Add(node);
             }
 
-            ITreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()), children);
+            ITreeNode<SyntaxNodeOrToken> tree = new ITreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()), children);
             tree.Start = st.SpanStart;
             return tree;
         }
@@ -63,7 +63,7 @@ namespace TreeElement.Spg.Node
             if (!st.Children.Any())
             {
                 var dtoken = new DynToken(st.Value.Kind(), st);
-                var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
+                var dtreeNode = new ITreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
                 return dtreeNode;
             }
             var children = new List<ITreeNode<Token>>();
@@ -72,7 +72,7 @@ namespace TreeElement.Spg.Node
                 var node = ConvertITreeNodeToToken(sot);
                 children.Add(node);
             }
-            var tree = new TreeNode<Token>(token, new TLabel(token.Kind), children);
+            var tree = new ITreeNode<Token>(token, new TLabel(token.Kind), children);
             return tree;
         }
 
@@ -86,7 +86,7 @@ namespace TreeElement.Spg.Node
             var list = st.Children;
             if (!list.Any())
             {
-                return new TreeNode<T>(st.Value, st.Label);
+                return new ITreeNode<T>(st.Value, st.Label);
             }
 
             List<ITreeNode<T>> children = new List<ITreeNode<T>>();
@@ -96,7 +96,7 @@ namespace TreeElement.Spg.Node
                 children.Add(node);
             }
 
-            ITreeNode<T> tree = new TreeNode<T>(st.Value, st.Label, children);
+            ITreeNode<T> tree = new ITreeNode<T>(st.Value, st.Label, children);
             return tree;
         }
 
@@ -105,7 +105,7 @@ namespace TreeElement.Spg.Node
             var list = st.Children;
             if (!list.Any() || dist[st] >= height)
             {
-                return new TreeNode<T>(st.Value, st.Label);
+                return new ITreeNode<T>(st.Value, st.Label);
             }
 
             List<ITreeNode<T>> children = new List<ITreeNode<T>>();
@@ -115,7 +115,7 @@ namespace TreeElement.Spg.Node
                 children.Add(node);
             }
 
-            ITreeNode<T> tree = new TreeNode<T>(st.Value, st.Label, children);
+            ITreeNode<T> tree = new ITreeNode<T>(st.Value, st.Label, children);
             return tree;
         }
 

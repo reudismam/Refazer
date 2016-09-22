@@ -7,41 +7,13 @@ namespace TreeElement.Spg.Node
     /// TreeNode class
     /// </summary>
     /// <typeparam name="T">Node type</typeparam>
-    public class TreeNode<T> : ITreeNode<T>
-    {
+    public class ITreeNode<T>
+    { 
         /// <summary>
-        /// Children nodes
+        /// Gets the children.
         /// </summary>
-        private List<ITreeNode<T>> _children;
-
-        /// <summary>
-        /// Initializes a new instance of the class.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="label">Label</param>
-        /// <param name="children">The children.</param>
-        public TreeNode(T value, TLabel label, List<ITreeNode<T>> children)
-        {
-            Value = value;
-            Label = label;
-            _children = children;
-            foreach (var child in _children)
-            {
-                child.Parent = this;
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the class
-        /// </summary>
-        /// <param name="value">value</param>
-        /// <param name="label">Label</param>
-        public TreeNode(T value, TLabel label)
-        {
-            Value = value;
-            Label = label;
-            _children = new List<ITreeNode<T>>();
-        }
+        /// <value>The children.</value>
+        public List<ITreeNode<T>> Children { get; set; }
 
         public ITreeNode<T> Parent { get; set; }
 
@@ -57,21 +29,51 @@ namespace TreeElement.Spg.Node
 
         public int Start { get; set; }
 
-        /// <summary>
-        /// Children get and set method
-        /// </summary>
-        List<ITreeNode<T>> ITreeNode<T>.Children
-        {
-            get
-            {
-                return _children;
-            }
 
-            set
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="label">Label</param>
+        /// <param name="children">The children.</param>
+        public ITreeNode(T value, TLabel label, List<ITreeNode<T>> children)
+        {
+            Value = value;
+            Label = label;
+            Children = children;
+            foreach (var child in Children)
             {
-                _children = value;
+                child.Parent = this;
             }
         }
+
+        /// <summary>
+        /// Initializes a new instance of the class
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <param name="label">Label</param>
+        public ITreeNode(T value, TLabel label)
+        {
+            Value = value;
+            Label = label;
+            Children = new List<ITreeNode<T>>();
+        }
+
+        ///// <summary>
+        ///// Children get and set method
+        ///// </summary>
+        //List<ITreeNode<T>> ITreeNode<T>.Children
+        //{
+        //    get
+        //    {
+        //        return _children;
+        //    }
+
+        //    set
+        //    {
+        //        _children = value;
+        //    }
+        //}
 
         ///// <summary>
         ///// Get descendants nodes
@@ -118,7 +120,7 @@ namespace TreeElement.Spg.Node
         public void AddChild(ITreeNode<T> child, int k)
         {
             child.Parent = this;
-            _children.Insert(k, child);
+            Children.Insert(k, child);
         }
 
         /// <summary>
@@ -127,7 +129,7 @@ namespace TreeElement.Spg.Node
         /// <param name="k">position</param>
         public void RemoveNode(int k)
         {
-            _children.RemoveAt(k);
+            Children.RemoveAt(k);
         }
 
         public bool IsLabel(TLabel label)
@@ -158,11 +160,11 @@ namespace TreeElement.Spg.Node
         /// <returns>True if objects are equals</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is TreeNode<T>))
+            if (!(obj is ITreeNode<T>))
             {
                 return false;
             }
-            TreeNode<T> compare = (TreeNode<T>)obj;
+            ITreeNode<T> compare = (ITreeNode<T>)obj;
             return /*IsEqual(this, compare);*/ Value.Equals(compare.Value);
         }
 
