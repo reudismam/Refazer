@@ -531,7 +531,7 @@ namespace ProseSample.Substrings
             return AST.Ref(rule, parameter, spec);
         }
 
-        [WitnessFunction("NodeMatch", 1)]
+        [WitnessFunction("Match", 1)]
         public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();

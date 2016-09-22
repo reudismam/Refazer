@@ -309,7 +309,7 @@ namespace ProseSample.Substrings
             return true;
         }
 
-        public static bool NodeMatch(Node sx, Pattern template)
+        public static bool Match(Node sx, Pattern template)
         {
             //if (!sx.Value.Value.IsKind(template.Tree.Value.Kind)) return false
             if (template is PatternP)

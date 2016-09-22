@@ -21,7 +21,7 @@ feature double Score = RankingScore;
 Patch rule := SE(editList) | EList(editList, rule);
 IEnumerable<Node> editList := EditMap(operation, locations) = Map(\target: Node => operation, locations);
 IEnumerable<Node> locations := EditFilter(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
-bool nodematch := NodeMatch(x, pattern);
+bool nodematch := Match(x, pattern);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
 Node operation := Insert(target, ast, k) | InsertBefore(target, r, ast) |  Update(target, ast) | Delete(target, r);
