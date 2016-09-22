@@ -11,11 +11,9 @@ namespace ProseSample.Substrings
 
         public Node RightNode { get; set; }
 
-        public Node(ITreeNode<SyntaxNodeOrToken> value/*, ITreeNode<SyntaxNodeOrToken> leftNode = null, ITreeNode<SyntaxNodeOrToken> rightNode = null*/)
+        public Node(ITreeNode<SyntaxNodeOrToken> value)
         {
             Value = value;
-            //LeftNode = leftNode;
-            //RightNode = rightNode;
         }
 
         public override string ToString()
