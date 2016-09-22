@@ -18,7 +18,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var syntaxKinds = new List<object>();
-                foreach (List<ITreeNode<SyntaxNodeOrToken>> mt in spec.DisjunctiveExamples[input])
+                foreach (List<TreeNode<SyntaxNodeOrToken>> mt in spec.DisjunctiveExamples[input])
                 {
                     syntaxKinds.Add(mt.First().Value.Kind());
                 }
@@ -35,11 +35,11 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var matches = new List<object>();
 
-                foreach (List<ITreeNode<SyntaxNodeOrToken>> matchResultList in spec.DisjunctiveExamples[input])
+                foreach (List<TreeNode<SyntaxNodeOrToken>> matchResultList in spec.DisjunctiveExamples[input])
                 {
                     var firstExample = matchResultList.First();
 
-                    var children = firstExample.Children.Select(v => new List<ITreeNode<SyntaxNodeOrToken>>()).ToList();
+                    var children = firstExample.Children.Select(v => new List<TreeNode<SyntaxNodeOrToken>>()).ToList();
 
                     foreach (var matchResult in matchResultList)
                     {
@@ -69,7 +69,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (var input in spec.ProvidedInputs)
             {
                 var literalExamples = new List<object>();
-                foreach (List<ITreeNode<SyntaxNodeOrToken>> treeNodes in spec.DisjunctiveExamples[input])
+                foreach (List<TreeNode<SyntaxNodeOrToken>> treeNodes in spec.DisjunctiveExamples[input])
                 {
                     var tree = treeNodes.First();
 
@@ -92,7 +92,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (var input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-                foreach (List<ITreeNode<SyntaxNodeOrToken>> treeNodes in spec.DisjunctiveExamples[input])
+                foreach (List<TreeNode<SyntaxNodeOrToken>> treeNodes in spec.DisjunctiveExamples[input])
                 {
                     var first = treeNodes.First().Value;
                     var kind = first.Kind();

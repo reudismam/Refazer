@@ -1,17 +1,20 @@
 ﻿using Microsoft.CodeAnalysis;
-using ProseSample.Substrings;
 
 namespace ProseSample.Substrings
 {
     public class Node
     {
-        public ITreeNode<SyntaxNodeOrToken> Value { get; set; }
+        public TreeNode<SyntaxNodeOrToken> Value { get; set; }
+
+        public Node Parent { get; set; }
+
+        public Node Children { get; set; }
 
         public Node LeftNode { get; set; }
 
         public Node RightNode { get; set; }
 
-        public Node(ITreeNode<SyntaxNodeOrToken> value)
+        public Node(TreeNode<SyntaxNodeOrToken> value)
         {
             Value = value;
         }

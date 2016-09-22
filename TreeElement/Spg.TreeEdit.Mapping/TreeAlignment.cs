@@ -6,9 +6,9 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 {
     class TreeAlignment<T>
     {
-        Dictionary<ITreeNode<T>, string> _dict;
+        Dictionary<TreeNode<T>, string> _dict;
 
-        private void KnuthAssignCanonicalName(ITreeNode<T> root)
+        private void KnuthAssignCanonicalName(TreeNode<T> root)
         {
             if (root == null) return;
 
@@ -44,9 +44,9 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             _dict[root] = label;
         }
 
-        public Dictionary<ITreeNode<T>, string> Align(ITreeNode<T> t)
+        public Dictionary<TreeNode<T>, string> Align(TreeNode<T> t)
         {
-            _dict = new Dictionary<ITreeNode<T>, string>();
+            _dict = new Dictionary<TreeNode<T>, string>();
             KnuthAssignCanonicalName(t);
             return _dict;
         }

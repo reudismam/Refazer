@@ -44,7 +44,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var matches = new List<Node>();
                 foreach (var v in edits)
                 {
-                    ITreeNode<SyntaxNodeOrToken> target;
+                    TreeNode<SyntaxNodeOrToken> target;
                     if (v.EditOperation is Insert<SyntaxNodeOrToken> || v.EditOperation is Move<SyntaxNodeOrToken>)
                     {
                         //matches.Add(new Node(v.EditOperation.Parent));

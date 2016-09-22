@@ -5,20 +5,20 @@ namespace TreeElement
 {
     public class TreeTraversal<T>
     {
-        public List<ITreeNode<T>> List;
+        public List<TreeNode<T>> List;
 
-        public ITreeNode<T> Root;
+        public TreeNode<T> Root;
 
-        public List<ITreeNode<T>> PostOrderTraversal(ITreeNode<T> t)
+        public List<TreeNode<T>> PostOrderTraversal(TreeNode<T> t)
         {
-            List = new List<ITreeNode<T>>();
+            List = new List<TreeNode<T>>();
 
             PostOrder(t);
 
             return List;
         }
 
-        private void PostOrder(ITreeNode<T> t)
+        private void PostOrder(TreeNode<T> t)
         {
 
             foreach (var ch in t.Children)

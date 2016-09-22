@@ -148,7 +148,7 @@ namespace LongestCommonSubsequence
             return p.Equals(q);
         }
 
-        private static double CalcSimilarity(ITreeNode<SyntaxNodeOrToken> a, ITreeNode<SyntaxNodeOrToken> b)
+        private static double CalcSimilarity(TreeNode<SyntaxNodeOrToken> a, TreeNode<SyntaxNodeOrToken> b)
         {
             if (a.Value.AsNode().DescendantNodesAndSelf().Count() < 20 &&
                 b.Value.AsNode().DescendantNodesAndSelf().Count() < 20)

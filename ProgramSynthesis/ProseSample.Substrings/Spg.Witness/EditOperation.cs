@@ -235,7 +235,7 @@ namespace ProseSample.Substrings.Spg.Witness
         //    return new ExampleSpec(kExamples);
         //}
 
-        private static ITreeNode<SyntaxNodeOrToken> GetAfterNode(ITreeNode<SyntaxNodeOrToken> currentTree, ITreeNode<SyntaxNodeOrToken> t1Node)
+        private static TreeNode<SyntaxNodeOrToken> GetAfterNode(TreeNode<SyntaxNodeOrToken> currentTree, TreeNode<SyntaxNodeOrToken> t1Node)
         {
             var node = TreeUpdate.FindNode(currentTree, t1Node.Value);
             if (node == null) return null;
@@ -268,7 +268,7 @@ namespace ProseSample.Substrings.Spg.Witness
         //    return new ExampleSpec(kExamples);
         //}
 
-        public static Node GetNode(ITreeNode<SyntaxNodeOrToken> searchedNode)
+        public static Node GetNode(TreeNode<SyntaxNodeOrToken> searchedNode)
         {
             var currentTree = WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
@@ -283,7 +283,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return new Node(targetNodeHeight);
         }
 
-        public static Node GetNode(ITreeNode<SyntaxNodeOrToken> currentTree, ITreeNode<SyntaxNodeOrToken> searchedNode)
+        public static Node GetNode(TreeNode<SyntaxNodeOrToken> currentTree, TreeNode<SyntaxNodeOrToken> searchedNode)
         {
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
             var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 3);

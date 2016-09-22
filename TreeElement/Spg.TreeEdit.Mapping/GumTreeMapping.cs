@@ -20,10 +20,10 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <param name="t1">First rooted tree.</param>
         /// <param name="t2">Second rooted tree.</param>
         /// <returns>Mapping from the nodes from t1 and t2.</returns>
-        public Dictionary<ITreeNode<T>, ITreeNode<T>> TopDown(ITreeNode<T> t1, ITreeNode<T> t2)
+        public Dictionary<TreeNode<T>, TreeNode<T>> TopDown(TreeNode<T> t1, TreeNode<T> t2)
         {
-            var M = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
-            var A = new List<Tuple<ITreeNode<T>, ITreeNode<T>>>();
+            var M = new Dictionary<TreeNode<T>, TreeNode<T>>();
+            var A = new List<Tuple<TreeNode<T>, TreeNode<T>>>();
 
             var l1 = new PriorityQueue<T>();
             var l2 = new PriorityQueue<T>();
@@ -53,17 +53,17 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 }
                 else
                 {
-                    List<Tuple<int, ITreeNode<T>>> h1 = l1.Pop();
-                    List<Tuple<int, ITreeNode<T>>> h2 = l2.Pop();
+                    List<Tuple<int, TreeNode<T>>> h1 = l1.Pop();
+                    List<Tuple<int, TreeNode<T>>> h2 = l2.Pop();
 
-                    var dict1 = new Dictionary<ITreeNode<T>, List<ITreeNode<T>>>();
-                    var dict2 = new Dictionary<ITreeNode<T>, List<ITreeNode<T>>>();
+                    var dict1 = new Dictionary<TreeNode<T>, List<TreeNode<T>>>();
+                    var dict2 = new Dictionary<TreeNode<T>, List<TreeNode<T>>>();
                     foreach (var item1 in h1)
                     {
-                        if (!dict1.ContainsKey(item1.Item2)) dict1.Add(item1.Item2, new List<ITreeNode<T>>());
+                        if (!dict1.ContainsKey(item1.Item2)) dict1.Add(item1.Item2, new List<TreeNode<T>>());
                         foreach (var item2 in h2)
                         {
-                            if (!dict2.ContainsKey(item2.Item2)) dict2.Add(item2.Item2, new List<ITreeNode<T>>());
+                            if (!dict2.ContainsKey(item2.Item2)) dict2.Add(item2.Item2, new List<TreeNode<T>>());
 
                             if (IsomorphicManager<T>.IsIsomorphic(item1.Item2, item2.Item2))
                             {
@@ -150,7 +150,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <param name="t2">Second tree</param>
         /// <param name="M">Previous mapping</param>
         /// <returns></returns>
-        public Dictionary<ITreeNode<T>, ITreeNode<T>> BottomUp(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        public Dictionary<TreeNode<T>, TreeNode<T>> BottomUp(TreeNode<T> t1, TreeNode<T> t2, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             var traversal = new TreeTraversal<T>();
             var t1Nodes = traversal.PostOrderTraversal(t1);
@@ -158,7 +158,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             {
                 if (!M.ContainsKey(t1Node) && HasMatchedChildren(t1Node, M))
                 {
-                    ITreeNode<T> t2Node = Candidate(t1Node, t2, M);
+                    TreeNode<T> t2Node = Candidate(t1Node, t2, M);
                     double dice = Dice(t1Node, t2Node, M);
 
                     if (t2Node != null && dice > 0.25)
@@ -188,7 +188,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             return M;
         }
 
-        private static bool SameLabelOrEquivalent(ITreeNode<T> a, ITreeNode<T> b)
+        private static bool SameLabelOrEquivalent(TreeNode<T> a, TreeNode<T> b)
         {
             return a.IsLabel(b.Label) ||
                    (a.IsLabel(new TLabel(SyntaxKind.MethodDeclaration)) && b.IsLabel(new TLabel(SyntaxKind.PropertyDeclaration))) ||
@@ -200,7 +200,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// </summary>
         /// <param name="t">Tree</param>
         /// <param name="M">Mapping</param>
-        private void RemoveFromM(ITreeNode<T> t, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        private void RemoveFromM(TreeNode<T> t, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             var traversal = new TreeTraversal<T>();
             var elements = traversal.PostOrderTraversal(t);
@@ -217,12 +217,12 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         ///// <param name="t1">T1 tree</param>
         ///// <param name="t2">T2 tree</param>
         ///// <returns></returns>
-        //private Dictionary<ITreeNode<T>, ITreeNode<T>> Opt(ITreeNode<T> t1, ITreeNode<T> t2)
+        //private Dictionary<TreeNode<T>, TreeNode<T>> Opt(TreeNode<T> t1, TreeNode<T> t2)
         //{
         //    var zss = new CSharpZss<T>(t1, t2);
         //    var result = zss.Compute();
         //    var script = result.Item2;
-        //    var dict = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
+        //    var dict = new Dictionary<TreeNode<T>, TreeNode<T>>();
 
         //    foreach (var editOperation in script.Where(editOperation => editOperation.Item1 != null && editOperation.Item2 != null))
         //    {
@@ -249,7 +249,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <param name="t1">T1 tree</param>
         /// <param name="t2">T2 tree</param>
         /// <returns></returns>
-        private Dictionary<ITreeNode<T>, ITreeNode<T>> Opt(ITreeNode<T> t1, ITreeNode<T> t2)
+        private Dictionary<TreeNode<T>, TreeNode<T>> Opt(TreeNode<T> t1, TreeNode<T> t2)
         {
             var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
@@ -270,8 +270,8 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             var t2List = t2Traversal.PostOrderTraversal(t2);
 
 
-            var dic1 = new Dictionary<int, ITreeNode<T>>();
-            var dic2 = new Dictionary<int, ITreeNode<T>>();
+            var dic1 = new Dictionary<int, TreeNode<T>>();
+            var dic2 = new Dictionary<int, TreeNode<T>>();
 
             for (int i = 0; i < t1List.Count; i++)
             {
@@ -283,7 +283,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 dic2.Add(i + 1, t2List[i]);
             }
 
-            var dictionary = new Dictionary<ITreeNode<T>, ITreeNode<T>>();
+            var dictionary = new Dictionary<TreeNode<T>, TreeNode<T>>();
 
             StringReader strReader = new StringReader(output);
             strReader.ReadLine(); //discard files line
@@ -321,19 +321,19 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <param name="t">Tree t to be analyzed</param>
         /// <param name="M">Computed mapping</param>
         /// <returns>Tree t2 with the disired characteristic.</returns>
-        private static bool HasMatchedChildren(ITreeNode<T> t, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        private static bool HasMatchedChildren(TreeNode<T> t, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             return t.DescendantNodes().Any(M.ContainsKey);
         }
 
-        private ITreeNode<T> Candidate(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        private TreeNode<T> Candidate(TreeNode<T> t1, TreeNode<T> t2, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             var list = from i in t2.DescendantNodesAndSelf()
                        where SameLabelOrEquivalent(i, t1)
                        select i;
 
             double max = -1;
-            ITreeNode<T> smax = null;
+            TreeNode<T> smax = null;
             foreach (var i in list)
             {
                 double dice = Dice(t1, i, M);
@@ -355,7 +355,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <param name="t2">Second tree</param>
         /// <param name="M">Mapping</param>
         /// <returns></returns>
-        private static double Dice(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        private static double Dice(TreeNode<T> t1, TreeNode<T> t2, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             if (t2 == null) return 0.0;
 
@@ -383,7 +383,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         /// <param name="t1">First tree.</param>
         /// <param name="t2">Second tree</param>
         /// <returns>Mapping between two trees.</returns>
-        public Dictionary<ITreeNode<T>, ITreeNode<T>> Mapping(ITreeNode<T> t1, ITreeNode<T> t2)
+        public Dictionary<TreeNode<T>, TreeNode<T>> Mapping(TreeNode<T> t1, TreeNode<T> t2)
         {
             //return Opt(t1, t2);
             var M = TopDown(t1, t2);

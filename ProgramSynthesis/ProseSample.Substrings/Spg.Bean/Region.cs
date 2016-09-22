@@ -5,9 +5,9 @@ namespace ProseSample.Substrings
 {
     public class Region
     {
-        public ITreeNode<SyntaxNodeOrToken> Tree { get; set; }
+        public TreeNode<SyntaxNodeOrToken> Tree { get; set; }
 
-        public Region(ITreeNode<SyntaxNodeOrToken> tree)
+        public Region(TreeNode<SyntaxNodeOrToken> tree)
         {
             Tree = tree;
         }

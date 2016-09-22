@@ -6,7 +6,7 @@ namespace ProseSample.Substrings.Spg.Witness.Target
 {
     public class T1TargetLearner: LearnTargetTemplate
     {
-        protected override ITreeNode<SyntaxNodeOrToken> Target(Edit<SyntaxNodeOrToken> edit)
+        protected override TreeNode<SyntaxNodeOrToken> Target(Edit<SyntaxNodeOrToken> edit)
         {
             return edit.EditOperation.T1Node;
         }

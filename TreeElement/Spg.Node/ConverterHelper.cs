@@ -14,27 +14,27 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="st">Syntax tree root</param>
         /// <returns>TreeNode</returns>
-        public static ITreeNode<SyntaxNodeOrToken> ConvertCSharpToTreeNode(SyntaxNodeOrToken st)
+        public static TreeNode<SyntaxNodeOrToken> ConvertCSharpToTreeNode(SyntaxNodeOrToken st)
         {
             if (!Valid(st)) return null;
 
             var list = GetChildren(st); //st.AsNode().ChildNodes();
             if (!list.Any())
             {
-                var treeNode = new ITreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
+                var treeNode = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
                 treeNode.Start = st.SpanStart;
                 return treeNode;
             }
 
-            List<ITreeNode<SyntaxNodeOrToken>> children = new List<ITreeNode<SyntaxNodeOrToken>>();
+            List<TreeNode<SyntaxNodeOrToken>> children = new List<TreeNode<SyntaxNodeOrToken>>();
             foreach (SyntaxNodeOrToken sot in list)
             {
-                ITreeNode<SyntaxNodeOrToken> node = ConvertCSharpToTreeNode(sot);
+                TreeNode<SyntaxNodeOrToken> node = ConvertCSharpToTreeNode(sot);
                 node.Start = sot.SpanStart;
                 children.Add(node);
             }
 
-            ITreeNode<SyntaxNodeOrToken> tree = new ITreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()), children);
+            TreeNode<SyntaxNodeOrToken> tree = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()), children);
             tree.Start = st.SpanStart;
             return tree;
         }
@@ -57,65 +57,65 @@ namespace ProseSample.Substrings
             return list;
         }
 
-        public static ITreeNode<Token> ConvertITreeNodeToToken(ITreeNode<SyntaxNodeOrToken> st)
+        public static TreeNode<Token> ConvertITreeNodeToToken(TreeNode<SyntaxNodeOrToken> st)
         {
             var token = new Token(st.Value.Kind(), st);
             if (!st.Children.Any())
             {
                 var dtoken = new DynToken(st.Value.Kind(), st);
-                var dtreeNode = new ITreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
+                var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
                 return dtreeNode;
             }
-            var children = new List<ITreeNode<Token>>();
+            var children = new List<TreeNode<Token>>();
             foreach (var sot in st.Children)
             {
                 var node = ConvertITreeNodeToToken(sot);
                 children.Add(node);
             }
-            var tree = new ITreeNode<Token>(token, new TLabel(token.Kind), children);
+            var tree = new TreeNode<Token>(token, new TLabel(token.Kind), children);
             return tree;
         }
 
-        public static SyntaxNodeOrToken ConvertTreeNodeToCSsharp(ITreeNode<SyntaxNodeOrToken> treeNode)
+        public static SyntaxNodeOrToken ConvertTreeNodeToCSsharp(TreeNode<SyntaxNodeOrToken> treeNode)
         {
             return null;
         }
 
-        public static ITreeNode<T> MakeACopy<T>(ITreeNode<T> st)
+        public static TreeNode<T> MakeACopy<T>(TreeNode<T> st)
         {
             var list = st.Children;
             if (!list.Any())
             {
-                return new ITreeNode<T>(st.Value, st.Label);
+                return new TreeNode<T>(st.Value, st.Label);
             }
 
-            List<ITreeNode<T>> children = new List<ITreeNode<T>>();
-            foreach (ITreeNode<T> sot in st.Children)
+            List<TreeNode<T>> children = new List<TreeNode<T>>();
+            foreach (TreeNode<T> sot in st.Children)
             {
-                ITreeNode<T> node = MakeACopy(sot);
+                TreeNode<T> node = MakeACopy(sot);
                 children.Add(node);
             }
 
-            ITreeNode<T> tree = new ITreeNode<T>(st.Value, st.Label, children);
+            TreeNode<T> tree = new TreeNode<T>(st.Value, st.Label, children);
             return tree;
         }
 
-        public static ITreeNode<T> TreeAtHeight<T>(ITreeNode<T> st, Dictionary<ITreeNode<T>, int> dist, int height)
+        public static TreeNode<T> TreeAtHeight<T>(TreeNode<T> st, Dictionary<TreeNode<T>, int> dist, int height)
         {
             var list = st.Children;
             if (!list.Any() || dist[st] >= height)
             {
-                return new ITreeNode<T>(st.Value, st.Label);
+                return new TreeNode<T>(st.Value, st.Label);
             }
 
-            List<ITreeNode<T>> children = new List<ITreeNode<T>>();
-            foreach (ITreeNode<T> sot in st.Children)
+            List<TreeNode<T>> children = new List<TreeNode<T>>();
+            foreach (TreeNode<T> sot in st.Children)
             {
-                ITreeNode<T> node = TreeAtHeight(sot, dist, height);
+                TreeNode<T> node = TreeAtHeight(sot, dist, height);
                 children.Add(node);
             }
 
-            ITreeNode<T> tree = new ITreeNode<T>(st.Value, st.Label, children);
+            TreeNode<T> tree = new TreeNode<T>(st.Value, st.Label, children);
             return tree;
         }
 
@@ -124,7 +124,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="st">Syntax tree root</param>
         /// <returns>TreeNode</returns>
-        public static string ConvertTreeNodeToString<T>(ITreeNode<T> st)
+        public static string ConvertTreeNodeToString<T>(TreeNode<T> st)
         {           
             var list = st.Children;
             if (!list.Any())

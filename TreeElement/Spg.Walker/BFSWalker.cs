@@ -11,16 +11,16 @@ namespace TreeElement.Spg.Walker
         /// </summary>
         /// <param name="u">Node to be traversed</param>
         /// <returns></returns>
-        public static List<ITreeNode<T>> BreadFirstSearch(ITreeNode<T> u)
+        public static List<TreeNode<T>> BreadFirstSearch(TreeNode<T> u)
         {
-            var result = new List<ITreeNode<T>>();
-            var dist = new Dictionary<ITreeNode<T>, int> { [u] = 0 };
-            var q = new Queue<ITreeNode<T>>();
+            var result = new List<TreeNode<T>>();
+            var dist = new Dictionary<TreeNode<T>, int> { [u] = 0 };
+            var q = new Queue<TreeNode<T>>();
             q.Enqueue(u);
 
             while (q.Any())
             {
-                ITreeNode<T> v = q.Dequeue();
+                TreeNode<T> v = q.Dequeue();
                 foreach (var c in v.Children)
                 {
                     if (!dist.ContainsKey(c))
@@ -35,16 +35,16 @@ namespace TreeElement.Spg.Walker
             return result;
         }
 
-        public static Dictionary<ITreeNode<T>, int> Dist(ITreeNode<T> u)
+        public static Dictionary<TreeNode<T>, int> Dist(TreeNode<T> u)
         {
-            var result = new List<ITreeNode<T>>();
-            var dist = new Dictionary<ITreeNode<T>, int> { [u] = 0 };
-            var q = new Queue<ITreeNode<T>>();
+            var result = new List<TreeNode<T>>();
+            var dist = new Dictionary<TreeNode<T>, int> { [u] = 0 };
+            var q = new Queue<TreeNode<T>>();
             q.Enqueue(u);
 
             while (q.Any())
             {
-                ITreeNode<T> v = q.Dequeue();
+                TreeNode<T> v = q.Dequeue();
                 foreach (var c in v.Children)
                 {
                     if (!dist.ContainsKey(c))

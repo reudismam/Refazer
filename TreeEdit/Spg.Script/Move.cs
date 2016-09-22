@@ -4,9 +4,9 @@ namespace TreeEdit.Spg.Script
 {
     public class Move<T> : EditOperation<T>
     {
-        private ITreeNode<T> _previousParent;
+        private TreeNode<T> _previousParent;
 
-        public ITreeNode<T> PreviousParent 
+        public TreeNode<T> PreviousParent 
         {
             get{ return _previousParent; }
             set { _previousParent = value; }
@@ -18,7 +18,7 @@ namespace TreeEdit.Spg.Script
         /// <param name="movedNode">Moved node</param>
         /// <param name="parent">Parent where the node will go.</param>
         /// <param name="k">Position of this node in the parent</param>
-        public Move(ITreeNode<T> movedNode, ITreeNode<T> parent, int k) : base(movedNode, parent, k){}
+        public Move(TreeNode<T> movedNode, TreeNode<T> parent, int k) : base(movedNode, parent, k){}
 
         /// <summary>
         /// String represent on this object

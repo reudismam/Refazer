@@ -152,11 +152,11 @@ namespace TreeEdit.Spg.ConnectedComponents
                 return false;
             }
 
-            private ITreeNode<T> GetNodes(T value)
+            private TreeNode<T> GetNodes(T value)
             {
                 SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object)value;
                 var newnode = ConverterHelper.ConvertCSharpToTreeNode(newT2);
-                ITreeNode<T> newT1 = (ITreeNode<T>)(object)newnode;
+                TreeNode<T> newT1 = (TreeNode<T>)(object)newnode;
                 return newT1;
             }
         }

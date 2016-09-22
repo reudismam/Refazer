@@ -6,7 +6,7 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Parent: Context
     {
-        //public override ITreeNode<Token> Target(ITreeNode<Token> sot)
+        //public override TreeNode<Token> Target(TreeNode<Token> sot)
         //{
         //    if (sot.Parent == null)
         //    {

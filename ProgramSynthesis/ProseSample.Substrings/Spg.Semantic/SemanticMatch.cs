@@ -12,7 +12,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             var pchildren = children.Select(child => child.Tree).ToList();
             var token = (kind == SyntaxKind.EmptyStatement) ? new EmptyToken() : new Token(kind, null);
-            var inode = new ITreeNode<Token>(token, null, pchildren);
+            var inode = new TreeNode<Token>(token, null, pchildren);
             var pattern = new Pattern(inode);
             return pattern;
         }    
@@ -26,7 +26,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         {
             var token = new DynToken(tree.Kind(), ConverterHelper.ConvertCSharpToTreeNode(tree));
             var label = new TLabel(tree.Kind());
-            var inode = new ITreeNode<Token>(token, label);
+            var inode = new TreeNode<Token>(token, label);
             var pattern = new Pattern(inode);
             return pattern;
         }
@@ -39,7 +39,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         public static Pattern Variable(SyntaxKind kind)
         {
             var token = (kind == SyntaxKind.EmptyStatement) ? new EmptyToken() : new Token(kind, null);
-            var inode = new ITreeNode<Token>(token, null);
+            var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;
         }
@@ -52,7 +52,7 @@ namespace ProseSample.Substrings.Spg.Semantic
         public static Pattern Leaf(SyntaxKind kind)
         {
             var token = new LeafToken(kind, null);
-            var inode = new ITreeNode<Token>(token, null);
+            var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;
         }

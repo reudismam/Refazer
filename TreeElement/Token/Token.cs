@@ -8,20 +8,20 @@ namespace ProseSample.Substrings
     {
         public SyntaxKind Kind { get; set; }
 
-        public ITreeNode<SyntaxNodeOrToken> Value;
+        public TreeNode<SyntaxNodeOrToken> Value;
 
         /// <summary>
         /// Create a new token
         /// </summary>
         /// <param name="kind">Syntax Kind</param>
         /// <param name="value">Node</param>
-        public Token(SyntaxKind kind, ITreeNode<SyntaxNodeOrToken> value)
+        public Token(SyntaxKind kind, TreeNode<SyntaxNodeOrToken> value)
         {
             Kind = kind;
             Value = value;
         }
 
-        public virtual bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)
+        public virtual bool IsMatch(TreeNode<SyntaxNodeOrToken> node)
         {
             return node.IsLabel(new TLabel(Kind));
         }

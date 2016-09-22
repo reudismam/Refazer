@@ -15,7 +15,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var mats = new List<ITreeNode<Token>>();
+                var mats = new List<TreeNode<Token>>();
                 foreach(Pattern node in spec.DisjunctiveExamples[input])
                 {
                     if (!(node is PatternP)) continue;

@@ -6,10 +6,10 @@ namespace TreeEdit.Spg.ConnectedComponents
 {
     public class TemplateConnectedComponents<T>
     {
-        private Dictionary<ITreeNode<T>, bool> _visited;
-        private List<ITreeNode<T>> _nodes;
+        private Dictionary<TreeNode<T>, bool> _visited;
+        private List<TreeNode<T>> _nodes;
 
-        public void DepthFirstSearch(ITreeNode<T> tree)
+        public void DepthFirstSearch(TreeNode<T> tree)
         {
             _visited[tree] = true;
 
@@ -27,12 +27,12 @@ namespace TreeEdit.Spg.ConnectedComponents
             }
         }
 
-        public List<ITreeNode<T>> ConnectedNodes(List<ITreeNode<T>> nodes)
+        public List<TreeNode<T>> ConnectedNodes(List<TreeNode<T>> nodes)
         {
-            _visited = new Dictionary<ITreeNode<T>, bool>();
+            _visited = new Dictionary<TreeNode<T>, bool>();
             _nodes = nodes;
 
-            var ccs = new List<ITreeNode<T>>();
+            var ccs = new List<TreeNode<T>>();
             foreach (var node in nodes)
             {
                 if (!_visited.ContainsKey(node))
@@ -45,10 +45,10 @@ namespace TreeEdit.Spg.ConnectedComponents
             return ccs.Select(ReconstructTree).ToList();
         }
 
-        //private ITreeNode<T> result = new ITreeNode<T>();
-        public ITreeNode<T> ReconstructTree(ITreeNode<T> node)
+        //private TreeNode<T> result = new TreeNode<T>();
+        public TreeNode<T> ReconstructTree(TreeNode<T> node)
         {
-            var children = new List<ITreeNode<T>>();
+            var children = new List<TreeNode<T>>();
             for (int i = 0; i < node.Children.Count; i++)
             {
                 var child = node.Children[i];
@@ -59,7 +59,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                 }
             }
 
-            node.Children = new List<ITreeNode<T>>();
+            node.Children = new List<TreeNode<T>>();
             for (int i = 0; i < children.Count; i++)
             {
                 var child = children[i];

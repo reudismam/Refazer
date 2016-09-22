@@ -8,13 +8,13 @@ namespace TreeEdit.Spg.Isomorphic
 {
     public class IsomorphicPairs<T>
     {
-        private Dictionary<ITreeNode<T>, string> _dict1;
-        private Dictionary<ITreeNode<T>, string> _dict2;
+        private Dictionary<TreeNode<T>, string> _dict1;
+        private Dictionary<TreeNode<T>, string> _dict2;
 
-        private Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int> _alg;
+        private Dictionary<Tuple<TreeNode<T>, TreeNode<T>>, int> _alg;
 
 
-        private void AllPairOfIsomorphic(ITreeNode<T> t1, ITreeNode<T> t2)
+        private void AllPairOfIsomorphic(TreeNode<T> t1, TreeNode<T> t2)
         {
             if (!t1.Children.Any())
             {
@@ -38,29 +38,13 @@ namespace TreeEdit.Spg.Isomorphic
             _alg.Add(Tuple.Create(t1, t2), -1);
         }
 
-        /// <summary>
-        /// Splits the source node in the elements of type kind.
-        /// </summary>
-        /// <param name="node">Source node</param>
-        /// <param name="label">Syntax kind</param>
-        /// <returns></returns>
-        private static List<ITreeNode<T>> SplitToNodes(ITreeNode<T> node, TLabel label)
-        {
-            var descendantNodes = node.DescendantNodesAndSelf();
-            var kinds = from k in descendantNodes
-                        where k.IsLabel(label)
-                        select k;
-
-            return kinds.ToList();
-        }
-
-        public List<Tuple<ITreeNode<T>, ITreeNode<T>>> Pairs(ITreeNode<T> t1, ITreeNode<T> t2)
+        public List<Tuple<TreeNode<T>, TreeNode<T>>> Pairs(TreeNode<T> t1, TreeNode<T> t2)
         {
             var talg = new TreeAlignment<T>();
             _dict1 = talg.Align(t1);
             _dict2 = talg.Align(t2);
 
-            _alg = new Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int>();
+            _alg = new Dictionary<Tuple<TreeNode<T>, TreeNode<T>>, int>();
 
             AllPairOfIsomorphic(t1, t2);
 

@@ -23,7 +23,7 @@ namespace ProseSample.Substrings
         /// <summary>
         /// Current trees.
         /// </summary>
-        public static Dictionary<object, ITreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<object, ITreeNode<SyntaxNodeOrToken>>();
+        public static Dictionary<object, TreeNode<SyntaxNodeOrToken>> CurrentTrees = new Dictionary<object, TreeNode<SyntaxNodeOrToken>>();
         /// <summary>
         /// TreeUpdate mapping.
         /// </summary>
@@ -92,7 +92,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 0)]
         public static DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<ITreeNode<Token>>.List0(rule, parameter, spec);
+            return GList<TreeNode<Token>>.List0(rule, parameter, spec);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec matchSpec)
         {
-            return GList<ITreeNode<Token>>.List1(rule, parameter, spec);
+            return GList<TreeNode<Token>>.List1(rule, parameter, spec);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("SC", 0)]
         public static DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<ITreeNode<Token>>.Single(rule, parameter, spec);
+            return GList<TreeNode<Token>>.Single(rule, parameter, spec);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("NList", 0)]
         public static DisjunctiveExamplesSpec WitnessNList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<ITreeNode<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
+            return GList<TreeNode<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("NList", 1)]
         public static DisjunctiveExamplesSpec WitnessCList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<ITreeNode<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
+            return GList<TreeNode<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("SN", 0)]
         public static DisjunctiveExamplesSpec WitnessCnChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<ITreeNode<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
+            return GList<TreeNode<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var mats = new List<ITreeNode<Token>>();
+                var mats = new List<TreeNode<Token>>();
                 foreach (Pattern node in spec.DisjunctiveExamples[input])
                 {
                     if (node.GetType().IsSubclassOf(typeof(Pattern))) continue;
@@ -522,7 +522,7 @@ namespace ProseSample.Substrings
         public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
-            var dic = new Dictionary<int, List<ITreeNode<SyntaxNodeOrToken>>>();
+            var dic = new Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 //get parent
@@ -537,7 +537,7 @@ namespace ProseSample.Substrings
 
                     if (!dic.ContainsKey(i))
                     {
-                        dic[i] = new List<ITreeNode<SyntaxNodeOrToken>>();
+                        dic[i] = new List<TreeNode<SyntaxNodeOrToken>>();
                     }
                     dic[i].Add(ConverterHelper.ConvertCSharpToTreeNode(parent));
                     parent = parent.Parent;
@@ -612,7 +612,7 @@ namespace ProseSample.Substrings
         //public static DisjunctiveExamplesSpec NodeMatchBasic(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         //{
         //    var eExamples = new Dictionary<State, IEnumerable<object>>();
-        //    var patterns = new List<ITreeNode<Token>>();
+        //    var patterns = new List<TreeNode<Token>>();
         //    foreach (State input in spec.ProvidedInputs)
         //    {
         //        var inpTree = (Node)input[rule.Body[0]];
@@ -628,7 +628,7 @@ namespace ProseSample.Substrings
         //        //{
         //        //    var copy = ConverterHelper.MakeACopy(commonPattern.Tree);
         //        //    var empty = new EmptyToken();
-        //        //    ITreeNode<Token> itreeNodeToken = new TreeNode<Token>(empty, new TLabel(SyntaxKind.EmptyStatement));
+        //        //    TreeNode<Token> itreeNodeToken = new TreeNode<Token>(empty, new TLabel(SyntaxKind.EmptyStatement));
         //        //    itreeNodeToken.Children = copy.Children;
         //        //    list.Add(new Pattern(itreeNodeToken));
         //        //}
@@ -637,13 +637,13 @@ namespace ProseSample.Substrings
         //    return DisjunctiveExamplesSpec.From(eExamples);
         //}
 
-        private static ITreeNode<Token> BuildPattern(ITreeNode<SyntaxNodeOrToken> tree)
+        private static TreeNode<Token> BuildPattern(TreeNode<SyntaxNodeOrToken> tree)
         {
             var pattern = ConverterHelper.ConvertITreeNodeToToken(tree);
             return pattern;
         }
 
-        public static ITreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
+        public static TreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
         {
             var node = CurrentTrees[n];
             return node;

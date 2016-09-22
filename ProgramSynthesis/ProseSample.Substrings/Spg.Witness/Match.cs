@@ -23,7 +23,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var syntaxKinds = new List<object>();
-                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Value;
                     syntaxKinds.Add(sot.Kind);
@@ -38,8 +38,8 @@ namespace ProseSample.Substrings.Spg.Witness
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<List<ITreeNode<Token>>>();
-                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
+                var matches = new List<List<TreeNode<Token>>>();
+                foreach (TreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
                     if (!node.Children.Any()) continue;
                     var lsot = node.Children;
@@ -54,7 +54,7 @@ namespace ProseSample.Substrings.Spg.Witness
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
-            var patterns = new List<ITreeNode<Token>>();
+            var patterns = new List<TreeNode<Token>>();
             var indexChildList = new Dictionary<State, int>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -116,7 +116,7 @@ namespace ProseSample.Substrings.Spg.Witness
         //public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         //{
         //    var eExamples = new Dictionary<State, IEnumerable<object>>();
-        //    var dic = new Dictionary<int, List<ITreeNode<SyntaxNodeOrToken>>>();
+        //    var dic = new Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>>();
         //    foreach (State input in spec.ProvidedInputs)
         //    {
         //        //get parent
@@ -131,7 +131,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
         //            if (!dic.ContainsKey(i))
         //            {
-        //                dic[i] = new List<ITreeNode<SyntaxNodeOrToken>>();
+        //                dic[i] = new List<TreeNode<SyntaxNodeOrToken>>();
         //            }
         //            dic[i].Add(ConverterHelper.ConvertCSharpToTreeNode(parent));
         //            parent = parent.Parent;
@@ -187,7 +187,7 @@ namespace ProseSample.Substrings.Spg.Witness
         public static DisjunctiveExamplesSpec MatchPatternBasic(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
-            var patterns = new List<ITreeNode<Token>>();
+            var patterns = new List<TreeNode<Token>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var target = (Node)input[rule.Body[0]];
@@ -221,10 +221,10 @@ namespace ProseSample.Substrings.Spg.Witness
         }
 
         //XPath
-        public static string GetPath(ITreeNode<SyntaxNodeOrToken> navigator)
+        public static string GetPath(TreeNode<SyntaxNodeOrToken> navigator)
         {
             string path = "";
-            for (ITreeNode<SyntaxNodeOrToken> node = navigator; node != null; node = node.Parent)
+            for (TreeNode<SyntaxNodeOrToken> node = navigator; node != null; node = node.Parent)
             {
                 string append = "/";
 
@@ -249,7 +249,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return path.ToString();
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> PreviousSibling(ITreeNode<SyntaxNodeOrToken> node)
+        private static TreeNode<SyntaxNodeOrToken> PreviousSibling(TreeNode<SyntaxNodeOrToken> node)
         {
             var parent = node.Parent;
             var parentIndex = parent.Children.FindIndex(o => o.Equals(node));
@@ -258,7 +258,7 @@ namespace ProseSample.Substrings.Spg.Witness
         }
 
 
-        public static List<string> GetXpaths(ITreeNode<SyntaxNodeOrToken> doc, SyntaxNodeOrToken stop)
+        public static List<string> GetXpaths(TreeNode<SyntaxNodeOrToken> doc, SyntaxNodeOrToken stop)
         {
             var xpathList = new List<string>();
             var xpath = "";
@@ -270,13 +270,13 @@ namespace ProseSample.Substrings.Spg.Witness
             return xpathList;
         }
 
-        public static void GetXPaths(ITreeNode<SyntaxNodeOrToken> node, ref List<string> xpathList, string xpath, SyntaxNodeOrToken stop)
+        public static void GetXPaths(TreeNode<SyntaxNodeOrToken> node, ref List<string> xpathList, string xpath, SyntaxNodeOrToken stop)
         {
             xpath += "/" + node.Label;
             if (!xpathList.Contains(xpath))
                 xpathList.Add(xpath);
 
-            foreach (ITreeNode<SyntaxNodeOrToken> child in node.Children)
+            foreach (TreeNode<SyntaxNodeOrToken> child in node.Children)
             {
                 if (child.Value.Equals(stop)) return;
                 GetXPaths(child, ref xpathList, xpath, stop);
@@ -285,7 +285,7 @@ namespace ProseSample.Substrings.Spg.Witness
         //EndXPath
 
 
-        public static Pattern BuildPattern(List<ITreeNode<Token>> patterns, bool leafToken = true)
+        public static Pattern BuildPattern(List<TreeNode<Token>> patterns, bool leafToken = true)
         {
             var pattern = patterns.First();
             for (int i = 1; i < patterns.Count; i++)
@@ -295,12 +295,12 @@ namespace ProseSample.Substrings.Spg.Witness
             return new Pattern(pattern);
         }
 
-        public static Pattern BuildPattern(ITreeNode<Token> t1, ITreeNode<Token> t2, bool considerLeafToken)
+        public static Pattern BuildPattern(TreeNode<Token> t1, TreeNode<Token> t2, bool considerLeafToken)
         {
             var emptyKind = SyntaxKind.EmptyStatement;
             var token = t1.Value.Kind == emptyKind && t2.Value.Kind == emptyKind ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
-            var itreeNode = new ITreeNode<Token>(token, new TLabel(token.Kind));
-            Pattern pattern = (t1.Value.Kind != t2.Value.Kind) ? new Pattern(new ITreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))) : new Pattern(itreeNode); //EmptyToken pattern.
+            var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
+            Pattern pattern = (t1.Value.Kind != t2.Value.Kind) ? new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))) : new Pattern(itreeNode); //EmptyToken pattern.
             if (!t1.Children.Any() || !t2.Children.Any())
             {
                 if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)
@@ -310,7 +310,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(v1, v2))
                     {
                         var dtoken = new DynToken(t1.Value.Kind, t1.Value.Value);
-                        var ditreeNode = new ITreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
+                        var ditreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
                         return new Pattern(ditreeNode);
                     }
                 }
@@ -450,9 +450,9 @@ namespace ProseSample.Substrings.Spg.Witness
             return false;
         }
 
-        private static Tuple<List<ITreeNode<SyntaxNodeOrToken>>, List<ITreeNode<SyntaxNodeOrToken>>> SegmentElementsBeforeAfter(Node target, List<ITreeNode<SyntaxNodeOrToken>> matches)
+        private static Tuple<List<TreeNode<SyntaxNodeOrToken>>, List<TreeNode<SyntaxNodeOrToken>>> SegmentElementsBeforeAfter(Node target, List<TreeNode<SyntaxNodeOrToken>> matches)
         {
-            ITreeNode<SyntaxNodeOrToken> node = null;
+            TreeNode<SyntaxNodeOrToken> node = null;
             if (target.Value.Children.Any())
             {
                 node = target.Value.Children.First();
@@ -461,8 +461,8 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 node = target.Value;
             }
-            var listBefore = new List<ITreeNode<SyntaxNodeOrToken>>();
-            var listAfter = new List<ITreeNode<SyntaxNodeOrToken>>();
+            var listBefore = new List<TreeNode<SyntaxNodeOrToken>>();
+            var listAfter = new List<TreeNode<SyntaxNodeOrToken>>();
             foreach (var match in matches)
             {
                 if (match.Value.SpanStart < node.Value.SpanStart)

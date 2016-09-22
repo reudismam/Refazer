@@ -143,7 +143,7 @@ namespace ProseSample.Substrings.Spg.Witness
         /// </summary>
         /// <param name="connectedComponents">Uncompacted edit operations</param>
         /// <param name="inpTree">Input tree</param>
-        private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, ITreeNode<SyntaxNodeOrToken> inpTree)
+        private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, TreeNode<SyntaxNodeOrToken> inpTree)
         {
             var newEditOperations = new List<Edit<SyntaxNodeOrToken>>();
             foreach (var script in connectedComponents)
@@ -157,7 +157,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return newEditOperations;
         }
 
-        private static Edit<SyntaxNodeOrToken> CompactScriptIntoASingleOperation(ITreeNode<SyntaxNodeOrToken> inpTree, Script script)
+        private static Edit<SyntaxNodeOrToken> CompactScriptIntoASingleOperation(TreeNode<SyntaxNodeOrToken> inpTree, Script script)
         {
             if (script.Edits.Count == 1) return script.Edits.First();
 
@@ -213,7 +213,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return null;
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> ProcessScriptOnNode(Script script, ITreeNode<SyntaxNodeOrToken> parent)
+        private static TreeNode<SyntaxNodeOrToken> ProcessScriptOnNode(Script script, TreeNode<SyntaxNodeOrToken> parent)
         {
             var treeUpdate = new TreeUpdate(parent);
             foreach (var s in script.Edits)
@@ -223,7 +223,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return treeUpdate.CurrentTree;
         }
 
-        private static Edit<SyntaxNodeOrToken> ProcessSequenceOfDeleteOperations(Script script, ITreeNode<SyntaxNodeOrToken> parent)
+        private static Edit<SyntaxNodeOrToken> ProcessSequenceOfDeleteOperations(Script script, TreeNode<SyntaxNodeOrToken> parent)
         {
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
             var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> {edits});
@@ -256,12 +256,12 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <param name="script">Edit script</param>
         /// <param name="inpTree">Input tree</param>
         /// <returns></returns>
-        private static ITreeNode<SyntaxNodeOrToken> GetParent(Script script, ITreeNode<SyntaxNodeOrToken> inpTree)
+        private static TreeNode<SyntaxNodeOrToken> GetParent(Script script, TreeNode<SyntaxNodeOrToken> inpTree)
         {
-            ITreeNode<SyntaxNodeOrToken> root = null;
+            TreeNode<SyntaxNodeOrToken> root = null;
             foreach (var v in script.Edits)
             {
-                ITreeNode<SyntaxNodeOrToken> tocompare = null;
+                TreeNode<SyntaxNodeOrToken> tocompare = null;
                 if (v.EditOperation is Update<SyntaxNodeOrToken> || v.EditOperation is Delete<SyntaxNodeOrToken>)
                 {
                     tocompare = v.EditOperation.T1Node;
@@ -395,7 +395,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return dist;
         }
 
-        private static void ConfigureContext(ITreeNode<SyntaxNodeOrToken> anchor, Edit<SyntaxNodeOrToken> edit)
+        private static void ConfigureContext(TreeNode<SyntaxNodeOrToken> anchor, Edit<SyntaxNodeOrToken> edit)
         {
             var treeUp = new TreeUpdate(anchor);
             ConfigureParentSyntaxTree(edit, anchor);
@@ -406,10 +406,10 @@ namespace ProseSample.Substrings.Spg.Witness
             WitnessFunctions.CurrentTrees[anchor] = anchor;
         }
 
-        public static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> ConfigContextBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> inputTree)
+        public static Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>> ConfigContextBeforeAfterNode(Edit<SyntaxNodeOrToken> edit, TreeNode<SyntaxNodeOrToken> inputTree)
         {
             //Get a reference for the node that was modified on the T1 tree.
-            ITreeNode<SyntaxNodeOrToken> inputNode = null;
+            TreeNode<SyntaxNodeOrToken> inputNode = null;
             //if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
             if (edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>)
             {
@@ -419,8 +419,8 @@ namespace ProseSample.Substrings.Spg.Witness
             var previousTree = new TreeUpdate(inputTree);
             var copy = ConverterHelper.MakeACopy(inputTree);
 
-            Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
-            ITreeNode<SyntaxNodeOrToken> treeNode = null;
+            Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
+            TreeNode<SyntaxNodeOrToken> treeNode = null;
             if (inputNode == null)
             {
                 previousTree.ProcessEditOperation(edit.EditOperation);
@@ -438,7 +438,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return beforeAfterAnchorNode;
         }
 
-        private static Tuple<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>> GetBeforeAfterAnchorNode(ITreeNode<SyntaxNodeOrToken> node)
+        private static Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>> GetBeforeAfterAnchorNode(TreeNode<SyntaxNodeOrToken> node)
         {
             for (int i = 0; i < node.Parent.Children.Count; i++)
             {
@@ -455,10 +455,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                 }
             }
-            return Tuple.Create<ITreeNode<SyntaxNodeOrToken>, ITreeNode<SyntaxNodeOrToken>>(null, null);
+            return Tuple.Create<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>>(null, null);
         }
 
-        private static void ConfigureParentSyntaxTree(Edit<SyntaxNodeOrToken> edit, ITreeNode<SyntaxNodeOrToken> syntaxTree)
+        private static void ConfigureParentSyntaxTree(Edit<SyntaxNodeOrToken> edit, TreeNode<SyntaxNodeOrToken> syntaxTree)
         {
             edit.EditOperation.T1Node.SyntaxTree = syntaxTree;
             if (edit.EditOperation.Parent != null)

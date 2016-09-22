@@ -20,7 +20,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
-                foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (!ConverterHelper.Valid(sot.Value)) return null;
                     if (!sot.Children.Any()) return null;
@@ -39,7 +39,7 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var matches = new List<object>();
 
-                foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (!ConverterHelper.Valid(sot.Value)) return null;
                     var lsot = sot.Children;
@@ -54,10 +54,10 @@ namespace ProseSample.Substrings.Spg.Witness
         public static ExampleSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, object>();
-            var mats = new List<ITreeNode<SyntaxNodeOrToken>>();
+            var mats = new List<TreeNode<SyntaxNodeOrToken>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (sot.Children.Any()) return null;
                     mats.Add(sot);
@@ -79,7 +79,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var target = (Node) input[rule.Body[0]];
                 var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
                 var mats = new List<object>();
-                foreach (ITreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (!ConverterHelper.Valid(sot.Value)) return null;
                     //var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);

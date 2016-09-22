@@ -37,7 +37,7 @@ namespace ProseSample.Substrings
         /// <param name="node">Source node</param>
         /// <param name="kind">Syntax kind</param>
         /// <returns>Elements of kind type</returns>
-        public static List<ITreeNode<SyntaxNodeOrToken>> SplitToNodes(ITreeNode<SyntaxNodeOrToken> node, SyntaxKind kind)
+        public static List<TreeNode<SyntaxNodeOrToken>> SplitToNodes(TreeNode<SyntaxNodeOrToken> node, SyntaxKind kind)
         {
             TLabel label = new TLabel(kind);
             var descendantNodes = node.DescendantNodesAndSelf();
@@ -161,7 +161,7 @@ namespace ProseSample.Substrings
         /// <returns>Transformed node.</returns>
         public static Node Script(Node target, IEnumerable<Node> edits)
         {
-            ITreeNode<SyntaxNodeOrToken> current = edits.Last().Value;
+            TreeNode<SyntaxNodeOrToken> current = edits.Last().Value;
             if (edits.Last().LeftNode != null)
             {
                 var leftnode = ReconstructTree(edits.First().LeftNode.Value);
@@ -175,7 +175,7 @@ namespace ProseSample.Substrings
             var node = ReconstructTree(current);
             Console.WriteLine(node.ToString());
             var itree = ConverterHelper.ConvertCSharpToTreeNode(node);
-            return itree != null ? new Node(itree) : new Node(new ITreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None)));
+            return itree != null ? new Node(itree) : new Node(new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None)));
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace ProseSample.Substrings
         {
             var childrenList = (List<Node>) childrenNodes;
             if (!childrenList.Any()) return null;
-            ITreeNode<SyntaxNodeOrToken> parent = new ITreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
+            TreeNode<SyntaxNodeOrToken> parent = new TreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
             SyntaxNodeOrToken nodevalue = null;
             for (int i = 0; i < childrenList.Count(); i++)
             {
@@ -220,8 +220,8 @@ namespace ProseSample.Substrings
         /// <returns>A new constant node.</returns>
         public static Node ConstNode(SyntaxNodeOrToken cst)
         {
-            var parent = new ITreeNode<SyntaxNodeOrToken>(cst.Parent, new TLabel(cst.Parent.Kind()));
-            var itreeNode = new ITreeNode<SyntaxNodeOrToken>(cst, new TLabel(cst.Kind()));
+            var parent = new TreeNode<SyntaxNodeOrToken>(cst.Parent, new TLabel(cst.Parent.Kind()));
+            var itreeNode = new TreeNode<SyntaxNodeOrToken>(cst, new TLabel(cst.Kind()));
             itreeNode.Parent = parent;
             var node = new Node(itreeNode);
             return node;
@@ -324,7 +324,7 @@ namespace ProseSample.Substrings
             }
         }
 
-        private static ITreeNode<SyntaxNodeOrToken> FindParent(ITreeNode<SyntaxNodeOrToken> value, string s)
+        private static TreeNode<SyntaxNodeOrToken> FindParent(TreeNode<SyntaxNodeOrToken> value, string s)
         {
             var matches = Regex.Matches(s, "[0-9]");
             if (matches.Count == 0) return null;
@@ -338,7 +338,7 @@ namespace ProseSample.Substrings
             return current;
         }
 
-        public static ITreeNode<T> FindChild<T>(ITreeNode<T> parent, string s)
+        public static TreeNode<T> FindChild<T>(TreeNode<T> parent, string s)
         {
             var matches = Regex.Matches(s, "[0-9]");
             if (matches.Count == 0) return null;
@@ -413,7 +413,7 @@ namespace ProseSample.Substrings
             {
                 //var emptyKind = SyntaxKind.EmptyStatement;
                 result.Add(new Node(n));
-                //var parentEmpty = new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(emptyKind), new List<ITreeNode<SyntaxNodeOrToken>> {n}));
+                //var parentEmpty = new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(emptyKind), new List<TreeNode<SyntaxNodeOrToken>> {n}));
                 //result.Add(parentEmpty);
             }
             return result;
@@ -455,7 +455,7 @@ namespace ProseSample.Substrings
             var regions = new List<Node>();
             for (int j = 0; j < list.First().Count; j++)
             {
-                ITreeNode<SyntaxNodeOrToken> iTree = new ITreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
+                TreeNode<SyntaxNodeOrToken> iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
                 for (int i = 0; i < list.Count; i++)
                 {
                     var child = list[i][j];
@@ -465,7 +465,7 @@ namespace ProseSample.Substrings
 
                 var beforeFlorest = iTree.Children.Select(o => o.Value).ToList();
                 var emptyStatement = SyntaxFactory.EmptyStatement();
-                var newtree = new ITreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement));
+                var newtree = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement));
                 newtree.AddChild(iTree.Children.First(), 0);
                 var newNode = new Node(newtree);
                 //BeforeAfterMapping[newNode] = beforeFlorest;
@@ -475,7 +475,7 @@ namespace ProseSample.Substrings
             return regions;
         }
 
-        private static List<List<SyntaxNodeOrToken>> FlorestByKind(Pattern match, ITreeNode<SyntaxNodeOrToken> currentTree)
+        private static List<List<SyntaxNodeOrToken>> FlorestByKind(Pattern match, TreeNode<SyntaxNodeOrToken> currentTree)
         {
             var list = new List<List<SyntaxNodeOrToken>>();
             foreach (var child in match.Tree.Children)
@@ -1025,7 +1025,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="tree">Tree in another format</param>
         /// <returns>Reconstructed tree</returns>
-        public static SyntaxNodeOrToken ReconstructTree(ITreeNode<SyntaxNodeOrToken> tree)
+        public static SyntaxNodeOrToken ReconstructTree(TreeNode<SyntaxNodeOrToken> tree)
         {
             if (!tree.Children.Any())
             {

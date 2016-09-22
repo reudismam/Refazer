@@ -4,14 +4,14 @@ using ProseSample.Substrings;
 
 namespace TreeElement
 {
-    public class CSharpZss<T> : Zss<ITreeNode<T>>
+    public class CSharpZss<T> : Zss<TreeNode<T>>
     {
         
-        public CSharpZss(ITreeNode<T> previousTree, ITreeNode<T> currentTree) : base(previousTree,currentTree)
+        public CSharpZss(TreeNode<T> previousTree, TreeNode<T> currentTree) : base(previousTree,currentTree)
         {
         }
 
-        protected override void GenerateNodes(ITreeNode<T> t1, ITreeNode<T> t2)
+        protected override void GenerateNodes(TreeNode<T> t1, TreeNode<T> t2)
         {
             TreeTraversal<T> traversal = new TreeTraversal<T>();
             var l1 = traversal.PostOrderTraversal(t1);
@@ -26,9 +26,9 @@ namespace TreeElement
             return;
         }
 
-        private List<ZssNode<ITreeNode<T>>> ConvertToZZ(List<ITreeNode<T>> list)
+        private List<ZssNode<TreeNode<T>>> ConvertToZZ(List<TreeNode<T>> list)
         {
-            var zzlist = new List<ZssNode<ITreeNode<T>>>();
+            var zzlist = new List<ZssNode<TreeNode<T>>>();
             foreach (var i in list)
             {
                 var node = new CSharpZssNode<T>(i);

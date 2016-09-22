@@ -7,12 +7,12 @@ namespace ProseSample.Substrings
 {
     public class LeafToken : Token 
     {
-        public LeafToken(SyntaxKind kind, ITreeNode<SyntaxNodeOrToken> value) : base(kind, value)
+        public LeafToken(SyntaxKind kind, TreeNode<SyntaxNodeOrToken> value) : base(kind, value)
         {
             Kind = kind;
         }
 
-        public override bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)
+        public override bool IsMatch(TreeNode<SyntaxNodeOrToken> node)
         {
             return base.IsMatch(node) && !node.Children.Any();
         }

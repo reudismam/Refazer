@@ -4,7 +4,7 @@ namespace TreeEdit.Spg.Script
 {
     public class Delete<T>: EditOperation<T>
     {
-        public Delete(ITreeNode<T> deletedNode) : base(deletedNode, deletedNode.Parent, -1)
+        public Delete(TreeNode<T> deletedNode) : base(deletedNode, deletedNode.Parent, -1)
         {
         }
 

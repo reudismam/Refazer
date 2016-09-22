@@ -18,7 +18,7 @@ namespace TreeEdit.Spg.Script
         /// <param name="t2">Target tree</param>
         /// <param name="M">Mapping between source and target tree nodes</param>
         /// <returns></returns>
-        public List<EditOperation<T>> EditScript(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        public List<EditOperation<T>> EditScript(TreeNode<T> t1, TreeNode<T> t2, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             var editScript = new List<EditOperation<T>>();
             var bfs = BFSWalker<T>.BreadFirstSearch(t2);
@@ -35,7 +35,7 @@ namespace TreeEdit.Spg.Script
                     //if (!M.ContainsKey(x)) continue;
                     int k = FindPos(x, M);
 
-                    var xnode = new ITreeNode<T>(x.Value, x.Label);
+                    var xnode = new TreeNode<T>(x.Value, x.Label);
                     var insert = new Insert<T>(xnode, z, k);
                     z.AddChild(xnode, k - 1);
                     M.Add(xnode, x);
@@ -51,7 +51,7 @@ namespace TreeEdit.Spg.Script
                         var update = new Update<T>(w, x, z, y);
                         int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
                         v.RemoveNode(index);
-                        var xnode = new ITreeNode<T>(x.Value, x.Label);
+                        var xnode = new TreeNode<T>(x.Value, x.Label);
                         v.AddChild(xnode, index);
                         M.Add(xnode, x);
                         M.Remove(w);
@@ -99,9 +99,9 @@ namespace TreeEdit.Spg.Script
             {
                 if (s is Move<T>) continue;
                 var t1copy = ConverterHelper.MakeACopy(s.T1Node);
-                t1copy.Children = new List<ITreeNode<T>>();
+                t1copy.Children = new List<TreeNode<T>>();
                 var parentcopy = ConverterHelper.MakeACopy(s.Parent);
-                parentcopy.Children = new List<ITreeNode<T>>();
+                parentcopy.Children = new List<TreeNode<T>>();
 
                 s.T1Node = t1copy;
                 s.Parent = parentcopy;
@@ -112,8 +112,8 @@ namespace TreeEdit.Spg.Script
                 var v = editScript[i];
                 if (v is Insert<T>)
                 {
-                    var xnode = new ITreeNode<T>(v.T1Node.Value, v.T1Node.Label);
-                    var znode = new ITreeNode<T>(v.Parent.Value, v.Parent.Label);
+                    var xnode = new TreeNode<T>(v.T1Node.Value, v.T1Node.Label);
+                    var znode = new TreeNode<T>(v.Parent.Value, v.Parent.Label);
 
                     var insert = new Insert<T>(xnode, znode, v.K);
                     editScript[i] = insert;
@@ -157,17 +157,17 @@ namespace TreeEdit.Spg.Script
         /// <param name="w">w is the patner of x (w in T1)</param>
         /// <param name="x">Node in t2</param>
         /// <returns>Index to be updated</returns>
-        private int FindPos(ITreeNode<T> x, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        private int FindPos(TreeNode<T> x, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
-            ITreeNode<T> y = x.Parent; ITreeNode<T> w = M.ToList().Find(o => o.Value.Equals(x)).Key;
+            TreeNode<T> y = x.Parent; TreeNode<T> w = M.ToList().Find(o => o.Value.Equals(x)).Key;
 
-            ITreeNode<T> firstChild = y.Children.ElementAt(0);
+            TreeNode<T> firstChild = y.Children.ElementAt(0);
 
             if (firstChild.Equals(x)) return 1;
             //if (!y.Children.Any()) return 1;
 
-            ITreeNode<T> v = null;
-            foreach (ITreeNode<T> c in y.Children)
+            TreeNode<T> v = null;
+            foreach (TreeNode<T> c in y.Children)
             {
                 if (c.Equals(x))
                 {
@@ -177,10 +177,10 @@ namespace TreeEdit.Spg.Script
                 v = c;
             }
 
-            ITreeNode<T> u = M.ToList().Find(o => o.Value.Equals(v)).Key;//Mline.Values.ToList().Find(o => o.Equals(x));
+            TreeNode<T> u = M.ToList().Find(o => o.Value.Equals(v)).Key;//Mline.Values.ToList().Find(o => o.Equals(x));
 
             int count = 1;
-            foreach (ITreeNode<T> c in u.Parent.Children)
+            foreach (TreeNode<T> c in u.Parent.Children)
             {
                 if (c.Equals(u)) return count + 1;
 
@@ -195,16 +195,16 @@ namespace TreeEdit.Spg.Script
         ///// </summary>
         ///// <param name="u">Node to be traversed</param>
         ///// <returns></returns>
-        //private List<ITreeNode<T>> BreadFirstSearch(ITreeNode<T> u)
+        //private List<TreeNode<T>> BreadFirstSearch(TreeNode<T> u)
         //{
-        //    var result = new List<ITreeNode<T>>();
-        //    var dist = new Dictionary<ITreeNode<T>, int> { [u] = 0 };
-        //    var q = new Queue<ITreeNode<T>>();
+        //    var result = new List<TreeNode<T>>();
+        //    var dist = new Dictionary<TreeNode<T>, int> { [u] = 0 };
+        //    var q = new Queue<TreeNode<T>>();
         //    q.Enqueue(u);
 
         //    while (q.Any())
         //    {
-        //        ITreeNode<T> v = q.Dequeue();
+        //        TreeNode<T> v = q.Dequeue();
 
         //        foreach (var c in v.Children)
         //        {

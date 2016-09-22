@@ -4,16 +4,16 @@ using ProseSample.Substrings;
 
 namespace TreeElement
 {
-    public class CSharpZssNode<T> : ZssNode<ITreeNode<T>>
+    public class CSharpZssNode<T> : ZssNode<TreeNode<T>>
     {
 
-        public CSharpZssNode(ITreeNode<T> inode)
+        public CSharpZssNode(TreeNode<T> inode)
         {
             InternalNode = inode;
             Label = inode.ToString();
         }
 
-        public override ZssNode<ITreeNode<T>> GetLeftMostDescendant()
+        public override ZssNode<TreeNode<T>> GetLeftMostDescendant()
         {
             var traversal = new TreeTraversal<T>();
             var list = traversal.PostOrderTraversal(InternalNode);
@@ -23,7 +23,7 @@ namespace TreeElement
             return new CSharpZssNode<T>(list.First());
         }
 
-        public override bool Similar(ZssNode<ITreeNode<T>> other)
+        public override bool Similar(ZssNode<TreeNode<T>> other)
         {
             bool isEqual = InternalNode.IsLabel(other.InternalNode.Label) && InternalNode.ToString().Equals(other.InternalNode.ToString());
             return isEqual;

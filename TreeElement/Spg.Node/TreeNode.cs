@@ -8,15 +8,15 @@ namespace ProseSample.Substrings
     /// TreeNode class
     /// </summary>
     /// <typeparam name="T">Node type</typeparam>
-    public class ITreeNode<T>
+    public class TreeNode<T>
     { 
         /// <summary>
         /// Gets the children.
         /// </summary>
         /// <value>The children.</value>
-        public List<ITreeNode<T>> Children { get; set; }
+        public List<TreeNode<T>> Children { get; set; }
 
-        public ITreeNode<T> Parent { get; set; }
+        public TreeNode<T> Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the value.
@@ -26,7 +26,7 @@ namespace ProseSample.Substrings
 
         public TLabel Label { get; set; }
 
-        public ITreeNode<T> SyntaxTree { get; set; }
+        public TreeNode<T> SyntaxTree { get; set; }
 
         public int Start { get; set; }
 
@@ -37,7 +37,7 @@ namespace ProseSample.Substrings
         /// <param name="value">The value.</param>
         /// <param name="label">Label</param>
         /// <param name="children">The children.</param>
-        public ITreeNode(T value, TLabel label, List<ITreeNode<T>> children)
+        public TreeNode(T value, TLabel label, List<TreeNode<T>> children)
         {
             Value = value;
             Label = label;
@@ -53,17 +53,17 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="value">value</param>
         /// <param name="label">Label</param>
-        public ITreeNode(T value, TLabel label)
+        public TreeNode(T value, TLabel label)
         {
             Value = value;
             Label = label;
-            Children = new List<ITreeNode<T>>();
+            Children = new List<TreeNode<T>>();
         }
 
         ///// <summary>
         ///// Children get and set method
         ///// </summary>
-        //List<ITreeNode<T>> ITreeNode<T>.Children
+        //List<TreeNode<T>> TreeNode<T>.Children
         //{
         //    get
         //    {
@@ -80,7 +80,7 @@ namespace ProseSample.Substrings
         ///// Get descendants nodes
         ///// </summary>
         ///// <returns></returns>
-        //public List<ITreeNode<T>> DescendantNodes()
+        //public List<TreeNode<T>> DescendantNodes()
         //{
         //    var list = BFSWalker<T>.BreadFirstSearch(this);
         //    return list;
@@ -90,9 +90,9 @@ namespace ProseSample.Substrings
         /// Get descendants nodes
         /// </summary>
         /// <returns></returns>
-        public List<ITreeNode<T>> DescendantNodes()
+        public List<TreeNode<T>> DescendantNodes()
         {
-            //var list = new List<ITreeNode<T>>();
+            //var list = new List<TreeNode<T>>();
 
             //if (!_children.Any())
             //{
@@ -118,7 +118,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="child">Child</param>
         /// <param name="k">Position</param>
-        public void AddChild(ITreeNode<T> child, int k)
+        public void AddChild(TreeNode<T> child, int k)
         {
             child.Parent = this;
             Children.Insert(k, child);
@@ -138,7 +138,7 @@ namespace ProseSample.Substrings
             return label.Equals(Label);
         }
 
-        public List<ITreeNode<T>> DescendantNodesAndSelf()
+        public List<TreeNode<T>> DescendantNodesAndSelf()
         {
             var list = DescendantNodes();
             //list.Insert(0, this);
@@ -161,11 +161,11 @@ namespace ProseSample.Substrings
         /// <returns>True if objects are equals</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is ITreeNode<T>))
+            if (!(obj is TreeNode<T>))
             {
                 return false;
             }
-            ITreeNode<T> compare = (ITreeNode<T>)obj;
+            TreeNode<T> compare = (TreeNode<T>)obj;
             return /*IsEqual(this, compare);*/ Value.Equals(compare.Value);
         }
 
@@ -178,7 +178,7 @@ namespace ProseSample.Substrings
             return ToString().GetHashCode();
         }
 
-        public static bool IsEqual(ITreeNode<T> t1, ITreeNode<T> compare)
+        public static bool IsEqual(TreeNode<T> t1, TreeNode<T> compare)
         {
             if (!t1.IsLabel(compare.Label)) return false;
             if (!t1.Value.Equals(compare.Value)) return false;

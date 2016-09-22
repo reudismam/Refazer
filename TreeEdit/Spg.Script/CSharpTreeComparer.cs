@@ -58,8 +58,8 @@ namespace TreeEdit.Spg.TreeEdit.Script
 
         protected override bool TreesEqual(SyntaxNode oldNode, SyntaxNode newNode)
         {
-            var oldTree = new ITreeNode<SyntaxNodeOrToken>(oldNode, new TLabel(oldNode.Kind()));
-            var newTree = new ITreeNode<SyntaxNodeOrToken>(newNode, new TLabel(newNode.Kind()));
+            var oldTree = new TreeNode<SyntaxNodeOrToken>(oldNode, new TLabel(oldNode.Kind()));
+            var newTree = new TreeNode<SyntaxNodeOrToken>(newNode, new TLabel(newNode.Kind()));
             return IsomorphicManager<SyntaxNodeOrToken>.AhuTreeIsomorphism(oldTree, newTree);
         }
 

@@ -5,7 +5,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
 {
     public class TreeManager<T>
     {
-        public static ITreeNode<T> GetNodeAtHeight(ITreeNode<T> tree, int height)
+        public static TreeNode<T> GetNodeAtHeight(TreeNode<T> tree, int height)
         {
             var dist = BFSWalker<T>.Dist(tree);
             var targetNodeHeight = ConverterHelper.TreeAtHeight(tree, dist, height);

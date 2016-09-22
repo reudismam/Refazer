@@ -8,12 +8,12 @@ namespace TreeEdit.Spg.TreeEdit.PQ
 {
     public class PriorityQueue<T>
     {
-        public IPriorityQueue<Tuple<int, ITreeNode<T>>> pq { get; set; }
+        public IPriorityQueue<Tuple<int, TreeNode<T>>> pq { get; set; }
 
         public PriorityQueue()
         {
             var comp = new ComparerHeap();
-            pq = new IntervalHeap<Tuple<int, ITreeNode<T>>>(comp);
+            pq = new IntervalHeap<Tuple<int, TreeNode<T>>>(comp);
         }
 
         public int PeekMax()
@@ -23,14 +23,14 @@ namespace TreeEdit.Spg.TreeEdit.PQ
             return pq.FindMax().Item1;
         }
 
-        public void Push(ITreeNode<T> t)
+        public void Push(TreeNode<T> t)
         {
             int h = Height(t);
-            Tuple<int, ITreeNode<T>> tuple = Tuple.Create(h, t);
+            Tuple<int, TreeNode<T>> tuple = Tuple.Create(h, t);
             pq.Add(tuple);
         }
 
-        public int Height(ITreeNode<T> t)
+        public int Height(TreeNode<T> t)
         {
             if (!t.Children.Any()) return 1;
 
@@ -43,7 +43,7 @@ namespace TreeEdit.Spg.TreeEdit.PQ
             return 1 + max;
         }
 
-        public void Open(ITreeNode<T> t1)
+        public void Open(TreeNode<T> t1)
         {
             foreach (var item in t1.Children)
             {
@@ -51,12 +51,12 @@ namespace TreeEdit.Spg.TreeEdit.PQ
             }
         }
 
-        public List<Tuple<int, ITreeNode<T>>> Pop()
+        public List<Tuple<int, TreeNode<T>>> Pop()
         {
-            Tuple<int, ITreeNode<T>> t = pq.FindMax();
+            Tuple<int, TreeNode<T>> t = pq.FindMax();
             int top = t.Item1;
 
-            List<Tuple<int, ITreeNode<T>>> l = new List<Tuple<int, ITreeNode<T>>>();
+            List<Tuple<int, TreeNode<T>>> l = new List<Tuple<int, TreeNode<T>>>();
             while (t.Item1 == top)
             {
                 l.Add(t);
@@ -75,9 +75,9 @@ namespace TreeEdit.Spg.TreeEdit.PQ
             return l;
         }
 
-        class ComparerHeap : IComparer<Tuple<int, ITreeNode<T>>>
+        class ComparerHeap : IComparer<Tuple<int, TreeNode<T>>>
         {
-            public int Compare(Tuple<int, ITreeNode<T>> x, Tuple<int, ITreeNode<T>> y)
+            public int Compare(Tuple<int, TreeNode<T>> x, Tuple<int, TreeNode<T>> y)
             {
                 if (x.Item1 > y.Item1) return 1;
 

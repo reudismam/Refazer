@@ -5,7 +5,7 @@ namespace ProseSample.Substrings
     public class PatternP: Pattern
     {
         public string K { get; set; }
-        public PatternP(ITreeNode<Token> tree, string k) : base(tree)
+        public PatternP(TreeNode<Token> tree, string k) : base(tree)
         {
             K = k;
         }

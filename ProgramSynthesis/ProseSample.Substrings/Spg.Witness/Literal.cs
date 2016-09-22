@@ -50,7 +50,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 //var key = input[rule.Body[0]];
                 //var inpTree = WitnessFunctions.GetCurrentTree(key);
 
-                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
                     //var sot = node.Value;
                     if (node.Children.Any()) return null;

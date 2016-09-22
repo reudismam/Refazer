@@ -49,7 +49,7 @@ namespace ProseSample.Substrings.Spg.Witness.Target
             return new ExampleSpec(kExamples);
         }
 
-        protected abstract ITreeNode<SyntaxNodeOrToken> Target(Edit<SyntaxNodeOrToken> edit);
+        protected abstract TreeNode<SyntaxNodeOrToken> Target(Edit<SyntaxNodeOrToken> edit);
 
         protected abstract bool ProcessEditOperation(Edit<SyntaxNodeOrToken> edit);
     }

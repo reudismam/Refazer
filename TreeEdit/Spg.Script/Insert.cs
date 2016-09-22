@@ -10,7 +10,7 @@ namespace TreeEdit.Spg.Script
         /// <param name="insertedNode">Node that will be inserted</param>
         /// <param name="parent">Parent of the node that will be inserted</param>
         /// <param name="k">Position where the node will be inserted</param>
-        public Insert(ITreeNode<T> insertedNode, ITreeNode<T> parent, int k) : base(insertedNode, parent, k)
+        public Insert(TreeNode<T> insertedNode, TreeNode<T> parent, int k) : base(insertedNode, parent, k)
         {
         }
 

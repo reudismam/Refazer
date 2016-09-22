@@ -10,7 +10,7 @@ namespace TreeEdit.Spg.Script
         /// <param name="insertedNode">Node that will be inserted</param>
         /// <param name="parent">Parent of the node that will be inserted</param>
         /// <param name="k">Position where the node will be inserted</param>
-        public InsertBefore(ITreeNode<T> insertedNode, ITreeNode<T> parent) : base(insertedNode, parent, -1)
+        public InsertBefore(TreeNode<T> insertedNode, TreeNode<T> parent) : base(insertedNode, parent, -1)
         {
         }
 

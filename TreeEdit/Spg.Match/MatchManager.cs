@@ -18,7 +18,7 @@ namespace TreeEdit.Spg.Match
         /// <param name="inpTree">Input tree</param>
         /// <param name="sot">Look for</param>
         /// <returns>Matched nodes</returns>
-        public static List<ITreeNode<SyntaxNodeOrToken>> ConcreteMatches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxNodeOrToken sot)
+        public static List<TreeNode<SyntaxNodeOrToken>> ConcreteMatches(TreeNode<SyntaxNodeOrToken> inpTree, SyntaxNodeOrToken sot)
         {
             var descendants = inpTree.DescendantNodes();
             var matches = from item in descendants
@@ -33,7 +33,7 @@ namespace TreeEdit.Spg.Match
         /// <param name="inpTree">Input tree</param>
         /// <param name="kind">Syntax tree or token to be matched.</param>
         /// <returns>Abstract match</returns>
-        public static List<ITreeNode<SyntaxNodeOrToken>> AbstractMatches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
+        public static List<TreeNode<SyntaxNodeOrToken>> AbstractMatches(TreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
         {
             return (from item in inpTree.DescendantNodes() where item.Value.IsKind(kind) select item).ToList();
         }
@@ -44,7 +44,7 @@ namespace TreeEdit.Spg.Match
         /// <param name="inpTree">Input tree</param>
         /// <param name="kind">Syntax tree or token to be matched.</param>
         /// <returns>Abstract match</returns>
-        public static List<ITreeNode<SyntaxNodeOrToken>> LeafAbstractMatches(ITreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
+        public static List<TreeNode<SyntaxNodeOrToken>> LeafAbstractMatches(TreeNode<SyntaxNodeOrToken> inpTree, SyntaxKind kind)
         {
             var nodes = from item in inpTree.DescendantNodes() where item.Value.IsKind(kind) select item;
             var result = nodes.Where(v => !v.Children.Any()).ToList();
@@ -56,7 +56,7 @@ namespace TreeEdit.Spg.Match
         /// </summary>
         /// <param name="node">Node</param>
         /// <param name="pattern">Pattern</param>
-        public static List<ITreeNode<SyntaxNodeOrToken>> Matches(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
+        public static List<TreeNode<SyntaxNodeOrToken>> Matches(TreeNode<SyntaxNodeOrToken> node, TreeNode<Token> pattern)
         {
             //TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
             //var nodes = tree.PostOrderTraversal(tree);
@@ -64,7 +64,7 @@ namespace TreeEdit.Spg.Match
             nodes.Insert(0, node);
             var matchNodes = nodes.Where(v => IsValueEachChild(v, pattern)).ToList();
 
-            //var edited = new List<Tuple<ITreeNode<SyntaxNodeOrToken>, List<ITreeNode<SyntaxNodeOrToken>>>>();
+            //var edited = new List<Tuple<TreeNode<SyntaxNodeOrToken>, List<TreeNode<SyntaxNodeOrToken>>>>();
             //foreach (var match in matchNodes)
             //{
             //    var children = match.Children;
@@ -72,11 +72,11 @@ namespace TreeEdit.Spg.Match
 
             //    if (list.Count <= 1) continue;
 
-            //    var added = new List<ITreeNode<SyntaxNodeOrToken>>();
+            //    var added = new List<TreeNode<SyntaxNodeOrToken>>();
             //    for (int i = 0; i < list.First().Count; i++)
             //    {
             //        var parent = ConverterHelper.MakeACopy(match);
-            //        parent.Children = new List<ITreeNode<SyntaxNodeOrToken>>();
+            //        parent.Children = new List<TreeNode<SyntaxNodeOrToken>>();
             //        foreach (var c in list)
             //        {
             //            parent.AddChild(c[i], parent.Children.Count());
@@ -103,7 +103,7 @@ namespace TreeEdit.Spg.Match
         /// </summary>
         /// <param name="node">Node</param>
         /// <param name="pattern">Pattern</param>
-        public static bool IsValue(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
+        public static bool IsValue(TreeNode<SyntaxNodeOrToken> node, TreeNode<Token> pattern)
         {
             if (!pattern.Value.IsMatch(node))
             {
@@ -132,7 +132,7 @@ namespace TreeEdit.Spg.Match
         /// </summary>
         /// <param name="node">Node</param>
         /// <param name="pattern">Pattern</param>
-        public static bool IsValueEachChild(ITreeNode<SyntaxNodeOrToken> node, ITreeNode<Token> pattern)
+        public static bool IsValueEachChild(TreeNode<SyntaxNodeOrToken> node, TreeNode<Token> pattern)
         {
             if (!pattern.Value.IsMatch(node))
             {
@@ -163,7 +163,7 @@ namespace TreeEdit.Spg.Match
         /// </summary>
         /// <param name="tree">Node</param>
         /// <param name="node">Pattern</param>
-        public static bool IsValueEachChild(ITreeNode<SyntaxNodeOrToken> tree, ITreeNode<SyntaxNodeOrToken> node)
+        public static bool IsValueEachChild(TreeNode<SyntaxNodeOrToken> tree, TreeNode<SyntaxNodeOrToken> node)
         {
             if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(tree, node))
             {
@@ -190,7 +190,7 @@ namespace TreeEdit.Spg.Match
         ///// </summary>
         ///// <param name="tree">Node</param>
         ///// <param name="node">Pattern</param>
-        //public static bool IsValueEachChild(ITreeNode<SyntaxNodeOrToken> tree, ITreeNode<SyntaxNodeOrToken> node)
+        //public static bool IsValueEachChild(TreeNode<SyntaxNodeOrToken> tree, TreeNode<SyntaxNodeOrToken> node)
         //{
         //    if (!node.Value.Equals(tree.Value))
         //    {

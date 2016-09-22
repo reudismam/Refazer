@@ -11,7 +11,7 @@ namespace ProseSample.Substrings
         {
         }
 
-        public override bool IsMatch(ITreeNode<SyntaxNodeOrToken> node)
+        public override bool IsMatch(TreeNode<SyntaxNodeOrToken> node)
         {
             return true;
         }

@@ -16,7 +16,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<SyntaxKind>();
-                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
                     if ((node.Value is LeafToken) || (node.Value is DynToken)) continue;
                     if (node.Children.Any()) continue;
@@ -34,7 +34,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<SyntaxKind>();
-                foreach (ITreeNode<Token> node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<Token> node in spec.DisjunctiveExamples[input])
                 {
                     if (!(node.Value is LeafToken)) continue;
                     if (node.Children.Any()) continue;

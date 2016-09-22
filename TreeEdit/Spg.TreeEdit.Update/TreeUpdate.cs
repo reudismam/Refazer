@@ -13,7 +13,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
         /// <summary>
         /// Newest updated tree
         /// </summary>
-        public ITreeNode<SyntaxNodeOrToken> CurrentTree { get; set; }
+        public TreeNode<SyntaxNodeOrToken> CurrentTree { get; set; }
 
         /// <summary>
         /// Indicate the edit operations that was processed.
@@ -25,7 +25,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             CurrentTree = ConverterHelper.ConvertCSharpToTreeNode(tree);
         }
 
-        public TreeUpdate(ITreeNode<SyntaxNodeOrToken> tree)
+        public TreeUpdate(TreeNode<SyntaxNodeOrToken> tree)
         {
             CurrentTree = tree;
         }
@@ -75,7 +75,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 if (parent == null) parent = CurrentTree;
                 CurrentTree = RemoveNode(CurrentTree, editOperation.T1Node);
 
-                ITreeNode<SyntaxNodeOrToken> treeNode = editOperation.T1Node;
+                TreeNode<SyntaxNodeOrToken> treeNode = editOperation.T1Node;
                 parent.AddChild(treeNode, editOperation.K - 1);
                 treeNode.Parent = parent;
             }
@@ -86,7 +86,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             }
         }
 
-        private ITreeNode<SyntaxNodeOrToken> RemoveNode(ITreeNode<SyntaxNodeOrToken> iTree, ITreeNode<SyntaxNodeOrToken> oldNode)
+        private TreeNode<SyntaxNodeOrToken> RemoveNode(TreeNode<SyntaxNodeOrToken> iTree, TreeNode<SyntaxNodeOrToken> oldNode)
         {
             if (!iTree.Children.Any()) return iTree;
 
@@ -94,13 +94,13 @@ namespace TreeEdit.Spg.TreeEdit.Update
             {
                 //iTree = iTree.Children.Single();
                 //return iTree;
-                iTree = new ITreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+                iTree = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
                 return iTree;
             }
 
             if (IsEquals(iTree, oldNode))
             {
-                iTree = new ITreeNode<SyntaxNodeOrToken>(null, null);
+                iTree = new TreeNode<SyntaxNodeOrToken>(null, null);
                 return iTree;
             }
 
@@ -125,7 +125,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             return iTree;
         }
 
-        private bool IsEquals(ITreeNode<SyntaxNodeOrToken> iTree, ITreeNode<SyntaxNodeOrToken> oldNode)
+        private bool IsEquals(TreeNode<SyntaxNodeOrToken> iTree, TreeNode<SyntaxNodeOrToken> oldNode)
         {
             if (!iTree.Value.IsKind(oldNode.Value.Kind()))
             {
@@ -145,7 +145,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             return true;
         }
 
-        private void ReplaceNode(ITreeNode<SyntaxNodeOrToken> iTree, SyntaxNodeOrToken oldNode, ITreeNode<SyntaxNodeOrToken> newNode)
+        private void ReplaceNode(TreeNode<SyntaxNodeOrToken> iTree, SyntaxNodeOrToken oldNode, TreeNode<SyntaxNodeOrToken> newNode)
         {
             if (!iTree.Children.Any()) return;
 
@@ -170,7 +170,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             }
         }
 
-        public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree, SyntaxNodeOrToken node)
+        public static TreeNode<SyntaxNodeOrToken> FindNode(TreeNode<SyntaxNodeOrToken> tree, SyntaxNodeOrToken node)
         {
             var nodes = from item in tree.DescendantNodesAndSelf()
                         where node.IsKind(item.Value.Kind())
@@ -181,9 +181,9 @@ namespace TreeEdit.Spg.TreeEdit.Update
             return nodes.FirstOrDefault();
         }
 
-        public static ITreeNode<SyntaxNodeOrToken> FindNode(ITreeNode<SyntaxNodeOrToken> tree, ITreeNode<SyntaxNodeOrToken> node)
+        public static TreeNode<SyntaxNodeOrToken> FindNode(TreeNode<SyntaxNodeOrToken> tree, TreeNode<SyntaxNodeOrToken> node)
         {
-            var nodes = new List<ITreeNode<SyntaxNodeOrToken>>();
+            var nodes = new List<TreeNode<SyntaxNodeOrToken>>();
             var descendantsNodesAndSelf = tree.DescendantNodesAndSelf();
             foreach (var item in descendantsNodesAndSelf)
             {

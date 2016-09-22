@@ -12,7 +12,7 @@ namespace TreeEdit.Spg.Print
     {
         private static StreamWriter _prettyPrint;
 
-        private static Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int> _dic;
+        private static Dictionary<Tuple<TreeNode<T>, TreeNode<T>>, int> _dic;
 
         private static int _currentIndex;
 
@@ -22,7 +22,7 @@ namespace TreeEdit.Spg.Print
             set { _prettyPrint = value;}
         } 
 
-        public static void PrintPretty(ITreeNode<T> tree, string indent, bool last)
+        public static void PrintPretty(TreeNode<T> tree, string indent, bool last)
         {
             Console.Write(indent);
             if (last)
@@ -49,7 +49,7 @@ namespace TreeEdit.Spg.Print
         }
 
 
-        private static void PrettyPrintString(ITreeNode<T> tree, string indent, bool last)
+        private static void PrettyPrintString(TreeNode<T> tree, string indent, bool last)
         {
             _prettyPrint.Write(indent);
             if (last)
@@ -76,9 +76,9 @@ namespace TreeEdit.Spg.Print
         }
 
 
-        private static void PrettyPrintKey(ITreeNode<T> tree, string indent, bool last, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        private static void PrettyPrintKey(TreeNode<T> tree, string indent, bool last, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
-            Tuple<ITreeNode<T>, ITreeNode<T>> t = null;
+            Tuple<TreeNode<T>, TreeNode<T>> t = null;
 
             if (M.ContainsKey(tree))
             {
@@ -124,9 +124,9 @@ namespace TreeEdit.Spg.Print
                 PrettyPrintKey(tree.Children[i], indent, i == tree.Children.Count - 1, M);
         }
 
-        private static void PrettyPrintValue(ITreeNode<T> tree, string indent, bool last, Dictionary<ITreeNode<T>, ITreeNode<T>> M)
+        private static void PrettyPrintValue(TreeNode<T> tree, string indent, bool last, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
-            List<Tuple<ITreeNode<T>, ITreeNode<T>>> listT = new List<Tuple<ITreeNode<T>, ITreeNode<T>>>();
+            List<Tuple<TreeNode<T>, TreeNode<T>>> listT = new List<Tuple<TreeNode<T>, TreeNode<T>>>();
 
             if (M.ContainsValue(tree))
             {
@@ -174,7 +174,7 @@ namespace TreeEdit.Spg.Print
                 PrettyPrintValue(tree.Children[i], indent, i == tree.Children.Count - 1, M);
         }
 
-        public static string PrettyPrintString(ITreeNode<T> tree, string path = "out.txt")
+        public static string PrettyPrintString(TreeNode<T> tree, string path = "out.txt")
         {
             _prettyPrint = new StreamWriter(path);
             PrettyPrintString(tree, "", true);
@@ -183,10 +183,10 @@ namespace TreeEdit.Spg.Print
             return result;
         }
 
-        public static Tuple<string, string> PrettyPrintString(ITreeNode<T> t1, ITreeNode<T> t2, Dictionary<ITreeNode<T>, ITreeNode<T>> M, string path = "out.txt")
+        public static Tuple<string, string> PrettyPrintString(TreeNode<T> t1, TreeNode<T> t2, Dictionary<TreeNode<T>, TreeNode<T>> M, string path = "out.txt")
         {
             _currentIndex = 0;
-            _dic = new Dictionary<Tuple<ITreeNode<T>, ITreeNode<T>>, int>();
+            _dic = new Dictionary<Tuple<TreeNode<T>, TreeNode<T>>, int>();
             string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
             path = startupPath + path;
             _prettyPrint = new StreamWriter(path);
