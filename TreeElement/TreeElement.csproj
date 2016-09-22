@@ -138,7 +138,6 @@
     <Compile Include="Spg.Isomorphic\IsomorphicManager.cs" />
     <Compile Include="Spg.Isomorphic\IsomorphicPairs.cs" />
     <Compile Include="Spg.Node\ConverterHelper.cs" />
-    <Compile Include="Spg.Node\CSharpTreeNode.cs" />
     <Compile Include="Spg.Node\ITreeNode.cs" />
     <Compile Include="Spg.Node\TLabel.cs" />
     <Compile Include="Spg.Node\TreeNode.cs" />
