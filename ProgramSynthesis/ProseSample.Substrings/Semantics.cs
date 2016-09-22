@@ -79,7 +79,7 @@ namespace ProseSample.Substrings
             return SemanticMatch.Leaf(kind);
         }
 
-        public static Pattern Parent(Pattern match, string k)
+        public static Pattern Context(Pattern match, string k)
         {
             var patternP = new PatternP(match.Tree, k);
             return patternP;
@@ -394,7 +394,7 @@ namespace ProseSample.Substrings
             }
         }
 
-        public static Pattern NMatch(Pattern kmatch)
+        public static Pattern NodeMatch(Pattern kmatch)
         {
             return kmatch;
         }

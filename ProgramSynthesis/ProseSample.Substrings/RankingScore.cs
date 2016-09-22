@@ -32,8 +32,8 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Match")]
         public static double Score_Match(double inSource, double matchScore) => matchScore;
 
-        [FeatureCalculator("NMatch")]
-        public static double Score_NMatch(double matchScore) => matchScore;
+        [FeatureCalculator("NodeMatch")]
+        public static double Score_NodeMatch(double matchScore) => matchScore;
 
         [FeatureCalculator("SC")]
         public static double Score_CS(double childScore) => childScore;
@@ -68,23 +68,8 @@ namespace ProseSample.Substrings
         [FeatureCalculator("SplitNodes")]
         public static double Score_SplitNodes(double inScore) => inScore;
 
-        [FeatureCalculator("Template")]
-        public static double Score_Template(double inScore, double kind) => inScore + kind;
-
         [FeatureCalculator("Transformation")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
-
-        [FeatureCalculator("Script")]
-        public static double Score_Edit(double edit) => edit;
-
-        //[FeatureCalculator("Transformation")]
-        //public static double Score_ManyTrans(double inScore, double loop) => inScore + loop;
-
-        [FeatureCalculator("RegionMap")]
-        public static double Score_Loop(double inScore, double breaks) => inScore + breaks;
-
-        [FeatureCalculator("ParentNode")]
-        public static double Score_ParentNode(double inScore, double expressionScore, double astScore) => inScore + expressionScore + astScore;
 
         [FeatureCalculator("Insert")]
         public static double Score_Insert(double inScore, double astScore, double kScore) => inScore + astScore + kScore;
@@ -125,7 +110,7 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Concrete")]
         public static double Score_Concrete(double treeScore) => treeScore;
 
-        [FeatureCalculator("Parent")]
+        [FeatureCalculator("Context")]
         public static double Score_Parent(double matchScore, double kScore) => matchScore + 30;
 
         [FeatureCalculator("RightChild")]

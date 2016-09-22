@@ -26,10 +26,11 @@ IEnumerable<Node> fnodes := Traversal(node, id);
 
 Node operation := Insert(target, ast, k) | InsertBefore(target, r, ast) |  Update(target, ast) | Delete(target, r);
 
-Node r := Reference(target, pattern, k);
-Pattern pattern := NMatch(kmatch) | Parent(kmatch, id);
+Pattern pattern := NodeMatch(kmatch) | Context(kmatch, id);
 Pattern kmatch := C(kind, children) | Literal(tree) | Leaf(kind) | Variable(kind);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
+
+Node r := Reference(target, pattern, k);
 
 Node ast:= Node(kind, childrenNodes) | Const(tree) | Ref(target, r);
 IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);

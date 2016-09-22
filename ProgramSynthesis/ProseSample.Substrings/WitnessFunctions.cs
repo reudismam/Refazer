@@ -75,7 +75,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjuntive example specification</returns>
-        [WitnessFunction("Parent", 0)]
+        [WitnessFunction("Context", 0)]
         public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return new Parent().ParentVariable(rule, parameter, spec);
@@ -89,7 +89,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kindBinding">kindRef binding</param>
         /// <returns>Disjuntive example specification</returns>
-        [WitnessFunction("Parent", 1, DependsOnParameters = new[] { 0 })]
+        [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kindBinding)
         {
             return new Parent().ParentK(rule, parameter, spec, kindBinding);
@@ -298,7 +298,7 @@ namespace ProseSample.Substrings
             return Match.MatchK(rule, parameter, spec, kind);
         }
 
-        [WitnessFunction("NMatch", 0)]
+        [WitnessFunction("NodeMatch", 0)]
         public static DisjunctiveExamplesSpec NMatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
