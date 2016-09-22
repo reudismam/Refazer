@@ -218,7 +218,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="cst">Constant</param>
         /// <returns>A new constant node.</returns>
-        public static Node Const(SyntaxNodeOrToken cst)
+        public static Node ConstNode(SyntaxNodeOrToken cst)
         {
             var parent = new TreeNode<SyntaxNodeOrToken>(cst.Parent, new TLabel(cst.Parent.Kind()));
             var itreeNode = new TreeNode<SyntaxNodeOrToken>(cst, new TLabel(cst.Kind()));

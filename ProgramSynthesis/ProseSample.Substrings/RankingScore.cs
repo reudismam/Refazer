@@ -89,20 +89,14 @@ namespace ProseSample.Substrings
         [FeatureCalculator("Node")]
         public static double Score_Node1(double kScore, double astScore) => kScore +  astScore;
 
-        [FeatureCalculator("Const")]
+        [FeatureCalculator("ConstNode")]
         public static double Score_Node1(double astScore) => astScore;
-
-        [FeatureCalculator("Tree")]
-        public static double Score_Tree(double kindScore) => kindScore;
 
         [FeatureCalculator("Ref")]
         public static double Score_Ref(double inScore, double matchScore) => matchScore;
 
         [FeatureCalculator("Abstract")]
         public static double Score_Abstract(double kindScore) => kindScore;
-
-        [FeatureCalculator("Leaf")]
-        public static double Score_Leaf(double kindScore) => kindScore;
 
         [FeatureCalculator("Context")]
         public static double Score_Parent(double matchScore, double kScore) => matchScore + 30;
