@@ -36,7 +36,7 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Literal", 0)]
+        [WitnessFunction("Concrete", 0)]
         public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Literal.LiteralTree(rule, parameter, spec);
@@ -49,23 +49,10 @@ namespace ProseSample.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Variable", 0)]
+        [WitnessFunction("Abstract", 0)]
         public static ExampleSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Variable.VariableKind(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// KindRef witness function for parameter kind.
-        /// </summary>
-        /// <param name="rule">Literal rule</param>
-        /// <param name="parameter">Parameter number</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Leaf", 0)]
-        public static ExampleSpec LeafKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return Variable.LeafKind(rule, parameter, spec);
         }
 
         /// <summary>

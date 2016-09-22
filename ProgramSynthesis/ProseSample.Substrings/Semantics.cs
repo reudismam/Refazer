@@ -63,21 +63,11 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="kind">Kind</param>
         /// <returns>Search result</returns>
-        public static Pattern Variable(SyntaxKind kind)
+        public static Pattern Abstract(SyntaxKind kind)
         {
             return SemanticMatch.Variable(kind);
         }
 
-
-        /// <summary>
-        /// Searches a node with with kind and occurrence
-        /// </summary>
-        /// <param name="kind">Kind</param>
-        /// <returns>Search result</returns>
-        public static Pattern Leaf(SyntaxKind kind)
-        {
-            return SemanticMatch.Leaf(kind);
-        }
 
         public static Pattern Context(Pattern match, string k)
         {
@@ -93,7 +83,7 @@ namespace ProseSample.Substrings
         /// </summary>
         /// <param name="tree">Value</param>
         /// <returns>Literal</returns>
-        public static Pattern Literal(SyntaxNodeOrToken tree)
+        public static Pattern Concrete(SyntaxNodeOrToken tree)
         {
             return SemanticMatch.Literal(tree);
         }

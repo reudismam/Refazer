@@ -28,7 +28,7 @@ Node operation := Insert(target, ast, k) | InsertBefore(target, r, ast) |  Updat
 
 Pattern pattern := NodeMatch(kmatch) | Context(kmatch, id);
 Pattern kmatch := token | Pattern(kind, children);
-Pattern token := Literal(tree) | Leaf(kind) | Variable(kind);
+Pattern token := Concrete(tree) | Abstract(kind);
 
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
 
