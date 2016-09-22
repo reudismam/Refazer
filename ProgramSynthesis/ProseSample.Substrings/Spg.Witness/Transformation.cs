@@ -73,23 +73,23 @@ namespace ProseSample.Substrings.Spg.Witness
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<Node>();
+                var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
                 for (int i = 0; i < spec.Examples[input].Count(); i++)
                 {
                     var examples = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
                     var edit = examples.ElementAt(i);
                     var editOperation = edit.EditOperation;
-                    Node node;
+                    TreeNode<SyntaxNodeOrToken> node;
                     if (editOperation is Update<SyntaxNodeOrToken> || editOperation is Delete<SyntaxNodeOrToken>)
                     {
-                        node = new Node(editOperation.T1Node);
+                        node = editOperation.T1Node;
                     }
                     else
                     {
-                        node = new Node(editOperation.Parent);
+                        node = editOperation.Parent;
                     }
                     kMatches.Add(node);
-                    ConfigureContext(node.Value, edit);
+                    ConfigureContext(node, edit);
                 }
                 kExamples[input] = kMatches;
             }

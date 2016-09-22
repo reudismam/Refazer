@@ -526,8 +526,8 @@ namespace ProseSample.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 //get parent
-                var target = (Node)input[rule.Body[0]];
-                var parent = target.Value.Value.AsNode();
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                var parent = target.Value.AsNode();
                 for (int i = 0; i < 3; i++)
                 {
                     if (parent.IsKind(SyntaxKind.Block) || parent.DescendantNodesAndSelf().Count() > 100)
@@ -553,7 +553,7 @@ namespace ProseSample.Substrings
             for (int i = 0; i < spec.ProvidedInputs.Count(); i++)
             {
                 var input = spec.ProvidedInputs.ElementAt(i);
-                var target = (Node)input[rule.Body[0]];
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 foreach (var item in dic)
                 {
                     if (item.Value.Count() == spec.ProvidedInputs.Count())
@@ -568,7 +568,7 @@ namespace ProseSample.Substrings
                         }
                         else
                         {
-                            var targetNode = TreeUpdate.FindNode(item.Value[i], target.Value.Value);
+                            var targetNode = TreeUpdate.FindNode(item.Value[i], target.Value);
                             var str1 = Match.GetPath(targetNode);
                             var p = new PatternP(commonPattern.Tree, str1);
                             dicPattern[item.Key].Add(p);

@@ -58,12 +58,12 @@ namespace ProseSample.Substrings.Spg.Witness
             var indexChildList = new Dictionary<State, int>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var target = (Node)input[rule.Body[0]];
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
-                var examples = (from Node node in spec.DisjunctiveExamples[input] select node.Value).ToList();
+                var currentTree = WitnessFunctions.GetCurrentTree(target);
+                var examples = spec.DisjunctiveExamples[input].Select(o => (TreeNode<SyntaxNodeOrToken>) o).ToList();
 
-                if (examples.First().Equals(target.Value) || target.Value.Value.AsNode() != null && target.Value.Value.AsNode().DescendantNodesAndSelf().Count() >= 100)
+                if (examples.First().Equals(target) || target.Value.AsNode() != null && target.Value.AsNode().DescendantNodesAndSelf().Count() >= 100)
                 {
                     return MatchPatternBasic(rule, parameter, spec);
                 }
@@ -71,7 +71,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
                 if (matchInInputTree == null)
                 {
-                    currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
+                    currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                     matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
                 }
 
@@ -348,17 +348,17 @@ namespace ProseSample.Substrings.Spg.Witness
                 var mats = new List<object>();
                 var patternExample = (Pattern)kind.Examples[input];
                 var pattern = patternExample.Tree;
-                var target = (Node)input[rule.Body[0]];
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
 
-                foreach (Node node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
+                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
                     var matches = MatchManager.Matches(currentTree, pattern);
 
                     if (isFullTree)
                     {
-                        currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
+                        currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                         matches = MatchManager.Matches(currentTree, pattern);
                         //todo refactor this
                         for (int i = 0; i < matches.Count; i++)
@@ -366,7 +366,7 @@ namespace ProseSample.Substrings.Spg.Witness
                             var item = matches[i];
                             if (patternExample is PatternP)
                             {
-                                if (item.Children.Any(o => MatchManager.IsValueEachChild(node.Value, o)))
+                                if (item.Children.Any(o => MatchManager.IsValueEachChild(node, o)))
                                 {
                                     var beforeafter = SegmentElementsBeforeAfter(target, matches);
                                     var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
@@ -384,7 +384,7 @@ namespace ProseSample.Substrings.Spg.Witness
                             }
                             else
                             {
-                                if (MatchManager.IsValueEachChild(node.Value, item))
+                                if (MatchManager.IsValueEachChild(node, item))
                                 {
                                     var beforeafter = SegmentElementsBeforeAfter(target, matches);
                                     var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
@@ -409,14 +409,14 @@ namespace ProseSample.Substrings.Spg.Witness
                             var item = matches[i];
                             if (patternExample is PatternP)
                             {
-                                if (item.Children.Any(o => MatchManager.IsValueEachChild(node.Value, o)))
+                                if (item.Children.Any(o => MatchManager.IsValueEachChild(node, o)))
                                 {
                                     mats.Add(i + 1);
                                 }
                             }
                             else {
 
-                                if (MatchManager.IsValueEachChild(node.Value, item))
+                                if (MatchManager.IsValueEachChild(node, item))
                                 {
                                     mats.Add(i + 1);
                                 }
@@ -436,9 +436,9 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 var patternExample = (Pattern)kind.Examples[input];
                 var pattern = patternExample.Tree;
-                foreach (Node node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    var currentTree = WitnessFunctions.GetCurrentTree(node.Value.SyntaxTree);
+                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
                     var matches = MatchManager.Matches(currentTree, pattern);
 
                     if (!matches.Any())
@@ -450,16 +450,16 @@ namespace ProseSample.Substrings.Spg.Witness
             return false;
         }
 
-        private static Tuple<List<TreeNode<SyntaxNodeOrToken>>, List<TreeNode<SyntaxNodeOrToken>>> SegmentElementsBeforeAfter(Node target, List<TreeNode<SyntaxNodeOrToken>> matches)
+        private static Tuple<List<TreeNode<SyntaxNodeOrToken>>, List<TreeNode<SyntaxNodeOrToken>>> SegmentElementsBeforeAfter(TreeNode<SyntaxNodeOrToken> target, List<TreeNode<SyntaxNodeOrToken>> matches)
         {
             TreeNode<SyntaxNodeOrToken> node = null;
-            if (target.Value.Children.Any())
+            if (target.Children.Any())
             {
-                node = target.Value.Children.First();
+                node = target.Children.First();
             }
             else
             {
-                node = target.Value;
+                node = target;
             }
             var listBefore = new List<TreeNode<SyntaxNodeOrToken>>();
             var listAfter = new List<TreeNode<SyntaxNodeOrToken>>();
