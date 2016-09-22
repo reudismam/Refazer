@@ -69,35 +69,5 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return new ExampleSpec(treeExamples);
         }
-
-        public static DisjunctiveExamplesSpec Ref(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            //Todo Bug correct the witness function Ref
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var target = (Node) input[rule.Body[0]];
-                var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
-                var mats = new List<object>();
-                foreach (TreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
-                {
-                    if (!ConverterHelper.Valid(sot.Value)) return null;
-                    //var subTree = ConverterHelper.ConvertCSharpToTreeNode(sot.Value);
-                    /*var node = TreeUpdate.FindNode(currentTree, sot.Value);//IsomorphicManager<SyntaxNodeOrToken>.FindIsomorphicSubTree(inpTree.Value, subTree);
-                    if (node == null)
-                    {
-                        var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                        currentTree = inputTree.Value;
-                        node = TreeUpdate.FindNode(currentTree, sot.Value);
-                    }
-
-                    if (node == null) return null;*/
-                    var result = new Node(sot);
-                    mats.Add(result);
-                }
-                treeExamples[input] = mats;
-            }
-            return DisjunctiveExamplesSpec.From(treeExamples);
-        }
     }
 }

@@ -7,11 +7,9 @@ using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.List;
-using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using ProseSample.Substrings.Spg.Witness;
-using ProseSample.Substrings;
 
 namespace ProseSample.Substrings
 {
@@ -510,12 +508,6 @@ namespace ProseSample.Substrings
         public static ExampleSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return AST.Const(rule, parameter, spec);
-        }
-
-        [WitnessFunction("Ref", 1)]
-        public static DisjunctiveExamplesSpec Ref(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            return AST.Ref(rule, parameter, spec);
         }
 
         [WitnessFunction("Match", 1)]
