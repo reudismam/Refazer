@@ -7,7 +7,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Update;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace ProseSample.Substrings.Spg.Witness
 {

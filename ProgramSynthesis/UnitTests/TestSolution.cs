@@ -19,7 +19,6 @@ using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
-using TreeElement.Spg.Node;
 
 namespace UnitTests
 {

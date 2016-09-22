@@ -1,4 +1,4 @@
-﻿using TreeElement.Spg.Node;
+﻿using ProseSample.Substrings;
 using TreeElement.Spg.Walker;
 
 namespace TreeEdit.Spg.TreeEdit.Update

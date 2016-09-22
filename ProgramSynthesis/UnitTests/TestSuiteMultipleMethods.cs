@@ -10,7 +10,6 @@ using Microsoft.ProgramSynthesis.Specifications;
 using NUnit.Framework;
 using ProseSample;
 using ProseSample.Substrings;
-using TreeElement.Spg.Node;
 
 namespace UnitTests
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
 {

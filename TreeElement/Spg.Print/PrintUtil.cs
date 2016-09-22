@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis.Differencing;
 //using TreeEdit.Spg.Script;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace TreeEdit.Spg.Print
 {

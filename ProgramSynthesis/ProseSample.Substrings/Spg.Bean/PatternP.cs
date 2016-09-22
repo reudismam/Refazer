@@ -1,4 +1,4 @@
-﻿using TreeElement.Spg.Node;
+﻿using ProseSample.Substrings;
 
 namespace ProseSample.Substrings
 {

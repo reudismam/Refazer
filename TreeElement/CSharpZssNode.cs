@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace TreeElement
 {

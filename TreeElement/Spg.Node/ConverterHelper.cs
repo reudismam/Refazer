@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using ProseSample.Substrings;
 
-namespace TreeElement.Spg.Node
+namespace ProseSample.Substrings
 {
     public class ConverterHelper
     {

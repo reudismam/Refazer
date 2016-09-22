@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace ProseSample.Substrings.Spg.Witness
 {

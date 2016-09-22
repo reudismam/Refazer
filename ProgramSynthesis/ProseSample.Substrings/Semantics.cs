@@ -13,7 +13,7 @@ using ProseSample.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace ProseSample.Substrings
 {

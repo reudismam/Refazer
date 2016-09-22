@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using TreeElement;
 using TreeElement.Spg.Walker;
 
-namespace TreeElement.Spg.Node
+namespace ProseSample.Substrings
 {
     /// <summary>
     /// TreeNode class

@@ -5,7 +5,7 @@ using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace TreeEdit
 {

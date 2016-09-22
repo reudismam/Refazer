@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TreeEdit.Spg.TreeEdit.Mapping;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace TreeEdit.Spg.Isomorphic
 {

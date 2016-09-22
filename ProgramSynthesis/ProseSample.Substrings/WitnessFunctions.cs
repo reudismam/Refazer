@@ -11,7 +11,7 @@ using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using ProseSample.Substrings.Spg.Witness;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace ProseSample.Substrings
 {

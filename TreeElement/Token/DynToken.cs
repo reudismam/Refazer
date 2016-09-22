@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Isomorphic;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace ProseSample.Substrings
 {

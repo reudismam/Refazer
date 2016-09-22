@@ -1,4 +1,4 @@
-﻿namespace TreeElement.Spg.Node
+﻿namespace ProseSample.Substrings
 {
     public class TLabel
     {

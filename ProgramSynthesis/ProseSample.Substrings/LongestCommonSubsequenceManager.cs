@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace LongestCommonSubsequence
 {

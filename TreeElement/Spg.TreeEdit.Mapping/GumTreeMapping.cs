@@ -8,7 +8,7 @@ using TreeEdit.Spg.TreeEdit.PQ;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace TreeEdit.Spg.TreeEdit.Mapping
 {

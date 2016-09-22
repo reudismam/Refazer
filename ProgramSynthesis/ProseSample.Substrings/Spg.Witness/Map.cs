@@ -10,7 +10,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 using TreeElement.Spg.Walker;
 
 namespace ProseSample.Substrings.Spg.Witness

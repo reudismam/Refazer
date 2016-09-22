@@ -7,7 +7,7 @@ using ProseSample.Substrings.Spg.Witness.Target;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using TreeElement.Spg.Node;
+using ProseSample.Substrings;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
