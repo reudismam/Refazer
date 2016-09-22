@@ -27,7 +27,9 @@ IEnumerable<Node> fnodes := Traversal(node, id);
 Node operation := Insert(target, ast, k) | InsertBefore(target, r, ast) |  Update(target, ast) | Delete(target, r);
 
 Pattern pattern := NodeMatch(kmatch) | Context(kmatch, id);
-Pattern kmatch := C(kind, children) | Literal(tree) | Leaf(kind) | Variable(kind);
+Pattern kmatch := token | Pattern(kind, children);
+Pattern token := Literal(tree) | Leaf(kind) | Variable(kind);
+
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
 
 Node r := Reference(target, pattern, k);
