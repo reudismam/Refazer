@@ -275,7 +275,6 @@ namespace ProseSample.Substrings
                 var isValid = node.Equals(sx.Value);/*&& parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1*/;
                 if(isValid) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value.Parent} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
                 return isValid;
-
             }
             else
             {

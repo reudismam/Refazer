@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
@@ -11,7 +9,6 @@ using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
-using ProseSample.Substrings;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -112,79 +109,6 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-
-        //[WitnessFunction("NodeMatch", 1)]
-        //public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        //{
-        //    var eExamples = new Dictionary<State, IEnumerable<object>>();
-        //    var dic = new Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>>();
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        //get parent
-        //        var target = (Node)input[rule.Body[0]];
-        //        var parent = target.Value.Value.AsNode();
-        //        for (int i = 0; i < 3; i++)
-        //        {
-        //            if (parent.IsKind(SyntaxKind.Block) || parent.DescendantNodesAndSelf().Count() > 100)
-        //            {
-        //                if (i != 0) break;
-        //            }
-
-        //            if (!dic.ContainsKey(i))
-        //            {
-        //                dic[i] = new List<TreeNode<SyntaxNodeOrToken>>();
-        //            }
-        //            dic[i].Add(ConverterHelper.ConvertCSharpToTreeNode(parent));
-        //            parent = parent.Parent;
-        //        }
-        //    }
-
-        //    var dicPattern = new Dictionary<int, List<Pattern>>();
-        //    foreach (var item in dic)
-        //    {
-        //        dicPattern[item.Key] = new List<Pattern>();
-        //    }
-
-        //    for (int i = 0; i < spec.ProvidedInputs.Count(); i++)
-        //    {
-        //        var input = spec.ProvidedInputs.ElementAt(i);
-        //        var target = (Node)input[rule.Body[0]];
-        //        foreach (var item in dic)
-        //        {
-        //            if (item.Value.Count() == spec.ProvidedInputs.Count())
-        //            {
-        //                var patterns = item.Value.Select(ConverterHelper.ConvertITreeNodeToToken).ToList();
-        //                var commonPattern = Match.BuildPattern(patterns);
-
-        //                if (item.Key == 0)
-        //                {
-        //                    var p = new Pattern(commonPattern.Tree);
-        //                    dicPattern[item.Key].Add(p);
-        //                }
-        //                else
-        //                {
-        //                    var targetNode = TreeUpdate.FindNode(item.Value[i], target.Value.Value);
-        //                    var str1 = Match.GetPath(targetNode);
-        //                    var p = new PatternP(commonPattern.Tree, str1);
-        //                    dicPattern[item.Key].Add(p);
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    foreach (var input in spec.ProvidedInputs)
-        //    {
-        //        var resultList = new List<Pattern>();
-        //        var list = dicPattern.OrderByDescending(o => o.Key).Select(item => item.Value).ToList();
-        //        resultList.Add(list.Last().First());
-        //        var valids = ValidPatterns(list);
-        //        if (valids.Any()) resultList.Add(valids.First());
-        //        eExamples[input] = resultList;
-        //    }
-        //    //end get parent
-        //    return DisjunctiveExamplesSpec.From(eExamples);
-        //}
-
         public static DisjunctiveExamplesSpec MatchPatternBasic(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
@@ -221,11 +145,17 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        //XPath
-        public static string GetPath(TreeNode<SyntaxNodeOrToken> navigator)
+        /// <summary>
+        /// Build an XPath expression for the target node. To build this XPath, 
+        /// we keep get the parent while the parent is null and build an XPath 
+        /// from the last parent until the target node.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns>XPath</returns>
+        public static string GetPath(TreeNode<SyntaxNodeOrToken> target)
         {
             string path = "";
-            for (TreeNode<SyntaxNodeOrToken> node = navigator; node != null; node = node.Parent)
+            for (TreeNode<SyntaxNodeOrToken> node = target; node != null; node = node.Parent)
             {
                 string append = "/";
 
@@ -242,12 +172,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
 
                     append += $"{index}]";
-                    //path.Insert(0, append);
                     path = append + path;
                 }
             }
-
-            return path.ToString();
+            return path;
         }
 
         private static TreeNode<SyntaxNodeOrToken> PreviousSibling(TreeNode<SyntaxNodeOrToken> node)
