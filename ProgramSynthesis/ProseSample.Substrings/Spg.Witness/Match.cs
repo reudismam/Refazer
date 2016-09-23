@@ -190,14 +190,14 @@ namespace ProseSample.Substrings.Spg.Witness
             var patterns = new List<TreeNode<Token>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var target = (Node)input[rule.Body[0]];
-                var currentTree = WitnessFunctions.GetCurrentTree(target.Value);
-                var examples = (from Node node in spec.DisjunctiveExamples[input] select node.Value).ToList();
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                var currentTree = WitnessFunctions.GetCurrentTree(target);
+                var examples = spec.DisjunctiveExamples[input].Select(o => (TreeNode<SyntaxNodeOrToken>)o).ToList();
 
                 var matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
                 if (matchInInputTree == null)
                 {
-                    currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
+                    currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                     matchInInputTree = TreeUpdate.FindNode(currentTree, examples.First());
                 }
 

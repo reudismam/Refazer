@@ -275,8 +275,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     tocompare = v.EditOperation.Parent;
                 }
 
-                if (root == null) root = tocompare;
-
+                if (root == null)
+                {
+                    root = tocompare;
+                }
                 else if (TreeUpdate.FindNode(inpTree, tocompare.Value) != null)
                 {
                     if (root.Value.SpanStart > tocompare.Value.SpanStart)
@@ -285,11 +287,11 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                     else if (root.Value.SpanStart == tocompare.Value.SpanStart)
                     {
-                        var toCompareValue = tocompare.Value.AsNode();
                         var rootValue = root.Value.AsNode();
                         if (rootValue == null) root = tocompare;
-
-                        if (toCompareValue != null && toCompareValue.ChildNodes().Contains(rootValue))
+                        var toCompareValue = tocompare.Value.AsNode();
+                        
+                        if (toCompareValue != null && toCompareValue.DescendantNodesAndSelf().Contains(rootValue))
                         {
                             root = tocompare;
                         }
