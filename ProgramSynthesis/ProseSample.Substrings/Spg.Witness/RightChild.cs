@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {

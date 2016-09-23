@@ -6,6 +6,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings.Spg.Witness.Target;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {

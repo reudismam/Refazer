@@ -8,6 +8,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Update;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {

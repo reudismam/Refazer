@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {

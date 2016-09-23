@@ -11,6 +11,7 @@ using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
 
 namespace ProseSample.Substrings.Spg.Witness

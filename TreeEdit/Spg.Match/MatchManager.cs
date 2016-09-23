@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using ProseSample.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement;
+using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
 
 namespace TreeEdit.Spg.Match

@@ -11,6 +11,7 @@ using ProseSample.Substrings.List;
 using ProseSample.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
 using TreeElement;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {

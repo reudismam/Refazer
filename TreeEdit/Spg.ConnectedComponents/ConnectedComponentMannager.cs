@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.Script;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.ConnectedComponents
 {

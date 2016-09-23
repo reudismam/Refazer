@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Isomorphic
 {

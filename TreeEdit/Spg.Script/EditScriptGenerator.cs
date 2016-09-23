@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.Print;
 using TreeElement;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
 
 namespace TreeEdit.Spg.Script

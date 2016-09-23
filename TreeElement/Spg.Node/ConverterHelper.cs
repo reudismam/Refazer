@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings
 {

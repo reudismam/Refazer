@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 
 namespace LongestCommonSubsequence
 {

@@ -14,6 +14,7 @@ using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.Script;
 using ProseSample.Substrings;
+using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness.Target
 {
