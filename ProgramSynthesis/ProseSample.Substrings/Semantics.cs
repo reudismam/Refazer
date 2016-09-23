@@ -145,35 +145,8 @@ namespace ProseSample.Substrings
                     var n = ReconstructTree(v.Value);
                     resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
                 }
-
-                //resultList.AddRange(edited);
             }
             return resultList;
-        }
-
-        /// <summary>
-        /// Script semantic function
-        /// </summary>
-        /// <param name="target">Node</param>
-        /// <param name="edits">Edit operations</param>
-        /// <returns>Transformed node.</returns>
-        public static Node Script(Node target, IEnumerable<Node> edits)
-        {
-            TreeNode<SyntaxNodeOrToken> current = edits.Last().Value;
-            if (edits.Last().LeftNode != null)
-            {
-                var leftnode = ReconstructTree(edits.First().LeftNode.Value);
-            }
-
-            if (edits.Last().RightNode != null)
-            {
-                var rightnode = ReconstructTree(edits.First().RightNode.Value);
-            }
-
-            var node = ReconstructTree(current);
-            Console.WriteLine(node.ToString());
-            var itree = ConverterHelper.ConvertCSharpToTreeNode(node);
-            return itree != null ? new Node(itree) : new Node(new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None)));
         }
 
         /// <summary>
@@ -447,12 +420,10 @@ namespace ProseSample.Substrings
                     iTree.AddChild(newchild, i);
                 }
 
-                var beforeFlorest = iTree.Children.Select(o => o.Value).ToList();
                 var emptyStatement = SyntaxFactory.EmptyStatement();
                 var newtree = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement));
                 newtree.AddChild(iTree.Children.First(), 0);
                 var newNode = new Node(newtree);
-                //BeforeAfterMapping[newNode] = beforeFlorest;
 
                 regions.Add(newNode);
             }
