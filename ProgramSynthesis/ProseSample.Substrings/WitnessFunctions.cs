@@ -293,7 +293,7 @@ namespace ProseSample.Substrings
                 foreach (Pattern node in spec.DisjunctiveExamples[input])
                 {
                     if (node.GetType().IsSubclassOf(typeof(Pattern))) continue;
-                    var target = node.Tree;//Target(node);
+                    var target = node.Tree;
                     if (target == null) continue;
                     mats.Add(target);
                 }
@@ -337,20 +337,7 @@ namespace ProseSample.Substrings
         public static ExampleSpec DeleteFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.T1Learner<Delete<SyntaxNodeOrToken>>(rule, parameter, spec);
-        }
-
-        ///// <summary>
-        ///// Witness function for parater k in the insert operator
-        ///// </summary>
-        ///// <param name="rule">Grammar rule</param>
-        ///// <param name="parameter">Parameter</param>
-        ///// <param name="spec">Examples specification</param>
-        ///// <returns></returns>
-        //[WitnessFunction("Update", 1)]
-        //public static ExampleSpec UpdateFrom(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return EditOperation.T1Learner<Update<SyntaxNodeOrToken>>(rule, parameter, spec);
-        //}
+        }    
 
         /// <summary>
         /// Witness function for parater k in the insert operator
@@ -364,19 +351,6 @@ namespace ProseSample.Substrings
         {
             return EditOperation.UpdateTo(rule, parameter, spec);
         }
-
-        ///// <summary>
-        ///// Witness function for parater k in the insert operator
-        ///// </summary>
-        ///// <param name="rule">Grammar rule</param>
-        ///// <param name="parameter">Parameter</param>
-        ///// <param name="spec">Examples specification</param>
-        ///// <returns></returns>
-        //[WitnessFunction("Move", 1)]
-        //public static ExampleSpec MoveFrom(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return EditOperation.ParentLearner<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
-        //}
 
         /// <summary>
         /// Witness function for parater k in the insert operator
@@ -404,19 +378,7 @@ namespace ProseSample.Substrings
             return EditOperation.LearnK<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
 
-        ///// <summary>
-        ///// Witness function for parater k in the insert operator
-        ///// </summary>
-        ///// <param name="rule">Grammar rule</param>
-        ///// <param name="parameter">Parameter</param>
-        ///// <param name="spec">Examples specification</param>
-        ///// <returns></returns>
-        //[WitnessFunction("Insert", 1)]
-        //public static ExampleSpec InsertParent(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    return EditOperation.InsertParentLearner(rule, parameter, spec);
-        //}
-
+        
         /// <summary>
         /// Witness function for parater k in the insert operator
         /// </summary>
@@ -598,41 +560,6 @@ namespace ProseSample.Substrings
                     valids.Add(patternP);
             }
             return valids;
-        }
-
-
-        //public static DisjunctiveExamplesSpec NodeMatchBasic(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        //{
-        //    var eExamples = new Dictionary<State, IEnumerable<object>>();
-        //    var patterns = new List<TreeNode<Token>>();
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        var inpTree = (Node)input[rule.Body[0]];
-        //        var hinpTree = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(inpTree.Value, 3);
-        //        var pattern = BuildPattern(hinpTree);
-        //        patterns.Add(pattern);
-        //    }
-        //    var commonPattern = Match.BuildPattern(patterns);
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        var list = new List<Pattern> { new Pattern(ConverterHelper.MakeACopy(commonPattern.Tree)) };
-        //        //if (commonPattern.Tree.Children.Any())
-        //        //{
-        //        //    var copy = ConverterHelper.MakeACopy(commonPattern.Tree);
-        //        //    var empty = new EmptyToken();
-        //        //    TreeNode<Token> itreeNodeToken = new TreeNode<Token>(empty, new TLabel(SyntaxKind.EmptyStatement));
-        //        //    itreeNodeToken.Children = copy.Children;
-        //        //    list.Add(new Pattern(itreeNodeToken));
-        //        //}
-        //        eExamples[input] = list;
-        //    }
-        //    return DisjunctiveExamplesSpec.From(eExamples);
-        //}
-
-        private static TreeNode<Token> BuildPattern(TreeNode<SyntaxNodeOrToken> tree)
-        {
-            var pattern = ConverterHelper.ConvertITreeNodeToToken(tree);
-            return pattern;
         }
 
         public static TreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
