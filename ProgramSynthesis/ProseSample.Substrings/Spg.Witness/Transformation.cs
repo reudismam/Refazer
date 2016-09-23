@@ -179,8 +179,7 @@ namespace ProseSample.Substrings.Spg.Witness
         private static Edit<SyntaxNodeOrToken> ProcessRootNodeHasMoreThanOneChild(Script script, List<Edit<SyntaxNodeOrToken>> children, TreeNode<SyntaxNodeOrToken> parent, TreeNode<SyntaxNodeOrToken> transformed)
         {
             //todo correct the children.First children.second
-            if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> &&
-                children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
+            if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> && children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
             {
                 var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
                 var to = children.First().EditOperation.T1Node;

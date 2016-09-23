@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,9 +10,7 @@ using Microsoft.CodeAnalysis.Formatting;
 using ProseSample.Substrings.List;
 using ProseSample.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
-using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement;
-using ProseSample.Substrings;
 
 namespace ProseSample.Substrings
 {
@@ -73,9 +70,6 @@ namespace ProseSample.Substrings
         {
             var patternP = new PatternP(match.Tree, k);
             return patternP;
-            //var child = match.Value.Children.ElementAt(k - 1);
-            //var result = new Node(child);
-            //return result;
         }
 
         /// <summary>
@@ -92,7 +86,6 @@ namespace ProseSample.Substrings
         /// Insert the newNode node as in the k position of the node in the matching result 
         /// </summary>
         /// <param name="target">Target node</param>
-        /// <param name="node">Input data</param>
         /// <param name="k">Position in witch the node will be inserted.</param>
         /// <param name="newNode">Node that will be insert</param>
         /// <returns>New node with the newNode node inserted as the k child</returns>
@@ -117,7 +110,6 @@ namespace ProseSample.Substrings
         /// Update edit operation
         /// </summary>
         /// <param name="target">Target node</param>
-        /// <param name="node">Input node</param>
         /// <param name="to">New value</param>
         public static Node Update(Node target, Node to)
         {
@@ -148,7 +140,13 @@ namespace ProseSample.Substrings
             var resultList = new List<Node>();
             foreach (var edited in beforeFlorest)
             {
-                resultList.AddRange(edited);
+                foreach (var v in edited)
+                {
+                    var n = ReconstructTree(v.Value);
+                    resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
+                }
+
+                //resultList.AddRange(edited);
             }
             return resultList;
         }
@@ -225,17 +223,6 @@ namespace ProseSample.Substrings
             itreeNode.Parent = parent;
             var node = new Node(itreeNode);
             return node;
-        }
-
-        /// <summary>
-        /// Reference semantic function
-        /// </summary>
-        /// <param name="node">Node</param>
-        /// <param name="result">Result of the pattern</param>
-        /// <returns>Result of the pattern</returns>
-        public static Node Ref(Node node, Node result)
-        {
-            return result;
         }
 
         public static IEnumerable<Pattern> CList(Pattern child1, IEnumerable<Pattern> cList)
@@ -411,10 +398,7 @@ namespace ProseSample.Substrings
             var result = new List<Node>();
             foreach (var n in nodes)
             {
-                //var emptyKind = SyntaxKind.EmptyStatement;
                 result.Add(new Node(n));
-                //var parentEmpty = new Node(new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(emptyKind), new List<TreeNode<SyntaxNodeOrToken>> {n}));
-                //result.Add(parentEmpty);
             }
             return result;
         }
