@@ -159,48 +159,11 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static Edit<SyntaxNodeOrToken> CompactScriptIntoASingleOperation(TreeNode<SyntaxNodeOrToken> inpTree, Script script)
         {
-            if (script.Edits.Count == 1) return script.Edits.First();
-
             var parent = GetParent(script, inpTree);
             var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
             var transformed = ProcessScriptOnNode(script, parent);
             if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>)) return ProcessSequenceOfDeleteOperations(script, parent);
-
-            if (children.Count > 1)
-            {
-                //todo correct the children.First children.second
-                if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> &&
-                    children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
-                {
-                    var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
-                    var to = children.First().EditOperation.T1Node;
-                    foreach (var v in @from.DescendantNodesAndSelf())
-                    {
-                        foreach (var edit in script.Edits)
-                        {
-                            if (edit.EditOperation is Update<SyntaxNodeOrToken>)
-                            {
-                                var up = (Update<SyntaxNodeOrToken>) edit.EditOperation;
-                                if (v.Equals(up.To))
-                                {
-                                    v.Value = up.T1Node.Value;
-                                }
-                            }
-                        }
-                    }
-                    var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                    return new Edit<SyntaxNodeOrToken>(update);
-                }
-                else
-                {
-                    //todo we need to work more here.
-                    var toNode = transformed;
-                    var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
-                    var update = new Update<SyntaxNodeOrToken>(@from, toNode,
-                        ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
-                    return new Edit<SyntaxNodeOrToken>(update);
-                }
-            }
+            if (children.Count > 1) return ProcessRootNodeHasMoreThanOneChild(script, children, parent, transformed);
 
             var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
             if (firstOperation is Insert<SyntaxNodeOrToken>)
@@ -211,6 +174,48 @@ namespace ProseSample.Substrings.Spg.Witness
                 return new Edit<SyntaxNodeOrToken>(insert);
             }
             return null;
+        }
+
+        private static Edit<SyntaxNodeOrToken> ProcessRootNodeHasMoreThanOneChild(Script script, List<Edit<SyntaxNodeOrToken>> children, TreeNode<SyntaxNodeOrToken> parent, TreeNode<SyntaxNodeOrToken> transformed)
+        {
+            //todo correct the children.First children.second
+            if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> &&
+                children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
+            {
+                var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
+                var to = children.First().EditOperation.T1Node;
+                foreach (var v in @from.DescendantNodesAndSelf())
+                {
+                    foreach (var edit in script.Edits)
+                    {
+                        if (edit.EditOperation is Update<SyntaxNodeOrToken>)
+                        {
+                            var up = (Update<SyntaxNodeOrToken>)edit.EditOperation;
+                            if (v.Equals(up.To))
+                            {
+                                v.Value = up.T1Node.Value;
+                            }
+                        }
+                    }
+                }
+                var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
+                {
+                    var operation = new Edit<SyntaxNodeOrToken>(update);
+                    return operation;
+                }
+            }
+            else
+            {
+                //todo we need to work more here.
+                var toNode = transformed;
+                var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
+                var update = new Update<SyntaxNodeOrToken>(@from, toNode,
+                    ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
+                {
+                    var operation = new Edit<SyntaxNodeOrToken>(update);
+                    return operation;
+                }
+            }
         }
 
         private static TreeNode<SyntaxNodeOrToken> ProcessScriptOnNode(Script script, TreeNode<SyntaxNodeOrToken> parent)
@@ -226,7 +231,7 @@ namespace ProseSample.Substrings.Spg.Witness
         private static Edit<SyntaxNodeOrToken> ProcessSequenceOfDeleteOperations(Script script, TreeNode<SyntaxNodeOrToken> parent)
         {
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
-            var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> {edits});
+            var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> { edits });
 
             if (list.Count == 1)
             {
@@ -238,7 +243,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
             var node = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
             var transformed = ProcessScriptOnNode(script, node);
-           
+
             var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
             var to = ConverterHelper.MakeACopy(transformed);
             var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
