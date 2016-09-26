@@ -120,7 +120,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 eExamples[input] = new List<Pattern> { patternP, new Pattern(patterncopy.Children.ElementAt(indexChildList[input])) };
             }
             return DisjunctiveExamplesSpec.From(eExamples);
-        }*/
+        }
 
         public static DisjunctiveExamplesSpec MatchPatternBasic(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
@@ -156,7 +156,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 eExamples[input] = new List<Pattern> { new Pattern(ConverterHelper.MakeACopy(commonPattern.Tree)) };
             }
             return DisjunctiveExamplesSpec.From(eExamples);
-        }
+        }*/
 
         /// <summary>
         /// Build an XPath expression for the target node. To build this XPath, 
@@ -227,7 +227,7 @@ namespace ProseSample.Substrings.Spg.Witness
         //EndXPath
 
 
-        public static Pattern BuildPattern(List<TreeNode<Token>> patterns, bool leafToken = true)
+        /*public static Pattern BuildPattern(List<TreeNode<Token>> patterns, bool leafToken = true)
         {
             var pattern = patterns.First();
             for (int i = 1; i < patterns.Count; i++)
@@ -277,7 +277,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
             }
             return pattern;
-        }
+        }*/
 
         public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
@@ -401,7 +401,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 kExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
-        }*/
+        }
 
         private static bool IsFullTree(DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
@@ -450,6 +450,6 @@ namespace ProseSample.Substrings.Spg.Witness
 
             var tuple = Tuple.Create(listBefore, listAfter);
             return tuple;
-        }
+        }*/
     }
 }
