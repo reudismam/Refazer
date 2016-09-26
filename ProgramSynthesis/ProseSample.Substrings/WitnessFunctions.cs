@@ -398,7 +398,6 @@ namespace ProseSample.Substrings
             return EditOperation.LearnK<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
 
-
         /// <summary>
         /// Witness function for parater k in the insert operator
         /// </summary>
@@ -411,7 +410,6 @@ namespace ProseSample.Substrings
         {
             return EditOperation.Insertast(rule, parameter, spec);
         }
-
 
         /// <summary>
         /// Witness function for parater k in the insert operator

@@ -5,6 +5,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseSample.Substrings;
+using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -44,16 +45,18 @@ namespace ProseSample.Substrings.Spg.Witness
         public static ExampleSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, object>();
-            var literalExamples = new List<SyntaxNodeOrToken>();
-            foreach (var input in spec.ProvidedInputs)
+            var mats = new List<TreeNode<SyntaxNodeOrToken>>();
+            foreach (State input in spec.ProvidedInputs)
             {
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
-                    if (node.Children.Any()) return null;
-                    literalExamples.Add(node.Value);
-                }
+                    if (sot.Children.Any()) return null;
+                    mats.Add(sot);
 
-                treeExamples[input] = literalExamples.First();
+                    var first = mats.First();
+                    if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot)) return null;
+                }
+                treeExamples[input] = mats.First().Value;
             }
             return new ExampleSpec(treeExamples);
         }
