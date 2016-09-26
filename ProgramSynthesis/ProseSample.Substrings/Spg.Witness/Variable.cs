@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
@@ -17,11 +18,10 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<SyntaxKind>();
-                foreach (TreeNode<Token> node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    if ((node.Value is LeafToken) || (node.Value is DynToken)) continue;
                     if (node.Children.Any()) continue;
-                    mats.Add(node.Value.Kind);
+                    mats.Add(node.Value.Kind());
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats.First();

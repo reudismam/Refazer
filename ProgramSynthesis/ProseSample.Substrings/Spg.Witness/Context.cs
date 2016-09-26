@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -16,12 +17,11 @@ namespace ProseSample.Substrings.Spg.Witness
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var mats = new List<TreeNode<Token>>();
-                foreach(Pattern node in spec.DisjunctiveExamples[input])
+                var mats = new List<TreeNode<SyntaxNodeOrToken>>();
+                foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    if (!(node is PatternP)) continue;
-                    if (node.Tree == null) continue;
-                    mats.Add(node.Tree);
+                    if (node.Parent == null) continue;
+                    mats.Add(node.Parent);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;

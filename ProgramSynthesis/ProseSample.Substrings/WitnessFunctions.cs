@@ -91,7 +91,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 0)]
         public static DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<TreeNode<Token>>.List0(rule, parameter, spec);
+            return GList<TreeNode<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("CList", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec matchSpec)
         {
-            return GList<TreeNode<Token>>.List1(rule, parameter, spec);
+            return GList<TreeNode<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace ProseSample.Substrings
         [WitnessFunction("SC", 0)]
         public static DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<TreeNode<Token>>.Single(rule, parameter, spec);
+            return GList<TreeNode<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
         }
 
         /// <summary>
@@ -290,6 +290,25 @@ namespace ProseSample.Substrings
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
+                var mats = new List<TreeNode<SyntaxNodeOrToken>>();
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                {
+                    mats.Add(node);
+                }
+                if (!mats.Any()) return null;
+                treeExamples[input] = mats;
+
+                treeExamples[input] = mats;
+            }
+            return DisjunctiveExamplesSpec.From(treeExamples);
+        }
+
+        /*[WitnessFunction("NodeMatch", 0)]
+        public static DisjunctiveExamplesSpec NMatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
                 var mats = new List<TreeNode<Token>>();
                 foreach (Pattern node in spec.DisjunctiveExamples[input])
                 {
@@ -302,7 +321,7 @@ namespace ProseSample.Substrings
                 treeExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
-        }
+        }*/
 
         [WitnessFunction("Transformation", 1)]
         public static SubsequenceSpec TransformationLoop(GrammarRule rule, int parameter, ExampleSpec spec)
@@ -338,7 +357,7 @@ namespace ProseSample.Substrings
         public static ExampleSpec DeleteFrom(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return EditOperation.T1Learner<Delete<SyntaxNodeOrToken>>(rule, parameter, spec);
-        }    
+        }
 
         /// <summary>
         /// Witness function for parater k in the insert operator
@@ -379,7 +398,7 @@ namespace ProseSample.Substrings
             return EditOperation.LearnK<Move<SyntaxNodeOrToken>>(rule, parameter, spec);
         }
 
-        
+
         /// <summary>
         /// Witness function for parater k in the insert operator
         /// </summary>
@@ -448,7 +467,7 @@ namespace ProseSample.Substrings
 
         /// <summary>
         /// C witness function for expression parameter with one child
-        /// </summary>
+        /// </summary>N
         /// <param name="rule">C rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Example specification</param>
@@ -474,6 +493,20 @@ namespace ProseSample.Substrings
         }
 
         [WitnessFunction("Match", 1)]
+        public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var eExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                kMatches.Add(target);
+                eExamples[input] = kMatches;
+            }
+            return DisjunctiveExamplesSpec.From(eExamples);
+        }
+
+        /*[WitnessFunction("Match", 1)]
         public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
@@ -543,14 +576,14 @@ namespace ProseSample.Substrings
             }
             //end get parent
             return DisjunctiveExamplesSpec.From(eExamples);
-        }
+        }*/
 
         public static List<Pattern> ValidPatterns(List<List<Pattern>> list)
         {
             var valids = new List<Pattern>();
             for (int i = 0; i < list.Count - 1; i++)
             {
-                var patternPList = list[i].Select(o => (PatternP) o).ToList();
+                var patternPList = list[i].Select(o => (PatternP)o).ToList();
                 if (!patternPList.Any()) continue;
                 if (patternPList.Any(o => !o.K.Equals(patternPList.First().K))) continue;
 
