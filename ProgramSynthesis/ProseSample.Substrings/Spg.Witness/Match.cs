@@ -63,75 +63,6 @@ namespace ProseSample.Substrings.Spg.Witness
             return new DisjunctiveExamplesSpec(eExamples);
         }
 
-        ///// <summary>
-        ///// Build an XPath expression for the target node. To build this XPath, 
-        ///// we keep get the parent while the parent is null and build an XPath 
-        ///// from the last parent until the target node.
-        ///// </summary>
-        ///// <param name="target"></param>
-        ///// <param name="parent"></param>
-        ///// <returns>XPath</returns>
-        //public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<SyntaxNodeOrToken> parent)
-        //{
-        //    string path = "";
-        //    for (TreeNode<SyntaxNodeOrToken> node = target; !node.Equals(parent); node = node.Parent)
-        //    {
-        //        string append = "/";
-
-        //        if (node.Parent != null && node.Parent.Children.Count >= 1)
-        //        {
-        //            append += "[";
-
-        //            int index = 1;
-        //            var previousSibling = PreviousSibling(node);
-        //            while (previousSibling != null)
-        //            {
-        //                index++;
-        //                previousSibling = PreviousSibling(previousSibling);
-        //            }
-
-        //            append += $"{index}]";
-        //            path = append + path;
-        //        }
-        //    }
-        //    return path;
-        //}
-
-        //private static TreeNode<SyntaxNodeOrToken> PreviousSibling(TreeNode<SyntaxNodeOrToken> node)
-        //{
-        //    var parent = node.Parent;
-        //    var parentIndex = parent.Children.FindIndex(o => o.Equals(node));
-        //    if (parentIndex == 0) return null;
-        //    return parent.Children[parentIndex - 1];
-        //}
-
-
-        //public static List<string> GetXpaths(TreeNode<SyntaxNodeOrToken> doc, SyntaxNodeOrToken stop)
-        //{
-        //    var xpathList = new List<string>();
-        //    var xpath = "";
-        //    foreach (var child in doc.Children)
-        //    {
-        //        if (child.Value.Equals(stop)) return xpathList;
-        //        GetXPaths(child, ref xpathList, xpath, stop);
-        //    }
-        //    return xpathList;
-        //}
-
-        //public static void GetXPaths(TreeNode<SyntaxNodeOrToken> node, ref List<string> xpathList, string xpath, SyntaxNodeOrToken stop)
-        //{
-        //    xpath += "/" + node.Label;
-        //    if (!xpathList.Contains(xpath))
-        //        xpathList.Add(xpath);
-
-        //    foreach (TreeNode<SyntaxNodeOrToken> child in node.Children)
-        //    {
-        //        if (child.Value.Equals(stop)) return;
-        //        GetXPaths(child, ref xpathList, xpath, stop);
-        //    }
-        //}
-        //EndXPath
-
         public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
@@ -147,11 +78,22 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
                     var matches = MatchManager.Matches(currentTree, pattern);
+                    TreeNode<SyntaxNodeOrToken> compare = null;
 
                     for (int i = 0; i < matches.Count; i++)
                     {
-                        var m = matches[i];
-                        if (m.Equals(target))
+                        var match = matches[i];
+                        if (patternExample is PatternP)
+                        {
+                            var patternP = patternExample as PatternP;
+                            compare = Semantics.FindChild(match, patternP.K);
+                        }
+                        else
+                        {
+                            compare = node;
+                        }
+
+                        if (compare != null && match.Equals(compare))
                         {
                             mats.Add(i + 1);
                         }
@@ -454,3 +396,74 @@ namespace ProseSample.Substrings.Spg.Witness
         }
         return pattern;
     }*/
+
+/*
+    /// <summary>
+    /// Build an XPath expression for the target node. To build this XPath, 
+    /// we keep get the parent while the parent is null and build an XPath 
+    /// from the last parent until the target node.
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="parent"></param>
+    /// <returns>XPath</returns>
+    public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<SyntaxNodeOrToken> parent)
+    {
+        string path = "";
+        for (TreeNode<SyntaxNodeOrToken> node = target; !node.Equals(parent); node = node.Parent)
+        {
+            string append = "/";
+
+            if (node.Parent != null && node.Parent.Children.Count >= 1)
+            {
+                append += "[";
+
+                int index = 1;
+                var previousSibling = PreviousSibling(node);
+                while (previousSibling != null)
+                {
+                    index++;
+                    previousSibling = PreviousSibling(previousSibling);
+                }
+
+                append += $"{index}]";
+                path = append + path;
+            }
+        }
+        return path;
+    }
+
+    private static TreeNode<SyntaxNodeOrToken> PreviousSibling(TreeNode<SyntaxNodeOrToken> node)
+    {
+        var parent = node.Parent;
+        var parentIndex = parent.Children.FindIndex(o => o.Equals(node));
+        if (parentIndex == 0) return null;
+        return parent.Children[parentIndex - 1];
+    }
+
+
+    public static List<string> GetXpaths(TreeNode<SyntaxNodeOrToken> doc, SyntaxNodeOrToken stop)
+    {
+        var xpathList = new List<string>();
+        var xpath = "";
+        foreach (var child in doc.Children)
+        {
+            if (child.Value.Equals(stop)) return xpathList;
+            GetXPaths(child, ref xpathList, xpath, stop);
+        }
+        return xpathList;
+    }
+
+    public static void GetXPaths(TreeNode<SyntaxNodeOrToken> node, ref List<string> xpathList, string xpath, SyntaxNodeOrToken stop)
+    {
+        xpath += "/" + node.Label;
+        if (!xpathList.Contains(xpath))
+            xpathList.Add(xpath);
+
+        foreach (TreeNode<SyntaxNodeOrToken> child in node.Children)
+        {
+            if (child.Value.Equals(stop)) return;
+            GetXPaths(child, ref xpathList, xpath, stop);
+        }
+    }
+    //EndXPath
+    */
