@@ -63,7 +63,109 @@ namespace ProseSample.Substrings.Spg.Witness
             return new DisjunctiveExamplesSpec(eExamples);
         }
 
-        /*public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        ///// <summary>
+        ///// Build an XPath expression for the target node. To build this XPath, 
+        ///// we keep get the parent while the parent is null and build an XPath 
+        ///// from the last parent until the target node.
+        ///// </summary>
+        ///// <param name="target"></param>
+        ///// <param name="parent"></param>
+        ///// <returns>XPath</returns>
+        //public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<SyntaxNodeOrToken> parent)
+        //{
+        //    string path = "";
+        //    for (TreeNode<SyntaxNodeOrToken> node = target; !node.Equals(parent); node = node.Parent)
+        //    {
+        //        string append = "/";
+
+        //        if (node.Parent != null && node.Parent.Children.Count >= 1)
+        //        {
+        //            append += "[";
+
+        //            int index = 1;
+        //            var previousSibling = PreviousSibling(node);
+        //            while (previousSibling != null)
+        //            {
+        //                index++;
+        //                previousSibling = PreviousSibling(previousSibling);
+        //            }
+
+        //            append += $"{index}]";
+        //            path = append + path;
+        //        }
+        //    }
+        //    return path;
+        //}
+
+        //private static TreeNode<SyntaxNodeOrToken> PreviousSibling(TreeNode<SyntaxNodeOrToken> node)
+        //{
+        //    var parent = node.Parent;
+        //    var parentIndex = parent.Children.FindIndex(o => o.Equals(node));
+        //    if (parentIndex == 0) return null;
+        //    return parent.Children[parentIndex - 1];
+        //}
+
+
+        //public static List<string> GetXpaths(TreeNode<SyntaxNodeOrToken> doc, SyntaxNodeOrToken stop)
+        //{
+        //    var xpathList = new List<string>();
+        //    var xpath = "";
+        //    foreach (var child in doc.Children)
+        //    {
+        //        if (child.Value.Equals(stop)) return xpathList;
+        //        GetXPaths(child, ref xpathList, xpath, stop);
+        //    }
+        //    return xpathList;
+        //}
+
+        //public static void GetXPaths(TreeNode<SyntaxNodeOrToken> node, ref List<string> xpathList, string xpath, SyntaxNodeOrToken stop)
+        //{
+        //    xpath += "/" + node.Label;
+        //    if (!xpathList.Contains(xpath))
+        //        xpathList.Add(xpath);
+
+        //    foreach (TreeNode<SyntaxNodeOrToken> child in node.Children)
+        //    {
+        //        if (child.Value.Equals(stop)) return;
+        //        GetXPaths(child, ref xpathList, xpath, stop);
+        //    }
+        //}
+        //EndXPath
+
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        {
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var mats = new List<object>();
+                var patternExample = (Pattern)kind.Examples[input];
+                var pattern = patternExample.Tree;
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                //var inputTree = (Node)input[rule.Grammar.InputSymbol];
+
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                {
+                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
+                    var matches = MatchManager.Matches(currentTree, pattern);
+
+                    for (int i = 0; i < matches.Count; i++)
+                    {
+                        var m = matches[i];
+                        if (m.Equals(target))
+                        {
+                            mats.Add(i + 1);
+                        }
+                    }
+                }
+                if (!mats.Any()) return null;
+                kExamples[input] = mats;
+            }
+            return DisjunctiveExamplesSpec.From(kExamples);
+        }
+    }
+}
+
+/*public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             var patterns = new List<TreeNode<Token>>();
@@ -159,298 +261,196 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }*/
 
-        /// <summary>
-        /// Build an XPath expression for the target node. To build this XPath, 
-        /// we keep get the parent while the parent is null and build an XPath 
-        /// from the last parent until the target node.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns>XPath</returns>
-        public static string GetPath(TreeNode<SyntaxNodeOrToken> target)
+/*public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+   {
+       var kExamples = new Dictionary<State, IEnumerable<object>>();
+       var isFullTree = IsFullTree(spec, kind);
+
+       //var intersectMatches = new List<int>();
+       foreach (State input in spec.ProvidedInputs)
+       {
+           var mats = new List<object>();
+           var patternExample = (Pattern)kind.Examples[input];
+           var pattern = patternExample.Tree;
+           var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+           var inputTree = (Node)input[rule.Grammar.InputSymbol];
+
+           foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+           {
+               var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
+               var matches = MatchManager.Matches(currentTree, pattern);
+
+               if (isFullTree)
+               {
+                   currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
+                   matches = MatchManager.Matches(currentTree, pattern);
+                   //todo refactor this
+                   for (int i = 0; i < matches.Count; i++)
+                   {
+                       var item = matches[i];
+                       if (patternExample is PatternP)
+                       {
+                           if (item.Children.Any(o => MatchManager.IsValueEachChild(node, o)))
+                           {
+                               var beforeafter = SegmentElementsBeforeAfter(target, matches);
+                               var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
+                               var aIndex = beforeafter.Item2.FindIndex(o => o.Equals(item));
+
+                               if (bIndex != -1)
+                               {
+                                   mats.Add(-(bIndex + 1));
+                               }
+                               else
+                               {
+                                   mats.Add(aIndex + 1);
+                               }
+                           }
+                       }
+                       else
+                       {
+                           if (MatchManager.IsValueEachChild(node, item))
+                           {
+                               var beforeafter = SegmentElementsBeforeAfter(target, matches);
+                               var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
+                               var aIndex = beforeafter.Item2.FindIndex(o => o.Equals(item));
+
+                               if (bIndex != -1)
+                               {
+                                   mats.Add(-(bIndex + 1));
+                               }
+                               else
+                               {
+                                   mats.Add(aIndex + 1);
+                               }
+                           }
+                       }
+                   }
+               }
+               else
+               {
+                   for (int i = 0; i < matches.Count; i++)
+                   {
+                       var item = matches[i];
+                       if (patternExample is PatternP)
+                       {
+                           if (item.Children.Any(o => MatchManager.IsValueEachChild(node, o)))
+                           {
+                               mats.Add(i + 1);
+                           }
+                       }
+                       else {
+
+                           if (MatchManager.IsValueEachChild(node, item))
+                           {
+                               mats.Add(i + 1);
+                           }
+                       }
+                   }
+               }
+           }
+           if (!mats.Any()) return null;
+           kExamples[input] = mats;
+       }
+       return DisjunctiveExamplesSpec.From(kExamples);
+   }
+
+   private static bool IsFullTree(DisjunctiveExamplesSpec spec, ExampleSpec kind)
+   {
+       foreach (State input in spec.ProvidedInputs)
+       {
+           var patternExample = (Pattern)kind.Examples[input];
+           var pattern = patternExample.Tree;
+           foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+           {
+               var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
+               var matches = MatchManager.Matches(currentTree, pattern);
+
+               if (!matches.Any())
+               {
+                   return true;
+               }
+           }
+       }
+       return false;
+   }
+
+   private static Tuple<List<TreeNode<SyntaxNodeOrToken>>, List<TreeNode<SyntaxNodeOrToken>>> SegmentElementsBeforeAfter(TreeNode<SyntaxNodeOrToken> target, List<TreeNode<SyntaxNodeOrToken>> matches)
+   {
+       TreeNode<SyntaxNodeOrToken> node = null;
+       if (target.Children.Any())
+       {
+           node = target.Children.First();
+       }
+       else
+       {
+           node = target;
+       }
+       var listBefore = new List<TreeNode<SyntaxNodeOrToken>>();
+       var listAfter = new List<TreeNode<SyntaxNodeOrToken>>();
+       foreach (var match in matches)
+       {
+           if (match.Value.SpanStart < node.Value.SpanStart)
+           {
+               listBefore.Add(match);
+           }
+           else
+           {
+               listAfter.Add(match);
+           }
+       }
+
+       var tuple = Tuple.Create(listBefore, listAfter);
+       return tuple;
+   }*/
+
+/*public static Pattern BuildPattern(List<TreeNode<Token>> patterns, bool leafToken = true)
+    {
+        var pattern = patterns.First();
+        for (int i = 1; i < patterns.Count; i++)
         {
-            string path = "";
-            for (TreeNode<SyntaxNodeOrToken> node = target; node != null; node = node.Parent)
-            {
-                string append = "/";
-
-                if (node.Parent != null && node.Parent.Children.Count >= 1)
-                {
-                    append += "[";
-
-                    int index = 1;
-                    var previousSibling = PreviousSibling(node);
-                    while (previousSibling != null)
-                    {
-                        index++;
-                        previousSibling = PreviousSibling(previousSibling);
-                    }
-
-                    append += $"{index}]";
-                    path = append + path;
-                }
-            }
-            return path;
+            pattern = BuildPattern(pattern, patterns[i], leafToken).Tree;
         }
-
-        private static TreeNode<SyntaxNodeOrToken> PreviousSibling(TreeNode<SyntaxNodeOrToken> node)
-        {
-            var parent = node.Parent;
-            var parentIndex = parent.Children.FindIndex(o => o.Equals(node));
-            if (parentIndex == 0) return null;
-            return parent.Children[parentIndex - 1];
-        }
-
-
-        public static List<string> GetXpaths(TreeNode<SyntaxNodeOrToken> doc, SyntaxNodeOrToken stop)
-        {
-            var xpathList = new List<string>();
-            var xpath = "";
-            foreach (var child in doc.Children)
-            {
-                if (child.Value.Equals(stop)) return xpathList;
-                GetXPaths(child, ref xpathList, xpath, stop);
-            }
-            return xpathList;
-        }
-
-        public static void GetXPaths(TreeNode<SyntaxNodeOrToken> node, ref List<string> xpathList, string xpath, SyntaxNodeOrToken stop)
-        {
-            xpath += "/" + node.Label;
-            if (!xpathList.Contains(xpath))
-                xpathList.Add(xpath);
-
-            foreach (TreeNode<SyntaxNodeOrToken> child in node.Children)
-            {
-                if (child.Value.Equals(stop)) return;
-                GetXPaths(child, ref xpathList, xpath, stop);
-            }
-        }
-        //EndXPath
-
-
-        /*public static Pattern BuildPattern(List<TreeNode<Token>> patterns, bool leafToken = true)
-        {
-            var pattern = patterns.First();
-            for (int i = 1; i < patterns.Count; i++)
-            {
-                pattern = BuildPattern(pattern, patterns[i], leafToken).Tree;
-            }
-            return new Pattern(pattern);
-        }
-
-        public static Pattern BuildPattern(TreeNode<Token> t1, TreeNode<Token> t2, bool considerLeafToken)
-        {
-            var emptyKind = SyntaxKind.EmptyStatement;
-            var token = t1.Value.Kind == emptyKind && t2.Value.Kind == emptyKind ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
-            var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
-            Pattern pattern = (t1.Value.Kind != t2.Value.Kind) ? new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))) : new Pattern(itreeNode); //EmptyToken pattern.
-            if (!t1.Children.Any() || !t2.Children.Any())
-            {
-                if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)
-                {
-                    var v1 = ConverterHelper.ConvertCSharpToTreeNode(t1.Value.Value.Value);
-                    var v2 = ConverterHelper.ConvertCSharpToTreeNode(t2.Value.Value.Value);
-                    if (IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(v1, v2))
-                    {
-                        var dtoken = new DynToken(t1.Value.Kind, t1.Value.Value);
-                        var ditreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
-                        return new Pattern(ditreeNode);
-                    }
-                }
-
-                //if (!t1.Value.Value.Children.Any() && !t2.Value.Value.Children.Any() && considerLeafToken)
-                //{
-                //    var ltoken = new LeafToken(t1.Value.Kind, t1.Value.Value);
-                //    var litreenode = new TreeNode<Token>(ltoken, new TLabel(token.Kind));
-                //    return new Pattern(litreenode);
-                //}
-                return pattern;
-            }
-
-            if (t1.Children.Count == t2.Children.Count)
-            {
-                for (int j = 0; j < t1.Children.Count; j++)
-                {
-                    var t1Child = t1.Children.ElementAt(j);
-                    var t2Child = t2.Children.ElementAt(j);
-                    Pattern patternChild = BuildPattern(t1Child, t2Child, considerLeafToken);
-                    pattern.Tree.AddChild(patternChild.Tree, j);
-                }
-            }
-            return pattern;
-        }*/
-
-        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var mats = new List<object>();
-                var patternExample = (Pattern)kind.Examples[input];
-                var pattern = patternExample.Tree;
-                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                //var inputTree = (Node)input[rule.Grammar.InputSymbol];
-
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                {
-                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
-                    var matches = MatchManager.Matches(currentTree, pattern);
-
-                    for (int i = 0; i < matches.Count; i++)
-                    {
-                        var m = matches[i];
-                        if (m.Equals(target))
-                        {
-                            mats.Add(i + 1);
-                        }
-                    }
-                }
-                if (!mats.Any()) return null;
-                kExamples[input] = mats;
-            }
-            return DisjunctiveExamplesSpec.From(kExamples);
-        }
-
-        /*public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var isFullTree = IsFullTree(spec, kind);
-
-            //var intersectMatches = new List<int>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var mats = new List<object>();
-                var patternExample = (Pattern)kind.Examples[input];
-                var pattern = patternExample.Tree;
-                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                var inputTree = (Node)input[rule.Grammar.InputSymbol];
-
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                {
-                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
-                    var matches = MatchManager.Matches(currentTree, pattern);
-
-                    if (isFullTree)
-                    {
-                        currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
-                        matches = MatchManager.Matches(currentTree, pattern);
-                        //todo refactor this
-                        for (int i = 0; i < matches.Count; i++)
-                        {
-                            var item = matches[i];
-                            if (patternExample is PatternP)
-                            {
-                                if (item.Children.Any(o => MatchManager.IsValueEachChild(node, o)))
-                                {
-                                    var beforeafter = SegmentElementsBeforeAfter(target, matches);
-                                    var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
-                                    var aIndex = beforeafter.Item2.FindIndex(o => o.Equals(item));
-
-                                    if (bIndex != -1)
-                                    {
-                                        mats.Add(-(bIndex + 1));
-                                    }
-                                    else
-                                    {
-                                        mats.Add(aIndex + 1);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (MatchManager.IsValueEachChild(node, item))
-                                {
-                                    var beforeafter = SegmentElementsBeforeAfter(target, matches);
-                                    var bIndex = beforeafter.Item1.FindIndex(o => o.Equals(item));
-                                    var aIndex = beforeafter.Item2.FindIndex(o => o.Equals(item));
-
-                                    if (bIndex != -1)
-                                    {
-                                        mats.Add(-(bIndex + 1));
-                                    }
-                                    else
-                                    {
-                                        mats.Add(aIndex + 1);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < matches.Count; i++)
-                        {
-                            var item = matches[i];
-                            if (patternExample is PatternP)
-                            {
-                                if (item.Children.Any(o => MatchManager.IsValueEachChild(node, o)))
-                                {
-                                    mats.Add(i + 1);
-                                }
-                            }
-                            else {
-
-                                if (MatchManager.IsValueEachChild(node, item))
-                                {
-                                    mats.Add(i + 1);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!mats.Any()) return null;
-                kExamples[input] = mats;
-            }
-            return DisjunctiveExamplesSpec.From(kExamples);
-        }
-
-        private static bool IsFullTree(DisjunctiveExamplesSpec spec, ExampleSpec kind)
-        {
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var patternExample = (Pattern)kind.Examples[input];
-                var pattern = patternExample.Tree;
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                {
-                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
-                    var matches = MatchManager.Matches(currentTree, pattern);
-
-                    if (!matches.Any())
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        private static Tuple<List<TreeNode<SyntaxNodeOrToken>>, List<TreeNode<SyntaxNodeOrToken>>> SegmentElementsBeforeAfter(TreeNode<SyntaxNodeOrToken> target, List<TreeNode<SyntaxNodeOrToken>> matches)
-        {
-            TreeNode<SyntaxNodeOrToken> node = null;
-            if (target.Children.Any())
-            {
-                node = target.Children.First();
-            }
-            else
-            {
-                node = target;
-            }
-            var listBefore = new List<TreeNode<SyntaxNodeOrToken>>();
-            var listAfter = new List<TreeNode<SyntaxNodeOrToken>>();
-            foreach (var match in matches)
-            {
-                if (match.Value.SpanStart < node.Value.SpanStart)
-                {
-                    listBefore.Add(match);
-                }
-                else
-                {
-                    listAfter.Add(match);
-                }
-            }
-
-            var tuple = Tuple.Create(listBefore, listAfter);
-            return tuple;
-        }*/
+        return new Pattern(pattern);
     }
-}
+
+    public static Pattern BuildPattern(TreeNode<Token> t1, TreeNode<Token> t2, bool considerLeafToken)
+    {
+        var emptyKind = SyntaxKind.EmptyStatement;
+        var token = t1.Value.Kind == emptyKind && t2.Value.Kind == emptyKind ? new EmptyToken() : new Token(t1.Value.Kind, t1.Value.Value);
+        var itreeNode = new TreeNode<Token>(token, new TLabel(token.Kind));
+        Pattern pattern = (t1.Value.Kind != t2.Value.Kind) ? new Pattern(new TreeNode<Token>(new EmptyToken(), new TLabel(emptyKind))) : new Pattern(itreeNode); //EmptyToken pattern.
+        if (!t1.Children.Any() || !t2.Children.Any())
+        {
+            if (!t1.Children.Any() && !t2.Children.Any() && t1.Value is DynToken && t2.Value is DynToken)
+            {
+                var v1 = ConverterHelper.ConvertCSharpToTreeNode(t1.Value.Value.Value);
+                var v2 = ConverterHelper.ConvertCSharpToTreeNode(t2.Value.Value.Value);
+                if (IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(v1, v2))
+                {
+                    var dtoken = new DynToken(t1.Value.Kind, t1.Value.Value);
+                    var ditreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
+                    return new Pattern(ditreeNode);
+                }
+            }
+
+            //if (!t1.Value.Value.Children.Any() && !t2.Value.Value.Children.Any() && considerLeafToken)
+            //{
+            //    var ltoken = new LeafToken(t1.Value.Kind, t1.Value.Value);
+            //    var litreenode = new TreeNode<Token>(ltoken, new TLabel(token.Kind));
+            //    return new Pattern(litreenode);
+            //}
+            return pattern;
+        }
+
+        if (t1.Children.Count == t2.Children.Count)
+        {
+            for (int j = 0; j < t1.Children.Count; j++)
+            {
+                var t1Child = t1.Children.ElementAt(j);
+                var t2Child = t2.Children.ElementAt(j);
+                Pattern patternChild = BuildPattern(t1Child, t2Child, considerLeafToken);
+                pattern.Tree.AddChild(patternChild.Tree, j);
+            }
+        }
+        return pattern;
+    }*/
