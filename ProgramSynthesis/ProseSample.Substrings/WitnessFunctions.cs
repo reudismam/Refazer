@@ -76,7 +76,7 @@ namespace ProseSample.Substrings
         /// <param name="kindBinding">kindRef binding</param>
         /// <returns>Disjuntive example specification</returns>
         [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec kindBinding)
+        public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
             return new Parent().ParentK(rule, parameter, spec, kindBinding);
         }
