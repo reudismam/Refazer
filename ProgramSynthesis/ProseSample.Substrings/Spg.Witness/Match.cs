@@ -78,11 +78,11 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
                     var matches = MatchManager.Matches(currentTree, pattern);
-                    TreeNode<SyntaxNodeOrToken> compare = null;
 
                     for (int i = 0; i < matches.Count; i++)
                     {
                         var match = matches[i];
+                        TreeNode<SyntaxNodeOrToken> compare = null;
                         if (patternExample is PatternP)
                         {
                             var patternP = patternExample as PatternP;

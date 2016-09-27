@@ -20,7 +20,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 var mats = new List<SyntaxKind>();
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    if (node.Children.Any()) continue;
+                    //if (node.Children.Any()) continue;
                     mats.Add(node.Value.Kind());
                 }
                 if (!mats.Any()) return null;
