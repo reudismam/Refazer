@@ -52,8 +52,12 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
-                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                kMatches.Add(target);
+                //var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                {
+                    kMatches.Add(node);
+                }
+                //kMatches.Add(target);
                 eExamples[input] = kMatches;
             }
             return new DisjunctiveExamplesSpec(eExamples);
