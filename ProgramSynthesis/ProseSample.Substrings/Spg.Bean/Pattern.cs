@@ -7,6 +7,14 @@ namespace ProseSample.Substrings
     {
         public TreeNode<Token> Tree;
 
+        public string K { get; set; }
+
+        public Pattern(TreeNode<Token> tree, string k)
+        {
+            Tree = tree;
+            K = k;
+        }
+
         public Pattern(TreeNode<Token> tree)
         {
             Tree = tree;
@@ -14,7 +22,7 @@ namespace ProseSample.Substrings
 
         public override string ToString()
         {
-            return $"Pattern({Tree})";
+            return $"Pattern({Tree}, {K})";
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Match;
+using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -52,11 +53,15 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
-                //var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
+                    var found = TreeUpdate.FindNode(target, node);
+                    if (found == null) continue;
+
                     kMatches.Add(node);
                 }
+                if (!kMatches.Any()) return null;
                 //kMatches.Add(target);
                 eExamples[input] = kMatches;
             }
@@ -82,16 +87,16 @@ namespace ProseSample.Substrings.Spg.Witness
                     for (int i = 0; i < matches.Count; i++)
                     {
                         var match = matches[i];
-                        TreeNode<SyntaxNodeOrToken> compare = null;
-                        if (patternExample is PatternP)
-                        {
-                            var patternP = patternExample as PatternP;
-                            compare = Semantics.FindChild(match, patternP.K);
-                        }
-                        else
-                        {
-                            compare = node;
-                        }
+                        //TreeNode<SyntaxNodeOrToken> compare = null;
+                        //if (patternExample is PatternP)
+                        //{
+                        //    var patternP = patternExample as PatternP;
+                            var compare = Semantics.FindChild(match, patternExample.K);
+                        //}
+                        //else
+                        //{
+                        //    compare = node;
+                        //}
 
                         if (compare != null && match.Equals(compare))
                         {

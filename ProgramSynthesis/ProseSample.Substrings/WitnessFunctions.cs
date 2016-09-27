@@ -576,23 +576,23 @@ namespace ProseSample.Substrings
             return DisjunctiveExamplesSpec.From(eExamples);
         }*/
 
-        public static List<Pattern> ValidPatterns(List<List<Pattern>> list)
-        {
-            var valids = new List<Pattern>();
-            for (int i = 0; i < list.Count - 1; i++)
-            {
-                var patternPList = list[i].Select(o => (PatternP)o).ToList();
-                if (!patternPList.Any()) continue;
-                if (patternPList.Any(o => !o.K.Equals(patternPList.First().K))) continue;
+        //public static List<Pattern> ValidPatterns(List<List<Pattern>> list)
+        //{
+        //    var valids = new List<Pattern>();
+        //    for (int i = 0; i < list.Count - 1; i++)
+        //    {
+        //        var patternPList = list[i].Select(o => (PatternP)o).ToList();
+        //        if (!patternPList.Any()) continue;
+        //        if (patternPList.Any(o => !o.K.Equals(patternPList.First().K))) continue;
 
-                var patternP = patternPList.First();
-                var child = Semantics.FindChild(patternP.Tree, patternP.K);
-                if (child == null) continue;
-                if (patternP.Tree.DescendantNodesAndSelf().Any(o => o.Value.Kind != SyntaxKind.EmptyStatement))
-                    valids.Add(patternP);
-            }
-            return valids;
-        }
+        //        var patternP = patternPList.First();
+        //        var child = Semantics.FindChild(patternP.Tree, patternP.K);
+        //        if (child == null) continue;
+        //        if (patternP.Tree.DescendantNodesAndSelf().Any(o => o.Value.Kind != SyntaxKind.EmptyStatement))
+        //            valids.Add(patternP);
+        //    }
+        //    return valids;
+        //}
 
         public static TreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
         {

@@ -69,8 +69,8 @@ namespace ProseSample.Substrings
 
         public static Pattern Context(Pattern match, string k)
         {
-            var patternP = new PatternP(match.Tree, k);
-            return patternP;
+            var pattern = new Pattern(match.Tree, k);
+            return pattern;
         }
 
         /// <summary>
@@ -263,9 +263,9 @@ namespace ProseSample.Substrings
         public static bool Match(Node sx, Pattern template)
         {
             //if (!sx.Value.Value.IsKind(template.Tree.Value.Kind)) return false
-            if (template is PatternP)
-            {
-                var patternP = (PatternP) template;
+            //if (template is PatternP)
+            //{
+                var patternP = template;
                 var parent = FindParent(sx.Value, patternP.K);
                 if (parent == null) return false;
                 var isValue = MatchManager.IsValueEachChild(parent, template.Tree);
@@ -275,13 +275,13 @@ namespace ProseSample.Substrings
                 var isValid = node.Equals(sx.Value);/*&& parent.Children.FindIndex(o => o.Equals(sx.Value)) == patternP.K - 1*/;
                 if(isValid) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value.Parent} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
                 return isValid;
-            }
-            else
-            {
-                var isValue = MatchManager.IsValueEachChild(sx.Value, template.Tree);
-                if(isValue) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{sx.Value.Value.Parent} \n" + Environment.NewLine);
-                return isValue;
-            }
+            //}
+            //else
+            //{
+            //    var isValue = MatchManager.IsValueEachChild(sx.Value, template.Tree);
+            //    if(isValue) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{sx.Value.Value.Parent} \n" + Environment.NewLine);
+            //    return isValue;
+            //}
         }
 
         private static TreeNode<SyntaxNodeOrToken> FindParent(TreeNode<SyntaxNodeOrToken> value, string s)
@@ -316,10 +316,9 @@ namespace ProseSample.Substrings
 
         public static Node Reference(Node target, Pattern kmatch, int k)
         {
-            if (kmatch is PatternP)
-            {
-                var patternP = (PatternP) kmatch;
-
+            //if (kmatch is PatternP)
+            //{
+                var patternP = kmatch;
                 if (k >= 0)
                 {
                     var nodes = MatchManager.Matches(target.Value, kmatch.Tree);           
@@ -336,12 +335,12 @@ namespace ProseSample.Substrings
                     var node = FindChild(match, patternP.K);
                     return new Node(node);
                 }
-            }
-            else
-            {
-                var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
-                return new Node(nodes.ElementAt(k - 1));      
-            }
+            //}
+            //else
+            //{
+            //    var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
+            //    return new Node(nodes.ElementAt(k - 1));      
+            //}
         }
 
         public static Pattern NodeMatch(Pattern kmatch)
