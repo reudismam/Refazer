@@ -62,7 +62,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjuntive example specification</returns>
         [WitnessFunction("Context", 0)]
-        public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return new Parent().ParentVariable(rule, parameter, spec);
         }
@@ -76,7 +76,7 @@ namespace ProseSample.Substrings
         /// <param name="kindBinding">kindRef binding</param>
         /// <returns>Disjuntive example specification</returns>
         [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kindBinding)
         {
             return new Parent().ParentK(rule, parameter, spec, kindBinding);
         }
@@ -273,13 +273,13 @@ namespace ProseSample.Substrings
         }
 
         [WitnessFunction("Reference", 1)]
-        public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Match.MatchPattern(rule, parameter, spec);
         }
 
         [WitnessFunction("Reference", 2, DependsOnParameters = new[] { 1 })]
-        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
         {
             return Match.MatchK(rule, parameter, spec, kind);
         }
@@ -491,17 +491,17 @@ namespace ProseSample.Substrings
         }
 
         [WitnessFunction("Match", 1)]
-        public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static ExampleSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var eExamples = new Dictionary<State, IEnumerable<object>>();
+            var eExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
+                //var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                kMatches.Add(target);
-                eExamples[input] = kMatches;
+                //kMatches.Add(target);
+                eExamples[input] = target;
             }
-            return DisjunctiveExamplesSpec.From(eExamples);
+            return new ExampleSpec(eExamples);
         }
 
         /*[WitnessFunction("Match", 1)]

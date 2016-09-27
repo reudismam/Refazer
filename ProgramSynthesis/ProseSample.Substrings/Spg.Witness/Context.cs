@@ -10,7 +10,7 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public abstract class Context
     {
-        public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -25,7 +25,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
             }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return new DisjunctiveExamplesSpec(treeExamples);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Parent binding</param>
-        public ExampleSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public ExampleSpec ParentK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
         {
             var kExamples = new Dictionary<State, object>();
             var matches = new List<object>();
