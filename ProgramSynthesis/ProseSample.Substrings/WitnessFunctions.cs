@@ -492,17 +492,17 @@ namespace ProseSample.Substrings
         }
 
         [WitnessFunction("Match", 1)]
-        public static ExampleSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var eExamples = new Dictionary<State, object>();
+            var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
+                var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                //kMatches.Add(target);
-                eExamples[input] = Tuple.Create(target, target);
+                kMatches.Add(target);
+                eExamples[input] =  kMatches;
             }
-            return new ExampleSpec(eExamples);
+            return DisjunctiveExamplesSpec.From(eExamples);
         }
 
         /*[WitnessFunction("Match", 1)]

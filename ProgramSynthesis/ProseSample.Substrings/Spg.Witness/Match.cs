@@ -53,25 +53,25 @@ namespace ProseSample.Substrings.Spg.Witness
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>>>();
+                var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
                     var found = TreeUpdate.FindNode(target, node);
                     if (found == null) continue;
 
-                    kMatches.Add(Tuple.Create(node, node));
+                    kMatches.Add(node);
 
-                    var parent = node.Parent;
-                    if (parent != null)
-                    {
-                        kMatches.Add(Tuple.Create(parent, node));
-                    }
+                    //var parent = node.Parent;
+                    //if (parent != null)
+                    //{
+                    //    kMatches.Add(Tuple.Create(parent, node));
+                    //}
                 }
                 if (!kMatches.Any()) return null;
                 eExamples[input] = kMatches;
             }
-            return DisjunctiveExamplesSpec.From(eExamples);
+            return new DisjunctiveExamplesSpec(eExamples);
         }
 
         public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
@@ -104,7 +104,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         //    compare = node;
                         //}
 
-                        if (compare != null && match.Equals(compare))
+                        if (compare != null && compare.Equals(node))
                         {
                             mats.Add(i + 1);
                         }

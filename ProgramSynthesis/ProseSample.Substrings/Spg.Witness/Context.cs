@@ -17,14 +17,19 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<TreeNode<SyntaxNodeOrToken>>();
-                foreach(Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>> node in spec.DisjunctiveExamples[input])
+                foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {                   
-                    mats.Add(node.Item1);
+                    //mats.Add(node);
+                    var parent = node.Parent;
+                    if (parent != null)
+                    {
+                        mats.Add(parent);
+                    }
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
             }
-            return new DisjunctiveExamplesSpec(treeExamples);
+            return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
         /// <summary>
@@ -40,10 +45,10 @@ namespace ProseSample.Substrings.Spg.Witness
             var matches = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //var parent = (TreeNode<SyntaxNodeOrToken>)kind.Examples[input]; 
-                foreach (Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>> node in spec.DisjunctiveExamples[input])
+                var parent = (TreeNode<SyntaxNodeOrToken>) kind.Examples[input]; 
+                foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    var path = GetPath(node.Item2, node.Item1);
+                    var path = GetPath(node, parent);
                     matches.Add(path);
                 }
                 if (!matches.Any()) return null;    
@@ -65,6 +70,40 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             string path = "";
             for (TreeNode<SyntaxNodeOrToken> node = target; !node.Equals(parent); node = node.Parent)
+            {
+                string append = "/";
+
+                if (node.Parent != null && node.Parent.Children.Count >= 1)
+                {
+                    append += "[";
+
+                    int index = 1;
+                    var previousSibling = PreviousSibling(node);
+                    while (previousSibling != null)
+                    {
+                        index++;
+                        previousSibling = PreviousSibling(previousSibling);
+                    }
+
+                    append += $"{index}]";
+                    path = append + path;
+                }
+            }
+            return path;
+        }
+
+        /// <summary>
+        /// Build an XPath expression for the target node. To build this XPath, 
+        /// we keep get the parent while the parent is null and build an XPath 
+        /// from the last parent until the target node.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="parent"></param>
+        /// <returns>XPath</returns>
+        public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<Token> parent)
+        {
+            string path = "";
+            for (TreeNode<SyntaxNodeOrToken> node = target; !node.Value.IsKind(parent.Value.Kind); node = node.Parent)
             {
                 string append = "/";
 

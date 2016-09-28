@@ -301,8 +301,7 @@ namespace ProseSample.Substrings
         public static TreeNode<T> FindChild<T>(TreeNode<T> parent, string s)
         {
             var matches = Regex.Matches(s, "[0-9]");
-            if (matches.Count == 0) return null;
-
+            //if (matches.Count == 0) return null;
             var current = parent;
             foreach (Match match in matches)
             {

@@ -18,6 +18,7 @@ namespace ProseSample.Substrings
         public Pattern(TreeNode<Token> tree)
         {
             Tree = tree;
+            K = ".";
         }
 
         public override string ToString()
