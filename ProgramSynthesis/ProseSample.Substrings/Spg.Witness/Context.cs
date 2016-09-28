@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
@@ -10,17 +11,15 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public abstract class Context
     {
-        public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, ExampleSpec spec)
+        public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<TreeNode<SyntaxNodeOrToken>>();
-                foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                {
-                    mats.Add(node);
-                    if (node.Parent == null) continue;                    
-                    mats.Add(node.Parent);
+                foreach(Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>> node in spec.DisjunctiveExamples[input])
+                {                   
+                    mats.Add(node.Item1);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
@@ -35,16 +34,16 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Parent binding</param>
-        public ExampleSpec ParentK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
+        public ExampleSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var kExamples = new Dictionary<State, object>();
             var matches = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var parent = (TreeNode<SyntaxNodeOrToken>)kind.Examples[input]; 
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                //var parent = (TreeNode<SyntaxNodeOrToken>)kind.Examples[input]; 
+                foreach (Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>> node in spec.DisjunctiveExamples[input])
                 {
-                    var path = GetPath(node, parent);
+                    var path = GetPath(node.Item2, node.Item1);
                     matches.Add(path);
                 }
                 if (!matches.Any()) return null;    

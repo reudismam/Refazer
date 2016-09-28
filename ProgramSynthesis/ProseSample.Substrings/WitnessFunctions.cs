@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -62,7 +63,7 @@ namespace ProseSample.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjuntive example specification</returns>
         [WitnessFunction("Context", 0)]
-        public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return new Parent().ParentVariable(rule, parameter, spec);
         }
@@ -76,7 +77,7 @@ namespace ProseSample.Substrings
         /// <param name="kindBinding">kindRef binding</param>
         /// <returns>Disjuntive example specification</returns>
         [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kindBinding)
+        public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
             return new Parent().ParentK(rule, parameter, spec, kindBinding);
         }
@@ -499,7 +500,7 @@ namespace ProseSample.Substrings
                 //var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 //kMatches.Add(target);
-                eExamples[input] = target;
+                eExamples[input] = Tuple.Create(target, target);
             }
             return new ExampleSpec(eExamples);
         }

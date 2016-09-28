@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -47,25 +48,30 @@ namespace ProseSample.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(eExamples);
         }
 
-        public static ExampleSpec MatchPattern(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, ExampleSpec spec)
         {
-            var eExamples = new Dictionary<State, object>();
+            var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                //var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
-                //var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                //foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                //{
-                //    var found = TreeUpdate.FindNode(target, node);
-                //    if (found == null) continue;
+                var kMatches = new List<Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>>>();
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                {
+                    var found = TreeUpdate.FindNode(target, node);
+                    if (found == null) continue;
 
-                //    kMatches.Add(node);
-                //}
-                //if (!kMatches.Any()) return null;
-                //kMatches.Add(target);
-                eExamples[input] = spec.Examples[input];
+                    kMatches.Add(Tuple.Create(node, node));
+
+                    var parent = node.Parent;
+                    if (parent != null)
+                    {
+                        kMatches.Add(Tuple.Create(parent, node));
+                    }
+                }
+                if (!kMatches.Any()) return null;
+                eExamples[input] = kMatches;
             }
-            return new ExampleSpec(eExamples);
+            return DisjunctiveExamplesSpec.From(eExamples);
         }
 
         public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
