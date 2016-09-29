@@ -20,9 +20,12 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {                   
                     var parent = node.Parent;
-                    if (parent != null)
+                    if (parent == null) continue;
+                   
+                    var pParent = node.Parent.Parent;
+                    if (pParent != null)
                     {
-                        mats.Add(parent);
+                        mats.Add(pParent);
                     }
                 }
                 if (!mats.Any()) return null;
