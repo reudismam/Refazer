@@ -48,7 +48,7 @@ namespace ProseSample
                 LogListener = new LogListener(),
             });
             var consistentPrograms = engine.LearnGrammar(spec);
-            const ulong a = 1999;
+            const ulong a = 10;
             var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score").ToList();
             
             var b =  (ulong) topK.Count;

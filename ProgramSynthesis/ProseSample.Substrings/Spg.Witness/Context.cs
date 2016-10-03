@@ -21,6 +21,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {                   
                     var parent = node.Parent;
                     if (parent == null) continue;
+                    mats.Add(parent);
                    
                     var pParent = node.Parent.Parent;
                     if (pParent != null)
@@ -31,7 +32,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
             }
-            return DisjunctiveExamplesSpec.From(treeExamples);
+            return new DisjunctiveExamplesSpec(treeExamples);
         }
 
         /// <summary>
@@ -47,10 +48,10 @@ namespace ProseSample.Substrings.Spg.Witness
             var matches = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var parent = (TreeNode<SyntaxNodeOrToken>) kind.Examples[input]; 
+                var parent = (Pattern) kind.Examples[input]; 
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    var path = GetPath(node, parent);
+                    var path = GetPath(node, parent.Tree);
                     matches.Add(path);
                 }
                 if (!matches.Any()) return null;    
