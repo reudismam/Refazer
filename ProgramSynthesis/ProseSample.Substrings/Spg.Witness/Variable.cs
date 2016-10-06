@@ -12,40 +12,51 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Variable
     {
-        public static ExampleSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var treeExamples = new Dictionary<State, object>();
-            var mats = new List<SyntaxKind>();
-            var childrenNums = new List<int>();
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            var dicMats = new Dictionary<int, List<SyntaxKind>>();
+            var dicChil = new Dictionary<int, List<int>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var defaultValue = default(SyntaxKind);
                 SyntaxKind kind = defaultValue;
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                var examples = spec.DisjunctiveExamples[input].ToList();
+                var kinds = new List<object>();
+                for (int i = 0; i < examples.Count(); i++)
                 {
+                    var node = (TreeNode<SyntaxNodeOrToken>) examples.ElementAt(i);
                     kind = node.Value.Kind();
-                    mats.Add(kind);
-                    childrenNums.Add(node.Children.Count);
+                    kinds.Add(kind);
+                    if (!dicMats.ContainsKey(i)) dicMats.Add(i, new List<SyntaxKind>());
+                    if (!dicChil.ContainsKey(i)) dicChil.Add(i, new List<int>());
+                    dicMats[i].Add(kind);
+                    dicChil[i].Add(node.Children.Count);
                 }
                 if (kind == defaultValue) return null;
-                treeExamples[input] = kind;
+                treeExamples[input] = kinds;
             }
 
-            if (!mats.Any()) return null;
-            var isChilNumEqual = childrenNums.All(o => o.Equals(childrenNums.First()));
-            var isTypeEqual = mats.All(o => o.Equals(mats.First()));
-
-            if (!isTypeEqual)
+            foreach (var pair in dicMats)
             {
-                foreach (var input in spec.ProvidedInputs)
+                var mats = pair.Value;
+                var childrenNums = dicChil[pair.Key];
+                if (!mats.Any()) continue;
+                var isChilNumEqual = childrenNums.All(o => o.Equals(childrenNums.First()));
+                var isTypeEqual = mats.All(o => o.Equals(mats.First()));
+                if (isTypeEqual && isChilNumEqual) continue;
+
+                if (!isTypeEqual)
                 {
-                    treeExamples[input] = SyntaxKind.EmptyStatement;
+                    foreach (var input in spec.ProvidedInputs)
+                    {
+                        var kinds = (List<object>) treeExamples[input];
+                        kinds[pair.Key] = SyntaxKind.EmptyStatement;
+                        treeExamples[input] = kinds;
+                    }
                 }
             }
-
-            if (isTypeEqual && isChilNumEqual) return null;
-
-            return new ExampleSpec(treeExamples);
+            return DisjunctiveExamplesSpec.From(treeExamples);
         }
     }
 }
