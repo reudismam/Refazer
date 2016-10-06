@@ -15,35 +15,36 @@ namespace ProseSample.Substrings.Spg.Witness
         public static ExampleSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, object>();
+            var mats = new List<SyntaxKind>();
+            var childrenNums = new List<int>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var mats = new List<SyntaxKind>();
+                var defaultValue = default(SyntaxKind);
+                SyntaxKind kind = defaultValue;
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    //if (node.Children.Any()) continue;
-                    mats.Add(node.Value.Kind());
+                    kind = node.Value.Kind();
+                    mats.Add(kind);
+                    childrenNums.Add(node.Children.Count);
                 }
-                if (!mats.Any()) return null;
-                treeExamples[input] = mats.First();
+                if (kind == defaultValue) return null;
+                treeExamples[input] = kind;
             }
-            return new ExampleSpec(treeExamples);
-        }
 
-        public static ExampleSpec LeafKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            var treeExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
+            if (!mats.Any()) return null;
+            var isChilNumEqual = childrenNums.All(o => o.Equals(childrenNums.First()));
+            var isTypeEqual = mats.All(o => o.Equals(mats.First()));
+
+            if (!isTypeEqual)
             {
-                var mats = new List<SyntaxKind>();
-                foreach (TreeNode<Token> node in spec.DisjunctiveExamples[input])
+                foreach (var input in spec.ProvidedInputs)
                 {
-                    if (!(node.Value is LeafToken)) continue;
-                    if (node.Children.Any()) continue;
-                    mats.Add(node.Value.Kind);
+                    treeExamples[input] = SyntaxKind.EmptyStatement;
                 }
-                if (!mats.Any()) return null;
-                treeExamples[input] = mats.First();
             }
+
+            if (isTypeEqual && isChilNumEqual) return null;
+
             return new ExampleSpec(treeExamples);
         }
     }
