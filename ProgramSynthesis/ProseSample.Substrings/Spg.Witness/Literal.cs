@@ -18,7 +18,6 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var examples = spec.DisjunctiveExamples[input].ToList();
-                //if (examples.Count > 1) return null;
                 for (int i = 0; i < examples.Count; i++)
                 {
                     var sot = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
@@ -35,6 +34,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var isOneIncluded = false;
             foreach (var pair in dicMats)
             {
+                if (pair.Value.First().Children.Any()) continue;
                 if (!pair.Value.Any()) continue;
                 if (pair.Value.Count == exNum)
                 {
