@@ -14,29 +14,25 @@ namespace ProseSample.Substrings.Spg.Witness
         public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            var dicMats = new Dictionary<int, List<SyntaxKind>>();
-            var dicChil = new Dictionary<int, List<int>>();
+            var dicMats = new Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var examples = spec.DisjunctiveExamples[input].ToList();
-                //var kinds = new List<object>();
                 for (int i = 0; i < examples.Count; i++)
                 {
                     var node = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
-                    //kinds.Add(node.Value.Kind());
-
-                    if (!dicMats.ContainsKey(i)) dicMats.Add(i, new List<SyntaxKind>());
-                    if (!dicChil.ContainsKey(i)) dicChil.Add(i, new List<int>());
-
-                    dicMats[i].Add(node.Value.Kind());
-                    dicChil[i].Add(node.Children.Count);
+                    if (!dicMats.ContainsKey(i))
+                    {
+                        dicMats.Add(i, new List<TreeNode<SyntaxNodeOrToken>>());
+                    }
+                    dicMats[i].Add(node);
                 }
                 treeExamples[input] = new List<object>();
             }
-            return ConfigureKind(spec, dicMats, dicChil, treeExamples);
+            return ConfigureKind(spec, dicMats, treeExamples);
         }
 
-        private static DisjunctiveExamplesSpec ConfigureKind(DisjunctiveExamplesSpec spec, Dictionary<int, List<SyntaxKind>> dicMats, Dictionary<int, List<int>> dicChil, Dictionary<State, IEnumerable<object>> treeExamples)
+        private static DisjunctiveExamplesSpec ConfigureKind(DisjunctiveExamplesSpec spec, Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>> dicMats, Dictionary<State, IEnumerable<object>> treeExamples)
         {
             var isAtLeastOneCorrect = false;
             var exNum = spec.ProvidedInputs.Count();
@@ -45,11 +41,11 @@ namespace ProseSample.Substrings.Spg.Witness
                 if (pair.Value.Count == exNum)
                 {
                     var mats = pair.Value;
-                    var childrenNums = dicChil[pair.Key];
                     if (!mats.Any()) continue;
-                    var isChilNumEqual = childrenNums.All(o => o.Equals(childrenNums.First()));
-                    var isTypeEqual = mats.All(o => o.Equals(mats.First()));
-                    if (isTypeEqual && isChilNumEqual && childrenNums.First() != 0) continue;
+                    var isChilNumEqual = mats.All(o => o.Children.Count == mats.First().Children.Count);
+                    var isTypeEqual = mats.All(o => o.IsLabel(mats.First().Label));
+                    var hasChildren = mats.First().Children.Count != 0;
+                    if (isTypeEqual && isChilNumEqual && hasChildren) continue;
 
                     if (!isTypeEqual)
                     {
@@ -57,7 +53,6 @@ namespace ProseSample.Substrings.Spg.Witness
                         {
                             var examples = (List<object>)treeExamples[input];
                             examples.Add(SyntaxKind.EmptyStatement);
-                            //kinds[pair.Key] = SyntaxKind.EmptyStatement;
                             treeExamples[input] = examples;
                         }
                     }
@@ -66,7 +61,7 @@ namespace ProseSample.Substrings.Spg.Witness
                         foreach (var input in spec.ProvidedInputs)
                         {
                             var examples = (List<object>)treeExamples[input];
-                            examples.Add(pair.Value.First());
+                            examples.Add(pair.Value.First().Value.Kind());
                             treeExamples[input] = examples;
                         }
                     }
