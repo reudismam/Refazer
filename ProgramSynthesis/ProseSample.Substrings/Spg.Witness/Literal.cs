@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseSample.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 
@@ -12,34 +11,46 @@ namespace ProseSample.Substrings.Spg.Witness
 {
     public class Literal
     {
-        //public static DisjunctiveExamplesSpec LiteralK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec treeBinding)
+        //public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         //{
         //    var treeExamples = new Dictionary<State, IEnumerable<object>>();
-        //    foreach (var input in spec.ProvidedInputs)
+        //    var dicMats = new Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>>();
+        //    foreach (State input in spec.ProvidedInputs)
         //    {
-        //        var mats = new List<object>();
-        //        var key = (Node) input[rule.Body[0]];
-        //        var inpTree = WitnessFunctions.GetCurrentTree(key.Value);
-        //        foreach (Node node in spec.DisjunctiveExamples[input])
+        //        var examples = spec.DisjunctiveExamples[input].ToList();
+        //        if (examples.Count > 1) return null;
+        //        for (int i = 0; i < examples.Count; i++)
         //        {
-        //            var sot = node.Value;
-        //            if (sot.Value.IsToken || sot.Children.Any()) return null;
-
-        //            var matches = MatchManager.ConcreteMatches(inpTree, sot.Value);
-
-        //            for (int i = 0; i < matches.Count; i++)
+        //            var sot = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
+        //            if (sot.Children.Any())
         //            {
-        //                var item = matches[i].Value;
-        //                if (item.Span.Contains(sot.Value.Span) && sot.Value.Span.Contains(item.Span))
-        //                {
-        //                    mats.Add(i + 1);
-        //                }
+        //                if (!dicMats.ContainsKey(i)) dicMats.Add(i, new List<TreeNode<SyntaxNodeOrToken>>());
+        //                dicMats[i].Add(sot);
         //            }
         //        }
-        //        treeExamples[input] = mats;
+        //        treeExamples[input] = new List<object>();
         //    }
-        //    var values = treeExamples.Values;
-        //    return values.Any(sequence => !sequence.SequenceEqual(values.First())) ? null : DisjunctiveExamplesSpec.From(treeExamples);
+
+        //    var exNum = spec.ProvidedInputs.Count();
+        //    var isOneIncluded = false;
+        //    foreach (var pair in dicMats)
+        //    {
+        //        if (!pair.Value.Any()) continue;
+        //        if (pair.Value.Count == exNum)
+        //        {
+        //            var first = pair.Value.First();
+        //            if(!pair.Value.All(sot => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot))) continue;  
+        //            foreach (State input in spec.ProvidedInputs)
+        //            {
+        //                var examples = (List<object>)treeExamples[input];
+        //                examples.Add(pair.Value.First());
+        //                treeExamples[input] = examples;
+        //            }
+        //            isOneIncluded = true;
+        //        }
+        //    }
+        //    if (!isOneIncluded) return null;
+        //    return DisjunctiveExamplesSpec.From(treeExamples);
         //}
 
         public static ExampleSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
@@ -60,39 +71,5 @@ namespace ProseSample.Substrings.Spg.Witness
             }
             return new ExampleSpec(treeExamples);
         }
-
-        /*public static ExampleSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            var treeExamples = new Dictionary<State, object>();
-            var literalExamples = new List<SyntaxNodeOrToken>();
-            foreach (var input in spec.ProvidedInputs)
-            {
-                //var key = input[rule.Body[0]];
-                //var inpTree = WitnessFunctions.GetCurrentTree(key);
-
-                foreach (TreeNode<Token> node in spec.DisjunctiveExamples[input])
-                {
-                    //var sot = node.Value;
-                    if (node.Children.Any()) return null;
-
-                    if (!(node.Value is DynToken)) return null;
-
-                    var dyn = (DynToken) node.Value;
-
-                    //var matches = MatchManager.ConcreteMatches(inpTree, sot.Value);
-
-                    //if (!matches.Any()) return null;
-
-                    //literalExamples.Add(matches.First());
-                    literalExamples.Add(dyn.Value.Value);
-
-                    //var first = literalExamples.First();
-                    //if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(sot, first)) return null;
-                }
-
-                treeExamples[input] = literalExamples.First();
-            }
-            return new ExampleSpec(treeExamples);
-        }*/
     }
 }
