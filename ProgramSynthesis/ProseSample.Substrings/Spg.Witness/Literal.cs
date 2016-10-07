@@ -21,7 +21,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 for (int i = 0; i < examples.Count; i++)
                 {
                     var sot = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
-                    if (sot.Children.Any())
+                    if (!sot.Children.Any())
                     {
                         if (!dicMats.ContainsKey(i)) dicMats.Add(i, new List<TreeNode<SyntaxNodeOrToken>>());
                         dicMats[i].Add(sot);
