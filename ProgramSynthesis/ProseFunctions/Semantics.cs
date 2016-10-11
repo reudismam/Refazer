@@ -747,8 +747,10 @@ namespace ProseSample.Substrings
                     {
                         initializer = (InitializerExpressionSyntax) children[1];
                     }
-                    var objectcreation = SyntaxFactory.ObjectCreationExpression(typeSyntax, argumentList, initializer);
-                    objectcreation = objectcreation.WithAdditionalAnnotations(Formatter.Annotation);
+                    var newToken = SyntaxFactory.Token(SyntaxKind.NewKeyword).WithTrailingTrivia(new List<SyntaxTrivia> {SyntaxFactory.Space});
+                    var objectcreation = SyntaxFactory.ObjectCreationExpression(newToken, typeSyntax, argumentList, initializer);
+                    //objectcreation = Formatter.Format(objectcreation, Formatter.Annotation, null);
+                    //objectcreation = objectcreation.WithAdditionalAnnotations(Formatter.Annotation).WithNewKeyword(SyntaxFactory.Token(SyntaxKind.NewKeyword));
                     return objectcreation;
                 }
                 case SyntaxKind.ParameterList:
