@@ -287,8 +287,6 @@ namespace ProseSample.Substrings
         private static TreeNode<SyntaxNodeOrToken> FindParent(TreeNode<SyntaxNodeOrToken> value, string s)
         {
             var matches = Regex.Matches(s, "[0-9]");
-            if (matches.Count == 0) return null;
-
             var current = value;
             foreach (var match in matches)
             {
@@ -301,7 +299,6 @@ namespace ProseSample.Substrings
         public static TreeNode<T> FindChild<T>(TreeNode<T> parent, string s)
         {
             var matches = Regex.Matches(s, "[0-9]");
-            //if (matches.Count == 0) return null;
             var current = parent;
             foreach (Match match in matches)
             {
