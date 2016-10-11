@@ -11,11 +11,11 @@ Refactor/*
 IntelliUndo/*
 
 
-ProgramSynthesis/ProseSample.Substrings/bin/*
-ProgramSynthesis/ProseSample.Substrings/obj/*
+ProgramSynthesis/ProseFunctions/bin/*
+ProgramSynthesis/ProseFunctions/obj/*
 
-ProgramSynthesis/ProseSample/bin/*
-ProgramSynthesis/ProseSample/obj/*
+ProgramSynthesis/ProseManager/bin/*
+ProgramSynthesis/ProseManager/obj/*
 
 ProgramSynthesis/ProseSample.TextExtraction/*
 ProgramSynthesis/ProseSample.TextExtraction/bin/*

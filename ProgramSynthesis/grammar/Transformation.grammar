@@ -1,5 +1,5 @@
 ﻿reference 'Microsoft.ProgramSynthesis.Extraction.Text.Semantics.dll';
-reference 'ProseSample.Substrings.dll';
+reference 'ProseFunctions.dll';
 reference 'Microsoft.CodeAnalysis.CSharp.dll';
 reference 'Microsoft.CodeAnalysis.dll';
 reference 'TreeElement.dll';

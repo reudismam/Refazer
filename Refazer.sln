@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProseManager", "ProgramSynthesis\ProseSample\ProseManager.csproj", "{C7FC4D3C-3CAE-42B9-AFF9-83CB07A7872F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProseManager", "ProgramSynthesis\ProseManager\ProseManager.csproj", "{C7FC4D3C-3CAE-42B9-AFF9-83CB07A7872F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProseFunctions", "ProgramSynthesis\ProseSample.Substrings\ProseFunctions.csproj", "{41E9A9B1-B013-4A87-9759-E3004FEF8A81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProseFunctions", "ProgramSynthesis\ProseFunctions\ProseFunctions.csproj", "{41E9A9B1-B013-4A87-9759-E3004FEF8A81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeEdit", "TreeEdit\TreeEdit.csproj", "{4BF08076-5BA3-45B8-8DA9-BED3C4BCA9F7}"
 EndProject

@@ -195,11 +195,11 @@
     <Compile Include="WorkspaceManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProseSample.Substrings\ProseFunctions.csproj">
+    <ProjectReference Include="..\ProseFunctions\ProseFunctions.csproj">
       <Project>{41e9a9b1-b013-4a87-9759-e3004fef8a81}</Project>
       <Name>ProseFunctions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProseSample\ProseManager.csproj">
+    <ProjectReference Include="..\ProseManager\ProseManager.csproj">
       <Project>{c7fc4d3c-3cae-42b9-aff9-83cb07a7872f}</Project>
       <Name>ProseManager</Name>
     </ProjectReference>
