@@ -749,8 +749,6 @@ namespace ProseSample.Substrings
                     }
                     var newToken = SyntaxFactory.Token(SyntaxKind.NewKeyword).WithTrailingTrivia(new List<SyntaxTrivia> {SyntaxFactory.Space});
                     var objectcreation = SyntaxFactory.ObjectCreationExpression(newToken, typeSyntax, argumentList, initializer);
-                    //objectcreation = Formatter.Format(objectcreation, Formatter.Annotation, null);
-                    //objectcreation = objectcreation.WithAdditionalAnnotations(Formatter.Annotation).WithNewKeyword(SyntaxFactory.Token(SyntaxKind.NewKeyword));
                     return objectcreation;
                 }
                 case SyntaxKind.ParameterList:
@@ -998,9 +996,8 @@ namespace ProseSample.Substrings
                     identifier.Add(v.Value);
                 }
             }
-            //children = tree.Children.Select(ReconstructTree).ToList();
             var node = GetSyntaxElement((SyntaxKind) tree.Label.Label, children, tree.Value, identifier);
-            return node;
+            return node.AsNode().NormalizeWhitespace();
         }
     }
 }
