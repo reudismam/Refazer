@@ -59,13 +59,9 @@
       <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>
       <Name>TreeElement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProseSample.Substrings\ProseSample.Substrings.csproj">
+    <ProjectReference Include="..\ProseSample.Substrings\ProseFunctions.csproj">
       <Project>{41e9a9b1-b013-4a87-9759-e3004fef8a81}</Project>
-      <Name>ProseSample.Substrings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ProseSample.TextExtraction\ProseSample.TextExtraction.csproj">
-      <Project>{5aa217f9-deab-46be-81be-afd00948ac50}</Project>
-      <Name>ProseSample.TextExtraction</Name>
+      <Name>ProseFunctions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

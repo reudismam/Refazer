@@ -195,17 +195,13 @@
     <Compile Include="WorkspaceManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProseSample.Substrings\ProseSample.Substrings.csproj">
+    <ProjectReference Include="..\ProseSample.Substrings\ProseFunctions.csproj">
       <Project>{41e9a9b1-b013-4a87-9759-e3004fef8a81}</Project>
-      <Name>ProseSample.Substrings</Name>
+      <Name>ProseFunctions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProseSample.TextExtraction\ProseSample.TextExtraction.csproj">
-      <Project>{5aa217f9-deab-46be-81be-afd00948ac50}</Project>
-      <Name>ProseSample.TextExtraction</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ProseSample\ProseSample.csproj">
+    <ProjectReference Include="..\ProseSample\ProseManager.csproj">
       <Project>{c7fc4d3c-3cae-42b9-aff9-83cb07a7872f}</Project>
-      <Name>ProseSample</Name>
+      <Name>ProseManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TreeElement\TreeElement.csproj">
       <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>

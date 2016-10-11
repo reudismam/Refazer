@@ -52,24 +52,5 @@ namespace ProseSample.Substrings.Spg.Witness
             if (!isOneIncluded) return null;
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
-
-        //public static ExampleSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        //{
-        //    var treeExamples = new Dictionary<State, object>();
-        //    var mats = new List<TreeNode<SyntaxNodeOrToken>>();
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        foreach (TreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
-        //        {
-        //            if (sot.Children.Any()) return null;
-        //            mats.Add(sot);
-
-        //            var first = mats.First();
-        //            if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot)) return null;
-        //        }
-        //        treeExamples[input] = mats.First().Value;
-        //    }
-        //    return new ExampleSpec(treeExamples);
-        //}
     }
 }
