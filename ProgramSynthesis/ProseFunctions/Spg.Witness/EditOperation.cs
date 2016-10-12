@@ -52,31 +52,31 @@ namespace ProseSample.Substrings.Spg.Witness
             return new ExampleSpec(kExamples);
         }
 
-        public static ExampleSpec ParentLearner<T>(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-                var editOperation = edit.EditOperation;
-                if (!(editOperation is T)) return null;
+        //public static ExampleSpec ParentLearner<T>(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+        //        var editOperation = edit.EditOperation;
+        //        if (!(editOperation is T)) return null;
 
-                return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
-            }
-            return null;
-        }
+        //        return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
+        //    }
+        //    return null;
+        //}
 
-        public static ExampleSpec InsertParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
-        {
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
-                var editOperation = edit.EditOperation;
-                if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
+        //public static ExampleSpec InsertParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
+        //{
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
+        //        var editOperation = edit.EditOperation;
+        //        if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;
 
-                return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
-            }
-            return null;
-        }
+        //        return new ParentTargetLearner().NodeLearner(rule, parameter, spec);
+        //    }
+        //    return null;
+        //}
 
         public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec)
         {
@@ -267,7 +267,7 @@ namespace ProseSample.Substrings.Spg.Witness
         //    return new ExampleSpec(kExamples);
         //}
 
-        public static Node GetNode(TreeNode<SyntaxNodeOrToken> searchedNode)
+        public static TreeNode<SyntaxNodeOrToken> GetNode(TreeNode<SyntaxNodeOrToken> searchedNode)
         {
             var currentTree = WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
@@ -279,17 +279,17 @@ namespace ProseSample.Substrings.Spg.Witness
 
             targetNodeHeight.SyntaxTree = searchedNode.SyntaxTree;
             targetNodeHeight.Parent = targetNode.Parent;
-            return new Node(targetNodeHeight);
+            return targetNodeHeight;
         }
 
-        public static Node GetNode(TreeNode<SyntaxNodeOrToken> currentTree, TreeNode<SyntaxNodeOrToken> searchedNode)
+        public static TreeNode<SyntaxNodeOrToken> GetNode(TreeNode<SyntaxNodeOrToken> currentTree, TreeNode<SyntaxNodeOrToken> searchedNode)
         {
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
             var targetNodeHeight = TreeManager<SyntaxNodeOrToken>.GetNodeAtHeight(targetNode, 3);
 
             targetNodeHeight.SyntaxTree = searchedNode.SyntaxTree;
             targetNodeHeight.Parent = targetNode.Parent;
-            return new Node(targetNodeHeight);
+            return targetNodeHeight;
         }
     }
 }
