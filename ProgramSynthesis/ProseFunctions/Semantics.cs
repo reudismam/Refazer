@@ -750,6 +750,11 @@ namespace ProseSample.Substrings
                     if (children[1].IsKind(SyntaxKind.ArgumentList))
                     {
                         argumentList = (ArgumentListSyntax) children[1];
+                        //}else if (children[1].IsKind(SyntaxKind.GenericName))
+                        //{
+                        //    initializer = (GenericNameSyntax) children[1];
+
+                        //}
                     }
                     else
                     {

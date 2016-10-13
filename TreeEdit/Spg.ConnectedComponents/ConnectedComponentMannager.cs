@@ -38,10 +38,10 @@ namespace TreeEdit.Spg.ConnectedComponents
             _visited = new Dictionary<Tuple<T, T, int>, int>();
             int i = 0;
             var dic = new Dictionary<int, List<EditOperation<T>>>();
-            foreach (var edit in editOperations)
+            foreach (var edit in primaryEditions)
             {
                 var t = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
-                if (!_visited.ContainsKey(t) && primaryEditions.Contains(edit))
+                if (!_visited.ContainsKey(t))
                 {
                     dic.Add(i, new List<EditOperation<T>>());
                     DepthFirstSearch(edit, i++);
