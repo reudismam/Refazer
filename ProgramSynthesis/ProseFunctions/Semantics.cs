@@ -143,8 +143,16 @@ namespace ProseSample.Substrings
             {
                 foreach (var v in edited)
                 {
-                    var n = ReconstructTree(v.Value);
-                    resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
+                    if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
+                    {
+                        var n = ReconstructTree(v.Value);
+                        resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
+                    }
+                    else
+                    {
+                        var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+                        resultList.Add(new Node(treeNode));
+                    }
                 }
             }
             return resultList;
