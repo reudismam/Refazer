@@ -46,7 +46,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                     dic.Add(i, new List<EditOperation<T>>());
                     DepthFirstSearch(edit, i++);
                 }
-            }       
+            }
 
             foreach (var edit in editOperations)
             {
@@ -61,29 +61,35 @@ namespace TreeEdit.Spg.ConnectedComponents
 
         private static Dictionary<int, List<EditOperation<T>>> JoinPrimaryOperationsByParent(List<EditOperation<T>> primaryEditions, List<EditOperation<T>> editOperations, int i, Dictionary<int, List<EditOperation<T>>> dic)
         {
-            for (int index = 0; index < editOperations.Count; index++)
+            var dictionary = new Dictionary<TreeNode<T>, HashSet<int>>();
+            foreach (var v in primaryEditions)
             {
-                for (int j = index + 1; j < editOperations.Count; j++)
+                if (!dictionary.ContainsKey(v.Parent))
                 {
-                    if (primaryEditions.Contains(editOperations[index]) && primaryEditions.Contains(editOperations[j]) &&
-                        editOperations[index].Parent.Equals(editOperations[j].Parent))
-                    {
-                        i++;
-                        var editi = editOperations[index];
-                        var editj = editOperations[j];
-                        var ti = Tuple.Create(editi.T1Node.Value, editi.Parent.Value, editi.K);
-                        var tj = Tuple.Create(editj.T1Node.Value, editj.Parent.Value, editj.K);
-                        dic.Add(i, new List<EditOperation<T>>());
-                        dic[i].AddRange(dic[_visited[ti]]);
-                        dic[i].AddRange(dic[_visited[tj]]);
+                    dictionary.Add(v.Parent, new HashSet<int>());
+                }
+                var t = Tuple.Create(v.T1Node.Value, v.Parent.Value, v.K);
+                var index = _visited[t];
+                dictionary[v.Parent].Add(index);
+            }
 
-                        dic.Remove(_visited[ti]);
-                        dic.Remove(_visited[tj]);
+            foreach (var keypair in dictionary)
+            {
+                if (keypair.Value.Count > 1)
+                {
+                    i++;
+                    dic.Add(i, new List<EditOperation<T>>());
+                    foreach (var index in keypair.Value)
+                    {
+                        dic[i].AddRange(dic[index]);
+                        dic.Remove(index);
                     }
                 }
             }
             return dic;
         }
+
+        
 
         /// <summary>
         /// Depth first search
@@ -130,7 +136,7 @@ namespace TreeEdit.Spg.ConnectedComponents
             {
                 var editI = script[i];
                 var ti = Tuple.Create(editI.T1Node.Value, editI.Parent.Value, editI.K);
-                
+
                 for (int j = 0; j < script.Count; j++)
                 {
                     if (i == j) continue;
@@ -156,7 +162,7 @@ namespace TreeEdit.Spg.ConnectedComponents
             {
                 var editI = Script[indexI];
                 var editJ = Script[indexJ];
-      
+
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
 
