@@ -46,15 +46,43 @@ namespace TreeEdit.Spg.ConnectedComponents
                     dic.Add(i, new List<EditOperation<T>>());
                     DepthFirstSearch(edit, i++);
                 }
-            }
+            }       
+
             foreach (var edit in editOperations)
             {
                 var t = Tuple.Create(edit.T1Node.Value, edit.Parent.Value, edit.K);
                 int cc = _visited[t];
                 dic[cc].Add(edit);
             }
+            dic = JoinPrimaryOperationsByParent(primaryEditions, editOperations, i, dic);
             var ccs = new List<List<EditOperation<T>>>(dic.Values);
             return ccs;
+        }
+
+        private static Dictionary<int, List<EditOperation<T>>> JoinPrimaryOperationsByParent(List<EditOperation<T>> primaryEditions, List<EditOperation<T>> editOperations, int i, Dictionary<int, List<EditOperation<T>>> dic)
+        {
+            for (int index = 0; index < editOperations.Count; index++)
+            {
+                for (int j = index + 1; j < editOperations.Count; j++)
+                {
+                    if (primaryEditions.Contains(editOperations[index]) && primaryEditions.Contains(editOperations[j]) &&
+                        editOperations[index].Parent.Equals(editOperations[j].Parent))
+                    {
+                        i++;
+                        var editi = editOperations[index];
+                        var editj = editOperations[j];
+                        var ti = Tuple.Create(editi.T1Node.Value, editi.Parent.Value, editi.K);
+                        var tj = Tuple.Create(editj.T1Node.Value, editj.Parent.Value, editj.K);
+                        dic.Add(i, new List<EditOperation<T>>());
+                        dic[i].AddRange(dic[_visited[ti]]);
+                        dic[i].AddRange(dic[_visited[tj]]);
+
+                        dic.Remove(_visited[ti]);
+                        dic.Remove(_visited[tj]);
+                    }
+                }
+            }
+            return dic;
         }
 
         /// <summary>
