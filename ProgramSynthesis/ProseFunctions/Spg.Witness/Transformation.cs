@@ -160,6 +160,8 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static Edit<SyntaxNodeOrToken> CompactScriptIntoASingleOperation(TreeNode<SyntaxNodeOrToken> inpTree, Script script)
         {
+            if (script.Edits.Count == 1) return script.Edits.First();
+
             var parent = GetParent(script, inpTree);
             var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
             var transformed = ProcessScriptOnNode(script, parent);
