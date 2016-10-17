@@ -68,9 +68,22 @@ namespace TreeEdit.Spg.ConnectedComponents
                 {
                     dictionary.Add(v.Parent, new HashSet<int>());
                 }
-                var t = Tuple.Create(v.T1Node.Value, v.Parent.Value, v.K);
-                var index = _visited[t];
-                dictionary[v.Parent].Add(index);
+                //var t = Tuple.Create(v.T1Node.Value, v.Parent.Value, v.K);
+                //var index = _visited[t];
+                //dictionary[v.Parent].Add(index);
+            }
+
+            foreach (var vi in primaryEditions)
+            {
+                foreach (var vj in primaryEditions)
+                {
+                    if (GetNode(vi.Parent.Value).DescendantNodesAndSelf().Contains(vj.Parent))
+                    {
+                        var t = Tuple.Create(vj.T1Node.Value, vj.Parent.Value, vj.K);
+                        var index = _visited[t];
+                        dictionary[vi.Parent].Add(index);
+                    }
+                }
             }
 
             foreach (var keypair in dictionary)
@@ -166,34 +179,36 @@ namespace TreeEdit.Spg.ConnectedComponents
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
 
-                var nodes = GetNodes(editI.T1Node.Value);
+                var nodes = GetNode(editI.T1Node.Value);
                 if (nodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
                 if (editI.Parent.Parent != null && editI.Parent.Parent.Equals(editJ.T1Node)) return true;
 
                 if (editI is Update<T>)
                 {
                     var update = editI as Update<T>;
-                    var toNodeParent = GetNodes(update.ToParent.Value);
+                    var toNodeParent = GetNode(update.ToParent.Value);
                     if (toNodeParent.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
                 }
 
                 if (editJ is Update<T>)
                 {
                     var update = editJ as Update<T>;
-                    var parentNodes = GetNodes(editI.Parent.Value);
+                    var parentNodes = GetNode(editI.Parent.Value);
                     if (parentNodes.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
                     if (parentNodes.DescendantNodesAndSelf().Contains(update.To)) return true;
                 }
                 return false;
             }
 
-            private TreeNode<T> GetNodes(T value)
-            {
-                SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object)value;
-                var newnode = ConverterHelper.ConvertCSharpToTreeNode(newT2);
-                TreeNode<T> newT1 = (TreeNode<T>)(object)newnode;
-                return newT1;
-            }
+            
+        }
+
+        private static TreeNode<T> GetNode(T value)
+        {
+            SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object)value;
+            var newnode = ConverterHelper.ConvertCSharpToTreeNode(newT2);
+            TreeNode<T> newT1 = (TreeNode<T>)(object)newnode;
+            return newT1;
         }
 
         public static List<EditOperation<T>> ComputePrimaryEditions(List<EditOperation<T>> script)

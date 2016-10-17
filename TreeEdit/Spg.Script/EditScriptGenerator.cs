@@ -23,9 +23,11 @@ namespace TreeEdit.Spg.Script
         {
             var editScript = new List<EditOperation<T>>();
             var bfs = BFSWalker<T>.BreadFirstSearch(t2);
+            int count = -1;
 
             foreach (var x in bfs)
             {
+                count ++;
                 //Combines the update, insert, align, and move phases
                 var y = x.Parent;
                 var z = M.ToList().Find(o => o.Value.Equals(y)).Key;

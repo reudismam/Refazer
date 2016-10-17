@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
@@ -14,6 +15,7 @@ using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
 using ProseSample.Substrings;
+using TreeEdit.Spg.Print;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -87,6 +89,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     }
                     else
                     {
+                        node = editOperation.Parent;
                         node = editOperation.Parent;
                     }
                     kMatches.Add(node);

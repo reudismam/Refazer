@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis.Differencing;
@@ -47,6 +48,32 @@ namespace TreeEdit.Spg.Print
 
             for (int i = 0; i < tree.Children.Count; i++)
                 PrintPretty(tree.Children[i], indent, i == tree.Children.Count - 1);
+        }
+
+        public static void PrintPrettyDebug(TreeNode<T> tree, string indent, bool last)
+        {
+            Debug.Write(indent);
+            if (last)
+            {
+                Debug.Write("\\-");
+                indent += "  ";
+            }
+            else
+            {
+                Debug.Write("|-");
+                indent += "| ";
+            }
+            if (!tree.Children.Any())
+            {
+                Debug.WriteLine(tree.Label + "(\"" + tree + "\")");
+            }
+            else
+            {
+                Debug.WriteLine(tree.Label);
+            }
+
+            for (int i = 0; i < tree.Children.Count; i++)
+                PrintPrettyDebug(tree.Children[i], indent, i == tree.Children.Count - 1);
         }
 
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.TreeEdit.PQ;
 using TreeEdit.Spg.Print;
@@ -253,9 +255,17 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         private Dictionary<TreeNode<T>, TreeNode<T>> Opt(TreeNode<T> t1, TreeNode<T> t2)
         {
             var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
+            t1String = Regex.Replace(t1String, "[^0-9a-zA-Z}{@\"]+", " ");
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
+            t2String = Regex.Replace(t2String, "[^0-9a-zA-Z}{@\"]+", " ");
 
-            string cmd = @"/c java -jar """ + GetTestDataFolder(@"\libs") + $@"\RTED_v1.1.jar"" -t {t1String} {t2String} -c 1 1 1 -s heavy --switch -m";
+            var f1 = GetTestDataFolder(@"\") + @"\a.t";
+            var f2 = GetTestDataFolder(@"\") + @"\b.t";
+
+            File.WriteAllText(f1, t1String);
+            File.WriteAllText(f2, t2String);
+
+            string cmd = @"/c java -jar """ + GetTestDataFolder(@"\libs") + $@"\RTED_v1.1.jar"" -f ""{f1}"" ""{f2}"" -c 1 1 1 -s heavy --switch -m";
             Process proc = new Process();
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.Arguments = cmd;
