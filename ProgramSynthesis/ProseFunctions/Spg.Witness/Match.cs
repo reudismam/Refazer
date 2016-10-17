@@ -83,7 +83,7 @@ namespace ProseSample.Substrings.Spg.Witness
                     {
                         var match = matches[i];
                         var compare = Semantics.FindChild(match, patternExample.K);
-                        if (compare != null && compare.Equals(node))
+                        if (compare != null && IsEqual(compare.Value, node.Value))
                         {
                             mats.Add(i + 1);
                         }
@@ -93,6 +93,14 @@ namespace ProseSample.Substrings.Spg.Witness
                 kExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
+        }
+
+        public static bool IsEqual(SyntaxNodeOrToken x, SyntaxNodeOrToken y)
+        {
+            if (!x.IsKind(y.Kind())) return false;
+            if (!x.ToString().Equals(y.ToString())) return false;
+
+            return true;
         }
     }
 }

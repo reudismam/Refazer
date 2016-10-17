@@ -9,7 +9,7 @@ using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
-    public abstract class Context
+    public class Context
     {
         public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
