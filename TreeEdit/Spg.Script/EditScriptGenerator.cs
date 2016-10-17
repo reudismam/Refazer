@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using TreeEdit.Spg.Print;
 using TreeElement;
 using ProseSample.Substrings;
 using TreeElement.Spg.Node;
@@ -35,7 +33,6 @@ namespace TreeEdit.Spg.Script
 
                 if (w == null)
                 {
-                    //if (!M.ContainsKey(x)) continue;
                     int k = FindPos(x, M);
 
                     var xnode = new TreeNode<T>(x.Value, x.Label);
@@ -43,7 +40,6 @@ namespace TreeEdit.Spg.Script
                     z.AddChild(xnode, k - 1);
                     M.Add(xnode, x);
 
-                    //PrintUtil<T>.PrintPretty(t1, "", true);
                     editScript.Add(insert);
                 }
                 else //x has a partner in M
@@ -59,7 +55,6 @@ namespace TreeEdit.Spg.Script
                         M.Add(xnode, x);
                         M.Remove(w);
                         w = xnode;
-                        //PrintUtil<T>.PrintPretty(t1, "", true);
                         editScript.Add(update);
                     }
 
@@ -74,11 +69,9 @@ namespace TreeEdit.Spg.Script
                         z.AddChild(w, k - 1);
                         int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
                         v.RemoveNode(index);
-                        //PrintUtil<T>.PrintPretty(t1, "", true);
                         editScript.Add(move);
                     }
                 }
-
                 //AlignChildren(x, w);   
             }
 
@@ -93,7 +86,6 @@ namespace TreeEdit.Spg.Script
                     var v = delete.Parent;
                     int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
                     v.RemoveNode(index);
-                    //PrintUtil<T>.PrintPretty(t1, "", true);
                     editScript.Add(delete);
                 }
             }
@@ -124,7 +116,6 @@ namespace TreeEdit.Spg.Script
             }
 
             var removes = new List<Tuple<EditOperation<T>, List<EditOperation<T>>>>();
-            var deletes = new List<EditOperation<T>>();
             foreach (var v in editScript)
             {
                 if (v is Move<T>)
@@ -140,17 +131,14 @@ namespace TreeEdit.Spg.Script
                     list.Add(delete);
                     list.Add(insert);
                     removes.Add(Tuple.Create(v, list));           
-                    //deletes.Add(delete);
                 }
             }
-            //editScript.InsertRange(0, deletes);
             foreach (var v in removes)
             {
                 var index = editScript.FindIndex(o => o.Equals(v.Item1));
                 editScript.InsertRange(index, v.Item2);
                 editScript.Remove(v.Item1);
             }
-
             return editScript;
         }
 
@@ -167,7 +155,6 @@ namespace TreeEdit.Spg.Script
             TreeNode<T> firstChild = y.Children.ElementAt(0);
 
             if (firstChild.Equals(x)) return 1;
-            //if (!y.Children.Any()) return 1;
 
             TreeNode<T> v = null;
             foreach (TreeNode<T> c in y.Children)
@@ -179,9 +166,7 @@ namespace TreeEdit.Spg.Script
 
                 v = c;
             }
-
-            TreeNode<T> u = M.ToList().Find(o => o.Value.Equals(v)).Key;//Mline.Values.ToList().Find(o => o.Equals(x));
-
+            TreeNode<T> u = M.ToList().Find(o => o.Value.Equals(v)).Key;
             int count = 1;
             foreach (TreeNode<T> c in u.Parent.Children)
             {
@@ -189,38 +174,7 @@ namespace TreeEdit.Spg.Script
 
                 count++;
             }
-
             return -1;
         }
-
-        ///// <summary>
-        ///// Breadth First Search traversal
-        ///// </summary>
-        ///// <param name="u">Node to be traversed</param>
-        ///// <returns></returns>
-        //private List<TreeNode<T>> BreadFirstSearch(TreeNode<T> u)
-        //{
-        //    var result = new List<TreeNode<T>>();
-        //    var dist = new Dictionary<TreeNode<T>, int> { [u] = 0 };
-        //    var q = new Queue<TreeNode<T>>();
-        //    q.Enqueue(u);
-
-        //    while (q.Any())
-        //    {
-        //        TreeNode<T> v = q.Dequeue();
-
-        //        foreach (var c in v.Children)
-        //        {
-        //            if (!dist.ContainsKey(c))
-        //            {
-        //                dist[v] = dist[u] + 1;
-        //                result.Add(c);
-        //                q.Enqueue(c);
-        //            }
-        //        }
-        //    }
-
-        //    return result;
-        //}
     }
 }
