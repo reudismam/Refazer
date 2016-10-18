@@ -90,7 +90,6 @@ namespace ProseSample.Substrings.Spg.Witness
                     else
                     {
                         node = editOperation.Parent;
-                        node = editOperation.Parent;
                     }
                     kMatches.Add(node);
                     ConfigureContext(node, edit);

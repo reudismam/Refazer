@@ -9,6 +9,7 @@ using Microsoft.ProgramSynthesis.Compiler;
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
+using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
 
 namespace ProseSample
@@ -42,11 +43,18 @@ namespace ProseSample
 
         public static ProgramNode Learn(Grammar grammar, Spec spec)
         {
-            var engine = new SynthesisEngine(grammar, new SynthesisEngine.Config
+            var deductivecf = new DeductiveSynthesis.Config
             {
+                PrereqProgramsThreshold = k => 1,
+            };
+
+            //var strategyconfig = Ded
+            var engine = new SynthesisEngine(grammar, new SynthesisEngine.Config            
+            {               
                 UseThreads = false,
                 LogListener = new LogListener(),
             });
+
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 10;
             var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score").ToList();
