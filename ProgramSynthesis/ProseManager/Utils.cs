@@ -48,11 +48,11 @@ namespace ProseSample
                 PrereqProgramsThreshold = k => 1,
             };
 
-            //var strategyconfig = Ded
-            var engine = new SynthesisEngine(grammar, new SynthesisEngine.Config            
-            {               
+            var engine = new SynthesisEngine(grammar, new SynthesisEngine.Config
+            {
                 UseThreads = false,
                 LogListener = new LogListener(),
+                Strategies = new [] {typeof(DeductiveSynthesis.Config)},
             });
 
             var consistentPrograms = engine.LearnGrammar(spec);

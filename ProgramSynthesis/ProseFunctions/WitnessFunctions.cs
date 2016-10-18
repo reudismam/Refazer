@@ -458,8 +458,19 @@ namespace ProseSample.Substrings
             {
                 var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+                if (target.Value.Parent.Parent.DescendantNodesAndSelf().Count() < 100)
+                {
+                    var parent = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
+                    target = TreeUpdate.FindNode(parent, target.Value);
+                }
+                else if (target.Value.Parent.DescendantNodesAndSelf().Count() < 100)
+                {
+                    var parent = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent);
+                    target = TreeUpdate.FindNode(parent, target.Value);
+                }
+
                 kMatches.Add(target);
-                eExamples[input] =  kMatches;
+                eExamples[input] = kMatches;
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
