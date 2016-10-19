@@ -775,7 +775,22 @@ namespace ProseSample.Substrings
                 }
                 case SyntaxKind.Parameter:
                 {
-                    return children.First().Parent;
+                    var parameter = (ParameterSyntax) node;
+                    foreach (var c in children)
+                    {
+                        if (c.IsKind(SyntaxKind.GenericName))
+                        {
+                            var type = (TypeSyntax) c;
+                            parameter = parameter.WithType(type);
+                        }
+                        if (c.IsKind(SyntaxKind.EqualsValueClause))
+                        {
+                            var equalsValue = (EqualsValueClauseSyntax) c;
+                            parameter = parameter.WithDefault(equalsValue);
+                        }
+                    }
+
+                    return parameter;
                 }
                 case SyntaxKind.BracketedArgumentList:
                 {
