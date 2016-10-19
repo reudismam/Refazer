@@ -789,7 +789,6 @@ namespace ProseSample.Substrings
                             parameter = parameter.WithDefault(equalsValue);
                         }
                     }
-
                     return parameter;
                 }
                 case SyntaxKind.BracketedArgumentList:
