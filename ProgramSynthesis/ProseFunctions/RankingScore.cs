@@ -120,11 +120,13 @@ namespace ProseSample.Substrings
         public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore + 30;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
-        public static double KScore(int k) => k >= 0 ? 1.0 : -30;
+        public static double KScore(K k) => 1.1;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
-
         public static double KDScore(string kd) => 1.1;
+
+        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+        public static double CScore(int c) => 1.1;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KindScore(SyntaxKind kd) => 1.1;

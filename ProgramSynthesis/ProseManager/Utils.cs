@@ -52,7 +52,7 @@ namespace ProseSample
             {
                 UseThreads = false,
                 LogListener = new LogListener(),
-                Strategies = new [] {typeof(DeductiveSynthesis.Config)},
+                //Strategies = new [] {typeof(DeductiveSynthesis.Config)},
             });
 
             var consistentPrograms = engine.LearnGrammar(spec);

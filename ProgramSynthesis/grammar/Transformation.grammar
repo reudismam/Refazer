@@ -23,7 +23,7 @@ IEnumerable<Node> locations := EditFilter(nodematch, fnodes) = Filter(\x: Node =
 bool nodematch := Match(x, pattern);
 IEnumerable<Node> fnodes := Traversal(node, id);
 
-Node operation := Insert(target, ast, k) | InsertBefore(target, ref, ast) |  Update(target, ast) | Delete(target, ref);
+Node operation := Insert(target, ast, c) | InsertBefore(target, ref, ast) |  Update(target, ast) | Delete(target, ref);
 
 Pattern pattern := kmatch | Context(kmatch, id);
 Pattern kmatch := token | Pattern(kind, children);
@@ -36,5 +36,6 @@ IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 Node ref := Reference(target, pattern, k);
 
 @feature[Score=KindScore] SyntaxKind kind;                     @input Node node;
-@feature[Score=KDScore] string id;                             @feature[Score=KScore] int k;
+@feature[Score=KDScore] string id;                             @feature[Score=KScore] K k;
+@feature[Score=CScore] int c;
 @feature[Score=NodeScore] SyntaxNodeOrToken tree;

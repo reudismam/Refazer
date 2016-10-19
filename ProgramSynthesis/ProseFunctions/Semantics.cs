@@ -307,9 +307,10 @@ namespace ProseSample.Substrings
         }
 
 
-        public static Node Reference(Node target, Pattern kmatch, int k)
+        public static Node Reference(Node target, Pattern kmatch, K ki)
         {
             var patternP = kmatch;
+            var k = ki.GetK(kmatch);
             if (k >= 0)
             {
                 var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
