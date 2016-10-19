@@ -33,7 +33,7 @@ Pattern token := Concrete(tree) | Abstract(kind);
 Node ast:= const | ref;
 Node const := Node(kind, childrenNodes) | ConstNode(tree);
 IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
-Node ref := Reference(target, pattern, k);
+Node ref := Reference(target, pattern, c);
 
 @feature[Score=KindScore] SyntaxKind kind;                     @input Node node;
 @feature[Score=KDScore] string id;                             @feature[Score=KScore] K k;
