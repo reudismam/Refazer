@@ -66,35 +66,6 @@ namespace ProseSample.Substrings.Spg.Witness
             return new DisjunctiveExamplesSpec(eExamples);
         }
 
-        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var mats = new List<object>();
-                var patternExample = (Pattern)kind.Examples[input];
-                var pattern = patternExample.Tree;
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                {
-                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
-                    var matches = MatchManager.Matches(currentTree, pattern);
-
-                    for (int i = 0; i < matches.Count; i++)
-                    {
-                        var match = matches[i];
-                        var compare = Semantics.FindChild(match, patternExample.K);
-                        if (compare != null && IsEqual(compare.Value, node.Value))
-                        {
-                            mats.Add(i + 1);
-                        }
-                    }
-                }
-                if (!mats.Any()) return null;
-                kExamples[input] = mats;
-            }
-            return DisjunctiveExamplesSpec.From(kExamples);
-        }
-
         //public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
         //{
         //    var kExamples = new Dictionary<State, IEnumerable<object>>();
@@ -106,13 +77,42 @@ namespace ProseSample.Substrings.Spg.Witness
         //        foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
         //        {
         //            var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
-        //            K k = new K(currentTree, node);
-        //            mats.Add(k);
-        //        }    
+        //            var matches = MatchManager.Matches(currentTree, pattern);
+
+        //            for (int i = 0; i < matches.Count; i++)
+        //            {
+        //                var match = matches[i];
+        //                var compare = Semantics.FindChild(match, patternExample.K);
+        //                if (compare != null && IsEqual(compare.Value, node.Value))
+        //                {
+        //                    mats.Add(i + 1);
+        //                }
+        //            }
+        //        }
+        //        if (!mats.Any()) return null;
         //        kExamples[input] = mats;
         //    }
         //    return DisjunctiveExamplesSpec.From(kExamples);
         //}
+
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
+        {
+            var kExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var mats = new List<object>();
+                var patternExample = (Pattern)kind.Examples[input];
+                var pattern = patternExample.Tree;
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                {
+                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
+                    K k = new K(currentTree, node);
+                    mats.Add(k);
+                }
+                kExamples[input] = mats;
+            }
+            return DisjunctiveExamplesSpec.From(kExamples);
+        }
 
         public static bool IsEqual(SyntaxNodeOrToken x, SyntaxNodeOrToken y)
         {

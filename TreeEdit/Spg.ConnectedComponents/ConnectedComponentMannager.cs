@@ -94,8 +94,11 @@ namespace TreeEdit.Spg.ConnectedComponents
                     dic.Add(i, new List<EditOperation<T>>());
                     foreach (var index in keypair.Value)
                     {
-                        dic[i].AddRange(dic[index]);
-                        dic.Remove(index);
+                        if (dic.ContainsKey(index))
+                        {
+                            dic[i].AddRange(dic[index]);
+                            dic.Remove(index);
+                        }
                     }
                 }
             }
