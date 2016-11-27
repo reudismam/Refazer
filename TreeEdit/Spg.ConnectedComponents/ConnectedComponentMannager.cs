@@ -91,11 +91,11 @@ namespace TreeEdit.Spg.ConnectedComponents
                 if (keypair.Value.Count > 1)
                 {
                     i++;
-                    dic.Add(i, new List<EditOperation<T>>());
                     foreach (var index in keypair.Value)
                     {
                         if (dic.ContainsKey(index))
                         {
+                            if (!dic.ContainsKey(i)) dic.Add(i, new List<EditOperation<T>>());   
                             dic[i].AddRange(dic[index]);
                             dic.Remove(index);
                         }
