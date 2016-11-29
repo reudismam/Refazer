@@ -173,6 +173,7 @@ namespace ProseSample.Substrings.Spg.Witness
             //transformed version of the parent node.
             var transformed = ProcessScriptOnNode(script, parent);
 
+            //TODO Refactor the code to does not convert a list in another list and back.
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
             var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.ComputePrimaryEditions(edits);
             var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
