@@ -178,6 +178,22 @@ namespace LCA.Spg.Manager
             return lca;
         }
 
+        public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNodeOrToken> nodes, SyntaxNodeOrToken tree)
+        {
+            if (nodes == null) throw new ArgumentNullException(nameof(nodes));
+            if (tree == null) throw new ArgumentNullException(nameof(tree));
+            if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
+
+            LCAManager lcaCalculator = GetInstance();
+            SyntaxNodeOrToken lca = nodes[0];
+            for (int i = 1; i < nodes.Count; i++)
+            {
+                SyntaxNodeOrToken node = nodes[i];
+                lca = lcaCalculator.LeastCommonAncestor(tree, lca, node);
+            }
+            return lca;
+        }
+
         ///// <summary>
         ///// Least common ancestor of elements between start and end.
         ///// </summary>

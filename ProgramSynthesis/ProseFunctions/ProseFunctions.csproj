@@ -204,6 +204,10 @@
     <Compile Include="WitnessFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LCA\LCA.csproj">
+      <Project>{F256F0B4-F9B1-49CE-86C2-F70096E96F88}</Project>
+      <Name>LCA</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LongestCommonAncestor\LongestCommonSubsequence.csproj">
       <Project>{b66821a8-75db-4165-83b7-91a8b5df8eb0}</Project>
       <Name>LongestCommonSubsequence</Name>

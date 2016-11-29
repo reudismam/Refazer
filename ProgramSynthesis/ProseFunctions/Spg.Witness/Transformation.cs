@@ -17,6 +17,7 @@ using TreeEdit.Spg.TreeEdit.Update;
 using ProseSample.Substrings;
 using TreeEdit.Spg.Print;
 using TreeElement.Spg.Node;
+using LCA.Spg.Manager;
 
 namespace ProseSample.Substrings.Spg.Witness
 {
@@ -267,7 +268,7 @@ namespace ProseSample.Substrings.Spg.Witness
         /// <returns></returns>
         private static TreeNode<SyntaxNodeOrToken> GetParent(Script script, TreeNode<SyntaxNodeOrToken> inpTree)
         {
-            TreeNode<SyntaxNodeOrToken> root = null;
+            var listNodes = new List<SyntaxNodeOrToken>();
             foreach (var v in script.Edits)
             {
                 TreeNode<SyntaxNodeOrToken> tocompare = null;
@@ -280,30 +281,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     tocompare = v.EditOperation.Parent;
                 }
 
-                if (root == null)
-                {
-                    root = tocompare;
-                }
-                else if (TreeUpdate.FindNode(inpTree, tocompare.Value) != null)
-                {
-                    if (root.Value.SpanStart > tocompare.Value.SpanStart)
-                    {
-                        root = tocompare;
-                    }
-                    else if (root.Value.SpanStart == tocompare.Value.SpanStart)
-                    {
-                        var rootValue = root.Value.AsNode();
-                        if (rootValue == null) root = tocompare;
-                        var toCompareValue = tocompare.Value.AsNode();
-                        
-                        if (toCompareValue != null && toCompareValue.DescendantNodesAndSelf().Contains(rootValue))
-                        {
-                            root = tocompare;
-                        }
-                    }
-                }
+                listNodes.Add(tocompare.Value);       
             }
-            var parent = ConverterHelper.ConvertCSharpToTreeNode(root.Value);
+            var lca = LCAManager.GetInstance().LeastCommonAncestor(listNodes, inpTree.Value);
+            var parent = ConverterHelper.ConvertCSharpToTreeNode(lca);
             return parent;
         }
 
