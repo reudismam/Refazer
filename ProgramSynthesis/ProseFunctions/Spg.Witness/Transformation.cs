@@ -163,11 +163,20 @@ namespace ProseSample.Substrings.Spg.Witness
 
         private static Edit<SyntaxNodeOrToken> CompactScriptIntoASingleOperation(TreeNode<SyntaxNodeOrToken> inpTree, Script script)
         {
-            if (script.Edits.Count == 1) return script.Edits.First();
-
+            //if the script has only an edit, the compacted edit is itself.
+            if (script.Edits.Count == 1)
+            {
+                return script.Edits.First();
+            }
+            //parent of the edit operations
             var parent = GetParent(script, inpTree);
-            var children = script.Edits.Where(o => o.EditOperation.Parent.Value.Equals(parent.Value)).ToList();
+            //transformed version of the parent node.
             var transformed = ProcessScriptOnNode(script, parent);
+
+            var edits = script.Edits.Select(o => o.EditOperation).ToList();
+            var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.ComputePrimaryEditions(edits);
+            var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
+           
             if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>)) return ProcessSequenceOfDeleteOperations(script, parent);
             if (children.Count > 1) return ProcessRootNodeHasMoreThanOneChild(script, children, parent, transformed);
 
