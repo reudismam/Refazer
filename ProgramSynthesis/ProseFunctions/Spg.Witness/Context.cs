@@ -106,7 +106,7 @@ namespace ProseSample.Substrings.Spg.Witness
         public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<Token> parent)
         {
             string path = "";
-            for (TreeNode<SyntaxNodeOrToken> node = target; !node.Value.IsKind(parent.Value.Kind); node = node.Parent)
+            for (TreeNode<SyntaxNodeOrToken> node = target; node != null && node.Value != null && !node.Value.IsKind(parent.Value.Kind); node = node.Parent)
             {
                 string append = "/";
 
