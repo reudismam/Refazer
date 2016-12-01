@@ -28,11 +28,12 @@ namespace ProseSample.Substrings.Spg.Witness
                     if (t1Parent == null) continue; 
                     mats.Add(t1Parent.Parent);
                    
-                    var pParent = node.Parent.Parent;
-                    if (pParent == null) continue;
-                    var t1PParent = TreeUpdate.FindNode(inputTree.Value, node.Parent.Value);
-                    if (t1PParent == null) continue;
-                    mats.Add(t1PParent.Parent);           
+                    //TODO resolve this bug here
+                    //var pParent = node.Parent.Parent;
+                    //if (pParent == null) continue;
+                    //var t1PParent = TreeUpdate.FindNode(inputTree.Value, node.Parent.Value);
+                    //if (t1PParent == null) continue;
+                    //mats.Add(t1PParent.Parent);           
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;

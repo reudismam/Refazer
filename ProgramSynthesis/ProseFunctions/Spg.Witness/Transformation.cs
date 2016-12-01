@@ -173,6 +173,7 @@ namespace ProseSample.Substrings.Spg.Witness
             //transformed version of the parent node.
             var parentCopy = ConverterHelper.MakeACopy(parent);
             var transformed = ProcessScriptOnNode(script, parentCopy);
+            var tstring = PrintUtil<SyntaxNodeOrToken>.PrettyPrintString(transformed);
 
             //TODO Refactor the code to does not convert a list in another list and back.
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
