@@ -179,6 +179,11 @@ namespace TreeEdit.Spg.ConnectedComponents
                 var editI = Script[indexI];
                 var editJ = Script[indexJ];
 
+                if (!(editI.GetType() == editJ.GetType() || editI is Update<SyntaxNode> || editJ is Update<SyntaxNodeOrToken>))
+                {
+                    return false;
+                }
+
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.Parent)) return true;
                 if (editI.T1Node.DescendantNodesAndSelf().Contains(editJ.T1Node)) return true;
 
