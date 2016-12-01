@@ -8,27 +8,27 @@ namespace ProseSample.Substrings
 {
     public class K
     {
-        private readonly TreeNode<SyntaxNodeOrToken> Input;
-        private readonly TreeNode<SyntaxNodeOrToken> Node;
+        private readonly TreeNode<SyntaxNodeOrToken> _input;
+        private readonly TreeNode<SyntaxNodeOrToken> _node;
 
         public K(TreeNode<SyntaxNodeOrToken> input, TreeNode<SyntaxNodeOrToken> node)
         {
-            Input = input;
-            Node = node;
+            _input = input;
+            _node = node;
         }
 
         public int GetK(Pattern patternExample)
         {
             var pattern = patternExample.Tree;
 
-            var currentTree = Input;
+            var currentTree = _input;
             var matches = MatchManager.Matches(currentTree, pattern);
 
             for (int i = 0; i < matches.Count; i++)
             {
                 var match = matches[i];
                 var compare = Semantics.FindChild(match, patternExample.K);
-                if (compare != null && Match.IsEqual(compare.Value, Node.Value))
+                if (compare != null && Match.IsEqual(compare.Value, _node.Value))
                 {
                     return i + 1;
                 }

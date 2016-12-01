@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
 namespace ProseSample.Substrings.Spg.Witness
@@ -14,20 +15,24 @@ namespace ProseSample.Substrings.Spg.Witness
         public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            
             foreach (State input in spec.ProvidedInputs)
             {
+                var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var mats = new List<TreeNode<SyntaxNodeOrToken>>();
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {                   
                     var parent = node.Parent;
                     if (parent == null) continue;
-                    mats.Add(parent);
+                    var t1Parent = TreeUpdate.FindNode(inputTree.Value, node.Value);
+                    if (t1Parent == null) continue; 
+                    mats.Add(t1Parent.Parent);
                    
                     var pParent = node.Parent.Parent;
-                    if (pParent != null)
-                    {
-                        mats.Add(pParent);
-                    }
+                    if (pParent == null) continue;
+                    var t1PParent = TreeUpdate.FindNode(inputTree.Value, node.Parent.Value);
+                    if (t1PParent == null) continue;
+                    mats.Add(t1PParent.Parent);           
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;

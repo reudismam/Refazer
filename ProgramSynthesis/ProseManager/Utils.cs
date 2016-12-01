@@ -11,6 +11,8 @@ using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
 using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
+using Microsoft.ProgramSynthesis.Utils;
+using ProseSample.Substrings;
 
 namespace ProseSample
 {
@@ -57,22 +59,44 @@ namespace ProseSample
 
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 10;
-            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score").ToList();
+            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score", 2).ToList();
             
             var b =  (ulong) topK.Count;
             topK = topK.ToList().GetRange(0, (int) Math.Min(a, b));
             var programs = "";
+            List<ProgramNode> validated = new List<ProgramNode>();
             foreach (ProgramNode p in topK)
             {
                 programs += p + "\n\n";
                 Console.WriteLine(p + "\n");
+
+                if (ValidateProgram(p, spec))
+                {
+                    validated.Add(p);
+                }
             }
             File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
-            ProgramNode bestProgram = topK.First();
+            ProgramNode bestProgram = validated.First();
             string stringprogram = bestProgram.ToString();
             var score = bestProgram["Score"];
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
             return bestProgram;
+        }
+
+        private static bool ValidateProgram(ProgramNode program, Spec spec)
+        {
+            foreach (var state in spec.ProvidedInputs)
+            {
+                try
+                {
+                    object[] output = program.Invoke(state).ToEnumerable().ToArray();
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         #region Auxiliary methods

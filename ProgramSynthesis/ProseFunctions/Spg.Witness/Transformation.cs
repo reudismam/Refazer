@@ -171,7 +171,8 @@ namespace ProseSample.Substrings.Spg.Witness
             //parent of the edit operations
             var parent = GetParent(script, inpTree);
             //transformed version of the parent node.
-            var transformed = ProcessScriptOnNode(script, parent);
+            var parentCopy = ConverterHelper.MakeACopy(parent);
+            var transformed = ProcessScriptOnNode(script, parentCopy);
 
             //TODO Refactor the code to does not convert a list in another list and back.
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
@@ -291,7 +292,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     tocompare = v.EditOperation.Parent;
                 }
 
-                listNodes.Add(tocompare.Value);       
+                if (TreeUpdate.FindNode(inpTree, tocompare.Value) != null)
+                {
+                    listNodes.Add(tocompare.Value);
+                }
             }
             var lca = LCAManager.GetInstance().LeastCommonAncestor(listNodes, inpTree.Value);
             var parent = ConverterHelper.ConvertCSharpToTreeNode(lca);
