@@ -24,9 +24,9 @@ namespace ProseSample.Substrings.Spg.Witness
                 {                   
                     var parent = node.Parent;
                     if (parent == null) continue;
-                    var t1Parent = TreeUpdate.FindNode(inputTree.Value, node.Value);
-                    if (t1Parent == null) continue; 
-                    mats.Add(t1Parent.Parent);
+                    var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
+                    if (t1Node == null) continue; 
+                    mats.Add(t1Node.Parent);
                    
                     //TODO resolve this bug here
                     //var pParent = node.Parent.Parent;
@@ -54,10 +54,13 @@ namespace ProseSample.Substrings.Spg.Witness
             var matches = new List<object>();
             foreach (State input in spec.ProvidedInputs)
             {
+                var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var parent = (Pattern) kind.Examples[input]; 
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    var path = GetPath(node, parent.Tree);
+                    var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
+                    if (t1Node == null) continue;
+                    var path = GetPath(t1Node, parent.Tree);
                     matches.Add(path);
                 }
                 if (!matches.Any()) return null;    
