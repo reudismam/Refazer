@@ -51,6 +51,7 @@ IntelliMeta.sln.ide/*
 *.cache
 *.suo
 *.coverage
+out.txt
 Backup[0-9]*/*
 Backup/*
 */packages/*
