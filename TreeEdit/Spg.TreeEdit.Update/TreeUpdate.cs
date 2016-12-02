@@ -44,7 +44,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
                 var parent = FindNode(CurrentTree, editOperation.Parent.Value);
                 if (parent == null) parent = CurrentTree;
                 var treeNode = /*ConverterHelper.MakeACopy(*/editOperation.T1Node/*)*/;
-                treeNode.Status = NodeStatus.INSERTED;
+                treeNode.Status = NodeStatus.Inserted;
                 parent.AddChild(treeNode, editOperation.K - 1);
                 treeNode.Parent = parent;
             }
@@ -109,7 +109,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
             bool found = false;
             foreach (var item in iTree.Children)
             {
-                if (oldNode.Value.Span.Contains(item.Value.Span) && item.Value.Span.Contains(oldNode.Value.Span) && oldNode.Value.IsKind(item.Value.Kind()) && item.Status == NodeStatus.NONE)
+                if (oldNode.Value.Span.Contains(item.Value.Span) && item.Value.Span.Contains(oldNode.Value.Span) && oldNode.Value.IsKind(item.Value.Kind()) && item.Status == NodeStatus.None)
                 {
                     found = true;
                     break;

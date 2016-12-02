@@ -23,12 +23,24 @@ namespace TreeElement.Spg.Node
         /// <value>The value.</value>
         public T Value { get; set; }
 
+        /// <summary>
+        /// Define the label of this TreeNode
+        /// </summary>
         public TLabel Label { get; set; }
 
+        /// <summary>
+        /// Define the syntax tree that this TreeNode is associated
+        /// </summary>
         public TreeNode<T> SyntaxTree { get; set; }
 
+        /// <summary>
+        /// Define the start position of this TreeNode
+        /// </summary>
         public int Start { get; set; }
 
+        /// <summary>
+        /// Define the status of this TreeNode
+        /// </summary>
         public NodeStatus Status { get; set; }
 
 
@@ -47,7 +59,7 @@ namespace TreeElement.Spg.Node
             {
                 child.Parent = this;
             }
-            Status = NodeStatus.NONE;
+            Status = NodeStatus.None;
         }
 
         /// <summary>
@@ -60,34 +72,8 @@ namespace TreeElement.Spg.Node
             Value = value;
             Label = label;
             Children = new List<TreeNode<T>>();
-            Status = NodeStatus.NONE;
+            Status = NodeStatus.None;
         }
-
-        ///// <summary>
-        ///// Children get and set method
-        ///// </summary>
-        //List<TreeNode<T>> TreeNode<T>.Children
-        //{
-        //    get
-        //    {
-        //        return _children;
-        //    }
-
-        //    set
-        //    {
-        //        _children = value;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Get descendants nodes
-        ///// </summary>
-        ///// <returns></returns>
-        //public List<TreeNode<T>> DescendantNodes()
-        //{
-        //    var list = BFSWalker<T>.BreadFirstSearch(this);
-        //    return list;
-        //}
 
         /// <summary>
         /// Get descendants nodes
@@ -95,24 +81,8 @@ namespace TreeElement.Spg.Node
         /// <returns></returns>
         public List<TreeNode<T>> DescendantNodes()
         {
-            //var list = new List<TreeNode<T>>();
-
-            //if (!_children.Any())
-            //{
-            //    return list;
-            //}
-
-            //foreach (var item in _children)
-            //{
-            //    list.Add(item);
-            //    list.AddRange(item.DescendantNodes());
-            //}
-
-            //return list;
-            //return BFSWalker<T>.BreadFirstSearch(this);
             var traversal = new TreeTraversal<T>();
             var list = traversal.PostOrderTraversal(this);
-            //list.RemoveAt(list.Count - 1);
             return list;
         }
 
@@ -144,7 +114,6 @@ namespace TreeElement.Spg.Node
         public List<TreeNode<T>> DescendantNodesAndSelf()
         {
             var list = DescendantNodes();
-            //list.Insert(0, this);
             return list;
         }
 
@@ -181,6 +150,12 @@ namespace TreeElement.Spg.Node
             return ToString().GetHashCode();
         }
 
+        /// <summary>
+        /// Determines if the two TreeNodes are equal.
+        /// </summary>
+        /// <param name="t1">First TreeNode</param>
+        /// <param name="compare">Second TreeNode</param>
+        /// <returns></returns>
         public static bool IsEqual(TreeNode<T> t1, TreeNode<T> compare)
         {
             if (!t1.IsLabel(compare.Label)) return false;
@@ -202,11 +177,14 @@ namespace TreeElement.Spg.Node
         }
     }
 
+    /// <summary>
+    /// Define the node status
+    /// </summary>
     public enum NodeStatus
     {
-        INSERTED,
-        DELETED,
-        UPDADE,
-        NONE
+        Inserted,
+        Deleted,
+        Updade,
+        None
     }
 }
