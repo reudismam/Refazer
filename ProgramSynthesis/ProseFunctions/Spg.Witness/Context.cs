@@ -25,9 +25,10 @@ namespace ProseSample.Substrings.Spg.Witness
                     var parent = node.Parent;
                     if (parent == null) continue;
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
-                    if (t1Node == null) continue; 
-                    mats.Add(t1Node.Parent);
-
+                    if (t1Node?.Parent.DescendantNodesAndSelf().Count() < 50)
+                    {
+                        mats.Add(t1Node.Parent);
+                    }
                     //TODO resolve this bug here
                     //var pParent = node.Parent.Parent;
                     //if (pParent == null) continue;
