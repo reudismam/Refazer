@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using ProseSample.Substrings;
@@ -130,12 +131,17 @@ namespace ProseSample.Substrings
             var list = st.Children;
             if (!list.Any())
             {
+                var content = st.Value.ToString().Trim();
                 //if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
                 //{
                 //    var tNode = "{" + st.Label + "}";
                 //    return tNode;
                 //}
-                var treeNode = "{"+st.Label+"("+st.Value.ToString().Trim()+")}";
+                if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
+                {
+                    content = Regex.Replace(content, "[^0-9a-zA-Z\"]+", " ");
+                }
+                var treeNode = "{"+st.Label+"("+content+")}";             
                 return treeNode;
             }
             var tree = "{"+ st.Label;

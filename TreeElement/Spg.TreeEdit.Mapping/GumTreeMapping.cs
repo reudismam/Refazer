@@ -142,7 +142,6 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
                 sortList = sortList.Except(removes).ToList();
             }
-
             return M;
         }
 
@@ -255,9 +254,11 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
         private Dictionary<TreeNode<T>, TreeNode<T>> Opt(TreeNode<T> t1, TreeNode<T> t2)
         {
             var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
-            t1String = Regex.Replace(t1String, "[^0-9a-zA-Z}{@\"]+", " ");
+            //t1String = Regex.Replace(t1String, "[^0-9a-zA-Z}{@\"]+", " ");
+            //t1String = Regex.Replace(t1String, "(?:(?:@\"[^\"]*\")+)", "\"code\"");
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
-            t2String = Regex.Replace(t2String, "[^0-9a-zA-Z}{@\"]+", " ");
+            //t2String = Regex.Replace(t2String, "(?:(?:@\"[^\"]*\")+)", "\"code\"");
+            //t2String = Regex.Replace(t2String, "[^0-9a-zA-Z}{@\"]+", " ");
 
             var f1 = GetTestDataFolder(@"\") + @"\a.t";
             var f2 = GetTestDataFolder(@"\") + @"\b.t";
@@ -295,7 +296,6 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
             }
 
             var dictionary = new Dictionary<TreeNode<T>, TreeNode<T>>();
-
             StringReader strReader = new StringReader(output);
             strReader.ReadLine(); //discard files line
             while (true)
@@ -311,9 +311,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
                 {
                     dictionary.Add(dic1[first], dic2[second]);
                 }
-
             }
-
             return dictionary;
         }
 
