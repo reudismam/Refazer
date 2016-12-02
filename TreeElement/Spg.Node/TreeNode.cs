@@ -15,6 +15,9 @@ namespace TreeElement.Spg.Node
         /// <value>The children.</value>
         public List<TreeNode<T>> Children { get; set; }
 
+        /// <summary>
+        /// Parent node
+        /// </summary>
         public TreeNode<T> Parent { get; set; }
 
         /// <summary>
