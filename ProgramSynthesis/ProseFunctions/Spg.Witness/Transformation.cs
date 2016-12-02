@@ -185,7 +185,11 @@ namespace ProseSample.Substrings.Spg.Witness
             var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
            
             if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>)) return ProcessSequenceOfDeleteOperations(script, parent);
-            if (children.Count > 1) return ProcessRootNodeHasMoreThanOneChild(script, children, parent, transformed);
+            if (children.Count > 1)
+            {
+                var editOp = ProcessRootNodeHasMoreThanOneChild(script, children, parent, transformed);
+                return editOp;
+            }
 
             var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
             if (firstOperation is Insert<SyntaxNodeOrToken>)
@@ -245,6 +249,7 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (var s in script.Edits)
             {
                 treeUpdate.ProcessEditOperation(s.EditOperation);
+                PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(treeUpdate.CurrentTree, "", true);
             }
             return treeUpdate.CurrentTree;
         }

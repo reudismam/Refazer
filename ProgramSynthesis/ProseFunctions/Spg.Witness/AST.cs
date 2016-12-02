@@ -29,7 +29,6 @@ namespace ProseSample.Substrings.Spg.Witness
                 }
                 kExamples[input] = kMatches;
             }
-
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 

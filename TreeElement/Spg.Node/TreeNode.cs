@@ -29,6 +29,8 @@ namespace TreeElement.Spg.Node
 
         public int Start { get; set; }
 
+        public NodeStatus Status { get; set; }
+
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -45,6 +47,7 @@ namespace TreeElement.Spg.Node
             {
                 child.Parent = this;
             }
+            Status = NodeStatus.NONE;
         }
 
         /// <summary>
@@ -57,6 +60,7 @@ namespace TreeElement.Spg.Node
             Value = value;
             Label = label;
             Children = new List<TreeNode<T>>();
+            Status = NodeStatus.NONE;
         }
 
         ///// <summary>
@@ -196,5 +200,13 @@ namespace TreeElement.Spg.Node
             }
             return true;
         }
+    }
+
+    public enum NodeStatus
+    {
+        INSERTED,
+        DELETED,
+        UPDADE,
+        NONE
     }
 }
