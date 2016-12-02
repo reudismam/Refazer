@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
 using ProseSample.Substrings;
 using TreeElement.Spg.Node;
@@ -77,7 +78,7 @@ namespace TreeEdit.Spg.ConnectedComponents
             {
                 foreach (var vj in primaryEditions)
                 {
-                    if (GetNode(vi.Parent.Value).DescendantNodesAndSelf().Contains(vj.Parent))
+                    if (GetNode(vi.Parent.Value).DescendantNodesAndSelf().Contains(vj.Parent) && !vi.Parent.IsLabel(new TLabel(SyntaxKind.ClassDeclaration)))
                     {
                         var t = Tuple.Create(vj.T1Node.Value, vj.Parent.Value, vj.K);
                         var index = _visited[t];

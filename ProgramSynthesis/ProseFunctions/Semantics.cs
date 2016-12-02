@@ -513,6 +513,7 @@ namespace ProseSample.Substrings
                 }
                 case SyntaxKind.MethodDeclaration:
                 {
+                    //TODO improve the creation of the MethodDeclaration.
                     var method = (MethodDeclarationSyntax) node;
                     if (children.Any(o => o.IsKind(SyntaxKind.AttributeList)))
                     {
@@ -776,7 +777,17 @@ namespace ProseSample.Substrings
                 }
                 case SyntaxKind.Parameter:
                 {
-                    var parameter = (ParameterSyntax) node;
+                    ParameterSyntax parameter;
+                    if (node == null && children[0].IsKind(SyntaxKind.IdentifierName))
+                    {
+                        var name = (IdentifierNameSyntax) children[0];
+                        parameter = SyntaxFactory.Parameter(name.Identifier);
+                    }
+                    else
+                    {
+                        parameter = (ParameterSyntax)node;
+                    }
+                    
                     foreach (var c in children)
                     {
                         if (c.IsKind(SyntaxKind.GenericName))

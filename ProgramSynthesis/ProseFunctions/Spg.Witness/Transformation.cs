@@ -172,6 +172,12 @@ namespace ProseSample.Substrings.Spg.Witness
             {
                 return script.Edits.First();
             }
+
+            if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
+            {
+                return ProcessSequenceOfDeleteOperations(script, inpTree);
+            }
+
             //parent of the edit operations
             var parent = GetParent(script, inpTree);
             //transformed version of the parent node.
@@ -183,8 +189,7 @@ namespace ProseSample.Substrings.Spg.Witness
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
             var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.ComputePrimaryEditions(edits);
             var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
-           
-            if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>)) return ProcessSequenceOfDeleteOperations(script, parent);
+          
             if (children.Count > 1)
             {
                 var editOp = ProcessRootNodeHasMoreThanOneChild(script, children, parent, transformed);
@@ -254,7 +259,7 @@ namespace ProseSample.Substrings.Spg.Witness
             return treeUpdate.CurrentTree;
         }
 
-        private static Edit<SyntaxNodeOrToken> ProcessSequenceOfDeleteOperations(Script script, TreeNode<SyntaxNodeOrToken> parent)
+        private static Edit<SyntaxNodeOrToken> ProcessSequenceOfDeleteOperations(Script script, TreeNode<SyntaxNodeOrToken> inpTree)
         {
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
             var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> { edits });
@@ -269,6 +274,9 @@ namespace ProseSample.Substrings.Spg.Witness
 
             var node = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
             var transformed = ProcessScriptOnNode(script, node);
+
+            //parent of the edit operations
+            var parent = GetParent(script, inpTree);
 
             var @from = ConverterHelper.ConvertCSharpToTreeNode(list.First().Parent.Value);
             var to = ConverterHelper.MakeACopy(transformed);
