@@ -55,23 +55,19 @@ namespace TreeEdit.Spg.ConnectedComponents
                 int cc = _visited[t];
                 dic[cc].Add(edit);
             }
-            dic = JoinPrimaryOperationsByParent(primaryEditions, editOperations, i, dic);
+            dic = JoinPrimaryOperationsByParent(primaryEditions, i, dic);
             var ccs = new List<List<EditOperation<T>>>(dic.Values);
             return ccs;
         }
 
-        private static Dictionary<int, List<EditOperation<T>>> JoinPrimaryOperationsByParent(List<EditOperation<T>> primaryEditions, List<EditOperation<T>> editOperations, int i, Dictionary<int, List<EditOperation<T>>> dic)
+        private static Dictionary<int, List<EditOperation<T>>> JoinPrimaryOperationsByParent(List<EditOperation<T>> primaryEditions, int i, Dictionary<int, List<EditOperation<T>>> connectedComponentsDictionary)
         {
-            var dictionary = new Dictionary<TreeNode<T>, HashSet<int>>();
-            foreach (var v in primaryEditions)
+            //Parent dictionary. Contains the parent and the connected components
+            //to this parent.
+            var parentDictionary = new Dictionary<TreeNode<T>, HashSet<int>>();
+            foreach (var v in primaryEditions.Where(v => !parentDictionary.ContainsKey(v.Parent)))
             {
-                if (!dictionary.ContainsKey(v.Parent))
-                {
-                    dictionary.Add(v.Parent, new HashSet<int>());
-                }
-                //var t = Tuple.Create(v.T1Node.Value, v.Parent.Value, v.K);
-                //var index = _visited[t];
-                //dictionary[v.Parent].Add(index);
+                parentDictionary.Add(v.Parent, new HashSet<int>());
             }
 
             foreach (var vi in primaryEditions)
@@ -82,28 +78,28 @@ namespace TreeEdit.Spg.ConnectedComponents
                     {
                         var t = Tuple.Create(vj.T1Node.Value, vj.Parent.Value, vj.K);
                         var index = _visited[t];
-                        dictionary[vi.Parent].Add(index);
+                        parentDictionary[vi.Parent].Add(index);
                     }
                 }
             }
 
-            foreach (var keypair in dictionary)
+            foreach (var keypair in parentDictionary)
             {
                 if (keypair.Value.Count > 1)
                 {
                     i++;
                     foreach (var index in keypair.Value)
                     {
-                        if (dic.ContainsKey(index))
+                        if (connectedComponentsDictionary.ContainsKey(index))
                         {
-                            if (!dic.ContainsKey(i)) dic.Add(i, new List<EditOperation<T>>());   
-                            dic[i].AddRange(dic[index]);
-                            dic.Remove(index);
+                            if (!connectedComponentsDictionary.ContainsKey(i)) connectedComponentsDictionary.Add(i, new List<EditOperation<T>>());   
+                            connectedComponentsDictionary[i].AddRange(connectedComponentsDictionary[index]);
+                            connectedComponentsDictionary.Remove(index);
                         }
                     }
                 }
             }
-            return dic;
+            return connectedComponentsDictionary;
         }
 
         
@@ -208,8 +204,6 @@ namespace TreeEdit.Spg.ConnectedComponents
                 }
                 return false;
             }
-
-            
         }
 
         private static TreeNode<T> GetNode(T value)
