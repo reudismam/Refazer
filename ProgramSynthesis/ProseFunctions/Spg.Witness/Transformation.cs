@@ -41,7 +41,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
-                    var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.ComputePrimaryEditions(script);
+                    var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.PrimaryEditions(script);
                     var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script);
                     dicCcs[input] = ccs;
                     ccsList.AddRange(ccs);
@@ -124,7 +124,7 @@ namespace ProseSample.Substrings.Spg.Witness
         }
 
         /// <summary>
-        /// Cluster edit edit in regions
+        /// Cluster edit in regions
         /// </summary>
         /// <param name="clusteredEdits">Clustered edit operations</param>
         public static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> clusteredEdits)
@@ -181,7 +181,7 @@ namespace ProseSample.Substrings.Spg.Witness
 
             //TODO Refactor the code to does not convert a list in another list and back.
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
-            var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.ComputePrimaryEditions(edits);
+            var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.PrimaryEditions(edits);
             var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
           
             if (children.Count > 1)

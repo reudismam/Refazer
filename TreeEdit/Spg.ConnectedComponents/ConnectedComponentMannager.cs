@@ -220,7 +220,12 @@ namespace TreeEdit.Spg.ConnectedComponents
             return newT1;
         }
 
-        public static List<EditOperation<T>> ComputePrimaryEditions(List<EditOperation<T>> script)
+        /// <summary>
+        /// Compute the primary editions. The primary editions are editions
+        /// that do not depend that another edit to be created to exist.
+        /// </summary>
+        /// <param name="script">Script to create the primary editions</param>
+        public static List<EditOperation<T>> PrimaryEditions(List<EditOperation<T>> script)
         {
             ConnectionComparer = new FullConnected(script);
             var primariesFlag = script.Select(o => true).ToList();
@@ -231,7 +236,8 @@ namespace TreeEdit.Spg.ConnectedComponents
                 {
                     if (i == j) continue;
                     var editJ = script[j];
-                    if (!editI.Parent.Equals(editJ.Parent) && ConnectionComparer.IsConnected(i, j))
+                    //The two edition are connected, but they are not siblings.
+                    if (ConnectionComparer.IsConnected(i, j) && !editI.Parent.Equals(editJ.Parent))
                     {
                         primariesFlag[j] = false; //j is not a primary operation
                     }
