@@ -153,14 +153,8 @@ namespace ProseSample.Substrings.Spg.Witness
             foreach (var script in connectedComponents)
             {
                 var edit = CompactScriptIntoASingleOperation(inpTree, script);
-                if (edit != null)
-                {
-                    newEditOperations.Add(edit);
-                }
-                else
-                {
-                    throw new Exception("Unable to create edit operation!!");
-                }
+                if (edit == null) throw new Exception("Unable to create edit operation!!");
+                newEditOperations.Add(edit);
             }
             return newEditOperations;
         }
