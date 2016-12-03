@@ -12,7 +12,6 @@ using Microsoft.ProgramSynthesis.Learning.Logging;
 using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
-using ProseSample.Substrings;
 
 namespace ProseSample
 {
