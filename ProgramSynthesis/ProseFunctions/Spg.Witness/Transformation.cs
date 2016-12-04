@@ -42,7 +42,7 @@ namespace ProseSample.Substrings.Spg.Witness
                 {
                     var script = Script(inpTree, outTree);
                     var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.PrimaryEditions(script);
-                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script);
+                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script, inpTreeNode.Value);
                     dicCcs[input] = ccs;
                     ccsList.AddRange(ccs);
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LCA.Spg.Manager;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
@@ -18,6 +19,8 @@ namespace TreeEdit.Spg.ConnectedComponents
         /// Visited edit operations. Required to compute connected components (DFS implementation).
         /// </summary>
         private static Dictionary<Tuple<T, T, int>, int> _visited;
+
+        private static TreeNode<SyntaxNodeOrToken> _inputTree;
 
         /// <summary>
         /// Edit operations graph
@@ -74,7 +77,7 @@ namespace TreeEdit.Spg.ConnectedComponents
             {
                 foreach (var vj in primaryEditions)
                 {
-                    if (GetNode(vi.Parent.Value).DescendantNodesAndSelf().Contains(vj.Parent) && !vi.Parent.IsLabel(new TLabel(SyntaxKind.ClassDeclaration)))
+                    if (IsConnected(vi, vj))
                     {
                         var t = Tuple.Create(vj.T1Node.Value, vj.Parent.Value, vj.K);
                         var index = _visited[t];
@@ -99,10 +102,23 @@ namespace TreeEdit.Spg.ConnectedComponents
                     }
                 }
             }
-            return connectedComponentsDictionary;
+            return connectedComponentsDictionary; 
         }
 
-        
+        private static bool IsConnected(EditOperation<T> vi, EditOperation<T> vj)
+        {
+            var parentDescendantNodesAndSelf = GetNode(vi.Parent.Value).DescendantNodesAndSelf();
+            if (vj is Update<SyntaxNodeOrToken>)
+            {
+                var viT1Node = (SyntaxNodeOrToken) (object) vi.T1Node.Value;
+                var vjT1Node = (SyntaxNodeOrToken) (object) vj.T1Node.Value;
+                var tree = viT1Node.SyntaxTree;
+                var lca = LCAManager.GetInstance().LeastCommonAncestor(tree.GetRoot(), viT1Node, vjT1Node);
+            }
+
+            return parentDescendantNodesAndSelf.Contains(vj.Parent) && !vi.Parent.IsLabel(new TLabel(SyntaxKind.ClassDeclaration));
+        }
+
 
         /// <summary>
         /// Depth first search
@@ -123,7 +139,7 @@ namespace TreeEdit.Spg.ConnectedComponents
             }
         }
 
-        public static List<List<EditOperation<T>>> ConnectedComponents(List<EditOperation<T>> primaryEditions, List<EditOperation<T>> editOperations)
+        public static List<List<EditOperation<T>>> ConnectedComponents(List<EditOperation<T>> primaryEditions, List<EditOperation<T>> editOperations, TreeNode<SyntaxNodeOrToken> inpTree)
         {
             ConnectionComparer = new FullConnected(editOperations);
             BuildDigraph(editOperations);
@@ -212,6 +228,12 @@ namespace TreeEdit.Spg.ConnectedComponents
             var newnode = ConverterHelper.ConvertCSharpToTreeNode(newT2);
             TreeNode<T> newT1 = (TreeNode<T>)(object)newnode;
             return newT1;
+        }
+
+        private static SyntaxNodeOrToken GetSyntaxNode(T value)
+        {
+            SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object)value;
+            return newT2;
         }
 
         /// <summary>
