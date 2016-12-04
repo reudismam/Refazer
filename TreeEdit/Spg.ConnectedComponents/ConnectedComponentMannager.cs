@@ -108,14 +108,6 @@ namespace TreeEdit.Spg.ConnectedComponents
         private static bool IsConnected(EditOperation<T> vi, EditOperation<T> vj)
         {
             var parentDescendantNodesAndSelf = GetNode(vi.Parent.Value).DescendantNodesAndSelf();
-            if (vj is Update<SyntaxNodeOrToken>)
-            {
-                var viT1Node = (SyntaxNodeOrToken) (object) vi.T1Node.Value;
-                var vjT1Node = (SyntaxNodeOrToken) (object) vj.T1Node.Value;
-                var tree = viT1Node.SyntaxTree;
-                var lca = LCAManager.GetInstance().LeastCommonAncestor(tree.GetRoot(), viT1Node, vjT1Node);
-            }
-
             return parentDescendantNodesAndSelf.Contains(vj.Parent) && !vi.Parent.IsLabel(new TLabel(SyntaxKind.ClassDeclaration));
         }
 
