@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
 using ProseSample.Substrings;
+using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.ConnectedComponents
@@ -65,8 +66,7 @@ namespace TreeEdit.Spg.ConnectedComponents
 
         private static Dictionary<int, List<EditOperation<T>>> JoinPrimaryOperationsByParent(List<EditOperation<T>> primaryEditions, int i, Dictionary<int, List<EditOperation<T>>> connectedComponentsDictionary)
         {
-            //Parent dictionary. Contains the parent and the connected components
-            //to this parent.
+            //Parent dictionary, which contains the parent and the connected components to this parent.
             var parentDictionary = new Dictionary<TreeNode<T>, HashSet<int>>();
             foreach (var v in primaryEditions.Where(v => !parentDictionary.ContainsKey(v.Parent)))
             {
@@ -95,14 +95,96 @@ namespace TreeEdit.Spg.ConnectedComponents
                     {
                         if (connectedComponentsDictionary.ContainsKey(index))
                         {
-                            if (!connectedComponentsDictionary.ContainsKey(i)) connectedComponentsDictionary.Add(i, new List<EditOperation<T>>());   
+                            if (!connectedComponentsDictionary.ContainsKey(i))
+                            {
+                                connectedComponentsDictionary.Add(i, new List<EditOperation<T>>());
+                            }
                             connectedComponentsDictionary[i].AddRange(connectedComponentsDictionary[index]);
                             connectedComponentsDictionary.Remove(index);
                         }
                     }
                 }
             }
-            return connectedComponentsDictionary; 
+
+            connectedComponentsDictionary = JoinUpdateOperations(connectedComponentsDictionary);
+            return connectedComponentsDictionary;
+        }
+
+        private static Dictionary<int, List<EditOperation<T>>> JoinUpdateOperations(Dictionary<int, List<EditOperation<T>>> connectedComponentsDictionary)
+        {
+            var joinList = new List<Tuple<EditOperation<T>, EditOperation<T>>>();
+            foreach (var keypair in connectedComponentsDictionary)
+            {
+                if (!keypair.Value.All(o => o is Update<T>)) continue;
+                var op = keypair.Value.First();
+
+                EditOperation<T> closest = null;
+                TreeNode<T> n = null;
+                int closestDistance = -1;
+                foreach (var keypaircomp in connectedComponentsDictionary)
+                {
+                    if (keypair.Key == keypaircomp.Key) continue;
+                    var listNodes = new List<SyntaxNodeOrToken>();
+
+                    var opT1NodeValue = (SyntaxNodeOrToken) (object) op.T1Node.Value;
+                    listNodes.Add(opT1NodeValue);
+                    foreach (var pop in keypaircomp.Value)
+                    {
+                        TreeNode<T> tocompare = null;
+                        if (pop is Update<T> || pop is Delete<SyntaxNodeOrToken>)
+                        {
+                            tocompare = pop.T1Node;
+                        }
+                        else
+                        {
+                            tocompare = pop.Parent;
+                        }
+
+                        var tocompareValue = (SyntaxNodeOrToken) (object) tocompare.Value;
+                        if (TreeUpdate.FindNode(_inputTree, tocompareValue) != null)
+                        {
+                            n = tocompare;
+                            listNodes.Add(tocompareValue);
+                        }
+                    }
+                    var lca = LCAManager.GetInstance().LeastCommonAncestor(listNodes, _inputTree.Value);
+                    var distToOp = DistanceToRoot(op.T1Node, lca);
+                    var distToPop = DistanceToRoot(n, lca);
+
+                    if (Math.Abs(distToOp - distToPop) > closestDistance)
+                    {
+                        closest = keypaircomp.Value.Last();
+                        closestDistance = Math.Abs(distToOp - distToPop);
+                    }
+                }
+                joinList.Add(Tuple.Create(op, closest));
+            }
+
+            foreach (var v in joinList)
+            {
+                var vi = v.Item1;
+                var vj = v.Item2;
+
+                var ti = Tuple.Create(vi.T1Node.Value, vi.Parent.Value, vi.K);
+                var indexi = _visited[ti];
+
+                var tj = Tuple.Create(vj.T1Node.Value, vj.Parent.Value, vj.K);
+                var indexj = _visited[tj];
+
+                connectedComponentsDictionary[indexj].AddRange(connectedComponentsDictionary[indexi]);
+                connectedComponentsDictionary.Remove(indexi);
+            }
+            return connectedComponentsDictionary;
+        }
+
+        public static int DistanceToRoot(TreeNode<T> target, SyntaxNodeOrToken parent)
+        {
+            int dist = 0;
+            for (TreeNode<T> node = target; node != null && !node.Value.Equals(parent); node = node.Parent)
+            {
+                dist++;
+            }
+            return dist;
         }
 
         private static bool IsConnected(EditOperation<T> vi, EditOperation<T> vj)
@@ -134,6 +216,7 @@ namespace TreeEdit.Spg.ConnectedComponents
         public static List<List<EditOperation<T>>> ConnectedComponents(List<EditOperation<T>> primaryEditions, List<EditOperation<T>> editOperations, TreeNode<SyntaxNodeOrToken> inpTree)
         {
             ConnectionComparer = new FullConnected(editOperations);
+            _inputTree = inpTree;
             BuildDigraph(editOperations);
             var ccs = ComputeConnectedComponents(primaryEditions, editOperations);
             return ccs;
