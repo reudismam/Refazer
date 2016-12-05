@@ -205,7 +205,7 @@ namespace ProseSample.Substrings.Spg.Witness
         private static Edit<SyntaxNodeOrToken> ProcessRootNodeHasMoreThanOneChild(Script script, List<Edit<SyntaxNodeOrToken>> children, TreeNode<SyntaxNodeOrToken> parent, TreeNode<SyntaxNodeOrToken> transformed)
         {
             //todo correct the children.First children.second
-            if (children.Count == 2 && children.First().EditOperation is Insert<SyntaxNodeOrToken> && children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)
+            if (IsDirectUpdate(children, parent, transformed))
             {
                 var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
                 var to = children.First().EditOperation.T1Node;
@@ -241,6 +241,18 @@ namespace ProseSample.Substrings.Spg.Witness
                     return operation;
                 }
             }
+        }
+
+        private static bool IsDirectUpdate(List<Edit<SyntaxNodeOrToken>> children, TreeNode<SyntaxNodeOrToken> parent, TreeNode<SyntaxNodeOrToken> transformed)
+        {
+            if (children.Count != 2) return false;
+
+            if (!(children.First().EditOperation is Insert<SyntaxNodeOrToken> &&
+                  children.ElementAt(1).EditOperation is Delete<SyntaxNodeOrToken>)) return false;
+
+            var indexInsert = transformed.Children.FindIndex(o => o.Equals(children.First().EditOperation.T1Node));
+            var indexDelete = parent.Children.FindIndex(o => o.Equals(children.ElementAt(1).EditOperation.T1Node));
+            return indexInsert == indexDelete;
         }
 
         private static TreeNode<SyntaxNodeOrToken> ProcessScriptOnNode(Script script, TreeNode<SyntaxNodeOrToken> parent)
