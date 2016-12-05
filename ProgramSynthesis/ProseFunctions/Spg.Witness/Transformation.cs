@@ -18,6 +18,7 @@ using ProseSample.Substrings;
 using TreeEdit.Spg.Print;
 using TreeElement.Spg.Node;
 using LCA.Spg.Manager;
+using TreeElement.Spg.TreeEdit.Mapping;
 
 namespace ProseSample.Substrings.Spg.Witness
 {

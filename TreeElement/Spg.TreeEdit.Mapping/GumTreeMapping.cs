@@ -4,14 +4,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
-using TreeEdit.Spg.TreeEdit.PQ;
-using TreeEdit.Spg.Print;
-using TreeEdit.Spg.Isomorphic;
-using TreeElement;
 using ProseSample.Substrings;
+using TreeEdit.Spg.Isomorphic;
+using TreeEdit.Spg.Print;
+using TreeEdit.Spg.TreeEdit.Mapping;
+using TreeEdit.Spg.TreeEdit.PQ;
 using TreeElement.Spg.Node;
 
-namespace TreeEdit.Spg.TreeEdit.Mapping
+namespace TreeElement.Spg.TreeEdit.Mapping
 {
     public class GumTreeMapping<T> : ITreeMapping<T>
     {
