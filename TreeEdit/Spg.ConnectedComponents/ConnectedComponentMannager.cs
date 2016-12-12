@@ -112,6 +112,8 @@ namespace TreeEdit.Spg.ConnectedComponents
 
         private static Dictionary<int, List<EditOperation<T>>> JoinUpdateOperations(Dictionary<int, List<EditOperation<T>>> connectedComponentsDictionary)
         {
+            if (connectedComponentsDictionary.Count() == 1) return connectedComponentsDictionary;
+
             var joinList = new List<Tuple<EditOperation<T>, EditOperation<T>>>();
             foreach (var keypair in connectedComponentsDictionary)
             {
