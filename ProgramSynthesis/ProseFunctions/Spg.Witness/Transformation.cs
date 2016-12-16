@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using DbscanImplementation;
 using LongestCommonSubsequence;
@@ -12,9 +11,7 @@ using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Script;
-using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.Update;
-using ProseSample.Substrings;
 using TreeEdit.Spg.Print;
 using TreeElement.Spg.Node;
 using LCA.Spg.Manager;
@@ -178,7 +175,6 @@ namespace ProseSample.Substrings.Spg.Witness
             //transformed version of the parent node.
             var parentCopy = ConverterHelper.MakeACopy(parent);
             var transformed = ProcessScriptOnNode(script, parentCopy);
-            //var tstring = PrintUtil<SyntaxNodeOrToken>.PrettyPrintString(transformed);
 
             //TODO Refactor the code to does not convert a list in another list and back.
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
@@ -395,34 +391,7 @@ namespace ProseSample.Substrings.Spg.Witness
         private static double Distance(LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>> lcc, EditOperationDatasetItem x, EditOperationDatasetItem y)
         {
             var common = (double)lcc.FindCommon(x.Operations, y.Operations).Count;
-            //var tuple = Tuple.Create(common / (double)x.Operations.Count, common / (double)y.Operations.Count);
             var dist = 1.0 - (2 * common) / ((double)x.Operations.Count + (double)y.Operations.Count);
-            //var squares = (tuple.Item1 * tuple.Item1 + tuple.Item2 * tuple.Item2) / 2;
-            //var dist = 1.0 - Math.Sqrt(squares);
-            //if (!Operations.ContainsKey(x.Operations))
-            //{
-            //    var xtree = CurrentTrees[x.Operations];
-            //    var editsx = new Script(x.Operations.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
-            //    var compEditx = CompactScript(new List<Script> {editsx}, ConverterHelper.MakeACopy(xtree));
-            //    Operations[x.Operations] = compEditx.First().Edits.Single().EditOperation;
-            //}
-
-            //if (!Operations.ContainsKey(y.Operations))
-            //{
-            //    var ytree = CurrentTrees[y.Operations];
-            //    var editsy = new Script(y.Operations.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList());
-            //    var compEdity = CompactScript(new List<Script> {editsy}, ConverterHelper.MakeACopy(ytree));
-            //    Operations[y.Operations] = compEdity.First().Edits.Single().EditOperation;
-            //}
-
-
-            //var xeditOperation = Operations[x.Operations];
-            //var yeditOperation = Operations[y.Operations];
-
-
-            ////todo refactor this method 
-            //if (xeditOperation.GetType() != yeditOperation.GetType()) return 1;
-
             return dist;
         }
 
@@ -441,7 +410,6 @@ namespace ProseSample.Substrings.Spg.Witness
         {
             //Get a reference for the node that was modified on the T1 tree.
             TreeNode<SyntaxNodeOrToken> inputNode = null;
-            //if (TreeUpdate.FindNode(inputTree, edit.EditOperation.T1Node.Value) != null)
             if (edit.EditOperation is Delete<SyntaxNodeOrToken> || edit.EditOperation is Update<SyntaxNodeOrToken>)
             {
                 inputNode = edit.EditOperation.T1Node;
