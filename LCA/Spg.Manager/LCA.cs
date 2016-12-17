@@ -10,8 +10,9 @@ namespace LCA.Spg.Manager
     public class LCA<T>
     {
         /// <summary>
-        /// The least common ancestor
+        /// Compute the Least Common Ancestor
         /// </summary>
+        /// <param name="id">Unique id</param>
         /// <param name="rootNode">Root node</param>
         /// <param name="x">First syntax node</param>
         /// <param name="y">Second syntax node</param>
@@ -54,25 +55,7 @@ namespace LCA.Spg.Manager
             /// Gets the children.
             /// </summary>
             /// <value>The children.</value>
-            public IList<ITreeNode<T>> Children
-            {
-                get
-                {
-                    return _children;
-                }
-            }
-
-            /// <summary>
-            /// Gets the children.
-            /// </summary>
-            /// <value>The children.</value>
-            IEnumerable<ITreeNode<T>> ITreeNode<T>.Children
-            {
-                get
-                {
-                    return _children;
-                }
-            }
+            IEnumerable<ITreeNode<T>> ITreeNode<T>.Children => _children;
 
             /// <summary>
             /// String representation of this object
@@ -129,24 +112,6 @@ namespace LCA.Spg.Manager
             /// </summary>
             private LeastCommonAncestorFinder()
             {
-                //if (rootNode == null)
-                //{
-                //    throw new NotImplementedException("rootNode");
-                //}
-                //_rootNode = rootNode;
-                //LCAProcessing<T> value;
-                //if (!preprocessing.TryGetValue(obj, out value))
-                //{
-                //    PreProcess();
-                //    LCAProcessing<T> lcaProcessing = new LCAProcessing<T>(_indexLookup, _nodes, _values);
-                //    preprocessing.Add(obj, lcaProcessing);
-                //}
-
-                //value = preprocessing[obj];
-                //_rootNode = rootNode;
-                //_indexLookup = value._indexLookup as Dictionary<ITreeNode<T>, NodeIndex>;
-                //_nodes = value._nodes as List<ITreeNode<T>>;
-                //_values = value._values;
             }
 
             /// <summary>
@@ -173,10 +138,11 @@ namespace LCA.Spg.Manager
 
                 return _instance;
             }
+
             private void Init(object obj, ITreeNode<T> rootNode)
             {
-                if (obj == null) throw new ArgumentNullException("obj");
-                if (rootNode == null) throw new ArgumentNullException("rootNode");
+                if (obj == null) throw new ArgumentNullException(nameof(obj));
+                if (rootNode == null) throw new ArgumentNullException(nameof(rootNode));
 
                 _rootNode = rootNode;
                 LCAProcessing<T> value;
@@ -194,7 +160,6 @@ namespace LCA.Spg.Manager
                 _values = value.Values;
             }
 
-
             /// <summary>
             /// Finds the common parent between two nodes.
             /// </summary>
@@ -203,8 +168,8 @@ namespace LCA.Spg.Manager
             /// <returns></returns>
             public ITreeNode<T> FindCommonParent(ITreeNode<T> x, ITreeNode<T> y)
             {
-                if (x == null) throw new ArgumentNullException("x");
-                if (y == null) throw new ArgumentNullException("y");
+                if (x == null) throw new ArgumentNullException(nameof(x));
+                if (y == null) throw new ArgumentNullException(nameof(y));
 
                 // Find the first time the nodes were visited during preprocessing.
                 NodeIndex nodeIndex;
@@ -226,7 +191,6 @@ namespace LCA.Spg.Manager
                     temp = indexX;
                     indexX = indexY;
                     indexY = temp;
-
                 }
 
                 // Find the lowest value.
@@ -274,14 +238,13 @@ namespace LCA.Spg.Manager
                         lastNodeStack.Push(new ProcessingState(next));
                     }
                 }
-             
                 _nodes.TrimExcess();
                 _values.TrimExcess();
             }
 
             private class ProcessingState
             {
-                private IEnumerator<ITreeNode<T>> _enumerator;
+                private readonly IEnumerator<ITreeNode<T>> _enumerator;
 
                 /// <summary>
                 /// Initializes a new instance of the <see cref="LeastCommonAncestorFinder&lt;T&gt;.ProcessingState"/> class.
@@ -297,7 +260,7 @@ namespace LCA.Spg.Manager
                 /// Gets the node.
                 /// </summary>
                 /// <value>The value.</value>
-                public ITreeNode<T> Value { get; private set; }
+                public ITreeNode<T> Value { get; }
 
                 /// <summary>
                 /// Gets the next child.
@@ -346,64 +309,6 @@ namespace LCA.Spg.Manager
             /// </summary>
             /// <value>The children.</value>
             IEnumerable<ITreeNode<T>> Children { get; }
-
         }
     }
 }
-
-/*private static TreeNode<DymToken> ConvertToTreeNode(SyntaxNodeOrToken st)
-        {
-            if (st.ChildNodesAndTokens().Count == 0)
-            {
-                return new TreeNode<DymToken>(new DymToken(st));
-            }
-
-            List<TreeNode<DymToken>> childrens = new List<TreeNode<DymToken>>();
-            foreach (SyntaxNodeOrToken sot in st.ChildNodesAndTokens())
-            {
-                //childrens.Add(sot);
-                TreeNode<DymToken> nodes = ConvertToTreeNode(sot);
-                childrens.Add(nodes);
-            }
-
-            TreeNode<DymToken> tree = new TreeNode<DymToken>(new DymToken(st), childrens.ToArray());
-            return tree;
-        }*/
-
-//public void Init(SyntaxNodeOrToken root, SyntaxNodeOrToken n1, SyntaxNodeOrToken n2)
-//{
-//    /*TreeNode<int> rootNode = new TreeNode<int>(
-//        0,
-//        new TreeNode<int>(1,
-//            new TreeNode<int>(2),
-//            new TreeNode<int>(3),
-//            new TreeNode<int>(4,
-//                new TreeNode<int>(5),
-//                new TreeNode<int>(6))
-//            ),
-//        new TreeNode<int>(7,
-//            new TreeNode<int>(8),
-//            new TreeNode<int>(9)
-//            )
-//    );*/
-
-//    //TreeNode<DymToken> rootNode = ConvertToTreeNode(root);
-//    TreeNode<SyntaxNodeOrToken> rootNode = ConvertToTreeNode(root);
-
-//    /*ITreeNode<SyntaxNodeOrToken> x = ((rootNode.Children[0] as TreeNode<SyntaxNodeOrToken>).Children[2] as TreeNode<SyntaxNodeOrToken>).Children[1];
-//    ITreeNode<SyntaxNodeOrToken> y = ((rootNode.Children[0] as TreeNode<SyntaxNodeOrToken>).Children[1]);*/
-//    //ITreeNode<SyntaxNodeOrToken> x = new TreeNode<SyntaxNodeOrToken>(n1);
-//    //ITreeNode<DymToken> y = new TreeNode<DymToken>(new DymToken(n2));
-//    //LeastCommonAncestorFinder<DymToken> finder = new LeastCommonAncestorFinder<DymToken>(rootNode);
-//    //ITreeNode<DymToken> result = finder.FindCommonParent(x, y);
-//    ITreeNode<SyntaxNodeOrToken> x = new TreeNode<SyntaxNodeOrToken>(n1);
-//    ITreeNode<SyntaxNodeOrToken> y = new TreeNode<SyntaxNodeOrToken>(n2);
-
-
-
-//    LeastCommonAncestorFinder<SyntaxNodeOrToken> finder = new LeastCommonAncestorFinder<SyntaxNodeOrToken>(rootNode);
-//    ITreeNode<SyntaxNodeOrToken> result = finder.FindCommonParent(x, y);
-
-//    Console.WriteLine(result.Value);
-//    Console.ReadLine();
-//}
