@@ -28,7 +28,6 @@ namespace LCA.Spg.Manager
 
         private LCAManager()
         {
-            //_dic = new Dictionary<string, Tuple<Dictionary<Node, SyntaxNodeOrToken>, LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>>>();
         }
 
         /// <summary>
@@ -88,7 +87,6 @@ namespace LCA.Spg.Manager
             return it;
         }
 
-
         /// <summary>
         /// Convert a syntax tree to a TreeNode
         /// </summary>
@@ -97,7 +95,6 @@ namespace LCA.Spg.Manager
         private LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> _ConvertToTreeNode(SyntaxNodeOrToken st)
         {
             Node key = new Node(st.SpanStart, st.Span.End, st);
-
             if (!_snodeMap.ContainsKey(key))
             {
                 _snodeMap.Add(key, st);
@@ -106,14 +103,12 @@ namespace LCA.Spg.Manager
             {
                 return new LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>(st);
             }
-
             List<LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>> children = new List<LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>>();
             foreach (SyntaxNodeOrToken sot in st.ChildNodesAndTokens())
             {
                 LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> node = _ConvertToTreeNode(sot);
                 children.Add(node);
             }
-
             LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> tree = new LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>(st, children.ToArray());
             return tree;
         }
@@ -134,50 +129,6 @@ namespace LCA.Spg.Manager
             return lca.LeastCommonAncestor(root.ToFullString(), rootNode, x, y).AsNode();
         }
 
-        ///// <summary>
-        ///// Least common ancestor of nodes in the tree
-        ///// </summary>
-        ///// <param name="nodes">Nodes in the tree</param>
-        ///// <param name="tree">Tree</param>
-        ///// <returns>Least common ancestor of nodes in the tree</returns>
-        //public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNode> nodes, SyntaxTree tree)
-        //{
-        //    if (nodes == null) throw new ArgumentNullException("nodes");
-        //    if (tree == null) throw new ArgumentNullException("tree");
-        //    if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
-
-        //    LCAManager lcaCalculator = LCAManager.GetInstance();
-        //    SyntaxNodeOrToken lca = nodes[0];
-        //    for (int i = 1; i < nodes.Count; i++)
-        //    {
-        //        SyntaxNodeOrToken node = nodes[i];
-        //        lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
-        //    }
-        //    return lca;
-        //}
-
-        /// <summary>
-        /// Least common ancestor of nodes in the tree
-        /// </summary>
-        /// <param name="nodes">Nodes in the tree</param>
-        /// <param name="tree">Tree</param>
-        /// <returns>Least common ancestor of nodes in the tree</returns>
-        public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNodeOrToken> nodes, SyntaxTree tree)
-        {
-            if (nodes == null) throw new ArgumentNullException(nameof(nodes));
-            if (tree == null) throw new ArgumentNullException(nameof(tree));
-            if (!nodes.Any()) throw new ArgumentException("Nodes cannot be empty");
-
-            LCAManager lcaCalculator = GetInstance();
-            SyntaxNodeOrToken lca = nodes[0];
-            for (int i = 1; i < nodes.Count; i++)
-            {
-                SyntaxNodeOrToken node = nodes[i];
-                lca = lcaCalculator.LeastCommonAncestor(tree.GetRoot(), lca, node);
-            }
-            return lca;
-        }
-
         public SyntaxNodeOrToken LeastCommonAncestor(List<SyntaxNodeOrToken> nodes, SyntaxNodeOrToken tree)
         {
             if (nodes == null) throw new ArgumentNullException(nameof(nodes));
@@ -194,49 +145,6 @@ namespace LCA.Spg.Manager
             return lca;
         }
 
-        ///// <summary>
-        ///// Least common ancestor of elements between start and end.
-        ///// </summary>
-        ///// <param name="tree">Syntax tree</param>
-        ///// <param name="start">Start</param>
-        ///// <param name="end">End</param>
-        ///// <returns>Least common ancestor of elements between start and end.</returns>
-        //public static SyntaxNode LeastCommonAncestor(SyntaxTree tree, int start, int end)
-        //{
-        //    List<SyntaxNodeOrToken> nodesSelection = ASTManager.NodesBetweenStartAndEndPosition(tree, start, end);
-
-        //    SyntaxNodeOrToken lca = GetInstance().LeastCommonAncestor(nodesSelection, tree);
-        //    SyntaxNode snode = lca.AsNode();
-
-        //    return snode;
-        //}
-
-        ///// <summary>
-        ///// Least common ancestors 
-        ///// </summary>
-        ///// <param name="examples">List of examples</param>
-        ///// <param name="sourceCode">Source code</param>
-        ///// <returns>Least common ancestors</returns>
-        //public List<SyntaxNode> LeastCommonAncestors(List<Tuple<ListNode, ListNode>> examples, string sourceCode)
-        //{
-        //    List<SyntaxNode> syntaxList = new List<SyntaxNode>();
-        //    foreach (var example in examples)
-        //    {
-        //        List<SyntaxNodeOrToken> list = new List<SyntaxNodeOrToken>();
-
-        //        if (example.Item2.List.Any())
-        //        {
-        //            list.Add(example.Item2.List[0]);
-        //            list.Add(example.Item2.List[example.Item2.Length() - 1]);
-        //            SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
-        //            SyntaxNodeOrToken snode = LeastCommonAncestor(list, tree);
-        //            syntaxList.Add(snode.AsNode());
-        //        }
-        //    }
-        //    return syntaxList;
-        //}
-
-
         /// <summary>
         /// Class node
         /// </summary>
@@ -246,11 +154,11 @@ namespace LCA.Spg.Manager
             /// Syntax node or token reference
             /// </summary>
             public SyntaxNodeOrToken Snt;
+
             /// <summary>
             /// Start position
             /// </summary>
             public int Start { get; set; }
-
 
             /// <summary>
             /// End position
@@ -275,6 +183,7 @@ namespace LCA.Spg.Manager
                 this.SyntaxKind = snt.Kind();
                 this.Snt = snt;
             }
+
             /// <summary>
             /// Determine if obj is equal to this.
             /// </summary>
