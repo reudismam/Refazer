@@ -5,19 +5,23 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using TreeEdit.Spg.Isomorphic;
-using TreeEdit.Spg.TreeEdit.Update;
 using ProseFunctions.Substrings;
+using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings.Spg.Witness
+namespace ProseFunctions.Spg.Witness
 {
     public class AST
     {
+        /// <summary>
+        /// Witness function to compute the kind of the node.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Specification</param>
         public static DisjunctiveExamplesSpec NodeKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<object>();
@@ -32,13 +36,19 @@ namespace ProseFunctions.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(kExamples);
         }
 
+        /// <summary>
+        /// Witness function to return the specification for the children of a node.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Specification</param>
+        /// <param name="kind">Kind specification</param>
         public static DisjunctiveExamplesSpec NodeChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<object>();
-
                 foreach (TreeNode<SyntaxNodeOrToken> sot in spec.DisjunctiveExamples[input])
                 {
                     if (!ConverterHelper.Valid(sot.Value)) return null;
@@ -49,8 +59,14 @@ namespace ProseFunctions.Substrings.Spg.Witness
                 eExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(eExamples);
-        }   
+        }
 
+        /// <summary>
+        /// Return a specification for the ConstNode witness function.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Specification</param>
         public static ExampleSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, object>();
