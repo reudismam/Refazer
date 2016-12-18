@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 
-namespace ProseSample.Substrings
+namespace ProseFunctions.Substrings
 {
     static class RegexUtils
     {

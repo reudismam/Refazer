@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TreeElement;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
 

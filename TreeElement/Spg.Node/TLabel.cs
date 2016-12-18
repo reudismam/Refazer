@@ -1,4 +1,4 @@
-﻿namespace ProseSample.Substrings
+﻿namespace ProseFunctions.Substrings
 {
     public class TLabel
     {

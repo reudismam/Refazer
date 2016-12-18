@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.ConnectedComponents

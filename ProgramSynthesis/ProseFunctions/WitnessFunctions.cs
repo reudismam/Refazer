@@ -6,12 +6,12 @@ using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.List;
+using ProseFunctions.Substrings.Spg.Witness;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using ProseSample.Substrings.Spg.Witness;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings
+namespace ProseFunctions.Substrings
 {
     /// <summary>
     /// Witness functions for the grammar

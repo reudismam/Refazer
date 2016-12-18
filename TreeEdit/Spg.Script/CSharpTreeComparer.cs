@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.CodeAnalysis.Text;
 using TreeEdit.Spg.Isomorphic;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Script

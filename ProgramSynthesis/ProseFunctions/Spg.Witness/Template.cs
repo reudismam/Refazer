@@ -6,10 +6,10 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Isomorphic;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings.Spg.Witness
+namespace ProseFunctions.Substrings.Spg.Witness
 {
     public class Template
     {

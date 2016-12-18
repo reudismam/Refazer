@@ -6,7 +6,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseSample.Substrings.Spg.Bean;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Script;
@@ -15,9 +14,10 @@ using TreeEdit.Spg.Print;
 using TreeElement.Spg.Node;
 using LCA.Spg.Manager;
 using LongestCommonAncestor;
+using ProseFunctions.Substrings.Spg.Bean;
 using TreeElement.Spg.TreeEdit.Mapping;
 
-namespace ProseSample.Substrings.Spg.Witness
+namespace ProseFunctions.Substrings.Spg.Witness
 {
     public class Transformation
     {

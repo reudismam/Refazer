@@ -1,8 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings
+namespace ProseFunctions.Substrings
 {
     public class Region
     {

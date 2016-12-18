@@ -7,11 +7,12 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
 using Microsoft.CodeAnalysis.CSharp;
-using static ProseSample.Utils;
+using static ProseFunctions.Utils;
 using Microsoft.CodeAnalysis;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Substrings;
 
-namespace ProseSample
+namespace ProseFunctions
 {
     //Main class
     internal static class Program

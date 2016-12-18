@@ -5,7 +5,7 @@ using LCA.Spg.Manager;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 

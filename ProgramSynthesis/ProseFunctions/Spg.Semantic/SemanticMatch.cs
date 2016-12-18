@@ -2,10 +2,10 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings.Spg.Semantic
+namespace ProseFunctions.Substrings.Spg.Semantic
 {
     public class SemanticMatch
     {   

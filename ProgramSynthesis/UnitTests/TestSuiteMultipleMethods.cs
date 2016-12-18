@@ -8,8 +8,9 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using NUnit.Framework;
-using ProseSample;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions;
+using ProseFunctions.Substrings;
 
 namespace UnitTests
 {

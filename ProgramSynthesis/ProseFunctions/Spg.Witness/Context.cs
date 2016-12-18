@@ -5,10 +5,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using ProseFunctions.Substrings.Spg.Bean;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings.Spg.Witness
+namespace ProseFunctions.Substrings.Spg.Witness
 {
     public class Context
     {

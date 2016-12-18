@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 
 namespace TreeElement.Spg.Node
 {

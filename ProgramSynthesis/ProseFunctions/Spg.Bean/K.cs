@@ -1,16 +1,27 @@
 ﻿using Microsoft.CodeAnalysis;
-using ProseSample.Substrings;
-using ProseSample.Substrings.Spg.Witness;
+using ProseFunctions.Substrings;
+using ProseFunctions.Substrings.Spg.Witness;
 using TreeEdit.Spg.Match;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings
+namespace ProseFunctions.Substrings.Spg.Bean
 {
     public class K
     {
+        /// <summary>
+        /// Input tree
+        /// </summary>
         private readonly TreeNode<SyntaxNodeOrToken> _input;
+        /// <summary>
+        /// Node in the input tree
+        /// </summary>
         private readonly TreeNode<SyntaxNodeOrToken> _node;
 
+        /// <summary>
+        /// Construct a new K
+        /// </summary>
+        /// <param name="input">Input tree</param>
+        /// <param name="node">Node in the input tree</param>
         public K(TreeNode<SyntaxNodeOrToken> input, TreeNode<SyntaxNodeOrToken> node)
         {
             _input = input;

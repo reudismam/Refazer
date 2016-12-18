@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Script;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Update

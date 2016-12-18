@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 
-namespace ProseSample.Substrings
+namespace ProseFunctions.Substrings
 {
     public class Bindings
     {

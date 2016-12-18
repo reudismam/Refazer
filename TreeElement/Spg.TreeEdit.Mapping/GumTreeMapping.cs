@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.TreeEdit.Mapping;

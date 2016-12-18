@@ -7,14 +7,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using ProseFunctions.Substrings.Spg.Bean;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
 
-namespace ProseSample.Substrings.Spg.Witness
+namespace ProseFunctions.Substrings.Spg.Witness
 {
     public class Map
     {

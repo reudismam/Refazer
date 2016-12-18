@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.Script;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings.Spg.Witness.Target
+namespace ProseFunctions.Substrings.Spg.Witness.Target
 {
     public class T1TargetLearner: LearnTargetTemplate
     {

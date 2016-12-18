@@ -7,7 +7,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings.Spg.Witness
+namespace ProseFunctions.Substrings.Spg.Witness
 {
     public class Literal
     {

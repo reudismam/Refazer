@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.CodeAnalysis;
+using ProseFunctions.Substrings.Spg.Bean;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 
-namespace ProseSample.Substrings.Spg.Semantic
+namespace ProseFunctions.Substrings.Spg.Semantic
 {
     public class SemanticEditOperation
     {

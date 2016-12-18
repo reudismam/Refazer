@@ -4,14 +4,15 @@ reference 'Microsoft.CodeAnalysis.dll';
 reference 'TreeElement.dll';
 
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
+using ProseFunctions.Substrings.Spg.Bean;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 using System;
 
-using semantics ProseSample.Substrings.Semantics;
-using learners ProseSample.Substrings.WitnessFunctions;
+using semantics ProseFunctions.Substrings.Semantics;
+using learners ProseFunctions.Substrings.WitnessFunctions;
 
 language Transformation;
 @vardefault[VariableScore]

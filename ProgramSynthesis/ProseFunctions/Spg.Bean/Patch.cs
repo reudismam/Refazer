@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using Microsoft.CodeAnalysis;
-using TreeEdit.Spg.Script;
 
-namespace ProseSample.Substrings
+namespace ProseFunctions.Substrings.Spg.Bean
 {
     public class Patch
     {

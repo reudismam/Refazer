@@ -8,12 +8,13 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using ProseFunctions.List;
-using ProseSample.Substrings.Spg.Semantic;
+using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
 using TreeElement;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings
+namespace ProseFunctions.Substrings
 {
     public static class Semantics
     {

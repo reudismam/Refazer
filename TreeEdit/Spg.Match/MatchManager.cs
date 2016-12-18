@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement;
 using TreeElement.Spg.Node;

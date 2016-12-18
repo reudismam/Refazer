@@ -13,7 +13,7 @@ using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
 
-namespace ProseSample
+namespace ProseFunctions
 {
     public static class Utils
     {

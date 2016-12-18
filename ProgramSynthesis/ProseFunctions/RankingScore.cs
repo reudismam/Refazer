@@ -1,8 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
+using ProseFunctions.Substrings.Spg.Bean;
 
-namespace ProseSample.Substrings
+namespace ProseFunctions.Substrings
 {
     public static class RankingScore
     {

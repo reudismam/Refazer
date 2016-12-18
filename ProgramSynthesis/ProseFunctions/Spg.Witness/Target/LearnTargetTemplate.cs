@@ -5,12 +5,13 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using ProseFunctions.Substrings.Spg.Bean;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
-using ProseSample.Substrings;
+using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseSample.Substrings.Spg.Witness.Target
+namespace ProseFunctions.Substrings.Spg.Witness.Target
 {
     public abstract class LearnTargetTemplate
     {
