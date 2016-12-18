@@ -7,7 +7,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings.Spg.Witness
+namespace ProseFunctions.Spg.Witness
 {
     public class Variable
     {
@@ -69,7 +69,6 @@ namespace ProseFunctions.Substrings.Spg.Witness
                 }
             }
             if (!isAtLeastOneCorrect) return null;
-
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
     }
