@@ -5,7 +5,7 @@ reference 'TreeElement.dll';
 
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using ProseFunctions.Substrings;
-using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Spg.Bean;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
