@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using ProseFunctions.Spg.Witness;
 using ProseFunctions.Substrings;
-using ProseFunctions.Substrings.Spg.Witness;
 using TreeEdit.Spg.Match;
 using TreeElement.Spg.Node;
 

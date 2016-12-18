@@ -187,6 +187,7 @@
     <Compile Include="Spg.Transform\CodeTransformation.cs" />
     <Compile Include="Spg.Transform\Transformation.cs" />
     <Compile Include="EvaluationTest.cs" />
+    <Compile Include="ICSE2017Dataset.cs" />
     <Compile Include="TestSolution.cs" />
     <Compile Include="TestSuiteMultipleMethods.cs" />
     <Compile Include="TestSuite.cs" />

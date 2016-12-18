@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
+using LCA.Spg.Manager;
+using LongestCommonAncestor;
 using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using ProseFunctions.Spg.Bean;
+using ProseFunctions.Substrings;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
-using TreeEdit.Spg.Print;
 using TreeElement.Spg.Node;
-using LCA.Spg.Manager;
-using LongestCommonAncestor;
-using ProseFunctions.Spg.Bean;
 using TreeElement.Spg.TreeEdit.Mapping;
 
-namespace ProseFunctions.Substrings.Spg.Witness
+namespace ProseFunctions.Spg.Witness
 {
     public class Transformation
     {

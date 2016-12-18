@@ -6,7 +6,6 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Spg.Witness.Target;
 using ProseFunctions.Substrings;
-using ProseFunctions.Substrings.Spg.Witness;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
