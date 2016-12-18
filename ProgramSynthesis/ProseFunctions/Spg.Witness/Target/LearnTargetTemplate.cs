@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
+using ProseFunctions.Substrings;
+using ProseFunctions.Substrings.Spg.Witness;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
-using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings.Spg.Witness.Target
+namespace ProseFunctions.Spg.Witness.Target
 {
     public abstract class LearnTargetTemplate
     {
+        /// <summary>
+        /// Learn the node witness function
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">specification</param>
         public ExampleSpec NodeLearner(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
@@ -31,11 +37,12 @@ namespace ProseFunctions.Substrings.Spg.Witness.Target
                     var previousTree = ConverterHelper.MakeACopy(treeUp.CurrentTree);
                     treeUp.ProcessEditOperation(editOperation);
                     WitnessFunctions.CurrentTrees[key] = previousTree;
-
+#if DEBUG
                     Console.WriteLine("PREVIOUS TREE\n\n");
                     PrintUtil<SyntaxNodeOrToken>.PrintPretty(previousTree, "", true);
                     Console.WriteLine("UPDATED TREE\n\n");
                     PrintUtil<SyntaxNodeOrToken>.PrintPretty(treeUp.CurrentTree, "", true);
+#endif
                 }
 
                 var from = Target(edit);
