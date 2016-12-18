@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
-using ProseSample.Substrings.List;
+using ProseFunctions.List;
 using ProseSample.Substrings.Spg.Semantic;
 using TreeEdit.Spg.Match;
 using TreeElement;
