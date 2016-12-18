@@ -192,7 +192,6 @@
     <Compile Include="Spg.Witness\Target\ParentTargetLearner.cs" />
     <Compile Include="Spg.Witness\Target\LearnTargetTemplate.cs" />
     <Compile Include="Spg.Witness\Literal.cs" />
-    <Compile Include="Spg.Witness\Map.cs" />
     <Compile Include="Spg.Witness\Match.cs" />
     <Compile Include="Spg.Witness\Context.cs" />
     <Compile Include="Spg.Witness\Target\T1TargetLearner.cs" />

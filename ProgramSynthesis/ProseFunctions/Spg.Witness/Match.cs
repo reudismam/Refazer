@@ -6,14 +6,20 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
-using TreeEdit.Spg.Match;
+using ProseFunctions.Substrings;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings.Spg.Witness
+namespace ProseFunctions.Spg.Witness
 {
     public class Match
     {
+        /// <summary>
+        /// Witness function for the parameter kind of the NewNode specification.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Specification</param>
         public static DisjunctiveExamplesSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var kdExamples = new Dictionary<State, IEnumerable<object>>();
@@ -30,6 +36,13 @@ namespace ProseFunctions.Substrings.Spg.Witness
             return DisjunctiveExamplesSpec.From(kdExamples);
         }
 
+        /// <summary>
+        /// Witness function for the parameter children of the NewNode specification.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">Parameter</param>
+        /// <param name="spec">Specification</param>
+        /// <param name="kind">Kind specification</param>
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();

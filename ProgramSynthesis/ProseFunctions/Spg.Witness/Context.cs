@@ -1,22 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
+using ProseFunctions.Substrings;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings.Spg.Witness
+namespace ProseFunctions.Spg.Witness
 {
     public class Context
     {
+        /// <summary>
+        /// Specification for the parent attribute of the Context operator.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Specification</param>
         public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            
             foreach (State input in spec.ProvidedInputs)
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
