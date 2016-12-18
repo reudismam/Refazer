@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings
+namespace ProseFunctions.Spg.Bean
 {
     public class Node
     {

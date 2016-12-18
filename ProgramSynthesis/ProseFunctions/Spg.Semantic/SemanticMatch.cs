@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
-using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Spg.Bean;
 
 namespace ProseFunctions.Substrings
 {

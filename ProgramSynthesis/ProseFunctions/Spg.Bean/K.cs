@@ -4,7 +4,7 @@ using ProseFunctions.Substrings.Spg.Witness;
 using TreeEdit.Spg.Match;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings.Spg.Bean
+namespace ProseFunctions.Spg.Bean
 {
     public class K
     {

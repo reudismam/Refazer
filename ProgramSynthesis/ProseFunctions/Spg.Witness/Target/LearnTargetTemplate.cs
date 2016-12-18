@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Spg.Bean;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using ProseFunctions.Substrings;

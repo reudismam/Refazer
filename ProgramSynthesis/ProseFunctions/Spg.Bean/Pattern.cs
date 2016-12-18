@@ -1,7 +1,7 @@
 ﻿using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings
+namespace ProseFunctions.Spg.Bean
 {
     public class Pattern
     {

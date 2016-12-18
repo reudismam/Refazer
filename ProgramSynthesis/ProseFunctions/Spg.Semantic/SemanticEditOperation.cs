@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.CodeAnalysis;
-using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Spg.Bean;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;

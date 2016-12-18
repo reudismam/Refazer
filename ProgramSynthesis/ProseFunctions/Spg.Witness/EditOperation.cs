@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings.Spg.Witness.Target;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;

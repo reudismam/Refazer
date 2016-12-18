@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using TreeEdit.Spg.Script;
 
-namespace ProseFunctions.Substrings.Spg.Bean
+namespace ProseFunctions.Spg.Bean
 {
     public class Script
     {

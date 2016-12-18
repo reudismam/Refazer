@@ -9,7 +9,7 @@ using Microsoft.ProgramSynthesis.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using static ProseFunctions.Utils;
 using Microsoft.CodeAnalysis;
-using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 
 namespace ProseFunctions

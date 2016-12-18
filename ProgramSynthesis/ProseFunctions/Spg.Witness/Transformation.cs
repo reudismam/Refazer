@@ -14,7 +14,7 @@ using TreeEdit.Spg.Print;
 using TreeElement.Spg.Node;
 using LCA.Spg.Manager;
 using LongestCommonAncestor;
-using ProseFunctions.Substrings.Spg.Bean;
+using ProseFunctions.Spg.Bean;
 using TreeElement.Spg.TreeEdit.Mapping;
 
 namespace ProseFunctions.Substrings.Spg.Witness
