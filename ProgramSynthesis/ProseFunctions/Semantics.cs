@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using ProseFunctions.List;
 using ProseFunctions.Spg.Bean;
-using ProseFunctions.Substrings.Spg.Semantic;
+using ProseFunctions.Spg.Semantic;
 using TreeEdit.Spg.Match;
 using TreeElement;
 using TreeElement.Spg.Node;
@@ -27,7 +27,7 @@ namespace ProseFunctions.Substrings
         /// <returns>The element on the tree with specified kind and child nodes</returns>
         public static Pattern Pattern(SyntaxKind kind, IEnumerable<Pattern> children)
         {
-            return SemanticMatch.C(kind, children);
+            return MatchSemanticFunctions.C(kind, children);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ProseFunctions.Substrings
         /// <returns>Search result</returns>
         public static Pattern Abstract(SyntaxKind kind)
         {
-            return SemanticMatch.Variable(kind);
+            return MatchSemanticFunctions.Variable(kind);
         }
 
 
@@ -81,7 +81,7 @@ namespace ProseFunctions.Substrings
         /// <returns>Literal</returns>
         public static Pattern Concrete(SyntaxNodeOrToken tree)
         {
-            return SemanticMatch.Literal(tree);
+            return MatchSemanticFunctions.Literal(tree);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace ProseFunctions.Substrings
         /// <returns>New node with the newNode node inserted as the k child</returns>
         public static Node Insert(Node target, Node newNode, int k)
         {
-            return SemanticEditOperation.Insert(target, newNode, k);
+            return EditOperationSemanticFunctions.Insert(target, newNode, k);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace ProseFunctions.Substrings
         /// <returns>New node with the newNode node inserted as the k child</returns>
         public static Node InsertBefore(Node target, Node node, Node newNode)
         {
-            return SemanticEditOperation.InsertBefore(target, node, newNode);
+            return EditOperationSemanticFunctions.InsertBefore(target, node, newNode);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace ProseFunctions.Substrings
         /// <param name="to">New value</param>
         public static Node Update(Node target, Node to)
         {
-            return SemanticEditOperation.Update(target, to);
+            return EditOperationSemanticFunctions.Update(target, to);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace ProseFunctions.Substrings
         /// <returns>Result of the edit opration</returns>
         public static Node Delete(Node target, Node node)
         {
-            return SemanticEditOperation.Delete(target, node);
+            return EditOperationSemanticFunctions.Delete(target, node);
         }
 
         /// <summary>

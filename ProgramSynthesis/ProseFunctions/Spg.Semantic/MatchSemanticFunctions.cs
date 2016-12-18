@@ -6,9 +6,9 @@ using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings.Spg.Semantic
+namespace ProseFunctions.Spg.Semantic
 {
-    public class SemanticMatch
+    public class MatchSemanticFunctions
     {   
         public static Pattern C(SyntaxKind kind, IEnumerable<Pattern> children)
         {

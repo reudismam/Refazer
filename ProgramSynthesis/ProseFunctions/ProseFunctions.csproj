@@ -185,8 +185,8 @@
     <Compile Include="Spg.Bean\Node.cs" />
     <Compile Include="Spg.Bean\Patch.cs" />
     <Compile Include="Spg.Bean\Script.cs" />
-    <Compile Include="Spg.Semantic\SemanticEditOperation.cs" />
-    <Compile Include="Spg.Semantic\SemanticMatch.cs" />
+    <Compile Include="Spg.Semantic\EditOperationSemanticFunctions.cs" />
+    <Compile Include="Spg.Semantic\MatchSemanticFunctions.cs" />
     <Compile Include="Spg.Witness\AST.cs" />
     <Compile Include="Spg.Witness\EditOperation.cs" />
     <Compile Include="Spg.Witness\Target\ParentTargetLearner.cs" />

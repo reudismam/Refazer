@@ -5,15 +5,21 @@ using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 
-namespace ProseFunctions.Substrings.Spg.Semantic
+namespace ProseFunctions.Spg.Semantic
 {
-    public class SemanticEditOperation
+    public class EditOperationSemanticFunctions
     {
-        public static Node Insert(Node target, Node ast, int k)
+        /// <summary>
+        /// Insert witness function
+        /// </summary>
+        /// <param name="parent">Parent node</param>
+        /// <param name="ast">Node to be inserted</param>
+        /// <param name="k">Position to insert the node in the parent</param>
+        public static Node Insert(Node parent, Node ast, int k)
         {
-            TreeUpdate update = new TreeUpdate(target.Value);
+            TreeUpdate update = new TreeUpdate(parent.Value);
             var child = ast.Value;
-            var insert = new Insert<SyntaxNodeOrToken>(child, target.Value, k);
+            var insert = new Insert<SyntaxNodeOrToken>(child, parent.Value, k);
             update.ProcessEditOperation(insert);
 #if DEBUG
             Console.WriteLine("TREE UPDATE!!");
@@ -22,14 +28,30 @@ namespace ProseFunctions.Substrings.Spg.Semantic
             return new Node(update.CurrentTree);
         }
 
+        /// <summary>
+        /// Insert before
+        /// </summary>
+        /// <param name="target">Target tree</param>
+        /// <param name="parent">Parent of the node</param>
+        /// <param name="ast">Sinbling</param>
         public static Node InsertBefore(Node target, Node parent, Node ast)
         {
             parent.LeftNode = ast;
             return parent;
         }
 
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="target">Target tree</param>
+        /// <param name="to">Target Node</param>
         public static Node Update(Node target, Node to) => to;
 
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="target">Target tree</param>
+        /// <param name="fromNode">Node to be deleted</param>
         public static Node Delete(Node target, Node fromNode)
         {
             TreeUpdate update = new TreeUpdate(target.Value);
