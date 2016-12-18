@@ -1,4 +1,4 @@
-﻿namespace LongestCommonSubsequence
+﻿namespace LongestCommonAncestor
 {
     /// <summary>
     /// Modification type

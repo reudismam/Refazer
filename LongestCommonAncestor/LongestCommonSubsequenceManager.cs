@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using TreeEdit.Spg.Script;
-using ProseSample.Substrings;
-using TreeElement.Spg.Node;
 
-namespace LongestCommonSubsequence
+namespace LongestCommonAncestor
 {
     /// <summary>
     /// Find the difference between two list using longest common sequences

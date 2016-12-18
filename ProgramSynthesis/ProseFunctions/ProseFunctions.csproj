@@ -175,7 +175,6 @@
   <ItemGroup>
     <Compile Include="Bindings.cs" />
     <Compile Include="List\GList.cs" />
-    <Compile Include="LongestCommonSubsequenceManager.cs" />
     <Compile Include="Spg.Bean\K.cs" />
     <Compile Include="Spg.Bean\Pattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

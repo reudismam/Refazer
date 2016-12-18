@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DbscanImplementation;
-using LongestCommonSubsequence;
 using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
@@ -15,6 +14,7 @@ using TreeEdit.Spg.TreeEdit.Update;
 using TreeEdit.Spg.Print;
 using TreeElement.Spg.Node;
 using LCA.Spg.Manager;
+using LongestCommonAncestor;
 using TreeElement.Spg.TreeEdit.Mapping;
 
 namespace ProseSample.Substrings.Spg.Witness
