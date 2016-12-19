@@ -31,35 +31,37 @@ namespace ProseFunctions.Spg.Witness
         public static SubsequenceSpec TransformationRule(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var dicCcs = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
-            var ccsList = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+            var dicConnectedComponents = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
+            var listConnectedComponents = new List<List<EditOperation<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var inpTreeNode = (Node)input[rule.Body[0]];
+                var inpTreeNode = (Node) input[rule.Body[0]];
                 var inpTree = inpTreeNode.Value.Value;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
                     var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.PrimaryEditions(script);
-                    var ccs = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script, inpTreeNode.Value);
-                    dicCcs[input] = ccs;
-                    ccsList.AddRange(ccs);
+                    var connectedComponentsInput = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script, inpTreeNode.Value);
+                    dicConnectedComponents[input] = connectedComponentsInput;
+                    listConnectedComponents.AddRange(connectedComponentsInput);
                 }
             }
-
-            var clusters = ClusterScript(ccsList);
+            var clusters = ClusterScript(listConnectedComponents);
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<List<Script>>();
+                var inpTree = (Node)input[rule.Body[0]];
+                //Compacted scripts for this input
+                var scriptsInput = new List<List<Script>>();
                 foreach (var cluster in clusters)
                 {
-                    var ccsInput = dicCcs[input];
-                    var listItem = cluster.Where(item => ccsInput.Any(e => IsEquals(item.Edits, e))).ToList();
-                    kMatches.Add(listItem);
+                    //Connected components for this input
+                    var connectedComponentsInput = dicConnectedComponents[input];
+                    //Select from the cluster the connected components related to the input.
+                    var connectedComponentsInputInCluster = cluster.Where(o => connectedComponentsInput.Any(e => IsEquals(o.Edits, e)));
+                    scriptsInput.Add(connectedComponentsInputInCluster.ToList());
                 }
-                var inpTreeNode = (Node)input[rule.Body[0]];
-                var edits = kMatches.Select(o => CompactScript(o, inpTreeNode.Value)).ToList();
-                kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { edits };
+                var compactedEditsInput = scriptsInput.Select(o => CompactScript(o, inpTree.Value)).ToList();
+                kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { compactedEditsInput };
             }
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
