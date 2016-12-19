@@ -28,9 +28,8 @@ namespace ProseFunctions.Spg.Witness
                 var mats = new List<TreeNode<SyntaxNodeOrToken>>();
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {                   
-                    var parent = node.Parent;
-                    if (parent == null) continue;
-                    var parentT1Node = TreeUpdate.FindNode(inputTree.Value, parent);
+                    var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
+                    var parentT1Node = t1Node?.Parent;       
                     if (parentT1Node?.DescendantNodesAndSelf().Count() < 50)
                     {
                         mats.Add(parentT1Node);

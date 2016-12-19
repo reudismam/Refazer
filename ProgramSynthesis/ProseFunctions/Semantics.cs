@@ -443,6 +443,13 @@ namespace ProseFunctions.Substrings
         {
             switch (kind)
             {
+                case SyntaxKind.ArrayCreationExpression:
+                {
+                    var arrayType = (ArrayTypeSyntax) children[0];
+                    var newToken = SyntaxFactory.Token(SyntaxKind.NewKeyword).WithTrailingTrivia(new List<SyntaxTrivia> { SyntaxFactory.Space });
+                    var arrayCreation = SyntaxFactory.ArrayCreationExpression(newToken, arrayType, null);
+                    return arrayCreation;
+                }
                 case SyntaxKind.ImplicitArrayCreationExpression:
                 {
                     var initializerExpression = (InitializerExpressionSyntax) children[0];
@@ -601,6 +608,7 @@ namespace ProseFunctions.Substrings
                 case SyntaxKind.BitwiseOrExpression:
                 case SyntaxKind.AsExpression:
                 case SyntaxKind.AddExpression:
+                case SyntaxKind.SubtractExpression:
                 case SyntaxKind.GreaterThanOrEqualExpression:
                 case SyntaxKind.LogicalOrExpression:
                 case SyntaxKind.LogicalAndExpression:
