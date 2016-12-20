@@ -14,7 +14,7 @@ namespace ProseFunctions.Spg.Witness
         public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            var dicMats = new Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>>();
+            var examplesDisjunction = new Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var examples = spec.DisjunctiveExamples[input].ToList();
@@ -23,20 +23,19 @@ namespace ProseFunctions.Spg.Witness
                     var sot = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
                     if (!sot.Children.Any())
                     {
-                        if (!dicMats.ContainsKey(i)) dicMats.Add(i, new List<TreeNode<SyntaxNodeOrToken>>());
-                        dicMats[i].Add(sot);
+                        if (!examplesDisjunction.ContainsKey(i)) examplesDisjunction.Add(i, new List<TreeNode<SyntaxNodeOrToken>>());
+                        examplesDisjunction[i].Add(sot);
                     }
                 }
                 treeExamples[input] = new List<object>();
             }
 
-            var exNum = spec.ProvidedInputs.Count();
-            var isOneIncluded = false;
-            foreach (var pair in dicMats)
-            {
-                if (pair.Value.First().Children.Any()) continue;
+            var exampleNumber = spec.ProvidedInputs.Count();
+            var containValidDisjunction = false;
+            foreach (var pair in examplesDisjunction)
+            { 
                 if (!pair.Value.Any()) continue;
-                if (pair.Value.Count == exNum)
+                if (pair.Value.Count == exampleNumber)
                 {
                     var first = pair.Value.First();
                     if (!pair.Value.All(sot => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot))) continue;
@@ -46,10 +45,10 @@ namespace ProseFunctions.Spg.Witness
                         examples.Add(pair.Value.First().Value);
                         treeExamples[input] = examples;
                     }
-                    isOneIncluded = true;
+                    containValidDisjunction = true;
                 }
             }
-            if (!isOneIncluded) return null;
+            if (!containValidDisjunction) return null;
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
     }

@@ -30,17 +30,11 @@ namespace ProseFunctions.Spg.Witness
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {                   
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
-                    var parentT1Node = t1Node?.Parent;       
+                    var parentT1Node = t1Node?.Parent;
                     if (parentT1Node?.DescendantNodesAndSelf().Count() < 50)
                     {
                         mats.Add(parentT1Node);
                     }
-                    //TODO resolve this bug here
-                    //var pParent = node.Parent.Parent;
-                    //if (pParent == null) continue;
-                    //var t1PParent = TreeUpdate.FindNode(inputTree.Value, node.Parent.Value);
-                    //if (t1PParent == null) continue;
-                    //mats.Add(t1PParent.Parent);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
