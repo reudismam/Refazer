@@ -306,17 +306,9 @@ namespace ProseFunctions.Spg.Witness
             var listNodes = new List<SyntaxNodeOrToken>();
             foreach (var v in script.Edits)
             {
-                TreeNode<SyntaxNodeOrToken> tocompare = null;
-                if (v.EditOperation is Update<SyntaxNodeOrToken> || v.EditOperation is Delete<SyntaxNodeOrToken>)
-                {
-                    tocompare = v.EditOperation.T1Node;
-                }
-                else
-                {
-                    tocompare = v.EditOperation.Parent;
-                }
-
-                if (TreeUpdate.FindNode(inpTree, tocompare.Value) != null)
+                var tocompare = (v.EditOperation is Update<SyntaxNodeOrToken> || v.EditOperation is Delete<SyntaxNodeOrToken>) ? v.EditOperation.T1Node : v.EditOperation.Parent;
+                var t1Node = TreeUpdate.FindNode(inpTree, tocompare.Value);
+                if (t1Node != null)
                 {
                     listNodes.Add(tocompare.Value);
                 }

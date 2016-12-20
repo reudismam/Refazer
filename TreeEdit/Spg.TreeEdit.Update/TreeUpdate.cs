@@ -177,6 +177,7 @@ namespace TreeEdit.Spg.TreeEdit.Update
                         where node.IsKind(item.Value.Kind())
                               && item.Value.Span.Contains(node.Span)
                               && node.Span.Contains(item.Value.Span)
+                              && node.ToString().Equals(item.ToString())
                         select item;
             var nodesList = nodes.ToList();
             return nodes.FirstOrDefault();

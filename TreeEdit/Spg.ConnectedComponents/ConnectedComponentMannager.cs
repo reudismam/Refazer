@@ -112,54 +112,50 @@ namespace TreeEdit.Spg.ConnectedComponents
 
         private static Dictionary<int, List<EditOperation<T>>> JoinUpdateOperations(Dictionary<int, List<EditOperation<T>>> connectedComponentsDictionary)
         {
-            if (connectedComponentsDictionary.Count() == 1) return connectedComponentsDictionary;
-
+            //If the dictionary contains only an operation there is nothing to be joined.
+            if (connectedComponentsDictionary.Count == 1) return connectedComponentsDictionary;
             var joinList = new List<Tuple<EditOperation<T>, EditOperation<T>>>();
             foreach (var keypair in connectedComponentsDictionary)
             {
+                //If list of editions does not contains update do not process
                 if (!keypair.Value.All(o => o is Update<T>)) continue;
-                var op = keypair.Value.First();
-
+                //First operation in the connected components, which represents this component.
+                var operation = keypair.Value.First();
                 EditOperation<T> closest = null;
-                TreeNode<T> n = null;
+                TreeNode<T> validNode = null;
                 int closestDistance = -1;
                 foreach (var keypaircomp in connectedComponentsDictionary)
                 {
                     if (keypair.Key == keypaircomp.Key) continue;
-                    var listNodes = new List<SyntaxNodeOrToken>();
+                    //If list of editions only contains update do not process
+                    if (keypair.Value.All(o => o is Update<T>)) continue;
 
-                    var opT1NodeValue = (SyntaxNodeOrToken) (object) op.T1Node.Value;
-                    listNodes.Add(opT1NodeValue);
-                    foreach (var pop in keypaircomp.Value)
+                    var toComputeLcaList = new List<SyntaxNodeOrToken>();
+                    var t1NodeValueOperation = (SyntaxNodeOrToken) (object) operation.T1Node.Value;
+                    toComputeLcaList.Add(t1NodeValueOperation);
+                    foreach (var otherOperation in keypaircomp.Value)
                     {
-                        TreeNode<T> tocompare = null;
-                        if (pop is Update<T> || pop is Delete<SyntaxNodeOrToken>)
+                        TreeNode<T> tocompare = otherOperation is Update<T> || otherOperation is Delete<SyntaxNodeOrToken> ? otherOperation.T1Node : otherOperation.Parent;
+                        var otherOperationValue = (SyntaxNodeOrToken) (object) tocompare.Value;
+                        if (TreeUpdate.FindNode(_inputTree, otherOperationValue) != null)
                         {
-                            tocompare = pop.T1Node;
-                        }
-                        else
-                        {
-                            tocompare = pop.Parent;
-                        }
-
-                        var tocompareValue = (SyntaxNodeOrToken) (object) tocompare.Value;
-                        if (TreeUpdate.FindNode(_inputTree, tocompareValue) != null)
-                        {
-                            n = tocompare;
-                            listNodes.Add(tocompareValue);
+                            validNode = tocompare;
+                            toComputeLcaList.Add(otherOperationValue);
                         }
                     }
-                    var lca = LCAManager.GetInstance().LeastCommonAncestor(listNodes, _inputTree.Value);
-                    var distToOp = DistanceToRoot(op.T1Node, lca);
-                    var distToPop = DistanceToRoot(n, lca);
-
+                    var lca = LCAManager.GetInstance().LeastCommonAncestor(toComputeLcaList, _inputTree.Value);
+                    var distToOp = DistanceToRoot(operation.T1Node, lca);
+                    var distToPop = DistanceToRoot(validNode, lca);
                     if (Math.Abs(distToOp - distToPop) > closestDistance)
                     {
                         closest = keypaircomp.Value.Last();
                         closestDistance = Math.Abs(distToOp - distToPop);
                     }
                 }
-                joinList.Add(Tuple.Create(op, closest));
+                if (closest != null)
+                {
+                    joinList.Add(Tuple.Create(operation, closest));
+                }
             }
 
             foreach (var v in joinList)
