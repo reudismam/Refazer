@@ -40,8 +40,8 @@ namespace ProseFunctions.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
-                    var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.PrimaryEditions(script);
-                    var connectedComponentsInput = ConnectedComponentMannager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script, inpTreeNode.Value);
+                    var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(script);
+                    var connectedComponentsInput = ConnectedComponentManager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script, inpTreeNode.Value);
                     dicConnectedComponents[input] = connectedComponentsInput;
                     listConnectedComponents.AddRange(connectedComponentsInput);
                 }
@@ -181,7 +181,7 @@ namespace ProseFunctions.Spg.Witness
 
             //TODO Refactor the code to does not convert a list in another list and back.
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
-            var primaryEditions = ConnectedComponentMannager<SyntaxNodeOrToken>.PrimaryEditions(edits);
+            var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(edits);
             var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
           
             if (children.Count > 1)

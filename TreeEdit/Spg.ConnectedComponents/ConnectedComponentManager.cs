@@ -14,7 +14,7 @@ namespace TreeEdit.Spg.ConnectedComponents
     /// <summary>
     /// Compute connected components.
     /// </summary>
-    public class ConnectedComponentMannager<T>
+    public class ConnectedComponentManager<T>
     {
         /// <summary>
         /// Visited edit operations. Required to compute connected components (DFS implementation).
