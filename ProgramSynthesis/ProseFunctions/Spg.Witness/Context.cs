@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -61,7 +62,10 @@ namespace ProseFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var parent = (Pattern) kind.Examples[input]; 
+                var parent = (Pattern) kind.Examples[input];
+                //If the pattern is Empty then return
+                if (parent.Tree.Value.Kind == SyntaxKind.EmptyStatement) return null;
+
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
