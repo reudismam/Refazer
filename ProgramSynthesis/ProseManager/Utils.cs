@@ -68,14 +68,15 @@ namespace ProseFunctions
             {
                 programs += p + "\n\n";
                 Console.WriteLine(p + "\n");
-
+                var scorep = p["Score"];
                 if (ValidateProgram(p, spec))
                 {
                     validated.Add(p);
                 }
             }
+
             File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
-            ProgramNode bestProgram = validated.First();
+            ProgramNode bestProgram = validated.OrderByDescending(o => o["Score"]).First();
             string stringprogram = bestProgram.ToString();
             var score = bestProgram["Score"];
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");

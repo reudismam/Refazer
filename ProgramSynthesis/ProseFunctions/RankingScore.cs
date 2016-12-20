@@ -91,7 +91,7 @@ namespace ProseFunctions.Substrings
         public static double Score_Pattern(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Reference")]
-        public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore + 200;
+        public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore + 30;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KScore(K k) => 1.1;
