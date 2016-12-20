@@ -61,7 +61,7 @@ namespace ProseFunctions.Spg.Witness
                     scriptsInput.Add(connectedComponentsInputInCluster.ToList());
                 }
                 var compactedEditsInput = scriptsInput.Select(o => CompactScript(o, inpTree.Value)).ToList();
-                kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { compactedEditsInput };
+                kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { compactedEditsInput.GetRange(1, 1) };
             }
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;

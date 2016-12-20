@@ -9,26 +9,14 @@ namespace ProseFunctions.Substrings
     {
         public const double VariableScore = 0;
 
-        [FeatureCalculator("NodesMap")]
-        public static double Score_NodesMap( double scriptScore, double editScore) =>  scriptScore + editScore;
-
         [FeatureCalculator("EditMap")]
         public static double Score_EditMap(double scriptScore, double editScore) => scriptScore + editScore;
 
         [FeatureCalculator("Traversal")]
         public static double Score_Traversal(double scriptScore, double editScore) => scriptScore + editScore;
 
-        [FeatureCalculator("Stts")]
-        public static double Score_Stts(double predScore, double splitScore) => predScore + splitScore;
-
-        [FeatureCalculator("Breaks")]
-        public static double Score_Breaks(double predScore, double splitScore) => predScore + splitScore;
-
         [FeatureCalculator("EditFilter")]
         public static double Score_EditFilter(double predScore, double splitScore) => predScore + splitScore;
-
-        [FeatureCalculator("FTrue")]
-        public static double Score_FTrue() => 1.1;
 
         [FeatureCalculator("Match")]
         public static double Score_Match(double inSource, double matchScore) => matchScore;
@@ -66,9 +54,6 @@ namespace ProseFunctions.Substrings
         [FeatureCalculator("EList")]
         public static double Score_EList(double childScore, double childrenScore) => childScore + childrenScore;
 
-        [FeatureCalculator("SplitNodes")]
-        public static double Score_SplitNodes(double inScore) => inScore;
-
         [FeatureCalculator("Transformation")]
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
@@ -93,23 +78,11 @@ namespace ProseFunctions.Substrings
         [FeatureCalculator("ConstNode")]
         public static double Score_Node1(double astScore) => astScore;
 
-        [FeatureCalculator("Ref")]
-        public static double Score_Ref(double inScore, double matchScore) => matchScore;
-
         [FeatureCalculator("Abstract")]
         public static double Score_Abstract(double kindScore) => kindScore;
 
         [FeatureCalculator("Context")]
         public static double Score_Parent(double matchScore, double kScore) => matchScore + 30;
-
-        [FeatureCalculator("RightChild")]
-        public static double Score_RightChild(double inScore, double matchScore) => matchScore;
-
-        [FeatureCalculator("Child")]
-        public static double Score_Child(double inScore, double matchScore) => matchScore;
-
-        [FeatureCalculator("P")]
-        public static double Score_P(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Concrete")]
         public static double Score_Concrete(double treeScore) => treeScore + 30;
@@ -118,7 +91,7 @@ namespace ProseFunctions.Substrings
         public static double Score_Pattern(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Reference")]
-        public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore + 30;
+        public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore + 200;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KScore(K k) => 1.1;
