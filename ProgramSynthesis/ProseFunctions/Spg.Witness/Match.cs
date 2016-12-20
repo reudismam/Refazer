@@ -70,7 +70,9 @@ namespace ProseFunctions.Spg.Witness
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
+                    var currentTree = ConverterHelper.ConvertCSharpToTreeNode(node.Value.SyntaxTree.GetCompilationUnitRoot());
                     var found = TreeUpdate.FindNode(target, node);
+                    if (found == null) found = TreeUpdate.FindNode(currentTree, node);
                     if (found == null) continue;
                     kMatches.Add(node);
                 }

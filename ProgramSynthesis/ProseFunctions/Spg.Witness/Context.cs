@@ -31,7 +31,7 @@ namespace ProseFunctions.Spg.Witness
                 {                   
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     var parentT1Node = t1Node?.Parent;
-                    if (parentT1Node?.DescendantNodesAndSelf().Count() < 50)
+                    if (parentT1Node?.DescendantNodesAndSelf().Count() < 70)
                     {
                         mats.Add(parentT1Node);
                     }

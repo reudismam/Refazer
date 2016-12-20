@@ -16,13 +16,10 @@ namespace ProseFunctions.Substrings
         public static double Score_Traversal(double scriptScore, double editScore) => scriptScore + editScore;
 
         [FeatureCalculator("EditFilter")]
-        public static double Score_EditFilter(double predScore, double splitScore) => predScore + splitScore;
+        public static double Score_EditFilter(double predScore, double splitScore) => (predScore + splitScore) * 1.1;
 
         [FeatureCalculator("Match")]
         public static double Score_Match(double inSource, double matchScore) => matchScore;
-
-        [FeatureCalculator("NodeMatch")]
-        public static double Score_NodeMatch(double matchScore) => matchScore;
 
         [FeatureCalculator("SC")]
         public static double Score_CS(double childScore) => childScore;
@@ -85,7 +82,7 @@ namespace ProseFunctions.Substrings
         public static double Score_Parent(double matchScore, double kScore) => matchScore + 30;
 
         [FeatureCalculator("Concrete")]
-        public static double Score_Concrete(double treeScore) => treeScore + 30;
+        public static double Score_Concrete(double treeScore) => treeScore * 30;
 
         [FeatureCalculator("Pattern")]
         public static double Score_Pattern(double kindScore, double expression1Score) => kindScore + expression1Score;

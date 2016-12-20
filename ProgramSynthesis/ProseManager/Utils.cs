@@ -58,10 +58,10 @@ namespace ProseFunctions
 
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 10;
-            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score", 2).ToList();
+            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score", 5).ToList();
             
             var b =  (ulong) topK.Count;
-            topK = topK.ToList().GetRange(0, (int) Math.Min(a, b));
+            topK = topK.GetRange(0, (int) Math.Min(a, b)).OrderByDescending(o => o["Score"]).ToList();
             var programs = "";
             List<ProgramNode> validated = new List<ProgramNode>();
             foreach (ProgramNode p in topK)
@@ -76,7 +76,7 @@ namespace ProseFunctions
             }
 
             File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
-            ProgramNode bestProgram = validated.OrderByDescending(o => o["Score"]).First();
+            ProgramNode bestProgram = validated.First();
             string stringprogram = bestProgram.ToString();
             var score = bestProgram["Score"];
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
@@ -87,14 +87,14 @@ namespace ProseFunctions
         {
             foreach (var state in spec.ProvidedInputs)
             {
-                try
-                {
+                //try
+                //{
                     object[] output = program.Invoke(state).ToEnumerable().ToArray();
-                }
-                catch (Exception e)
-                {
-                    return false;
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    return false;
+                //}
             }
             return true;
         }

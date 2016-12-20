@@ -106,7 +106,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                 }
             }
 
-            connectedComponentsDictionary = JoinUpdateOperations(connectedComponentsDictionary);
+            //connectedComponentsDictionary = JoinUpdateOperations(connectedComponentsDictionary);
             return connectedComponentsDictionary;
         }
 
@@ -128,7 +128,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                 {
                     if (keypair.Key == keypaircomp.Key) continue;
                     //If list of editions only contains update do not process
-                    if (keypair.Value.All(o => o is Update<T>)) continue;
+                    if (keypair.Value.All(o => o is Update<T>) && keypaircomp.Value.All(o => o is Update<T>)) continue;
 
                     var toComputeLcaList = new List<SyntaxNodeOrToken>();
                     var t1NodeValueOperation = (SyntaxNodeOrToken) (object) operation.T1Node.Value;
