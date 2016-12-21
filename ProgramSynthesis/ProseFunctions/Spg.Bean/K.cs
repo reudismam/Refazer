@@ -47,6 +47,24 @@ namespace ProseFunctions.Spg.Bean
             return -1;
         }
 
+        public int GetKParent(Pattern patternExample)
+        {
+            var pattern = patternExample.Tree;
+            var parent = _input.Value.Parent.Parent;
+            var currentTree = ConverterHelper.ConvertCSharpToTreeNode(parent);
+            var matches = MatchManager.Matches(currentTree, pattern);
+            for (int i = 0; i < matches.Count; i++)
+            {
+                var match = matches[i];
+                var compare = Semantics.FindChild(match, patternExample.K);
+                if (compare != null && Match.IsEqual(compare.Value, _node.Value))
+                {
+                    return i + 1;
+                }
+            }
+            return -100000000;
+        }
+
         public override string ToString()
         {
             return "K";

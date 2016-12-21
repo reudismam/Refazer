@@ -321,9 +321,10 @@ namespace ProseFunctions.Substrings
             }
             else
             {
+                k = ki.GetKParent(kmatch);
                 var ancestor = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
                 var nodes = MatchManager.Matches(ancestor, kmatch.Tree);
-                nodes.Reverse();
+                //nodes.Reverse();
                 var match = nodes.ElementAt(Math.Abs(k) - 1);
                 var node = FindChild(match, patternP.K);
                 return new Node(node);

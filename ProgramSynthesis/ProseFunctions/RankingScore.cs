@@ -79,16 +79,16 @@ namespace ProseFunctions.Substrings
         public static double Score_Abstract(double kindScore) => kindScore;
 
         [FeatureCalculator("Context")]
-        public static double Score_Parent(double matchScore, double kScore) => matchScore + 30;
+        public static double Score_Parent(double matchScore, double kScore) => matchScore;
 
         [FeatureCalculator("Concrete")]
-        public static double Score_Concrete(double treeScore) => treeScore * 30;
+        public static double Score_Concrete(double treeScore) => treeScore * 1000;
 
         [FeatureCalculator("Pattern")]
         public static double Score_Pattern(double kindScore, double expression1Score) => kindScore + expression1Score;
 
         [FeatureCalculator("Reference")]
-        public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore + 30;
+        public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore;
 
         [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
         public static double KScore(K k) => 1.1;

@@ -57,7 +57,7 @@ namespace ProseFunctions
             });
 
             var consistentPrograms = engine.LearnGrammar(spec);
-            const ulong a = 10;
+            const ulong a = 100;
             var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score", 5).ToList();
             
             var b =  (ulong) topK.Count;
@@ -66,9 +66,9 @@ namespace ProseFunctions
             List<ProgramNode> validated = new List<ProgramNode>();
             foreach (ProgramNode p in topK)
             {
-                programs += p + "\n\n";
-                Console.WriteLine(p + "\n");
                 var scorep = p["Score"];
+                programs += $"Score[{scorep}] " + p + "\n\n";          
+                Console.WriteLine($"Score[{scorep}] " + p + "\n");     
                 if (ValidateProgram(p, spec))
                 {
                     validated.Add(p);
@@ -87,14 +87,14 @@ namespace ProseFunctions
         {
             foreach (var state in spec.ProvidedInputs)
             {
-                //try
-                //{
+                try
+                {
                     object[] output = program.Invoke(state).ToEnumerable().ToArray();
-                //}
-                //catch (Exception e)
-                //{
-                //    return false;
-                //}
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
             }
             return true;
         }

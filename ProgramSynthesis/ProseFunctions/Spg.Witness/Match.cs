@@ -70,9 +70,8 @@ namespace ProseFunctions.Spg.Witness
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.SyntaxTree.GetCompilationUnitRoot());
-                    var found = TreeUpdate.FindNode(target, node);
-                    if (found == null) found = TreeUpdate.FindNode(currentTree, node);
+                    var currentTree = GetAnchorTree(target, node);
+                    var found = TreeUpdate.FindNode(currentTree, node);
                     if (found == null) continue;
                     kMatches.Add(node);
                 }
@@ -80,7 +79,7 @@ namespace ProseFunctions.Spg.Witness
                 eExamples[input] = kMatches;
             }
             return new DisjunctiveExamplesSpec(eExamples);
-        }
+        }    
 
         //public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
         //{
@@ -117,17 +116,32 @@ namespace ProseFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var mats = new List<object>();
-                var patternExample = (Pattern)kind.Examples[input];
-                var pattern = patternExample.Tree;
+                var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    var currentTree = WitnessFunctions.GetCurrentTree(node.SyntaxTree);
-                    K k = new K(currentTree, node);
+                    //var currentTree = GetAnchorTree(target, node);
+                    K k = new K(target, node);
                     mats.Add(k);
                 }
                 kExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
+        }
+
+        /// <summary>
+        /// Get anchor node
+        /// </summary>
+        /// <param name="target">Current target</param>
+        /// <param name="node">Node</param>
+        private static TreeNode<SyntaxNodeOrToken> GetAnchorTree(TreeNode<SyntaxNodeOrToken> target, TreeNode<SyntaxNodeOrToken> node)
+        {
+            var found = TreeUpdate.FindNode(target, node);
+            if (found == null)
+            {
+                var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
+                return currentTree;
+            }
+            return target;
         }
 
         public static bool IsEqual(SyntaxNodeOrToken x, SyntaxNodeOrToken y)
