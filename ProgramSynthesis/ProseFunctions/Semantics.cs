@@ -171,6 +171,12 @@ namespace ProseFunctions.Substrings
             if (!childrenList.Any()) return null;
             TreeNode<SyntaxNodeOrToken> parent = new TreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
             SyntaxNodeOrToken nodevalue = null;
+
+            if (childrenList.Any(o => o.Value.IsLabel(new TLabel(SyntaxKind.None))))
+            {
+                var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+                return new Node(treeNode);
+            }
             for (int i = 0; i < childrenList.Count(); i++)
             {
                 var child = childrenList.ElementAt(i).Value;
@@ -315,6 +321,11 @@ namespace ProseFunctions.Substrings
             if (k >= 0)
             {
                 var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
+                if (!nodes.Any())
+                {
+                    var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+                    return new Node(treeNode);
+                }
                 var match = nodes.ElementAt(k - 1);
                 var node = FindChild(match, patternP.K);
                 return new Node(node);
