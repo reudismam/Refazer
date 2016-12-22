@@ -75,7 +75,7 @@ namespace ProseFunctions.Spg.Witness
                     var found = TreeUpdate.FindNode(target, node.Value);
                     if(found == null) found = TreeUpdate.FindNode(currentTree, node.Value);
                     if (found == null) continue;
-                    kMatches.Add(node);
+                    kMatches.Add(found);
                 }
                 if (!kMatches.Any()) return null;
                 eExamples[input] = kMatches;
@@ -122,8 +122,8 @@ namespace ProseFunctions.Spg.Witness
                 //var parent = (Pattern)kind.Examples[input];
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    //var currentTree = GetAnchorTree(target, node);
-                    K k = new K(target, node);
+                    var found = TreeUpdate.FindNode(target, node.Value);
+                    K k = new K(target, found);
                     mats.Add(k);
                 }
                 kExamples[input] = mats;
