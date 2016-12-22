@@ -67,7 +67,7 @@ namespace ProseFunctions.Spg.Bean
 
         public override string ToString()
         {
-            return "K";
+            return $"K({_input.Label} - {_input}, {_node.Label} - {_node})";
         }
 
         public override bool Equals(object obj)

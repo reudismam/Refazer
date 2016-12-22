@@ -57,7 +57,7 @@ namespace ProseFunctions
             });
 
             var consistentPrograms = engine.LearnGrammar(spec);
-            const ulong a = 100;
+            const ulong a = 10;
             var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score", 5).ToList();
             
             var b =  (ulong) topK.Count;
