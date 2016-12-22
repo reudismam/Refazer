@@ -61,7 +61,9 @@ namespace ProseFunctions
             var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score", 5).ToList();
             
             var b =  (ulong) topK.Count;
-            topK = topK.GetRange(0, (int) Math.Min(a, b)).OrderByDescending(o => o["Score"]).ToList();
+            topK = topK.GetRange(0, (int) Math.Min(a, b)).ToList();
+            //topK = consistentPrograms.RealizedPrograms.ToList();
+            topK = topK.OrderByDescending(o => o["Score"]).ToList();
             var programs = "";
             List<ProgramNode> validated = new List<ProgramNode>();
             foreach (ProgramNode p in topK)
