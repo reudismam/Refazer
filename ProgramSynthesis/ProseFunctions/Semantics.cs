@@ -342,11 +342,6 @@ namespace ProseFunctions.Substrings
             }
         }
 
-        public static Pattern NodeMatch(Pattern kmatch)
-        {
-            return kmatch;
-        }
-
         public static IEnumerable<Node> Template(Node node, Pattern pattern)
         {
             var currentTree = node.Value;

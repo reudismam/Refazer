@@ -71,9 +71,12 @@ namespace ProseFunctions.Spg.Witness
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
                     //var currentTree = GetAnchorTree(target, node);
-                    var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                     var found = TreeUpdate.FindNode(target, node.Value);
-                    if(found == null) found = TreeUpdate.FindNode(currentTree, node.Value);
+                    if (found == null)
+                    {
+                        var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
+                        found = TreeUpdate.FindNode(currentTree, node);
+                    }
                     if (found == null) continue;
                     kMatches.Add(found);
                 }
@@ -123,6 +126,11 @@ namespace ProseFunctions.Spg.Witness
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
                     var found = TreeUpdate.FindNode(target, node.Value);
+                    if (found == null)
+                    {
+                        var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
+                        found = TreeUpdate.FindNode(currentTree, node);
+                    }
                     K k = new K(target, found);
                     mats.Add(k);
                 }
