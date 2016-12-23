@@ -76,6 +76,7 @@ namespace ProseFunctions.Spg.Witness
                     {
                         var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                         found = TreeUpdate.FindNode(currentTree, node);
+                        if (currentTree.DescendantNodesAndSelf().Count() > 50) continue;
                     }
                     if (found == null) continue;
                     kMatches.Add(found);

@@ -70,7 +70,7 @@ namespace ProseFunctions
             {
                 var scorep = p["Score"];
                 programs += $"Score[{scorep}] " + p + "\n\n";          
-                Console.WriteLine($"Score[{scorep}] " + p + "\n");
+                ////////Console.WriteLine($"Score[{scorep}] " + p + "\n");
                 if (ValidateProgram(p, spec))
                 {
                     validated.Add(p);
