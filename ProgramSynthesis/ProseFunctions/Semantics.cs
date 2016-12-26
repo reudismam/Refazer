@@ -314,10 +314,10 @@ namespace ProseFunctions.Substrings
         }
 
 
-        public static Node Reference(Node target, Pattern kmatch, K ki)
+        public static Node Reference(Node target, Pattern kmatch, int k)
         {
             var patternP = kmatch;
-            var k = ki.GetK(kmatch);
+            //var k = ki.GetK(kmatch);
             if (k >= 0)
             {
                 var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
@@ -332,7 +332,7 @@ namespace ProseFunctions.Substrings
             }
             else
             {
-                k = ki.GetKParent(kmatch);
+                //k = ki.GetKParent(kmatch);
                 var ancestor = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
                 var nodes = MatchManager.Matches(ancestor, kmatch.Tree);
                 //nodes.Reverse();

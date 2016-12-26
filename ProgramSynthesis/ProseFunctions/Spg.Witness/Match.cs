@@ -123,7 +123,7 @@ namespace ProseFunctions.Spg.Witness
             {
                 var mats = new List<object>();
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                //var parent = (Pattern)kind.Examples[input];
+                var pattern = (Pattern)kind.Examples[input];
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
                     var found = TreeUpdate.FindNode(target, node.Value);
@@ -132,7 +132,8 @@ namespace ProseFunctions.Spg.Witness
                         var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                         found = TreeUpdate.FindNode(currentTree, node);
                     }
-                    K k = new K(target, found);
+                    K ki = new K(target, found);
+                    var k = ki.GetK(pattern);
                     mats.Add(k);
                 }
                 kExamples[input] = mats;
