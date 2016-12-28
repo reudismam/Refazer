@@ -169,6 +169,7 @@
       <HintPath>..\..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -182,12 +183,14 @@
   <ItemGroup>
     <Compile Include="CodeLocation.cs" />
     <Compile Include="FileUtil.cs" />
+    <Compile Include="ICSE2017DatasetAuto.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="RegionManager.cs" />
     <Compile Include="Spg.Transform\CodeTransformation.cs" />
     <Compile Include="Spg.Transform\Transformation.cs" />
     <Compile Include="EvaluationTest.cs" />
     <Compile Include="ICSE2017Dataset.cs" />
+    <Compile Include="TestHelper.cs" />
     <Compile Include="TestSolution.cs" />
     <Compile Include="TestSuiteMultipleMethods.cs" />
     <Compile Include="TestSuite.cs" />

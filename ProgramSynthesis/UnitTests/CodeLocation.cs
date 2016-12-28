@@ -31,7 +31,7 @@ namespace Spg.LocationRefactor.Location
 
             CodeLocation other = (CodeLocation) obj;
 
-            return SourceClass.ToUpperInvariant().Equals(other.SourceClass.ToUpperInvariant()) && Region.Node.SpanStart == other.Region.Node.SpanStart && Region.Node.Span.End == other.Region.Node.Span.End;
+            return SourceClass.ToUpperInvariant().Equals(other.SourceClass.ToUpperInvariant()) && Region.Start == other.Region.Start && Region.Length == other.Region.Length;
         }
 
         public override string ToString()

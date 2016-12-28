@@ -31,24 +31,12 @@ namespace LCA.Spg.Manager
         }
 
         /// <summary>
-        /// Initiate a new instance
-        /// </summary>
-        public static void Init()
-        {
-            _instance = null;
-            LCA<SyntaxNodeOrToken>.LeastCommonAncestorFinder<SyntaxNodeOrToken>.Init();
-        }
-
-        /// <summary>
         /// Return a singleton instance
         /// </summary>
         /// <returns></returns>
         public static LCAManager GetInstance()
-        {
-            if (_instance == null)
-            {
-                _instance = new LCAManager();
-            }
+        { 
+            _instance = new LCAManager();
             return _instance;
         }
 

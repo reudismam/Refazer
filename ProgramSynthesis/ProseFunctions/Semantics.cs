@@ -269,11 +269,6 @@ namespace ProseFunctions.Substrings
             return nodes.Select(snot => (SyntaxNodeOrToken)snot).ToList();
         }
 
-        public static bool FTrue()
-        {
-            return true;
-        }
-
         public static bool Match(Node sx, Pattern template)
         {
             var patternP = template;
@@ -284,7 +279,14 @@ namespace ProseFunctions.Substrings
 
             var node = FindChild(parent, patternP.K);
             var isValid = node.Equals(sx.Value);
-            if (isValid) File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value.Parent} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
+            if (isValid)
+            {
+                File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value.Parent} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
+                string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+                string file = expHome + "codefragments.txt";
+                string separator = "EndLine";
+                File.AppendAllText(file, $"{node.Value.Span.Start}{separator}{node.Value.Span.Length}{separator}{node.Value}{separator}{node.Value.SyntaxTree.FilePath}{separator}");
+            }
             return isValid;
         }
 

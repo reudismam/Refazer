@@ -89,7 +89,6 @@ namespace LCA.Spg.Manager
             {
                 return ToString().GetHashCode();
             }
-
         }
 
         /// <summary>
@@ -106,20 +105,11 @@ namespace LCA.Spg.Manager
             readonly Dictionary<object, LCAProcessing<T>>  _preprocessing = new Dictionary<object, LCAProcessing<T>>();
             private static LeastCommonAncestorFinder<T> _instance;
  
-
             /// <summary>
             /// Initializes a new instance of the <see cref="LeastCommonAncestorFinder&lt;T&gt;"/> class.
             /// </summary>
             private LeastCommonAncestorFinder()
             {
-            }
-
-            /// <summary>
-            /// Initiate a new instance
-            /// </summary>
-            public static void Init()
-            {
-                _instance = null;
             }
 
             /// <summary>
@@ -129,13 +119,9 @@ namespace LCA.Spg.Manager
             /// <param name="rootNode">Node tree</param>
             /// <returns>A singleton instance of LeastCommonAncestorFinder</returns>
             public static LeastCommonAncestorFinder<T> GetInstance(object obj, ITreeNode<T> rootNode)
-            {
-                if (_instance == null)
-                {
-                    _instance = new LeastCommonAncestorFinder<T>();
-                }
+            { 
+                _instance = new LeastCommonAncestorFinder<T>();
                 _instance.Init(obj, rootNode);
-
                 return _instance;
             }
 
