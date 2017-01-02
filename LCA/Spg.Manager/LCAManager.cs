@@ -33,7 +33,6 @@ namespace LCA.Spg.Manager
         /// <summary>
         /// Return a singleton instance
         /// </summary>
-        /// <returns></returns>
         public static LCAManager GetInstance()
         { 
             _instance = new LCAManager();
@@ -44,7 +43,6 @@ namespace LCA.Spg.Manager
         /// Convert node to tree
         /// </summary>
         /// <param name="sn">Syntax node root</param>
-        /// <returns></returns>
         public LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken> ConvertToTreeNode(SyntaxNode sn)
         {
             Tuple<Dictionary<Node, SyntaxNodeOrToken>, LCA<SyntaxNodeOrToken>.TreeNode<SyntaxNodeOrToken>> value;

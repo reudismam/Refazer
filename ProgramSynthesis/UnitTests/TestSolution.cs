@@ -1099,11 +1099,11 @@ namespace UnitTests
         //    var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
         //    for (int i = 0; i < regions.Count; i++)
         //    {
-        //        var dicionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
+        //        var dictionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
 
         //        List<Tuple<string, string>> documents = new List<Tuple<string, string>>();
         //        //Dictionary<string, List<Selection>> dicSelections = new Dictionary<string, List<Selection>>();
-        //        foreach (KeyValuePair<string, List<TRegion>> entry in dicionarySelection)
+        //        foreach (KeyValuePair<string, List<TRegion>> entry in dictionarySelection)
         //        {
         //            string sourceCode = FileUtil.ReadFile(entry.Key);
         //            Tuple<string, List<TRegion>> tu = Transform(sourceCode, globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
