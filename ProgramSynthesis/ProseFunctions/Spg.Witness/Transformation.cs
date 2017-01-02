@@ -5,6 +5,7 @@ using DbscanImplementation;
 using LCA.Spg.Manager;
 using LongestCommonAncestor;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
@@ -50,6 +51,7 @@ namespace ProseFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node)input[rule.Body[0]];
+                SyntaxNodeOrToken outTree = (SyntaxNodeOrToken) spec.DisjunctiveExamples[input].SingleOrDefault();
                 //Compacted scripts for this input
                 var scriptsInput = new List<List<Script>>();
                 foreach (var cluster in clusters)
@@ -60,7 +62,7 @@ namespace ProseFunctions.Spg.Witness
                     var connectedComponentsInputInCluster = cluster.Where(o => connectedComponentsInput.Any(e => IsEquals(o.Edits, e)));
                     scriptsInput.Add(connectedComponentsInputInCluster.ToList());
                 }
-                var compactedEditsInput = scriptsInput.Select(o => CompactScript(o, inpTree.Value)).ToList();
+                var compactedEditsInput = scriptsInput.Select(o => CompactScript(o, inpTree.Value, outTree)).ToList();
                 kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { compactedEditsInput };
             }
             var subsequence = new SubsequenceSpec(kExamples);
@@ -148,12 +150,22 @@ namespace ProseFunctions.Spg.Witness
         /// </summary>
         /// <param name="connectedComponents">Uncompacted edit operations</param>
         /// <param name="inpTree">Input tree</param>
-        private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, TreeNode<SyntaxNodeOrToken> inpTree)
+        private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, TreeNode<SyntaxNodeOrToken> inpTree, SyntaxNodeOrToken outTree)
         {
             var newEditOperations = new List<Edit<SyntaxNodeOrToken>>();
             foreach (var script in connectedComponents)
             {
                 var edit = CompactScriptIntoASingleOperation(inpTree, script);
+                if (!inpTree.IsLabel(new TLabel(outTree.Kind())) && edit.EditOperation.T1Node.Equals(inpTree))
+                {
+                    if (edit.EditOperation is Update<SyntaxNodeOrToken>)
+                    {
+                        var update = (Update<SyntaxNodeOrToken>) edit.EditOperation;
+                        var to = update.To;
+                        to.Value = outTree;
+                        to.Label = new TLabel(outTree.Kind());
+                    }
+                }
                 if (edit == null) throw new Exception("Unable to create edit operation!!");
                 newEditOperations.Add(edit);
             }
@@ -203,7 +215,6 @@ namespace ProseFunctions.Spg.Witness
 
         private static Edit<SyntaxNodeOrToken> ProcessRootNodeHasMoreThanOneChild(Script script, List<Edit<SyntaxNodeOrToken>> children, TreeNode<SyntaxNodeOrToken> parent, TreeNode<SyntaxNodeOrToken> transformed)
         {
-            //todo correct the children.First children.second
             if (IsDirectUpdate(children, parent, transformed))
             {
                 var @from = ConverterHelper.ConvertCSharpToTreeNode(children.ElementAt(1).EditOperation.T1Node.Value);
@@ -292,11 +303,6 @@ namespace ProseFunctions.Spg.Witness
 
         /// <summary>
         /// Get the not in which the operations are being executed.
-        /// The parent is computed based on the position of the nodes in the syntax tree.
-        /// If a particular node occurs first in the tree than another node.
-        /// Then, it is a candidate for the parent position, else the other node is a candidate for the parent position.
-        /// If two nodes occur in the same position of the syntax tree,
-        /// then the node that is an ancestor of another node is the candidate for the parent position.
         /// </summary>
         /// <param name="script">Edit script</param>
         /// <param name="inpTree">Input tree</param>

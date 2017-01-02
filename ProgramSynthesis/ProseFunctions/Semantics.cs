@@ -561,6 +561,27 @@ namespace ProseFunctions.Substrings
                     }
                     return method;
                 }
+
+                case SyntaxKind.PropertyDeclaration:
+                {
+                    var type = (TypeSyntax) children[0];
+                    string name = identifiers[0].ToString();
+                    var property = SyntaxFactory.PropertyDeclaration(type, name);
+
+                    if (children.Any(o => o.IsKind(SyntaxKind.ArrowExpressionClause)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.PredefinedType));
+                        property = property.WithExpressionBody((ArrowExpressionClauseSyntax) children[index]);
+                    }
+
+                    if (children.Any(o => o.IsKind(SyntaxKind.AccessorList)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.AccessorList));
+                        property = property.WithAccessorList((AccessorListSyntax)children[index]);
+                    }
+
+                    return property;
+                }
                 case SyntaxKind.CastExpression:
                 {
                     var typeSyntax = (TypeSyntax) children[0];
@@ -1029,11 +1050,12 @@ namespace ProseFunctions.Substrings
                     var list = children.Select(v => (AccessorDeclarationSyntax) v).ToList();
                     var syntaxList = new SyntaxList<AccessorDeclarationSyntax>();
                     syntaxList.AddRange(list);
-                    var acessorList = SyntaxFactory.AccessorList(syntaxList);
+                    var acessorList = SyntaxFactory.AccessorList();
+                    acessorList = acessorList.AddAccessors(list.ToArray());
                     return acessorList;
                 }
             }
-            throw new Exception("Ussupported Kind Support.");
+            throw new Exception($"Ussupported Kind Support: {kind}");
         }
 
         /// <summary>
