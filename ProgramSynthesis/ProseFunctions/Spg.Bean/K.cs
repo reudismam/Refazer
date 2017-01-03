@@ -8,6 +8,8 @@ namespace ProseFunctions.Spg.Bean
 {
     public class K
     {
+        public static int INF = 100000000;
+
         /// <summary>
         /// Input tree
         /// </summary>
@@ -44,7 +46,7 @@ namespace ProseFunctions.Spg.Bean
                     return i + 1;
                 }
             }
-            return -1;
+            return -INF;
         }
 
         public int GetKParent(Pattern patternExample)
@@ -62,7 +64,7 @@ namespace ProseFunctions.Spg.Bean
                     return i + 1;
                 }
             }
-            return -100000000;
+            return -INF;
         }
 
         public override string ToString()

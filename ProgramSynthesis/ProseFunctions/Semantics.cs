@@ -745,12 +745,27 @@ namespace ProseFunctions.Substrings
                     var variableDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, spal);
                     return variableDeclaration;
                 }
-            case SyntaxKind.VariableDeclarator:
+             case SyntaxKind.VariableDeclarator:
                 {
                     var property = (VariableDeclaratorSyntax)node;
-                    var identifer = property.Identifier;
-                    var equalsExpression = (EqualsValueClauseSyntax)children[0];
-                    var variableDeclaration = SyntaxFactory.VariableDeclarator(identifer, null, equalsExpression);
+                    SyntaxToken identifier = default(SyntaxToken);
+                    if (identifiers.Any(o => o.IsKind(SyntaxKind.IdentifierToken)))
+                    {
+                        var index = identifiers.FindIndex(o => o.IsKind(SyntaxKind.IdentifierToken));
+                        identifier = (SyntaxToken) identifiers[index];
+                    }
+                    else
+                    {
+                        identifier = property.Identifier;
+                    }
+                    
+                    EqualsValueClauseSyntax equalsExpression = null;
+                    if (children.Any(o => o.IsKind(SyntaxKind.EqualsValueClause)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.EqualsValueClause));
+                        equalsExpression = (EqualsValueClauseSyntax)children[index];
+                    }               
+                    var variableDeclaration = SyntaxFactory.VariableDeclarator(identifier, null, equalsExpression);
                     return variableDeclaration;
                 }
             case SyntaxKind.ExpressionStatement:

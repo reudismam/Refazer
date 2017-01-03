@@ -134,6 +134,7 @@ namespace ProseFunctions.Spg.Witness
                     }
                     K ki = new K(target, found);
                     var k = ki.GetK(pattern);
+                    if (k == -K.INF) continue;
                     mats.Add(k);
                 }
                 kExamples[input] = mats;
