@@ -44,16 +44,10 @@ namespace ProseFunctions
 
         public static ProgramNode Learn(Grammar grammar, Spec spec)
         {
-            var deductivecf = new DeductiveSynthesis.Config
-            {
-                PrereqProgramsThreshold = k => 1,
-            };
-
             var engine = new SynthesisEngine(grammar, new SynthesisEngine.Config
             {
                 UseThreads = false,
                 LogListener = new LogListener(),
-                //Strategies = new [] {typeof(DeductiveSynthesis.Config)},
             });
 
             var consistentPrograms = engine.LearnGrammar(spec);
@@ -62,7 +56,6 @@ namespace ProseFunctions
             
             var b =  (ulong) topK.Count;
             topK = topK.OrderByDescending(o => o["Score"]).ToList().GetRange(0, (int) Math.Min(a, b)).ToList();
-            //topK = consistentPrograms.RealizedPrograms.ToList();
             topK = topK.OrderByDescending(o => o["Score"]).ToList();
             var programs = "";
             List<ProgramNode> validated = new List<ProgramNode>();
@@ -70,11 +63,10 @@ namespace ProseFunctions
             {
                 var scorep = p["Score"];
                 programs += $"Score[{scorep}] " + p + "\n\n";          
-                ////////Console.WriteLine($"Score[{scorep}] " + p + "\n");
-                if (ValidateProgram(p, spec))
-                {
-                    validated.Add(p);
-                }
+                //if (ValidateProgram(p, spec))
+                //{
+                validated.Add(p);
+                //}
             }
 
             File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);

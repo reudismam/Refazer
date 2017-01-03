@@ -35,9 +35,15 @@ namespace ProseFunctions.Spg.Witness
                     {
                         if (node.Value.AsNode() == null)
                         {
-                            mats.Add(parentT1Node.Parent);
+                            if (parentT1Node.Parent != null && parentT1Node.Parent.DescendantNodesAndSelf().Count < 50)
+                            {
+                                mats.Add(parentT1Node.Parent);
+                            }
                         }
-                        mats.Add(parentT1Node);
+                        else
+                        {
+                            mats.Add(parentT1Node);
+                        }
                     }
                 }
                 if (!mats.Any()) return null;

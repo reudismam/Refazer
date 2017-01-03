@@ -43,7 +43,7 @@ namespace ProseFunctions.Substrings
 
         public static bool Valid(SyntaxNodeOrToken st)
         {
-            return st.IsNode || IsAcessModifier(st) ||  IsModifier(st) || st.IsKind(SyntaxKind.IdentifierToken);
+            return st.IsNode /*|| IsAcessModifier(st) ||  IsModifier(st)*/ /*|| st.IsKind(SyntaxKind.IdentifierToken)*/;
         }
 
         private static List<SyntaxNodeOrToken> GetChildren(SyntaxNodeOrToken st)
