@@ -89,14 +89,14 @@ namespace ProseFunctions
         {
             foreach (var state in spec.ProvidedInputs)
             {
-                try
-                {
+                //try
+                //{
                     object[] output = program.Invoke(state).ToEnumerable().ToArray();
-                }
-                catch (Exception e)
-                {
-                    return false;
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    return false;
+                //}
             }
             return true;
         }

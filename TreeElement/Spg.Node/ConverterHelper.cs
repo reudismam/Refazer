@@ -43,7 +43,7 @@ namespace ProseFunctions.Substrings
 
         public static bool Valid(SyntaxNodeOrToken st)
         {
-            return st.IsNode /*|| st.IsKind(SyntaxKind.IdentifierToken)*/;
+            return st.IsNode || IsAcessModifier(st) ||  IsModifier(st) || st.IsKind(SyntaxKind.IdentifierToken);
         }
 
         private static List<SyntaxNodeOrToken> GetChildren(SyntaxNodeOrToken st)
@@ -57,6 +57,60 @@ namespace ProseFunctions.Substrings
                 }
             }
             return list;
+        }
+
+        public static bool IsAcessModifier(SyntaxNodeOrToken st)
+        {
+            if (st.AsNode() != null) return false;
+            switch (st.Kind())
+            {
+                case SyntaxKind.PublicKeyword:
+                    return true;
+                case SyntaxKind.ProtectedKeyword:
+                    return true;
+                case SyntaxKind.InternalKeyword:
+                    return true;
+                case SyntaxKind.PrivateKeyword:
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool IsModifier(SyntaxNodeOrToken st)
+        {
+            if (st.AsNode() != null) return false;
+            switch (st.Kind())
+            {
+                case SyntaxKind.AbstractKeyword:
+                    return true;
+                case SyntaxKind.AsyncKeyword:
+                    return true;
+                case SyntaxKind.ConstKeyword:
+                    return true;
+                case SyntaxKind.EventKeyword:
+                    return true;
+                case SyntaxKind.ExternKeyword:
+                    return true;
+                case SyntaxKind.NewKeyword:
+                    return true;
+                case SyntaxKind.OverrideKeyword:
+                    return true;
+                case SyntaxKind.PartialKeyword:
+                    return true;
+                case SyntaxKind.ReadOnlyKeyword:
+                    return true;
+                case SyntaxKind.SealedKeyword:
+                    return true;
+                case SyntaxKind.StaticKeyword:
+                    return true;
+                case SyntaxKind.UnsafeKeyword:
+                    return true;
+                case SyntaxKind.VirtualKeyword:
+                    return true;
+                case SyntaxKind.VolatileKeyword:
+                    return true;
+            }
+            return false;
         }
 
         public static TreeNode<Token> ConvertITreeNodeToToken(TreeNode<SyntaxNodeOrToken> st)
