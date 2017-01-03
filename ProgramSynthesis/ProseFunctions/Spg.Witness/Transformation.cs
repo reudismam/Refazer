@@ -391,8 +391,11 @@ namespace ProseFunctions.Spg.Witness
 
         private static double Distance(LongestCommonSubsequenceManager<EditOperation<SyntaxNodeOrToken>> lcc, EditOperationDatasetItem x, EditOperationDatasetItem y)
         {
-            var common = (double)lcc.FindCommon(x.Operations, y.Operations).Count;
-            var dist = 1.0 - (2 * common) / ((double)x.Operations.Count + (double)y.Operations.Count);
+            var xEditOperations = x.Operations.Where(o => !o.T1Node.Value.IsKind(SyntaxKind.IdentifierToken) || o is Update<SyntaxNodeOrToken>).ToList();
+            var yEditOperations = y.Operations.Where(o => !o.T1Node.Value.IsKind(SyntaxKind.IdentifierToken) || o is Update<SyntaxNodeOrToken>).ToList();
+
+            var common = (double)lcc.FindCommon(xEditOperations, yEditOperations).Count;
+            var dist = 1.0 - (2 * common) / ((double)xEditOperations.Count + (double)yEditOperations.Count);
             return dist;
         }
 
