@@ -185,7 +185,9 @@ namespace ProseFunctions.Substrings
             var list = st.Children;
             if (!list.Any())
             {
-                var content = st.Value.ToString().Trim();
+                var value = st.Value;
+                //var value = RemoveComments((SyntaxNodeOrToken) node);
+                var content = value.ToString().Trim();
                 //if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
                 //{
                 //    var tNode = "{" + st.Label + "}";
@@ -195,6 +197,12 @@ namespace ProseFunctions.Substrings
                 {
                     content = Regex.Replace(content, "[^0-9a-zA-Z\"]+", " ");
                 }
+
+                if (st.IsLabel(new TLabel(SyntaxKind.Block)))
+                {
+                    content = ""+ st.Label;
+                }
+
                 var treeNode = "{"+st.Label+"("+content+")}";             
                 return treeNode;
             }
@@ -207,6 +215,30 @@ namespace ProseFunctions.Substrings
 
             tree += "}";
             return tree;
+        }
+
+        public static SyntaxNodeOrToken RemoveComments(SyntaxNodeOrToken sot)
+        {
+            var node = sot.AsNode();
+            if (node != null)
+            {
+                var trivias = sot.AsNode().DescendantTrivia();
+                node = node.ReplaceTrivia(trivias, EmptyTrivia);
+            }
+            return node;
+        }
+
+        private static SyntaxTrivia EmptyTrivia(SyntaxTrivia t1, SyntaxTrivia t2)
+        {
+            if (t1.IsKind(SyntaxKind.SingleLineCommentTrivia) || t1.IsKind(SyntaxKind.MultiLineCommentTrivia))
+            {
+                t2 = SyntaxFactory.Space;
+            }
+            else
+            {
+                t2 = t1;
+            }
+            return t2;
         }
     }
 }
