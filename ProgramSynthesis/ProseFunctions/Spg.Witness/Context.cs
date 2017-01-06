@@ -31,13 +31,17 @@ namespace ProseFunctions.Spg.Witness
                 {                   
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     var parentT1Node = t1Node?.Parent;
-                    if (parentT1Node?.DescendantNodesAndSelf().Count < 50)
+                    if (parentT1Node?.DescendantNodesAndSelf().Count < 40)
                     {
                         if (node.Value.AsNode() == null)
                         {
-                            if (parentT1Node.Parent != null && parentT1Node.Parent.DescendantNodesAndSelf().Count < 50)
+                            if (parentT1Node.Parent != null)
                             {
-                                mats.Add(parentT1Node.Parent);
+                                var descendantsAndSelf = parentT1Node.Parent.DescendantNodesAndSelf();
+                                if (descendantsAndSelf.Count < 40)
+                                {
+                                    mats.Add(parentT1Node.Parent);
+                                }
                             }
                         }
                         else
