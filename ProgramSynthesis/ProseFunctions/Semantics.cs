@@ -863,6 +863,8 @@ namespace ProseFunctions.Substrings
                     var parameterList = SyntaxFactory.ParameterList(spal);
                     return parameterList;
                 }
+            case SyntaxKind.ComplexElementInitializerExpression:
+            case SyntaxKind.CollectionInitializerExpression:
             case SyntaxKind.ObjectInitializerExpression:
             case SyntaxKind.ArrayInitializerExpression:
                 {
