@@ -156,6 +156,7 @@ namespace ProseFunctions.Spg.Witness
             foreach (var script in connectedComponents)
             {
                 var edit = CompactScriptIntoASingleOperation(inpTree, script);
+                if (edit == null) throw new Exception("Unable to create edit operation!!");
                 if (!inpTree.IsLabel(new TLabel(outTree.Kind())) && edit.EditOperation.T1Node.Equals(inpTree))
                 {
                     if (edit.EditOperation is Update<SyntaxNodeOrToken>)
@@ -166,7 +167,6 @@ namespace ProseFunctions.Spg.Witness
                         to.Label = new TLabel(outTree.Kind());
                     }
                 }
-                if (edit == null) throw new Exception("Unable to create edit operation!!");
                 newEditOperations.Add(edit);
             }
             return newEditOperations;
@@ -174,43 +174,43 @@ namespace ProseFunctions.Spg.Witness
 
         private static Edit<SyntaxNodeOrToken> CompactScriptIntoASingleOperation(TreeNode<SyntaxNodeOrToken> inpTree, Script script)
         {
-            //if the script has only an edit, the compacted edit is itself.
+            //check base case
             if (script.Edits.Count == 1)
             {
                 return script.Edits.First();
             }
 
-            if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>))
-            {
-                return ProcessSequenceOfDeleteOperations(script, inpTree);
-            }
+            if (script.Edits.All(o => o.EditOperation is Delete<SyntaxNodeOrToken>)) return ProcessDeleteOperations(script, inpTree);
 
             //parent of the edit operations
             var parent = GetParent(script, inpTree);
-            //transformed version of the parent node.
             var parentCopy = ConverterHelper.MakeACopy(parent);
+            //transformed version of the parent node.
             var transformed = ProcessScriptOnNode(script, parentCopy);
-
-            //TODO Refactor the code to does not convert a list in another list and back.
-            var edits = script.Edits.Select(o => o.EditOperation).ToList();
-            var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(edits);
-            var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
-          
-            if (children.Count > 1)
+            var primaryEditions = PrimaryEditions(script);
+            if (primaryEditions.Count > 1)
             {
-                var editOp = ProcessRootNodeHasMoreThanOneChild(script, children, parent, transformed);
+                var editOp = ProcessRootNodeHasMoreThanOneChild(script, primaryEditions, parent, transformed);
                 return editOp;
             }
 
-            var firstOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
-            if (firstOperation is Insert<SyntaxNodeOrToken>)
+            var rootOperation = script.Edits.Find(o => !(o.EditOperation is Delete<SyntaxNodeOrToken>)).EditOperation;
+            if (rootOperation is Insert<SyntaxNodeOrToken>)
             {
-                var inserted = TreeUpdate.FindNode(transformed, firstOperation.T1Node.Value);
-                var parentcopy = ConverterHelper.ConvertCSharpToTreeNode(transformed.Value);
-                var insert = new Insert<SyntaxNodeOrToken>(inserted, parentcopy, firstOperation.K);
+                var insertedNode = TreeUpdate.FindNode(transformed, rootOperation.T1Node.Value);
+                var newParentInsertedNode = ConverterHelper.ConvertCSharpToTreeNode(transformed.Value);
+                var insert = new Insert<SyntaxNodeOrToken>(insertedNode, newParentInsertedNode, rootOperation.K);
                 return new Edit<SyntaxNodeOrToken>(insert);
             }
             return null;
+        }
+
+        private static List<Edit<SyntaxNodeOrToken>> PrimaryEditions(Script script)
+        {
+            var edits = script.Edits.Select(o => o.EditOperation).ToList();
+            var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(edits);
+            var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
+            return children;
         }
 
         private static Edit<SyntaxNodeOrToken> ProcessRootNodeHasMoreThanOneChild(Script script, List<Edit<SyntaxNodeOrToken>> children, TreeNode<SyntaxNodeOrToken> parent, TreeNode<SyntaxNodeOrToken> transformed)
@@ -241,11 +241,10 @@ namespace ProseFunctions.Spg.Witness
             }
             else
             {
-                //todo we need to work more here.
                 var toNode = transformed;
                 var @from = ConverterHelper.ConvertCSharpToTreeNode(parent.Value);
-                var update = new Update<SyntaxNodeOrToken>(@from, toNode,
-                    ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent));
+                var oldParent = ConverterHelper.ConvertCSharpToTreeNode(parent.Value.Parent);
+                var update = new Update<SyntaxNodeOrToken>(@from, toNode, oldParent);
                 {
                     var operation = new Edit<SyntaxNodeOrToken>(update);
                     return operation;
@@ -276,7 +275,7 @@ namespace ProseFunctions.Spg.Witness
             return treeUpdate.CurrentTree;
         }
 
-        private static Edit<SyntaxNodeOrToken> ProcessSequenceOfDeleteOperations(Script script, TreeNode<SyntaxNodeOrToken> inpTree)
+        private static Edit<SyntaxNodeOrToken> ProcessDeleteOperations(Script script, TreeNode<SyntaxNodeOrToken> inpTree)
         {
             var edits = script.Edits.Select(o => o.EditOperation).ToList();
             var list = Compact(new List<List<EditOperation<SyntaxNodeOrToken>>> { edits });

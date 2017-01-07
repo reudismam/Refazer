@@ -309,6 +309,13 @@ namespace TreeEdit.Spg.ConnectedComponents
             return newT2;
         }
 
+        ////public static List<Edit<SyntaxNodeOrToken>> PrimaryEditions(Script script)
+        ////{
+        ////    var edits = script.Edits.Select(o => o.EditOperation).ToList();
+        ////    var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(edits);
+        ////    var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
+        ////}
+
         /// <summary>
         /// Compute the primary editions. The primary editions are editions
         /// that do not depend that another edit to be created to exist.
