@@ -121,9 +121,6 @@
     <Compile Include="Spg.Script\Update.cs" />
     <Compile Include="Spg.TreeEdit.Update\TreeManager.cs" />
     <Compile Include="Spg.TreeEdit.Update\TreeUpdate.cs" />
-    <Compile Include="Spg.TreeEdit.Update\AddAnnotationRewriter.cs" />
-    <Compile Include="Spg.TreeEdit.Update\UpdateTreeRewriter.cs" />
-    <Compile Include="TreeEditMain.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

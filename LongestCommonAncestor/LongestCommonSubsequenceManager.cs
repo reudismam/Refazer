@@ -7,7 +7,6 @@ namespace LongestCommonAncestor
     /// <summary>
     /// Find the difference between two list using longest common sequences
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class LongestCommonSubsequenceManager<T>
     {
         /// <summary>
@@ -15,7 +14,6 @@ namespace LongestCommonAncestor
         /// </summary>
         /// <param name="baseline">Baseline</param>
         /// <param name="revision">Baseline</param>
-        /// <returns></returns>
         public virtual List<ComparisonResult<T>> FindDifference(List<T> baseline, List<T> revision)
         {
             int[,] differenceMatrix = Matrix(baseline, revision);
@@ -28,7 +26,6 @@ namespace LongestCommonAncestor
         /// </summary>
         /// <param name="baseline">Baseline</param>
         /// <param name="revision">Baseline</param>
-        /// <returns></returns>
         public virtual List<T> FindCommon(List<T> baseline, List<T> revision)
         {
             int[,] differenceMatrix = Matrix(baseline, revision);
@@ -51,9 +48,7 @@ namespace LongestCommonAncestor
         /// <summary>
         /// Find the difference between two arrays
         /// </summary>
-        /// <param name="baseline">Baseline</param>
-        /// <param name="revision">Baseline</param>
-        /// <returns></returns>
+        /// <param name="baselines">List to be compared</param>
         public virtual List<T> FindDifference(List<List<T>> baselines)
         {
             if (baselines.Count < 2) throw new ArgumentException("baselines must contains at least two elements.");
@@ -80,7 +75,6 @@ namespace LongestCommonAncestor
             return baseline;
         }
 
-
         /// <summary>
         /// Find difference list
         /// </summary>
@@ -89,7 +83,6 @@ namespace LongestCommonAncestor
         /// <param name="revision">Revision</param>
         /// <param name="baselineIndex">Baseline index</param>
         /// <param name="revisionIndex">Revision Index</param>
-        /// <returns></returns>
         private static List<ComparisonResult<T>> FindDifference(int[,] matrix, List<T> baseline, List<T> revision, int baselineIndex, int revisionIndex)
         {
             List<ComparisonResult<T>> results = new List<ComparisonResult<T>>();
@@ -130,43 +123,8 @@ namespace LongestCommonAncestor
 
         private static bool IsPartialyEquals(T p, T q)
         {
-            //var edita = (EditOperation<SyntaxNodeOrToken>)(object)p;
-            //var editb = (EditOperation<SyntaxNodeOrToken>)(object)q;
-
-            //var t1A = edita.T1Node;
-            //var t1B = editb.T1Node;
-            //var pa = edita.Parent;
-            //var pb = editb.Parent;
-
-            //if (p.GetType() == q.GetType() && CalcSimilarity(t1A, t1B) > 0.5 && CalcSimilarity(pa, pb) > 0.5 && edita.K == editb.K) return true;
-
-
             return p.Equals(q);
         }
-
-        /*private static double CalcSimilarity(TreeNode<SyntaxNodeOrToken> a, TreeNode<SyntaxNodeOrToken> b)
-        {
-            if (a.Value.AsNode().DescendantNodesAndSelf().Count() < 20 &&
-                b.Value.AsNode().DescendantNodesAndSelf().Count() < 20)
-            {
-                var t1aitree = ConverterHelper.ConvertCSharpToTreeNode(a.Value);
-                var t1bitree = ConverterHelper.ConvertCSharpToTreeNode(b.Value);
-
-                var t1atoken = ConverterHelper.ConvertITreeNodeToToken(t1aitree);
-                var t1btoken = ConverterHelper.ConvertITreeNodeToToken(t1bitree);
-                var pattern = ProseSample.Substrings.Spg.Witness.Match.BuildPattern(t1atoken, t1btoken, false);
-
-                var common = pattern.Tree.DescendantNodesAndSelf().Where(o => !o.IsLabel(new TLabel(SyntaxKind.EmptyStatement)));
-                var den = (double) a.Value.AsNode().DescendantNodesAndSelf().Count() +
-                          b.Value.AsNode().DescendantNodesAndSelf().Count();
-                var mult = (2.0*common.Count());
-
-                var result = mult/den;
-
-                return result;
-            }
-            return 0.0;
-        }*/
 
         /// <summary>
         /// Longest common ancestor of two list
@@ -195,7 +153,6 @@ namespace LongestCommonAncestor
                     }
                 }
             }
-
             return matrix;
         }
     }

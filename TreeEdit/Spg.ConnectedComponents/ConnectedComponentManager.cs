@@ -105,84 +105,7 @@ namespace TreeEdit.Spg.ConnectedComponents
                     }
                 }
             }
-
-            //connectedComponentsDictionary = JoinUpdateOperations(connectedComponentsDictionary);
             return connectedComponentsDictionary;
-        }
-
-        private static Dictionary<int, List<EditOperation<T>>> JoinUpdateOperations(Dictionary<int, List<EditOperation<T>>> connectedComponentsDictionary)
-        {
-            //If the dictionary contains only an operation there is nothing to be joined.
-            if (connectedComponentsDictionary.Count == 1) return connectedComponentsDictionary;
-            var joinList = new List<Tuple<EditOperation<T>, EditOperation<T>>>();
-            foreach (var keypair in connectedComponentsDictionary)
-            {
-                //If list of editions does not contains update do not process
-                if (!keypair.Value.All(o => o is Update<T>)) continue;
-                //First operation in the connected components, which represents this component.
-                var operation = keypair.Value.First();
-                EditOperation<T> closest = null;
-                TreeNode<T> validNode = null;
-                int closestDistance = -1;
-                foreach (var keypaircomp in connectedComponentsDictionary)
-                {
-                    if (keypair.Key == keypaircomp.Key) continue;
-                    //If list of editions only contains update do not process
-                    if (keypair.Value.All(o => o is Update<T>) && keypaircomp.Value.All(o => o is Update<T>)) continue;
-
-                    var toComputeLcaList = new List<SyntaxNodeOrToken>();
-                    var t1NodeValueOperation = (SyntaxNodeOrToken) (object) operation.T1Node.Value;
-                    toComputeLcaList.Add(t1NodeValueOperation);
-                    foreach (var otherOperation in keypaircomp.Value)
-                    {
-                        TreeNode<T> tocompare = otherOperation is Update<T> || otherOperation is Delete<SyntaxNodeOrToken> ? otherOperation.T1Node : otherOperation.Parent;
-                        var otherOperationValue = (SyntaxNodeOrToken) (object) tocompare.Value;
-                        if (TreeUpdate.FindNode(_inputTree, otherOperationValue) != null)
-                        {
-                            validNode = tocompare;
-                            toComputeLcaList.Add(otherOperationValue);
-                        }
-                    }
-                    var lca = LCAManager.GetInstance().LeastCommonAncestor(toComputeLcaList, _inputTree.Value);
-                    var distToOp = DistanceToRoot(operation.T1Node, lca);
-                    var distToPop = DistanceToRoot(validNode, lca);
-                    if (Math.Abs(distToOp - distToPop) > closestDistance)
-                    {
-                        closest = keypaircomp.Value.Last();
-                        closestDistance = Math.Abs(distToOp - distToPop);
-                    }
-                }
-                if (closest != null)
-                {
-                    joinList.Add(Tuple.Create(operation, closest));
-                }
-            }
-
-            foreach (var v in joinList)
-            {
-                var vi = v.Item1;
-                var vj = v.Item2;
-
-                var ti = Tuple.Create(vi.T1Node.Value, vi.Parent.Value, vi.K);
-                var indexi = _visited[ti];
-
-                var tj = Tuple.Create(vj.T1Node.Value, vj.Parent.Value, vj.K);
-                var indexj = _visited[tj];
-
-                connectedComponentsDictionary[indexj].AddRange(connectedComponentsDictionary[indexi]);
-                connectedComponentsDictionary.Remove(indexi);
-            }
-            return connectedComponentsDictionary;
-        }
-
-        public static int DistanceToRoot(TreeNode<T> target, SyntaxNodeOrToken parent)
-        {
-            int dist = 0;
-            for (TreeNode<T> node = target; node != null && !node.Value.Equals(parent); node = node.Parent)
-            {
-                dist++;
-            }
-            return dist;
         }
 
         private static bool IsConnected(EditOperation<T> vi, EditOperation<T> vj)
@@ -191,12 +114,11 @@ namespace TreeEdit.Spg.ConnectedComponents
             return parentDescendantNodesAndSelf.Contains(vj.Parent) && !vi.Parent.IsLabel(new TLabel(SyntaxKind.ClassDeclaration));
         }
 
-
         /// <summary>
         /// Depth first search
         /// </summary>
         /// <param name="editOperation"></param>
-        /// <param name="i"></param>
+        /// <param name="i">Group index</param>
         private static void DepthFirstSearch(EditOperation<T> editOperation, int i)
         {
             var t = Tuple.Create(editOperation.T1Node.Value, editOperation.Parent.Value, editOperation.K);
@@ -308,13 +230,6 @@ namespace TreeEdit.Spg.ConnectedComponents
             SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object)value;
             return newT2;
         }
-
-        ////public static List<Edit<SyntaxNodeOrToken>> PrimaryEditions(Script script)
-        ////{
-        ////    var edits = script.Edits.Select(o => o.EditOperation).ToList();
-        ////    var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(edits);
-        ////    var children = primaryEditions.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList();
-        ////}
 
         /// <summary>
         /// Compute the primary editions. The primary editions are editions

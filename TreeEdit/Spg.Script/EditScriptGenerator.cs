@@ -16,7 +16,6 @@ namespace TreeEdit.Spg.Script
         /// <param name="t1">Source tree</param>
         /// <param name="t2">Target tree</param>
         /// <param name="M">Mapping between source and target tree nodes</param>
-        /// <returns></returns>
         public List<EditOperation<T>> EditScript(TreeNode<T> t1, TreeNode<T> t2, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             var editScript = new List<EditOperation<T>>();
@@ -142,8 +141,8 @@ namespace TreeEdit.Spg.Script
         /// <summary>
         /// Find the index in which the edit operations will be executed.
         /// </summary>
-        /// <param name="w">w is the patner of x (w in T1)</param>
         /// <param name="x">Node in t2</param>
+        /// <param name="M">Mapping</param>
         /// <returns>Index to be updated</returns>
         private int FindPos(TreeNode<T> x, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {

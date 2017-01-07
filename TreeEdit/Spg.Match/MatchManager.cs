@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using ProseFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
-using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
 
@@ -64,40 +62,8 @@ namespace TreeEdit.Spg.Match
             var nodes =  BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(node);
             nodes.Insert(0, node);
             var matchNodes = nodes.Where(v => IsValueEachChild(v, pattern)).ToList();
-
-            //var edited = new List<Tuple<TreeNode<SyntaxNodeOrToken>, List<TreeNode<SyntaxNodeOrToken>>>>();
-            //foreach (var match in matchNodes)
-            //{
-            //    var children = match.Children;
-            //    var list = pattern.Children.Select(p => children.Where(v => IsValue(v, p)).ToList()).ToList();
-
-            //    if (list.Count <= 1) continue;
-
-            //    var added = new List<TreeNode<SyntaxNodeOrToken>>();
-            //    for (int i = 0; i < list.First().Count; i++)
-            //    {
-            //        var parent = ConverterHelper.MakeACopy(match);
-            //        parent.Children = new List<TreeNode<SyntaxNodeOrToken>>();
-            //        foreach (var c in list)
-            //        {
-            //            parent.AddChild(c[i], parent.Children.Count());
-            //        }
-            //        //matchNodes.Add(parent);
-            //        added.Add(parent);
-            //    }
-            //    edited.Add(Tuple.Create(match, added));
-            //}
-
-            //foreach (var e in edited)
-            //{
-            //    int position = matchNodes.FindIndex(o => o.Equals(e.Item1));
-            //    matchNodes.InsertRange(position, e.Item2); 
-            //    matchNodes.RemoveAll(o => o.Equals(e.Item1));
-            //}
-
             return matchNodes;
         }
-
 
         /// <summary>
         /// Verify if the tree match the pattern
@@ -111,8 +77,6 @@ namespace TreeEdit.Spg.Match
                 return false;
             }
 
-            //if (tree.Children.Count <= pattern.Children.Count) return false;
-
             foreach (var child in pattern.Children)
             {
                 var valid = node.Children.Any(tchild => IsValue(tchild, child));
@@ -121,10 +85,6 @@ namespace TreeEdit.Spg.Match
                     return false;
                 }
             }
-            //var child = pattern.Children[index];
-            //var pchild = tree.Children[index];
-            //var valid = IsValue(pchild, child);
-
             return true;
         }
 
@@ -185,32 +145,5 @@ namespace TreeEdit.Spg.Match
             }
             return true;
         }
-
-        ///// <summary>
-        ///// Verify if the tree match the pattern
-        ///// </summary>
-        ///// <param name="tree">Node</param>
-        ///// <param name="node">Pattern</param>
-        //public static bool IsValueEachChild(TreeNode<SyntaxNodeOrToken> tree, TreeNode<SyntaxNodeOrToken> node)
-        //{
-        //    if (!node.Value.Equals(tree.Value))
-        //    {
-        //        return false;
-        //    }
-
-        //    if (tree.Children.Count != node.Children.Count) return false;
-
-        //    for (int i = 0; i < node.Children.Count; i++)
-        //    {
-        //        var nodechild = tree.Children[i];
-        //        var child = node.Children[i];
-        //        var valid = IsValueEachChild(nodechild, child);
-        //        if (!valid)
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //    return true;
-        //}
     }
 }

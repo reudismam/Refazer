@@ -179,7 +179,6 @@ namespace TreeEdit.Spg.TreeEdit.Update
                               && node.Span.Contains(item.Value.Span)
                               && node.ToString().Equals(item.ToString())
                         select item;
-            var nodesList = nodes.ToList();
             return nodes.FirstOrDefault();
         }
 

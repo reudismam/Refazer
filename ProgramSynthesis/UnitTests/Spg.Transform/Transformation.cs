@@ -1,6 +1,6 @@
 using System;
 
-namespace Spg.LocationRefactor.Transform
+namespace UnitTests.Spg.Transform
 {
     /// <summary>
     /// Represents a transformation

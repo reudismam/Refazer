@@ -1,5 +1,4 @@
-﻿using ProseFunctions.Substrings;
-using TreeElement.Spg.Node;
+﻿using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Script
 {

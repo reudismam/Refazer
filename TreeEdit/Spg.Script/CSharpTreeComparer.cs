@@ -3,11 +3,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.CodeAnalysis.Text;
-using TreeEdit.Spg.Isomorphic;
 using ProseFunctions.Substrings;
+using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 
-namespace TreeEdit.Spg.TreeEdit.Script
+namespace TreeEdit.Spg.Script
 {
     public class CSharpTreeComparer: TreeComparer<SyntaxNode>
     {
@@ -19,7 +19,6 @@ namespace TreeEdit.Spg.TreeEdit.Script
         public override double GetDistance(SyntaxNode oldNode, SyntaxNode newNode)
         {
             if (ValuesEqual(oldNode, newNode)) return 1;
-
             return 0;
         }
 

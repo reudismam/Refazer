@@ -20,6 +20,7 @@ using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
+using UnitTests.Spg.Transform;
 
 namespace UnitTests
 {

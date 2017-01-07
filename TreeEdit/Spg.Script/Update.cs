@@ -24,10 +24,9 @@ namespace TreeEdit.Spg.Script
         /// <summary>
         /// String representation of this object
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
-            return "Update(" + T1Node.Label + "- (" + T1Node + ")" + " to " + To.Label + "- (" + To + "))";
+            return $"Update({T1Node.Label} - ({T1Node}) to {To.Label} - ({To}))";
         }
 
         public override bool Equals(object obj)

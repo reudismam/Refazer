@@ -1,5 +1,4 @@
-﻿using ProseFunctions.Substrings;
-using TreeElement.Spg.Node;
+﻿using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Script
 {
@@ -24,7 +23,7 @@ namespace TreeEdit.Spg.Script
         /// <summary>
         /// String represent on this object
         /// </summary>
-        /// <returns>Strring representation</returns>
+        /// <returns>String representation</returns>
         public override string ToString()
         {
             return "Move(" + T1Node.Label + " to " + Parent.Label + ", " + K + ")";

@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
+using UnitTests.Spg.Transform;
 
 namespace Spg.LocationRefactor.Location
 {
