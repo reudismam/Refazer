@@ -46,17 +46,6 @@ namespace NUnitTests.Spg.NUnitTests.Util
                 }
 
             }
-            //foreach (CodeTransformation metaLoc in locations)
-            //{
-            //    metaLoc.Region.Path = metaLoc.SourceClass;
-            //    foreach (TRegion metaSelec in selections)
-            //    {
-            //        if (metaLoc.Region.Equals(metaSelec))
-            //        {
-            //            metaLocList.Add(metaLoc);
-            //        }
-            //    }
-            //}
             return metaLocList;
         }
 

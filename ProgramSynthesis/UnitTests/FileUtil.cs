@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Spg.ExampleRefactoring.Util
+namespace UnitTests
 {
     /// <summary>
     /// Manage files
@@ -14,22 +14,6 @@ namespace Spg.ExampleRefactoring.Util
         /// <returns>String representing the content of the file</returns>
         public static String ReadFile(string path)
         {
-            //string value = File.ReadAllText(path);
-            //return value;
-            ////string s = "";
-
-            ////using (StreamReader sr = new StreamReader(path))
-            ////{
-            ////    string line;
-
-            ////    while ((line = sr.ReadLine()) != null)
-            ////    {
-            ////        s += line;
-            ////    }
-            ////}
-
-            ////return s;
-
             // Open the text file using a stream reader.
             using (StreamReader sr = new StreamReader(path))
             {

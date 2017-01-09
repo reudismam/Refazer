@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
-using Microsoft.ProgramSynthesis.Utils;
 using NUnit.Framework;
 using NUnitTests.Spg.NUnitTests.Util;
 using ProseFunctions;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 using Spg.ExampleRefactoring.Util;
-using Spg.ExampleRefactoring.Workspace;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
-using UnitTests.Spg.Transform;
 
 namespace UnitTests
 {

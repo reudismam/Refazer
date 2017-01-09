@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Spg.ExampleRefactoring.Util;
+using UnitTests;
 
 namespace Spg.ExampleRefactoring.Util
 {
