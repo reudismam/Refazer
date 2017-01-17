@@ -52,11 +52,11 @@ namespace ProseFunctions
 
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 10;
-            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList().ToList() : consistentPrograms.TopK("Score", 5).ToList();
+            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK("Score", 5).ToList();
             
             var b =  (ulong) topK.Count;
             topK = topK.OrderByDescending(o => o["Score"]).ToList().GetRange(0, (int) Math.Min(a, b)).ToList();
-            topK = topK.OrderByDescending(o => o["Score"]).ToList();
+            //topK = topK.OrderByDescending(o => o["Score"]).ToList();
             var programs = "";
             List<ProgramNode> validated = new List<ProgramNode>();
             foreach (ProgramNode p in topK)

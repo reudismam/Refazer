@@ -59,7 +59,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Example specification</param>
-        /// <returns>Disjuntive example specification</returns>
+        /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Context", 0)]
         public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
@@ -73,7 +73,7 @@ namespace ProseFunctions.Substrings
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Example specification</param>
         /// <param name="kindBinding">kindRef binding</param>
-        /// <returns>Disjuntive example specification</returns>
+        /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
@@ -258,13 +258,13 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// C witness functino for expression parameter with one child
+        /// C witness function for expression parameter with one child
         /// </summary>
         /// <param name="rule">C rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Learned kind</param>
-        /// <returns>Disjuntive examples specification</returns>
+        /// <returns>Disjunctive examples specification</returns>
         [WitnessFunction("Pattern", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
@@ -307,7 +307,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Witness function for parater k in the insert operator
+        /// Witness function for parameter k in the insert operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
@@ -320,7 +320,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Witness function for parater k in the insert operator
+        /// Witness function for parameter k in the insert operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
@@ -333,7 +333,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Witness function for parater k in the insert operator
+        /// Witness function for parameter k in the insert operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
@@ -346,7 +346,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Witness function for parater k in the insert operator
+        /// Witness function for parameter k in the insert operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
@@ -359,7 +359,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Witness function for parater k in the insert operator
+        /// Witness function for parameter k in the insert operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
@@ -372,7 +372,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Witness function for parater k in the insert operator
+        /// Witness function for parameter k in the insert operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
@@ -385,7 +385,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Witness function for parater k in the insert operator
+        /// Witness function for parameter k in the insert operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
@@ -398,7 +398,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Witness function for parater k in the insert operator
+        /// Witness function for parameter k in the insert operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
@@ -416,7 +416,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">C rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Example specification</param>
-        /// <returns>Disjuntive examples specification</returns>
+        /// <returns>Disjunctive examples specification</returns>
         [WitnessFunction("Node", 0)]
         public static DisjunctiveExamplesSpec NodeKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
@@ -430,7 +430,7 @@ namespace ProseFunctions.Substrings
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Learned kind</param>
-        /// <returns>Disjuntive examples specification</returns>
+        /// <returns>Disjunctive examples specification</returns>
         [WitnessFunction("Node", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec NodeChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {

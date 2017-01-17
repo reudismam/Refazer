@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using DbscanImplementation;
 using LCA.Spg.Manager;
@@ -34,6 +35,7 @@ namespace ProseFunctions.Spg.Witness
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var dicConnectedComponents = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
             var listConnectedComponents = new List<List<EditOperation<SyntaxNodeOrToken>>>();
+            var transSizeList = new List<int>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTreeNode = (Node) input[rule.Body[0]];
@@ -41,6 +43,7 @@ namespace ProseFunctions.Spg.Witness
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
+                    transSizeList.Add(script.Count);                
                     var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(script);
                     var connectedComponentsInput = ConnectedComponentManager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script, inpTreeNode.Value);
                     dicConnectedComponents[input] = connectedComponentsInput;
@@ -65,12 +68,29 @@ namespace ProseFunctions.Spg.Witness
                 var compactedEditsInput = scriptsInput.Select(o => CompactScript(o, inpTree.Value, outTree)).ToList();
                 kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { compactedEditsInput };
             }
+            SaveToFile(transSizeList);
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
         }
 
+        private static void SaveToFile(List<int> transSizeList)
+        {
+            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+            string filePath = expHome + "scriptsize.txt";
+            string s = "";
+            for(int i = 0; i < transSizeList.Count - 1; i++)
+            {
+                var trans = transSizeList[i];
+                s += trans + "\n";
+            }
+            s += transSizeList.Last();
+            StreamWriter file = new StreamWriter(filePath);
+            file.Write(s);
+            file.Close();
+        }
+
         /// <summary>
-        /// Segment the edit edit in nodes
+        /// Segment the edit in nodes
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Rule parameter</param>
