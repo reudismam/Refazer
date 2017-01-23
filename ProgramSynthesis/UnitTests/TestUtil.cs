@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
-using UnitTests.Spg.Transform;
 
-namespace NUnitTests.Spg.NUnitTests.Util
+namespace UnitTests
 {
     internal class TestUtil
     {
         public const string LOG_PATH = @"C:\Users\SPG-04\Documents\Research\ICSE\LogICSE.xlsx";
+
         public static List<CodeLocation> GetAllLocationsOnCommit(List<TRegion> selections, List<CodeLocation> locations)
         {
             List<CodeLocation> metaLocList = new List<CodeLocation>();

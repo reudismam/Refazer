@@ -9,7 +9,6 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
 using NUnit.Framework;
-using NUnitTests.Spg.NUnitTests.Util;
 using ProseFunctions;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;

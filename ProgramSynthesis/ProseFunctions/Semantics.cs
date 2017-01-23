@@ -59,7 +59,7 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
-        /// Searches a node with with kind and occurrence
+        /// Searches a node with kind and occurrence
         /// </summary>
         /// <param name="kind">Kind</param>
         /// <returns>Search result</returns>
@@ -94,7 +94,8 @@ namespace ProseFunctions.Substrings
         /// <returns>New node with the newNode node inserted as the k child</returns>
         public static Node Insert(Node target, Node newNode, int k)
         {
-            return EditOperationSemanticFunctions.Insert(target, newNode, k);
+            var result = EditOperationSemanticFunctions.Insert(target, newNode, k);
+            return result;
         }
 
         /// <summary>
@@ -106,7 +107,8 @@ namespace ProseFunctions.Substrings
         /// <returns>New node with the newNode node inserted as the k child</returns>
         public static Node InsertBefore(Node target, Node node, Node newNode)
         {
-            return EditOperationSemanticFunctions.InsertBefore(target, node, newNode);
+            var result = EditOperationSemanticFunctions.InsertBefore(target, node, newNode);
+            return result;
         }
 
         /// <summary>
@@ -116,7 +118,8 @@ namespace ProseFunctions.Substrings
         /// <param name="to">New value</param>
         public static Node Update(Node target, Node to)
         {
-            return EditOperationSemanticFunctions.Update(target, to);
+            var result = EditOperationSemanticFunctions.Update(target, to);
+            return result;
         }
 
         /// <summary>
@@ -124,10 +127,11 @@ namespace ProseFunctions.Substrings
         /// </summary>
         /// <param name="target">target</param>
         /// <param name="node">Input node</param>
-        /// <returns>Result of the edit opration</returns>
+        /// <returns>Result of the edit operation</returns>
         public static Node Delete(Node target, Node node)
         {
-            return EditOperationSemanticFunctions.Delete(target, node);
+            var result = EditOperationSemanticFunctions.Delete(target, node);
+            return result;
         }
 
         /// <summary>

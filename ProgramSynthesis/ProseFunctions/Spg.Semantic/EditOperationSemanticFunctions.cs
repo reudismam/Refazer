@@ -33,7 +33,7 @@ namespace ProseFunctions.Spg.Semantic
         /// </summary>
         /// <param name="target">Target tree</param>
         /// <param name="parent">Parent of the node</param>
-        /// <param name="ast">Sinbling</param>
+        /// <param name="ast">Sibling</param>
         public static Node InsertBefore(Node target, Node parent, Node ast)
         {
             parent.LeftNode = ast;
