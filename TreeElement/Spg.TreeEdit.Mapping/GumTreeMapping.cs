@@ -57,22 +57,11 @@ namespace TreeElement.Spg.TreeEdit.Mapping
                     List<Tuple<int, TreeNode<T>>> h1 = l1.Pop();
                     List<Tuple<int, TreeNode<T>>> h2 = l2.Pop();
 
-                    var dict1 = new Dictionary<TreeNode<T>, List<TreeNode<T>>>();
-                    var dict2 = new Dictionary<TreeNode<T>, List<TreeNode<T>>>();
-                    foreach (var item1 in h1)
-                    {
-                        if (!dict1.ContainsKey(item1.Item2)) dict1.Add(item1.Item2, new List<TreeNode<T>>());
-                        foreach (var item2 in h2)
-                        {
-                            if (!dict2.ContainsKey(item2.Item2)) dict2.Add(item2.Item2, new List<TreeNode<T>>());
+                    //dict1 contains nodes isomorphic to t1 nodes, similarly, dict2 for t2
+                    Dictionary<TreeNode<T>, List<TreeNode<T>>> dict1;
+                    Dictionary<TreeNode<T>, List<TreeNode<T>>> dict2;
+                    Dictionary(out dict1, h1, h2, out dict2);
 
-                            if (IsomorphicManager<T>.IsIsomorphic(item1.Item2, item2.Item2))
-                            {
-                                dict1[item1.Item2].Add(item2.Item2);
-                                dict2[item2.Item2].Add(item1.Item2);
-                            }
-                        }
-                    }
                     foreach (var item1 in h1)
                     {
                         foreach (var item2 in h2)
@@ -105,7 +94,7 @@ namespace TreeElement.Spg.TreeEdit.Mapping
 
                     foreach (var item1 in h1)
                     {
-                        if (!dict1[item1.Item2].Any())
+                        if (!M.ContainsKey(item1.Item2) && !A.Any(e => e.Item1.Equals(item1.Item2)))
                         {
                             l1.Open(item1.Item2);
                         }
@@ -113,7 +102,7 @@ namespace TreeElement.Spg.TreeEdit.Mapping
 
                     foreach (var item2 in h2)
                     {
-                        if (!dict2[item2.Item2].Any())
+                        if (!M.ContainsValue(item2.Item2) && !A.Any(e => e.Item2.Equals(item2.Item2)))
                         {
                             l2.Open(item2.Item2);
                         }
@@ -137,10 +126,29 @@ namespace TreeElement.Spg.TreeEdit.Mapping
                 }
 
                 var removes = sortList.Where(elm => elm.Item1.Equals(item.Item1) || elm.Item2.Equals(item.Item2)).ToList();
-
                 sortList = sortList.Except(removes).ToList();
             }
             return M;
+        }
+
+        private static void Dictionary(out Dictionary<TreeNode<T>, List<TreeNode<T>>> dict1, List<Tuple<int, TreeNode<T>>> h1, List<Tuple<int, TreeNode<T>>> h2, out Dictionary<TreeNode<T>, List<TreeNode<T>>> dict2)
+        {
+            dict1 = new Dictionary<TreeNode<T>, List<TreeNode<T>>>();
+            dict2 = new Dictionary<TreeNode<T>, List<TreeNode<T>>>();
+            foreach (var item1 in h1)
+            {
+                if (!dict1.ContainsKey(item1.Item2)) dict1.Add(item1.Item2, new List<TreeNode<T>>());
+                foreach (var item2 in h2)
+                {
+                    if (!dict2.ContainsKey(item2.Item2)) dict2.Add(item2.Item2, new List<TreeNode<T>>());
+
+                    if (IsomorphicManager<T>.IsIsomorphic(item1.Item2, item2.Item2))
+                    {
+                        dict1[item1.Item2].Add(item2.Item2);
+                        dict2[item2.Item2].Add(item1.Item2);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -154,9 +162,12 @@ namespace TreeElement.Spg.TreeEdit.Mapping
         {
             var traversal = new TreeTraversal<T>();
             var t1Nodes = traversal.PostOrderTraversal(t1);
-            foreach (var t1Node in t1Nodes)
+            for (int i = 0; i < t1Nodes.Count; i++)
             {
-                if (!M.ContainsKey(t1Node) && HasMatchedChildren(t1Node, M))
+                var t1Node = t1Nodes[i];
+                var isContainedInMapping = M.ContainsKey(t1Node);
+                var hasMatchedChildren = HasMatchedChildren(t1Node, M);
+                if (!isContainedInMapping && hasMatchedChildren)
                 {
                     TreeNode<T> t2Node = Candidate(t1Node, t2, M);
                     double dice = Dice(t1Node, t2Node, M);
