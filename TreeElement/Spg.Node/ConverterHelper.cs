@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace ProseFunctions.Substrings
