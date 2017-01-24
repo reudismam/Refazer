@@ -7,6 +7,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
+using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
@@ -79,6 +80,7 @@ namespace ProseFunctions.Spg.Witness
                         if (currentTree.DescendantNodesAndSelf().Count() > 50) continue;
                     }
                     if (found == null) continue;
+                    if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(found, node)) continue;
                     kMatches.Add(found);
                 }
                 if (!kMatches.Any()) return null;
