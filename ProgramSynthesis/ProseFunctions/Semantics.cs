@@ -17,6 +17,7 @@ namespace ProseFunctions.Substrings
 {
     public static class Semantics
     {
+        private static Dictionary<Node, Node> dicBeforeAfter = new Dictionary<Node, Node>();
 
         /// <summary>
         /// Matches the element on the tree with specified kind and child nodes.
@@ -93,6 +94,7 @@ namespace ProseFunctions.Substrings
         public static Node Insert(Node target, Node newNode, int k)
         {
             var result = EditOperationSemanticFunctions.Insert(target, newNode, k);
+            dicBeforeAfter.Add(result, target);
             return result;
         }
 
@@ -106,6 +108,7 @@ namespace ProseFunctions.Substrings
         public static Node InsertBefore(Node target, Node node, Node newNode)
         {
             var result = EditOperationSemanticFunctions.InsertBefore(target, node, newNode);
+            dicBeforeAfter.Add(result, target);
             return result;
         }
 
@@ -117,6 +120,7 @@ namespace ProseFunctions.Substrings
         public static Node Update(Node target, Node to)
         {
             var result = EditOperationSemanticFunctions.Update(target, to);
+            dicBeforeAfter.Add(result, target);
             return result;
         }
 
@@ -129,6 +133,7 @@ namespace ProseFunctions.Substrings
         public static Node Delete(Node target, Node node)
         {
             var result = EditOperationSemanticFunctions.Delete(target, node);
+            dicBeforeAfter.Add(result, target);
             return result;
         }
 
@@ -149,12 +154,25 @@ namespace ProseFunctions.Substrings
                 {
                     if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
                     {
+                        var before = dicBeforeAfter[v];
                         var n = ReconstructTree(v.Value);
+                        string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+                        string file = expHome + "beforeafter.txt";
+                        string separator = "EndLine";
+                        File.AppendAllText(file, $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
+
                         resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
                     }
                     else
                     {
+                        var before = dicBeforeAfter[v];
+                        var n = ReconstructTree(v.Value);
+                        string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+                        string file = expHome + "beforeafter.txt";
+                        string separator = "EndLine";
+                        File.AppendAllText(file, $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
                         var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+
                         resultList.Add(new Node(treeNode));
                     }
                 }
@@ -284,7 +302,7 @@ namespace ProseFunctions.Substrings
             var isValid = node.Equals(sx.Value);
             if (isValid)
             {
-                File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value.Parent} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
+                //File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value.Parent} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
                 string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
                 string file = expHome + "codefragments.txt";
                 string separator = "EndLine";

@@ -69,7 +69,10 @@ namespace ProseFunctions
                 //}
             }
 
-            File.WriteAllText(@"C:\Users\SPG-04\Desktop\programs.txt", programs);
+            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+            string file = expHome + "programs.txt";
+            File.WriteAllText(file, programs);
+
             ProgramNode bestProgram = validated.First();
             string stringprogram = bestProgram.ToString();
             var score = bestProgram["Score"];
