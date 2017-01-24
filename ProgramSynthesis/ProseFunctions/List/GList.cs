@@ -12,7 +12,7 @@ namespace ProseFunctions.List
         /// Return the first element of the list.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Paraeter</param>
+        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         public static DisjunctiveExamplesSpec List0(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
@@ -22,11 +22,12 @@ namespace ProseFunctions.List
                 var matches = new List<object>();
                 foreach (List<T> matchResult in spec.DisjunctiveExamples[input])
                 {
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count == 1) return null;
+                    if (!matchResult.Any()) continue;
+                    if (matchResult.Count == 1) continue;
 
                     matches.Add(matchResult.First());
                 }
+                if (!matches.Any()) return null;
                 treeExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
@@ -46,13 +47,15 @@ namespace ProseFunctions.List
                 var matches = new List<object>();
                 foreach (List<T> matchResult in spec.DisjunctiveExamples[input])
                 {
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count == 1) return null;
+                    if (!matchResult.Any()) continue;
+                    if (matchResult.Count == 1) continue;
 
                     var copy = new List<T>(matchResult);
                     copy.RemoveAt(0);
                     matches.Add(copy);
                 }
+
+                if (!matches.Any()) return null;
                 treeExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);
@@ -73,11 +76,12 @@ namespace ProseFunctions.List
                 var matches = new List<object>();
                 foreach (List<T> matchResult in spec.DisjunctiveExamples[input])
                 {
-                    if (!matchResult.Any()) return null;
-                    if (matchResult.Count != 1) return null;
+                    if (!matchResult.Any()) continue;
+                    if (matchResult.Count != 1) continue;
 
                     matches.Add(matchResult.First());
                 }
+                if (!matches.Any()) return null;
                 treeExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(treeExamples);

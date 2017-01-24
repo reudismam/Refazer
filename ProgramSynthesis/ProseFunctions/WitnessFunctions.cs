@@ -35,7 +35,7 @@ namespace ProseFunctions.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Concrete", 0)]
-        public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Literal.LiteralTree(rule, parameter, spec);
         }
@@ -48,7 +48,7 @@ namespace ProseFunctions.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Abstract", 0)]
-        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Variable.VariableKind(rule, parameter, spec);
         }
@@ -101,7 +101,7 @@ namespace ProseFunctions.Substrings
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("CList", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, DisjunctiveExamplesSpec matchSpec)
+        public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return GList<TreeNode<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
         }

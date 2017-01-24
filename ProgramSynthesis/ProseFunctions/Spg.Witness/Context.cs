@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -23,10 +24,11 @@ namespace ProseFunctions.Spg.Witness
         public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            var examplesDisjunction = new Dictionary<int, List<Tuple<State, TreeNode<SyntaxNodeOrToken>>>>();
+            Enumerable.Range(0, 2).ForEach(o => examplesDisjunction.Add(o, new List<Tuple<State, TreeNode<SyntaxNodeOrToken>>>()));
             foreach (State input in spec.ProvidedInputs)
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var mats = new List<TreeNode<SyntaxNodeOrToken>>();
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {                   
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
@@ -40,18 +42,34 @@ namespace ProseFunctions.Spg.Witness
                                 var descendantsAndSelf = parentT1Node.Parent.DescendantNodesAndSelf();
                                 if (descendantsAndSelf.Count < 40)
                                 {
-                                    mats.Add(parentT1Node.Parent);
+                                    examplesDisjunction[0].Add(Tuple.Create(input, parentT1Node.Parent));
                                 }
                             }
                         }
                         else
                         {
-                            mats.Add(parentT1Node);
+                            examplesDisjunction[0].Add(Tuple.Create(input, parentT1Node.Parent));
                         }
                     }
+                    //examplesDisjunction[1].Add(Tuple.Create(input, node));
                 }
-                if (!mats.Any()) return null;
-                treeExamples[input] = mats;
+                treeExamples[input] = new List<TreeNode<SyntaxNodeOrToken>>(); ;
+            }
+
+            var exampleNumber = spec.ProvidedInputs.Count();
+            foreach (var key in examplesDisjunction.Keys)
+            {
+                var value = examplesDisjunction[key];
+                if (!value.Any()) continue;
+                if (value.Count == exampleNumber)
+                { 
+                    foreach (State input in spec.ProvidedInputs)
+                    {
+                        var examples = (List<TreeNode<SyntaxNodeOrToken>>)treeExamples[input];
+                        examples.Add(value.Find(o => o.Item1.Equals(input)).Item2);
+                        treeExamples[input] = examples;
+                    }
+                }
             }
             return new DisjunctiveExamplesSpec(treeExamples);
         }
