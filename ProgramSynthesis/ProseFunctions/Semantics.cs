@@ -155,7 +155,20 @@ namespace ProseFunctions.Substrings
                     if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
                     {
                         var before = dicBeforeAfter[v];
-                        var n = ReconstructTree(v.Value);
+
+                        SyntaxNodeOrToken n;
+                        if (v.LeftNode != null)
+                        {
+                            n = ReconstructTree(v.LeftNode.Value);
+                        }
+                        else if (v.RightNode != null)
+                        {
+                            n = ReconstructTree(v.RightNode.Value);
+                        }
+                        else
+                        {
+                            n = ReconstructTree(v.Value);
+                        }
                         string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
                         string file = expHome + "beforeafter.txt";
                         string separator = "EndLine";
@@ -878,8 +891,9 @@ namespace ProseFunctions.Substrings
                 }
             case SyntaxKind.ParameterList:
                 {
-                    var parameter = (ParameterSyntax)children[0];
-                    var spal = SyntaxFactory.SeparatedList(new[] { parameter });
+                    var parameterSyntaxList = new List<ParameterSyntax>();
+                    children.ForEach(o => parameterSyntaxList.Add((ParameterSyntax)o));
+                    var spal = SyntaxFactory.SeparatedList(parameterSyntaxList);
                     var parameterList = SyntaxFactory.ParameterList(spal);
                     return parameterList;
                 }
