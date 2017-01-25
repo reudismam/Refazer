@@ -564,14 +564,58 @@ namespace ProseFunctions.Substrings
                 }
             case SyntaxKind.MethodDeclaration:
                 {
-                    //TODO improve the creation of the MethodDeclaration.
                     var method = (MethodDeclarationSyntax)node;
+                    if (identifiers != null && identifiers.Any(o => o.IsKind(SyntaxKind.IdentifierToken)))
+                    {
+                        var index = identifiers.FindIndex(o => o.IsKind(SyntaxKind.IdentifierToken));
+                        var name = (SyntaxToken) identifiers[index];
+                        method = method.WithIdentifier(name);
+                    }
+
+                    if (identifiers != null)
+                    {
+                        var modifiers = new List<SyntaxToken>();
+                        if (identifiers.Any(ConverterHelper.IsAcessModifier))
+                        {
+                            var index = identifiers.FindIndex(ConverterHelper.IsAcessModifier);
+                            modifiers.Add((SyntaxToken)identifiers[index]);
+                        }
+
+                        if (identifiers.Any(o => o.IsKind(SyntaxKind.SealedKeyword)))
+                        {
+                            var index = identifiers.FindIndex(o => o.IsKind(SyntaxKind.SealedKeyword));
+                            modifiers.Add((SyntaxToken)identifiers[index]);
+                        }
+
+                        if (identifiers.Any(o => o.IsKind(SyntaxKind.StaticKeyword)))
+                        {
+                            var index = identifiers.FindIndex(o => o.IsKind(SyntaxKind.StaticKeyword));
+                            modifiers.Add((SyntaxToken)identifiers[index]);
+                        }
+
+                        if (identifiers.Any(o => o.IsKind(SyntaxKind.OverrideKeyword)))
+                        {
+                            var index = identifiers.FindIndex(o => o.IsKind(SyntaxKind.OverrideKeyword));
+                            modifiers.Add((SyntaxToken)identifiers[index]);
+                        }
+
+                        if (modifiers.Any())
+                        {
+                            method = method.AddModifiers(modifiers.ToArray());
+                        }
+                    }
+
+                    if (children.Any(o => o.IsKind(SyntaxKind.ArrowExpressionClause)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.PredefinedType));
+                        method = method.WithExpressionBody((ArrowExpressionClauseSyntax)children[index]);
+                    }
+
                     if (children.Any(o => o.IsKind(SyntaxKind.AttributeList)))
                     {
                         var index = children.FindIndex(o => o.IsKind(SyntaxKind.AttributeList));
                         var syntaList = new SyntaxList<AttributeListSyntax>();
                         var attributeListSyntax = (AttributeListSyntax)children[index];
-                        //syntaList.Insert(0, attributeListSyntax);
                         method = method.WithAttributeLists(syntaList);
                         method = method.AddAttributeLists(attributeListSyntax);
                     }
@@ -593,6 +637,7 @@ namespace ProseFunctions.Substrings
                         var index = children.FindIndex(o => o.IsKind(SyntaxKind.Block));
                         method = method.WithBody((BlockSyntax)children[index]);
                     }
+
                     return method;
                 }
 
@@ -606,7 +651,6 @@ namespace ProseFunctions.Substrings
                         var index = identifiers.FindIndex(o => o.IsKind(SyntaxKind.IdentifierToken));
                         name = identifiers[index].ToString();
                     }
-
 
                     var property = SyntaxFactory.PropertyDeclaration(type, name);
 
