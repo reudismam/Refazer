@@ -8,6 +8,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
+using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
@@ -194,7 +195,7 @@ namespace ProseFunctions.Spg.Witness
         public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<Token> parent)
         {
             string path = "";
-            for (TreeNode<SyntaxNodeOrToken> node = target; node != null && node.Value != null && !node.Value.IsKind(parent.Value.Kind); node = node.Parent)
+            for (TreeNode<SyntaxNodeOrToken> node = target; node != null && node.Value != null && !MatchManager.IsValueEachChild(node, parent); node = node.Parent)
             {
                 string append = "/";
 
