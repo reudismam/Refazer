@@ -9,11 +9,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseFunctions.List;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Spg.Semantic;
+using ProseFunctions.Substrings;
 using TreeEdit.Spg.Match;
 using TreeElement;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings
+namespace ProseFunctions
 {
     public static class Semantics
     {
