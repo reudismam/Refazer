@@ -33,7 +33,9 @@ namespace TreeEdit.Spg.Isomorphic
             Dictionary<TreeNode<T>, string> dict1 = talg.Align(t1);
             Dictionary<TreeNode<T>, string> dict2 = talg.Align(t2);
 
-            if (dict1[t1].Equals(dict2[t2]))
+            var ahuT1 = dict1[t1];
+            var ahuT2 = dict2[t2];
+            if (ahuT1.Equals(ahuT2))
             {
                 return true;
             }

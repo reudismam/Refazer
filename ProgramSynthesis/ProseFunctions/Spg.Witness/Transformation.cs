@@ -413,6 +413,14 @@ namespace ProseFunctions.Spg.Witness
             var xEditOperations = x.Operations.Where(o => !o.T1Node.Value.IsKind(SyntaxKind.IdentifierToken) || o is Update<SyntaxNodeOrToken>).ToList();
             var yEditOperations = y.Operations.Where(o => !o.T1Node.Value.IsKind(SyntaxKind.IdentifierToken) || o is Update<SyntaxNodeOrToken>).ToList();
 
+            ////var xpme = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(xEditOperations);
+            ////var ypme = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(yEditOperations);
+
+            ////var commonpm = (double)lcc.FindCommon(xpme, ypme).Count;
+            ////var distpm = 1.0 - (2 * commonpm) / ((double)xpme.Count + (double)ypme.Count);
+
+            ////if (Math.Abs(distpm) > 0.01 && ypme.Count > 1) return 1.0;
+
             var common = (double)lcc.FindCommon(xEditOperations, yEditOperations).Count;
             var dist = 1.0 - (2 * common) / ((double)xEditOperations.Count + (double)yEditOperations.Count);
             return dist;

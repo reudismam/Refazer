@@ -14,7 +14,7 @@ using TreeEdit.Spg.Match;
 using TreeElement;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions
+namespace ProseFunctions.Substrings
 {
     public static class Semantics
     {

@@ -23,7 +23,7 @@ namespace TreeEdit.Spg.Script
 
         public bool Equals(Delete<T> other)
         {
-            return other.T1Node.IsLabel(T1Node.Label) && other.Parent.IsLabel(Parent.Label);
+            return K == other.K && other.T1Node.IsLabel(T1Node.Label) && other.Parent.IsLabel(Parent.Label);
         }
     }
 }

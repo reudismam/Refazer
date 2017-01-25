@@ -17,7 +17,7 @@ namespace TreeEdit.Spg.TreeEdit.Mapping
 
             if (!root.Children.Any())
             {
-                _dict[root] = "1" + root + "0";
+                _dict[root] = $"{root.Label}1" + root + $"0{root.Label}";
                 return;
             }
 

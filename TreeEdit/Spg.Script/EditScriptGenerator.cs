@@ -81,6 +81,7 @@ namespace TreeEdit.Spg.Script
                     var delete = new Delete<T>(w);
                     var v = delete.Parent;
                     int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
+                    delete.K = index;
                     v.RemoveNode(index);
                     editScript.Add(delete);
                 }
