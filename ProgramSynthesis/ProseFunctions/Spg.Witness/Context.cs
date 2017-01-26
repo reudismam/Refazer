@@ -141,6 +141,7 @@ namespace ProseFunctions.Spg.Witness
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     if (t1Node == null) continue;
                     var path = GetPath(t1Node, parent.Tree);
+                    if (path == null) continue;
                     matches.Add(path);
                 }
                 if (!matches.Any()) return null;    
@@ -195,14 +196,13 @@ namespace ProseFunctions.Spg.Witness
         public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<Token> parent)
         {
             string path = "";
-            for (TreeNode<SyntaxNodeOrToken> node = target; node != null && node.Value != null && !MatchManager.IsValueEachChild(node, parent); node = node.Parent)
+            TreeNode<SyntaxNodeOrToken> node;
+            for (node = target; node != null && node.Value != null && !MatchManager.IsValueEachChild(node, parent); node = node.Parent)
             {
                 string append = "/";
-
                 if (node.Parent != null && node.Parent.Children.Count >= 1)
                 {
                     append += "[";
-
                     int index = 1;
                     var previousSibling = PreviousSibling(node);
                     while (previousSibling != null)
@@ -210,11 +210,11 @@ namespace ProseFunctions.Spg.Witness
                         index++;
                         previousSibling = PreviousSibling(previousSibling);
                     }
-
                     append += $"{index}]";
                     path = append + path;
                 }
             }
+            if (node == null) return null;
             return path;
         }
 
