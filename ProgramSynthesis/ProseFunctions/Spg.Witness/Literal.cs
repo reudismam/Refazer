@@ -14,41 +14,25 @@ namespace ProseFunctions.Spg.Witness
         public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            var examplesDisjunction = new Dictionary<int, List<TreeNode<SyntaxNodeOrToken>>>();
+            var matches = new List<TreeNode<SyntaxNodeOrToken>>();
             foreach (State input in spec.ProvidedInputs)
             {
                 var examples = spec.DisjunctiveExamples[input].ToList();
+                var mats = new List<object>();
                 for (int i = 0; i < examples.Count; i++)
                 {
                     var sot = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
                     if (!sot.Children.Any())
                     {
-                        if (!examplesDisjunction.ContainsKey(i)) examplesDisjunction.Add(i, new List<TreeNode<SyntaxNodeOrToken>>());
-                        examplesDisjunction[i].Add(sot);
+                        matches.Add(sot);
+                        mats.Add(sot);
                     }
                 }
-                treeExamples[input] = new List<object>();
+                if (!mats.Any()) return null;
             }
-
-            var exampleNumber = spec.ProvidedInputs.Count();
-            var containValidDisjunction = false;
-            foreach (var pair in examplesDisjunction)
-            { 
-                if (!pair.Value.Any()) continue;
-                if (pair.Value.Count == exampleNumber)
-                {
-                    var first = pair.Value.First();
-                    if (!pair.Value.All(sot => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot))) continue;
-                    foreach (State input in spec.ProvidedInputs)
-                    {
-                        var examples = (List<object>)treeExamples[input];
-                        examples.Add(pair.Value.First().Value);
-                        treeExamples[input] = examples;
-                    }
-                    containValidDisjunction = true;
-                }
-            }
-            if (!containValidDisjunction) return null;
+            var first = matches.First();
+            if (!matches.All(sot => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot))) return null;
+            spec.ProvidedInputs.ForEach(input => treeExamples[input] = new List<object> {first.Value});
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
     }

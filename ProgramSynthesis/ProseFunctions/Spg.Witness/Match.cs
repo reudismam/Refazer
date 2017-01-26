@@ -71,21 +71,14 @@ namespace ProseFunctions.Spg.Witness
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    //var currentTree = GetAnchorTree(target, node);
                     var list = target.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
-                    //var found = list.FirstOrDefault();
-                    //if (found == null)
                     if (!list.Any())
                     {
                         var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                         list = currentTree.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
-                        //found = list.FirstOrDefault();//TreeUpdate.FindNode(currentTree, node);
                         if (currentTree.DescendantNodesAndSelf().Count() > 50) continue;
                     }
-                    //if (found == null) continue;
                     if (!list.Any()) continue;
-                    //if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(found, node)) continue;
-                    //kMatches.Add(found);
                     kMatches.AddRange(list);
                 }
                 if (!kMatches.Any()) return null;
@@ -93,38 +86,6 @@ namespace ProseFunctions.Spg.Witness
             }
             return new DisjunctiveExamplesSpec(eExamples);
         }
-
-        //public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, ExampleSpec spec)
-        //{
-        //    var eExamples = new Dictionary<State, IEnumerable<object>>();
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
-        //        var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-        //        foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-        //        {
-        //            //var currentTree = GetAnchorTree(target, node);
-        //            var list = target.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
-        //            var found = list.FirstOrDefault();
-        //            if (found == null)          
-        //            //if (!list.Any())
-        //            {
-        //                var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
-        //                list = currentTree.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
-        //                found = list.FirstOrDefault();//TreeUpdate.FindNode(currentTree, node);
-        //                if (currentTree.DescendantNodesAndSelf().Count() > 50) continue;
-        //            }
-        //            if (found == null) continue;
-        //            //if (!list.Any()) continue;
-        //            if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(found, node)) continue;
-        //            kMatches.Add(found);
-        //            //kMatches.AddRange(list);
-        //        }
-        //        if (!kMatches.Any()) return null;
-        //        eExamples[input] = kMatches;
-        //    }
-        //    return new DisjunctiveExamplesSpec(eExamples);
-        //}     
 
         public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
         {
