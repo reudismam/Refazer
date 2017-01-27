@@ -7,6 +7,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.List;
 using ProseFunctions.Spg.Witness;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
@@ -458,12 +459,14 @@ namespace ProseFunctions.Substrings
             {
                 var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                if (target.Value.Parent.Parent.DescendantNodesAndSelf().Count() < 100)
+                var parentParentDecendants = target.Value.Parent.Parent.DescendantNodesAndSelf().ToList();
+                var descendantNodesAndSelf = target.Value.Parent.DescendantNodesAndSelf().ToList();
+                if (parentParentDecendants.Count() < 100)
                 {
                     var parent = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                     target = TreeUpdate.FindNode(parent, target.Value);
                 }
-                else if (target.Value.Parent.DescendantNodesAndSelf().Count() < 100)
+                else if (descendantNodesAndSelf.Count() < 100)
                 {
                     var parent = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent);
                     target = TreeUpdate.FindNode(parent, target.Value);

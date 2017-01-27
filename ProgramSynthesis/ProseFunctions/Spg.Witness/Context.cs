@@ -9,6 +9,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 using TreeEdit.Spg.Match;
+using TreeEdit.Spg.Print;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
@@ -34,9 +35,11 @@ namespace ProseFunctions.Spg.Witness
                 {
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     var parentT1Node = t1Node?.Parent;
-                    if (parentT1Node?.DescendantNodesAndSelf().Count < 40)
+                    if (parentT1Node == null) continue; 
+                    var parentDescendants = parentT1Node.DescendantNodesAndSelf();
+                    if (parentDescendants.Count < 100)
                     {
-                        if (node.Value.AsNode() == null)
+                        if (t1Node.Value.AsNode() == null)
                         {
                             if (parentT1Node.Parent != null)
                             {
