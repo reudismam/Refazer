@@ -202,6 +202,13 @@ namespace ProseFunctions.Substrings
                     content = ""+ st.Label;
                 }
 
+                if (st.IsLabel(new TLabel(SyntaxKind.ArgumentList)))
+                {
+                    //content = "" + st.Label;
+                    var argList = "{" + st.Label + "}";
+                    return argList;
+                }
+
                 var treeNode = "{"+st.Label+"("+content+")}";             
                 return treeNode;
             }

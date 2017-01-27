@@ -42,7 +42,7 @@ namespace TreeEdit.Spg.Script
                 else //x has a partner in M
                 {
                     var v = w.Parent;
-                    if (!w.Children.Any() && !w.ToString().Equals(x.ToString()))
+                    if (!w.Children.Any() && !x.Children.Any() && !w.ToString().Equals(x.ToString()))
                     {
                         var update = new Update<T>(w, x, z, y);
                         int index = v.Children.TakeWhile(item => !item.Equals(w)).Count();
