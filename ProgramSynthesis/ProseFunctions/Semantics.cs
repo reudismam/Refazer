@@ -75,6 +75,12 @@ namespace ProseFunctions.Substrings
             return pattern;
         }
 
+        public static Pattern ContextP(Pattern match, string k)
+        {
+            var pattern = new Pattern(match.Tree, k);
+            return pattern;
+        }
+
         /// <summary>
         /// Literal
         /// </summary>

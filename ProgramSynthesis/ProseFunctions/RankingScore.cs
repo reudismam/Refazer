@@ -81,6 +81,9 @@ namespace ProseFunctions.Substrings
         [FeatureCalculator("Context")]
         public static double Score_Parent(double matchScore, double kScore) => matchScore;
 
+        [FeatureCalculator("ContextP")]
+        public static double Score_ParentP(double matchScore, double kScore) => matchScore;
+
         [FeatureCalculator("Concrete")]
         public static double Score_Concrete(double treeScore) => treeScore * 1000;
 

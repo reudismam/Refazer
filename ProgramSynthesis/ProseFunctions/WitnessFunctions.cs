@@ -65,7 +65,7 @@ namespace ProseFunctions.Substrings
         public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return new Context().ParentVariable(rule, parameter, spec);
-        }
+        }  
 
         /// <summary>
         /// Parent witness function for parameter k
@@ -77,6 +77,33 @@ namespace ProseFunctions.Substrings
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        {
+            return new Context().ParentK(rule, parameter, spec, kindBinding);
+        }
+
+        /// <summary>
+        /// Parent witness function for parameter kindRef
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("ContextP", 0)]
+        public static DisjunctiveExamplesSpec ParentVariableP(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return new Context().ParentVariableP(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// Parent witness function for parameter k
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <param name="kindBinding">kindRef binding</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("ContextP", 1, DependsOnParameters = new[] { 0 })]
+        public static DisjunctiveExamplesSpec ParentPK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
             return new Context().ParentK(rule, parameter, spec, kindBinding);
         }

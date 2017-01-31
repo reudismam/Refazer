@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,7 +8,6 @@ using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 using TreeEdit.Spg.Match;
-using TreeEdit.Spg.Print;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
@@ -35,31 +33,76 @@ namespace ProseFunctions.Spg.Witness
                 {
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     var parentT1Node = t1Node?.Parent;
-                    if (parentT1Node == null) continue; 
-                    var parentDescendants = parentT1Node.DescendantNodesAndSelf();
-                    if (parentDescendants.Count < 100)
+                    if (parentT1Node == null) continue;
+
+                    var parentParent = parentT1Node.Parent;
+                    if (parentParent != null)
                     {
-                        if (t1Node.Value.AsNode() == null)
-                        {
-                            if (parentT1Node.Parent != null)
-                            {
-                                var descendantsAndSelf = parentT1Node.Parent.DescendantNodesAndSelf();
-                                if (descendantsAndSelf.Count < 40)
-                                {
-                                    mats.Add(parentT1Node.Parent);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            mats.Add(parentT1Node);
-                        }
+                        AnalyseParent(parentParent, t1Node, mats);
                     }
+
+                    //AnalyseParent(parentT1Node, t1Node, mats);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
             }
             return new DisjunctiveExamplesSpec(treeExamples);
+        }
+
+        /// <summary>
+        /// Specification for the parent attribute of the Context operator.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Specification</param>
+        public DisjunctiveExamplesSpec ParentVariableP(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var inputTree = (Node)input[rule.Grammar.InputSymbol];
+                var mats = new List<TreeNode<SyntaxNodeOrToken>>();
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                {
+                    var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
+                    var parentT1Node = t1Node?.Parent;
+                    if (parentT1Node == null) continue;
+
+                    //var parentParent = parentT1Node.Parent;
+                    //if (parentParent != null)
+                    //{
+                    //    AnalyseParent(parentParent, t1Node, mats);
+                    //}
+
+                    AnalyseParent(parentT1Node, t1Node, mats);
+                }
+                if (!mats.Any()) return null;
+                treeExamples[input] = mats;
+            }
+            return new DisjunctiveExamplesSpec(treeExamples);
+        }
+
+        private static void AnalyseParent(TreeNode<SyntaxNodeOrToken> parentT1Node, TreeNode<SyntaxNodeOrToken> t1Node, List<TreeNode<SyntaxNodeOrToken>> mats)
+        {
+            var parentDescendants = parentT1Node.DescendantNodesAndSelf();
+            if (parentDescendants.Count < 100)
+            {
+                if (t1Node.Value.AsNode() == null)
+                {
+                    if (parentT1Node.Parent != null)
+                    {
+                        var descendantsAndSelf = parentT1Node.Parent.DescendantNodesAndSelf();
+                        if (descendantsAndSelf.Count < 100)
+                        {
+                            mats.Add(parentT1Node.Parent);
+                        }
+                    }
+                }
+                else
+                {
+                    mats.Add(parentT1Node);
+                }
+            }
         }
 
         ///// <summary>
