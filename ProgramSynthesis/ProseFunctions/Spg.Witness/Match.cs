@@ -97,6 +97,7 @@ namespace ProseFunctions.Spg.Witness
                 {
                     var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                     var list = currentTree.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
+                    if (currentTree.DescendantNodesAndSelf().Count > 50) continue;
                     if (!list.Any()) continue;
                     kMatches.AddRange(list);
                 }
@@ -104,12 +105,6 @@ namespace ProseFunctions.Spg.Witness
                 eExamples[input] = kMatches;
             }
             return new DisjunctiveExamplesSpec(eExamples);
-        }
-
-        private static List<TreeNode<SyntaxNodeOrToken>> ComputeList(List<TreeNode<SyntaxNodeOrToken>> list)
-        {
-            if (list.Any()) list = new List<TreeNode<SyntaxNodeOrToken>> { list.Last() };
-            return list;
         }
 
         public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
