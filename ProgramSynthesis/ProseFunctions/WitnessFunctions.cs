@@ -109,6 +109,33 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
+        /// Parent witness function for parameter kindRef
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("ContextPPP", 0)]
+        public static DisjunctiveExamplesSpec ParentVariablePPP(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return new Context().ParentVariablePPP(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// Parent witness function for parameter k
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <param name="kindBinding">kindRef binding</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("ContextPPP", 1, DependsOnParameters = new[] { 0 })]
+        public static DisjunctiveExamplesSpec ParentPPPK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        {
+            return new Context().ParentK(rule, parameter, spec, kindBinding);
+        }
+
+        /// <summary>
         /// CList witness function for parameter 0
         /// </summary>
         /// <param name="rule">Literal rule</param>

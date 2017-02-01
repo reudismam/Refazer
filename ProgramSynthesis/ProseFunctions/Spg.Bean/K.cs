@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+using Microsoft.CodeAnalysis;
 using ProseFunctions.Spg.Witness;
 using ProseFunctions.Substrings;
 using TreeEdit.Spg.Match;
@@ -54,18 +55,38 @@ namespace ProseFunctions.Spg.Bean
             var pattern = patternExample.Tree;
             var parent = _input.Value.Parent.Parent;
             var currentTree = ConverterHelper.ConvertCSharpToTreeNode(parent);
-            var matches = MatchManager.Matches(currentTree, pattern);
+            var matches = MatchManager.Matches(currentTree, pattern, _input);
+            matches = matches.OrderByDescending(o => o.Start).ToList();
             for (int i = 0; i < matches.Count; i++)
             {
                 var match = matches[i];
                 var compare = Semantics.FindChild(match, patternExample.K);
                 if (compare != null && Match.IsEqual(compare.Value, _node.Value))
                 {
-                    return i + 1;
+                   return i + 1;
                 }
             }
             return -INF;
         }
+
+        //public int GetKParent(Pattern patternExample)
+        //{
+        //    var pattern = patternExample.Tree;
+        //    var parent = _input.Value.Parent.Parent;
+        //    var currentTree = ConverterHelper.ConvertCSharpToTreeNode(parent);
+        //    var matches = MatchManager.Matches(currentTree, pattern);
+        //    matches.Reverse();
+        //    for (int i = 0; i < matches.Count; i++)
+        //    {
+        //        var match = matches[i];
+        //        var compare = Semantics.FindChild(match, patternExample.K);
+        //        if (compare != null && Match.IsEqual(compare.Value, _node.Value))
+        //        {
+        //            return i + 1;
+        //        }
+        //    }
+        //    return -INF;
+        //}
 
         public override string ToString()
         {
