@@ -384,10 +384,16 @@ namespace ProseFunctions.Substrings
                 //k = ki.GetKParent(kmatch);
                 var ancestor = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
                 var nodes = MatchManager.Matches(ancestor, kmatch.Tree);
-                //nodes.Reverse();
-                var match = nodes.ElementAt(Math.Abs(k) - 1);
-                var node = FindChild(match, patternP.K);
-                return new Node(node);
+                if (nodes.Any())
+                {
+                    var matches = MatchManager.Matches(ancestor, kmatch.Tree, target.Value);
+                    matches = matches.OrderByDescending(o => o.Start).ToList();
+                    var match = matches.ElementAt(Math.Abs(k) - 1);
+                    var node = FindChild(match, patternP.K);
+                    return new Node(node);
+                }
+                var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+                return new Node(treeNode);
             }
         }
 

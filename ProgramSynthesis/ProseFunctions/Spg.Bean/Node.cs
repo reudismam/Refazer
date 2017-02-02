@@ -11,12 +11,12 @@ namespace ProseFunctions.Spg.Bean
         public TreeNode<SyntaxNodeOrToken> Value { get; set; }
 
         /// <summary>
-        /// Left Sinbling
+        /// Left Sibling
         /// </summary>
         public Node LeftNode { get; set; }
 
         /// <summary>
-        /// /Right sinbling
+        /// /Right sibling
         /// </summary>
         public Node RightNode { get; set; }
 

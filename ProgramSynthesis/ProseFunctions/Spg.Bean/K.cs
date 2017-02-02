@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using ProseFunctions.Spg.Witness;
 using ProseFunctions.Substrings;
@@ -57,7 +56,6 @@ namespace ProseFunctions.Spg.Bean
             var parent = _input.Value.Parent.Parent;
             var currentTree = ConverterHelper.ConvertCSharpToTreeNode(parent);
             var matches = MatchManager.Matches(currentTree, pattern, _input);
-            MessageBox.Show($"Matches: {matches.Count}");
             matches = matches.OrderByDescending(o => o.Start).ToList();
             for (int i = 0; i < matches.Count; i++)
             {
