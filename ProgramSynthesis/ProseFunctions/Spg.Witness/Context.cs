@@ -112,7 +112,7 @@ namespace ProseFunctions.Spg.Witness
                         AnalyseParent(parentParentParent, t1Node, mats);
                     }
 
-                    AnalyseParent(parentT1Node, t1Node, mats);
+                    //AnalyseParent(parentT1Node, t1Node, mats);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
