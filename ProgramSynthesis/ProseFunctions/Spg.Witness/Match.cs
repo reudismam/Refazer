@@ -32,7 +32,7 @@ namespace ProseFunctions.Spg.Witness
                     var sot = node.Value;
                     syntaxKinds.Add(sot.Kind());
                 }
-                kdExamples[input] = syntaxKinds;
+                kdExamples[input] = syntaxKinds.Distinct().ToList();
             }
             return DisjunctiveExamplesSpec.From(kdExamples);
         }
@@ -47,20 +47,34 @@ namespace ProseFunctions.Spg.Witness
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
+            var dicMat = new Dictionary<State, List<TreeNode<SyntaxNodeOrToken>>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                dicMat.Add(input, new List<TreeNode<SyntaxNodeOrToken>>());
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                {
+                    dicMat[input].Add(node);
+                }
+            }
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<List<TreeNode<SyntaxNodeOrToken>>>();
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
-                    if (!node.Children.Any()) continue;
-                    var lsot = node.Children;
-                    matches.Add(lsot);
+                    var sot = node.Value;
+                    if (dicMat.All(o => dicMat[o.Key].Any(e => e.Value.Kind() == sot.Kind() && e.Children.Count == node.Children.Count)))
+                    {
+                        if (!node.Children.Any()) continue;
+                        var lsot = node.Children;
+                        matches.Add(lsot);
+                    }
                 }
                 if (!matches.Any()) return null;
-                eExamples[input] = matches;
+                eExamples[input] = matches.OrderByDescending(o => o.Count).ToList();
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
+
 
         public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, ExampleSpec spec)
         {
@@ -97,7 +111,7 @@ namespace ProseFunctions.Spg.Witness
                 {
                     var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                     var list = currentTree.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
-                    if (currentTree.DescendantNodesAndSelf().Count > 50) continue;
+
                     if (!list.Any()) continue;
                     kMatches.AddRange(list);
                 }
@@ -133,6 +147,7 @@ namespace ProseFunctions.Spg.Witness
                     }
                     mats.Add(k);
                 }
+                if (!mats.Any()) return null;
                 kExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(kExamples);

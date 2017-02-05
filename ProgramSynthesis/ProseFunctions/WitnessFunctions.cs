@@ -54,6 +54,7 @@ namespace ProseFunctions.Substrings
             return Variable.VariableKind(rule, parameter, spec);
         }
 
+
         /// <summary>
         /// Parent witness function for parameter kindRef
         /// </summary>
