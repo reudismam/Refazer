@@ -70,7 +70,7 @@ namespace ProseFunctions.Spg.Witness
                     }
                 }
                 if (!matches.Any()) return null;
-                eExamples[input] = matches.OrderByDescending(o => o.Count).ToList();
+                eExamples[input] = matches;
             }
             return DisjunctiveExamplesSpec.From(eExamples);
         }
@@ -111,6 +111,8 @@ namespace ProseFunctions.Spg.Witness
                 {
                     var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                     var list = currentTree.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
+
+                    if (currentTree.DescendantNodesAndSelf().Count > 50) continue;
 
                     if (!list.Any()) continue;
                     kMatches.AddRange(list);
