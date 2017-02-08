@@ -27,6 +27,7 @@ TreeElement/obj/*
 
 ProgramSynthesis/UnitTests/bin/*
 ProgramSynthesis/UnitTests/obj/*
+ProgramSynthesis/benchmarks*/*
 
 LongestCommonAncestor/bin/*
 LongestCommonAncestor/obj/*
