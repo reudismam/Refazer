@@ -69,7 +69,7 @@ namespace ProseFunctions.Substrings
         }
 
 
-        public static Pattern Context(Pattern match, string k)
+        public static Pattern ContextPP(Pattern match, string k)
         {
             var pattern = new Pattern(match.Tree, k);
             return pattern;
