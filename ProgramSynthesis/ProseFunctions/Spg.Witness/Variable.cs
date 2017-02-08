@@ -59,48 +59,17 @@ namespace ProseFunctions.Spg.Witness
                         }
                     }
                 }
+                if (!matches.Any())
+                {
+                    var result = Match.CChildren(rule, parameter, spec, null);
+                    return null;
+                }
                 treeExamples[input] = matches.Distinct(o => o).ToList();
             }
+
+            spec.ProvidedInputs.ForEach(o => treeExamples[o] = treeExamples.Values.First());
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
-
-        //public static DisjunctiveExamplesSpec VariableKindD(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        //{
-        //    var treeExamples = new Dictionary<State, IEnumerable<object>>();
-        //    var dicMat = new Dictionary<State, List<SyntaxKind>>();
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        var matches = new List<object>();
-        //        var examples = spec.DisjunctiveExamples[input].ToList();
-        //        dicMat.Add(input, new List<SyntaxKind>());
-        //        for (int i = 0; i < examples.Count; i++)
-        //        {
-        //            var node = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
-        //            matches.Add(node.Value.Kind());
-        //            dicMat[input].Add(node.Value.Kind());
-        //        }
-        //        treeExamples[input] = matches.Distinct(o => o).ToList();
-        //    }
-
-        //    foreach (State input in spec.ProvidedInputs)
-        //    {
-        //        var matches = new List<object>();
-        //        var examples = spec.DisjunctiveExamples[input].ToList();
-        //        for (int i = 0; i < examples.Count; i++)
-        //        {
-        //            var node = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
-        //            var kind = node.Value.Kind();
-
-        //            if (dicMat.All(o => dicMat[o.Key].Contains(kind)))
-        //            {
-        //                matches.Add(kind);
-        //            }
-        //        }
-        //        treeExamples[input] = matches.Distinct(o => o).ToList();
-        //    }
-        //    return DisjunctiveExamplesSpec.From(treeExamples);
-        //}
-
 
         public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {

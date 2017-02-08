@@ -111,7 +111,6 @@ namespace ProseFunctions.Spg.Witness
                 {
                     var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
                     var list = currentTree.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
-
                     if (currentTree.DescendantNodesAndSelf().Count > 50) continue;
 
                     if (!list.Any()) continue;
@@ -153,22 +152,6 @@ namespace ProseFunctions.Spg.Witness
                 kExamples[input] = mats;
             }
             return DisjunctiveExamplesSpec.From(kExamples);
-        }
-
-        /// <summary>
-        /// Get anchor node
-        /// </summary>
-        /// <param name="target">Current target</param>
-        /// <param name="node">Node</param>
-        private static TreeNode<SyntaxNodeOrToken> GetAnchorTree(TreeNode<SyntaxNodeOrToken> target, TreeNode<SyntaxNodeOrToken> node)
-        {
-            var found = TreeUpdate.FindNode(target, node.Value);
-            if (found == null)
-            {
-                var currentTree = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
-                return currentTree;
-            }
-            return target;
         }
 
         public static bool IsEqual(SyntaxNodeOrToken x, SyntaxNodeOrToken y)
