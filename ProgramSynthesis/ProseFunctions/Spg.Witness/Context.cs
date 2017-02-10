@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
@@ -67,6 +68,9 @@ namespace ProseFunctions.Spg.Witness
                     if (parentT1Node == null) continue;
 
                     AnalyseParent(parentT1Node, t1Node, mats);
+                    var parentParent = parentT1Node.Parent;
+                    if (parentParent == null) continue;
+                    AnalyseParent(parentParent, t1Node, mats);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;

@@ -42,6 +42,19 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
+        /// Literal witness function for parameter tree.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Concrete", 0)]
+        public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return Literal.LiteralTreeDisjunctive(rule, parameter, spec);
+        }
+
+        /// <summary>
         /// KindRef witness function for parameter kind.
         /// </summary>
         /// <param name="rule">Literal rule</param>
@@ -52,6 +65,19 @@ namespace ProseFunctions.Substrings
         public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Variable.VariableKind(rule, parameter, spec);
+        }
+
+        /// <summary>
+        /// KindRef witness function for parameter kind.
+        /// </summary>
+        /// <param name="rule">Literal rule</param>
+        /// <param name="parameter">Parameter number</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("Abstract", 0)]
+        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return Variable.VariableKindDisjunctive(rule, parameter, spec);
         }
 
         /// <summary>
@@ -88,7 +114,7 @@ namespace ProseFunctions.Substrings
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("ContextP", 0)]
+        [WitnessFunction("Context", 0)]
         public static DisjunctiveExamplesSpec ParentVariableP(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return new Context().ParentVariableP(rule, parameter, spec);
@@ -102,7 +128,7 @@ namespace ProseFunctions.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kindBinding">kindRef binding</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("ContextP", 1, DependsOnParameters = new[] { 0 })]
+        [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec ParentPK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
             return new Context().ParentK(rule, parameter, spec, kindBinding);
