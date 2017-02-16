@@ -17,7 +17,7 @@ namespace ProseFunctions.Substrings
 
         public override bool IsMatch(TreeNode<SyntaxNodeOrToken> node)
         {
-            return node.Value.Kind().ToString().Equals(Kind) && IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(Value, node);
+            return IsLabel(node) && IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(Value, node);
         }
 
         public override string ToString()

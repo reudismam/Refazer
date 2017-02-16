@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using ProseFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
-using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
 
@@ -58,8 +57,6 @@ namespace TreeEdit.Spg.Match
         /// <param name="pattern">Pattern</param>
         public static List<TreeNode<SyntaxNodeOrToken>> Matches(TreeNode<SyntaxNodeOrToken> node, TreeNode<Token> pattern)
         {
-            //TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
-            //var nodes = tree.PostOrderTraversal(tree);
             var nodes =  BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(node);
             nodes.Insert(0, node);
             var matchNodes = nodes.Where(v => IsValueEachChild(v, pattern)).ToList();
@@ -73,14 +70,9 @@ namespace TreeEdit.Spg.Match
         /// <param name="pattern">Pattern</param>
         public static List<TreeNode<SyntaxNodeOrToken>> Matches(TreeNode<SyntaxNodeOrToken> node, TreeNode<Token> pattern, TreeNode<SyntaxNodeOrToken> target)
         {
-            //TreeTraversal<SyntaxNodeOrToken> tree = new TreeTraversal<SyntaxNodeOrToken>();
-            //var nodes = tree.PostOrderTraversal(node);
             var nodes = BFSWalker<SyntaxNodeOrToken>.BreadFirstSearch(node);
             nodes.Insert(0, node);
-            //var indexTarget = nodes.FindIndex(o => o.Equals(target));
-            //nodes = nodes.GetRange(0, indexTarget);
             nodes = nodes.Where(o => o.Start < target.Start).ToList();
-            //nodes = nodes.Where(o => !target.DescendantNodesAndSelf().Contains(o)).ToList();
 
             var matchNodes = nodes.Where(v => IsValueEachChild(v, pattern)).ToList();
             return matchNodes;

@@ -24,7 +24,12 @@ namespace ProseFunctions.Substrings
 
         public virtual bool IsMatch(TreeNode<SyntaxNodeOrToken> node)
         {
-            //return node.IsLabel(new TLabel(Kind));
+            return IsLabel(node);
+
+        }
+
+        public bool IsLabel(TreeNode<SyntaxNodeOrToken> node)
+        {
             return node.Value.Kind().ToString().Equals(Kind);
         }
 
