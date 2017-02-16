@@ -11,7 +11,7 @@ namespace ProseFunctions.Spg.Semantic
 {
     public class MatchSemanticFunctions
     {   
-        public static Pattern C(string kind, IEnumerable<Pattern> children)
+        public static Pattern C(Label kind, IEnumerable<Pattern> children)
         {
             var pchildren = children.Select(child => child.Tree).ToList();
             var token = kind.Equals(Token.Expression) ? new EmptyToken() : new Token(kind, null);
@@ -27,7 +27,7 @@ namespace ProseFunctions.Spg.Semantic
         /// <returns>Literal</returns>
         public static Pattern Literal(SyntaxNodeOrToken tree)
         {
-            var token = new DynToken(tree.Kind().ToString(), ConverterHelper.ConvertCSharpToTreeNode(tree));
+            var token = new DynToken(new Label(tree.Kind().ToString()), ConverterHelper.ConvertCSharpToTreeNode(tree));
             var label = new TLabel(tree.Kind());
             var inode = new TreeNode<Token>(token, label);
             var pattern = new Pattern(inode);
@@ -37,11 +37,11 @@ namespace ProseFunctions.Spg.Semantic
         /// <summary>
         /// Variable
         /// </summary>
-        /// <param name="kind">Kind</param>
+        /// <param name="kind">Label</param>
         /// <returns>Variable pattern</returns>
-        public static Pattern Variable(string kind)
+        public static Pattern Variable(Label kind)
         {
-            var token = kind.Equals(Token.Expression) ? new EmptyToken() : new Token(kind, null);
+            var token = kind.IsLabel(new Label(Token.Expression)) ? new EmptyToken() : new Token(kind, null);
             var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;

@@ -115,11 +115,11 @@ namespace ProseFunctions.Substrings
 
         public static TreeNode<Token> ConvertITreeNodeToToken(TreeNode<SyntaxNodeOrToken> st)
         {
-            var token = new Token(st.Value.Kind().ToString(), st);
+            var token = new Token(new Label(st.Value.Kind().ToString()), st);
             if (!st.Children.Any())
             {
-                var dtoken = new DynToken(st.Value.Kind().ToString(), st);
-                var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
+                var dtoken = new DynToken(new Label(st.Value.Kind().ToString()), st);
+                var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Label));
                 return dtreeNode;
             }
             var children = new List<TreeNode<Token>>();
@@ -128,7 +128,7 @@ namespace ProseFunctions.Substrings
                 var node = ConvertITreeNodeToToken(sot);
                 children.Add(node);
             }
-            var tree = new TreeNode<Token>(token, new TLabel(token.Kind), children);
+            var tree = new TreeNode<Token>(token, new TLabel(token.Label), children);
             return tree;
         }
 

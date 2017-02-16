@@ -6,7 +6,8 @@ namespace TreeElement.Token
 {
     public class Token
     {
-        public string Kind { get; set; }
+        public Label Label { get; set; }
+
         public const string Expression = "<exp>";
 
         public TreeNode<SyntaxNodeOrToken> Value;
@@ -14,11 +15,11 @@ namespace TreeElement.Token
         /// <summary>
         /// Create a new token
         /// </summary>
-        /// <param name="kind">Syntax Kind</param>
+        /// <param name="label">Syntax Label</param>
         /// <param name="value">Node</param>
-        public Token(string kind, TreeNode<SyntaxNodeOrToken> value)
+        public Token(Label label, TreeNode<SyntaxNodeOrToken> value)
         {
-            Kind = kind;
+            Label = label;
             Value = value;
         }
 
@@ -30,12 +31,13 @@ namespace TreeElement.Token
 
         public bool IsLabel(TreeNode<SyntaxNodeOrToken> node)
         {
-            return node.Value.Kind().ToString().Equals(Kind);
+            var otherLabel = new Label(node.Value.Kind().ToString());
+            return otherLabel.Equals(Label);
         }
 
         public override string ToString()
         {
-            return $"Token({Kind})";
+            return $"Token({Label})";
         }
     }
 }

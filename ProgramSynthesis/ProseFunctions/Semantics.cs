@@ -9,10 +9,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProseFunctions.List;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Spg.Semantic;
-using ProseFunctions.Substrings;
 using TreeEdit.Spg.Match;
 using TreeElement;
 using TreeElement.Spg.Node;
+using TreeElement.Token;
 
 namespace ProseFunctions.Substrings
 {
@@ -28,7 +28,7 @@ namespace ProseFunctions.Substrings
         /// <returns>The element on the tree with specified kind and child nodes</returns>
         public static Pattern Pattern(string kind, IEnumerable<Pattern> children)
         {
-            return MatchSemanticFunctions.C(kind, children);
+            return MatchSemanticFunctions.C(new Label(kind), children);
         }
 
         /// <summary>
@@ -61,11 +61,11 @@ namespace ProseFunctions.Substrings
         /// <summary>
         /// Searches a node with kind and occurrence
         /// </summary>
-        /// <param name="kind">Kind</param>
+        /// <param name="kind">Label</param>
         /// <returns>Search result</returns>
         public static Pattern Abstract(string kind)
         {
-            return MatchSemanticFunctions.Variable(kind);
+            return MatchSemanticFunctions.Variable(new Label(kind));
         }
 
 
@@ -395,21 +395,7 @@ namespace ProseFunctions.Substrings
                 var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
                 return new Node(treeNode);
             }
-        }
-
-        //public static IEnumerable<Node> Template(Node node, Pattern pattern)
-        //{
-        //    var currentTree = node.Value;
-        //    var res = new List<Node>();
-        //    if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
-        //    {
-        //        var list = FlorestByKind(pattern, currentTree);
-
-        //        if (list.Any()) res = CreateRegions(list);
-        //    }
-        //    res = SingleLocations(res);
-        //    return res;
-        //}
+        }  
 
         public static IEnumerable<Node> Traversal(Node node, string type)
         {
@@ -423,76 +409,6 @@ namespace ProseFunctions.Substrings
             }
             return result;
         }
-
-        private static List<Node> SingleLocations(List<Node> res)
-        {
-            var list = new List<Node>();
-            var candidates = new List<Tuple<Node, Node>>();
-            bool[] intersect = new bool[res.Count];
-
-            for (int i = 0; i < res.Count; i++)
-            {
-                var v = res[i].Value.Value;
-                for (int j = i + 1; j < res.Count; j++)
-                {
-                    var c = res[j].Value.Value;
-                    if (v.Span.Contains(c.Span) || c.Span.Contains(v.Span))
-                    {
-                        intersect[i] = true;
-                        intersect[j] = true;
-                        candidates.Add(Tuple.Create(res[i], res[j]));
-                        break;
-                    }
-                }
-
-                if (!intersect[i])
-                {
-                    list.Add(res[i]);
-                }
-            }
-
-            list.AddRange(candidates.Select(v => v.Item1.Value.Value.Span.Contains(v.Item2.Value.Value.Span) ? v.Item2 : v.Item1));
-            return list.OrderBy(o => o.Value.Value.SpanStart).ToList();
-        }
-
-        private static List<Node> CreateRegions(List<List<SyntaxNodeOrToken>> list)
-        {
-            var regions = new List<Node>();
-            for (int j = 0; j < list.First().Count; j++)
-            {
-                TreeNode<SyntaxNodeOrToken> iTree = new TreeNode<SyntaxNodeOrToken>(SyntaxFactory.EmptyStatement(), new TLabel(SyntaxKind.EmptyStatement));
-                for (int i = 0; i < list.Count; i++)
-                {
-                    var child = list[i][j];
-                    var newchild = ConverterHelper.ConvertCSharpToTreeNode(child);
-                    iTree.AddChild(newchild, i);
-                }
-
-                var emptyStatement = SyntaxFactory.EmptyStatement();
-                var newtree = new TreeNode<SyntaxNodeOrToken>(emptyStatement, new TLabel(SyntaxKind.EmptyStatement));
-                newtree.AddChild(iTree.Children.First(), 0);
-                var newNode = new Node(newtree);
-
-                regions.Add(newNode);
-            }
-            return regions;
-        }
-
-        //private static List<List<SyntaxNodeOrToken>> FlorestByKind(Pattern match, TreeNode<SyntaxNodeOrToken> currentTree)
-        //{
-        //    var list = new List<List<SyntaxNodeOrToken>>();
-        //    foreach (var child in match.Tree.Children)
-        //    {
-        //        var nodeList = SplitToNodes(currentTree, child.Value.Kind);
-        //        var result = (from node in nodeList where MatchManager.IsValue(node, child) select node.Value).ToList();
-
-        //        if (result.Any())
-        //        {
-        //            list.Add(result);
-        //        }
-        //    }
-        //    return list;
-        //}
 
         /// <summary>
         /// Syntax node factory. This method will be removed in future

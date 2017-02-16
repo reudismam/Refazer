@@ -148,6 +148,7 @@
     <Compile Include="Spg.Walker\BFSWalker.cs" />
     <Compile Include="Token\DynToken.cs" />
     <Compile Include="Token\EmptyToken.cs" />
+    <Compile Include="Token\Label.cs" />
     <Compile Include="Token\Token.cs" />
     <Compile Include="TreeTraversal.cs" />
     <Compile Include="Zss.cs" />

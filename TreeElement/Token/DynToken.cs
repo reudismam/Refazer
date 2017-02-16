@@ -7,7 +7,7 @@ namespace TreeElement.Token
 {
     public class DynToken : Token
     {
-        public DynToken(string kind, TreeNode<SyntaxNodeOrToken> value) : base(kind, value)
+        public DynToken(Label label, TreeNode<SyntaxNodeOrToken> value) : base(label, value)
         {
             //Value = value;
             if (value == null) throw new ArgumentException("value cannot be null");

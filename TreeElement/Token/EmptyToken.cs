@@ -3,10 +3,11 @@ using TreeElement.Spg.Node;
 
 namespace TreeElement.Token
 {
-    public class EmptyToken : Token 
+    public class EmptyToken : Token
     {
-        public EmptyToken() : base(Token.Expression, null)
+        public EmptyToken() : base(new Label(Expression), null)
         {
+
         }
 
         public override bool IsMatch(TreeNode<SyntaxNodeOrToken> node)
