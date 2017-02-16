@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings
+namespace TreeElement.Token
 {
     public class Token
     {

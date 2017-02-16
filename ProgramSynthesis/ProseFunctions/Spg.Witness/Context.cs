@@ -11,6 +11,7 @@ using ProseFunctions.Substrings;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
+using TreeElement.Token;
 
 namespace ProseFunctions.Spg.Witness
 {

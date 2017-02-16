@@ -6,6 +6,7 @@ using ProseFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
+using TreeElement.Token;
 
 namespace TreeEdit.Spg.Match
 {

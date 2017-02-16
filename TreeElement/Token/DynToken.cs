@@ -1,11 +1,9 @@
 ﻿using System;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Isomorphic;
-using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Substrings
+namespace TreeElement.Token
 {
     public class DynToken : Token
     {

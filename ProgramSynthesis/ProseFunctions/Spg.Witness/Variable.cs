@@ -7,6 +7,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
+using TreeElement.Token;
 
 namespace ProseFunctions.Spg.Witness
 {

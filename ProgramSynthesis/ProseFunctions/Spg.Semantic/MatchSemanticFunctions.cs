@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
+using TreeElement.Token;
 
 namespace ProseFunctions.Spg.Semantic
 {
@@ -41,19 +42,6 @@ namespace ProseFunctions.Spg.Semantic
         public static Pattern Variable(string kind)
         {
             var token = kind.Equals(Token.Expression) ? new EmptyToken() : new Token(kind, null);
-            var inode = new TreeNode<Token>(token, null);
-            var pattern = new Pattern(inode);
-            return pattern;
-        }
-
-        /// <summary>
-        /// Variable
-        /// </summary>
-        /// <param name="kind">Kind</param>
-        /// <returns>Variable pattern</returns>
-        public static Pattern Leaf(string kind)
-        {
-            var token = new LeafToken(kind, null);
             var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;
