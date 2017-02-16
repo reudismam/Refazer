@@ -152,7 +152,7 @@ namespace ProseFunctions.Spg.Witness
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var parent = (Pattern) kind.Examples[input];
                 //If the pattern is Empty then return
-                if (parent.Tree.Value.Kind == SyntaxKind.EmptyStatement) return null;
+                if (parent.Tree.Value.Kind.Equals(Token.Expression)) return null;
 
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {

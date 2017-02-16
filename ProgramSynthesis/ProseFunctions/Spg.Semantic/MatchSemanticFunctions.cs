@@ -10,10 +10,10 @@ namespace ProseFunctions.Spg.Semantic
 {
     public class MatchSemanticFunctions
     {   
-        public static Pattern C(SyntaxKind kind, IEnumerable<Pattern> children)
+        public static Pattern C(string kind, IEnumerable<Pattern> children)
         {
             var pchildren = children.Select(child => child.Tree).ToList();
-            var token = (kind == SyntaxKind.EmptyStatement) ? new EmptyToken() : new Token(kind, null);
+            var token = kind.Equals(Token.Expression) ? new EmptyToken() : new Token(kind, null);
             var inode = new TreeNode<Token>(token, null, pchildren);
             var pattern = new Pattern(inode);
             return pattern;
@@ -26,7 +26,7 @@ namespace ProseFunctions.Spg.Semantic
         /// <returns>Literal</returns>
         public static Pattern Literal(SyntaxNodeOrToken tree)
         {
-            var token = new DynToken(tree.Kind(), ConverterHelper.ConvertCSharpToTreeNode(tree));
+            var token = new DynToken(tree.Kind().ToString(), ConverterHelper.ConvertCSharpToTreeNode(tree));
             var label = new TLabel(tree.Kind());
             var inode = new TreeNode<Token>(token, label);
             var pattern = new Pattern(inode);
@@ -38,9 +38,9 @@ namespace ProseFunctions.Spg.Semantic
         /// </summary>
         /// <param name="kind">Kind</param>
         /// <returns>Variable pattern</returns>
-        public static Pattern Variable(SyntaxKind kind)
+        public static Pattern Variable(string kind)
         {
-            var token = (kind == SyntaxKind.EmptyStatement) ? new EmptyToken() : new Token(kind, null);
+            var token = kind.Equals(Token.Expression) ? new EmptyToken() : new Token(kind, null);
             var inode = new TreeNode<Token>(token, null);
             var pattern = new Pattern(inode);
             return pattern;
@@ -51,7 +51,7 @@ namespace ProseFunctions.Spg.Semantic
         /// </summary>
         /// <param name="kind">Kind</param>
         /// <returns>Variable pattern</returns>
-        public static Pattern Leaf(SyntaxKind kind)
+        public static Pattern Leaf(string kind)
         {
             var token = new LeafToken(kind, null);
             var inode = new TreeNode<Token>(token, null);

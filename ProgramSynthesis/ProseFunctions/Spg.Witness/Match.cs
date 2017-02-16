@@ -32,7 +32,7 @@ namespace ProseFunctions.Spg.Witness
                     var sot = node.Value;
                     syntaxKinds.Add(sot.Kind());
                 }
-                kdExamples[input] = syntaxKinds.Distinct().ToList();
+                kdExamples[input] = syntaxKinds.Distinct().ToList().Select(o => o.ToString());
             }
             return DisjunctiveExamplesSpec.From(kdExamples);
         }

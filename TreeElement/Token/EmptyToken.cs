@@ -1,14 +1,11 @@
-﻿using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using ProseFunctions.Substrings;
+﻿using Microsoft.CodeAnalysis;
 using TreeElement.Spg.Node;
 
 namespace ProseFunctions.Substrings
 {
     public class EmptyToken : Token 
     {
-        public EmptyToken() : base(SyntaxKind.EmptyStatement, null)
+        public EmptyToken() : base(Token.Expression, null)
         {
         }
 

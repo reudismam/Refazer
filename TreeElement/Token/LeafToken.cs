@@ -1,14 +1,12 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace ProseFunctions.Substrings
 {
     public class LeafToken : Token 
     {
-        public LeafToken(SyntaxKind kind, TreeNode<SyntaxNodeOrToken> value) : base(kind, value)
+        public LeafToken(string kind, TreeNode<SyntaxNodeOrToken> value) : base(kind, value)
         {
             Kind = kind;
         }

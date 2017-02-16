@@ -1,13 +1,13 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using ProseFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace ProseFunctions.Substrings
 {
     public class Token
     {
-        public SyntaxKind Kind { get; set; }
+        public string Kind { get; set; }
+        public const string Expression = "<exp>";
 
         public TreeNode<SyntaxNodeOrToken> Value;
 
@@ -16,7 +16,7 @@ namespace ProseFunctions.Substrings
         /// </summary>
         /// <param name="kind">Syntax Kind</param>
         /// <param name="value">Node</param>
-        public Token(SyntaxKind kind, TreeNode<SyntaxNodeOrToken> value)
+        public Token(string kind, TreeNode<SyntaxNodeOrToken> value)
         {
             Kind = kind;
             Value = value;
@@ -24,7 +24,8 @@ namespace ProseFunctions.Substrings
 
         public virtual bool IsMatch(TreeNode<SyntaxNodeOrToken> node)
         {
-            return node.IsLabel(new TLabel(Kind));
+            //return node.IsLabel(new TLabel(Kind));
+            return node.Value.Kind().ToString().Equals(Kind);
         }
 
         public override string ToString()

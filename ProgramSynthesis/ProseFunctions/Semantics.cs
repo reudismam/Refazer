@@ -26,7 +26,7 @@ namespace ProseFunctions.Substrings
         /// <param name="kind">Syntax kind</param>
         /// <param name="children">Children nodes</param>
         /// <returns>The element on the tree with specified kind and child nodes</returns>
-        public static Pattern Pattern(SyntaxKind kind, IEnumerable<Pattern> children)
+        public static Pattern Pattern(string kind, IEnumerable<Pattern> children)
         {
             return MatchSemanticFunctions.C(kind, children);
         }
@@ -63,7 +63,7 @@ namespace ProseFunctions.Substrings
         /// </summary>
         /// <param name="kind">Kind</param>
         /// <returns>Search result</returns>
-        public static Pattern Abstract(SyntaxKind kind)
+        public static Pattern Abstract(string kind)
         {
             return MatchSemanticFunctions.Variable(kind);
         }
@@ -397,19 +397,19 @@ namespace ProseFunctions.Substrings
             }
         }
 
-        public static IEnumerable<Node> Template(Node node, Pattern pattern)
-        {
-            var currentTree = node.Value;
-            var res = new List<Node>();
-            if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
-            {
-                var list = FlorestByKind(pattern, currentTree);
+        //public static IEnumerable<Node> Template(Node node, Pattern pattern)
+        //{
+        //    var currentTree = node.Value;
+        //    var res = new List<Node>();
+        //    if (pattern.Tree.Value.Kind == SyntaxKind.EmptyStatement)
+        //    {
+        //        var list = FlorestByKind(pattern, currentTree);
 
-                if (list.Any()) res = CreateRegions(list);
-            }
-            res = SingleLocations(res);
-            return res;
-        }
+        //        if (list.Any()) res = CreateRegions(list);
+        //    }
+        //    res = SingleLocations(res);
+        //    return res;
+        //}
 
         public static IEnumerable<Node> Traversal(Node node, string type)
         {
@@ -478,21 +478,21 @@ namespace ProseFunctions.Substrings
             return regions;
         }
 
-        private static List<List<SyntaxNodeOrToken>> FlorestByKind(Pattern match, TreeNode<SyntaxNodeOrToken> currentTree)
-        {
-            var list = new List<List<SyntaxNodeOrToken>>();
-            foreach (var child in match.Tree.Children)
-            {
-                var nodeList = SplitToNodes(currentTree, child.Value.Kind);
-                var result = (from node in nodeList where MatchManager.IsValue(node, child) select node.Value).ToList();
+        //private static List<List<SyntaxNodeOrToken>> FlorestByKind(Pattern match, TreeNode<SyntaxNodeOrToken> currentTree)
+        //{
+        //    var list = new List<List<SyntaxNodeOrToken>>();
+        //    foreach (var child in match.Tree.Children)
+        //    {
+        //        var nodeList = SplitToNodes(currentTree, child.Value.Kind);
+        //        var result = (from node in nodeList where MatchManager.IsValue(node, child) select node.Value).ToList();
 
-                if (result.Any())
-                {
-                    list.Add(result);
-                }
-            }
-            return list;
-        }
+        //        if (result.Any())
+        //        {
+        //            list.Add(result);
+        //        }
+        //    }
+        //    return list;
+        //}
 
         /// <summary>
         /// Syntax node factory. This method will be removed in future

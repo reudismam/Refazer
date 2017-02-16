@@ -114,10 +114,10 @@ namespace ProseFunctions.Substrings
 
         public static TreeNode<Token> ConvertITreeNodeToToken(TreeNode<SyntaxNodeOrToken> st)
         {
-            var token = new Token(st.Value.Kind(), st);
+            var token = new Token(st.Value.Kind().ToString(), st);
             if (!st.Children.Any())
             {
-                var dtoken = new DynToken(st.Value.Kind(), st);
+                var dtoken = new DynToken(st.Value.Kind().ToString(), st);
                 var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Kind));
                 return dtreeNode;
             }

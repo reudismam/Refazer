@@ -9,7 +9,7 @@ namespace ProseFunctions.Substrings
 {
     public class DynToken : Token
     {
-        public DynToken(SyntaxKind kind, TreeNode<SyntaxNodeOrToken> value) : base(kind, value)
+        public DynToken(string kind, TreeNode<SyntaxNodeOrToken> value) : base(kind, value)
         {
             //Value = value;
             if (value == null) throw new ArgumentException("value cannot be null");
@@ -17,7 +17,7 @@ namespace ProseFunctions.Substrings
 
         public override bool IsMatch(TreeNode<SyntaxNodeOrToken> node)
         {
-            return node.Value.IsKind(Kind) && IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(Value, node);
+            return node.Value.Kind().ToString().Equals(Kind) && IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(Value, node);
         }
 
         public override string ToString()
