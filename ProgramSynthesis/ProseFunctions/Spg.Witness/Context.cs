@@ -112,7 +112,7 @@ namespace ProseFunctions.Spg.Witness
 
         private static void AnalyseParent(TreeNode<SyntaxNodeOrToken> parentT1Node, TreeNode<SyntaxNodeOrToken> t1Node, List<TreeNode<SyntaxNodeOrToken>> mats)
         {
-            int tolerance = 100;
+            int tolerance = 40;
             var parentDescendants = parentT1Node.DescendantNodesAndSelf();
             if (parentDescendants.Count < tolerance)
             {
