@@ -7,7 +7,6 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.List;
 using ProseFunctions.Spg.Witness;
-using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
@@ -87,37 +86,10 @@ namespace ProseFunctions.Substrings
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("ContextPP", 0)]
-        public static DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return new Context().ParentVariable(rule, parameter, spec);
-        }  
-
-        /// <summary>
-        /// Parent witness function for parameter k
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <param name="kindBinding">kindRef binding</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("ContextPP", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
-        {
-            return new Context().ParentK(rule, parameter, spec, kindBinding);
-        }
-
-        /// <summary>
-        /// Parent witness function for parameter kindRef
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Context", 0)]
-        public static DisjunctiveExamplesSpec ParentVariableP(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec ContextMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return new Context().ParentVariableP(rule, parameter, spec);
+            return new Context().ContextXPath(rule, parameter, spec);
         }
 
         /// <summary>
@@ -129,36 +101,9 @@ namespace ProseFunctions.Substrings
         /// <param name="kindBinding">kindRef binding</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec ParentPK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        public static DisjunctiveExamplesSpec ContextXPath(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
-            return new Context().ParentK(rule, parameter, spec, kindBinding);
-        }
-
-        /// <summary>
-        /// Parent witness function for parameter kindRef
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("ContextPPP", 0)]
-        public static DisjunctiveExamplesSpec ParentVariablePPP(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            return new Context().ParentVariablePPP(rule, parameter, spec);
-        }
-
-        /// <summary>
-        /// Parent witness function for parameter k
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Example specification</param>
-        /// <param name="kindBinding">kindRef binding</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("ContextPPP", 1, DependsOnParameters = new[] { 0 })]
-        public static DisjunctiveExamplesSpec ParentPPPK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
-        {
-            return new Context().ParentK(rule, parameter, spec, kindBinding);
+            return new Context().ContextXPath(rule, parameter, spec, kindBinding);
         }
 
         /// <summary>
@@ -532,30 +477,17 @@ namespace ProseFunctions.Substrings
         }
 
         [WitnessFunction("Match", 1)]
-        public static DisjunctiveExamplesSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static ExampleSpec NodeMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var eExamples = new Dictionary<State, IEnumerable<object>>();
+            var eExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
                 var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
-                var parentParentDecendants = target.Value.Parent.Parent.DescendantNodesAndSelf().ToList();
-                var descendantNodesAndSelf = target.Value.Parent.DescendantNodesAndSelf().ToList();
-                if (parentParentDecendants.Count() < 100)
-                {
-                    var parent = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
-                    target = TreeUpdate.FindNode(parent, target.Value);
-                }
-                else if (descendantNodesAndSelf.Count() < 100)
-                {
-                    var parent = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent);
-                    target = TreeUpdate.FindNode(parent, target.Value);
-                }
-
-                kMatches.Add(target);
-                eExamples[input] = kMatches;
+                var parent = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
+                target = TreeUpdate.FindNode(parent, target.Value);
+                eExamples[input] = target;
             }
-            return DisjunctiveExamplesSpec.From(eExamples);
+            return new ExampleSpec(eExamples);
         }
 
         public static TreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)

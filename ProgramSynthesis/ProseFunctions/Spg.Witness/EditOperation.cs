@@ -100,7 +100,7 @@ namespace ProseFunctions.Spg.Witness
             {
                 //input tree
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                //edit opration
+                //edit operation
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is Insert<SyntaxNodeOrToken>)) return null;

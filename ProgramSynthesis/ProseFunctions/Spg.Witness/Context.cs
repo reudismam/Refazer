@@ -14,14 +14,13 @@ namespace ProseFunctions.Spg.Witness
 {
     public class Context
     {
-
         /// <summary>
-        /// Specification for the parent attribute of the Context operator.
+        /// Specification for the pattern attribute of the Context operator.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
-        public DisjunctiveExamplesSpec ParentVariable(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public DisjunctiveExamplesSpec ContextXPath(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -30,79 +29,16 @@ namespace ProseFunctions.Spg.Witness
                 var mats = new List<TreeNode<SyntaxNodeOrToken>>();
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
+                    //Insert node itself
+                    mats.Add(node);
+                    //Insert ancestors
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     var parentT1Node = t1Node?.Parent;
                     if (parentT1Node == null) continue;
-
-                    var parentParent = parentT1Node.Parent;
-                    if (parentParent != null)
-                    {
-                        AnalyseParent(parentParent, t1Node, mats);
-                    }
-                }
-                if (!mats.Any()) return null;
-                treeExamples[input] = mats;
-            }
-            return new DisjunctiveExamplesSpec(treeExamples);
-        }
-
-        /// <summary>
-        /// Specification for the parent attribute of the Context operator.
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Specification</param>
-        public DisjunctiveExamplesSpec ParentVariableP(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var mats = new List<TreeNode<SyntaxNodeOrToken>>();
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                {
-                    var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
-                    var parentT1Node = t1Node?.Parent;
-                    if (parentT1Node == null) continue;
-
                     AnalyseParent(parentT1Node, t1Node, mats);
                     var parentParent = parentT1Node.Parent;
                     if (parentParent == null) continue;
                     AnalyseParent(parentParent, t1Node, mats);
-                }
-                if (!mats.Any()) return null;
-                treeExamples[input] = mats;
-            }
-            return new DisjunctiveExamplesSpec(treeExamples);
-        }
-
-        /// <summary>
-        /// Specification for the parent attribute of the Context operator.
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
-        /// <param name="spec">Specification</param>
-        public DisjunctiveExamplesSpec ParentVariablePPP(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
-        {
-            var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var mats = new List<TreeNode<SyntaxNodeOrToken>>();
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                {
-                    var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
-                    var parentT1Node = t1Node?.Parent;
-                    if (parentT1Node == null) continue;
-
-                    var parentParent = parentT1Node.Parent;
-                    if (parentParent == null) continue;
-
-                    var parentParentParent = parentParent.Parent;
-                    if (parentParentParent != null)
-                    {
-                        AnalyseParent(parentParentParent, t1Node, mats);
-                    }
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
@@ -135,13 +71,13 @@ namespace ProseFunctions.Spg.Witness
         }
 
         /// <summary>
-        /// Find the index of the child in the parent node.
+        /// Find the index of the child in the pattern node.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Parent binding</param>
-        public ExampleSpec ParentK(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public ExampleSpec ContextXPath(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var kExamples = new Dictionary<State, object>();
             var matches = new List<object>();
@@ -150,7 +86,7 @@ namespace ProseFunctions.Spg.Witness
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
                 var parent = (Pattern) kind.Examples[input];
                 //If the pattern is Empty then return
-                if (parent.Tree.Value.Label.Equals(Token.Expression)) return null;
+                if (parent.Tree.Value.Label.Equals(new Label(Token.Expression))) return null;
 
                 foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
@@ -169,51 +105,17 @@ namespace ProseFunctions.Spg.Witness
 
         /// <summary>
         /// Build an XPath expression for the target node. To build this XPath, 
-        /// we keep get the parent while the parent is null and build an XPath 
-        /// from the last parent until the target node.
+        /// we keep get the pattern while the pattern is null and build an XPath 
+        /// from the last pattern until the target node.
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="parent"></param>
+        /// <param name="pattern"></param>
         /// <returns>XPath</returns>
-        public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<SyntaxNodeOrToken> parent)
-        {
-            string path = "";
-            for (TreeNode<SyntaxNodeOrToken> node = target; !node.Equals(parent); node = node.Parent)
-            {
-                string append = "/";
-
-                if (node.Parent != null && node.Parent.Children.Count >= 1)
-                {
-                    append += "[";
-
-                    int index = 1;
-                    var previousSibling = PreviousSibling(node);
-                    while (previousSibling != null)
-                    {
-                        index++;
-                        previousSibling = PreviousSibling(previousSibling);
-                    }
-
-                    append += $"{index}]";
-                    path = append + path;
-                }
-            }
-            return path;
-        }
-
-        /// <summary>
-        /// Build an XPath expression for the target node. To build this XPath, 
-        /// we keep get the parent while the parent is null and build an XPath 
-        /// from the last parent until the target node.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="parent"></param>
-        /// <returns>XPath</returns>
-        public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<Token> parent)
+        public static string GetPath(TreeNode<SyntaxNodeOrToken> target, TreeNode<Token> pattern)
         {
             string path = "";
             TreeNode<SyntaxNodeOrToken> node;
-            for (node = target; node != null && node.Value != null && !MatchManager.IsValueEachChild(node, parent); node = node.Parent)
+            for (node = target; node != null && node.Value != null && !MatchManager.IsValueEachChild(node, pattern); node = node.Parent)
             {
                 string append = "/";
                 if (node.Parent != null && node.Parent.Children.Count >= 1)
@@ -231,6 +133,9 @@ namespace ProseFunctions.Spg.Witness
                 }
             }
             if (node == null) return null;
+
+            //In case of pattern matches the node itself
+            if (!path.Any()) return ".";
             return path;
         }
 

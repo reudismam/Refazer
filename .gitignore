@@ -29,6 +29,7 @@ ProgramSynthesis/UnitTests/bin/*
 ProgramSynthesis/UnitTests/obj/*
 ProgramSynthesis/benchmarks*/*
 
+
 LongestCommonAncestor/bin/*
 LongestCommonAncestor/obj/*
 
@@ -52,6 +53,7 @@ IntelliMeta.sln.ide/*
 *.cache
 *.suo
 *.coverage
+*.user
 out.txt
 Backup[0-9]*/*
 Backup/*
