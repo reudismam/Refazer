@@ -25,25 +25,25 @@ namespace ProseFunctions.Substrings
         public static double Score_CS(double childScore) => childScore;
 
         [FeatureCalculator("CList")]
-        public static double Score_CList(double childScore, double childrenScore) => /*(childScore + childrenScore) > 0 ? -(childScore + childrenScore) :*/ (childScore + childrenScore);
+        public static double Score_CList(double childScore, double childrenScore) => childScore + childrenScore;
 
         [FeatureCalculator("SP")]
         public static double Score_PS(double childScore) => childScore;
 
         [FeatureCalculator("PList")]
-        public static double Score_PList(double childScore, double childrenScore) => /*(childScore + childrenScore) > 0 ? -(childScore + childrenScore) :*/ (childScore + childrenScore);
+        public static double Score_PList(double childScore, double childrenScore) => childScore + childrenScore;
 
         [FeatureCalculator("SO")]
         public static double Score_SO(double childScore) => childScore;
 
         [FeatureCalculator("SL")]
-        public static double Score_SL(double childScore, double childrenScore) => /*(childScore + childrenScore) > 0 ? -(childScore + childrenScore) :*/ (childScore + childrenScore);
+        public static double Score_SL(double childScore, double childrenScore) => childScore + childrenScore;
 
         [FeatureCalculator("SN")]
         public static double Score_SN(double childScore) => childScore;
 
         [FeatureCalculator("NList")]
-        public static double Score_NList(double childScore, double childrenScore) => /*(childScore + childrenScore) > 0 ? -(childScore + childrenScore) :*/ (childScore + childrenScore);
+        public static double Score_NList(double childScore, double childrenScore) => childScore + childrenScore;
 
         [FeatureCalculator("SE")]
         public static double Score_SE(double childScore) => childScore;
@@ -78,14 +78,8 @@ namespace ProseFunctions.Substrings
         [FeatureCalculator("Abstract")]
         public static double Score_Abstract(double kindScore) => kindScore;
 
-        [FeatureCalculator("ContextPP")]
-        public static double Score_ParentPP(double matchScore, double kScore) => matchScore;
-
         [FeatureCalculator("Context")]
         public static double Score_ParentP(double matchScore, double kScore) => matchScore;
-
-        [FeatureCalculator("ContextPPP")]
-        public static double Score_ParentPPP(double matchScore, double kScore) => matchScore;
 
         [FeatureCalculator("Concrete")]
         public static double Score_Concrete(double treeScore) => treeScore * 1000;

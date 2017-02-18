@@ -68,20 +68,7 @@ namespace ProseFunctions.Substrings
             return MatchSemanticFunctions.Variable(new Label(kind));
         }
 
-
-        public static Pattern ContextPP(Pattern match, string k)
-        {
-            var pattern = new Pattern(match.Tree, k);
-            return pattern;
-        }
-
         public static Pattern Context(Pattern match, string k)
-        {
-            var pattern = new Pattern(match.Tree, k);
-            return pattern;
-        }
-
-        public static Pattern ContextPPP(Pattern match, string k)
         {
             var pattern = new Pattern(match.Tree, k);
             return pattern;
