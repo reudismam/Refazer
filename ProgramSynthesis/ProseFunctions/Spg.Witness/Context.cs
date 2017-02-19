@@ -5,6 +5,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using ProseFunctions.Spg.Bean;
+using ProseFunctions.Spg.Config;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
@@ -20,8 +21,9 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
-        public DisjunctiveExamplesSpec ContextXPath(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public DisjunctiveExamplesSpec ContextPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
+            SynthesisConfig config = SynthesisConfig.GetInstance();
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
             {
@@ -35,10 +37,10 @@ namespace ProseFunctions.Spg.Witness
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     var parentT1Node = t1Node?.Parent;
                     if (parentT1Node == null) continue;
-                    AnalyseParent(parentT1Node, t1Node, mats);
+                    if (config.LevelsForContext.Contains(1)) AnalyseParent(parentT1Node, t1Node, mats);
                     var parentParent = parentT1Node.Parent;
                     if (parentParent == null) continue;
-                    AnalyseParent(parentParent, t1Node, mats);
+                    if (config.LevelsForContext.Contains(2)) AnalyseParent(parentParent, t1Node, mats);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
