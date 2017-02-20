@@ -56,17 +56,13 @@ namespace ProseFunctions
             
             var b =  (ulong) topK.Count;
             topK = topK.OrderByDescending(o => o["Score"]).ToList().GetRange(0, (int) Math.Min(a, b)).ToList();
-            //topK = topK.OrderByDescending(o => o["Score"]).ToList();
             var programs = "";
             List<ProgramNode> validated = new List<ProgramNode>();
             foreach (ProgramNode p in topK)
             {
                 var scorep = p["Score"];
                 programs += $"Score[{scorep}] " + p + "\n\n";          
-                //if (ValidateProgram(p, spec))
-                //{
                 validated.Add(p);
-                //}
             }
 
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
@@ -76,24 +72,8 @@ namespace ProseFunctions
             ProgramNode bestProgram = validated.First();
             string stringprogram = bestProgram.ToString();
             var score = bestProgram["Score"];
-            WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
+            WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {stringprogram}");
             return bestProgram;
-        }
-
-        private static bool ValidateProgram(ProgramNode program, Spec spec)
-        {
-            foreach (var state in spec.ProvidedInputs)
-            {
-                //try
-                //{
-                    object[] output = program.Invoke(state).ToEnumerable().ToArray();
-                //}
-                //catch (Exception e)
-                //{
-                //    return false;
-                //}
-            }
-            return true;
         }
 
         #region Auxiliary methods
