@@ -23,18 +23,17 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="spec">Specification</param>
         public static DisjunctiveExamplesSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            var kdExamples = new Dictionary<State, IEnumerable<object>>();
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            var @intersect = spec.DisjunctiveExamples.First().Value.Cast<TreeNode<SyntaxNodeOrToken>>().Select(o => o.Value.Kind().ToString());
             foreach (State input in spec.ProvidedInputs)
             {
-                var syntaxKinds = new List<object>();
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
-                {
-                    var sot = node.Value;
-                    syntaxKinds.Add(sot.Kind());
-                }
-                kdExamples[input] = syntaxKinds.Distinct().ToList().Select(o => o.ToString());
+                var kids = spec.DisjunctiveExamples[input].Cast<TreeNode<SyntaxNodeOrToken>>().Select(o => o.Value.Kind().ToString());
+                @intersect = @intersect.Intersect(kids);
             }
-            return DisjunctiveExamplesSpec.From(kdExamples);
+            var list = new List<object>();
+            @intersect.ForEach(o => list.Add(o));
+            spec.ProvidedInputs.ForEach(o => treeExamples[o] = list);
+            return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
         /// <summary>

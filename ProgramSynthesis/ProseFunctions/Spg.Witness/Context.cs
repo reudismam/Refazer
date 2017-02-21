@@ -20,7 +20,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
-        public DisjunctiveExamplesSpec ContextXPath(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public DisjunctiveExamplesSpec ContextPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -35,10 +35,10 @@ namespace ProseFunctions.Spg.Witness
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     var parentT1Node = t1Node?.Parent;
                     if (parentT1Node == null) continue;
-                    AnalyseParent(parentT1Node, t1Node, mats);
+                    AnalyseParent(parentT1Node, mats);
                     var parentParent = parentT1Node.Parent;
                     if (parentParent == null) continue;
-                    AnalyseParent(parentParent, t1Node, mats);
+                    AnalyseParent(parentParent, mats);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
@@ -46,28 +46,11 @@ namespace ProseFunctions.Spg.Witness
             return new DisjunctiveExamplesSpec(treeExamples);
         }
 
-        private static void AnalyseParent(TreeNode<SyntaxNodeOrToken> parentT1Node, TreeNode<SyntaxNodeOrToken> t1Node, List<TreeNode<SyntaxNodeOrToken>> mats)
+        private static void AnalyseParent(TreeNode<SyntaxNodeOrToken> parent, List<TreeNode<SyntaxNodeOrToken>> mats)
         {
             int tolerance = 40;
-            var parentDescendants = parentT1Node.DescendantNodesAndSelf();
-            if (parentDescendants.Count < tolerance)
-            {
-                if (t1Node.Value.AsNode() == null)
-                {
-                    if (parentT1Node.Parent != null)
-                    {
-                        var descendantsAndSelf = parentT1Node.Parent.DescendantNodesAndSelf();
-                        if (descendantsAndSelf.Count < tolerance)
-                        {
-                            mats.Add(parentT1Node.Parent);
-                        }
-                    }
-                }
-                else
-                {
-                    mats.Add(parentT1Node);
-                }
-            }
+            var parentDescendants = parent.DescendantNodesAndSelf();
+            if (parentDescendants.Count < tolerance) mats.Add(parent);
         }
 
         /// <summary>
@@ -84,11 +67,11 @@ namespace ProseFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var parent = (Pattern) kind.Examples[input];
+                var parent = (Pattern)kind.Examples[input];
                 //If the pattern is Empty then return
                 if (parent.Tree.Value.Label.Equals(new Label(Token.Expression))) return null;
 
-                foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     if (t1Node == null) continue;
@@ -96,7 +79,7 @@ namespace ProseFunctions.Spg.Witness
                     if (path == null) continue;
                     matches.Add(path);
                 }
-                if (!matches.Any()) return null;    
+                if (!matches.Any()) return null;
                 if (matches.Any(sequence => !sequence.Equals(matches.First()))) return null;
                 kExamples[input] = matches.First();
             }

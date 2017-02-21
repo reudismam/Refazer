@@ -89,7 +89,7 @@ namespace ProseFunctions.Substrings
         [WitnessFunction("Context", 0)]
         public static DisjunctiveExamplesSpec ContextMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return new Context().ContextXPath(rule, parameter, spec);
+            return new Context().ContextPattern(rule, parameter, spec);
         }
 
         /// <summary>
