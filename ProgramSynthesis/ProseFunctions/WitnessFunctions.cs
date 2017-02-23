@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
@@ -107,6 +108,19 @@ namespace ProseFunctions.Substrings
         }
 
         /// <summary>
+        /// Parent witness function for parameter kindRef
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Example specification</param>
+        /// <returns>Disjunctive example specification</returns>
+        [WitnessFunction("SContext", 0)]
+        public static DisjunctiveExamplesSpec SContextMatch(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            return new Context().SContextPattern(rule, parameter, spec);
+        }
+
+        /// <summary>
         /// CList witness function for parameter 0
         /// </summary>
         /// <param name="rule">Literal rule</param>
@@ -116,7 +130,7 @@ namespace ProseFunctions.Substrings
         [WitnessFunction("CList", 0)]
         public static DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<TreeNode<SyntaxNodeOrToken>>.List0(rule, parameter, spec);
+            return GList<Tuple<TreeNode<SyntaxNodeOrToken>, int>>.List0(rule, parameter, spec);
         }
 
         /// <summary>
@@ -129,7 +143,7 @@ namespace ProseFunctions.Substrings
         [WitnessFunction("CList", 1, DependsOnParameters = new[] { 0 })]
         public static DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<TreeNode<SyntaxNodeOrToken>>.List1(rule, parameter, spec);
+            return GList<Tuple<TreeNode<SyntaxNodeOrToken>, int>>.List1(rule, parameter, spec);
         }
 
         /// <summary>
@@ -142,7 +156,7 @@ namespace ProseFunctions.Substrings
         [WitnessFunction("SC", 0)]
         public static DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
-            return GList<TreeNode<SyntaxNodeOrToken>>.Single(rule, parameter, spec);
+            return GList<Tuple<TreeNode<SyntaxNodeOrToken>, int>>.Single(rule, parameter, spec);
         }
 
         /// <summary>

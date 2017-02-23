@@ -81,6 +81,12 @@ namespace ProseFunctions.Substrings
             return pattern;
         }
 
+        public static Pattern SContext(Pattern match)
+        {
+            var pattern = new Pattern(match.Tree, ".");
+            return pattern;
+        }
+
         public static Pattern ContextPPP(Pattern match, string k)
         {
             var pattern = new Pattern(match.Tree, k);

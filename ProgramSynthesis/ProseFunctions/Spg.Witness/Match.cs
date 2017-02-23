@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,10 +25,10 @@ namespace ProseFunctions.Spg.Witness
         public static DisjunctiveExamplesSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            var @intersect = spec.DisjunctiveExamples.First().Value.Cast<TreeNode<SyntaxNodeOrToken>>().Select(o => o.Value.Kind().ToString());
+            var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
             foreach (State input in spec.ProvidedInputs)
             {
-                var kids = spec.DisjunctiveExamples[input].Cast<TreeNode<SyntaxNodeOrToken>>().Select(o => o.Value.Kind().ToString());
+                var kids = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
                 @intersect = @intersect.Intersect(kids);
             }
             var list = new List<object>();
@@ -50,22 +51,23 @@ namespace ProseFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 dicMat.Add(input, new List<TreeNode<SyntaxNodeOrToken>>());
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                foreach (Tuple<TreeNode<SyntaxNodeOrToken>, int> node in spec.DisjunctiveExamples[input])
                 {
-                    dicMat[input].Add(node);
+                    dicMat[input].Add(node.Item1);
                 }
             }
             foreach (State input in spec.ProvidedInputs)
             {
-                var matches = new List<List<TreeNode<SyntaxNodeOrToken>>>();
-                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                var matches = new List<List<Tuple<TreeNode<SyntaxNodeOrToken>, int>>>();
+                foreach (Tuple<TreeNode<SyntaxNodeOrToken>, int> node in spec.DisjunctiveExamples[input])
                 {
-                    var sot = node.Value;
-                    if (dicMat.All(o => dicMat[o.Key].Any(e => e.Value.Kind() == sot.Kind() && e.Children.Count == node.Children.Count)))
+                    var sot = node.Item1.Value;
+                    if (dicMat.All(o => dicMat[o.Key].Any(e => e.Value.Kind() == sot.Kind() && e.Children.Count == node.Item1.Children.Count)))
                     {
-                        if (!node.Children.Any()) continue;
-                        var lsot = node.Children;
-                        matches.Add(lsot);
+                        if (!node.Item1.Children.Any()) continue;
+                        var lsot = node.Item1.Children;
+                        var tlsot = lsot.Select(o => Tuple.Create(o, node.Item2)).ToList();
+                        matches.Add(tlsot);
                     }
                 }
                 if (!matches.Any()) return null;
