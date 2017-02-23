@@ -34,17 +34,17 @@ namespace ProseFunctions.Spg.Witness
                 {
                     //Insert node itself
                     Tuple<TreeNode<SyntaxNodeOrToken>, int> tnode = Tuple.Create(node, 0);
-                    mats.Add(tnode);
+                    if(config.LevelsForContext.Contains(0))mats.Add(tnode);
                     //Insert ancestors
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     var parent = t1Node?.Parent;
                     if (parent == null) continue;
                     Tuple<TreeNode<SyntaxNodeOrToken>, int> tparent = Tuple.Create(parent, 1);
-                    AnalyseParent(tparent, mats);
+                    if(config.LevelsForContext.Contains(1)) AnalyseParent(tparent, mats);
                     var parentParent = parent.Parent;
                     if (parentParent == null) continue;
                     Tuple<TreeNode<SyntaxNodeOrToken>, int> tparentParent = Tuple.Create(parentParent, 2);
-                    AnalyseParent(tparentParent, mats);
+                   if(config.LevelsForContext.Contains(2)) AnalyseParent(tparentParent, mats);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
