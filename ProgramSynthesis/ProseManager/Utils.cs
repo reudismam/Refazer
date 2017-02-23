@@ -9,9 +9,7 @@ using Microsoft.ProgramSynthesis.Compiler;
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
-using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
-using Microsoft.ProgramSynthesis.Utils;
 
 namespace ProseFunctions
 {
@@ -51,8 +49,8 @@ namespace ProseFunctions
             });
 
             var consistentPrograms = engine.LearnGrammar(spec);
-            const ulong a = 10;
-            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK("Score", 5).ToList();         
+            const ulong a = 100;
+            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK("Score", 5).ToList();
             var b =  (ulong) topK.Count;
             topK = topK.OrderByDescending(o => o["Score"]).ToList().GetRange(0, (int) Math.Min(a, b)).ToList();
             var programs = "";
@@ -71,24 +69,8 @@ namespace ProseFunctions
             ProgramNode bestProgram = validated.First();
             string stringprogram = bestProgram.ToString();
             var score = bestProgram["Score"];
-            WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {bestProgram}");
+            WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {stringprogram}");
             return bestProgram;
-        }
-
-        private static bool ValidateProgram(ProgramNode program, Spec spec)
-        {
-            foreach (var state in spec.ProvidedInputs)
-            {
-                //try
-                //{
-                    object[] output = program.Invoke(state).ToEnumerable().ToArray();
-                //}
-                //catch (Exception e)
-                //{
-                //    return false;
-                //}
-            }
-            return true;
         }
 
         #region Auxiliary methods

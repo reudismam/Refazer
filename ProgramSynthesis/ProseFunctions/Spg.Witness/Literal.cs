@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,18 +16,18 @@ namespace ProseFunctions.Spg.Witness
         public static DisjunctiveExamplesSpec LiteralTreeDisjunctive(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
-            var @intersect = spec.DisjunctiveExamples.First().Value.Cast<TreeNode<SyntaxNodeOrToken>>();
+            var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
             var comparer = new LiteralCompater();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kids = spec.DisjunctiveExamples[input].Cast<TreeNode<SyntaxNodeOrToken>>();
+                var kids = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
                 @intersect = @intersect.Intersect(kids, comparer);
             }
             var list = new List<object>();
-            @intersect = @intersect.Where(o => !o.Children.Any());
+            @intersect = @intersect.Where(o => !o.Item1.Children.Any());
             if (!@intersect.Any()) return null;
 
-            @intersect.ForEach(o => list.Add(o.Value));
+            @intersect.ForEach(o => list.Add(o.Item1.Value));
             spec.ProvidedInputs.ForEach(o => treeExamples[o] = list);
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
@@ -37,11 +38,10 @@ namespace ProseFunctions.Spg.Witness
             var matches = new List<TreeNode<SyntaxNodeOrToken>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                var examples = spec.DisjunctiveExamples[input].ToList();
                 var mats = new List<object>();
-                for (int i = 0; i < examples.Count; i++)
+                foreach(Tuple<TreeNode<SyntaxNodeOrToken>, int> tsot in spec.DisjunctiveExamples[input].ToList())
                 {
-                    var sot = (TreeNode<SyntaxNodeOrToken>)examples.ElementAt(i);
+                    var sot = tsot.Item1;
                     if (!sot.Children.Any())
                     {
                         matches.Add(sot);
@@ -56,16 +56,16 @@ namespace ProseFunctions.Spg.Witness
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        public class LiteralCompater : IEqualityComparer<TreeNode<SyntaxNodeOrToken>>
+        public class LiteralCompater : IEqualityComparer<Tuple<TreeNode<SyntaxNodeOrToken>, int>>
         {
-            public bool Equals(TreeNode<SyntaxNodeOrToken> x, TreeNode<SyntaxNodeOrToken> y)
+            public bool Equals(Tuple<TreeNode<SyntaxNodeOrToken>, int> x, Tuple<TreeNode<SyntaxNodeOrToken>, int> y)
             {
-                return IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(x, y);
+                return IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(x.Item1, y.Item1) && x.Item2 == y.Item2;
             }
 
-            public int GetHashCode(TreeNode<SyntaxNodeOrToken> x)
+            public int GetHashCode(Tuple<TreeNode<SyntaxNodeOrToken>, int> x)
             {
-                return x.Value.GetHashCode();
+                return x.Item1.Value.GetHashCode();
             }
         }
     }

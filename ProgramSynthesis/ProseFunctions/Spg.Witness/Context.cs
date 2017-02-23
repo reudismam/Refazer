@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
@@ -28,19 +29,22 @@ namespace ProseFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var mats = new List<TreeNode<SyntaxNodeOrToken>>();
+                var mats = new List<Tuple<TreeNode<SyntaxNodeOrToken>, int >>();
                 foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
                     //Insert node itself
-                    mats.Add(node);
+                    Tuple<TreeNode<SyntaxNodeOrToken>, int> tnode = Tuple.Create(node, 0);
+                    mats.Add(tnode);
                     //Insert ancestors
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
-                    var parentT1Node = t1Node?.Parent;
-                    if (parentT1Node == null) continue;
-                    if (config.LevelsForContext.Contains(1)) AnalyseParent(parentT1Node, t1Node, mats);
-                    var parentParent = parentT1Node.Parent;
+                    var parent = t1Node?.Parent;
+                    if (parent == null) continue;
+                    Tuple<TreeNode<SyntaxNodeOrToken>, int> tparent = Tuple.Create(parent, 1);
+                    AnalyseParent(tparent, mats);
+                    var parentParent = parent.Parent;
                     if (parentParent == null) continue;
-                    if (config.LevelsForContext.Contains(2)) AnalyseParent(parentParent, t1Node, mats);
+                    Tuple<TreeNode<SyntaxNodeOrToken>, int> tparentParent = Tuple.Create(parentParent, 2);
+                    AnalyseParent(tparentParent, mats);
                 }
                 if (!mats.Any()) return null;
                 treeExamples[input] = mats;
@@ -48,28 +52,11 @@ namespace ProseFunctions.Spg.Witness
             return new DisjunctiveExamplesSpec(treeExamples);
         }
 
-        private static void AnalyseParent(TreeNode<SyntaxNodeOrToken> parentT1Node, TreeNode<SyntaxNodeOrToken> t1Node, List<TreeNode<SyntaxNodeOrToken>> mats)
+        private static void AnalyseParent(Tuple<TreeNode<SyntaxNodeOrToken>, int> parent, List<Tuple<TreeNode<SyntaxNodeOrToken>, int>> mats)
         {
             int tolerance = 40;
-            var parentDescendants = parentT1Node.DescendantNodesAndSelf();
-            if (parentDescendants.Count < tolerance)
-            {
-                if (t1Node.Value.AsNode() == null)
-                {
-                    if (parentT1Node.Parent != null)
-                    {
-                        var descendantsAndSelf = parentT1Node.Parent.DescendantNodesAndSelf();
-                        if (descendantsAndSelf.Count < tolerance)
-                        {
-                            mats.Add(parentT1Node.Parent);
-                        }
-                    }
-                }
-                else
-                {
-                    mats.Add(parentT1Node);
-                }
-            }
+            var parentDescendants = parent.Item1.DescendantNodesAndSelf();
+            if (parentDescendants.Count < tolerance) mats.Add(parent);
         }
 
         /// <summary>
@@ -86,11 +73,11 @@ namespace ProseFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inputTree = (Node)input[rule.Grammar.InputSymbol];
-                var parent = (Pattern) kind.Examples[input];
+                var parent = (Pattern)kind.Examples[input];
                 //If the pattern is Empty then return
                 if (parent.Tree.Value.Label.Equals(new Label(Token.Expression))) return null;
 
-                foreach(TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
                 {
                     var t1Node = TreeUpdate.FindNode(inputTree.Value, node.Value);
                     if (t1Node == null) continue;
@@ -98,11 +85,36 @@ namespace ProseFunctions.Spg.Witness
                     if (path == null) continue;
                     matches.Add(path);
                 }
-                if (!matches.Any()) return null;    
+                if (!matches.Any()) return null;
                 if (matches.Any(sequence => !sequence.Equals(matches.First()))) return null;
                 kExamples[input] = matches.First();
             }
             return new ExampleSpec(kExamples);
+        }
+
+
+        /// <summary>
+        /// Specification for the pattern attribute of the Context operator.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="parameter">parameter</param>
+        /// <param name="spec">Specification</param>
+        public DisjunctiveExamplesSpec SContextPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        {
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (State input in spec.ProvidedInputs)
+            {
+                var mats = new List<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
+                foreach (TreeNode<SyntaxNodeOrToken> node in spec.DisjunctiveExamples[input])
+                {
+                    //Insert node itself
+                    Tuple<TreeNode<SyntaxNodeOrToken>, int> tnode = Tuple.Create(node, 0);
+                    mats.Add(tnode);
+                }
+                if (!mats.Any()) return null;
+                treeExamples[input] = mats;
+            }
+            return new DisjunctiveExamplesSpec(treeExamples);
         }
 
         /// <summary>
