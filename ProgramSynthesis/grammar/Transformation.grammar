@@ -36,7 +36,8 @@ Node const := Node(kind, childrenNodes) | ConstNode(tree);
 IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
 Node ref := Reference(target, pattern, c);
 
-@feature[Score=KindScore] SyntaxKind kind;                     @input Node node;
-@feature[Score=KDScore] string id;                             @feature[Score=KScore] K k;
-@feature[Score=CScore] int c;
-@feature[Score=NodeScore] SyntaxNodeOrToken tree;
+SyntaxKind kind;                     @input Node node;
+string id;                             
+K k;
+int c;
+SyntaxNodeOrToken tree;

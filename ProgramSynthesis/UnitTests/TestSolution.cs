@@ -479,7 +479,7 @@ namespace UnitTests
 
             //Learn program
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
-            ProgramNode program = Utils.Learn(grammar, spec);
+            ProgramNode program = Utils.Learn(grammar, spec, new RankingScore(grammar), new WitnessFunctions(grammar));
 
             ////Run program
             //var methods = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1); ;
@@ -948,7 +948,7 @@ namespace UnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
 
             long millBeforeLearn = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            ProgramNode program = Utils.Learn(grammar, spec);
+            ProgramNode program = Utils.Learn(grammar, spec, new RankingScore(grammar), new WitnessFunctions(grammar));
             long millAfterLearn = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long totalTimeToLearn = millAfterLearn - millBeforeLearn;
 

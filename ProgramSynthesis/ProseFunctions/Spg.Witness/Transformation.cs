@@ -101,9 +101,9 @@ namespace ProseFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var kMatches = new List<TreeNode<SyntaxNodeOrToken>>();
-                for (int i = 0; i < spec.Examples[input].Count(); i++)
+                for (int i = 0; i < spec.PositiveExamples[input].Count(); i++)
                 {
-                    var examples = (List<Edit<SyntaxNodeOrToken>>)spec.Examples[input];
+                    var examples = (List<Edit<SyntaxNodeOrToken>>)spec.PositiveExamples[input];
                     var edit = examples.ElementAt(i);
                     var editOperation = edit.EditOperation;
                     TreeNode<SyntaxNodeOrToken> node;

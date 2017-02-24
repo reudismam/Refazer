@@ -10,6 +10,7 @@ using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
 using Microsoft.ProgramSynthesis.Specifications;
+using Microsoft.ProgramSynthesis.Learning.Strategies;
 
 namespace ProseFunctions
 {
@@ -19,15 +20,14 @@ namespace ProseFunctions
         {
             foreach (string prerequisite in prerequisiteGrammars)
             {
-                var buildResult = DSLCompiler.Compile(prerequisite, $"{prerequisite}.xml");
-                if (buildResult.HasErrors)
-                {
-                    WriteColored(ConsoleColor.Magenta, buildResult.TraceDiagnostics);
-                    return null;
-                }
+                var options = new CompilerOptions { InputGrammar = prerequisite };
+                var buildResult = DSLCompiler.Compile(options);
+                if (!buildResult.HasErrors) continue;
+                WriteColored(ConsoleColor.Magenta, buildResult.TraceDiagnostics);
+                return null;
             }
 
-            var compilationResult = DSLCompiler.LoadGrammarFromFile(grammarFile);
+            var compilationResult = DSLCompiler.ParseGrammarFromFile(grammarFile);
             if (compilationResult.HasErrors)
             {
                 WriteColored(ConsoleColor.Magenta, compilationResult.TraceDiagnostics);
@@ -37,27 +37,34 @@ namespace ProseFunctions
             {
                 WriteColored(ConsoleColor.Yellow, compilationResult.TraceDiagnostics);
             }
+
             return compilationResult.Value;
         }
 
-        public static ProgramNode Learn(Grammar grammar, Spec spec)
+        public static ProgramNode Learn(Grammar grammar, Spec spec,
+                                         Feature<double> scorer, DomainLearningLogic witnessFunctions)
         {
             var engine = new SynthesisEngine(grammar, new SynthesisEngine.Config
             {
+                Strategies = new ISynthesisStrategy[]
+                {
+                    new EnumerativeSynthesis(),
+                    new DeductiveSynthesis(witnessFunctions)
+                },
                 UseThreads = false,
                 LogListener = new LogListener(),
             });
 
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 100;
-            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK("Score", 5).ToList();
+            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
             var b =  (ulong) topK.Count;
-            topK = topK.OrderByDescending(o => o["Score"]).ToList().GetRange(0, (int) Math.Min(a, b)).ToList();
+            topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int) Math.Min(a, b)).ToList();
             var programs = "";
             List<ProgramNode> validated = new List<ProgramNode>();
             foreach (ProgramNode p in topK)
             {
-                var scorep = p["Score"];
+                var scorep = p.GetFeatureValue(scorer);
                 programs += $"Score[{scorep}] " + p + "\n\n";          
                 validated.Add(p);
             }
@@ -68,7 +75,7 @@ namespace ProseFunctions
 
             ProgramNode bestProgram = validated.First();
             string stringprogram = bestProgram.ToString();
-            var score = bestProgram["Score"];
+            var score = bestProgram.GetFeatureValue(scorer);
             WriteColored(ConsoleColor.Cyan, $"[score = {score:F3}] {stringprogram}");
             return bestProgram;
         }
@@ -86,22 +93,6 @@ namespace ProseFunctions
             Console.ForegroundColor = currentColor;
         }
 
-        private static readonly Regex ExampleRegex = new Regex(@"(?<=\{)[^}]+(?=\})", RegexOptions.Compiled);
-
-        public static List<StringRegion> LoadBenchmark(string filename, out StringRegion document)
-        {
-            string content = File.ReadAllText(filename);
-            Match[] examples = ExampleRegex.Matches(content).Cast<Match>().ToArray();
-            document = StringRegion.Create(content.Replace("}", "").Replace("{", ""));
-            var result = new List<StringRegion>();
-            for (int i = 0, shift = -1; i < examples.Length; i++, shift -= 2)
-            {
-                int start = shift + examples[i].Index;
-                int end = start + examples[i].Length;
-                result.Add(document.Slice((uint) start, (uint) end));
-            }
-            return result;
-        }
 
         #endregion Auxiliary methods
     }

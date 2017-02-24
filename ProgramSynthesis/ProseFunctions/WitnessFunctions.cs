@@ -17,8 +17,10 @@ namespace ProseFunctions.Substrings
     /// <summary>
     /// Witness functions for the grammar
     /// </summary>
-    public static class WitnessFunctions
+    public class WitnessFunctions : DomainLearningLogic
     {
+        public WitnessFunctions(Grammar grammar) : base(grammar) { }
+
         /// <summary>
         /// Current trees.
         /// </summary>
@@ -35,7 +37,7 @@ namespace ProseFunctions.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Concrete", 0)]
+        [WitnessFunction(nameof(Semantics.Concrete), 0)]
         public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, ExampleSpec spec)
         {
             return Literal.LiteralTree(rule, parameter, spec);
@@ -48,7 +50,7 @@ namespace ProseFunctions.Substrings
         /// <param name="parameter">Parameter number</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Concrete", 0)]
+        [WitnessFunction(nameof(Semantics.Concrete), 0)]
         public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
         {
             return Literal.LiteralTreeDisjunctive(rule, parameter, spec);
@@ -213,7 +215,7 @@ namespace ProseFunctions.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.PositiveExamples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -242,7 +244,7 @@ namespace ProseFunctions.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var newPatch = new List<List<Edit<SyntaxNodeOrToken>>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.PositiveExamples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count == 1) return null;
@@ -269,7 +271,7 @@ namespace ProseFunctions.Substrings
             foreach (State input in spec.ProvidedInputs)
             {
                 var matches = new List<Edit<SyntaxNodeOrToken>>();
-                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.Examples[input])
+                foreach (List<List<Edit<SyntaxNodeOrToken>>> editList in spec.PositiveExamples[input])
                 {
                     if (!editList.Any()) return null;
                     if (editList.Count != 1) return null;
