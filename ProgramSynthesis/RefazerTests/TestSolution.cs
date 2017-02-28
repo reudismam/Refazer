@@ -12,6 +12,7 @@ using NUnit.Framework;
 using ProseFunctions;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
+using RefazerFunctions;
 using Spg.ExampleRefactoring.Util;
 using Spg.ExampleRefactoring.Workspace;
 using Spg.LocationRefactor.Location;

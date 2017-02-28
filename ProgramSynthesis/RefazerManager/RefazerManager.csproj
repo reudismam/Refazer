@@ -283,13 +283,13 @@
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RefazerFunctions\RefazerFunctions.csproj">
+      <Project>{07c1a3bf-5392-4686-923e-ad52280efecd}</Project>
+      <Name>RefazerFunctions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TreeElement\TreeElement.csproj">
       <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>
       <Name>TreeElement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ProseFunctions\ProseFunctions.csproj">
-      <Project>{41e9a9b1-b013-4a87-9759-e3004fef8a81}</Project>
-      <Name>ProseFunctions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

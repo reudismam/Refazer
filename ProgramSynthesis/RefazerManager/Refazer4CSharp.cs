@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProseFunctions;
+using RefazerFunctions;
 
 namespace ProseManager
 {

@@ -11,6 +11,7 @@ using static ProseFunctions.Utils;
 using Microsoft.CodeAnalysis;
 using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
+using RefazerFunctions;
 
 namespace ProseFunctions
 {
