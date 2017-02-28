@@ -60,7 +60,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Abstract", 0)]
+        [WitnessFunction(nameof(Semantics.Abstract), 0)]
         public DisjunctiveExamplesSpec VariableKind(GrammarRule rule, ExampleSpec spec)
         {
             return Variable.VariableKind(rule, spec);
@@ -72,7 +72,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Abstract", 0)]
+        [WitnessFunction(nameof(Semantics.Abstract), 0)]
         public DisjunctiveExamplesSpec VariableKind(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return Variable.VariableKindDisjunctive(rule, spec);
@@ -84,7 +84,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Context", 0)]
+        [WitnessFunction(nameof(Semantics.Context), 0)]
         public DisjunctiveExamplesSpec ContextMatch(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return new Context().ContextPattern(rule, spec);
@@ -97,22 +97,10 @@ namespace ProseFunctions.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kindBinding">kindRef binding</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("Context", 1, DependsOnParameters = new[] { 0 })]
+        [WitnessFunction(nameof(Semantics.Context), 1, DependsOnParameters = new[] { 0 })]
         public DisjunctiveExamplesSpec ContextXPath(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
         {
             return new Context().ContextXPath(rule, spec, kindBinding);
-        }
-
-        /// <summary>
-        /// Parent witness function for parameter kindRef
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="spec">Example specification</param>
-        /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("SContext", 0)]
-        public DisjunctiveExamplesSpec SContextMatch(GrammarRule rule, DisjunctiveExamplesSpec spec)
-        {
-            return new Context().SContextPattern(rule, spec);
         }
 
         /// <summary>
@@ -121,7 +109,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("CList", 0)]
+        [WitnessFunction(nameof(Semantics.CList), 0)]
         public DisjunctiveExamplesSpec WitnessCList1(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return GList<Tuple<TreeNode<SyntaxNodeOrToken>, int>>.List0(rule, spec);
@@ -133,7 +121,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("CList", 1, DependsOnParameters = new[] { 0 })]
+        [WitnessFunction(nameof(Semantics.CList), 1, DependsOnParameters = new[] { 0 })]
         public DisjunctiveExamplesSpec WitnessNList2(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return GList<Tuple<TreeNode<SyntaxNodeOrToken>, int>>.List1(rule, spec);
@@ -145,7 +133,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("SC", 0)]
+        [WitnessFunction(nameof(Semantics.SC), 0)]
         public DisjunctiveExamplesSpec WitnessScChild1(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return GList<Tuple<TreeNode<SyntaxNodeOrToken>, int>>.Single(rule, spec);
@@ -157,7 +145,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("NList", 0)]
+        [WitnessFunction(nameof(Semantics.NList), 0)]
         public DisjunctiveExamplesSpec WitnessNList1(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return GList<TreeNode<SyntaxNodeOrToken>>.List0(rule, spec);
@@ -169,7 +157,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("NList", 1)]
+        [WitnessFunction(nameof(Semantics.NList), 1)]
         public DisjunctiveExamplesSpec WitnessCList2(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return GList<TreeNode<SyntaxNodeOrToken>>.List1(rule, spec);
@@ -181,7 +169,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("SN", 0)]
+        [WitnessFunction(nameof(Semantics.SN), 0)]
         public DisjunctiveExamplesSpec WitnessCnChild1(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return GList<TreeNode<SyntaxNodeOrToken>>.Single(rule, spec);
@@ -193,7 +181,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("EList", 0)]
+        [WitnessFunction(nameof(Semantics.EList), 0)]
         public SubsequenceSpec WitnessEList1(GrammarRule rule, SubsequenceSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
@@ -222,7 +210,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("EList", 1)]
+        [WitnessFunction(nameof(Semantics.EList), 1)]
         public SubsequenceSpec WitnessEList2(GrammarRule rule, SubsequenceSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
@@ -248,7 +236,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("SE", 0)]
+        [WitnessFunction(nameof(Semantics.SE), 0)]
         public SubsequenceSpec WitnessSeChild1(GrammarRule rule, SubsequenceSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
@@ -276,7 +264,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">C rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive examples specification with the kind of the nodes in the examples</returns>
-        [WitnessFunction("Pattern", 0)]
+        [WitnessFunction(nameof(Semantics.Pattern), 0)]
         public DisjunctiveExamplesSpec CKind(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return Match.CKind(rule, spec);
@@ -289,25 +277,25 @@ namespace ProseFunctions.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Learned kind</param>
         /// <returns>Disjunctive examples specification</returns>
-        [WitnessFunction("Pattern", 1, DependsOnParameters = new[] { 0 })]
+        [WitnessFunction(nameof(Semantics.Pattern), 1, DependsOnParameters = new[] { 0 })]
         public DisjunctiveExamplesSpec CChildren(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             return Match.CChildren(rule, spec, kind);
         }
 
-        [WitnessFunction("Reference", 1)]
+        [WitnessFunction(nameof(Semantics.Reference), 1)]
         public DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, ExampleSpec spec)
         {
             return Match.MatchPattern(rule, spec);
         }
 
-        [WitnessFunction("Reference", 2, DependsOnParameters = new[] { 1 })]
+        [WitnessFunction(nameof(Semantics.Reference), 2, DependsOnParameters = new[] { 1 })]
         public DisjunctiveExamplesSpec MatchK(GrammarRule rule, ExampleSpec spec, ExampleSpec kind)
         {
             return Match.MatchK(rule, spec, kind);
         }
 
-        [WitnessFunction("Transformation", 1)]
+        [WitnessFunction(nameof(Semantics.Transformation), 1)]
         public SubsequenceSpec TransformationLoop(GrammarRule rule, ExampleSpec spec)
         {
             return Transformation.TransformationRule(rule, spec);
@@ -319,7 +307,7 @@ namespace ProseFunctions.Substrings
             return Transformation.EditMapTNode(rule, spec);
         }
 
-        [WitnessFunction("Traversal", 1)]
+        [WitnessFunction(nameof(Semantics.Traversal), 1)]
         public DisjunctiveExamplesSpec TemplateTraversal(GrammarRule rule, SubsequenceSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
@@ -336,7 +324,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Delete", 1)]
+        [WitnessFunction(nameof(Semantics.Delete), 1)]
         public ExampleSpec DeleteFrom(GrammarRule rule, ExampleSpec spec)
         {
             return EditOperation.T1Learner<Delete<SyntaxNodeOrToken>>(rule, spec);
@@ -348,11 +336,11 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Update", 1)]
+        [WitnessFunction(nameof(Semantics.Update), 1)]
         public ExampleSpec UpdateTo(GrammarRule rule, ExampleSpec spec)
         {
             return EditOperation.UpdateTo(rule, spec);
-        }
+        } 
 
         /// <summary>
         /// Witness function for parameter k in the insert operator
@@ -360,31 +348,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("Move", 1)]
-        public ExampleSpec MoveTo(GrammarRule rule, ExampleSpec spec)
-        {
-            return EditOperation.T1Learner<Move<SyntaxNodeOrToken>>(rule, spec);
-        }
-
-        /// <summary>
-        /// Witness function for parameter k in the insert operator
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="spec">Examples specification</param>
-        /// <returns></returns>
-        [WitnessFunction("Move", 2, DependsOnParameters = new[] { 1 })]
-        public ExampleSpec MoveK(GrammarRule rule, ExampleSpec spec, ExampleSpec ToSpec)
-        {
-            return EditOperation.LearnK<Move<SyntaxNodeOrToken>>(rule, spec);
-        }
-
-        /// <summary>
-        /// Witness function for parameter k in the insert operator
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="spec">Examples specification</param>
-        /// <returns></returns>
-        [WitnessFunction("Insert", 1)]
+        [WitnessFunction(nameof(Semantics.Insert), 1)]
         public ExampleSpec Insertast(GrammarRule rule, ExampleSpec spec)
         {
             return EditOperation.Insertast(rule, spec);
@@ -396,7 +360,19 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("InsertBefore", 1)]
+        [WitnessFunction(nameof(Semantics.Insert), 2, DependsOnParameters = new[] { 1 })]
+        public ExampleSpec InsertK(GrammarRule rule, ExampleSpec spec, ExampleSpec AstSpec)
+        {
+            return EditOperation.LearnK<Insert<SyntaxNodeOrToken>>(rule, spec);
+        }
+
+        /// <summary>
+        /// Witness function for parameter k in the insert operator
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="spec">Examples specification</param>
+        /// <returns></returns>
+        [WitnessFunction(nameof(Semantics.InsertBefore), 1)]
         public ExampleSpec InsertBeforeParent(GrammarRule rule, ExampleSpec spec)
         {
             return EditOperation.InsertBeforeParentLearner(rule, spec);
@@ -408,22 +384,10 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Examples specification</param>
         /// <returns></returns>
-        [WitnessFunction("InsertBefore", 2, DependsOnParameters = new[] { 1 })]
+        [WitnessFunction(nameof(Semantics.InsertBefore), 2, DependsOnParameters = new[] { 1 })]
         public ExampleSpec InsertBeforeast(GrammarRule rule, ExampleSpec spec)
         {
             return EditOperation.Insertast(rule, spec);
-        }
-
-        /// <summary>
-        /// Witness function for parameter k in the insert operator
-        /// </summary>
-        /// <param name="rule">Grammar rule</param>
-        /// <param name="spec">Examples specification</param>
-        /// <returns></returns>
-        [WitnessFunction("Insert", 2, DependsOnParameters = new[] { 1 })]
-        public ExampleSpec InsertK(GrammarRule rule, ExampleSpec spec, ExampleSpec AstSpec)
-        {
-            return EditOperation.LearnK<Insert<SyntaxNodeOrToken>>(rule, spec);
         }
 
         /// <summary>
@@ -432,7 +396,7 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">C rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive examples specification</returns>
-        [WitnessFunction("Node", 0)]
+        [WitnessFunction(nameof(Semantics.Node), 0)]
         public DisjunctiveExamplesSpec NodeKind(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             return AST.NodeKind(rule, spec);
@@ -445,7 +409,7 @@ namespace ProseFunctions.Substrings
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Learned kind</param>
         /// <returns>Disjunctive examples specification</returns>
-        [WitnessFunction("Node", 1, DependsOnParameters = new[] { 0 })]
+        [WitnessFunction(nameof(Semantics.Node), 1, DependsOnParameters = new[] { 0 })]
         public DisjunctiveExamplesSpec NodeChildren(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             return AST.NodeChildren(rule, spec, kind);
@@ -457,13 +421,13 @@ namespace ProseFunctions.Substrings
         /// <param name="rule">Rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction("ConstNode", 0)]
+        [WitnessFunction(nameof(Semantics.ConstNode), 0)]
         public ExampleSpec Const(GrammarRule rule, ExampleSpec spec)
         {
             return AST.Const(rule, spec);
         }
 
-        [WitnessFunction("Match", 1)]
+        [WitnessFunction(nameof(Semantics.Match), 1)]
         public ExampleSpec NodeMatch(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var eExamples = new Dictionary<State, object>();
