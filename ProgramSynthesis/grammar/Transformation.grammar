@@ -38,6 +38,5 @@ Node ref := Reference(target, pattern, c);
 
 SyntaxKind kind;                     @input Node node;
 string id;                             
-K k;
 int c;
 SyntaxNodeOrToken tree;
