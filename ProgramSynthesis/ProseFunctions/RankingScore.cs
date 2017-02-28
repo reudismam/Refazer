@@ -57,7 +57,7 @@ namespace ProseFunctions.Substrings
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
         [FeatureCalculator("Insert")]
-        public static double Score_Insert(double inScore, double astScore, double kScore) => inScore + astScore + kScore;
+        public static double Score_Insert(double inScore, double astScore) => inScore + astScore;
 
         [FeatureCalculator("InsertBefore")]
         public static double Score_InsertBefore(double inScore, double astScore) => inScore + astScore;
@@ -103,6 +103,9 @@ namespace ProseFunctions.Substrings
 
         [FeatureCalculator("id", Method = CalculationMethod.FromLiteral)]
         public static double KDScore(string kd) => 1.1;
+
+        [FeatureCalculator("rule", Method = CalculationMethod.FromLiteral)]
+        public static double RuleScore(string kd) => 1.1;
 
         [FeatureCalculator("c", Method = CalculationMethod.FromLiteral)]
         public static double CScore(int c) => 1.1;

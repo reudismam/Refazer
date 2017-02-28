@@ -19,7 +19,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
-        public static DisjunctiveExamplesSpec NodeKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec NodeKind(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -43,7 +43,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
         /// <param name="kind">Label specification</param>
-        public static DisjunctiveExamplesSpec NodeChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public static DisjunctiveExamplesSpec NodeChildren(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -67,7 +67,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
-        public static ExampleSpec Const(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec Const(GrammarRule rule, ExampleSpec spec)
         {
             var treeExamples = new Dictionary<State, object>();
             var mats = new List<TreeNode<SyntaxNodeOrToken>>();

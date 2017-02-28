@@ -22,7 +22,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
-        public static DisjunctiveExamplesSpec CKind(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec CKind(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
@@ -44,7 +44,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         /// <param name="kind">Label specification</param>
-        public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             var dicMat = new Dictionary<State, List<TreeNode<SyntaxNodeOrToken>>>();
@@ -77,7 +77,7 @@ namespace ProseFunctions.Spg.Witness
         }
 
 
-        public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec MatchPattern(GrammarRule rule, ExampleSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -89,7 +89,7 @@ namespace ProseFunctions.Spg.Witness
                     var list = target.DescendantNodesAndSelf().FindAll(o => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(o, node));
                     if (!list.Any())
                     {
-                        return MatchPatternParent(rule, parameter, spec);
+                        return MatchPatternParent(rule, spec);
                     }
                     if (!list.Any()) continue;
                     kMatches.AddRange(list);
@@ -101,7 +101,7 @@ namespace ProseFunctions.Spg.Witness
         }
 
 
-        public static DisjunctiveExamplesSpec MatchPatternParent(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static DisjunctiveExamplesSpec MatchPatternParent(GrammarRule rule, ExampleSpec spec)
         {
             var eExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -123,7 +123,7 @@ namespace ProseFunctions.Spg.Witness
             return new DisjunctiveExamplesSpec(eExamples);
         }
 
-        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, int parameter, ExampleSpec spec, ExampleSpec kind)
+        public static DisjunctiveExamplesSpec MatchK(GrammarRule rule, ExampleSpec spec, ExampleSpec kind)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)

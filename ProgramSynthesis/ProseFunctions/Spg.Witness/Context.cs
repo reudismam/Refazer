@@ -22,7 +22,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
-        public DisjunctiveExamplesSpec ContextPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public DisjunctiveExamplesSpec ContextPattern(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             SynthesisConfig config = SynthesisConfig.GetInstance();
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
@@ -66,7 +66,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Parent binding</param>
-        public ExampleSpec ContextXPath(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        public ExampleSpec ContextXPath(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
             var kExamples = new Dictionary<State, object>();
             var matches = new List<object>();
@@ -99,7 +99,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
-        public DisjunctiveExamplesSpec SContextPattern(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public DisjunctiveExamplesSpec SContextPattern(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)

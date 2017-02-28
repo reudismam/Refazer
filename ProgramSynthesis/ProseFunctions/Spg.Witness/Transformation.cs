@@ -30,7 +30,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Grammar parameter</param>
         /// <param name="spec">Example specification</param>
-        public static SubsequenceSpec TransformationRule(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static SubsequenceSpec TransformationRule(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             var dicConnectedComponents = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
@@ -95,7 +95,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Example specification</param>
-        public static SubsequenceSpec EditMapTNode(GrammarRule rule, int parameter, SubsequenceSpec spec)
+        public static SubsequenceSpec EditMapTNode(GrammarRule rule, SubsequenceSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)

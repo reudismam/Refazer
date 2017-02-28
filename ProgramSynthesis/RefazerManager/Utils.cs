@@ -31,6 +31,7 @@ namespace ProseFunctions
             if (compilationResult.HasErrors)
             {
                 WriteColored(ConsoleColor.Magenta, compilationResult.TraceDiagnostics);
+                WriteColored(ConsoleColor.Magenta, String.Join("\n", compilationResult.Diagnostics));
                 return null;
             }
             if (compilationResult.Diagnostics.Count > 0)

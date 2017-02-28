@@ -13,7 +13,7 @@ namespace ProseFunctions.Spg.Witness
 {
     public class Variable
     {
-        public static DisjunctiveExamplesSpec VariableKindDisjunctive(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec VariableKindDisjunctive(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
@@ -30,7 +30,7 @@ namespace ProseFunctions.Spg.Witness
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        public static ExampleSpec VariableKind(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec VariableKind(GrammarRule rule, ExampleSpec spec)
         {
             var first = (Tuple<TreeNode<SyntaxNodeOrToken>, int>)spec.Examples.First().Value;
             var mats = spec.Examples.Values.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
