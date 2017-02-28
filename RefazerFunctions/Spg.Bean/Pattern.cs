@@ -1,7 +1,7 @@
 ﻿using TreeElement.Spg.Node;
 using TreeElement.Token;
 
-namespace ProseFunctions.Spg.Bean
+namespace RefazerFunctions.Spg.Bean
 {
     public class Pattern
     {

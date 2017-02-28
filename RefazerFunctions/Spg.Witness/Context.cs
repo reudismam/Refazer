@@ -5,14 +5,14 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseFunctions.Spg.Bean;
-using ProseFunctions.Spg.Config;
+using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Spg.Config;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
 
-namespace ProseFunctions.Spg.Witness
+namespace RefazerFunctions.Spg.Witness
 {
     public class Context
     {

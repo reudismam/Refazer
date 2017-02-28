@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.CodeAnalysis;
-using ProseFunctions.Spg.Bean;
+using RefazerFunctions.Spg.Bean;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 
-namespace ProseFunctions.Spg.Semantic
+namespace RefazerFunctions.Spg.Semantic
 {
     public class EditOperationSemanticFunctions
     {

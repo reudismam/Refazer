@@ -4,14 +4,13 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
-using RefazerFunctions;
+using RefazerFunctions.Spg.Bean;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Spg.Witness.Target
+namespace RefazerFunctions.Spg.Witness.Target
 {
     public abstract class LearnTargetTemplate
     {

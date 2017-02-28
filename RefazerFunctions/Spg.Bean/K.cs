@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis;
-using ProseFunctions.Spg.Witness;
 using ProseFunctions.Substrings;
-using RefazerFunctions;
+using RefazerFunctions.Spg.Witness;
 using TreeEdit.Spg.Match;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Spg.Bean
+namespace RefazerFunctions.Spg.Bean
 {
     public class K
     {

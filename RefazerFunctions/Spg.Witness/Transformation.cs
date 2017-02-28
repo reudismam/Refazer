@@ -10,9 +10,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
-using RefazerFunctions;
+using RefazerFunctions.Spg.Bean;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Print;
@@ -21,7 +20,7 @@ using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.TreeEdit.Mapping;
 
-namespace ProseFunctions.Spg.Witness
+namespace RefazerFunctions.Spg.Witness
 {
     public class Transformation
     {

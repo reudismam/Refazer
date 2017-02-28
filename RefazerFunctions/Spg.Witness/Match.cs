@@ -6,13 +6,13 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
+using RefazerFunctions.Spg.Bean;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Spg.Witness
+namespace RefazerFunctions.Spg.Witness
 {
     public class Match
     {

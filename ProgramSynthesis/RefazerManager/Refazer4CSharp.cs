@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProseFunctions;
 using RefazerFunctions;
+using RefazerFunctions.Spg.Bean;
 
 namespace ProseManager
 {

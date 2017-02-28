@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
-using ProseFunctions.Spg.Bean;
+using RefazerFunctions.Spg.Bean;
 
 namespace RefazerFunctions
 {

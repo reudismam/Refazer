@@ -2,12 +2,12 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
+using RefazerFunctions.Spg.Bean;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
 
-namespace ProseFunctions.Spg.Semantic
+namespace RefazerFunctions.Spg.Semantic
 {
     public class MatchSemanticFunctions
     {   

@@ -9,7 +9,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
 
-namespace ProseFunctions.Spg.Witness
+namespace RefazerFunctions.Spg.Witness
 {
     public class Variable
     {

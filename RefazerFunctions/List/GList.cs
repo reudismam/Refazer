@@ -4,7 +4,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 
-namespace ProseFunctions.List
+namespace RefazerFunctions.List
 {
     public class GList<T>
     {

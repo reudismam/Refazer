@@ -2,7 +2,7 @@
 using TreeEdit.Spg.Script;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Spg.Witness.Target
+namespace RefazerFunctions.Spg.Witness.Target
 {
     public class ParentTargetLearner : LearnTargetTemplate
     {

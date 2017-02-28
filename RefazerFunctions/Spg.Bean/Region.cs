@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Spg.Bean
+namespace RefazerFunctions.Spg.Bean
 {
     public class Region
     {

@@ -3,14 +3,14 @@ using Microsoft.CodeAnalysis;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using ProseFunctions.Spg.Bean;
-using ProseFunctions.Spg.Witness.Target;
 using ProseFunctions.Substrings;
+using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Spg.Witness.Target;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Spg.Witness
+namespace RefazerFunctions.Spg.Witness
 {
     public class EditOperation
     {

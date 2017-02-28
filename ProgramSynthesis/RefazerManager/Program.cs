@@ -9,9 +9,9 @@ using Microsoft.ProgramSynthesis.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using static ProseFunctions.Utils;
 using Microsoft.CodeAnalysis;
-using ProseFunctions.Spg.Bean;
 using ProseFunctions.Substrings;
 using RefazerFunctions;
+using RefazerFunctions.Spg.Bean;
 
 namespace ProseFunctions
 {

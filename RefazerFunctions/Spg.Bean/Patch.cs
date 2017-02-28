@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ProseFunctions.Spg.Bean
+namespace RefazerFunctions.Spg.Bean
 {
     public class Patch
     {

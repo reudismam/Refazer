@@ -9,7 +9,7 @@ using ProseFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 
-namespace ProseFunctions.Spg.Witness
+namespace RefazerFunctions.Spg.Witness
 {
     public class AST
     {

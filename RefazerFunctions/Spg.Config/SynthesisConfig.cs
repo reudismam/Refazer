@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ProseFunctions.Spg.Config
+namespace RefazerFunctions.Spg.Config
 {
     public class SynthesisConfig
     {
