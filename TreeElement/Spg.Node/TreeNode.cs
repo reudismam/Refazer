@@ -8,7 +8,7 @@ namespace TreeElement.Spg.Node
     /// </summary>
     /// <typeparam name="T">Node type</typeparam>
     public class TreeNode<T>
-    { 
+    {
         /// <summary>
         /// Gets the children.
         /// </summary>
@@ -30,6 +30,12 @@ namespace TreeElement.Spg.Node
         /// Define the label of this TreeNode
         /// </summary>
         public TLabel Label { get; set; }
+
+        /// <summary>
+        /// Define the Type of this TreeNode
+        /// </summary>
+        public TType NodeType { get; set; }
+
 
         /// <summary>
         /// Define the syntax tree that this TreeNode is associated
@@ -76,6 +82,30 @@ namespace TreeElement.Spg.Node
             Label = label;
             Children = new List<TreeNode<T>>();
             Status = NodeStatus.None;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the class
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <param name="label">Label</param>
+        public TreeNode(T value, TLabel label, TType type)
+        {
+            Value = value;
+            Label = label;
+            NodeType = type;
+            Children = new List<TreeNode<T>>();
+            Status = NodeStatus.None;
+        }
+
+        /// <summary>
+        /// Update type of node
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <param name="label">Label</param>
+        public void updateNodeType(TType nodeType)
+        {
+            NodeType = new TType(nodeType);
         }
 
         /// <summary>

@@ -140,6 +140,7 @@
     <Compile Include="Spg.Node\ConverterHelper.cs" />
     <Compile Include="Spg.Node\TLabel.cs" />
     <Compile Include="Spg.Node\TreeNode.cs" />
+    <Compile Include="Spg.Node\TType.cs" />
     <Compile Include="Spg.Print\PrintUtil.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\GumTreeMapping.cs" />
     <Compile Include="Spg.TreeEdit.Mapping\ITreeMapping.cs" />
