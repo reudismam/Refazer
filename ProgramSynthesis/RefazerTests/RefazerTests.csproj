@@ -43,13 +43,9 @@
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.Workspaces.Desktop, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
@@ -335,6 +331,10 @@
     <ProjectReference Include="..\..\TreeElement\TreeElement.csproj">
       <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>
       <Name>TreeElement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WorkSpaces\WorkSpaces.csproj">
+      <Project>{64f1217c-f112-40d6-9ba9-d8d7856cf9b0}</Project>
+      <Name>WorkSpaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\RefazerManager\RefazerManager.csproj">
       <Project>{d9640d0e-12d7-45fe-b404-5d41bba5f167}</Project>

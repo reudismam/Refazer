@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
+using WorkSpaces.Spg.Workspace;
 
 namespace ProseFunctions.Substrings
 {
@@ -25,6 +26,8 @@ namespace ProseFunctions.Substrings
             {
                 var treeNode = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
                 treeNode.Start = st.SpanStart;
+                WorkspaceManager workspace = WorkspaceManager.GetInstance();
+                workspace.GetFullyQualifiedName(workspace.solutionPath, st, st.ToString());
                 return treeNode;
             }
 

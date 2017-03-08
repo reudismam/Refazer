@@ -4,33 +4,27 @@ using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
-//using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Spg.ExampleRefactoring.Workspace
+namespace WorkSpaces.Spg.Workspace
 {
     /// <summary>
     /// Manager the workspace
     /// </summary>
     public class WorkspaceManager
     {
-        public long totalTime { get; set; }
-
+        private long totalTime;
         private static WorkspaceManager _instance;
-        private readonly Dictionary<string, SemanticModel> _dictionary;
-
-        private readonly Dictionary<string, Compilation> _dictionaryProjects;
+        public string solutionPath = "";
 
         private Solution solutionInstance;
 
         private WorkspaceManager()
         {
-            _dictionary = new Dictionary<string, SemanticModel>();
-            _dictionaryProjects = new Dictionary<string, Compilation>();
         }
 
         /// <summary>
-        /// Init method
+        /// Start method
         /// </summary>
         public static void Init()
         {
@@ -42,19 +36,14 @@ namespace Spg.ExampleRefactoring.Workspace
             Console.WriteLine("Opening solution: " + solutionPath);
             if (solutionInstance == null)
             {
-                long millBefore = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                long millBefore = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
                 MSBuildWorkspace workspace = MSBuildWorkspace.Create();
                 solutionInstance = workspace.OpenSolutionAsync(solutionPath).Result;
-                long millAfer = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                long millAfer = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
                 totalTime = (millAfer - millBefore);
             }
             Console.WriteLine("Solution opened.");
             return solutionInstance;
-        }
-
-        public void SetWorkSpace(Microsoft.CodeAnalysis.Workspace workspace)
-        {
-            solutionInstance = workspace.CurrentSolution;
         }
 
         /// <summary>
@@ -78,6 +67,7 @@ namespace Spg.ExampleRefactoring.Workspace
         /// <returns>.cs files</returns>
         public List<Tuple<string, string>> GetSourcesFiles(List<string> projectName, string solutionPath)
         {
+            this.solutionPath = solutionPath;
             List<Tuple<string, string>> sourceFiles = new List<Tuple<string, string>>();
             Solution solution = GetWorkSpace(solutionPath);
 
@@ -85,9 +75,9 @@ namespace Spg.ExampleRefactoring.Workspace
             {
                 Project project = solution.GetProject(projectId);
 
-                if (!project.FilePath.ToUpperInvariant().EndsWith(".CSPROJ")) { continue; } // execute only if the project if C#
+                if (!project.FilePath.ToUpperInvariant().EndsWith(".CSPROJ")) { continue; } // execute only if the project is C#
 
-                if (/*project.Name.Equals(projectName)projectName.Contains(project.Name)*/true)
+                if (true)
                 {
                     foreach (DocumentId documentId in project.DocumentIds)
                     {
@@ -110,68 +100,43 @@ namespace Spg.ExampleRefactoring.Workspace
                     }
                 }
             }
-    
-            //foreach (var file in sourceFiles)
-            //{
-            //    if (file.Item2.ToUpperInvariant().Contains("AsyncLambdaVariableCodeFix.cs".ToUpperInvariant()))
-            //    {
-            //        MessageBox.Show("Reudismam");
-            //    }
-            //}
-            //sourceFiles = sourceFiles.OrderBy(o => o.Item2).ToList();
             return sourceFiles;
         }
 
-        ///// <summary>
-        ///// Get fully qualified name of a node
-        ///// </summary>
-        ///// <param name="projectName">Project name</param>
-        ///// <param name="solutionPath">Solution path</param>
-        ///// <param name="node">Node to be analyzed</param>
-        ///// <param name="name">Name of the identifier</param>
-        ///// <returns>Fully qualified name of the node</returns>
-        //public string GetFullyQualifiedName(string projectName, string solutionPath, SyntaxNodeOrToken node, string name)
-        //{
-        //    //Tuple<LCAManager.Node, string> tuple =
-        //    //    Tuple.Create(new LCAManager.Node(node.Span.Start, node.Span.End, node),
-        //    //        node.SyntaxTree.GetText().ToString());
-        //    //if (_dictionary.ContainsKey(tuple))
-        //    //{
-        //    //    return _dictionary[tuple];
-        //    //}
-        //    Solution solution = GetWorkSpace(solutionPath);
+        /// <summary>
+        /// Get fully qualified name of a node
+        /// </summary>
+        /// <param name="solutionPath">Solution path</param>
+        /// <param name="node">Node to be analyzed</param>
+        /// <param name="name">Name of the identifier</param>
+        /// <returns>Fully qualified name of the node</returns>
+        public string GetFullyQualifiedName(string solutionPath, SyntaxNodeOrToken node, string name)
+        {
+            Solution solution = GetWorkSpace(solutionPath);
+            foreach (Project project in solution.Projects)
+            {
+                Compilation compilation = project.GetCompilationAsync().Result;
+                foreach (Document document in project.Documents)
+                {
+                    SyntaxTree tree;
+                    document.TryGetSyntaxTree(out tree);
+                    if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
+                    {
+                        document.TryGetSyntaxTree(out tree);
+                        SemanticModel model = compilation.GetSemanticModel(tree);
+                        foreach (ISymbol symbol in model.LookupSymbols(node.SpanStart, null, name))
+                        {
+                            if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
+                            {
+                                return symbol.ToDisplayString();
+                            }
+                        }
+                    }
+                }
 
-        //    foreach (ProjectId projectId in solution.ProjectIds)
-        //    {
-        //        Project project = solution.GetProject(projectId);
-        //        //if (/*project.Name.Equals(projectName)*/ true)
-        //        //{
-        //        //    Compilation compilation = project.GetCompilationAsync().Result;
-        //        //    foreach (DocumentId documentId in project.DocumentIds)
-        //        //    {
-        //        //        var document = solution.GetDocument(documentId);
-
-        //        //        SyntaxTree tree;
-        //        //        document.TryGetSyntaxTree(out tree);
-        //        //        if (tree.GetText().ToString().Equals(node.SyntaxTree.GetText().ToString()))
-        //        //        {
-        //        //            document.TryGetSyntaxTree(out tree);
-        //        //            SemanticModel model2 = compilation.GetSemanticModel(tree);
-        //        //            foreach (ISymbol symbol in model2.LookupSymbols(node.SpanStart, null, name))
-        //        //            {
-        //        //                if (symbol.CanBeReferencedByName && symbol.Name.Contains(name))
-        //        //                {
-        //        //                    _dictionary.Add(tuple, symbol.ToDisplayString());
-        //        //                    return symbol.ToDisplayString();
-        //        //                }
-        //        //            }
-        //        //        }
-        //        //    }
-        //        //}
-        //    }
-        //    //_dictionary.Add(tuple, null);
-        //    return null;
-        //}
+            }
+            return null;
+        }
 
         ///// <summary>
         ///// Get fully qualified name of a node
