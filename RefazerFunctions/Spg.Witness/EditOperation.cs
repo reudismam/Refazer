@@ -19,7 +19,6 @@ namespace RefazerFunctions.Spg.Witness
         /// </summary>
         /// <typeparam name="T">Type of the operation</typeparam>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
         public static ExampleSpec T1Learner<T>(GrammarRule rule, ExampleSpec spec)
         {
@@ -37,7 +36,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Learn the to parameter for the Update operator.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         public static ExampleSpec UpdateTo(GrammarRule rule, ExampleSpec spec)
         {
@@ -58,7 +56,6 @@ namespace RefazerFunctions.Spg.Witness
         /// </summary>
         /// <typeparam name="T">Type of edit operation</typeparam>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         public static ExampleSpec LearnK<T>(GrammarRule rule, ExampleSpec spec)
         {
@@ -77,7 +74,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Witness function to learn the specification of the parameter ast of the operator Insert.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         public static ExampleSpec Insertast(GrammarRule rule, ExampleSpec spec)
         {
@@ -121,7 +117,7 @@ namespace RefazerFunctions.Spg.Witness
 
         public static TreeNode<SyntaxNodeOrToken> GetNode(TreeNode<SyntaxNodeOrToken> searchedNode)
         {
-            TreeNode<SyntaxNodeOrToken> currentTree = null;// WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
+            TreeNode<SyntaxNodeOrToken> currentTree = WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
             if (targetNode == null) return null;
             var targetNodeHeight = targetNode;

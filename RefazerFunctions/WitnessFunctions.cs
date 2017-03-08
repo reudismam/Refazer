@@ -442,7 +442,7 @@ namespace RefazerFunctions
             return new ExampleSpec(eExamples);
         }
 
-        public TreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
+        public static TreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
         {
             var node = CurrentTrees[n];
             return node;
