@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TreeElement</RootNamespace>
     <AssemblyName>TreeElement</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -231,10 +231,6 @@
     <ProjectReference Include="..\LongestCommonAncestor\LongestCommonSubsequence.csproj">
       <Project>{b66821a8-75db-4165-83b7-91a8b5df8eb0}</Project>
       <Name>LongestCommonSubsequence</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WorkSpaces\WorkSpaces.csproj">
-      <Project>{64f1217c-f112-40d6-9ba9-d8d7856cf9b0}</Project>
-      <Name>WorkSpaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

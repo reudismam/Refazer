@@ -313,7 +313,6 @@
     <Compile Include="TestHelper.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TRegion.cs" />
-    <Compile Include="WorkspaceManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
