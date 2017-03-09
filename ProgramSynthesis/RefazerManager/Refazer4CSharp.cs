@@ -7,19 +7,20 @@ using ProseFunctions.Substrings;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using static ProseFunctions.Utils;
+using static RefazerManager.Utils;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProseFunctions;
 using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
+using RefazerManager;
 
 namespace ProseManager
 {
     public class Refazer4CSharp
     {
-        public string LearnTransformations(Tuple<string, string> examples)
+        public string LearnTransformationsPath(Tuple<string, string> examples)
         {
             //Load grammar
             var grammar = GetGrammar();
@@ -44,10 +45,35 @@ namespace ProseManager
             return program.ToString();
         }
 
+        public string LearnTransformations(Tuple<string, string> examples)
+        {
+            //Load grammar
+            var grammar = GetGrammar();
+
+            //input data
+            string inputText = examples.Item1;
+            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
+
+            //output with some code fragments edited.
+            string outputText = examples.Item2;
+            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(inpTree)));
+            ioExamples.Add(inputState, new List<object> { outTree });
+
+
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            ProgramNode program = Learn(grammar, spec, new RankingScore(grammar), new WitnessFunctions(grammar));
+            return program.ToString();
+        }
+
         public static Grammar GetGrammar()
         {
             string path = GetBasePath();
-            var grammar = Utils.LoadGrammar(path + @"\grammar\Transformation.grammar");
+            var grammar = Utils.LoadGrammar(path + @"\ProgramSynthesis\grammar\Transformation.grammar");
             return grammar;
         }
         public static string GetBasePath()

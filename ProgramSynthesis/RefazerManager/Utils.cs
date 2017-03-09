@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Compiler;
-using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
-using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Learning.Strategies;
+using Microsoft.ProgramSynthesis.Specifications;
 
-namespace ProseFunctions
+namespace RefazerManager
 {
     public static class Utils
     {

@@ -7,11 +7,12 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
 using Microsoft.CodeAnalysis.CSharp;
-using static ProseFunctions.Utils;
+using static RefazerManager.Utils;
 using Microsoft.CodeAnalysis;
 using ProseFunctions.Substrings;
 using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
+using RefazerManager;
 
 namespace ProseFunctions
 {

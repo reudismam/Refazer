@@ -420,6 +420,7 @@ namespace RefazerFunctions
         /// Learn a constant node
         /// </summary>
         /// <param name="rule">Rule</param>
+        /// <param name="rule">Rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction(nameof(Semantics.ConstNode), 0)]
