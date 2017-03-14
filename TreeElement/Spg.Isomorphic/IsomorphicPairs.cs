@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TreeEdit.Spg.TreeEdit.Mapping;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Isomorphic

@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
 
-namespace ProseFunctions.Substrings
+namespace RefazerFunctions.Substrings
 {
     public class ConverterHelper
     {

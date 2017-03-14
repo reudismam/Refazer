@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;

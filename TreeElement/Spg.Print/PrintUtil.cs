@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis.Differencing;
 //using TreeEdit.Spg.Script;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Print

@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="Refazer.cs" company="Company">
+// <copyright file="Init.cs" company="Company">
 //     Copyright (c) Company.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ namespace RefazerUI
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class Refazer
+    internal sealed class Init
     {
         /// <summary>
         /// Command ID.
@@ -25,7 +25,7 @@ namespace RefazerUI
         /// <summary>
         /// Command menu group (command set GUID).
         /// </summary>
-        public static readonly Guid CommandSet = new Guid("14a0b4db-18c6-44ca-9c4e-c74660acf738");
+        public static readonly Guid CommandSet = new Guid("cafc9643-b52b-4c58-85d9-fa70ad0b3678");
 
         /// <summary>
         /// VS Package that provides this command, not null.
@@ -33,11 +33,11 @@ namespace RefazerUI
         private readonly Package package;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Refazer"/> class.
+        /// Initializes a new instance of the <see cref="Init"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        private Refazer(Package package)
+        private Init(Package package)
         {
             if (package == null)
             {
@@ -58,7 +58,7 @@ namespace RefazerUI
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static Refazer Instance
+        public static Init Instance
         {
             get;
             private set;
@@ -81,7 +81,7 @@ namespace RefazerUI
         /// <param name="package">Owner package, not null.</param>
         public static void Initialize(Package package)
         {
-            Instance = new Refazer(package);
+            Instance = new Init(package);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace RefazerUI
         private void MenuItemCallback(object sender, EventArgs e)
         {
             string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            string title = "Refazer";
+            string title = "Init";
 
             // Show a message box to prove we were here
             VsShellUtilities.ShowMessageBox(

@@ -9,12 +9,12 @@ using Microsoft.ProgramSynthesis.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using static RefazerManager.Utils;
 using Microsoft.CodeAnalysis;
-using ProseFunctions.Substrings;
 using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Substrings;
 using RefazerManager;
 
-namespace ProseFunctions
+namespace RefazerFunctions
 {
     //Main class
     internal static class Program

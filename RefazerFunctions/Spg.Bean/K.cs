@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using RefazerFunctions.Spg.Witness;
 using TreeEdit.Spg.Match;
 using TreeElement.Spg.Node;

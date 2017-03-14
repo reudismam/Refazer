@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.CodeAnalysis.Text;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
 

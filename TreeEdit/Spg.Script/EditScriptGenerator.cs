@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using RefazerFunctions.List;
 using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Spg.Semantic;

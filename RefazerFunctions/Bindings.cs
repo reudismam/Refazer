@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 
-namespace ProseFunctions.Substrings
+namespace RefazerFunctions.Substrings
 {
     public class Bindings
     {

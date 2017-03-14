@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="RefazerPackage.cs" company="Company">
+// <copyright file="InitPackage.cs" company="Company">
 //     Copyright (c) Company.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -38,19 +38,19 @@ namespace RefazerUI
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(RefazerPackage.PackageGuidString)]
+    [Guid(InitPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class RefazerPackage : Package
+    public sealed class InitPackage : Package
     {
         /// <summary>
-        /// RefazerPackage GUID string.
+        /// InitPackage GUID string.
         /// </summary>
-        public const string PackageGuidString = "268c7a02-c7bb-49f1-bb7a-30999b0e7ba9";
+        public const string PackageGuidString = "367d6a29-e6d1-4308-a156-f789054c943b";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Refazer"/> class.
+        /// Initializes a new instance of the <see cref="Init"/> class.
         /// </summary>
-        public RefazerPackage()
+        public InitPackage()
         {
             // Inside this method you can place any initialization code that does not require
             // any Visual Studio service because at this point the package object is created but
@@ -66,8 +66,9 @@ namespace RefazerUI
         /// </summary>
         protected override void Initialize()
         {
-            Refazer.Initialize(this);
+            Init.Initialize(this);
             base.Initialize();
+            Transform.Initialize(this);
         }
 
         #endregion
