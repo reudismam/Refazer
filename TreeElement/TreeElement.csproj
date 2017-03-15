@@ -200,6 +200,7 @@
   <ItemGroup>
     <Compile Include="CSharpZss.cs" />
     <Compile Include="CSharpZssNode.cs" />
+    <Compile Include="FileUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spg.Isomorphic\IsomorphicManager.cs" />

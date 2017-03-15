@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using EnvDTE;
 using Microsoft.VisualStudio.Text;
+using Spg.Controller;
 
 namespace RefazerUI
 {
@@ -97,20 +98,7 @@ namespace RefazerUI
         /// <param name="e">Event args.</param>
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            string title = "Init";
-
-            // Show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.Provider,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-
-            IVsTextManager txtMgr = (IVsTextManager) Provider.GetService(typeof(SVsTextManager));
+            IVsTextManager txtMgr = (IVsTextManager)Provider.GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
             int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
@@ -126,7 +114,7 @@ namespace RefazerUI
             var viewHost = (IWpfTextViewHost)holder;
 
             DTE dte;
-            dte = (DTE) Provider.GetService(typeof(DTE)); // we have access to GetService here.
+            dte = (DTE)Provider.GetService(typeof(DTE)); // we have access to GetService here.
             string fullName = dte.Solution.FullName;
             var document = dte.ActiveDocument;
             string before = GetText(viewHost);
@@ -134,11 +122,8 @@ namespace RefazerUI
             var proj = dte.Solution.FindProjectItem(document.FullName);
             var project = proj.ContainingProject;
 
-            //RefazerFunctions.Program.Main2();
-            //LearnTransformations(Tuple.Create("", ""));
-            //EditorController controller = EditorController.GetInstance();
-            //controller.Init(before);
-            //controller.Transform("");
+            EditorController controller = EditorController.GetInstance();
+            controller.Init(before);            
         }
 
         static public string GetText(IWpfTextViewHost host)

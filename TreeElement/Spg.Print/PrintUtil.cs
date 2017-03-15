@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.Differencing;
 //using TreeEdit.Spg.Script;
 using RefazerFunctions.Substrings;
 using TreeElement.Spg.Node;
+using TreeElement;
 
 namespace TreeEdit.Spg.Print
 {
@@ -215,7 +216,7 @@ namespace TreeEdit.Spg.Print
         {
             _currentIndex = 0;
             _dic = new Dictionary<Tuple<TreeNode<T>, TreeNode<T>>, int>();
-            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string startupPath = FileUtil.GetBasePath();
             path = startupPath + path;
             _prettyPrint = new StreamWriter(path);
             PrettyPrintKey(t1, "", true, M);

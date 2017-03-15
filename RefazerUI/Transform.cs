@@ -13,13 +13,15 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using EnvDTE;
 using Microsoft.VisualStudio.Text;
+using Spg.Controller;
+using Controller;
 
 namespace RefazerUI
 {
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class Transform
+    internal sealed class Transform: IEditStartedObserver
     {
         /// <summary>
         /// Command ID.
@@ -57,6 +59,9 @@ namespace RefazerUI
                 var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
                 commandService.AddCommand(menuItem);
             }
+
+            EditorController controller = EditorController.GetInstance();
+            controller.AddEditStartedObserver(this);
         }
 
         /// <summary>
@@ -97,19 +102,6 @@ namespace RefazerUI
         /// <param name="e">Event args.</param>
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            string title = "Init";
-
-            // Show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.Provider,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-
             IVsTextManager txtMgr = (IVsTextManager)Provider.GetService(typeof(SVsTextManager));
             IVsTextView vTextView = null;
             int mustHaveFocus = 1;
@@ -129,16 +121,31 @@ namespace RefazerUI
             dte = (DTE)Provider.GetService(typeof(DTE)); // we have access to GetService here.
             string fullName = dte.Solution.FullName;
             var document = dte.ActiveDocument;
-            string before = GetText(viewHost);
+            string after = GetText(viewHost);
 
             var proj = dte.Solution.FindProjectItem(document.FullName);
+            //throw new Exception("Error");
             var project = proj.ContainingProject;
 
-            //RefazerFunctions.Program.Main2();
-            //LearnTransformations(Tuple.Create("", ""));
-            //EditorController controller = EditorController.GetInstance();
-            //controller.Init(before);
-            //controller.Transform("");
+            EditorController controller = EditorController.GetInstance();
+            controller.Transform(after);
+        }
+
+        public void EnableTransformCommand(Package package, bool flag)
+        {
+            if (package == null)
+            {
+                throw new ArgumentNullException("package");
+            }
+            OleMenuCommandService commandService = Provider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            if (commandService != null)
+            {
+                var menuCommandID = new CommandID(CommandSet, CommandId);
+                //var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
+                //commandService.AddCommand(menuItem);
+                var menuItem = commandService.FindCommand(menuCommandID);
+                menuItem.Enabled = flag;
+            }
         }
 
         static public string GetText(IWpfTextViewHost host)
@@ -147,6 +154,11 @@ namespace RefazerUI
 
             ITextSnapshot document = view.TextSnapshot;
             return document.GetText();
+        }
+
+        public void EditStarted(EditStartedEvent @event)
+        {
+            EnableTransformCommand(package, true);
         }
     }
 }

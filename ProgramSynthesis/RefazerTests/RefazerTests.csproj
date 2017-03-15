@@ -368,15 +368,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeLocation.cs" />
-    <Compile Include="EvaluationTest.cs" />
     <Compile Include="FileUtil.cs" />
-    <Compile Include="ICSE2017Dataset.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegionManager.cs" />
     <Compile Include="Spg.Transform\CodeTransformation.cs" />
     <Compile Include="Spg.Transform\Transformation.cs" />
-    <Compile Include="TestHelper.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TRegion.cs" />
   </ItemGroup>

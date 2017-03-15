@@ -398,6 +398,28 @@
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Controller\Controller.csproj">
+      <Project>{D2C1E970-DC22-4E82-BAE7-60842E102C46}</Project>
+      <Name>Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProgramSynthesis\RefazerManager\RefazerManager.csproj">
+      <Project>{d9640d0e-12d7-45fe-b404-5d41bba5f167}</Project>
+      <Name>RefazerManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefazerFunctions\RefazerFunctions.csproj">
+      <Project>{07c1a3bf-5392-4686-923e-ad52280efecd}</Project>
+      <Name>RefazerFunctions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TreeEdit\TreeEdit.csproj">
+      <Project>{4bf08076-5ba3-45b8-8da9-bed3c4bca9f7}</Project>
+      <Name>TreeEdit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TreeElement\TreeElement.csproj">
+      <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>
+      <Name>TreeElement</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

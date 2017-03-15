@@ -1,19 +1,44 @@
 using Controller;
 using Controller.Event;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.ProgramSynthesis;
+using Microsoft.ProgramSynthesis.AST;
+using Microsoft.ProgramSynthesis.Utils;
 using ProseManager;
+using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Substrings;
 using Spg.Controller.Projects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using WorkSpaces.Spg.Workspace;
 
 namespace Spg.Controller
 {
+    
     /// <summary>
     /// Controller for editor graphical interface
     /// </summary>
     public class EditorController
     {
+        public Solution solutionPath
+        {
+            get;
+            set;
+        }
+
         private List<IEditStartedObserver> _editStartedOIbservers = new List<IEditStartedObserver>();
         private List<IEditFinishedObserver> _editFinishedOIbservers = new List<IEditFinishedObserver>();
+
+        /// <summary>
+        /// Current Program
+        /// </summary>
+        public ProgramNode CurrentProgram
+        {
+            get;
+            set;
+        } 
 
         /// <summary>
         /// Informatios about the project
@@ -121,8 +146,54 @@ namespace Spg.Controller
             this.after = after;
             var examples = Tuple.Create(before, after);
             var refazer = new Refazer4CSharp();
-            var rename = refazer.LearnTransformations(examples);
+            CurrentProgram = refazer.LearnTransformations(examples);
             NotifyEditFinishedObservers();
+        }
+
+        private List<SyntaxNodeOrToken> ExecutePrograms()
+        {         
+            var asts = new List<SyntaxNodeOrToken>();
+            if (solutionPath == null)
+            {
+                //Run program
+                return asts;
+            }
+            else
+            {
+                var path = solutionPath.FilePath;
+                var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
+                foreach (var v in files)
+                {
+                    var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
+                    asts.Add(tree);
+                }
+            }
+
+            foreach (var ast in asts)
+            {
+                var _grammar = Refazer4CSharp.GetGrammar();
+                var newInputState = State.Create(_grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
+                object[] output = CurrentProgram.Invoke(newInputState).ToEnumerable().ToArray();
+
+                Transformed.AddRange(output);
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+
+                if (output.Any())
+                {
+                    if (dicTrans.ContainsKey(ast.SyntaxTree.FilePath.ToUpperInvariant()))
+                    {
+                        dicTrans[ast.SyntaxTree.FilePath.ToUpperInvariant()].AddRange(output);
+                    }
+                    else
+                    {
+                        dicTrans[ast.SyntaxTree.FilePath.ToUpperInvariant()] = output.ToList();
+                    }
+                }
+            }
+
+
+            return asts;
+
         }
 
         /// <summary>

@@ -326,7 +326,7 @@ namespace TreeElement.Spg.TreeEdit.Mapping
 
         static string GetTestDataFolder(string testDataLocation)
         {
-            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string startupPath = FileUtil.GetBasePath();
             var pathItems = startupPath.Split(Path.DirectorySeparatorChar);
             string projectPath = String.Join(Path.DirectorySeparatorChar.ToString(), pathItems.Take(pathItems.Length - 4));
             string result = projectPath + testDataLocation;

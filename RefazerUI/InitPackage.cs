@@ -39,6 +39,7 @@ namespace RefazerUI
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(InitPackage.PackageGuidString)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class InitPackage : Package
     {
@@ -69,6 +70,7 @@ namespace RefazerUI
             Init.Initialize(this);
             base.Initialize();
             Transform.Initialize(this);
+            Transform.Instance.EnableTransformCommand(this, false);
         }
 
         #endregion

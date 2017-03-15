@@ -17,7 +17,11 @@ namespace WorkSpaces.Spg.Workspace
         private static WorkspaceManager _instance;
         public string solutionPath = "";
 
-        private Solution solutionInstance;
+        public Solution solutionInstance
+        {
+            get;
+            set;
+        }
 
         private WorkspaceManager()
         {
