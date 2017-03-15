@@ -280,18 +280,6 @@ __pycache__/
 # Telerik's JustMock configuration file
 *.jmconfig
 
-ExampleRefactoring/*
-NUnitTests/*
-LocationCodeRefactoring/*
-DirectedGraph/*
-NUnitTests/*
-IntelliExtract/*
-IntelliLocation/*
-IntelliMeta/*
-LocateAdornment/*
-Refactor/*
-IntelliUndo/*
-
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -308,3 +296,5 @@ ProgramSynthesis/benchmarks*/*
 
 *.t
 *.txt
+*.suo
+*.user
