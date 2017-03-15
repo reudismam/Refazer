@@ -9,6 +9,10 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Text.Editor;
+using EnvDTE;
+using Microsoft.VisualStudio.Text;
 
 namespace RefazerUI
 {
@@ -46,7 +50,7 @@ namespace RefazerUI
 
             this.package = package;
 
-            OleMenuCommandService commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            OleMenuCommandService commandService = this.Provider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
                 var menuCommandID = new CommandID(CommandSet, CommandId);
@@ -67,7 +71,7 @@ namespace RefazerUI
         /// <summary>
         /// Gets the service provider from the owner package.
         /// </summary>
-        private IServiceProvider ServiceProvider
+        private IServiceProvider Provider
         {
             get
             {
@@ -98,12 +102,51 @@ namespace RefazerUI
 
             // Show a message box to prove we were here
             VsShellUtilities.ShowMessageBox(
-                this.ServiceProvider,
+                this.Provider,
                 message,
                 title,
                 OLEMSGICON.OLEMSGICON_INFO,
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+
+
+            IVsTextManager txtMgr = (IVsTextManager) Provider.GetService(typeof(SVsTextManager));
+            IVsTextView vTextView = null;
+            int mustHaveFocus = 1;
+            txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
+            IVsUserData userData = vTextView as IVsUserData;
+            if (userData == null)
+            {
+                Console.WriteLine("No text view is currently open");
+                return;
+            }
+            object holder;
+            Guid guidViewHost = Microsoft.VisualStudio.Editor.DefGuidList.guidIWpfTextViewHost;
+            userData.GetData(ref guidViewHost, out holder);
+            var viewHost = (IWpfTextViewHost)holder;
+
+            DTE dte;
+            dte = (DTE) Provider.GetService(typeof(DTE)); // we have access to GetService here.
+            string fullName = dte.Solution.FullName;
+            var document = dte.ActiveDocument;
+            string before = GetText(viewHost);
+
+            var proj = dte.Solution.FindProjectItem(document.FullName);
+            var project = proj.ContainingProject;
+
+            //RefazerFunctions.Program.Main2();
+            //LearnTransformations(Tuple.Create("", ""));
+            //EditorController controller = EditorController.GetInstance();
+            //controller.Init(before);
+            //controller.Transform("");
+        }
+
+        static public string GetText(IWpfTextViewHost host)
+        {
+            IWpfTextView view = host.TextView;
+
+            ITextSnapshot document = view.TextSnapshot;
+            return document.GetText();
         }
     }
 }
