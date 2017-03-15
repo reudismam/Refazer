@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Controller</RootNamespace>
     <AssemblyName>Controller</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -335,9 +335,17 @@
       <Project>{d9640d0e-12d7-45fe-b404-5d41bba5f167}</Project>
       <Name>RefazerManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RefazerFunctions\RefazerFunctions.csproj">
+      <Project>{07c1a3bf-5392-4686-923e-ad52280efecd}</Project>
+      <Name>RefazerFunctions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TreeEdit\TreeEdit.csproj">
       <Project>{4bf08076-5ba3-45b8-8da9-bed3c4bca9f7}</Project>
       <Name>TreeEdit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TreeElement\TreeElement.csproj">
+      <Project>{FE305989-4148-4861-A351-D9DE83F5428B}</Project>
+      <Name>TreeElement</Name>
     </ProjectReference>
     <ProjectReference Include="..\WorkSpaces\WorkSpaces.csproj">
       <Project>{64f1217c-f112-40d6-9ba9-d8d7856cf9b0}</Project>

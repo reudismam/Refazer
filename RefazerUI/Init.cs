@@ -123,6 +123,7 @@ namespace RefazerUI
             var project = proj.ContainingProject;
 
             EditorController controller = EditorController.GetInstance();
+            EditorController.GetInstance().SetSolution(fullName);
             controller.Init(before);            
         }
 

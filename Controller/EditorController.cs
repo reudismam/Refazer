@@ -22,14 +22,10 @@ namespace Spg.Controller
     /// </summary>
     public class EditorController
     {
-        public Solution solutionPath
-        {
-            get;
-            set;
-        }
-
         private List<IEditStartedObserver> _editStartedOIbservers = new List<IEditStartedObserver>();
         private List<IEditFinishedObserver> _editFinishedOIbservers = new List<IEditFinishedObserver>();
+
+     
 
         /// <summary>
         /// Current Program
@@ -40,10 +36,14 @@ namespace Spg.Controller
             set;
         } 
 
+        private Grammar grammar { get; set; }
+
+        public List<object> Transformed { get; set; }
+
         /// <summary>
         /// Informatios about the project
         /// </summary>
-        public ProjectInformation ProjectInformation { get; set; }
+        public ProjectInformation ProjectInfo { get; set; }
 
         /// <summary>
         /// Code before transformation
@@ -85,6 +85,8 @@ namespace Spg.Controller
         /// </summary>
         private EditorController()
         {
+            ProjectInfo = ProjectInformation.GetInstance();
+            Transformed = new List<object>();
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace Spg.Controller
         /// <param name="solution">Solution</param>
         public void SetSolution(string solution)
         {
-            ProjectInformation.SolutionPath = solution;
+            ProjectInfo.SolutionPath = solution;
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace Spg.Controller
         /// <param name="project">Projects</param>
         public void SetProject(List<string> project)
         {
-            ProjectInformation.ProjectPath = project;
+            ProjectInfo.ProjectPath = project;
         }      
 
         /// <summary>
@@ -146,22 +148,23 @@ namespace Spg.Controller
             this.after = after;
             var examples = Tuple.Create(before, after);
             var refazer = new Refazer4CSharp();
-            CurrentProgram = refazer.LearnTransformations(examples);
+            grammar = Refazer4CSharp.GetGrammar();
+            CurrentProgram = refazer.LearnTransformations(grammar, examples);
+            ExecuteProgram();
             NotifyEditFinishedObservers();
         }
 
-        private List<SyntaxNodeOrToken> ExecutePrograms()
+        private Dictionary<string, List<object>> ExecuteProgram()
         {         
             var asts = new List<SyntaxNodeOrToken>();
-            if (solutionPath == null)
+            if (ProjectInfo.SolutionPath == null)
             {
                 //Run program
-                return asts;
+                return null;
             }
             else
             {
-                var path = solutionPath.FilePath;
-                var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
+                var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, ProjectInfo.SolutionPath);
                 foreach (var v in files)
                 {
                     var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
@@ -169,15 +172,13 @@ namespace Spg.Controller
                 }
             }
 
+            var dicTrans = new Dictionary<string, List<object>>();
             foreach (var ast in asts)
             {
-                var _grammar = Refazer4CSharp.GetGrammar();
-                var newInputState = State.Create(_grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
                 object[] output = CurrentProgram.Invoke(newInputState).ToEnumerable().ToArray();
 
                 Transformed.AddRange(output);
-                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
-
                 if (output.Any())
                 {
                     if (dicTrans.ContainsKey(ast.SyntaxTree.FilePath.ToUpperInvariant()))
@@ -190,10 +191,7 @@ namespace Spg.Controller
                     }
                 }
             }
-
-
-            return asts;
-
+            return dicTrans;
         }
 
         /// <summary>

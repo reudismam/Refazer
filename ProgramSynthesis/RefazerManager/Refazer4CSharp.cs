@@ -18,11 +18,8 @@ namespace ProseManager
 {
     public class Refazer4CSharp
     {
-        public string LearnTransformationsPath(Tuple<string, string> examples)
+        public string LearnTransformationsPath(Grammar grammar, Tuple<string, string> examples)
         {
-            //Load grammar
-            var grammar = GetGrammar();
-
             //input data
             string inputText = File.ReadAllText(examples.Item1);
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
@@ -43,11 +40,8 @@ namespace ProseManager
             return program.ToString();
         }
 
-        public ProgramNode LearnTransformations(Tuple<string, string> examples)
+        public ProgramNode LearnTransformations(Grammar grammar, Tuple<string, string> examples)
         {
-            //Load grammar
-            var grammar = GetGrammar();
-
             //input data
             string inputText = examples.Item1;
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
