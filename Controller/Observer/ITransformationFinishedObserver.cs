@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Controller
 {
-    public interface IEditFinishedObserver
+    public interface ITransformationFinishedObserver
     {
-        void EditFinished(EditFinishedEvent @event);
+        void TransformationFinished(TransformationFinishedEvent @event);
     }
 }

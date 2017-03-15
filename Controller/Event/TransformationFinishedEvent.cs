@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Controller.Event
 {
-    public class EditFinishedEvent
+    public class TransformationFinishedEvent
     {
     }
 }

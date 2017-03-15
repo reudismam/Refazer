@@ -14,13 +14,15 @@ using Microsoft.VisualStudio.Text.Editor;
 using EnvDTE;
 using Microsoft.VisualStudio.Text;
 using Spg.Controller;
+using Controller;
+using Controller.Event;
 
 namespace RefazerUI
 {
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class Init
+    internal sealed class Init: ITransformationFinishedObserver
     {
         /// <summary>
         /// Command ID.
@@ -58,6 +60,7 @@ namespace RefazerUI
                 var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
                 commandService.AddCommand(menuItem);
             }
+            EditorController.GetInstance().AddTransformationFinishedObserver(this);
         }
 
         /// <summary>
@@ -124,8 +127,9 @@ namespace RefazerUI
 
             EditorController controller = EditorController.GetInstance();
             EditorController.GetInstance().SetSolution(fullName);
-            controller.Init(before);            
-        }
+            controller.Init(before);
+            EnableInitCommand(package, false);
+        } 
 
         static public string GetText(IWpfTextViewHost host)
         {
@@ -133,6 +137,33 @@ namespace RefazerUI
 
             ITextSnapshot document = view.TextSnapshot;
             return document.GetText();
+        }
+
+        /// <summary>
+        /// Enable Init button
+        /// </summary>
+        /// <param name="package"></param>
+        /// <param name="flag"></param>
+        public void EnableInitCommand(Package package, bool flag)
+        {
+            if (package == null)
+            {
+                throw new ArgumentNullException("package");
+            }
+            OleMenuCommandService commandService = Provider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            if (commandService != null)
+            {
+                var menuCommandID = new CommandID(CommandSet, CommandId);
+                //var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
+                //commandService.AddCommand(menuItem);
+                var menuItem = commandService.FindCommand(menuCommandID);
+                menuItem.Enabled = flag;
+            }
+        }
+
+        public void TransformationFinished(TransformationFinishedEvent @event)
+        {
+            EnableInitCommand(package, true);
         }
     }
 }

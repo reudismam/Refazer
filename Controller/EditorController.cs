@@ -23,7 +23,7 @@ namespace Spg.Controller
     public class EditorController
     {
         private List<IEditStartedObserver> _editStartedOIbservers = new List<IEditStartedObserver>();
-        private List<IEditFinishedObserver> _editFinishedOIbservers = new List<IEditFinishedObserver>();
+        private List<ITransformationFinishedObserver> _transformationFinishedOIbservers = new List<ITransformationFinishedObserver>();
 
      
 
@@ -151,7 +151,7 @@ namespace Spg.Controller
             grammar = Refazer4CSharp.GetGrammar();
             CurrentProgram = refazer.LearnTransformations(grammar, examples);
             ExecuteProgram();
-            NotifyEditFinishedObservers();
+            NotifyTransformationFinishedObservers();
         }
 
         private Dictionary<string, List<object>> ExecuteProgram()
@@ -212,12 +212,12 @@ namespace Spg.Controller
         /// Notify highlight observers
         /// </summary>
         /// <param name="regions">Regions</param>
-        private void NotifyEditFinishedObservers()
+        private void NotifyTransformationFinishedObservers()
         {
-            EditFinishedEvent hEvent = new EditFinishedEvent();
-            foreach (var observer in _editFinishedOIbservers)
+            TransformationFinishedEvent hEvent = new TransformationFinishedEvent();
+            foreach (var observer in _transformationFinishedOIbservers)
             {
-                observer.EditFinished(hEvent);
+                observer.TransformationFinished(hEvent);
             }
         }
 
@@ -228,6 +228,11 @@ namespace Spg.Controller
         public void AddEditStartedObserver(IEditStartedObserver observer)
         {
            _editStartedOIbservers.Add(observer);
+        }
+
+        public void AddTransformationFinishedObserver(ITransformationFinishedObserver observer)
+        {
+            _transformationFinishedOIbservers.Add(observer);
         }
     }
 }

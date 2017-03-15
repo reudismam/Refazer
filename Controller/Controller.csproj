@@ -318,8 +318,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditorController.cs" />
-    <Compile Include="Event\EditFinishedEvent.cs" />
-    <Compile Include="Observer\IEditFinishedObserver.cs" />
+    <Compile Include="Event\TransformationFinishedEvent.cs" />
+    <Compile Include="Observer\ITransformationFinishedObserver.cs" />
     <Compile Include="Observer\IEditStartedObsever.cs" />
     <Compile Include="ProjectInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -129,6 +129,7 @@ namespace RefazerUI
 
             EditorController controller = EditorController.GetInstance();
             controller.Transform(after);
+            EnableTransformCommand(package, false);
         }
 
         public void EnableTransformCommand(Package package, bool flag)
