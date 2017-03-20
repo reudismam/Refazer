@@ -16,13 +16,6 @@ namespace RefazerManager
     {
         public static Grammar LoadGrammar(string grammarFile, params string[] prerequisiteGrammars)
         {
-            // Add this inside the start of ComputeRefactoringsAsync:
-            try { test(false); }
-            catch (System.Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-
             foreach (string prerequisite in prerequisiteGrammars)
             {
                 var options = new CompilerOptions { InputGrammar = prerequisite };
@@ -45,14 +38,6 @@ namespace RefazerManager
             }
 
             return compilationResult.Value;
-        }
-
-        // This is the method "test":
-        static void test(bool b)
-        {
-            if (!b) return;
-            Microsoft.CodeAnalysis.Solution s = null;
-            s.GetDocumentIdsWithFilePath("");
         }
 
         public static ProgramNode Learn(Grammar grammar, Spec spec,
