@@ -9,6 +9,7 @@ using Microsoft.ProgramSynthesis.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using static RefazerManager.Utils;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Substrings;
@@ -43,6 +44,16 @@ namespace RefazerFunctions
             //Getting examples methods
             var examplesInput = GetNodesByType(inpTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
             var examplesOutput = GetNodesByType(outTree, SyntaxKind.MethodDeclaration).GetRange(0, 1);
+
+            //Semantic model for the file
+            var inputSyntaxTree = CSharpSyntaxTree.ParseText(inputText);
+            var compilation = CSharpCompilation.Create("RefazerType")
+                                .AddSyntaxTrees(inputSyntaxTree)
+                                .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+
+            SemanticModel model = compilation.GetSemanticModel(inputSyntaxTree);
+            var methodFirst = inputSyntaxTree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().First();
+            var methodInfo = model.GetDeclaredSymbol(methodFirst);
 
             //building example methods
             var ioExamples = new Dictionary<State, IEnumerable<object>>();

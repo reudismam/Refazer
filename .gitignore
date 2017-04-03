@@ -292,8 +292,6 @@ bld/
 [Oo]bj/
 [Ll]og/
 
-ProgramSynthesis/benchmarks*/*
-
 *.t
 *.txt
 *.suo
