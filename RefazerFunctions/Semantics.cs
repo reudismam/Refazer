@@ -412,7 +412,7 @@ namespace RefazerFunctions
             }
         }  
 
-        public static IEnumerable<Node> Traversal(Node node, string type)
+        public static IEnumerable<Node> AllNodes(Node node, string type)
         {
             var traversal = new TreeTraversal<SyntaxNodeOrToken>();
             var itreenode = node.Value;

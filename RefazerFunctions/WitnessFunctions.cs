@@ -308,7 +308,7 @@ namespace RefazerFunctions
             return Transformation.EditMapTNode(rule, spec);
         }
 
-        [WitnessFunction(nameof(Semantics.Traversal), 1)]
+        [WitnessFunction(nameof(Semantics.AllNodes), 1)]
         public DisjunctiveExamplesSpec TemplateTraversal(GrammarRule rule, SubsequenceSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();

@@ -14,7 +14,7 @@ namespace RefazerFunctions
         [FeatureCalculator("EditMap")]
         public static double Score_EditMap(double scriptScore, double editScore) => scriptScore + editScore;
 
-        [FeatureCalculator(nameof(Semantics.Traversal))]
+        [FeatureCalculator(nameof(Semantics.AllNodes))]
         public static double Score_Traversal(double scriptScore, double editScore) => scriptScore + editScore;
 
         [FeatureCalculator("EditFilter")]

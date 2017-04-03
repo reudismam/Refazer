@@ -22,7 +22,7 @@ Patch rule := SE(editList) | EList(editList, rule);
 IEnumerable<Node> editList := EditMap(operation, locations) = Map(\target: Node => operation, locations);
 IEnumerable<Node> locations := EditFilter(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
 bool nodematch := Match(x, pattern);
-IEnumerable<Node> fnodes := Traversal(node, id);
+IEnumerable<Node> fnodes := AllNodes(node, id);
 
 Node operation := Insert(target, ast, c) | InsertBefore(target, ref, ast) |  Update(target, ast) | Delete(target, ref);
 
