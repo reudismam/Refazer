@@ -432,7 +432,7 @@ namespace UnitTests
         public static Grammar GetGrammar()
         {
             string path = GetBasePath();
-            var grammar = Utils.LoadGrammar(path + @"\grammar\Transformation.grammar");
+            var grammar = Utils.LoadGrammar(path + @"ProgramSynthesis\grammar\Transformation.grammar");
             return grammar;
         }
 
