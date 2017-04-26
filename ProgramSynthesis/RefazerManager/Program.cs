@@ -14,6 +14,7 @@ using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Substrings;
 using RefazerManager;
+using TreeElement.Spg.Node;
 
 namespace RefazerFunctions
 {

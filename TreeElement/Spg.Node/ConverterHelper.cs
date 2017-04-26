@@ -3,10 +3,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using TreeElement.Spg.Node;
+using RefazerFunctions.Substrings;
 using TreeElement.Token;
 
-namespace RefazerFunctions.Substrings
+namespace TreeElement.Spg.Node
 {
     public class ConverterHelper
     {
@@ -20,7 +20,7 @@ namespace RefazerFunctions.Substrings
         {
             if (!Valid(st)) return null;
 
-            var list = GetChildren(st); //st.AsNode().ChildNodes();
+            var list = GetChildren(st); 
             if (!list.Any())
             {
                 var treeNode = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
@@ -113,22 +113,22 @@ namespace RefazerFunctions.Substrings
             return false;
         }
 
-        public static TreeNode<Token> ConvertITreeNodeToToken(TreeNode<SyntaxNodeOrToken> st)
+        public static TreeNode<Token.Token> ConvertITreeNodeToToken(TreeNode<SyntaxNodeOrToken> st)
         {
-            var token = new Token(new Label(st.Value.Kind().ToString()), st);
+            var token = new Token.Token(new Label(st.Value.Kind().ToString()), st);
             if (!st.Children.Any())
             {
                 var dtoken = new DynToken(new Label(st.Value.Kind().ToString()), st);
-                var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Label));
+                var dtreeNode = new TreeNode<Token.Token>(dtoken, new TLabel(dtoken.Label));
                 return dtreeNode;
             }
-            var children = new List<TreeNode<Token>>();
+            var children = new List<TreeNode<Token.Token>>();
             foreach (var sot in st.Children)
             {
                 var node = ConvertITreeNodeToToken(sot);
                 children.Add(node);
             }
-            var tree = new TreeNode<Token>(token, new TLabel(token.Label), children);
+            var tree = new TreeNode<Token.Token>(token, new TLabel(token.Label), children);
             return tree;
         }
 

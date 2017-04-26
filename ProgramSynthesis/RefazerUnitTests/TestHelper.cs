@@ -14,6 +14,7 @@ using RefazerManager;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
+using TreeElement.Spg.Node;
 using WorkSpaces.Spg.Workspace;
 
 namespace UnitTests

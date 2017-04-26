@@ -13,6 +13,7 @@ using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
 using RefazerManager;
 using TreeElement;
+using TreeElement.Spg.Node;
 
 namespace ProseManager
 {
