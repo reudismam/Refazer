@@ -79,6 +79,41 @@ namespace RefazerManager
             return bestProgram;
         }
 
+        public static List<ProgramNode> LearnASet(Grammar grammar, Spec spec,
+                                         Feature<double> scorer, DomainLearningLogic witnessFunctions)
+        {
+            var engine = new SynthesisEngine(grammar, new SynthesisEngine.Config
+            {
+                Strategies = new ISynthesisStrategy[]
+                {
+                    new EnumerativeSynthesis(),
+                    new DeductiveSynthesis(witnessFunctions)
+                },
+                UseThreads = false,
+                LogListener = new LogListener(),
+            });
+
+            var consistentPrograms = engine.LearnGrammar(spec);
+            const ulong a = 201;
+            var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
+            var b = (ulong)topK.Count;
+            topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
+            var programs = "";
+            List<ProgramNode> validated = new List<ProgramNode>();
+            foreach (ProgramNode p in topK)
+            {
+                var scorep = p.GetFeatureValue(scorer);
+                programs += $"Score[{scorep}] " + p + "\n\n";
+                validated.Add(p);
+            }
+
+            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+            string file = expHome + "programs.txt";
+            File.WriteAllText(file, programs);
+
+            return validated;
+        }
+
         #region Auxiliary methods
 
         public static void WriteColored(ConsoleColor color, object obj)

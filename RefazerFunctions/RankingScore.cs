@@ -80,6 +80,9 @@ namespace RefazerFunctions
         [FeatureCalculator(nameof(Semantics.Concrete))]
         public static double Score_Concrete(double treeScore) => treeScore * 1000;
 
+        [FeatureCalculator(nameof(Semantics.Variable))]
+        public static double Score_Variable(double idScore) => idScore;
+
         [FeatureCalculator(nameof(Semantics.Pattern))]
         public static double Score_Pattern(double kindScore, double expression1Score) => kindScore + expression1Score;
 

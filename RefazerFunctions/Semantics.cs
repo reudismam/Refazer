@@ -19,7 +19,7 @@ namespace RefazerFunctions
 {
     public static class Semantics
     {
-        private static Dictionary<Node, Node> dicBeforeAfter = new Dictionary<Node, Node>();
+        private static readonly Dictionary<Node, Node> dicBeforeAfter = new Dictionary<Node, Node>();
 
         /// <summary>
         /// Matches the element on the tree with specified kind and child nodes.
@@ -95,6 +95,11 @@ namespace RefazerFunctions
         public static Pattern Concrete(SyntaxNodeOrToken tree)
         {
             return MatchSemanticFunctions.Literal(tree);
+        }
+
+        public static Pattern Variable(string id)
+        {
+            return null;
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ Node operation := Insert(target, ast, c) | InsertBefore(target, ref, ast) |  Upd
 Pattern pattern := Context(kmatch, id);
 Pattern kmatch := token | Pattern(id, children);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
-Pattern token := Concrete(tree) | Abstract(id);
+Pattern token := Concrete(tree) | Abstract(id) | Variable(id);
 
 Node ast:= const | ref;
 Node const := Node(kind, childrenNodes) | ConstNode(tree);

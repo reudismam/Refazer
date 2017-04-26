@@ -20,6 +20,8 @@ namespace RefazerFunctions
     /// </summary>
     public class WitnessFunctions: DomainLearningLogic
     {
+        public static Dictionary<State, Dictionary<string, string>> Bindings = new Dictionary<State, Dictionary<string, string>>();
+
         public WitnessFunctions(Grammar grammar) : base(grammar) { }
 
         /// <summary>
@@ -73,10 +75,10 @@ namespace RefazerFunctions
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction(nameof(Semantics.Abstract), 0)]
-        public DisjunctiveExamplesSpec VariableKind(GrammarRule rule, DisjunctiveExamplesSpec spec)
+        [WitnessFunction(nameof(Semantics.Variable), 0)]
+        public ExampleSpec AbstractId(GrammarRule rule, ExampleSpec spec)
         {
-            return Variable.VariableKindDisjunctive(rule, spec);
+            return Variable.VariableID(rule, spec);
         }
 
         /// <summary>
