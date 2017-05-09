@@ -41,6 +41,11 @@ namespace TreeElement.Spg.Node
             return tree;
         }
 
+
+        /// <summary>
+        /// Vefify if a node is valid.
+        /// </summary>
+        /// <param name="st">Node</param>
         public static bool Valid(SyntaxNodeOrToken st)
         {
             return st.IsNode || IsAcessModifier(st) || IsModifier(st) || st.IsKind(SyntaxKind.IdentifierToken);
@@ -186,13 +191,7 @@ namespace TreeElement.Spg.Node
             if (!list.Any())
             {
                 var value = st.Value;
-                //var value = RemoveComments((SyntaxNodeOrToken) node);
                 var content = value.ToString().Trim();
-                //if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
-                //{
-                //    var tNode = "{" + st.Label + "}";
-                //    return tNode;
-                //}
                 if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
                 {
                     content = Regex.Replace(content, "[^0-9a-zA-Z\"]+", " ");
@@ -205,7 +204,6 @@ namespace TreeElement.Spg.Node
 
                 if (st.IsLabel(new TLabel(SyntaxKind.ArgumentList)))
                 {
-                    //content = "" + st.Label;
                     var argList = "{" + st.Label + "}";
                     return argList;
                 }
@@ -221,6 +219,48 @@ namespace TreeElement.Spg.Node
             }
 
             tree += "}";
+            return tree;
+        }
+
+        /// <summary>
+        /// Convert a syntax tree to a TreeNode
+        /// </summary>
+        /// <param name="st">Syntax tree root</param>
+        /// <returns>TreeNode</returns>
+        public static string ConvertToAUEq<T>(TreeNode<T> st)
+        {
+            var list = st.Children;
+            if (!list.Any())
+            {
+                var value = st.Value;
+                var content = value.ToString().Trim();
+                if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
+                {
+                    content = Regex.Replace(content, "[^0-9a-zA-Z\"]+", " ");
+                }
+
+                if (st.IsLabel(new TLabel(SyntaxKind.Block)))
+                {
+                    content = "" + st.Label;
+                }
+
+                if (st.IsLabel(new TLabel(SyntaxKind.ArgumentList)))
+                {
+                    var argList = "(" + st.Label + ")";
+                    return argList;
+                }
+
+                var treeNode = "(" + st.Label + "_" + content + ")";
+                return treeNode;
+            }
+            var tree = "(" + st.Label;
+            foreach (var sot in st.Children)
+            {
+                var node = ConvertToAUEq(sot);
+                tree += node;
+            }
+
+            tree += ")";
             return tree;
         }
 

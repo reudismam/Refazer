@@ -221,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeLocation.cs" />
+    <Compile Include="EvaluationTest.cs" />
     <Compile Include="FileUtil.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="RegionManager.cs" />
@@ -230,7 +231,6 @@
     <Compile Include="TestSuite.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TRegion.cs" />
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
