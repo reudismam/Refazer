@@ -7,9 +7,9 @@ namespace UnitTests
 {
     internal class TestUtil
     {
-        public const string LogPath = @"C:\Users\SPG-04\Documents\Research\ICSE\LogICSE.xlsx";
+        public const string LogPath = @"C:\Users\SPG-09\Documents\EXP\ProgStatus2.xlsx";
 
-        public const string LogProgramStatus = @"C:\Users\SPG-04\Documents\Research\Ranking\ProgStatus.xlsx";
+        public const string LogProgramStatus = @"C:\Users\SPG-09\Documents\EXP\ProgStatus.xlsx";
 
         public static List<CodeLocation> GetAllLocationsOnCommit(List<TRegion> selections, List<CodeLocation> locations)
         {

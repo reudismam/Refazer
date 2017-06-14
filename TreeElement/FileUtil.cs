@@ -15,6 +15,7 @@ namespace TreeElement
         /// <returns>String representing the content of the file</returns>
         public static String ReadFile(string path)
         {
+            path = NormalizePath(path);
             // Open the text file using a stream reader.
             using (StreamReader sr = new StreamReader(path))
             {
@@ -23,13 +24,22 @@ namespace TreeElement
                 return line;
             }
         }
-
-        /// <summary>
-        /// Write string data to a file
-        /// </summary>
-        /// <param name="path">File path</param>
-        /// <param name="sourceCode">Source code</param>
-        public static void WriteToFile(string path, string sourceCode)
+        private static string NormalizePath(string path)
+        {
+            var result = path.Split(@"\".ToArray(), StringSplitOptions.None);
+                var mypath = @"C:\Users\SPG-09\Documents\";
+                var newresult = result.ToList().GetRange(4, result.Count() - 4).ToArray();
+                //Insert code to remove specific computer path
+                var newpath = Path.Combine(newresult);
+                var resultPath = mypath + newpath;
+            return resultPath;
+        }
+    /// <summary>
+    /// Write string data to a file
+    /// </summary>
+    /// <param name="path">File path</param>
+    /// <param name="sourceCode">Source code</param>
+    public static void WriteToFile(string path, string sourceCode)
         {
             StreamWriter file = new StreamWriter(path);
             file.Write(sourceCode);
