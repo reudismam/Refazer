@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
+using TreeEdit.Spg.Builder;
 using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
@@ -30,7 +32,6 @@ namespace TreeEdit.Spg.Script
                 if (w == null)
                 {
                     int k = FindPos(x, M);
-
                     var xnode = new TreeNode<T>(x.Value, x.Label);
                     var insert = new Insert<T>(xnode, z, k);
                     z.AddChild(xnode, k - 1);

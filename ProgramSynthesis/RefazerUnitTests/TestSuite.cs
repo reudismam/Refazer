@@ -1391,7 +1391,7 @@ namespace UnitTests
             //int seed = 160481219;
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-            var examples = randomList.GetRange(0, 2);
+            var examples = randomList.GetRange(0, 2);  
 
             //Execution
             TestHelper helper;
