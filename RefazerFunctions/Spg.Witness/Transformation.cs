@@ -28,7 +28,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Transformation witness function for parameter rule.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Grammar parameter</param>
         /// <param name="spec">Example specification</param>
         public static SubsequenceSpec TransformationRule(GrammarRule rule, ExampleSpec spec)
         {
@@ -93,7 +92,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Segment the edit in nodes
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Example specification</param>
         public static SubsequenceSpec EditMapTNode(GrammarRule rule, SubsequenceSpec spec)
         {
@@ -168,7 +166,7 @@ namespace RefazerFunctions.Spg.Witness
         /// <summary>
         /// Compact edit operations with similar semantic in compacted edit operations
         /// </summary>
-        /// <param name="connectedComponents">Uncompacted edit operations</param>
+        /// <param name="connectedComponents">Non-compacted edit operations</param>
         /// <param name="inpTree">Input tree</param>
         private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, TreeNode<SyntaxNodeOrToken> inpTree, SyntaxNodeOrToken outTree)
         {
@@ -346,7 +344,7 @@ namespace RefazerFunctions.Spg.Witness
         /// <summary>
         /// Compact similar edit operations in a single edit operation
         /// </summary>
-        /// <param name="connectedComponents">Uncompacted edit operations</param>
+        /// <param name="connectedComponents">Non-compacted edit operations</param>
         private static List<EditOperation<SyntaxNodeOrToken>> Compact(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
             var newList = new List<EditOperation<SyntaxNodeOrToken>>();
@@ -508,7 +506,7 @@ namespace RefazerFunctions.Spg.Witness
         /// </summary>
         /// <param name="inpTree">Input tree</param>
         /// <param name="outTree">Output tree</param>
-        /// <returns>Computed edit edit</returns>
+        /// <returns>Computed edit</returns>
         private static List<EditOperation<SyntaxNodeOrToken>> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree)
         {
             var gumTreeMapping = new GumTreeMapping<SyntaxNodeOrToken>();

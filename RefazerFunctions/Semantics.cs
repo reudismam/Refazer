@@ -11,6 +11,7 @@ using RefazerFunctions.List;
 using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Spg.Semantic;
 using TreeEdit.Spg.Match;
+using TreeEdit.Spg.Print;
 using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
@@ -190,6 +191,7 @@ namespace RefazerFunctions
                         }
                         else
                         {
+                            PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(v.Value, "", false);
                             n = ReconstructTree(v.Value);
                         }
                         string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
@@ -408,9 +410,12 @@ namespace RefazerFunctions
                 {
                     var matches = MatchManager.Matches(ancestor, kmatch.Tree, target.Value);
                     matches = matches.OrderByDescending(o => o.Start).ToList();
-                    var match = matches.ElementAt(Math.Abs(k) - 1);
-                    var node = FindChild(match, patternP.K);
-                    return new Node(node);
+                    if (matches.Any())
+                    {
+                        var match = matches.ElementAt(Math.Abs(k) - 1);
+                        var node = FindChild(match, patternP.K);
+                        return new Node(node);
+                    }
                 }
                 var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
                 return new Node(treeNode);
@@ -1147,7 +1152,7 @@ namespace RefazerFunctions
                     return acessorList;
                 }
             }
-            throw new Exception($"Ussupported Kind Support: {kind}");
+            throw new Exception($"Unsupported kind support: {kind}");
         }
 
         /// <summary>
