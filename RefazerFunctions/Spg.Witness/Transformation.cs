@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DbscanImplementation;
@@ -288,6 +289,7 @@ namespace RefazerFunctions.Spg.Witness
             foreach (var s in script.Edits)
             {
                 treeUpdate.ProcessEditOperation(s.EditOperation);
+                Debug.WriteLine("New Tree: \n\n");
                 PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(treeUpdate.CurrentTree, "", true);
             }
             return treeUpdate.CurrentTree;

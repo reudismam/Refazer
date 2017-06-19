@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RefazerFunctions.Substrings;
 using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Spg.Walker;
@@ -74,8 +73,9 @@ namespace TreeEdit.Spg.Script
             var traversal = new TreeTraversal<T>();
             var nodes = traversal.PostOrderTraversal(t1); //the delete phase
 
-            foreach (var w in nodes)
+            for (int i = 0;  i < nodes.Count; i++)
             {
+                var w = nodes[i];
                 if (!M.ContainsKey(w))
                 {
                     var delete = new Delete<T>(w);
