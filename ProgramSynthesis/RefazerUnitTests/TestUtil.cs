@@ -7,7 +7,7 @@ namespace UnitTests
 {
     internal class TestUtil
     {
-        public const string LogPath = @"C:\Users\SPG-09\Documents\EXP\ProgStatus2.xlsx";
+        public const string LogPath = @"C:\Users\SPG-04\Documents\Research\Ranking\ProgStatus2.xlsx";
 
         public const string LogProgramStatus = @"C:\Users\SPG-09\Documents\EXP\ProgStatus.xlsx";
 

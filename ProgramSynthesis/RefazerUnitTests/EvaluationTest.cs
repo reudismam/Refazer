@@ -52,16 +52,16 @@ namespace RefazerUnitTests
             SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(before, path: documents.First().Item1).GetRoot();
             var nodes = GetNodesByType(inpTree, new List<SyntaxKind> {SyntaxKind.MethodDeclaration});
             var targetMethod = nodes.ElementAt(2);
-            var lockStatements = GetNodesByType(targetMethod, new List<SyntaxKind> {SyntaxKind.LockStatement});
-            var lockStatementsStr = lockStatements.Select(o => o.ToString()).ToList();
+            var trees = GetNodesByType(targetMethod, new List<SyntaxKind> {SyntaxKind.LockStatement});
+            var lockStatementsStr = trees.Select(o => o.ToString()).ToList();
             var triples = new List<List<Tuple<string, string, string>>>();
-            foreach (var lockstm in lockStatements)
+            foreach (var tree in trees)
             {
                 var stms = new List<Tuple<string, string, string>>();
-                var node = lockstm;
-                for(node = lockstm; !node.IsKind(SyntaxKind.MethodDeclaration); node = node.Parent)
+                var node = tree;
+                for(node = tree; !node.IsKind(SyntaxKind.MethodDeclaration); node = node.Parent)
                 {
-                    var parent = lockstm.Parent;
+                    var parent = tree.Parent;
                     var children = parent.ChildNodes().ToList();
                     var leftSiblings = children.Where(o => children.IndexOf(o) < children.IndexOf(node.AsNode()));
                     var leftTrees = leftSiblings.Select(o => ConverterHelper.ConvertCSharpToTreeNode(o));
@@ -70,8 +70,8 @@ namespace RefazerUnitTests
                     var leftStr = String.Join(", ", leftTrees.Select(ConverterHelper.ConvertToAUEq));
                     var rightStr = String.Join(", ", rightTrees.Select(ConverterHelper.ConvertToAUEq));
                     string current;
-                    if (node.Equals(lockstm))
-                        current = ConverterHelper.ConvertToAUEq(ConverterHelper.ConvertCSharpToTreeNode(lockstm));
+                    if (node.Equals(tree))
+                        current = ConverterHelper.ConvertToAUEq(ConverterHelper.ConvertCSharpToTreeNode(tree));
                     else
                         current = node.Kind().ToString();
 
