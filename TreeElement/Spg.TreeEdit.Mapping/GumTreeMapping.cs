@@ -236,7 +236,8 @@ namespace TreeElement.Spg.TreeEdit.Mapping
             File.WriteAllText(f1, t1String);
             File.WriteAllText(f2, t2String);
 
-            string cmd = @"/c java -jar """ + GetTreeEditDistanceDataFolder(@"\libs") + $@"\RTED_v1.1.jar"" -f ""{f1}"" ""{f2}"" -c 1 1 1 -s heavy --switch -m";
+            string cmd = @"/c java -jar """ + GetTreeEditDistanceDataFolder(@"\libs") +
+                         $@"\RTED_v1.1.jar"" -f ""{f1}"" ""{f2}"" -c 1 1 1 -s heavy --switch -m";
             Process proc = new Process();
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.Arguments = cmd;
@@ -246,7 +247,7 @@ namespace TreeElement.Spg.TreeEdit.Mapping
             proc.Start();
             string output = proc.StandardOutput.ReadToEnd();
             string error = proc.StandardError.ReadToEnd();
-            if (!error.Equals("")) throw new Exception("Errors while computing tree edit distance algorithm.");      
+            if (!error.Equals("")) throw new Exception("Errors while computing tree edit distance algorithm.");
 
             var t1Traversal = new TreeTraversal<T>();
             var t1List = t1Traversal.PostOrderTraversal(t1);
@@ -284,21 +285,10 @@ namespace TreeElement.Spg.TreeEdit.Mapping
             return dictionary;
         }
 
-
         static string GetTreeEditDistanceDataFolder(string treeEditFileLocation)
         {
             string startupPath = FileUtil.GetBasePath();
             var result = startupPath + treeEditFileLocation;
-            return result;
-        }
-
-        //todo put this method on the appropriate class.
-        static string GetTestDataFolder(string testDataLocation)
-        {
-            string startupPath = FileUtil.GetBasePath();
-            var pathItems = startupPath.Split(Path.DirectorySeparatorChar);
-            string projectPath = String.Join(Path.DirectorySeparatorChar.ToString(), pathItems.Take(pathItems.Length - 4));
-            string result = projectPath + testDataLocation;
             return result;
         }
 
