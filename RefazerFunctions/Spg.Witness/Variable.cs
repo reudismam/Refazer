@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using RefazerFunctions.Substrings;
+using RefazerFunctions.Spg.Config;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
 
@@ -14,6 +15,7 @@ namespace RefazerFunctions.Spg.Witness
 {
     public class Variable
     {
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         public static DisjunctiveExamplesSpec VariableKindDisjunctive(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
@@ -31,24 +33,35 @@ namespace RefazerFunctions.Spg.Witness
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        public static ExampleSpec VariableKind(GrammarRule rule, ExampleSpec spec)
+        /// <summary>
+        /// Defines the back-propagation function of the kind parameter of the Abstract operator.
+        /// </summary>
+        /// <param name="rule">Grammar</param>
+        /// <param name="spec">Specification for Abstract operator</param>
+        public static DisjunctiveExamplesSpec VariableKind(GrammarRule rule, ExampleSpec spec)
         {
-            var first = (Tuple<TreeNode<SyntaxNodeOrToken>, int>)spec.Examples.First().Value;
-            var mats = spec.Examples.Values.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
-            //queries
-            var isChilNumEqual = mats.All(o => o.Item1.Children.Count == mats.First().Item1.Children.Count);
-            var isTypeEqual = mats.All(o => o.Item1.Value.Kind().ToString().Equals(mats.First().Item1.Value.Kind().ToString()));
-            var hasChildren = mats.First().Item1.Children.Count != 0;
-
-            if (isTypeEqual && isChilNumEqual && hasChildren) return null;
-            var treeExamples = new Dictionary<State, object>();
+            var matches = spec.Examples.Values.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().ToList();
+            var first = matches.First().Item1;
+            //queries       
+            var isTypeEqual = matches.All(o => o.Item1.Value.Kind().ToString().Equals(first.Value.Kind().ToString()));
+            if (SynthesisConfig.GetInstance().BoundGeneratedPrograms)
+            {
+                var isChildrenNumberEquals = matches.All(o => o.Item1.Children.Count == first.Children.Count);
+                var hasChildren = first.Children.Any();
+                if (isTypeEqual && isChildrenNumberEquals && hasChildren) return null;
+            }
+            var treeExamples = new Dictionary<State, IEnumerable<object>>();
             if (!isTypeEqual)
             {
-                spec.ProvidedInputs.ForEach(o => treeExamples[o] = Token.Expression);
-                return new ExampleSpec(treeExamples);
+                spec.ProvidedInputs.ForEach(o => treeExamples[o] = new List<object> { Token.Expression });
+                return new DisjunctiveExamplesSpec(treeExamples);
             }
-            spec.ProvidedInputs.ForEach(o => treeExamples[o] = first.Item1.Value.Kind().ToString());
-            return new ExampleSpec(treeExamples);
+            spec.ProvidedInputs.ForEach(o => treeExamples[o] = new List<object> { first.Value.Kind().ToString()});
+            if (!SynthesisConfig.GetInstance().BoundGeneratedPrograms)
+            {
+                spec.ProvidedInputs.ForEach(o => ((List<object>) treeExamples[o]).Add(Token.Expression));
+            }
+            return new DisjunctiveExamplesSpec(treeExamples);
         }
 
         public static ExampleSpec VariableID(GrammarRule rule, ExampleSpec spec)
