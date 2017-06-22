@@ -341,12 +341,12 @@ namespace RefazerFunctions
         public static bool Match(Node sx, Pattern template)
         {
             var patternP = template;
-            var parent = FindParent(sx.Value, patternP.K);
+            var parent = FindParent(sx.Value, patternP.XPath);
             if (parent == null) return false;
             var isValue = MatchManager.IsValueEachChild(parent, template.Tree);
             if (!isValue) return false;
 
-            var node = FindChild(parent, patternP.K);
+            var node = FindChild(parent, patternP.XPath);
             var isValid = node.Equals(sx.Value);
             if (isValid)
             {
@@ -398,7 +398,7 @@ namespace RefazerFunctions
                     return new Node(treeNode);
                 }
                 var match = nodes.ElementAt(k - 1);
-                var node = FindChild(match, patternP.K);
+                var node = FindChild(match, patternP.XPath);
                 return new Node(node);
             }
             else
@@ -413,7 +413,7 @@ namespace RefazerFunctions
                     if (matches.Any())
                     {
                         var match = matches.ElementAt(Math.Abs(k) - 1);
-                        var node = FindChild(match, patternP.K);
+                        var node = FindChild(match, patternP.XPath);
                         return new Node(node);
                     }
                 }
