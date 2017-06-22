@@ -13,6 +13,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using RefazerFunctions.Substrings;
 using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Spg.Config;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Print;
@@ -23,17 +24,20 @@ using TreeElement.Spg.TreeEdit.Mapping;
 
 namespace RefazerFunctions.Spg.Witness
 {
+    /// <summary>
+    /// This class specifies back-propagation functions for Transformation operator.
+    /// </summary>
     public class Transformation
     {
         /// <summary>
-        /// Transformation witness function for parameter rule.
+        /// Specifies the back-propagation function for the rule parameter of the transformation operator.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Example specification</param>
         public static SubsequenceSpec TransformationRule(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var dicConnectedComponents = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
+            var dictionaryConnectedComponents = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
             var listConnectedComponents = new List<List<EditOperation<SyntaxNodeOrToken>>>();
             var transSizeList = new List<int>();
             foreach (State input in spec.ProvidedInputs)
@@ -46,7 +50,7 @@ namespace RefazerFunctions.Spg.Witness
                     transSizeList.Add(script.Count);                
                     var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(script);
                     var connectedComponentsInput = ConnectedComponentManager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script, inpTreeNode.Value);
-                    dicConnectedComponents[input] = connectedComponentsInput;
+                    dictionaryConnectedComponents[input] = connectedComponentsInput;
                     listConnectedComponents.AddRange(connectedComponentsInput);
                 }
             }
@@ -54,13 +58,15 @@ namespace RefazerFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node)input[rule.Body[0]];
+                // ReSharper disable once PossibleNullReferenceException
                 SyntaxNodeOrToken outTree = (SyntaxNodeOrToken) spec.DisjunctiveExamples[input].SingleOrDefault();
                 //Compacted scripts for this input
                 var scriptsInput = new List<List<Script>>();
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var cluster in clusters)
                 {
                     //Connected components for this input
-                    var connectedComponentsInput = dicConnectedComponents[input];
+                    var connectedComponentsInput = dictionaryConnectedComponents[input];
                     //Select from the cluster the connected components related to the input.
                     var connectedComponentsInputInCluster = cluster.Where(o => connectedComponentsInput.Any(e => IsEquals(o.Edits, e)));
                     scriptsInput.Add(connectedComponentsInputInCluster.ToList());
@@ -68,11 +74,15 @@ namespace RefazerFunctions.Spg.Witness
                 var compactedEditsInput = scriptsInput.Select(o => CompactScript(o, inpTree.Value, outTree)).ToList();
                 kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { compactedEditsInput };
             }
-            SaveToFile(transSizeList);
+            if (SynthesisConfig.GetInstance().CreateLog) SaveToFile(transSizeList);
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
         }
 
+        /// <summary>
+        /// Logs the size of the transformation based on the number of edit operations computed by a distance tree algorithm.
+        /// </summary>
+        /// <param name="transSizeList">Size of the transformation</param>
         private static void SaveToFile(List<int> transSizeList)
         {
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);

@@ -931,6 +931,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RefazerFunctions.Spg.Config;
 using RefazerManager;
 using Spg.ExampleRefactoring.Util;
 using Spg.LocationRefactor.Location;
@@ -1407,8 +1408,11 @@ namespace RefazerUnitTests
                 var regionsFrags = ConvertFragmentsToRegions(fragments);
                 JsonUtil<List<TRegion>>.Write(regionsFrags, expHome + @"cprose\" + commit + @"\metadata\transformed_locationsAll" + seed + ".json");
 
-                string scriptsize = "scriptsize";
-                scriptsizes = GetDataAndSaveToFile(commit, expHome, seed, scriptsize);
+                if (SynthesisConfig.GetInstance().CreateLog)
+                {
+                    string scriptsize = "scriptsize";
+                    scriptsizes = GetDataAndSaveToFile(commit, expHome, seed, scriptsize);
+                }
 
                 string beforeafter = "beforeafter";
                 beforeafter = GetDataAndSaveToFile(commit, expHome, seed, beforeafter);
