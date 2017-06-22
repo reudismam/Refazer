@@ -1392,11 +1392,12 @@ namespace RefazerUnitTests
             //int seed = 160481219;
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-            var examples = randomList.GetRange(0, 2);  
+            var examples = randomList.GetRange(0, 2);
 
             //Execution
             TestHelper helper;
             string scriptsizes;
+            double mean = -1.0;
             while (true)
             {
                 examples.Sort();
@@ -1412,6 +1413,8 @@ namespace RefazerUnitTests
                 {
                     string scriptsize = "scriptsize";
                     scriptsizes = GetDataAndSaveToFile(commit, expHome, seed, scriptsize);
+                    var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(o => Int32.Parse(o));
+                    mean = sizes.Average();
                 }
 
                 string beforeafter = "beforeafter";
@@ -1452,8 +1455,6 @@ namespace RefazerUnitTests
                 examples.Add(firstProblematicLocation);
             }
 
-            var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(o => Int32.Parse(o));
-            var mean = sizes.Average();
             //Execution end
 
             long totalTimeToLearn = helper.TotalTimeToLearn;
