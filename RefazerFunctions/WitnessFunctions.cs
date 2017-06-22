@@ -6,7 +6,6 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using RefazerFunctions.Substrings;
 using RefazerFunctions.List;
 using RefazerFunctions.Spg.Witness;
 using TreeEdit.Spg.Script;

@@ -222,7 +222,6 @@
   <ItemGroup>
     <Compile Include="CodeLocation.cs" />
     <Compile Include="EvaluationTest.cs" />
-    <Compile Include="FileUtil.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="RegionManager.cs" />
     <Compile Include="Spg.Transform\CodeTransformation.cs" />

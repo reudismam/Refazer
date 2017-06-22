@@ -15,7 +15,7 @@ namespace TreeElement
         /// <returns>String representing the content of the file</returns>
         public static String ReadFile(string path)
         {
-            path = NormalizePath(path);
+            //path = NormalizePath(path);
             // Open the text file using a stream reader.
             using (StreamReader sr = new StreamReader(path))
             {

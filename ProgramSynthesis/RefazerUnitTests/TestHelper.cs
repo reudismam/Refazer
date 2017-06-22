@@ -459,6 +459,7 @@ using RefazerManager;
 using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
+using TreeElement;
 using WorkSpaces.Spg.Workspace;
 using TreeElement.Spg.Node;
 

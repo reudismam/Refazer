@@ -346,6 +346,7 @@ namespace RefazerFunctions.Spg.Witness
         private static TreeNode<SyntaxNodeOrToken> GetParent(Script script, TreeNode<SyntaxNodeOrToken> inpTree)
         {
             var listNodes = new List<SyntaxNodeOrToken>();
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var v in script.Edits)
             {
                 var tocompare = (v.EditOperation is Update<SyntaxNodeOrToken> || v.EditOperation is Delete<SyntaxNodeOrToken>) ? v.EditOperation.T1Node : v.EditOperation.Parent;

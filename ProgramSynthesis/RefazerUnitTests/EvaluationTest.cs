@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
 using RefazerManager;
+using TreeElement;
 using TreeElement.Spg.Node;
 using UnitTests;
 
