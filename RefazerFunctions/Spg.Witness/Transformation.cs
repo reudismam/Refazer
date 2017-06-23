@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using DbscanImplementation;
@@ -34,6 +35,8 @@ namespace RefazerFunctions.Spg.Witness
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Example specification</param>
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public static SubsequenceSpec TransformationRule(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
@@ -58,11 +61,9 @@ namespace RefazerFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node)input[rule.Body[0]];
-                // ReSharper disable once PossibleNullReferenceException
                 SyntaxNodeOrToken outTree = (SyntaxNodeOrToken) spec.DisjunctiveExamples[input].SingleOrDefault();
                 //Compacted scripts for this input
                 var scriptsInput = new List<List<Script>>();
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var cluster in clusters)
                 {
                     //Connected components for this input
@@ -164,14 +165,14 @@ namespace RefazerFunctions.Spg.Witness
         /// Clusters connected components
         /// </summary>
         /// <param name="connectedComponents">Connected components</param>
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [SuppressMessage("ReSharper", "InvertIf")]
         public static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
             var clusteredList = new List<List<Script>>();
-            // ReSharper disable once InvertIf
             if (connectedComponents.Any())
             {
                 var clusters = ClusterConnectedComponents(connectedComponents);
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var cluster in clusters)
                 {
                     var listEdit = cluster.Select(clusterList => new Script(clusterList.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();

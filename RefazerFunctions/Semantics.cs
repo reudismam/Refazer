@@ -113,13 +113,11 @@ namespace RefazerFunctions
         public static Node Insert(Node target, Node newNode, int k)
         {
             var result = EditOperationSemanticFunctions.Insert(target, newNode, k);
-            dicBeforeAfter.Add(result, target);
+            if (result != null)
+            {
+                dicBeforeAfter.Add(result, target);
+            }
             return result;
-        }
-
-        public static string Insert(string target, string newNode)
-        {
-            return null;
         }
 
         /// <summary>
@@ -176,7 +174,12 @@ namespace RefazerFunctions
             {
                 foreach (var v in edited)
                 {
-                    if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
+                    if (v == null)
+                    {
+                        var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+                        resultList.Add(new Node(treeNode));
+                    }
+                    else if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
                     {
                         var before = dicBeforeAfter[v];
 
@@ -198,7 +201,6 @@ namespace RefazerFunctions
                         string file = expHome + "beforeafter.txt";
                         string separator = "EndLine";
                         File.AppendAllText(file, $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
-
                         resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
                     }
                     else
@@ -210,7 +212,6 @@ namespace RefazerFunctions
                         string separator = "EndLine";
                         File.AppendAllText(file, $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
                         var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
-
                         resultList.Add(new Node(treeNode));
                     }
                 }
@@ -350,7 +351,6 @@ namespace RefazerFunctions
             var isValid = node.Equals(sx.Value);
             if (isValid)
             {
-                //File.AppendAllText(@"C:\Users\SPG-04\Desktop\codefragments.cf", $"{node.Value.Parent} \n {node.Value.SyntaxTree.FilePath}" + Environment.NewLine);
                 string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
                 string file = expHome + "codefragments.txt";
                 string separator = "EndLine";
@@ -420,7 +420,7 @@ namespace RefazerFunctions
                 var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
                 return new Node(treeNode);
             }
-        }  
+        }
 
         public static IEnumerable<Node> AllNodes(Node node, string type)
         {

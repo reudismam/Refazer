@@ -5,7 +5,7 @@ using Spg.LocationRefactor.TextRegion;
 namespace Spg.LocationRefactor.Transform
 {
     /// <summary>
-    /// Represents a transformation
+    /// Represents a BeforeAfter
     /// </summary>
     public class CodeTransformation
     {
@@ -18,16 +18,16 @@ namespace Spg.LocationRefactor.Transform
         public CodeLocation Location { get; set; }
 
         /// <summary>
-        /// Before and after transformation
+        /// Before and after BeforeAfter
         /// </summary>
-        /// <returns>Before and after transformation</returns>
+        /// <returns>Before and after BeforeAfter</returns>
         public Tuple<string, string> Transformation { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="location">Location</param>
-        /// <param name="trans">Location of the transformation</param>
+        /// <param name="trans">Location of the BeforeAfter</param>
         /// <param name="transformation">Transformation</param>
         public CodeTransformation(CodeLocation location, TRegion trans, Tuple<string, string> transformation)
         {

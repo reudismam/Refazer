@@ -15,7 +15,13 @@ namespace RefazerFunctions.Spg.Witness
 {
     public class Variable
     {
+        /// <summary>
+        /// Defines the back-propagation function of the kind parameter of the Abstract operator.
+        /// </summary>
+        /// <param name="rule">Grammar rule</param>
+        /// <param name="spec">Specification</param>
         [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
         public static DisjunctiveExamplesSpec VariableKindDisjunctive(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();

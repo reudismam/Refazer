@@ -518,7 +518,7 @@ namespace UnitTests
         //        if (examples.Contains(firstProblematicLocation))
         //        {
         //            GenerateDiffBeforeAfter(beforeafter, commit);
-        //            throw new Exception("A transformation could not be learned using this examples.");
+        //            throw new Exception("A BeforeAfter could not be learned using this examples.");
         //        }
         //        examples.Add(firstProblematicLocation);
         //    }
@@ -722,15 +722,15 @@ namespace UnitTests
                 foreach (var tregion in item.Value)
                 {
                     TRegion region = tregion.Item1;
-                    string transformation = tregion.Item2;
+                    string BeforeAfter = tregion.Item2;
 
                     int start = nextStart + region.Start;
                     int end = start + region.Length;
                     var sourceCodeUntilStart = sourceCode.Substring(0, start);
                     var sourceCodeAfterSelection = sourceCode.Substring(end);
-                    sourceCode = sourceCodeUntilStart + transformation + sourceCodeAfterSelection;
+                    sourceCode = sourceCodeUntilStart + BeforeAfter + sourceCodeAfterSelection;
 
-                    nextStart += transformation.Length - region.Length;
+                    nextStart += BeforeAfter.Length - region.Length;
                 }
                 tRegions.Add(Tuple.Create(source, sourceCode, filePath));
             }
@@ -1450,7 +1450,7 @@ namespace RefazerUnitTests
                 if (examples.Contains(firstProblematicLocation))
                 {
                     GenerateDiffBeforeAfter(beforeafter, commit);
-                    throw new Exception("A transformation could not be learned using this examples.");
+                    throw new Exception("A BeforeAfter could not be learned using this examples.");
                 }
                 examples.Add(firstProblematicLocation);
             }

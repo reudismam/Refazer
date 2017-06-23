@@ -396,13 +396,13 @@
 //            {
 //                Tuple<TRegion, TRegion> tregion = GetTRegionShift(regions, item);
 //                TRegion region = tregion.Item1;
-//                string transformation = tregion.Item2.Text;
+//                string BeforeAfter = tregion.Item2.Text;
 
 //                int start = nextStart + region.Start;
 //                int end = start + region.Length;
 //                var sourceCodeUntilStart = sourceCode.Substring(0, start);
 //                var sourceCodeAfterSelection = sourceCode.Substring(end);
-//                sourceCode = sourceCodeUntilStart + transformation + sourceCodeAfterSelection;
+//                sourceCode = sourceCodeUntilStart + BeforeAfter + sourceCodeAfterSelection;
 
 //                TRegion tr = new TRegion();
 //                tr.Start = start - 1;
@@ -411,7 +411,7 @@
 //                tr.Path = tregion.Item1.Path;
 //                tRegions.Add(tr);
 
-//                nextStart += transformation.Length - region.Length;
+//                nextStart += BeforeAfter.Length - region.Length;
 //            }
 //            Tuple<string, List<TRegion>> t = Tuple.Create(sourceCode, tRegions);
 //            return t;
