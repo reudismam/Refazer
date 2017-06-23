@@ -20,7 +20,7 @@ namespace RefazerFunctions
 {
     public static class Semantics
     {
-        private static readonly Dictionary<Node, Node> dicBeforeAfter = new Dictionary<Node, Node>();
+        private static readonly Dictionary<Node, Node> DicBeforeAfter = new Dictionary<Node, Node>();
 
         /// <summary>
         /// Matches the element on the tree with specified kind and child nodes.
@@ -115,7 +115,7 @@ namespace RefazerFunctions
             var result = EditOperationSemanticFunctions.Insert(target, newNode, k);
             if (result != null)
             {
-                dicBeforeAfter.Add(result, target);
+                DicBeforeAfter.Add(result, target);
             }
             return result;
         }
@@ -130,7 +130,7 @@ namespace RefazerFunctions
         public static Node InsertBefore(Node target, Node node, Node newNode)
         {
             var result = EditOperationSemanticFunctions.InsertBefore(target, node, newNode);
-            dicBeforeAfter.Add(result, target);
+            DicBeforeAfter.Add(result, target);
             return result;
         }
 
@@ -142,7 +142,7 @@ namespace RefazerFunctions
         public static Node Update(Node target, Node to)
         {
             var result = EditOperationSemanticFunctions.Update(target, to);
-            dicBeforeAfter.Add(result, target);
+            DicBeforeAfter.Add(result, target);
             return result;
         }
 
@@ -155,7 +155,7 @@ namespace RefazerFunctions
         public static Node Delete(Node target, Node node)
         {
             var result = EditOperationSemanticFunctions.Delete(target, node);
-            dicBeforeAfter.Add(result, target);
+            DicBeforeAfter.Add(result, target);
             return result;
         }
 
@@ -181,7 +181,7 @@ namespace RefazerFunctions
                     }
                     else if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
                     {
-                        var before = dicBeforeAfter[v];
+                        var before = DicBeforeAfter[v];
 
                         SyntaxNodeOrToken n;
                         if (v.LeftNode != null)
@@ -205,7 +205,7 @@ namespace RefazerFunctions
                     }
                     else
                     {
-                        var before = dicBeforeAfter[v];
+                        var before = DicBeforeAfter[v];
                         var n = ASTBuilder.ReconstructTree(v.Value);
                         string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
                         string file = expHome + "beforeafter.txt";

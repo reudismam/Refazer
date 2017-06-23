@@ -1,4 +1,7 @@
-using Controller;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Controller.Event;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -7,15 +10,11 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Utils;
 using ProseManager;
 using RefazerFunctions.Spg.Bean;
-using RefazerFunctions.Substrings;
 using Spg.Controller.Projects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TreeElement.Spg.Node;
 using WorkSpaces.Spg.Workspace;
 
-namespace Spg.Controller
+namespace Controller
 {
     
     /// <summary>
@@ -23,10 +22,8 @@ namespace Spg.Controller
     /// </summary>
     public class EditorController
     {
-        private List<IEditStartedObserver> _editStartedOIbservers = new List<IEditStartedObserver>();
-        private List<ITransformationFinishedObserver> _transformationFinishedOIbservers = new List<ITransformationFinishedObserver>();
-
-     
+        private readonly List<IEditStartedObserver> _editStartedOIbservers = new List<IEditStartedObserver>();
+        private readonly List<ITransformationFinishedObserver> _transformationFinishedOIbservers = new List<ITransformationFinishedObserver>();
 
         /// <summary>
         /// Current Program
@@ -42,7 +39,7 @@ namespace Spg.Controller
         public List<object> Transformed { get; set; }
 
         /// <summary>
-        /// Informatios about the project
+        /// Informations about the project
         /// </summary>
         public ProjectInformation ProjectInfo { get; set; }
 
@@ -69,8 +66,8 @@ namespace Spg.Controller
         /// </summary>
         public List<Tuple<string, string>> DocumentsBeforeAndAfter { get; set; }
        
-        public string before { get; set; }
-        public string after { get; set; }
+        public string Before { get; set; }
+        public string After { get; set; }
         /// <summary>
         /// Files opened on window
         /// </summary>
@@ -112,6 +109,7 @@ namespace Spg.Controller
         /// Get singleton EditorController instance
         /// </summary>
         /// <returns>Editor controller instance</returns>
+        [SuppressMessage("ReSharper", "ConvertIfStatementToNullCoalescingExpression")]
         public static EditorController GetInstance()
         {
             if (_instance == null)
@@ -125,9 +123,10 @@ namespace Spg.Controller
         /// Open files
         /// </summary>
         /// <returns>Open files</returns>
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         public IEnumerable<string> OpenFiles()
         {
-            List<string> files = new List<string>();
+            var files = new List<string>();
             foreach (KeyValuePair<string, bool> file in FilesOpened)
             {
                 if (file.Value)
@@ -138,16 +137,10 @@ namespace Spg.Controller
             return files;
         }
 
-        public void Init(string before)
-        {
-            this.before = before;
-            NotifyEditStartedObservers();
-        }
-
         public void Transform(string after)
         {
-            this.after = after;
-            var examples = Tuple.Create(before, after);
+            this.After = after;
+            var examples = Tuple.Create(Before, after);
             var refazer = new Refazer4CSharp();
             grammar = Refazer4CSharp.GetGrammar();
             CurrentProgram = refazer.LearnTransformations(grammar, examples);
@@ -155,6 +148,7 @@ namespace Spg.Controller
             NotifyTransformationFinishedObservers();
         }
 
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         private Dictionary<string, List<object>> ExecuteProgram()
         {         
             var asts = new List<SyntaxNodeOrToken>();
@@ -163,14 +157,11 @@ namespace Spg.Controller
                 //Run program
                 return null;
             }
-            else
+            var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, ProjectInfo.SolutionPath);
+            foreach (var v in files)
             {
-                var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, ProjectInfo.SolutionPath);
-                foreach (var v in files)
-                {
-                    var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
-                    asts.Add(tree);
-                }
+                var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
+                asts.Add(tree);
             }
 
             var dicTrans = new Dictionary<string, List<object>>();
@@ -196,9 +187,8 @@ namespace Spg.Controller
         }
 
         /// <summary>
-        /// Notify highlight observers
+        /// Notifies highlight observers
         /// </summary>
-        /// <param name="regions">Regions</param>
         private void NotifyEditStartedObservers()
         {
             EditStartedEvent hEvent = new EditStartedEvent();
@@ -208,11 +198,9 @@ namespace Spg.Controller
             }
         }
 
-
         /// <summary>
-        /// Notify highlight observers
+        /// Notifies highlight observers
         /// </summary>
-        /// <param name="regions">Regions</param>
         private void NotifyTransformationFinishedObservers()
         {
             TransformationFinishedEvent hEvent = new TransformationFinishedEvent();
@@ -223,7 +211,7 @@ namespace Spg.Controller
         }
 
         /// <summary>
-        /// Add program generated observer
+        /// Adds program generated observer
         /// </summary>
         /// <param name="observer">Observer</param>
         public void AddEditStartedObserver(IEditStartedObserver observer)
