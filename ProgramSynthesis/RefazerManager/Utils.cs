@@ -40,6 +40,13 @@ namespace RefazerManager
             return compilationResult.Value;
         }
 
+        /// <summary>
+        /// Learns one program transformations
+        /// </summary>
+        /// <param name="grammar">Grammar</param>
+        /// <param name="spec">Example-based specification</param>
+        /// <param name="scorer">Ranking functions</param>
+        /// <param name="witnessFunctions">Back-propagation functions</param>
         public static ProgramNode Learn(Grammar grammar, Spec spec,
                                          Feature<double> scorer, DomainLearningLogic witnessFunctions)
         {
@@ -56,7 +63,7 @@ namespace RefazerManager
 
             var consistentPrograms = engine.LearnGrammar(spec);
             const ulong a = 100;
-            var topK = consistentPrograms.Size < 20000 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
+            var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
             var b =  (ulong) topK.Count;
             topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int) Math.Min(a, b)).ToList();
             var programs = "";
@@ -79,6 +86,13 @@ namespace RefazerManager
             return bestProgram;
         }
 
+        /// <summary>
+        /// Learns a set of program transformations
+        /// </summary>
+        /// <param name="grammar">Grammar</param>
+        /// <param name="spec">Example-based specification</param>
+        /// <param name="scorer">Ranking functions</param>
+        /// <param name="witnessFunctions">Back-propagation functions</param>
         public static List<ProgramNode> LearnASet(Grammar grammar, Spec spec,
                                          Feature<double> scorer, DomainLearningLogic witnessFunctions)
         {
@@ -99,16 +113,16 @@ namespace RefazerManager
             var b = (ulong)topK.Count;
             topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
             var programs = "";
-            List<ProgramNode> validated = new List<ProgramNode>();
-            foreach (ProgramNode p in topK)
+            var validated = new List<ProgramNode>();
+            foreach (var p in topK)
             {
                 var scorep = p.GetFeatureValue(scorer);
                 programs += $"Score[{scorep}] " + p + "\n\n";
                 validated.Add(p);
             }
 
-            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-            string file = expHome + "programs.txt";
+            var expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+            var file = expHome + "programs.txt";
             File.WriteAllText(file, programs);
 
             return validated;

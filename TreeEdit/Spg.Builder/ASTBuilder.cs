@@ -313,6 +313,7 @@ namespace TreeEdit.Spg.Builder
                     var nameColon = SyntaxFactory.NameColon(identifier);
                     return nameColon;
                 }
+            case SyntaxKind.CoalesceExpression:
             case SyntaxKind.GreaterThanExpression:
             case SyntaxKind.LessThanExpression:
             case SyntaxKind.LessThanOrEqualExpression:
@@ -682,8 +683,6 @@ namespace TreeEdit.Spg.Builder
                     var ifStatement = SyntaxFactory.IfStatement(condition, statementSyntax);
                     return ifStatement;
                 }
-            case SyntaxKind.PostIncrementExpression:
-            case SyntaxKind.PostDecrementExpression:
             case SyntaxKind.PreIncrementExpression:
             case SyntaxKind.PreDecrementExpression:
             case SyntaxKind.LogicalNotExpression:
@@ -691,6 +690,13 @@ namespace TreeEdit.Spg.Builder
                 {
                     ExpressionSyntax expression = (ExpressionSyntax)children[0];
                     var unary = SyntaxFactory.PrefixUnaryExpression(kind, expression);
+                    return unary;
+                }
+            case SyntaxKind.PostIncrementExpression:
+            case SyntaxKind.PostDecrementExpression:
+                {
+                    ExpressionSyntax expression = (ExpressionSyntax)children[0];
+                    var unary = SyntaxFactory.PostfixUnaryExpression(kind, expression);
                     return unary;
                 }
             case SyntaxKind.YieldReturnStatement:
@@ -713,9 +719,14 @@ namespace TreeEdit.Spg.Builder
                 }
             case SyntaxKind.IdentifierName:
                 {
-                    SyntaxToken stoken = (SyntaxToken)identifiers.First();
-                    var identifierName = SyntaxFactory.IdentifierName(stoken);
-                    return identifierName;
+                    if (identifiers != null && identifiers.Any())
+                    {
+                        SyntaxToken stoken = (SyntaxToken) identifiers.First();
+                        var identifierName = SyntaxFactory.IdentifierName(stoken);
+                        return identifierName;
+                    }
+                    var identifier = children.First();
+                    return identifier;
                 }
             case SyntaxKind.TypeArgumentList:
                 {
@@ -732,12 +743,12 @@ namespace TreeEdit.Spg.Builder
                     var genericName = SyntaxFactory.GenericName(gName.Identifier, typeArg);
                     return genericName;
                 }
+            case SyntaxKind.IsExpression:
             case SyntaxKind.NotEqualsExpression:
                 {
                     var leftExpression = (ExpressionSyntax)children[0];
                     var rightExpression = (ExpressionSyntax)children[1];
-                    var notEqualsExpression = SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression,
-                        leftExpression, rightExpression);
+                    var notEqualsExpression = SyntaxFactory.BinaryExpression(kind, leftExpression, rightExpression);
                     return notEqualsExpression;
                 }
             case SyntaxKind.SetAccessorDeclaration:

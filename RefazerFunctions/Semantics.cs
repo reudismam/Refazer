@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -18,6 +19,7 @@ using TreeElement.Token;
 
 namespace RefazerFunctions
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public static class Semantics
     {
         private static readonly Dictionary<Node, Node> DicBeforeAfter = new Dictionary<Node, Node>();
@@ -165,6 +167,7 @@ namespace RefazerFunctions
         /// <param name="node">Node</param>
         /// <param name="patch">Edit operations</param>
         /// <returns>Transformed node.</returns>
+        [SuppressMessage("ReSharper", "LoopCanBePartlyConvertedToQuery")]
         public static IEnumerable<Node> Transformation(Node node, Patch patch)
         {
             var beforeFlorest = patch.Edits.Select(o => o.ToList());
@@ -174,12 +177,8 @@ namespace RefazerFunctions
             {
                 foreach (var v in edited)
                 {
-                    if (v == null)
-                    {
-                        var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
-                        resultList.Add(new Node(treeNode));
-                    }
-                    else if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
+                    if (v == null) continue; //if we are unable to transformation an location
+                    if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
                     {
                         var before = DicBeforeAfter[v];
 
@@ -197,21 +196,26 @@ namespace RefazerFunctions
                             PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(v.Value, "", false);
                             n = ASTBuilder.ReconstructTree(v.Value);
                         }
-                        string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+                        string expHome = Environment.GetEnvironmentVariable("EXP_HOME",
+                            EnvironmentVariableTarget.User);
                         string file = expHome + "beforeafter.txt";
                         string separator = "EndLine";
-                        File.AppendAllText(file, $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
+                        File.AppendAllText(file,
+                            $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
                         resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
                     }
                     else
                     {
                         var before = DicBeforeAfter[v];
                         var n = ASTBuilder.ReconstructTree(v.Value);
-                        string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+                        string expHome = Environment.GetEnvironmentVariable("EXP_HOME",
+                            EnvironmentVariableTarget.User);
                         string file = expHome + "beforeafter.txt";
                         string separator = "EndLine";
-                        File.AppendAllText(file, $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
-                        var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
+                        File.AppendAllText(file,
+                            $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
+                        var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken),
+                            new TLabel(SyntaxKind.None));
                         resultList.Add(new Node(treeNode));
                     }
                 }
@@ -348,6 +352,7 @@ namespace RefazerFunctions
             if (!isValue) return false;
 
             var node = FindChild(parent, patternP.XPath);
+            if (node == null) return false; //the XPath matches nothing.
             var isValid = node.Equals(sx.Value);
             if (isValid)
             {

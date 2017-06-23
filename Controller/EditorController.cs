@@ -28,13 +28,9 @@ namespace Controller
         /// <summary>
         /// Current Program
         /// </summary>
-        public ProgramNode CurrentProgram
-        {
-            get;
-            set;
-        } 
+        public ProgramNode CurrentProgram { get; set; } 
 
-        private Grammar grammar { get; set; }
+        private Grammar Grammar { get; set; }
 
         public List<object> Transformed { get; set; }
 
@@ -142,8 +138,8 @@ namespace Controller
             this.After = after;
             var examples = Tuple.Create(Before, after);
             var refazer = new Refazer4CSharp();
-            grammar = Refazer4CSharp.GetGrammar();
-            CurrentProgram = refazer.LearnTransformations(grammar, examples);
+            Grammar = Refazer4CSharp.GetGrammar();
+            CurrentProgram = refazer.LearnTransformations(Grammar, examples);
             ExecuteProgram();
             NotifyTransformationFinishedObservers();
         }
@@ -167,7 +163,7 @@ namespace Controller
             var dicTrans = new Dictionary<string, List<object>>();
             foreach (var ast in asts)
             {
-                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
+                var newInputState = State.Create(Grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
                 object[] output = CurrentProgram.Invoke(newInputState).ToEnumerable().ToArray();
 
                 Transformed.AddRange(output);
