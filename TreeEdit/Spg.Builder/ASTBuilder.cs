@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -499,7 +500,47 @@ namespace TreeEdit.Spg.Builder
                         initializer);
                     return objectcreation;
                 }
-            case SyntaxKind.ParameterList:
+            case SyntaxKind.AnonymousObjectCreationExpression:
+                {
+                    Debug.Assert(identifiers != null, "identifiers != null");
+                    if (identifiers.Any())
+                    {
+                        Debug.Assert(identifiers != null, "identifiers != null");
+                        SyntaxToken newToken = (SyntaxToken)identifiers.First();
+                        var anonymousObjectMemberDeclaratorSyntaxs =
+                            children.Select(child => (AnonymousObjectMemberDeclaratorSyntax)child).ToList();
+                        var spal = SyntaxFactory.SeparatedList(anonymousObjectMemberDeclaratorSyntaxs);
+                        var anonymousObjectCreation = SyntaxFactory.AnonymousObjectCreationExpression(newToken,
+                            SyntaxFactory.Token(SyntaxKind.OpenBraceToken), spal,
+                            SyntaxFactory.Token(SyntaxKind.CloseBraceToken));
+                        return anonymousObjectCreation;
+                    }
+                    else
+                    {
+                        var anonymousObjectMemberDeclaratorSyntaxs =
+                            children.Select(child => (AnonymousObjectMemberDeclaratorSyntax)child).ToList();
+                        var spal = SyntaxFactory.SeparatedList(anonymousObjectMemberDeclaratorSyntaxs);
+                        var anonymousObjectCreation = SyntaxFactory.AnonymousObjectCreationExpression(spal);
+                        return anonymousObjectCreation;
+                    }
+                }
+            case SyntaxKind.AnonymousObjectMemberDeclarator:
+                {
+                    if (children.Count == 2)
+                    {
+                        var nameEqualsSyntax = (NameEqualsSyntax) children.First();
+                        var expressionSyntax = (ExpressionSyntax) children[1];
+                        var anonymousDeclarator = SyntaxFactory.AnonymousObjectMemberDeclarator(nameEqualsSyntax, expressionSyntax);
+                        return anonymousDeclarator;
+                    }
+                    else
+                    {
+                        var expressionSyntax = (ExpressionSyntax) children.First();
+                        var anonymousDeclarator = SyntaxFactory.AnonymousObjectMemberDeclarator(expressionSyntax);
+                        return anonymousDeclarator;
+                    }
+                }
+                case SyntaxKind.ParameterList:
                 {
                     var parameterSyntaxList = new List<ParameterSyntax>();
                     children.ForEach(o => parameterSyntaxList.Add((ParameterSyntax)o));
@@ -668,6 +709,31 @@ namespace TreeEdit.Spg.Builder
                     var equalsValueClause = SyntaxFactory.EqualsValueClause(expressionSyntax);
                     return equalsValueClause;
                 }
+            case SyntaxKind.FromClause:
+                {
+                    Debug.Assert(identifiers != null, "identifiers != null");
+                    var identifier = (SyntaxToken)identifiers.First();
+                    var expression = (ExpressionSyntax)children.First();
+                    var fromClause = SyntaxFactory.FromClause(identifier, expression);
+                    return fromClause;
+                }
+            case SyntaxKind.SelectClause:
+                {
+                    Debug.Assert(identifiers != null, "identifiers != null");
+                    if (identifiers.Any())
+                    {
+                        var select = (SyntaxToken)identifiers.First();
+                        var expression = (ExpressionSyntax)children.First();
+                        var selectCLause = SyntaxFactory.SelectClause(select, expression);
+                        return selectCLause;
+                    }
+                    else
+                    {
+                        var expression = (ExpressionSyntax)children.First();
+                        var selectClause = SyntaxFactory.SelectClause(expression);
+                        return selectClause;
+                    }
+                }
             case SyntaxKind.ConditionalExpression:
                 {
                     var condition = (ExpressionSyntax)children[0];
@@ -676,12 +742,41 @@ namespace TreeEdit.Spg.Builder
                     var conditionalExpression = SyntaxFactory.ConditionalExpression(condition, whenTrue, whenFalse);
                     return conditionalExpression;
                 }
+            case SyntaxKind.QueryBody:
+                {
+                    var selectOrGroupClauseSyntax = (SelectOrGroupClauseSyntax)children.First();
+                    var queryBody = SyntaxFactory.QueryBody(selectOrGroupClauseSyntax);
+                    return queryBody;
+                }
             case SyntaxKind.IfStatement:
                 {
                     var condition = (ExpressionSyntax)children[0];
                     var statementSyntax = (StatementSyntax)children[1];
                     var ifStatement = SyntaxFactory.IfStatement(condition, statementSyntax);
                     return ifStatement;
+                }
+            case SyntaxKind.NullableType:
+                {
+                    Debug.Assert(identifiers != null, "identifiers != null");
+                    if (identifiers.Any())
+                    {
+                        var questionToken = (SyntaxToken)identifiers.First();
+                        var typeSyntax = (TypeSyntax)children.First();
+                        var nullableType = SyntaxFactory.NullableType(typeSyntax, questionToken);
+                        return nullableType;
+                    }
+                    {
+                        var typeSyntax = (TypeSyntax)children.First();
+                        var nullableType = SyntaxFactory.NullableType(typeSyntax);
+                        return nullableType;
+                    }
+                }
+            case SyntaxKind.QueryExpression:
+                {
+                    var fromClauseSyntax = (FromClauseSyntax)children.First();
+                    var queryBody = (QueryBodySyntax)children[1];
+                    var queryExpression = SyntaxFactory.QueryExpression(fromClauseSyntax, queryBody);
+                    return queryExpression;
                 }
             case SyntaxKind.PreIncrementExpression:
             case SyntaxKind.PreDecrementExpression:
@@ -721,7 +816,7 @@ namespace TreeEdit.Spg.Builder
                 {
                     if (identifiers != null && identifiers.Any())
                     {
-                        SyntaxToken stoken = (SyntaxToken) identifiers.First();
+                        SyntaxToken stoken = (SyntaxToken)identifiers.First();
                         var identifierName = SyntaxFactory.IdentifierName(stoken);
                         return identifierName;
                     }
