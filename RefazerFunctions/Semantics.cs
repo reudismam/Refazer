@@ -11,6 +11,7 @@ using RefazerFunctions.List;
 using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Spg.Semantic;
 using TreeEdit.Spg.Builder;
+using TreeEdit.Spg.Log;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Print;
 using TreeElement;
@@ -196,36 +197,21 @@ namespace RefazerFunctions
                             PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(v.Value, "", false);
                             n = ASTBuilder.ReconstructTree(v.Value);
                         }
-                        string expHome = Environment.GetEnvironmentVariable("EXP_HOME",
-                            EnvironmentVariableTarget.User);
-                        string file = expHome + "beforeafter.txt";
-                        string separator = "EndLine";
-                        File.AppendAllText(file,
-                            $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
+                        TransformationsLogger.GetInstance().Add(Tuple.Create(before.Value.Value, n));
                         resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
                     }
                     else
                     {
                         var before = DicBeforeAfter[v];
                         var n = ASTBuilder.ReconstructTree(v.Value);
-                        string expHome = Environment.GetEnvironmentVariable("EXP_HOME",
-                            EnvironmentVariableTarget.User);
-                        string file = expHome + "beforeafter.txt";
-                        string separator = "EndLine";
-                        File.AppendAllText(file,
-                            $"{before.Value.Value.SpanStart}{separator}{before.Value.Value.Span.Length}{separator}{before.Value.Value}{separator}{n}{separator}{before.Value.Value.SyntaxTree.FilePath}{separator}");
-                        var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken),
+                        TransformationsLogger.GetInstance().Add(Tuple.Create(before.Value.Value, n));
+                        var treeNode = new TreeNode<SyntaxNodeOrToken>(n,
                             new TLabel(SyntaxKind.None));
                         resultList.Add(new Node(treeNode));
                     }
                 }
             }
             return resultList;
-        }
-
-        public static Node Transformation(Node node, string patch)
-        {
-            return null;
         }
 
         /// <summary>
@@ -356,10 +342,8 @@ namespace RefazerFunctions
             var isValid = node.Equals(sx.Value);
             if (isValid)
             {
-                string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-                string file = expHome + "codefragments.txt";
-                string separator = "EndLine";
-                File.AppendAllText(file, $"{node.Value.Span.Start}{separator}{node.Value.Span.Length}{separator}{node.Value}{separator}{node.Value.SyntaxTree.FilePath}{separator}");
+                var codeFragmentsLogger = CodeFragmentsLogger.GetInstance();
+                codeFragmentsLogger.Add(node.Value);
             }
             return isValid;
         }

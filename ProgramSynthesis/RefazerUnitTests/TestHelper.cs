@@ -34,7 +34,7 @@
 //        /// </summary>
 //        private readonly List<TRegion> _regions;
 //        /// <summary>
-//        /// Locations
+//        /// Transformations
 //        /// </summary>
 //        private readonly List<CodeLocation> _locations;
 //        /// <summary>
@@ -480,7 +480,7 @@ namespace UnitTests
         /// </summary>
         private readonly List<TRegion> _regions;
         /// <summary>
-        /// Locations
+        /// Transformations
         /// </summary>
         private readonly List<CodeLocation> _locations;
         /// <summary>

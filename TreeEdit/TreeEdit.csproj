@@ -161,6 +161,8 @@
     <Compile Include="Spg.ConnectedComponents\ConnectionComparer.cs" />
     <Compile Include="Spg.ConnectedComponents\TemplateConnectedComponents.cs" />
     <Compile Include="Spg.ConnectedComponents\ConnectedComponentManager.cs" />
+    <Compile Include="Spg.Log\TransformationsLogger.cs" />
+    <Compile Include="Spg.Log\CodeFragmentsLogger.cs" />
     <Compile Include="Spg.Match\MatchManager.cs" />
     <Compile Include="Spg.Script\Edit.cs" />
     <Compile Include="Spg.Script\InsertBefore.cs" />

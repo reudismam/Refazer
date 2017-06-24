@@ -937,6 +937,7 @@ using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
+using TreeEdit.Spg.Log;
 using TreeElement;
 using UnitTests;
 
@@ -1400,13 +1401,13 @@ namespace RefazerUnitTests
             double mean = -1.0;
             while (true)
             {
+                CodeFragmentsLogger.GetInstance().Init();
+                TransformationsLogger.GetInstance().Init();
                 examples.Sort();
                 helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, seed);
                 helper.Execute(examples);
 
-                string codeFragments = "codefragments";
-                var fragments = GetDataAndSaveToFile(commit, expHome, seed, codeFragments);
-                var regionsFrags = ConvertFragmentsToRegions(fragments);
+                var regionsFrags = CodeFragmentsLogger.GetInstance().Locations.Select(o => new TRegion {Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath}).ToList();
                 JsonUtil<List<TRegion>>.Write(regionsFrags, expHome + @"cprose\" + commit + @"\metadata\transformed_locationsAll" + seed + ".json");
 
                 if (SynthesisConfig.GetInstance().CreateLog)
@@ -1417,31 +1418,28 @@ namespace RefazerUnitTests
                     mean = sizes.Average();
                 }
 
-                string beforeafter = "beforeafter";
-                beforeafter = GetDataAndSaveToFile(commit, expHome, seed, beforeafter);
-
+                var beforeafter = TransformationsLogger.GetInstance().Transformations.Select(o => Tuple.Create(new TRegion {Start = o.Item1.Span.Start, Length = o.Item1.Span.Length, Text = o.Item1.ToString(), Path = o.Item1.SyntaxTree.FilePath}, o.Item2.ToString(), o.Item1.SyntaxTree.FilePath)).ToList();
                 string programs = "programs";
                 programs = GetDataAndSaveToFile(commit, expHome, seed, programs);
 
-                var foundLocations = GetEditedLocations(fragments, locations);
+                var foundLocations = GetEditedLocations(regionsFrags, locations);
                 var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
 
                 if (firstProblematicLocation == -1)
                 {
                     //Generate meta-data for BaselineBeforeAfterList on commit.
-                    var foundList = GetEditionInLocations(fragments, locations);
+                    var foundList = GetEditionInLocations(regionsFrags, locations);
                     JsonUtil<List<TRegion>>.Write(foundList, expHome + @"cprose\" + commit + @"\metadata_tool\transformed_locations" + seed + ".json");
 
                     var beforeafterList = GetBeforeAfterData(beforeafter, locations);
                     JsonUtil<List<Tuple<TRegion, string, string>>>.Write(beforeafterList, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locations" + seed + ".json");
-                    var beforeafterListAll = ConvertBeforeAfterToRegions(beforeafter);
-                    JsonUtil<List<Tuple<TRegion, string, string>>>.Write(beforeafterListAll, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locationsAll" + seed + ".json");
+                    JsonUtil<List<Tuple<TRegion, string, string>>>.Write(beforeafter, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locationsAll" + seed + ".json");
                     //Comparing edited locations with baseline
                     var baselineBeforeAfterList = JsonUtil<List<Tuple<TRegion, string, string>>>.Read(expHome + @"cprose\" + commit + @"\metadata\before_after_locations" + seed + ".json");
                     var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfterList, randomList, locations);
                     if (firstIncorrect == -1)
                     {
-                        GenerateDiffBeforeAfter(beforeafter, commit);
+                        //GenerateDiffBeforeAfter(beforeafter, commit);
                         break;
                     }
 
@@ -1449,14 +1447,12 @@ namespace RefazerUnitTests
                 }
                 if (examples.Contains(firstProblematicLocation))
                 {
-                    GenerateDiffBeforeAfter(beforeafter, commit);
+                    //GenerateDiffBeforeAfter(beforeafter, commit);
                     throw new Exception("A transformation could not be learned using this examples.");
                 }
                 examples.Add(firstProblematicLocation);
             }
-
-            //Execution end
-
+            //end of execution 
             long totalTimeToLearn = helper.TotalTimeToLearn;
             long totalTimeToExecute = helper.TotalTimeToLearn;
             var transformed = helper.Transformed;
@@ -1491,9 +1487,8 @@ namespace RefazerUnitTests
             return firstNotFound;
         }
 
-        private static List<Tuple<TRegion, string, string>> GetBeforeAfterData(string beforeafter, List<CodeLocation> locations)
+        private static List<Tuple<TRegion, string, string>> GetBeforeAfterData(List<Tuple<TRegion, string, string>> regions, List<CodeLocation> locations)
         {
-            var regions = ConvertBeforeAfterToRegions(beforeafter);
             var dictionary = CreateDictionaryMatch(locations, regions.Select(o => o.Item1).ToList());
 
             var foundList = new List<TRegion>();
@@ -1504,9 +1499,8 @@ namespace RefazerUnitTests
             return regionsFound;
         }
 
-        private static void GenerateDiffBeforeAfter(string beforeafter, string commit)
+        private static void GenerateDiffBeforeAfter(List<Tuple<TRegion, string, string>> regions, string commit)
         {
-            var regions = ConvertBeforeAfterToRegions(beforeafter);
             var groups = regions.GroupBy(o => o.Item3);
             var dic = groups.ToDictionary(group => group.Key, group => group.ToList());
 
@@ -1628,18 +1622,16 @@ namespace RefazerUnitTests
             return firstNotFound;
         }
 
-        private static List<CodeLocation> GetEditedLocations(string fragments, List<CodeLocation> locations)
+        private static List<CodeLocation> GetEditedLocations(List<TRegion> regions, List<CodeLocation> locations)
         {
-            var regions = ConvertFragmentsToRegions(fragments);
             var dictionary = CreateDictionaryMatch(locations, regions);
 
             var found = dictionary.Where(o => o.Value.Any()).Select(o => o.Key).ToList();
             return found;
         }
 
-        private static List<TRegion> GetEditionInLocations(string fragments, List<CodeLocation> locations)
+        private static List<TRegion> GetEditionInLocations(List<TRegion> regions, List<CodeLocation> locations)
         {
-            var regions = ConvertFragmentsToRegions(fragments);
             var dictionary = CreateDictionaryMatch(locations, regions);
 
             var foundList = new List<TRegion>();
