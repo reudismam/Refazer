@@ -277,11 +277,11 @@ namespace TreeEdit.Spg.Builder
             case SyntaxKind.SwitchSection:
                 {
                     var labels =
-                        children.Where(o => o.IsKind(SyntaxKind.CaseSwitchLabel))
+                        children.Where(o => o.IsKind(SyntaxKind.CaseSwitchLabel) || o.IsKind(SyntaxKind.DefaultSwitchLabel))
                             .Select(o => (SwitchLabelSyntax)o)
                             .ToList();
                     var values =
-                        children.Where(o => !o.IsKind(SyntaxKind.CaseSwitchLabel))
+                        children.Where(o => !(o.IsKind(SyntaxKind.CaseSwitchLabel) || o.IsKind(SyntaxKind.DefaultSwitchLabel)))
                             .Select(o => (StatementSyntax)o)
                             .ToList();
                     var labelList = SyntaxFactory.List(labels);
@@ -295,7 +295,29 @@ namespace TreeEdit.Spg.Builder
                     var caseSwitchLabel = SyntaxFactory.CaseSwitchLabel(expressionSyntax);
                     return caseSwitchLabel;
                 }
-            case SyntaxKind.QualifiedName:
+            case SyntaxKind.SwitchStatement:
+                {
+                    if (children.Count > 1)
+                    {
+                        var expressionSyntax = (ExpressionSyntax) children.First();
+                        var switchSections = new List<SwitchSectionSyntax>();
+                        for (int i = 1; i < children.Count; i++)
+                        {
+                            var switchSection = (SwitchSectionSyntax) children[i];
+                            switchSections.Add(switchSection);
+                        }
+                        var syntaxList = SyntaxFactory.List(switchSections);
+                        var switchStatement = SyntaxFactory.SwitchStatement(expressionSyntax, syntaxList);
+                        return switchStatement;
+                    }
+                    else
+                    {
+                        var expression = (ExpressionSyntax) children.First();
+                        var switchStatement = SyntaxFactory.SwitchStatement(expression);
+                        return switchStatement;
+                    }
+                }
+                case SyntaxKind.QualifiedName:
                 {
                     var leftSyntax = (NameSyntax)children[0];
                     var rightSyntax = (SimpleNameSyntax)children[1];
@@ -335,6 +357,10 @@ namespace TreeEdit.Spg.Builder
                         leftExpression, rightExpresssion);
                     return logicalAndExpression;
                 }
+            case SyntaxKind.SubtractAssignmentExpression:
+            case SyntaxKind.DivideAssignmentExpression:
+            case SyntaxKind.MultiplyAssignmentExpression:
+            case SyntaxKind.AddAssignmentExpression:
             case SyntaxKind.SimpleAssignmentExpression:
                 {
                     var leftExpression = (ExpressionSyntax)children[0];
@@ -427,6 +453,7 @@ namespace TreeEdit.Spg.Builder
                 }
             case SyntaxKind.InvocationExpression:
                 {
+                    Debug.Assert(identifiers != null, "identifiers != null");
                     if (!identifiers.Any())
                     {
                         var expressionSyntax = (ExpressionSyntax)children[0];
@@ -442,9 +469,25 @@ namespace TreeEdit.Spg.Builder
                         var invocation = SyntaxFactory.InvocationExpression(expressionSyntax, argumentList);
                         return invocation;
                     }
-
                 }
-            case SyntaxKind.SimpleMemberAccessExpression:
+            case SyntaxKind.AwaitExpression:
+                {
+                    Debug.Assert(identifiers != null, "identifiers != null");
+                    if (identifiers.Any())
+                    {
+                        var awaitToken = (SyntaxToken) identifiers.First();
+                        var expressionSyntax = (ExpressionSyntax) children.First();
+                        var awaitExpression = SyntaxFactory.AwaitExpression(awaitToken, expressionSyntax);
+                        return awaitExpression;
+                    }
+                    else
+                    {
+                        var expressionSyntax = (ExpressionSyntax) children.First();
+                        var awaitExpresion = SyntaxFactory.AwaitExpression(expressionSyntax);
+                        return awaitExpresion;
+                    }
+                }
+                case SyntaxKind.SimpleMemberAccessExpression:
                 {
                     if (!identifiers.Any())
                     {
@@ -528,19 +571,19 @@ namespace TreeEdit.Spg.Builder
                 {
                     if (children.Count == 2)
                     {
-                        var nameEqualsSyntax = (NameEqualsSyntax) children.First();
-                        var expressionSyntax = (ExpressionSyntax) children[1];
+                        var nameEqualsSyntax = (NameEqualsSyntax)children.First();
+                        var expressionSyntax = (ExpressionSyntax)children[1];
                         var anonymousDeclarator = SyntaxFactory.AnonymousObjectMemberDeclarator(nameEqualsSyntax, expressionSyntax);
                         return anonymousDeclarator;
                     }
                     else
                     {
-                        var expressionSyntax = (ExpressionSyntax) children.First();
+                        var expressionSyntax = (ExpressionSyntax)children.First();
                         var anonymousDeclarator = SyntaxFactory.AnonymousObjectMemberDeclarator(expressionSyntax);
                         return anonymousDeclarator;
                     }
                 }
-                case SyntaxKind.ParameterList:
+            case SyntaxKind.ParameterList:
                 {
                     var parameterSyntaxList = new List<ParameterSyntax>();
                     children.ForEach(o => parameterSyntaxList.Add((ParameterSyntax)o));
@@ -557,6 +600,12 @@ namespace TreeEdit.Spg.Builder
                     var spal = SyntaxFactory.SeparatedList(expressionSyntaxs);
                     var arrayInitializer = SyntaxFactory.InitializerExpression(kind, spal);
                     return arrayInitializer;
+                }
+            case SyntaxKind.DefaultExpression:
+                {
+                    var typeSyntax = (TypeSyntax)children.First();
+                    var defaultExpression = SyntaxFactory.DefaultExpression(typeSyntax);
+                    return defaultExpression;
                 }
             case SyntaxKind.Parameter:
                 {
@@ -782,6 +831,7 @@ namespace TreeEdit.Spg.Builder
             case SyntaxKind.PreDecrementExpression:
             case SyntaxKind.LogicalNotExpression:
             case SyntaxKind.UnaryMinusExpression:
+            case SyntaxKind.UnaryPlusExpression:
                 {
                     ExpressionSyntax expression = (ExpressionSyntax)children[0];
                     var unary = SyntaxFactory.PrefixUnaryExpression(kind, expression);

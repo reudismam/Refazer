@@ -1450,7 +1450,7 @@ namespace RefazerUnitTests
                 if (examples.Contains(firstProblematicLocation))
                 {
                     GenerateDiffBeforeAfter(beforeafter, commit);
-                    throw new Exception("A BeforeAfter could not be learned using this examples.");
+                    throw new Exception("A transformation could not be learned using this examples.");
                 }
                 examples.Add(firstProblematicLocation);
             }
