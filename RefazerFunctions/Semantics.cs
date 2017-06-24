@@ -389,11 +389,15 @@ namespace RefazerFunctions
             return current;
         }
 
-
+        /// <summary>
+        /// Defines semantic functions for the Reference operator.
+        /// </summary>
+        /// <param name="target">Target node</param>
+        /// <param name="kmatch">Pattern</param>
+        /// <param name="k">Index of the match</param>
         public static Node Reference(Node target, Pattern kmatch, int k)
         {
             var patternP = kmatch;
-            //var k = ki.GetK(kmatch);
             if (k >= 0)
             {
                 var nodes = MatchManager.Matches(target.Value, kmatch.Tree);
@@ -402,13 +406,13 @@ namespace RefazerFunctions
                     var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
                     return new Node(treeNode);
                 }
+                if (nodes.Count < k) return null; //not enough nodes
                 var match = nodes.ElementAt(k - 1);
                 var node = FindChild(match, patternP.XPath);
                 return new Node(node);
             }
             else
             {
-                //k = ki.GetKParent(kmatch);
                 var ancestor = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Value.Parent.Parent);
                 var nodes = MatchManager.Matches(ancestor, kmatch.Tree);
                 if (nodes.Any())
