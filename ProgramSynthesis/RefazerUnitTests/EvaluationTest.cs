@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
 using RefazerManager;
-using Taramon.Exceller;
+using TreeElement;
 using TreeElement.Spg.Node;
 using UnitTests;
 
@@ -20,74 +20,6 @@ namespace RefazerUnitTests
     [TestClass]
     public class EvaluationTest
     {
-        //[TestMethod]
-        //public void ConvertToAntiUnificationEquation()
-        //{
-        //    var documents = new List<Tuple<string, string>> { Tuple.Create(@"C:\Users\SPG-04\Documents\Eval\Repos\NP\Before_NP02.cs",
-        //        @"C:\Users\SPG-04\Documents\Eval\Repos\NP\After_NP02.cs") };
-
-        //    string before = FileUtil.ReadFile(documents.First().Item1);
-        //    string after = FileUtil.ReadFile(documents.First().Item2);
-        //    SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(before, path: documents.First().Item1).GetRoot();
-        //    SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(after, path: documents.First().Item2).GetRoot();
-
-        //    var inpTreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
-        //    var outTreeNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
-
-        //    var antiInput = ConverterHelper.ConvertToAUEq(inpTreeNode);
-        //    var antiOutput = ConverterHelper.ConvertToAUEq(outTreeNode);
-
-        //    var isCorrect = true;
-        //    Assert.IsTrue(isCorrect);
-        //}
-
-        [TestMethod]
-        public void ConvertToAntiUnificationEquation()
-        {
-            var documents = new List<Tuple<string, string>> { Tuple.Create(
-               @"C:\Users\SPG-04\Documents\Eval\Repos\NP\SQLitePersistentStorage_WriteBatching.cs",
-               @"C:\Users\SPG-04\Documents\Eval\Repos\NP\SQLitePersistentStorage_WriteBatching.cs") };
-
-            string before = FileUtil.ReadFile(documents.First().Item1);
-            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(before, path: documents.First().Item1).GetRoot();
-            var nodes = GetNodesByType(inpTree, new List<SyntaxKind> {SyntaxKind.MethodDeclaration});
-            var targetMethod = nodes.ElementAt(2);
-            var lockStatements = GetNodesByType(targetMethod, new List<SyntaxKind> {SyntaxKind.LockStatement});
-            var lockStatementsStr = lockStatements.Select(o => o.ToString()).ToList();
-            var triples = new List<List<Tuple<string, string, string>>>();
-            foreach (var lockstm in lockStatements)
-            {
-                var stms = new List<Tuple<string, string, string>>();
-                var node = lockstm;
-                for(node = lockstm; !node.IsKind(SyntaxKind.MethodDeclaration); node = node.Parent)
-                {
-                    var parent = lockstm.Parent;
-                    var children = parent.ChildNodes().ToList();
-                    var leftSiblings = children.Where(o => children.IndexOf(o) < children.IndexOf(node.AsNode()));
-                    var leftTrees = leftSiblings.Select(o => ConverterHelper.ConvertCSharpToTreeNode(o));
-                    var rightSiblings = children.Where(o => children.IndexOf(o) > children.IndexOf(node.AsNode()));
-                    var rightTrees = rightSiblings.Select(o => ConverterHelper.ConvertCSharpToTreeNode(o));
-                    var leftStr = String.Join(", ", leftTrees.Select(ConverterHelper.ConvertToAUEq));
-                    var rightStr = String.Join(", ", rightTrees.Select(ConverterHelper.ConvertToAUEq));
-                    string current;
-                    if (node.Equals(lockstm))
-                        current = ConverterHelper.ConvertToAUEq(ConverterHelper.ConvertCSharpToTreeNode(lockstm));
-                    else
-                        current = node.Kind().ToString();
-
-                    stms.Add(Tuple.Create(leftStr, current, rightStr));
-                }
-                triples.Add(stms);
-            }
-        
-            var inpTreeNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
-
-            var antiInput = ConverterHelper.ConvertToAUEq(inpTreeNode);
-
-            var isCorrect = true;
-            Assert.IsTrue(isCorrect);
-        }
-
         static string GetTestDataFolder(string testDataLocation)
         {
             string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -132,9 +64,6 @@ namespace RefazerUnitTests
         {
             //Load grammar
             var grammar = GetGrammar();
-
-            //Folder to data
-            string expHome = Environment.GetEnvironmentVariable("EXP_EVALUATION", EnvironmentVariableTarget.User);
 
             //Examples
             var examplesInput = new List<SyntaxNodeOrToken>();

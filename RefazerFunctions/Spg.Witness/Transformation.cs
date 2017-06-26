@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using DbscanImplementation;
@@ -12,6 +14,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using RefazerFunctions.Substrings;
 using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Spg.Config;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Print;
@@ -22,18 +25,22 @@ using TreeElement.Spg.TreeEdit.Mapping;
 
 namespace RefazerFunctions.Spg.Witness
 {
+    /// <summary>
+    /// This class specifies back-propagation functions for Transformation operator.
+    /// </summary>
     public class Transformation
     {
         /// <summary>
-        /// Transformation witness function for parameter rule.
+        /// Specifies the back-propagation function for the rule parameter of the transformation operator.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Grammar parameter</param>
         /// <param name="spec">Example specification</param>
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public static SubsequenceSpec TransformationRule(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, IEnumerable<object>>();
-            var dicConnectedComponents = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
+            var dictionaryConnectedComponents = new Dictionary<State, List<List<EditOperation<SyntaxNodeOrToken>>>>();
             var listConnectedComponents = new List<List<EditOperation<SyntaxNodeOrToken>>>();
             var transSizeList = new List<int>();
             foreach (State input in spec.ProvidedInputs)
@@ -46,7 +53,7 @@ namespace RefazerFunctions.Spg.Witness
                     transSizeList.Add(script.Count);                
                     var primaryEditions = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(script);
                     var connectedComponentsInput = ConnectedComponentManager<SyntaxNodeOrToken>.ConnectedComponents(primaryEditions, script, inpTreeNode.Value);
-                    dicConnectedComponents[input] = connectedComponentsInput;
+                    dictionaryConnectedComponents[input] = connectedComponentsInput;
                     listConnectedComponents.AddRange(connectedComponentsInput);
                 }
             }
@@ -60,7 +67,7 @@ namespace RefazerFunctions.Spg.Witness
                 foreach (var cluster in clusters)
                 {
                     //Connected components for this input
-                    var connectedComponentsInput = dicConnectedComponents[input];
+                    var connectedComponentsInput = dictionaryConnectedComponents[input];
                     //Select from the cluster the connected components related to the input.
                     var connectedComponentsInputInCluster = cluster.Where(o => connectedComponentsInput.Any(e => IsEquals(o.Edits, e)));
                     scriptsInput.Add(connectedComponentsInputInCluster.ToList());
@@ -68,16 +75,20 @@ namespace RefazerFunctions.Spg.Witness
                 var compactedEditsInput = scriptsInput.Select(o => CompactScript(o, inpTree.Value, outTree)).ToList();
                 kExamples[input] = new List<List<List<Edit<SyntaxNodeOrToken>>>> { compactedEditsInput };
             }
-            SaveToFile(transSizeList);
+            if (SynthesisConfig.GetInstance().CreateLog) SaveToFile(transSizeList);
             var subsequence = new SubsequenceSpec(kExamples);
             return subsequence;
         }
 
+        /// <summary>
+        /// Logs the size of the transformation based on the number of edit operations computed by a distance tree algorithm
+        /// </summary>
+        /// <param name="transSizeList">Size of the transformation</param>
         private static void SaveToFile(List<int> transSizeList)
         {
-            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-            string filePath = expHome + "scriptsize.txt";
-            string s = "";
+            var expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+            var filePath = expHome + "scriptsize.txt";
+            var s = "";
             for(int i = 0; i < transSizeList.Count - 1; i++)
             {
                 var trans = transSizeList[i];
@@ -93,7 +104,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Segment the edit in nodes
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Example specification</param>
         public static SubsequenceSpec EditMapTNode(GrammarRule rule, SubsequenceSpec spec)
         {
@@ -123,13 +133,18 @@ namespace RefazerFunctions.Spg.Witness
             return new SubsequenceSpec(kExamples);
         }
 
-        private static bool IsEquals(List<Edit<SyntaxNodeOrToken>> item1, List<EditOperation<SyntaxNodeOrToken>> item2)
+        /// <summary>
+        /// Determines whether two edit scripts are equal
+        /// </summary>
+        /// <param name="firstEditScript">First edit script</param>
+        /// <param name="secondEditScript">Second edit script</param>
+        private static bool IsEquals(List<Edit<SyntaxNodeOrToken>> firstEditScript, List<EditOperation<SyntaxNodeOrToken>> secondEditScript)
         {
-            if (item1.Count != item2.Count) return false;
-            for (int i = 0; i < item1.Count(); i++)
+            if (firstEditScript.Count != secondEditScript.Count) return false;
+            for (int i = 0; i < firstEditScript.Count(); i++)
             {
-                var editI = item1[i].EditOperation;
-                var editj = item2[i];
+                var editI = firstEditScript[i].EditOperation;
+                var editj = secondEditScript[i];
 
                 if (!(editI.GetType() == editj.GetType())) return false;
                 if (!editI.T1Node.Value.Equals(editj.T1Node.Value)) return false;
@@ -147,15 +162,17 @@ namespace RefazerFunctions.Spg.Witness
         }
 
         /// <summary>
-        /// Cluster edit in regions
+        /// Clusters connected components
         /// </summary>
-        /// <param name="clusteredEdits">Clustered edit operations</param>
-        public static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> clusteredEdits)
+        /// <param name="connectedComponents">Connected components</param>
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
+        [SuppressMessage("ReSharper", "InvertIf")]
+        public static List<List<Script>> ClusterScript(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
             var clusteredList = new List<List<Script>>();
-            if (clusteredEdits.Any())
+            if (connectedComponents.Any())
             {
-                var clusters = ClusterConnectedComponents(clusteredEdits);
+                var clusters = ClusterConnectedComponents(connectedComponents);
                 foreach (var cluster in clusters)
                 {
                     var listEdit = cluster.Select(clusterList => new Script(clusterList.Select(o => new Edit<SyntaxNodeOrToken>(o)).ToList())).ToList();
@@ -166,9 +183,9 @@ namespace RefazerFunctions.Spg.Witness
         }
 
         /// <summary>
-        /// Compact edit operations with similar semantic in compacted edit operations
+        /// Compacts edit operations in single edit operations
         /// </summary>
-        /// <param name="connectedComponents">Uncompacted edit operations</param>
+        /// <param name="connectedComponents">Non-compacted edit operations</param>
         /// <param name="inpTree">Input tree</param>
         private static List<Edit<SyntaxNodeOrToken>> CompactScript(List<Script> connectedComponents, TreeNode<SyntaxNodeOrToken> inpTree, SyntaxNodeOrToken outTree)
         {
@@ -290,6 +307,7 @@ namespace RefazerFunctions.Spg.Witness
             foreach (var s in script.Edits)
             {
                 treeUpdate.ProcessEditOperation(s.EditOperation);
+                Debug.WriteLine("New Tree: \n\n");
                 PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(treeUpdate.CurrentTree, "", true);
             }
             return treeUpdate.CurrentTree;
@@ -329,6 +347,7 @@ namespace RefazerFunctions.Spg.Witness
         private static TreeNode<SyntaxNodeOrToken> GetParent(Script script, TreeNode<SyntaxNodeOrToken> inpTree)
         {
             var listNodes = new List<SyntaxNodeOrToken>();
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var v in script.Edits)
             {
                 var tocompare = (v.EditOperation is Update<SyntaxNodeOrToken> || v.EditOperation is Delete<SyntaxNodeOrToken>) ? v.EditOperation.T1Node : v.EditOperation.Parent;
@@ -346,7 +365,7 @@ namespace RefazerFunctions.Spg.Witness
         /// <summary>
         /// Compact similar edit operations in a single edit operation
         /// </summary>
-        /// <param name="connectedComponents">Uncompacted edit operations</param>
+        /// <param name="connectedComponents">Non-compacted edit operations</param>
         private static List<EditOperation<SyntaxNodeOrToken>> Compact(List<List<EditOperation<SyntaxNodeOrToken>>> connectedComponents)
         {
             var newList = new List<EditOperation<SyntaxNodeOrToken>>();
@@ -412,17 +431,8 @@ namespace RefazerFunctions.Spg.Witness
         {
             var xEditOperations = x.Operations.Where(o => !o.T1Node.Value.IsKind(SyntaxKind.IdentifierToken) || o is Update<SyntaxNodeOrToken>).ToList();
             var yEditOperations = y.Operations.Where(o => !o.T1Node.Value.IsKind(SyntaxKind.IdentifierToken) || o is Update<SyntaxNodeOrToken>).ToList();
-
-            ////var xpme = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(xEditOperations);
-            ////var ypme = ConnectedComponentManager<SyntaxNodeOrToken>.PrimaryEditions(yEditOperations);
-
-            ////var commonpm = (double)lcc.FindCommon(xpme, ypme).Count;
-            ////var distpm = 1.0 - (2 * commonpm) / ((double)xpme.Count + (double)ypme.Count);
-
-            ////if (Math.Abs(distpm) > 0.01 && ypme.Count > 1) return 1.0;
-
             var common = (double)lcc.FindCommon(xEditOperations, yEditOperations).Count;
-            var dist = 1.0 - (2 * common) / ((double)xEditOperations.Count + (double)yEditOperations.Count);
+            var dist = 1.0 - (2 * common) / ((double) xEditOperations.Count + (double) yEditOperations.Count);
             return dist;
         }
 
@@ -445,12 +455,8 @@ namespace RefazerFunctions.Spg.Witness
             {
                 inputNode = edit.EditOperation.T1Node;
             }
-
             var previousTree = new TreeUpdate(inputTree);
-            var copy = ConverterHelper.MakeACopy(inputTree);
-
             Tuple<TreeNode<SyntaxNodeOrToken>, TreeNode<SyntaxNodeOrToken>> beforeAfterAnchorNode;
-            TreeNode<SyntaxNodeOrToken> treeNode = null;
             if (inputNode == null)
             {
                 previousTree.ProcessEditOperation(edit.EditOperation);
@@ -461,10 +467,8 @@ namespace RefazerFunctions.Spg.Witness
             {
                 var from = TreeUpdate.FindNode(previousTree.CurrentTree, edit.EditOperation.T1Node.Value);
                 beforeAfterAnchorNode = GetBeforeAfterAnchorNode(from);
-                treeNode = TreeUpdate.FindNode(inputTree, inputNode.Value);
                 previousTree.ProcessEditOperation(edit.EditOperation);
             }
-
             return beforeAfterAnchorNode;
         }
 
@@ -508,7 +512,7 @@ namespace RefazerFunctions.Spg.Witness
         /// </summary>
         /// <param name="inpTree">Input tree</param>
         /// <param name="outTree">Output tree</param>
-        /// <returns>Computed edit edit</returns>
+        /// <returns>Computed edit</returns>
         private static List<EditOperation<SyntaxNodeOrToken>> Script(SyntaxNodeOrToken inpTree, SyntaxNodeOrToken outTree)
         {
             var gumTreeMapping = new GumTreeMapping<SyntaxNodeOrToken>();

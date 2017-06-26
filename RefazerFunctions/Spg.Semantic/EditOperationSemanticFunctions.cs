@@ -20,7 +20,14 @@ namespace RefazerFunctions.Spg.Semantic
             TreeUpdate update = new TreeUpdate(parent.Value);
             var child = ast.Value;
             var insert = new Insert<SyntaxNodeOrToken>(child, parent.Value, k);
-            update.ProcessEditOperation(insert);
+            try
+            {
+                update.ProcessEditOperation(insert);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 #if DEBUG
             Console.WriteLine("TREE UPDATE!!");
             PrintUtil<SyntaxNodeOrToken>.PrintPretty(update.CurrentTree, "", true);

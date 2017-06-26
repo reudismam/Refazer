@@ -156,10 +156,13 @@
   <ItemGroup>
     <Compile Include="C5\IPriorityQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spg.Builder\ASTBuilder.cs" />
     <Compile Include="Spg.Clustering\EditOperationDatasetItem.cs" />
     <Compile Include="Spg.ConnectedComponents\ConnectionComparer.cs" />
     <Compile Include="Spg.ConnectedComponents\TemplateConnectedComponents.cs" />
     <Compile Include="Spg.ConnectedComponents\ConnectedComponentManager.cs" />
+    <Compile Include="Spg.Log\TransformationsLogger.cs" />
+    <Compile Include="Spg.Log\CodeFragmentsLogger.cs" />
     <Compile Include="Spg.Match\MatchManager.cs" />
     <Compile Include="Spg.Script\Edit.cs" />
     <Compile Include="Spg.Script\InsertBefore.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Spg.Script\Insert.cs" />
     <Compile Include="Spg.Script\Move.cs" />
     <Compile Include="Spg.Script\Update.cs" />
+    <Compile Include="Spg.Transform\ASTTransformer.cs" />
     <Compile Include="Spg.TreeEdit.Update\TreeManager.cs" />
     <Compile Include="Spg.TreeEdit.Update\TreeUpdate.cs" />
   </ItemGroup>

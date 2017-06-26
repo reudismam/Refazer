@@ -1,17 +1,17 @@
 using System;
 
-namespace UnitTests.Spg.Transform
+namespace RefazerUnitTests.Spg.Transform
 {
     /// <summary>
-    /// Represents a transformation
+    /// Represents a BeforeAfter
     /// </summary>
     public class Transformation
     {
         /// <summary>
-        /// Before and after source code transformation
+        /// Before and after source code BeforeAfter
         /// </summary>
-        /// <returns>Before and after source code transformation</returns>
-        public Tuple<string, string> transformation { get; set; }
+        /// <returns>Before and after source code BeforeAfter</returns>
+        public Tuple<string, string> BeforeAfter { get; set; }
 
         /// <summary>
         /// Source path
@@ -22,11 +22,11 @@ namespace UnitTests.Spg.Transform
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="transformation">Before and after transformation</param>
+        /// <param name="beforeAfter">Before and after BeforeAfter</param>
         /// <param name="SourcePath">Source path</param>
-        public Transformation(Tuple<string, string> transformation, string SourcePath)
+        public Transformation(Tuple<string, string> beforeAfter, string SourcePath)
         {
-            this.transformation = transformation;
+            BeforeAfter = beforeAfter;
             this.SourcePath = SourcePath;
         }
     }

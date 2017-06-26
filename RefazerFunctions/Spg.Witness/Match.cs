@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using RefazerFunctions.Substrings;
 using RefazerFunctions.Spg.Bean;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Update;
@@ -14,18 +14,19 @@ using TreeElement.Spg.Node;
 
 namespace RefazerFunctions.Spg.Witness
 {
+    [SuppressMessage("ReSharper", "SuggestVarOrType_SimpleTypes")]
     public class Match
     {
         /// <summary>
-        /// Witness function for the parameter kind of the NewNode specification.
+        /// Witness function for the parameter kind of the Pattern operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         public static DisjunctiveExamplesSpec CKind(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (State input in spec.ProvidedInputs)
             {
                 var kids = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
@@ -38,22 +39,21 @@ namespace RefazerFunctions.Spg.Witness
         }
 
         /// <summary>
-        /// Witness function for the parameter children of the NewNode specification.
+        /// Witness function for the parameter children of the Pattern operator
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         /// <param name="kind">Label specification</param>
         public static DisjunctiveExamplesSpec CChildren(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kind)
         {
-            var eExamples = new Dictionary<State, IEnumerable<object>>();
-            var dicMat = new Dictionary<State, List<TreeNode<SyntaxNodeOrToken>>>();
+            var disjunctiveExamples = new Dictionary<State, IEnumerable<object>>();
+            var dictionaryMatches = new Dictionary<State, List<TreeNode<SyntaxNodeOrToken>>>();
             foreach (State input in spec.ProvidedInputs)
             {
-                dicMat.Add(input, new List<TreeNode<SyntaxNodeOrToken>>());
+                dictionaryMatches.Add(input, new List<TreeNode<SyntaxNodeOrToken>>());
                 foreach (Tuple<TreeNode<SyntaxNodeOrToken>, int> node in spec.DisjunctiveExamples[input])
                 {
-                    dicMat[input].Add(node.Item1);
+                    dictionaryMatches[input].Add(node.Item1);
                 }
             }
             foreach (State input in spec.ProvidedInputs)
@@ -62,7 +62,7 @@ namespace RefazerFunctions.Spg.Witness
                 foreach (Tuple<TreeNode<SyntaxNodeOrToken>, int> node in spec.DisjunctiveExamples[input])
                 {
                     var sot = node.Item1.Value;
-                    if (dicMat.All(o => dicMat[o.Key].Any(e => e.Value.Kind() == sot.Kind() && e.Children.Count == node.Item1.Children.Count)))
+                    if (dictionaryMatches.All(o => dictionaryMatches[o.Key].Any(e => e.Value.Kind() == sot.Kind() && e.Children.Count == node.Item1.Children.Count)))
                     {
                         if (!node.Item1.Children.Any()) continue;
                         var lsot = node.Item1.Children;
@@ -71,9 +71,9 @@ namespace RefazerFunctions.Spg.Witness
                     }
                 }
                 if (!matches.Any()) return null;
-                eExamples[input] = matches;
+                disjunctiveExamples[input] = matches;
             }
-            return DisjunctiveExamplesSpec.From(eExamples);
+            return DisjunctiveExamplesSpec.From(disjunctiveExamples);
         }
 
 

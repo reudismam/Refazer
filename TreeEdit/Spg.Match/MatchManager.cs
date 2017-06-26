@@ -159,5 +159,21 @@ namespace TreeEdit.Spg.Match
             }
             return true;
         }
+
+        /// <summary>
+        /// Finds the node that is within an AST
+        /// </summary>
+        /// <param name="tree">AST</param>
+        /// <param name="node">Node to be matched</param>
+        public static SyntaxNodeOrToken FindNode(SyntaxNodeOrToken tree, SyntaxNodeOrToken node)
+        {
+            var nodes = from item in tree.AsNode().DescendantNodesAndSelf()
+                        where node.IsKind(item.Kind())
+                              && item.Span.Contains(node.Span)
+                              && node.Span.Contains(item.Span)
+                              && node.ToString().Equals(item.ToString())
+                        select item;
+            return nodes.FirstOrDefault();
+        }
     }
 }

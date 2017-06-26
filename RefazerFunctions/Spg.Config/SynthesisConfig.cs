@@ -22,9 +22,14 @@ namespace RefazerFunctions.Spg.Config
         /// </summary>
         public List<int> LevelsForContext { get; set; }
 
+        public bool CreateLog { get; set; }
+        public bool BoundGeneratedPrograms { get; set; }
+
         private SynthesisConfig()
         {
             UseTokens = true;
+            CreateLog = true;
+            BoundGeneratedPrograms = false;
             DescendantsParentThreshouldForContext = 40;
             LevelsForContext = Enumerable.Range(0, 3).ToList();
         }

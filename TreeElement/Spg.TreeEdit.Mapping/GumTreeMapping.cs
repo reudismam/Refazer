@@ -222,83 +222,44 @@ namespace TreeElement.Spg.TreeEdit.Mapping
             }
         }
 
-        ///// <summary>
-        ///// Mapping between nodes without move operation
-        ///// </summary>
-        ///// <param name="t1">T1 tree</param>
-        ///// <param name="t2">T2 tree</param>
-        ///// <returns></returns>
-        //private Dictionary<TreeNode<T>, TreeNode<T>> Opt(TreeNode<T> t1, TreeNode<T> t2)
-        //{
-        //    var zss = new CSharpZss<T>(t1, t2);
-        //    var result = zss.Compute();
-        //    var script = result.Item2;
-        //    var dict = new Dictionary<TreeNode<T>, TreeNode<T>>();
-
-        //    foreach (var editOperation in script.Where(editOperation => editOperation.Item1 != null && editOperation.Item2 != null))
-        //    {
-        //        dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-        //        var isomorphicPairs = IsomorphicManager<T>.AllPairOfIsomorphic(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-
-        //        if (IsomorphicManager<T>.IsIsomorphic(editOperation.Item1.InternalNode,
-        //            editOperation.Item2.InternalNode))
-        //        {
-        //            dict.Add(editOperation.Item1.InternalNode, editOperation.Item2.InternalNode);
-        //        }
-
-        //        foreach (var pair in isomorphicPairs.Where(pair => !dict.ContainsKey(pair.Item1) && !dict.ContainsValue(pair.Item2)))
-        //        {
-        //            dict.Add(pair.Item1, pair.Item2);
-        //        }
-        //    }
-        //    return dict;
-        //}
-
         /// <summary>
         /// Mapping between nodes without move operation
         /// </summary>
         /// <param name="t1">T1 tree</param>
         /// <param name="t2">T2 tree</param>
-        /// <returns></returns>
         private Dictionary<TreeNode<T>, TreeNode<T>> Opt(TreeNode<T> t1, TreeNode<T> t2)
         {
             var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
-            //t1String = Regex.Replace(t1String, "[^0-9a-zA-Z}{@\"]+", " ");
-            //t1String = Regex.Replace(t1String, "(?:(?:@\"[^\"]*\")+)", "\"code\"");
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
-            //t2String = Regex.Replace(t2String, "(?:(?:@\"[^\"]*\")+)", "\"code\"");
-            //t2String = Regex.Replace(t2String, "[^0-9a-zA-Z}{@\"]+", " ");
-
-            var f1 = GetTestDataFolder(@"\") + @"\a.t";
-            var f2 = GetTestDataFolder(@"\") + @"\b.t";
-
+            var f1 = GetTreeEditDistanceDataFolder(@"\") + @"a.t";
+            var f2 = GetTreeEditDistanceDataFolder(@"\") + @"b.t";
             File.WriteAllText(f1, t1String);
             File.WriteAllText(f2, t2String);
 
-            string cmd = @"/c java -jar """ + GetTestDataFolder(@"\libs") + $@"\RTED_v1.1.jar"" -f ""{f1}"" ""{f2}"" -c 1 1 1 -s heavy --switch -m";
+            string cmd = @"/c java -jar """ + GetTreeEditDistanceDataFolder(@"\libs") +
+                         $@"\RTED_v1.1.jar"" -f ""{f1}"" ""{f2}"" -c 1 1 1 -s heavy --switch -m";
             Process proc = new Process();
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.Arguments = cmd;
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.RedirectStandardError = true;
             proc.Start();
             string output = proc.StandardOutput.ReadToEnd();
+            string error = proc.StandardError.ReadToEnd();
+            if (!error.Equals("")) throw new Exception("Errors while computing tree edit distance algorithm.");
 
             var t1Traversal = new TreeTraversal<T>();
             var t1List = t1Traversal.PostOrderTraversal(t1);
-
             var t2Traversal = new TreeTraversal<T>();
             var t2List = t2Traversal.PostOrderTraversal(t2);
 
-
             var dic1 = new Dictionary<int, TreeNode<T>>();
             var dic2 = new Dictionary<int, TreeNode<T>>();
-
             for (int i = 0; i < t1List.Count; i++)
             {
                 dic1.Add(i + 1, t1List[i]);
             }
-
             for (int i = 0; i < t2List.Count; i++)
             {
                 dic2.Add(i + 1, t2List[i]);
@@ -324,12 +285,10 @@ namespace TreeElement.Spg.TreeEdit.Mapping
             return dictionary;
         }
 
-        static string GetTestDataFolder(string testDataLocation)
+        static string GetTreeEditDistanceDataFolder(string treeEditFileLocation)
         {
             string startupPath = FileUtil.GetBasePath();
-            var pathItems = startupPath.Split(Path.DirectorySeparatorChar);
-            string projectPath = String.Join(Path.DirectorySeparatorChar.ToString(), pathItems.Take(pathItems.Length - 4));
-            string result = projectPath + testDataLocation;
+            var result = startupPath + treeEditFileLocation;
             return result;
         }
 
@@ -338,7 +297,7 @@ namespace TreeElement.Spg.TreeEdit.Mapping
         /// </summary>
         /// <param name="t">Tree t to be analyzed</param>
         /// <param name="M">Computed mapping</param>
-        /// <returns>Tree t2 with the disired characteristic.</returns>
+        /// <returns>Tree t2 with the desired characteristic.</returns>
         private static bool HasMatchedChildren(TreeNode<T> t, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             return t.DescendantNodes().Any(M.ContainsKey);
@@ -403,7 +362,6 @@ namespace TreeElement.Spg.TreeEdit.Mapping
         /// <returns>Mapping between two trees.</returns>
         public Dictionary<TreeNode<T>, TreeNode<T>> Mapping(TreeNode<T> t1, TreeNode<T> t2)
         {
-            //return Opt(t1, t2);
             var M = TopDown(t1, t2);
             M = BottomUp(t1, t2, M);
             return M;

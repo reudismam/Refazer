@@ -170,8 +170,8 @@ namespace TreeElement.Spg.Node
             {
                 return false;
             }
-            TreeNode<T> compare = (TreeNode<T>)obj;
-            return /*IsEqual(this, compare);*/ Value.Equals(compare.Value);
+            var compare = (TreeNode<T>)obj;
+            return Value.Equals(compare.Value);
         }
 
         /// <summary>

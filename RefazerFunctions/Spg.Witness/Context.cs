@@ -20,7 +20,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Specification for the pattern attribute of the Context operator.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
         public DisjunctiveExamplesSpec ContextPattern(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
@@ -63,7 +62,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Find the index of the child in the pattern node.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Rule parameter</param>
         /// <param name="spec">Example specification</param>
         /// <param name="kind">Parent binding</param>
         public ExampleSpec ContextXPath(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kind)
@@ -97,7 +95,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Specification for the pattern attribute of the Context operator.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
         public DisjunctiveExamplesSpec SContextPattern(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {

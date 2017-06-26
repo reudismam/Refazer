@@ -21,7 +21,7 @@ namespace RefazerFunctions.Spg.Bean
         private readonly TreeNode<SyntaxNodeOrToken> _node;
 
         /// <summary>
-        /// Construct a new K
+        /// Construct a new XPath
         /// </summary>
         /// <param name="input">Input tree</param>
         /// <param name="node">Node in the input tree</param>
@@ -41,7 +41,7 @@ namespace RefazerFunctions.Spg.Bean
             for (int i = 0; i < matches.Count; i++)
             {
                 var match = matches[i];
-                var compare = Semantics.FindChild(match, patternExample.K);
+                var compare = Semantics.FindChild(match, patternExample.XPath);
                 if (compare != null && Match.IsEqual(compare.Value, _node.Value))
                 {
                     return i + 1;
@@ -60,7 +60,7 @@ namespace RefazerFunctions.Spg.Bean
             for (int i = 0; i < matches.Count; i++)
             {
                 var match = matches[i];
-                var compare = Semantics.FindChild(match, patternExample.K);
+                var compare = Semantics.FindChild(match, patternExample.XPath);
                 if (compare != null && Match.IsEqual(compare.Value, _node.Value))
                 {
                    return i + 1;
@@ -79,7 +79,7 @@ namespace RefazerFunctions.Spg.Bean
         //    for (int i = 0; i < matches.Count; i++)
         //    {
         //        var match = matches[i];
-        //        var compare = Semantics.FindChild(match, patternExample.K);
+        //        var compare = Semantics.FindChild(match, patternExample.XPath);
         //        if (compare != null && Match.IsEqual(compare.Value, _node.Value))
         //        {
         //            return i + 1;

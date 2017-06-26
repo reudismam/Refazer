@@ -108,7 +108,7 @@ namespace Spg.LocationRefactor.Location
         /// Group location by source file
         /// </summary>
         /// <param name="list">Location list</param>
-        /// <returns>Locations by source file</returns>
+        /// <returns>Transformations by source file</returns>
         public Dictionary<string, List<CodeLocation>> GroupLocationsBySourceFile(List<CodeLocation> list)
         {
             Dictionary<string, List<CodeLocation>> dic = new Dictionary<string, List<CodeLocation>>();

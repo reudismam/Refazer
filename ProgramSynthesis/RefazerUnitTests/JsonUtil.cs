@@ -1,12 +1,11 @@
 using System;
 using Newtonsoft.Json;
-using Spg.ExampleRefactoring.Util;
-using UnitTests;
+using TreeElement;
 
-namespace Spg.ExampleRefactoring.Util
+namespace RefazerUnitTests
 {
     /// <summary>
-    /// Json utility
+    /// JSON utility
     /// </summary>
     public class JsonUtil<T>
     {
@@ -27,7 +26,6 @@ namespace Spg.ExampleRefactoring.Util
             }
             catch (OutOfMemoryException)
             {
-                //MessageBox.Show("Exception");
                 Console.WriteLine("Could not write to file: " + path);
             }
             finally
@@ -37,18 +35,14 @@ namespace Spg.ExampleRefactoring.Util
         }
 
         /// <summary>
-        /// Read Json object
+        /// Reads JSON objects
         /// </summary>
         /// <param name="path">File path</param>
         /// <returns>Object</returns>
         public static T Read(string path)
         {
-            //JsonSerializerSettings settings = new JsonSerializerSettings();
-            //settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            //settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-
             string json = FileUtil.ReadFile(path);
-            T obj = JsonConvert.DeserializeObject<T>(json/*, settings*/);
+            T obj = JsonConvert.DeserializeObject<T>(json);
             return obj;
         }
     }
