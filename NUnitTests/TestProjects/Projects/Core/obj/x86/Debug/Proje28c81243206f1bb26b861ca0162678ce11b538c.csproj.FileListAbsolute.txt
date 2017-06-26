@@ -1,4 +1,0 @@
-C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Core\obj\x86\Debug\Proje28c81243206f1bb26b861ca0162678ce11b538c.csprojResolveAssemblyReference.cache
-C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Core\obj\x86\Debug\Proje28c81243206f1bb26b861ca0162678ce11b538c.FxCopFixersResources.resources
-C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Core\obj\x86\Debug\Proje28c81243206f1bb26b861ca0162678ce11b538c.FxCopRulesResources.resources
-C:\Users\SPG\Documents\Visual Studio 2013\Projects\IntelliMeta\NUnitTests\bin\Debug\Projects\Core\obj\x86\Debug\Proje28c81243206f1bb26b861ca0162678ce11b538c.csproj.GenerateResource.Cache

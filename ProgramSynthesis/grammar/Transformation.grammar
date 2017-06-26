@@ -1,0 +1,42 @@
+﻿#reference 'Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35';
+#reference 'Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35';
+#reference 'file:TreeElement.dll';
+#reference 'file:RefazerFunctions.dll';
+
+using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
+using RefazerFunctions;
+using RefazerFunctions.Spg.Bean;
+using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using System;
+
+using semantics RefazerFunctions.Semantics;
+using learners RefazerFunctions.WitnessFunctions;
+
+language Transformation;
+
+@complete feature double Score = RankingScore;
+@start IEnumerable<Node>  trans := Transformation(node, rule);
+Patch rule := SE(editList) | EList(editList, rule);
+IEnumerable<Node> editList := EditMap(operation, locations) = Map(\target: Node => operation, locations);
+IEnumerable<Node> locations := EditFilter(nodematch, fnodes) = Filter(\x: Node => nodematch, fnodes);
+bool nodematch := Match(x, pattern);
+IEnumerable<Node> fnodes := AllNodes(node, id);
+
+Node operation := Insert(target, ast, c) | InsertBefore(target, ref, ast) |  Update(target, ast) | Delete(target, ref);
+
+Pattern pattern := Context(kmatch, id);
+Pattern kmatch := token | Pattern(id, children);
+IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
+Pattern token := Concrete(tree) | Abstract(id) | Variable(id);
+
+Node ast:= const | ref;
+Node const := Node(kind, childrenNodes) | ConstNode(tree);
+IEnumerable<Node> childrenNodes := SN(ast) | NList(ast, childrenNodes);
+Node ref := Reference(target, pattern, c);
+
+SyntaxKind kind;                     @input Node node;
+string id;                             
+int c;
+SyntaxNodeOrToken tree;
