@@ -926,8 +926,10 @@ namespace UnitTests
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -938,6 +940,7 @@ using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
 using TreeEdit.Spg.Log;
+using TreeEdit.Spg.Transform;
 using TreeElement;
 using UnitTests;
 
@@ -1439,7 +1442,8 @@ namespace RefazerUnitTests
                     var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfterList, randomList, locations);
                     if (firstIncorrect == -1)
                     {
-                        //GenerateDiffBeforeAfter(beforeafter, commit);
+                        var transformedDocuments = ASTTransformer.Transform(TransformationsLogger.GetInstance().Transformations);
+                        GeneratedDiffEdits(commit, transformedDocuments);
                         break;
                     }
 
@@ -1447,7 +1451,8 @@ namespace RefazerUnitTests
                 }
                 if (examples.Contains(firstProblematicLocation))
                 {
-                    //GenerateDiffBeforeAfter(beforeafter, commit);
+                    var transformedDocuments = ASTTransformer.Transform(TransformationsLogger.GetInstance().Transformations);
+                    GeneratedDiffEdits(commit, transformedDocuments);
                     throw new Exception("A transformation could not be learned using this examples.");
                 }
                 examples.Add(firstProblematicLocation);
@@ -1470,6 +1475,50 @@ namespace RefazerUnitTests
                 totalTimeToExecute,
                 mean);
             return true;
+        }
+
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        private static void GeneratedDiffEdits(string commit, List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> transformedList)
+        {
+            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+            string output = "";
+            string errors = "";
+            var pathoutput = Path.Combine(expHome, @"cprose\", commit + @"\metadata\diff.df");
+            foreach (var ba in transformedList)
+            {
+                var className = ba.Item1.SyntaxTree.FilePath.Split(@"\".ToCharArray()).Last();
+                var pathb = Path.Combine(expHome, @"cprose\", commit + @"\metadata_tool\B" + className);
+                var patha = Path.Combine(expHome, @"cprose\", commit + @"\metadata_tool\A" + className);
+                FileUtil.WriteToFile(pathb, ba.Item1.ToString());
+                FileUtil.WriteToFile(patha, ba.Item2.ToString());
+
+                Process process = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = $"/C diff {pathb} {patha} -U5";
+                process.StartInfo = startInfo;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.Start();
+
+                output += process.StandardOutput.ReadToEnd();
+                errors += process.StandardError.ReadToEnd();
+            }
+
+            if (!output.IsEmpty())
+            {
+                FileUtil.WriteToFile(pathoutput, output);
+            }
+            else if (!errors.IsEmpty())
+            {
+                FileUtil.WriteToFile(pathoutput, errors);
+            }
+            else
+            {
+                FileUtil.WriteToFile(pathoutput, "Occurs an error while running process.");
+            }
         }
 
         private static int GetFirstIncorrect(List<Tuple<TRegion, string, string>> toolBeforeAfterList, List<Tuple<TRegion, string, string>> baselineBeforeAfterList, List<int> randomList, List<CodeLocation> locations)

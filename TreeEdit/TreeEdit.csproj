@@ -173,6 +173,7 @@
     <Compile Include="Spg.Script\Insert.cs" />
     <Compile Include="Spg.Script\Move.cs" />
     <Compile Include="Spg.Script\Update.cs" />
+    <Compile Include="Spg.Transform\ASTTransformer.cs" />
     <Compile Include="Spg.TreeEdit.Update\TreeManager.cs" />
     <Compile Include="Spg.TreeEdit.Update\TreeUpdate.cs" />
   </ItemGroup>
