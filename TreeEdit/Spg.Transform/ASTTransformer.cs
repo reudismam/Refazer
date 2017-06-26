@@ -36,6 +36,13 @@ namespace TreeEdit.Spg.Transform
             return transformationList;
         }
 
+        /// <summary>
+        /// Receives a list of modification in the source code in terms of 
+        /// before and after edits in the source code and returns a new 
+        /// version of the document where these modifications take place.
+        /// </summary>
+        /// <param name="transformations">List of modifications</param>
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         private static async Task<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transformation(List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> transformations)
         { 
             var workspace = new AdhocWorkspace();
@@ -50,7 +57,6 @@ namespace TreeEdit.Spg.Transform
             var syntaxRoot = await document.GetSyntaxRootAsync();
             var nodes = new List<Tuple<SyntaxNode, SyntaxNode>>();
 
-            //Finally... create the document editor
             var documentEditor = await DocumentEditor.CreateAsync(document);
             foreach (var node in transformations)
             {
