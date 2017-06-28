@@ -1406,13 +1406,13 @@ namespace RefazerUnitTests
             {
                 var execId = "ranking";
                 //var execId = seed + "";
-                CodeFragmentsLogger.GetInstance().Init();
-                TransformationsLogger.GetInstance().Init();
+                CodeFragmentsInfo.GetInstance().Init();
+                TransformationsInfo.GetInstance().Init();
                 examples.Sort();
                 helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, execId);
                 helper.Execute(examples);
 
-                var regionsFrags = CodeFragmentsLogger.GetInstance().Locations.Select(o => new TRegion {Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath}).ToList();
+                var regionsFrags = CodeFragmentsInfo.GetInstance().Locations.Select(o => new TRegion {Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath}).ToList();
                 JsonUtil<List<TRegion>>.Write(regionsFrags, expHome + @"cprose\" + commit + @"\metadata\transformed_locationsAll" + execId + ".json");
 
                 if (SynthesisConfig.GetInstance().CreateLog)
@@ -1423,7 +1423,7 @@ namespace RefazerUnitTests
                     mean = sizes.Average();
                 }
 
-                var beforeafter = TransformationsLogger.GetInstance().Transformations.Select(o => Tuple.Create(new TRegion {Start = o.Item1.Span.Start, Length = o.Item1.Span.Length, Text = o.Item1.ToString(), Path = o.Item1.SyntaxTree.FilePath}, o.Item2.ToString(), o.Item1.SyntaxTree.FilePath)).ToList();
+                var beforeafter = TransformationsInfo.GetInstance().Transformations.Select(o => Tuple.Create(new TRegion {Start = o.Item1.Span.Start, Length = o.Item1.Span.Length, Text = o.Item1.ToString(), Path = o.Item1.SyntaxTree.FilePath}, o.Item2.ToString(), o.Item1.SyntaxTree.FilePath)).ToList();
                 string programs = "programs";
                 programs = GetDataAndSaveToFile(commit, expHome, execId, programs);
 
@@ -1446,7 +1446,7 @@ namespace RefazerUnitTests
                     {
                         try
                         {
-                            var transformedDocuments = ASTTransformer.Transform(TransformationsLogger.GetInstance().Transformations);
+                            var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
                             GeneratedDiffEdits(commit, transformedDocuments);
                         }
                         catch (Exception)
@@ -1462,7 +1462,7 @@ namespace RefazerUnitTests
                 {
                     try
                     {
-                        var transformedDocuments = ASTTransformer.Transform(TransformationsLogger.GetInstance().Transformations);
+                        var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
                         GeneratedDiffEdits(commit, transformedDocuments);
                     }
                     catch (Exception)
