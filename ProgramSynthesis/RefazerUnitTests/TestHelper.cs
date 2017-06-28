@@ -474,7 +474,7 @@ namespace UnitTests
         /// <summary>
         /// Execution id
         /// </summary>
-        private readonly int _execId;
+        private readonly string _execId;
         /// <summary>
         /// Regions
         /// </summary>
@@ -524,7 +524,7 @@ namespace UnitTests
         /// </summary>
         public Dictionary<string, List<TRegion>> DictionarySelection { get; set; }
 
-        public TestHelper(Grammar grammar, List<TRegion> regions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, int execId)
+        public TestHelper(Grammar grammar, List<TRegion> regions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, string execId)
         {
             _grammar = grammar;
             _regions = regions;

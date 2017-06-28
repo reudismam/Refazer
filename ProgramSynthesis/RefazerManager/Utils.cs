@@ -62,7 +62,7 @@ namespace RefazerManager
             });
 
             var consistentPrograms = engine.LearnGrammar(spec);
-            const ulong a = 100;
+            const ulong a = 200;
             var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
             var b =  (ulong) topK.Count;
             topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int) Math.Min(a, b)).ToList();

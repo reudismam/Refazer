@@ -1404,26 +1404,28 @@ namespace RefazerUnitTests
             double mean = -1.0;
             while (true)
             {
+                var execId = "ranking";
+                //var execId = seed + "";
                 CodeFragmentsLogger.GetInstance().Init();
                 TransformationsLogger.GetInstance().Init();
                 examples.Sort();
-                helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, seed);
+                helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, execId);
                 helper.Execute(examples);
 
                 var regionsFrags = CodeFragmentsLogger.GetInstance().Locations.Select(o => new TRegion {Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath}).ToList();
-                JsonUtil<List<TRegion>>.Write(regionsFrags, expHome + @"cprose\" + commit + @"\metadata\transformed_locationsAll" + seed + ".json");
+                JsonUtil<List<TRegion>>.Write(regionsFrags, expHome + @"cprose\" + commit + @"\metadata\transformed_locationsAll" + execId + ".json");
 
                 if (SynthesisConfig.GetInstance().CreateLog)
                 {
                     string scriptsize = "scriptsize";
-                    scriptsizes = GetDataAndSaveToFile(commit, expHome, seed, scriptsize);
+                    scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, scriptsize);
                     var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(o => Int32.Parse(o));
                     mean = sizes.Average();
                 }
 
                 var beforeafter = TransformationsLogger.GetInstance().Transformations.Select(o => Tuple.Create(new TRegion {Start = o.Item1.Span.Start, Length = o.Item1.Span.Length, Text = o.Item1.ToString(), Path = o.Item1.SyntaxTree.FilePath}, o.Item2.ToString(), o.Item1.SyntaxTree.FilePath)).ToList();
                 string programs = "programs";
-                programs = GetDataAndSaveToFile(commit, expHome, seed, programs);
+                programs = GetDataAndSaveToFile(commit, expHome, execId, programs);
 
                 var foundLocations = GetEditedLocations(regionsFrags, locations);
                 var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
@@ -1432,18 +1434,25 @@ namespace RefazerUnitTests
                 {
                     //Generate meta-data for BaselineBeforeAfterList on commit.
                     var foundList = GetEditionInLocations(regionsFrags, locations);
-                    JsonUtil<List<TRegion>>.Write(foundList, expHome + @"cprose\" + commit + @"\metadata_tool\transformed_locations" + seed + ".json");
+                    JsonUtil<List<TRegion>>.Write(foundList, expHome + @"cprose\" + commit + @"\metadata_tool\transformed_locations" + execId + ".json");
 
                     var beforeafterList = GetBeforeAfterData(beforeafter, locations);
-                    JsonUtil<List<Tuple<TRegion, string, string>>>.Write(beforeafterList, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locations" + seed + ".json");
-                    JsonUtil<List<Tuple<TRegion, string, string>>>.Write(beforeafter, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locationsAll" + seed + ".json");
+                    JsonUtil<List<Tuple<TRegion, string, string>>>.Write(beforeafterList, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locations" + execId + ".json");
+                    JsonUtil<List<Tuple<TRegion, string, string>>>.Write(beforeafter, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locationsAll" + execId + ".json");
                     //Comparing edited locations with baseline
-                    var baselineBeforeAfterList = JsonUtil<List<Tuple<TRegion, string, string>>>.Read(expHome + @"cprose\" + commit + @"\metadata\before_after_locations" + seed + ".json");
+                    var baselineBeforeAfterList = JsonUtil<List<Tuple<TRegion, string, string>>>.Read(expHome + @"cprose\" + commit + @"\metadata\before_after_locations" + execId + ".json");
                     var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfterList, randomList, locations);
                     if (firstIncorrect == -1)
                     {
-                        var transformedDocuments = ASTTransformer.Transform(TransformationsLogger.GetInstance().Transformations);
-                        GeneratedDiffEdits(commit, transformedDocuments);
+                        try
+                        {
+                            var transformedDocuments = ASTTransformer.Transform(TransformationsLogger.GetInstance().Transformations);
+                            GeneratedDiffEdits(commit, transformedDocuments);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
                         break;
                     }
 
@@ -1451,8 +1460,16 @@ namespace RefazerUnitTests
                 }
                 if (examples.Contains(firstProblematicLocation))
                 {
-                    var transformedDocuments = ASTTransformer.Transform(TransformationsLogger.GetInstance().Transformations);
-                    GeneratedDiffEdits(commit, transformedDocuments);
+                    try
+                    {
+                        var transformedDocuments = ASTTransformer.Transform(TransformationsLogger.GetInstance().Transformations);
+                        GeneratedDiffEdits(commit, transformedDocuments);
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+
                     throw new Exception("A transformation could not be learned using this examples.");
                 }
                 examples.Add(firstProblematicLocation);
@@ -1651,7 +1668,7 @@ namespace RefazerUnitTests
             return regions;
         }
 
-        private static string GetDataAndSaveToFile(string commit, string expHome, int seed, string fileName)
+        private static string GetDataAndSaveToFile(string commit, string expHome, string seed, string fileName)
         {
             string file = expHome + fileName + ".txt";
             var fragments = FileUtil.ReadFile(file);
