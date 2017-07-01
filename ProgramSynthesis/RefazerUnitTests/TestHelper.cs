@@ -452,7 +452,6 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
-using RefazerFunctions.Substrings;
 using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
 using RefazerManager;
@@ -460,10 +459,10 @@ using Spg.LocationRefactor.Location;
 using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using TreeElement;
-using WorkSpaces.Spg.Workspace;
 using TreeElement.Spg.Node;
+using WorkSpaces.Spg.Workspace;
 
-namespace UnitTests
+namespace RefazerUnitTests
 {
     class TestHelper
     {

@@ -1343,26 +1343,13 @@ namespace RefazerUnitTests
             Assert.IsTrue(isCorrect);
         }
 
-        static string GetTestDataFolder(string testDataLocation)
-        {
-            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
-            var pathItems = startupPath.Split(Path.DirectorySeparatorChar);
-            string projectPath = String.Join(Path.DirectorySeparatorChar.ToString(),
-                pathItems.Take(pathItems.Length - 4));
-            string result = projectPath + testDataLocation;
-            return result;
-        }
-
-        public static string GetBasePath()
-        {
-            string path = GetTestDataFolder(@"\");
-            return path;
-        }
-
+        /// <summary>
+        /// Gets the domain specific grammar
+        /// </summary>
         public static Grammar GetGrammar()
         {
-            string path = GetBasePath();
-            var grammar = Utils.LoadGrammar(path + @"ProgramSynthesis\grammar\Transformation.grammar");
+            string path = FileUtil.GetBasePath() + @"\ProgramSynthesis\grammar\Transformation.grammar";
+            var grammar = Utils.LoadGrammar(path);
             return grammar;
         }
 

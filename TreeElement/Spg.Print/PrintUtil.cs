@@ -221,16 +221,12 @@ namespace TreeEdit.Spg.Print
             _prettyPrint = new StreamWriter(path);
             PrettyPrintKey(t1, "", true, M);
             _prettyPrint.Close();
-
-            string t1result = File.ReadAllText(path);
-
+            string t1Result = File.ReadAllText(path);
             _prettyPrint = new StreamWriter(path);
             PrettyPrintValue(t2, "", true, M);
             _prettyPrint.Close();
-
-            string t2result = File.ReadAllText(path);
-
-            return null;
+            string t2Result = File.ReadAllText(path);
+            return Tuple.Create(t1Result, t2Result);
         }
     }
 }
