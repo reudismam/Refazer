@@ -1565,53 +1565,6 @@ namespace RefazerUnitTests
             return regionsFound;
         }
 
-        private static void GenerateDiffBeforeAfter(List<Tuple<TRegion, string, string>> regions, string commit)
-        {
-            var groups = regions.GroupBy(o => o.Item3);
-            var dic = groups.ToDictionary(group => group.Key, group => group.ToList());
-
-            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-            var transmedList = Transform(dic);
-            string output = "";
-            string errors = "";
-            var pathoutput = Path.Combine(expHome, @"cprose\", commit + @"\metadata\diff.df");
-            foreach (var ba in transmedList)
-            {
-                var className = ba.Item3.Split(@"\".ToCharArray()).Last();
-                var pathb = Path.Combine(expHome, @"cprose\", commit + @"\metadata_tool\B" + className);
-                var patha = Path.Combine(expHome, @"cprose\", commit + @"\metadata_tool\A" + className);
-                FileUtil.WriteToFile(pathb, ba.Item1);
-                FileUtil.WriteToFile(patha, ba.Item2);
-
-                Process process = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = $"/C diff {pathb} {patha} -U5";
-                process.StartInfo = startInfo;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.Start();
-
-                output += process.StandardOutput.ReadToEnd();
-                errors += process.StandardError.ReadToEnd();
-            }
-
-            if (!output.IsEmpty())
-            {
-                FileUtil.WriteToFile(pathoutput, output);
-            }
-            else if (!errors.IsEmpty())
-            {
-                FileUtil.WriteToFile(pathoutput, errors);
-            }
-            else
-            {
-                FileUtil.WriteToFile(pathoutput, "Occurs an error while running process.");
-            }
-        }
-
         public static List<Tuple<string, string, string>> Transform(Dictionary<string, List<Tuple<TRegion, string, string>>> transformations)
         {
             List<Tuple<string, string, string>> tRegions = new List<Tuple<string, string, string>>();
@@ -1637,35 +1590,6 @@ namespace RefazerUnitTests
                 tRegions.Add(Tuple.Create(source, sourceCode, filePath));
             }
             return tRegions;
-        }
-
-        private static List<Tuple<TRegion, string, string>> ConvertBeforeAfterToRegions(string beforeafter)
-        {
-            var regions = new List<Tuple<TRegion, string, string>>();
-            var enumerator = beforeafter.Split(new[] { "EndLine" }, StringSplitOptions.None).GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                if ((enumerator.Current + "").Equals("")) break;
-
-                int start = Int32.Parse(enumerator.Current + "");
-                enumerator.MoveNext();
-                int length = Int32.Parse(enumerator.Current + "");
-                enumerator.MoveNext();
-                string content = enumerator.Current + "";
-                enumerator.MoveNext();
-                string after = enumerator.Current + "";
-                enumerator.MoveNext();
-                string path = enumerator.Current + "";
-
-                var region = new TRegion();
-                region.Start = start;
-                region.Length = length;
-                region.Text = content;
-                region.Path = path;
-
-                regions.Add(Tuple.Create(region, after, path));
-            }
-            return regions;
         }
 
         private static string GetDataAndSaveToFile(string commit, string expHome, string seed, string fileName)
@@ -1720,34 +1644,7 @@ namespace RefazerUnitTests
             }
             return dictionary;
         }
-
-        private static List<TRegion> ConvertFragmentsToRegions(string fragments)
-        {
-            var regions = new List<TRegion>();
-            var enumerator = fragments.Split(new[] { "EndLine" }, StringSplitOptions.None).GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                if ((enumerator.Current + "").Equals("")) break;
-
-                int start = Int32.Parse(enumerator.Current + "");
-                enumerator.MoveNext();
-                int length = Int32.Parse(enumerator.Current + "");
-                enumerator.MoveNext();
-                string content = enumerator.Current + "";
-                enumerator.MoveNext();
-                string path = enumerator.Current + "";
-
-                var region = new TRegion();
-                region.Start = start;
-                region.Length = length;
-                region.Text = content;
-                region.Path = path;
-
-                regions.Add(region);
-            }
-            return regions;
-        }
-
+   
         public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
         {
