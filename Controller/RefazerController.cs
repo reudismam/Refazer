@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Controller.Event;
 using Microsoft.CodeAnalysis;
@@ -11,6 +12,7 @@ using ProseManager;
 using RefazerFunctions.Spg.Bean;
 using Spg.Controller.Projects;
 using TreeEdit.Spg.Log;
+using TreeEdit.Spg.LogInfo;
 using TreeElement.Spg.Node;
 using WorkSpaces.Spg.Workspace;
 
@@ -26,12 +28,21 @@ namespace Controller
         private readonly List<ITransformationFinishedObserver> _transformationFinishedOIbservers = new List<ITransformationFinishedObserver>();
 
         /// <summary>
-        /// Specifies the found locations
+        /// Gets the found locations
         /// </summary>
         /// <returns></returns>
         public List<SyntaxNodeOrToken> GetLocations()
         {
             return CodeFragmentsInfo.GetInstance().Locations;
+        }
+
+        /// <summary>
+        /// Gets the transformations performed into the source code in terms of
+        /// sourceCodeBefore and afterSourceCode code fragments
+        /// </summary>
+        public List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> GetTransformations()
+        {
+            return TransformationsInfo.GetInstance().Transformations;
         }
 
         /// <summary>
@@ -45,23 +56,21 @@ namespace Controller
 
         private Grammar Grammar { get; set; }
 
-        public List<object> Transformed { get; set; }
-
         /// <summary>
-        /// Informatios about the project
+        /// Informations about the project
         /// </summary>
         public ProjectInformation ProjectInfo { get; set; }
 
         /// <summary>
-        /// Code before transformation
+        /// Code sourceCodeBefore transformation
         /// </summary>
         /// <returns></returns>
         public string CurrentViewCodeBefore { get; set; }
 
         /// <summary>
-        /// Code before transformation
+        /// Code sourceCodeBefore transformation
         /// </summary>
-        /// <returns>Code before transformation</returns>
+        /// <returns>Code sourceCodeBefore transformation</returns>
         public string CurrentViewCodeAfter { get; set; }
 
         /// <summary>
@@ -71,7 +80,7 @@ namespace Controller
         public string CurrentViewCodePath { get; set; }
 
         /// <summary>
-        /// Documents before after edition
+        /// Documents sourceCodeBefore afterSourceCode edition
         /// </summary>
         public List<Tuple<string, string>> DocumentsBeforeAndAfter { get; set; }
 
@@ -87,13 +96,14 @@ namespace Controller
         /// </summary>
         private static RefazerController _instance;
 
+        private string _afterSourceCode;
+
         /// <summary>
         /// Constructor
         /// </summary>
         private RefazerController()
         {
             ProjectInfo = ProjectInformation.GetInstance();
-            Transformed = new List<object>();
         }
 
         /// <summary>
@@ -128,12 +138,13 @@ namespace Controller
         }
 
         /// <summary>
-        /// Open files
+        /// Gets opened files
         /// </summary>
         /// <returns>Open files</returns>
+        [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
         public IEnumerable<string> OpenFiles()
         {
-            List<string> files = new List<string>();
+            var files = new List<string>();
             foreach (KeyValuePair<string, bool> file in FilesOpened)
             {
                 if (file.Value)
@@ -144,16 +155,20 @@ namespace Controller
             return files;
         }
 
-        public void Init(string before)
+        /// <summary>
+        /// Indicates the start of the transformation
+        /// </summary>
+        public void Init()
         {
-            this.before = before;
             NotifyEditStartedObservers();
         }
 
-        public void Transform(string after)
+        /// <summary>
+        /// Specifies the start of the learning of transformations
+        /// </summary>
+        public void Transform()
         {
-            this.after = after;
-            var examples = Tuple.Create(before, after);
+            var examples = Tuple.Create(before, _afterSourceCode);
             var refazer = new Refazer4CSharp();
             Grammar = Refazer4CSharp.GetGrammar();
             CurrentProgram = refazer.LearnTransformations(Grammar, examples);
@@ -161,50 +176,30 @@ namespace Controller
             NotifyTransformationFinishedObservers();
         }
 
-        private Dictionary<string, List<object>> ExecuteProgram()
+        /// <summary>
+        /// Executes the specified program. If not program exists, it uses the first program learned.
+        /// </summary>
+        /// <param name="program">Program to be executed</param>
+        private void ExecuteProgram(ProgramNode program = null)
         {
+            if (program == null) program = CurrentProgram;
             var asts = new List<SyntaxNodeOrToken>();
-            if (ProjectInfo.SolutionPath == null)
+            var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, ProjectInfo.SolutionPath);
+            foreach (var v in files)
             {
-                //Run program
-                return null;
+                var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
+                asts.Add(tree);
             }
-            else
-            {
-                var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, ProjectInfo.SolutionPath);
-                foreach (var v in files)
-                {
-                    var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
-                    asts.Add(tree);
-                }
-            }
-
-            var dicTrans = new Dictionary<string, List<object>>();
             foreach (var ast in asts)
             {
                 var newInputState = State.Create(Grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
-                object[] output = CurrentProgram.Invoke(newInputState).ToEnumerable().ToArray();
-
-                Transformed.AddRange(output);
-                if (output.Any())
-                {
-                    if (dicTrans.ContainsKey(ast.SyntaxTree.FilePath.ToUpperInvariant()))
-                    {
-                        dicTrans[ast.SyntaxTree.FilePath.ToUpperInvariant()].AddRange(output);
-                    }
-                    else
-                    {
-                        dicTrans[ast.SyntaxTree.FilePath.ToUpperInvariant()] = output.ToList();
-                    }
-                }
+                program.Invoke(newInputState);
             }
-            return dicTrans;
         }
 
         /// <summary>
-        /// Notify highlight observers
+        /// Notifies highlight observers
         /// </summary>
-        /// <param name="regions">Regions</param>
         private void NotifyEditStartedObservers()
         {
             EditStartedEvent hEvent = new EditStartedEvent();

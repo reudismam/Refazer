@@ -51,7 +51,7 @@ namespace RefazerUI
                 var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
                 commandService.AddCommand(menuItem);
             }
-            RefazerCC.GetInstance().AddTransformationFinishedObserver(this);
+            RefazerController.GetInstance().AddTransformationFinishedObserver(this);
         }
 
         /// <summary>
@@ -116,8 +116,8 @@ namespace RefazerUI
             var proj = dte.Solution.FindProjectItem(document.FullName);
             var project = proj.ContainingProject;
 
-            var controller = RefazerCC.GetInstance();
-            RefazerCC.GetInstance().SetSolution(fullName);
+            var controller = RefazerController.GetInstance();
+            RefazerController.GetInstance().SetSolution(fullName);
             controller.Init(before);
             EnableInitCommand(package, false);
         } 

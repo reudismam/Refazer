@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using System.Globalization;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using EnvDTE;
@@ -47,7 +45,7 @@ namespace RefazerUI
                 commandService.AddCommand(menuItem);
             }
 
-            var controller = RefazerCC.GetInstance();
+            var controller = RefazerController.GetInstance();
             controller.AddEditStartedObserver(this);
         }
 
@@ -114,7 +112,7 @@ namespace RefazerUI
             //throw new Exception("Error");
             var project = proj.ContainingProject;
 
-            var controller = RefazerCC.GetInstance();
+            var controller = RefazerController.GetInstance();
             controller.Transform(after);
             EnableTransformCommand(package, false);
         }
