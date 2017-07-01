@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 
-namespace TreeEdit.Spg.Log
+namespace TreeEdit.Spg.LogInfo
 {
     /// <summary>
     /// Logs the transformations

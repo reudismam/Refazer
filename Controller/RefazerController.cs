@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Controller.Event;
@@ -9,6 +9,8 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Utils;
 using ProseManager;
 using RefazerFunctions.Spg.Bean;
+using Spg.Controller.Projects;
+using TreeEdit.Spg.Log;
 using TreeElement.Spg.Node;
 using WorkSpaces.Spg.Workspace;
 
@@ -24,9 +26,13 @@ namespace Controller
         private readonly List<ITransformationFinishedObserver> _transformationFinishedOIbservers = new List<ITransformationFinishedObserver>();
 
         /// <summary>
-        /// Specifies the node that will be modified
+        /// Specifies the found locations
         /// </summary>
-        public List<SyntaxNodeOrToken> Locations { get; set; }
+        /// <returns></returns>
+        public List<SyntaxNodeOrToken> GetLocations()
+        {
+            return CodeFragmentsInfo.GetInstance().Locations;
+        }
 
         /// <summary>
         /// Current Program
@@ -37,7 +43,7 @@ namespace Controller
             set;
         }
 
-        private Grammar grammar { get; set; }
+        private Grammar Grammar { get; set; }
 
         public List<object> Transformed { get; set; }
 
@@ -149,8 +155,8 @@ namespace Controller
             this.after = after;
             var examples = Tuple.Create(before, after);
             var refazer = new Refazer4CSharp();
-            grammar = Refazer4CSharp.GetGrammar();
-            CurrentProgram = refazer.LearnTransformations(grammar, examples);
+            Grammar = Refazer4CSharp.GetGrammar();
+            CurrentProgram = refazer.LearnTransformations(Grammar, examples);
             ExecuteProgram();
             NotifyTransformationFinishedObservers();
         }
@@ -176,7 +182,7 @@ namespace Controller
             var dicTrans = new Dictionary<string, List<object>>();
             foreach (var ast in asts)
             {
-                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
+                var newInputState = State.Create(Grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
                 object[] output = CurrentProgram.Invoke(newInputState).ToEnumerable().ToArray();
 
                 Transformed.AddRange(output);

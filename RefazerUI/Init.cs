@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using EnvDTE;
 using Microsoft.VisualStudio.Text;
-using Spg.Controller;
 using Controller;
 using Controller.Event;
 
@@ -52,7 +51,7 @@ namespace RefazerUI
                 var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
                 commandService.AddCommand(menuItem);
             }
-            EditorController.GetInstance().AddTransformationFinishedObserver(this);
+            RefazerCC.GetInstance().AddTransformationFinishedObserver(this);
         }
 
         /// <summary>
@@ -117,8 +116,8 @@ namespace RefazerUI
             var proj = dte.Solution.FindProjectItem(document.FullName);
             var project = proj.ContainingProject;
 
-            EditorController controller = EditorController.GetInstance();
-            EditorController.GetInstance().SetSolution(fullName);
+            var controller = RefazerCC.GetInstance();
+            RefazerCC.GetInstance().SetSolution(fullName);
             controller.Init(before);
             EnableInitCommand(package, false);
         } 

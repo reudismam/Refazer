@@ -7,8 +7,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using RefazerFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.Print;
-using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.PQ;
+using TreeElement.Spg.Mapping;
 using TreeElement.Spg.Node;
 
 namespace TreeElement.Spg.TreeEdit.Mapping

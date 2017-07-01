@@ -940,6 +940,7 @@ using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
 using TreeEdit.Spg.Log;
+using TreeEdit.Spg.LogInfo;
 using TreeEdit.Spg.Transform;
 using TreeElement;
 using UnitTests;

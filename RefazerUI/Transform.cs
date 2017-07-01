@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="Transform.cs" company="Company">
-//     Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel.Design;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell;
@@ -13,7 +7,6 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using EnvDTE;
 using Microsoft.VisualStudio.Text;
-using Spg.Controller;
 using Controller;
 
 namespace RefazerUI
@@ -45,13 +38,7 @@ namespace RefazerUI
         /// <param name="package">Owner package, not null.</param>
         private Transform(Package package)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException("package");
-            }
-
             this.package = package;
-
             OleMenuCommandService commandService = this.Provider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
@@ -60,7 +47,7 @@ namespace RefazerUI
                 commandService.AddCommand(menuItem);
             }
 
-            EditorController controller = EditorController.GetInstance();
+            var controller = RefazerCC.GetInstance();
             controller.AddEditStartedObserver(this);
         }
 
@@ -127,7 +114,7 @@ namespace RefazerUI
             //throw new Exception("Error");
             var project = proj.ContainingProject;
 
-            EditorController controller = EditorController.GetInstance();
+            var controller = RefazerCC.GetInstance();
             controller.Transform(after);
             EnableTransformCommand(package, false);
         }

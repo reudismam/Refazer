@@ -12,6 +12,7 @@ using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Spg.Semantic;
 using TreeEdit.Spg.Builder;
 using TreeEdit.Spg.Log;
+using TreeEdit.Spg.LogInfo;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Print;
 using TreeElement;

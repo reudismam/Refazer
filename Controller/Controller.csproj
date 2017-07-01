@@ -317,13 +317,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EditorController.cs" />
     <Compile Include="Event\TransformationFinishedEvent.cs" />
     <Compile Include="Observer\ITransformationFinishedObserver.cs" />
     <Compile Include="Observer\IEditStartedObsever.cs" />
     <Compile Include="ProjectInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Event\EditStartedEvent.cs" />
+    <Compile Include="RefazerController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
