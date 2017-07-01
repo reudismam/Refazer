@@ -1,9 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
-using System.Collections.Generic;
-using RefazerFunctions.Substrings;
+﻿using System.Collections.Generic;
 using TreeElement.Spg.Node;
 
-namespace TreeEdit.Spg.TreeEdit.Mapping
+namespace TreeElement.Spg.TreeEdit.Mapping
 {
     public interface ITreeMapping<T>
     {

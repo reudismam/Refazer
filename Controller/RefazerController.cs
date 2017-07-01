@@ -9,8 +9,6 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Utils;
 using ProseManager;
 using RefazerFunctions.Spg.Bean;
-using Spg.Controller.Projects;
-using TreeEdit.Spg.Log;
 using TreeElement.Spg.Node;
 using WorkSpaces.Spg.Workspace;
 
@@ -20,19 +18,15 @@ namespace Controller
     /// <summary>
     /// Controller for editor graphical interface
     /// </summary>
-    public class EditorController
+    public class RefazerController
     {
         private readonly List<IEditStartedObserver> _editStartedOIbservers = new List<IEditStartedObserver>();
         private readonly List<ITransformationFinishedObserver> _transformationFinishedOIbservers = new List<ITransformationFinishedObserver>();
 
         /// <summary>
-        /// Specifies the found locations
+        /// Specifies the node that will be modified
         /// </summary>
-        /// <returns></returns>
-        public List<SyntaxNodeOrToken> GetLocations()
-        {
-            return CodeFragmentsInfo.GetInstance().Locations;
-        }
+        public List<SyntaxNodeOrToken> Locations { get; set; }
 
         /// <summary>
         /// Current Program
@@ -43,7 +37,7 @@ namespace Controller
             set;
         }
 
-        private Grammar Grammar { get; set; }
+        private Grammar grammar { get; set; }
 
         public List<object> Transformed { get; set; }
 
@@ -85,12 +79,12 @@ namespace Controller
         /// <summary>
         /// Singleton instance
         /// </summary>
-        private static EditorController _instance;
+        private static RefazerController _instance;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private EditorController()
+        private RefazerController()
         {
             ProjectInfo = ProjectInformation.GetInstance();
             Transformed = new List<object>();
@@ -118,11 +112,11 @@ namespace Controller
         /// Get singleton EditorController instance
         /// </summary>
         /// <returns>Editor controller instance</returns>
-        public static EditorController GetInstance()
+        public static RefazerController GetInstance()
         {
             if (_instance == null)
             {
-                _instance = new EditorController();
+                _instance = new RefazerController();
             }
             return _instance;
         }
@@ -155,8 +149,8 @@ namespace Controller
             this.after = after;
             var examples = Tuple.Create(before, after);
             var refazer = new Refazer4CSharp();
-            Grammar = Refazer4CSharp.GetGrammar();
-            CurrentProgram = refazer.LearnTransformations(Grammar, examples);
+            grammar = Refazer4CSharp.GetGrammar();
+            CurrentProgram = refazer.LearnTransformations(grammar, examples);
             ExecuteProgram();
             NotifyTransformationFinishedObservers();
         }
@@ -182,7 +176,7 @@ namespace Controller
             var dicTrans = new Dictionary<string, List<object>>();
             foreach (var ast in asts)
             {
-                var newInputState = State.Create(Grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
+                var newInputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(ast)));
                 object[] output = CurrentProgram.Invoke(newInputState).ToEnumerable().ToArray();
 
                 Transformed.AddRange(output);
