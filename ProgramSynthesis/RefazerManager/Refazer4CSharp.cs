@@ -41,20 +41,22 @@ namespace ProseManager
             return program.ToString();
         }
 
-        public ProgramNode LearnTransformations(Grammar grammar, Tuple<string, string> examples)
+        public ProgramNode LearnTransformations(Grammar grammar, List<Tuple<string, string>> examples)
         {
             //input data
-            string inputText = examples.Item1;
-            SyntaxNodeOrToken inpTree = CSharpSyntaxTree.ParseText(inputText).GetRoot();
-
+            var astsInput = examples.Select(o => CSharpSyntaxTree.ParseText(o.Item1).GetRoot()).ToList();
             //output with some code fragments edited.
-            string outputText = examples.Item2;
-            SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(outputText).GetRoot();
+            var astsOutput = examples.Select(o => CSharpSyntaxTree.ParseText(o.Item2).GetRoot()).ToList();
 
             //building example methods
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
-            var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(inpTree)));
-            ioExamples.Add(inputState, new List<object> { outTree });
+            for (int i = 0; i < astsInput.Count(); i++)
+            {
+                var inpTree = astsInput.ElementAt(0);
+                var outTree = astsOutput.ElementAt(0);
+                var inputState = State.Create(grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(inpTree)));
+                ioExamples.Add(inputState, new List<object> {outTree});
+            }
 
 
             //Learn program

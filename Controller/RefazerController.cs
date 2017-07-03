@@ -84,8 +84,15 @@ namespace Controller
         /// </summary>
         public List<Tuple<string, string>> DocumentsBeforeAndAfter { get; set; }
 
-        public string before { get; set; }
-        public string after { get; set; }
+        /// <summary>
+        /// Defines a list of source code before the modifications of the developer
+        /// </summary>
+        public List<Tuple<string, string>> BeforeSourceCodeList { get; set; }
+
+        /// <summary>
+        /// Defines a list of source code after the modifications of the developer
+        /// </summary>
+        public List<Tuple<String, String>> AfterSourceCodeList { get; set; }
         /// <summary>
         /// Files opened on window
         /// </summary>
@@ -95,8 +102,6 @@ namespace Controller
         /// Singleton instance
         /// </summary>
         private static RefazerController _instance;
-
-        private string _afterSourceCode;
 
         /// <summary>
         /// Constructor
@@ -168,12 +173,18 @@ namespace Controller
         /// </summary>
         public void Transform()
         {
-            var examples = Tuple.Create(before, _afterSourceCode);
+            var exampleTuples = Tuple.Create(BeforeSourceCodeList, AfterSourceCodeList);
+            var examples = GetExamples(exampleTuples);
             var refazer = new Refazer4CSharp();
             Grammar = Refazer4CSharp.GetGrammar();
             CurrentProgram = refazer.LearnTransformations(Grammar, examples);
             ExecuteProgram();
             NotifyTransformationFinishedObservers();
+        }
+
+        private List<Tuple<string, string>> GetExamples(Tuple<List<Tuple<string, string>>, List<Tuple<string, string>>> exampleTuples)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

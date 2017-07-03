@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TextManager.Interop;
@@ -28,7 +29,7 @@ namespace RefazerUI
         /// <summary>
         /// VS Package that provides this command, not null.
         /// </summary>
-        private readonly Package package;
+        private readonly Package _package;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Init"/> class.
@@ -37,18 +38,12 @@ namespace RefazerUI
         /// <param name="package">Owner package, not null.</param>
         private Init(Package package)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException("package");
-            }
-
-            this.package = package;
-
+            _package = package;
             OleMenuCommandService commandService = this.Provider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
-                var menuCommandID = new CommandID(CommandSet, CommandId);
-                var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
+                var menuCommandId = new CommandID(CommandSet, CommandId);
+                var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandId);
                 commandService.AddCommand(menuItem);
             }
             RefazerController.GetInstance().AddTransformationFinishedObserver(this);
@@ -66,13 +61,7 @@ namespace RefazerUI
         /// <summary>
         /// Gets the service provider from the owner package.
         /// </summary>
-        private IServiceProvider Provider
-        {
-            get
-            {
-                return this.package;
-            }
-        }
+        private IServiceProvider Provider => _package;
 
         /// <summary>
         /// Initializes the singleton instance of the command.
@@ -93,7 +82,7 @@ namespace RefazerUI
         private void MenuItemCallback(object sender, EventArgs e)
         {
             IVsTextManager txtMgr = (IVsTextManager)Provider.GetService(typeof(SVsTextManager));
-            IVsTextView vTextView = null;
+            IVsTextView vTextView;
             int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
             IVsUserData userData = vTextView as IVsUserData;
@@ -107,25 +96,53 @@ namespace RefazerUI
             userData.GetData(ref guidViewHost, out holder);
             var viewHost = (IWpfTextViewHost)holder;
 
-            DTE dte;
-            dte = (DTE)Provider.GetService(typeof(DTE)); // we have access to GetService here.
+            var dte = (DTE)Provider.GetService(typeof(DTE));
             string fullName = dte.Solution.FullName;
             var document = dte.ActiveDocument;
             string before = GetText(viewHost);
+            var documentsList = GetOpenedDocuments(dte);
 
             var proj = dte.Solution.FindProjectItem(document.FullName);
             var project = proj.ContainingProject;
-
             var controller = RefazerController.GetInstance();
             RefazerController.GetInstance().SetSolution(fullName);
-            controller.Init(before);
-            EnableInitCommand(package, false);
-        } 
+            RefazerController.GetInstance().BeforeSourceCodeList = documentsList;
+            controller.Init();
+            EnableInitCommand(_package, false);
+        }
 
-        static public string GetText(IWpfTextViewHost host)
+        /// <summary>
+        /// Gets opened documents in the IDE.
+        /// </summary>
+        /// <param name="dte">The DTE.</param>
+        private List<Tuple<string, string>> GetOpenedDocuments(DTE dte)
+        {
+            var list = new List<Tuple<string, string>>();
+            try
+            {
+                // documents opened in the solution
+                foreach (Document doc in dte.Documents)
+                {
+                    var textDocument = (TextDocument) doc.Object("TextDocument");
+                    var editPoint = textDocument.StartPoint.CreateEditPoint();
+                    var text = editPoint.GetText(textDocument.EndPoint.CreateEditPoint());
+                    list.Add(Tuple.Create(doc.FullName, text));
+                }
+            }
+            catch
+            {
+                //Ignored
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Gets the text from a IWpfText
+        /// </summary>
+        /// <param name="host">IWpfText</param>
+        public static string GetText(IWpfTextViewHost host)
         {
             IWpfTextView view = host.TextView;
-
             ITextSnapshot document = view.TextSnapshot;
             return document.GetText();
         }
@@ -133,28 +150,30 @@ namespace RefazerUI
         /// <summary>
         /// Enable Init button
         /// </summary>
-        /// <param name="package"></param>
-        /// <param name="flag"></param>
+        /// <param name="package">Meny command</param>
+        /// <param name="flag">Enable or disable button</param>
         public void EnableInitCommand(Package package, bool flag)
         {
             if (package == null)
             {
-                throw new ArgumentNullException("package");
+                throw new ArgumentNullException(nameof(package));
             }
             OleMenuCommandService commandService = Provider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
-                var menuCommandID = new CommandID(CommandSet, CommandId);
-                //var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
-                //commandService.AddCommand(menuItem);
-                var menuItem = commandService.FindCommand(menuCommandID);
+                var menuCommandId = new CommandID(CommandSet, CommandId);
+                var menuItem = commandService.FindCommand(menuCommandId);
                 menuItem.Enabled = flag;
             }
         }
 
+        /// <summary>
+        /// Indicates the end of the transformation
+        /// </summary>
+        /// <param name="event">Event</param>
         public void TransformationFinished(TransformationFinishedEvent @event)
         {
-            EnableInitCommand(package, true);
+            EnableInitCommand(_package, true);
         }
     }
 }
