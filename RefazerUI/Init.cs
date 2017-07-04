@@ -148,7 +148,7 @@ namespace RefazerUI
         }
 
         /// <summary>
-        /// Enable Init button
+        /// Enable/Disable Init button
         /// </summary>
         /// <param name="package">Meny command</param>
         /// <param name="flag">Enable or disable button</param>

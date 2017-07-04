@@ -1440,6 +1440,7 @@ namespace RefazerUnitTests
                         catch (Exception)
                         {
                             // ignored
+                            throw new Exception("Errors in transforming the locations.");
                         }
                         break;
                     }
@@ -1456,6 +1457,7 @@ namespace RefazerUnitTests
                     catch (Exception)
                     {
                         // ignored
+                        throw new Exception("Errors in transforming the locations.");
                     }
 
                     throw new Exception("A transformation could not be learned using this examples.");

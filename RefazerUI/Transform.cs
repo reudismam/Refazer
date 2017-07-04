@@ -136,6 +136,11 @@ namespace RefazerUI
             return list;
         }
 
+        /// <summary>
+        /// Enable/Disable Transform button
+        /// </summary>
+        /// <param name="package">Meny command</param>
+        /// <param name="flag">Enable or disable button</param>
         public void EnableTransformCommand(Package package, bool flag)
         {
             if (package == null)
@@ -151,7 +156,7 @@ namespace RefazerUI
             }
         }
 
-        static public string GetText(IWpfTextViewHost host)
+        public static string GetText(IWpfTextViewHost host)
         {
             IWpfTextView view = host.TextView;
 

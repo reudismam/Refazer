@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Build.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Editing;
@@ -39,10 +40,11 @@ namespace TreeEdit.Spg.Transform
         /// before and after edits in the source code and returns a new 
         /// version of the document where these modifications take place.
         /// </summary>
-        /// <param name="transformations">List of modifications</param>
+        /// <param name="transformationsList">List of modifications</param>
         [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
-        private static async Task<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transformation(List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> transformations)
-        { 
+        private static async Task<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transformation(List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> transformationsList)
+        {
+            var transformations = RemoveDuplicates(transformationsList);
             var workspace = new AdhocWorkspace();
             var projectId = ProjectId.CreateNewId();
             var versionStamp = VersionStamp.Create();
@@ -67,6 +69,28 @@ namespace TreeEdit.Spg.Transform
             }
             var result = Tuple.Create((SyntaxNodeOrToken) sourceAST.GetRoot(), (SyntaxNodeOrToken) documentEditor.GetChangedRoot());
             return result;
+        }
+
+        public static List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> RemoveDuplicates(List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> transformations)
+        {
+            var nonDuplicates = transformations.Where(o => !transformations.Any(e => o.Item1.Span.IntersectsWith(e.Item1.Span) && e != o)).ToList();
+            var duplicates = transformations.Where(o => transformations.Any(e => o.Item1.Span.IntersectsWith(e.Item1.Span) && e != o)).ToList();
+
+            var hash = new HashSet<SyntaxNodeOrToken>();
+            foreach (var transformation in  duplicates)
+            {
+                if (!hash.Contains(transformation.Item1))
+                {
+                    var others = duplicates.Where(o => transformation.Item1.Span.IntersectsWith(o.Item1.Span) && transformation != o);
+                    var ordered = others.OrderBy(o => o.Item1.SpanStart).ThenByDescending(o => o.Item1.Span.Length);
+                    nonDuplicates.Add(ordered.First());
+                    foreach (var item in ordered)
+                    {
+                        hash.Add(item.Item1);
+                    }
+               }          
+            }
+            return nonDuplicates;
         }
     }
 }
