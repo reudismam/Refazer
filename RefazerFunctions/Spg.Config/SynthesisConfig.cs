@@ -29,7 +29,7 @@ namespace RefazerFunctions.Spg.Config
         {
             UseTokens = true;
             CreateLog = true;
-            BoundGeneratedPrograms = false;
+            BoundGeneratedPrograms = true;
             DescendantsParentThreshouldForContext = 40;
             LevelsForContext = Enumerable.Range(0, 3).ToList();
         }

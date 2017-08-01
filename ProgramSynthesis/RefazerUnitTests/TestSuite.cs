@@ -1358,6 +1358,8 @@ namespace RefazerUnitTests
         /// Complete test
         /// </summary>
         /// <param name="commit">Commit where the change occurs</param>
+        /// <param name="solutionPath">Path to the solution.</param>
+        /// <param name="kinds">Kinds that will be transformed.</param>
         /// <returns>True if pass test</returns>
         public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null)
         {
@@ -1378,10 +1380,6 @@ namespace RefazerUnitTests
 
             //Random number generator with a seed.
             int seed = 86028157;
-            //int seed = 104395301;
-            //int seed = 122949829;
-            //int seed = 141650963;
-            //int seed = 160481219;
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
             var examples = randomList.GetRange(0, 2);
@@ -1407,7 +1405,7 @@ namespace RefazerUnitTests
                 {
                     string scriptsize = "scriptsize";
                     scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, scriptsize);
-                    var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(o => Int32.Parse(o));
+                    var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
                     mean = sizes.Average();
                 }
 

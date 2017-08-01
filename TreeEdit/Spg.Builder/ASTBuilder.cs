@@ -9,10 +9,24 @@ using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Builder
 {
+    // ReSharper disable once InconsistentNaming
     public class ASTBuilder
     {
         /// <summary>
-        /// Reconstruct the tree
+        /// Reconstructs the tree
+        /// </summary>
+        /// <param name="target">Target node</param>
+        /// <param name="tree">Tree in another format</param>
+        /// <returns>Reconstructed tree</returns>
+        public static SyntaxNodeOrToken ReconstructTree(SyntaxNodeOrToken target, TreeNode<SyntaxNodeOrToken> tree)
+        {
+            SyntaxNodeOrToken newNode = ReconstructTree(tree);
+            newNode = newNode.WithLeadingTrivia(target.GetLeadingTrivia());
+            return newNode;
+        }
+
+        /// <summary>
+        /// Reconstructs the tree
         /// </summary>
         /// <param name="tree">Tree in another format</param>
         /// <returns>Reconstructed tree</returns>

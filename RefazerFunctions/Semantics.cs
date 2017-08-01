@@ -187,16 +187,16 @@ namespace RefazerFunctions
                         SyntaxNodeOrToken n;
                         if (v.LeftNode != null)
                         {
-                            n = ASTBuilder.ReconstructTree(v.LeftNode.Value);
+                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.LeftNode.Value);
                         }
                         else if (v.RightNode != null)
                         {
-                            n = ASTBuilder.ReconstructTree(v.RightNode.Value);
+                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.RightNode.Value);
                         }
                         else
                         {
                             PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(v.Value, "", false);
-                            n = ASTBuilder.ReconstructTree(v.Value);
+                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.Value);
                         }
                         TransformationsInfo.GetInstance().Add(Tuple.Create(before.Value.Value, n));
                         resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
@@ -204,7 +204,7 @@ namespace RefazerFunctions
                     else
                     {
                         var before = DicBeforeAfter[v];
-                        var n = ASTBuilder.ReconstructTree(v.Value);
+                        var n = ASTBuilder.ReconstructTree(node.Value.Value, v.Value);
                         TransformationsInfo.GetInstance().Add(Tuple.Create(before.Value.Value, n));
                         var treeNode = new TreeNode<SyntaxNodeOrToken>(n,
                             new TLabel(SyntaxKind.None));
