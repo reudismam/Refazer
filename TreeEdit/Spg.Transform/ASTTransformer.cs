@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Build.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Text;
 using TreeEdit.Spg.Match;
 using TreeElement;
@@ -67,7 +67,10 @@ namespace TreeEdit.Spg.Transform
             {
                 documentEditor.ReplaceNode(node.Item1, node.Item2);
             }
-            var result = Tuple.Create((SyntaxNodeOrToken) sourceAST.GetRoot(), (SyntaxNodeOrToken) documentEditor.GetChangedRoot());
+            var beforeAST = (SyntaxNodeOrToken) sourceAST.GetRoot();
+            var afterAST = (SyntaxNodeOrToken) documentEditor.GetChangedRoot();
+            afterAST = Formatter.Format(afterAST.AsNode(), new AdhocWorkspace());
+            var result = Tuple.Create(beforeAST, afterAST);
             return result;
         }
 

@@ -21,7 +21,9 @@ namespace TreeEdit.Spg.Builder
         public static SyntaxNodeOrToken ReconstructTree(SyntaxNodeOrToken target, TreeNode<SyntaxNodeOrToken> tree)
         {
             SyntaxNodeOrToken newNode = ReconstructTree(tree);
+            newNode = newNode.AsNode().NormalizeWhitespace();
             newNode = newNode.WithLeadingTrivia(target.GetLeadingTrivia());
+            newNode = newNode.WithTrailingTrivia(target.GetTrailingTrivia());
             return newNode;
         }
 
@@ -36,7 +38,6 @@ namespace TreeEdit.Spg.Builder
             {
                 return tree.Value;
             }
-
             List<SyntaxNodeOrToken> children = new List<SyntaxNodeOrToken>();
             List<SyntaxNodeOrToken> identifier = new List<SyntaxNodeOrToken>();
             foreach (var v in tree.Children)
@@ -52,7 +53,7 @@ namespace TreeEdit.Spg.Builder
                 }
             }
             var node = GetSyntaxElement((SyntaxKind)tree.Label.Label, children, tree.Value, identifier);
-            return node.AsNode().NormalizeWhitespace();
+            return node;
         }
 
         /// <summary>
