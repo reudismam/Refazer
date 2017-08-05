@@ -255,7 +255,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Refazer4CSharp.cs" />
     <Compile Include="Utils.cs" />
