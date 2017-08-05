@@ -13,7 +13,6 @@ using RefazerFunctions.Spg.Bean;
 using RefazerManager;
 using TreeElement;
 using TreeElement.Spg.Node;
-using UnitTests;
 
 namespace RefazerUnitTests
 {

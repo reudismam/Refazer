@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D9640D0E-12D7-45FE-B404-5D41BBA5F167}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RefazerManager</RootNamespace>
     <AssemblyName>RefazerManager</AssemblyName>
@@ -38,6 +38,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr4.Runtime, Version=4.5.0.0, Culture=neutral, PublicKeyToken=09abb75b9ed49849, processorArchitecture=MSIL">

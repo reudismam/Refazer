@@ -1,6 +1,6 @@
 using System;
-using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.TextRegion;
+using RefazerObject.Location;
+using RefazerObject.Region;
 
 namespace Spg.LocationRefactor.Transform
 {
@@ -9,7 +9,7 @@ namespace Spg.LocationRefactor.Transform
     /// </summary>
     public class CodeTransformation
     {
-        public TRegion Trans { get; set; }
+        public Region Trans { get; set; }
 
         /// <summary>
         /// Location to be transformed
@@ -29,7 +29,7 @@ namespace Spg.LocationRefactor.Transform
         /// <param name="location">Location</param>
         /// <param name="trans">Location of the BeforeAfter</param>
         /// <param name="transformation">Transformation</param>
-        public CodeTransformation(CodeLocation location, TRegion trans, Tuple<string, string> transformation)
+        public CodeTransformation(CodeLocation location, Region trans, Tuple<string, string> transformation)
         {
             this.Trans = trans;
             this.Location = location;

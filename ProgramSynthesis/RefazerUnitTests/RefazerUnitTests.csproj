@@ -220,16 +220,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeLocation.cs" />
     <Compile Include="EvaluationTest.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="RegionManager.cs" />
-    <Compile Include="Spg.Transform\CodeTransformation.cs" />
-    <Compile Include="Spg.Transform\Transformation.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="TestSuite.cs" />
     <Compile Include="TestUtil.cs" />
-    <Compile Include="TRegion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +240,10 @@
     <ProjectReference Include="..\..\RefazerFunctions\RefazerFunctions.csproj">
       <Project>{07c1a3bf-5392-4686-923e-ad52280efecd}</Project>
       <Name>RefazerFunctions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RefazerObject\RefazerObject.csproj">
+      <Project>{e7839ddd-aba8-4968-84af-2d9324dd61b0}</Project>
+      <Name>RefazerObject</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TreeEdit\TreeEdit.csproj">
       <Project>{4BF08076-5BA3-45B8-8DA9-BED3C4BCA9F7}</Project>

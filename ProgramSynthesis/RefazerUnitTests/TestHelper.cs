@@ -32,7 +32,7 @@
 //        /// <summary>
 //        /// Regions
 //        /// </summary>
-//        private readonly List<TRegion> _regions;
+//        private readonly List<Region> _regions;
 //        /// <summary>
 //        /// Transformations
 //        /// </summary>
@@ -76,9 +76,9 @@
 //        /// <summary>
 //        /// Dictionary selection
 //        /// </summary>
-//        public Dictionary<string, List<TRegion>> DictionarySelection { get; set; }
+//        public Dictionary<string, List<Region>> DictionarySelection { get; set; }
 
-//        public TestHelper(Grammar grammar, List<TRegion> regions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, int execId)
+//        public TestHelper(Grammar grammar, List<Region> regions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, int execId)
 //        {
 //            _grammar = grammar;
 //            _regions = regions;
@@ -105,10 +105,10 @@
 //            SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
 //            //building example methods
 //            var ioExamples = new Dictionary<State, IEnumerable<object>>();
-//            foreach (KeyValuePair<string, List<TRegion>> entry in DictionarySelection)
+//            foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
 //            {
 //                string sourceCode = FileUtil.ReadFile(entry.Key);
-//                Tuple<string, List<TRegion>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
+//                Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
 //                string sourceCodeAfter = tu.Item1;
 
 //                inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
@@ -122,7 +122,7 @@
 //                    for (int index = 0; index < allMethodsInput.Count; index++)
 //                    {
 //                        var method = allMethodsInput[index];
-//                        var tRegion = new TRegion
+//                        var tRegion = new Region
 //                        {
 //                            Start = method.SpanStart,
 //                            Length = method.Span.Length
@@ -229,10 +229,10 @@
 //            SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
 //            //building example methods
 //            var ioExamples = new Dictionary<State, IEnumerable<object>>();
-//            foreach (KeyValuePair<string, List<TRegion>> entry in DictionarySelection)
+//            foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
 //            {
 //                string sourceCode = FileUtil.ReadFile(entry.Key);
-//                Tuple<string, List<TRegion>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
+//                Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
 //                string sourceCodeAfter = tu.Item1;
 
 //                inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
@@ -246,7 +246,7 @@
 //                    for (int index = 0; index < allMethodsInput.Count; index++)
 //                    {
 //                        var method = allMethodsInput[index];
-//                        var tRegion = new TRegion
+//                        var tRegion = new Region
 //                        {
 //                            Start = method.SpanStart,
 //                            Length = method.Span.Length
@@ -290,7 +290,7 @@
 
 //            SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
 //            //building example methods
-//            foreach (KeyValuePair<string, List<TRegion>> entry in DictionarySelection)
+//            foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
 //            {
 //                string sourceCode = FileUtil.ReadFile(entry.Key);
 //                inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();       
@@ -387,15 +387,15 @@
 //            return result;
 //        }
 
-//        public static Tuple<string, List<TRegion>> Transform(string source, List<CodeTransformation> transformations, List<TRegion> regions)
+//        public static Tuple<string, List<Region>> Transform(string source, List<CodeTransformation> transformations, List<Region> regions)
 //        {
-//            List<TRegion> tRegions = new List<TRegion>();
+//            List<Region> tRegions = new List<Region>();
 //            int nextStart = 0;
 //            string sourceCode = source;
 //            foreach (CodeTransformation item in transformations)
 //            {
-//                Tuple<TRegion, TRegion> tregion = GetTRegionShift(regions, item);
-//                TRegion region = tregion.Item1;
+//                Tuple<Region, Region> tregion = GetTRegionShift(regions, item);
+//                Region region = tregion.Item1;
 //                string BeforeAfter = tregion.Item2.Text;
 
 //                int start = nextStart + region.Start;
@@ -404,7 +404,7 @@
 //                var sourceCodeAfterSelection = sourceCode.Substring(end);
 //                sourceCode = sourceCodeUntilStart + BeforeAfter + sourceCodeAfterSelection;
 
-//                TRegion tr = new TRegion();
+//                Region tr = new Region();
 //                tr.Start = start - 1;
 //                tr.Length = tregion.Item2.Length + 2;
 //                tr.Text = tregion.Item2.Text;
@@ -413,19 +413,19 @@
 
 //                nextStart += BeforeAfter.Length - region.Length;
 //            }
-//            Tuple<string, List<TRegion>> t = Tuple.Create(sourceCode, tRegions);
+//            Tuple<string, List<Region>> t = Tuple.Create(sourceCode, tRegions);
 //            return t;
 //            //return sourceCode;
 //        }
 
-//        private static Tuple<TRegion, TRegion> GetTRegionShift(List<TRegion> regions, CodeTransformation codeTransformation)
+//        private static Tuple<Region, Region> GetTRegionShift(List<Region> regions, CodeTransformation codeTransformation)
 //        {
-//            Tuple<TRegion, TRegion> t;
-//            foreach (TRegion tr in regions)
+//            Tuple<Region, Region> t;
+//            foreach (Region tr in regions)
 //            {
 //                if (codeTransformation.Trans.Equals(tr))
 //                {
-//                    TRegion region = new TRegion();
+//                    Region region = new Region();
 //                    region.Start = tr.Start;
 //                    region.Length = tr.Length - 2;
 //                    region.Path = tr.Path;
@@ -455,12 +455,14 @@ using Microsoft.ProgramSynthesis.Utils;
 using RefazerFunctions;
 using RefazerFunctions.Spg.Bean;
 using RefazerManager;
+using RefazerObject.Location;
+using RefazerObject.Region;
 using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 using TreeElement;
 using TreeElement.Spg.Node;
 using WorkSpaces.Spg.Workspace;
+using Region = RefazerObject.Region.Region;
 
 namespace RefazerUnitTests
 {
@@ -477,7 +479,7 @@ namespace RefazerUnitTests
         /// <summary>
         /// Regions
         /// </summary>
-        private readonly List<TRegion> _regions;
+        private readonly List<Region> _regions;
         /// <summary>
         /// Transformations
         /// </summary>
@@ -521,9 +523,9 @@ namespace RefazerUnitTests
         /// <summary>
         /// Dictionary selection
         /// </summary>
-        public Dictionary<string, List<TRegion>> DictionarySelection { get; set; }
+        public Dictionary<string, List<Region>> DictionarySelection { get; set; }
 
-        public TestHelper(Grammar grammar, List<TRegion> regions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, string execId)
+        public TestHelper(Grammar grammar, List<Region> regions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, string execId)
         {
             _grammar = grammar;
             _regions = regions;
@@ -550,10 +552,10 @@ namespace RefazerUnitTests
             SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
             //building example methods
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (KeyValuePair<string, List<TRegion>> entry in DictionarySelection)
+            foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
             {
                 string sourceCode = FileUtil.ReadFile(entry.Key);
-                Tuple<string, List<TRegion>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
+                Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
                 string sourceCodeAfter = tu.Item1;
 
                 inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
@@ -567,7 +569,7 @@ namespace RefazerUnitTests
                     for (int index = 0; index < allMethodsInput.Count; index++)
                     {
                         var method = allMethodsInput[index];
-                        var tRegion = new TRegion
+                        var tRegion = new Region
                         {
                             Start = method.SpanStart,
                             Length = method.Span.Length
@@ -695,15 +697,15 @@ namespace RefazerUnitTests
             return result;
         }
 
-        public static Tuple<string, List<TRegion>> Transform(string source, List<CodeTransformation> transformations, List<TRegion> regions)
+        public static Tuple<string, List<Region>> Transform(string source, List<CodeTransformation> transformations, List<Region> regions)
         {
-            List<TRegion> tRegions = new List<TRegion>();
+            List<Region> tRegions = new List<Region>();
             int nextStart = 0;
             string sourceCode = source;
             foreach (CodeTransformation item in transformations)
             {
-                Tuple<TRegion, TRegion> tregion = GetTRegionShift(regions, item);
-                TRegion region = tregion.Item1;
+                Tuple<Region, Region> tregion = GetTRegionShift(regions, item);
+                Region region = tregion.Item1;
                 string transformation = tregion.Item2.Text;
 
                 int start = nextStart + region.Start;
@@ -712,7 +714,7 @@ namespace RefazerUnitTests
                 var sourceCodeAfterSelection = sourceCode.Substring(end);
                 sourceCode = sourceCodeUntilStart + transformation + sourceCodeAfterSelection;
 
-                TRegion tr = new TRegion();
+                Region tr = new Region();
                 tr.Start = start - 1;
                 tr.Length = tregion.Item2.Length + 2;
                 tr.Text = tregion.Item2.Text;
@@ -721,19 +723,19 @@ namespace RefazerUnitTests
 
                 nextStart += transformation.Length - region.Length;
             }
-            Tuple<string, List<TRegion>> t = Tuple.Create(sourceCode, tRegions);
+            Tuple<string, List<Region>> t = Tuple.Create(sourceCode, tRegions);
             return t;
             //return sourceCode;
         }
 
-        private static Tuple<TRegion, TRegion> GetTRegionShift(List<TRegion> regions, CodeTransformation codeTransformation)
+        private static Tuple<Region, Region> GetTRegionShift(List<Region> regions, CodeTransformation codeTransformation)
         {
-            Tuple<TRegion, TRegion> t;
-            foreach (TRegion tr in regions)
+            Tuple<Region, Region> t;
+            foreach (Region tr in regions)
             {
                 if (codeTransformation.Trans.Equals(tr))
                 {
-                    TRegion region = new TRegion();
+                    Region region = new Region();
                     region.Start = tr.Start;
                     region.Length = tr.Length - 2;
                     region.Path = tr.Path;

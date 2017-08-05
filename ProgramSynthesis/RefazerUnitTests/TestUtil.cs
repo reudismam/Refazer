@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using RefazerObject.Location;
+using RefazerObject.Region;
 using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.TextRegion;
 using Spg.LocationRefactor.Transform;
 
-namespace UnitTests
+namespace RefazerUnitTests
 {
     internal class TestUtil
     {
@@ -11,13 +12,13 @@ namespace UnitTests
 
         public const string LogProgramStatus = @"C:\Users\SPG-09\Documents\EXP\ProgStatus.xlsx";
 
-        public static List<CodeLocation> GetAllLocationsOnCommit(List<TRegion> selections, List<CodeLocation> locations)
+        public static List<CodeLocation> GetAllLocationsOnCommit(List<Region> selections, List<CodeLocation> locations)
         {
             List<CodeLocation> metaLocList = new List<CodeLocation>();
             foreach (CodeLocation metaLoc in locations)
             {
                 metaLoc.Region.Path = metaLoc.SourceClass;
-                foreach (TRegion metaSelec in selections)
+                foreach (Region metaSelec in selections)
                 {
                     if (metaLoc.Region.Equals(metaSelec))
                     {
@@ -34,11 +35,11 @@ namespace UnitTests
 
             foreach(var transformation in transformations)
             {
-                TRegion tregion = transformation.Location.Region;
+                Region tregion = transformation.Location.Region;
 
                 foreach(var location in locations)
                 {
-                    TRegion lregion = location.Region;
+                    Region lregion = location.Region;
 
                     if (tregion.Start == lregion.Start && tregion.Length == lregion.Length && tregion.Path.ToUpperInvariant().Equals(lregion.Path.ToUpperInvariant()))
                     {

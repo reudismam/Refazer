@@ -2,17 +2,17 @@ using System;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 
-namespace Spg.LocationRefactor.TextRegion
+namespace RefazerObject.Region
 {
     /// <summary>
     /// Text region
     /// </summary>
-    public class TRegion
+    public class Region
     {
         /// <summary>
         /// Text
         /// </summary>
-        public String Text { get; set; }
+        public string Text { get; set; }
 
         /// <summary>
         /// Start position
@@ -27,17 +27,7 @@ namespace Spg.LocationRefactor.TextRegion
         /// <summary>
         /// Parent region
         /// </summary>
-        public TRegion Parent { get; set; }
-
-        /// <summary>
-        /// Syntax node
-        /// </summary>
-        public SyntaxNode Node { get; set; }
-
-        /// <summary>
-        /// Region color
-        /// </summary>
-        //public Color Color { get; set; }
+        public Region Parent { get; set; }
 
         /// <summary>
         /// Source code path
@@ -50,33 +40,31 @@ namespace Spg.LocationRefactor.TextRegion
         /// </summary>
         /// <param name="region">Region</param>
         /// <returns>Evaluation</returns>
-        public bool IsParent(TRegion region) {
-            string text = Regex.Escape(this.Text);
+        public bool IsParent(Region region) {
+            string text = Regex.Escape(Text);
             bool contains = Regex.IsMatch(region.Text, text);
-            //bool parent = contains && region.Color != this.Color;
-            //return parent;
             return contains;
         }
 
-        public bool IntersectWith(TRegion other)
+        /// <summary>
+        /// Verifies if this region intersect with other region
+        /// </summary>
+        /// <param name="other">Other region</param>
+        public bool IntersectWith(Region other)
         {
-            //if (!other.Path.ToUpperInvariant().Equals(Path.ToUpperInvariant()))
-            //{
-            //    return false;
-            //}
-            bool thisWithOther =  this.Start <= other.Start && other.Start <= this.Start + this.Length;
-            bool otherWithThis = other.Start <= this.Start  && this.Start <= other.Start + other.Length;
-            return (thisWithOther || otherWithThis);
+            bool thisWithOther = Start <= other.Start && other.Start <= Start + Length;
+            bool otherWithThis = other.Start <= Start  && Start <= other.Start + other.Length;
+            return thisWithOther || otherWithThis;
         }
 
         /// <summary>
-        /// Indicate if other region is inside this region.
+        /// Indicates if other region is inside this region.
         /// </summary>
         /// <param name="other">Other region</param>
         /// <returns>True if other object is inside this region</returns>
-        public bool IsInside(TRegion other)
+        public bool IsInside(Region other)
         {
-            bool thisWithOther = other.Start <= this.Start && this.Start + this.Length<= other.Start + other.Length;
+            bool thisWithOther = other.Start <= Start && Start + Length<= other.Start + other.Length;
             return (thisWithOther);
         }
 
@@ -90,14 +78,15 @@ namespace Spg.LocationRefactor.TextRegion
             return ToString().GetHashCode();
         }
 
+        /// <summary>
+        /// Determines if this object is equal to the other object
+        /// </summary>
+        /// <param name="obj">Other object</param>
         public override bool Equals(object obj)
         {
-            if (!(obj is TRegion)) return false;
-
-            TRegion other = (TRegion) obj;
-
-            return Start.Equals(other.Start) && Length.Equals(other.Length)
-                && Path.ToUpperInvariant().Equals(other.Path.ToUpperInvariant());
+            if (!(obj is Region)) return false;
+            Region other = (Region) obj;
+            return Start.Equals(other.Start) && Length.Equals(other.Length) && Path.ToUpperInvariant().Equals(other.Path.ToUpperInvariant());
         }
     }
 }

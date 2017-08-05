@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
-using Spg.LocationRefactor.TextRegion;
+using RefazerObject.Location;
+using RefazerObject.Region;
 using Spg.LocationRefactor.Transform;
 
 namespace Spg.LocationRefactor.Location
@@ -41,15 +41,15 @@ namespace Spg.LocationRefactor.Location
         /// </summary>
         /// <param name="list">List of no grouped regions</param>
         /// <returns>Regions grouped by source file</returns>
-        public Dictionary<string, List<TRegion>> GroupRegionBySourceFile(List<TRegion> list)
+        public Dictionary<string, List<Region>> GroupRegionBySourceFile(List<Region> list)
         {
-            Dictionary<string, List<TRegion>> dic = new Dictionary<string, List<TRegion>>();
+            Dictionary<string, List<Region>> dic = new Dictionary<string, List<Region>>();
             foreach (var item in list)
             {
-                List<TRegion> value;
+                List<Region> value;
                 if (!dic.TryGetValue(item.Parent.Text, out value))
                 {
-                    value = new List<TRegion>();
+                    value = new List<Region>();
                     dic[item.Parent.Text] = value;
                 }
 
@@ -63,16 +63,16 @@ namespace Spg.LocationRefactor.Location
         /// </summary>
         /// <param name="list">List of no grouped regions</param>
         /// <returns>Regions grouped by source file</returns>
-        public Dictionary<string, List<TRegion>> GroupRegionBySourcePath(List<TRegion> list)
+        public Dictionary<string, List<Region>> GroupRegionBySourcePath(List<Region> list)
         {
-            Dictionary<string, List<TRegion>> dic = new Dictionary<string, List<TRegion>>();
+            Dictionary<string, List<Region>> dic = new Dictionary<string, List<Region>>();
             foreach (var item in list)
             {
                 string path = item.Path.ToUpperInvariant();
-                List<TRegion> value;
+                List<Region> value;
                 if (!dic.TryGetValue(path, out value))
                 {
-                    value = new List<TRegion>();
+                    value = new List<Region>();
                     dic[path] = value;
                 }
 
