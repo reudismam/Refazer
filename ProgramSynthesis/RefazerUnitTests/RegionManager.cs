@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using RefazerObject.Location;
 using RefazerObject.Region;
-using Spg.LocationRefactor.Transform;
+using RefazerObject.Transformation;
 
 namespace Spg.LocationRefactor.Location
 {

@@ -935,10 +935,11 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RefazerFunctions.Spg.Config;
 using RefazerManager;
+using RefazerObject.Constants;
 using RefazerObject.Location;
 using RefazerObject.Region;
+using RefazerObject.Transformation;
 using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.Transform;
 using Taramon.Exceller;
 using TreeEdit.Spg.Log;
 using TreeEdit.Spg.LogInfo;
@@ -1363,16 +1364,17 @@ namespace RefazerUnitTests
         /// <returns>True if pass test</returns>
         public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null)
         {
+            string expHome = RefazerObject.Environment.Environment.ExpHome();
+            if (expHome.IsEmpty()) throw new Exception("Environment variable for the experiment not defined");
+
             if (kinds == null)
             {
                 kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
             }
-
             //Load grammar
             var grammar = GetGrammar();
-
-            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-            var codeTransformations = JsonUtil<List<CodeTransformation>>.Read(expHome + @"cprose\" + commit + @"\metadata\transformed_locations.json");
+            var pathTransformed = Path.Combine(expHome, TestConstants.MetadataFolder,  commit, TestConstants.TransformedLocations);
+            var codeTransformations = JsonUtil<List<CodeTransformation>>.Read(pathTransformed);
 
             List<Region> regions = codeTransformations.Select(entry => entry.Trans).ToList();
             var locations = codeTransformations.Select(entry => entry.Location).ToList();
@@ -1399,34 +1401,28 @@ namespace RefazerUnitTests
                 helper.Execute(examples);
 
                 var regionsFrags = CodeFragmentsInfo.GetInstance().Locations.Select(o => new Region {Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath}).ToList();
-                JsonUtil<List<Region>>.Write(regionsFrags, expHome + @"cprose\" + commit + @"\metadata\transformed_locationsAll" + execId + ".json");
-
+                string transformedPath = Path.Combine(expHome, TestConstants.MetadataFolder, commit, TestConstants.TransformedLocationsAll + execId + ".json");
+                JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
                 if (SynthesisConfig.GetInstance().CreateLog)
                 {
-                    string scriptsize = "scriptsize";
-                    scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, scriptsize);
+                    scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, Constants.ScriptSize);
                     var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
                     mean = sizes.Average();
                 }
-
                 var beforeafter = TransformationsInfo.GetInstance().Transformations.Select(o => Tuple.Create(new Region {Start = o.Item1.Span.Start, Length = o.Item1.Span.Length, Text = o.Item1.ToString(), Path = o.Item1.SyntaxTree.FilePath}, o.Item2.ToString(), o.Item1.SyntaxTree.FilePath)).ToList();
-                string programs = "programs";
-                programs = GetDataAndSaveToFile(commit, expHome, execId, programs);
-
+                GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
                 var foundLocations = GetEditedLocations(regionsFrags, locations);
                 var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
-
                 if (firstProblematicLocation == -1)
                 {
                     //Generate meta-data for BaselineBeforeAfterList on commit.
                     var foundList = GetEditionInLocations(regionsFrags, locations);
-                    JsonUtil<List<Region>>.Write(foundList, expHome + @"cprose\" + commit + @"\metadata_tool\transformed_locations" + execId + ".json");
-
+                    JsonUtil<List<Region>>.Write(foundList, Path.Combine(expHome, TestConstants.MetadataFolder, commit, TestConstants.TransformedLocationsTool + execId + ".json"));
                     var beforeafterList = GetBeforeAfterData(beforeafter, locations);
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locations" + execId + ".json");
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locationsAll" + execId + ".json");
+                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, Path.Combine(expHome,  TestConstants.MetadataFolder, commit, TestConstants.BeforeAfterLocationsTool + execId + ".json"));
+                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, Path.Combine(expHome, TestConstants.MetadataFolder, commit,  TestConstants.BeforeAfterLocationsAll + execId + ".json"));
                     //Comparing edited locations with baseline
-                    var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + @"cprose\" + commit + @"\metadata\before_after_locations" + execId + ".json");
+                    var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(Path.Combine(expHome, TestConstants.MetadataFolder, commit, TestConstants.BeforeAfterLocations + execId + ".json"));
                     var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfterList, randomList, locations);
                     if (firstIncorrect == -1)
                     {
@@ -1485,15 +1481,15 @@ namespace RefazerUnitTests
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         private static void GeneratedDiffEdits(string commit, List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> transformedList)
         {
-            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
+            string expHome = RefazerObject.Environment.Environment.ExpHome();
             string output = "";
             string errors = "";
-            var pathoutput = Path.Combine(expHome, @"cprose\", commit + @"\metadata\diff.df");
+            var pathoutput = Path.Combine(expHome, TestConstants.MetadataFolder, commit + TestConstants.DiffFolder);
             foreach (var ba in transformedList)
             {
                 var className = ba.Item1.SyntaxTree.FilePath.Split(@"\".ToCharArray()).Last();
-                var pathb = Path.Combine(expHome, @"cprose\", commit + @"\metadata_tool\B" + className);
-                var patha = Path.Combine(expHome, @"cprose\", commit + @"\metadata_tool\A" + className);
+                var pathb = Path.Combine(expHome, TestConstants.MetadataFolder, commit, TestConstants.BeforeFile, className);
+                var patha = Path.Combine(expHome, TestConstants.MetadataFolder, commit, TestConstants.AfterFile, className);
                 FileUtil.WriteToFile(pathb, ba.Item1.ToString());
                 FileUtil.WriteToFile(patha, ba.Item2.ToString());
 
@@ -1584,7 +1580,8 @@ namespace RefazerUnitTests
         {
             string file = expHome + fileName + ".txt";
             var fragments = FileUtil.ReadFile(file);
-            FileUtil.WriteToFile(expHome + @"cprose\" + commit + @"\" + fileName + seed + ".res", fragments);
+            var pathToOutput = Path.Combine(expHome, TestConstants.MetadataFolder, commit,  fileName + seed + ".res");
+            FileUtil.WriteToFile(pathToOutput, fragments);
             File.Delete(file);
             return fragments;
         }
@@ -1603,7 +1600,6 @@ namespace RefazerUnitTests
         private static List<CodeLocation> GetEditedLocations(List<Region> regions, List<CodeLocation> locations)
         {
             var dictionary = CreateDictionaryMatch(locations, regions);
-
             var found = dictionary.Where(o => o.Value.Any()).Select(o => o.Key).ToList();
             return found;
         }
@@ -1641,7 +1637,7 @@ namespace RefazerUnitTests
 
             commit = /*commitFirstLetter + "-" +*/ commitId;
 
-            string path = TestUtil.LogPath;
+            string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
             {
 
@@ -1680,7 +1676,7 @@ namespace RefazerUnitTests
 
             commit = commitId;
 
-            string path = TestUtil.LogProgramStatus;
+            string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
             {
                 em.Open(path);

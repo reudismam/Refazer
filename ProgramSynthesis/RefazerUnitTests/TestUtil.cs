@@ -1,21 +1,16 @@
 ﻿using System.Collections.Generic;
 using RefazerObject.Location;
 using RefazerObject.Region;
-using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.Transform;
+using RefazerObject.Transformation;
 
 namespace RefazerUnitTests
 {
     internal class TestUtil
     {
-        public const string LogPath = @"C:\Users\SPG-04\Documents\Research\Ranking\ProgStatus2.xlsx";
-
-        public const string LogProgramStatus = @"C:\Users\SPG-09\Documents\EXP\ProgStatus.xlsx";
-
         public static List<CodeLocation> GetAllLocationsOnCommit(List<Region> selections, List<CodeLocation> locations)
         {
             List<CodeLocation> metaLocList = new List<CodeLocation>();
-            foreach (CodeLocation metaLoc in locations)
+            foreach (var metaLoc in locations)
             {
                 metaLoc.Region.Path = metaLoc.SourceClass;
                 foreach (Region metaSelec in selections)

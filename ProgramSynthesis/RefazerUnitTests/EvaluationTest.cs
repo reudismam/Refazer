@@ -58,6 +58,7 @@ namespace RefazerUnitTests
         /// Complete test
         /// </summary>
         /// <param name="commit">Commit where the change occurs</param>
+        /// <param name="documents">Documents</param>
         /// <returns>True if pass test</returns>
         public static bool CompleteTestBase(string commit, List<Tuple<string, string>> documents)
         {

@@ -119,6 +119,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Constants\LogData.cs" />
+    <Compile Include="Constants\TestConstants.cs" />
+    <Compile Include="Environment\Environment.cs" />
     <Compile Include="Location\CodeLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Region\Region.cs" />

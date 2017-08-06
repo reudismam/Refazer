@@ -1,6 +1,6 @@
 using System;
 
-namespace RefazerUnitTests.Spg.Transform
+namespace RefazerObject.Transformation
 {
     /// <summary>
     /// Represents a BeforeAfter
