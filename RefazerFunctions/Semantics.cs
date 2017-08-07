@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using RefazerFunctions.Bean;
 using RefazerFunctions.Substrings;
 using RefazerFunctions.List;
 using RefazerFunctions.Spg.Bean;

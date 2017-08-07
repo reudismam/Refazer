@@ -1388,7 +1388,6 @@ namespace RefazerUnitTests
 
             //Execution
             TestHelper helper;
-            string scriptsizes;
             double mean = -1.0;
             while (true)
             {
@@ -1405,7 +1404,7 @@ namespace RefazerUnitTests
                 JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
                 if (SynthesisConfig.GetInstance().CreateLog)
                 {
-                    scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, Constants.ScriptSize);
+                    var scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, Constants.ScriptSize);
                     var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
                     mean = sizes.Average();
                 }

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis;
-using RefazerFunctions.Substrings;
 using RefazerFunctions.Spg.Witness;
 using TreeEdit.Spg.Match;
 using TreeElement.Spg.Node;
@@ -9,8 +8,6 @@ namespace RefazerFunctions.Spg.Bean
 {
     public class K
     {
-        public static int INF = 100000000;
-
         /// <summary>
         /// Input tree
         /// </summary>
@@ -34,10 +31,8 @@ namespace RefazerFunctions.Spg.Bean
         public int GetK(Pattern patternExample)
         {
             var pattern = patternExample.Tree;
-
             var currentTree = _input;
             var matches = MatchManager.Matches(currentTree, pattern);
-
             for (int i = 0; i < matches.Count; i++)
             {
                 var match = matches[i];
@@ -47,7 +42,7 @@ namespace RefazerFunctions.Spg.Bean
                     return i + 1;
                 }
             }
-            return -INF;
+            return -int.MaxValue;
         }
 
         public int GetKParent(Pattern patternExample)
@@ -66,27 +61,8 @@ namespace RefazerFunctions.Spg.Bean
                    return i + 1;
                 }
             }
-            return -INF;
+            return -int.MaxValue;
         }
-
-        //public int GetKParent(Pattern patternExample)
-        //{
-        //    var pattern = patternExample.Tree;
-        //    var parent = _input.Value.Parent.Parent;
-        //    var currentTree = ConverterHelper.ConvertCSharpToTreeNode(parent);
-        //    var matches = MatchManager.Matches(currentTree, pattern);
-        //    matches.Reverse();
-        //    for (int i = 0; i < matches.Count; i++)
-        //    {
-        //        var match = matches[i];
-        //        var compare = Semantics.FindChild(match, patternExample.XPath);
-        //        if (compare != null && Match.IsEqual(compare.Value, _node.Value))
-        //        {
-        //            return i + 1;
-        //        }
-        //    }
-        //    return -INF;
-        //}
 
         public override string ToString()
         {
