@@ -28,8 +28,8 @@ namespace RefazerFunctions.Spg.Witness
             var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
             foreach (State input in spec.ProvidedInputs)
             {
-                var kids = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
-                @intersect = @intersect.Intersect(kids);
+                var kinds = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
+                @intersect = @intersect.Intersect(kinds);
             }
             var list = new List<object>();
             @intersect.ForEach(o => list.Add(o));
