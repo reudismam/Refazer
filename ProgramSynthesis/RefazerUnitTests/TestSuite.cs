@@ -654,7 +654,7 @@ namespace RefazerUnitTests
         {
             string file = expHome + fileName + ".txt";
             var fragments = FileUtil.ReadFile(file);
-            var pathToOutput = expHome + TestConstants.MetadataFolder + "\\" + commit + fileName + seed + ".res";
+            var pathToOutput = expHome + TestConstants.MetadataFolder + "\\" + commit + "\\" + fileName + seed + ".res";
             FileUtil.WriteToFile(pathToOutput, fragments);
             File.Delete(file);
             return fragments;

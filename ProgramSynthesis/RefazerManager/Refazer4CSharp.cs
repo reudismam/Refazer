@@ -1,19 +1,18 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
-using System;
-using System.Collections.Generic;
-using static RefazerManager.Utils;
-using System.Linq;
 using Microsoft.ProgramSynthesis.Utils;
 using RefazerFunctions;
 using RefazerFunctions.Bean;
 using TreeElement;
 using TreeElement.Spg.Node;
 
-namespace ProseManager
+namespace RefazerManager
 {
     public class Refazer4CSharp
     {
@@ -45,14 +44,18 @@ namespace ProseManager
             }
             //Learn program
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
-            ProgramNode program = Learn(_grammar, spec, new RankingScore(_grammar), new WitnessFunctions(_grammar));
+            ProgramNode program = Utils.Learn(_grammar, spec, new RankingScore(_grammar), new WitnessFunctions(_grammar));
             return program;
         }
 
+        /// <summary>
+        /// Gets the grammar
+        /// </summary>
+        /// <returns>Grammar</returns>
         public static Grammar GetGrammar()
         {
             string path = FileUtil.GetBasePath();
-            var grammar = LoadGrammar(path + @"\ProgramSynthesis\grammar\Transformation.grammar");
+            var grammar = Utils.LoadGrammar(path + @"\ProgramSynthesis\grammar\Transformation.grammar");
             return grammar;
         }
     }
