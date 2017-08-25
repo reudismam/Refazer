@@ -57,7 +57,6 @@ namespace RefazerManager
         {
             var topK = LearnASet(grammar, spec, scorer, witnessFunctions);
             ProgramNode bestProgram = topK.First();
-            var pstring =bestProgram.ToString();
             return bestProgram;
         }
 

@@ -21,7 +21,7 @@ namespace RefazerManager
         public static object [] Apply(ProgramNode program, string toApply)
         {
             var inputText = FileUtil.ReadFile(toApply);
-            var inpTree = (SyntaxNodeOrToken)CSharpSyntaxTree.ParseText(inputText).GetRoot();
+            var inpTree = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(inputText, path: toApply).GetRoot();
             var newInputState = State.Create(_grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(inpTree)));
             object[] output = program.Invoke(newInputState).ToEnumerable().ToArray();
             return output;
@@ -37,10 +37,29 @@ namespace RefazerManager
                 var example = examples[i];
                 var inputText = FileUtil.ReadFile(example.Item1);
                 var outputText = FileUtil.ReadFile(example.Item2);
-                var inpTree = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(inputText).GetRoot();
-                var outTree = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(outputText).GetRoot();
+                var inpTree = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(inputText, path: example.Item1).GetRoot();
+                var outTree = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(outputText, path: example.Item2).GetRoot();
                 var inputState = State.Create(_grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(inpTree)));
                 ioExamples.Add(inputState, new List<object> {outTree});
+            }
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            ProgramNode program = Utils.Learn(_grammar, spec, new RankingScore(_grammar), new WitnessFunctions(_grammar));
+            return program;
+        }
+
+        public static ProgramNode LearnTransformation(List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> examples)
+        {
+            _grammar = GetGrammar();
+            //building examples
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            for (int i = 0; i < examples.Count; i++)
+            {
+                var example = examples[i];
+                var inpTree = example.Item1;
+                var outTree = example.Item2;
+                var inputState = State.Create(_grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(inpTree)));
+                ioExamples.Add(inputState, new List<object> { outTree });
             }
             //Learn program
             var spec = DisjunctiveExamplesSpec.From(ioExamples);

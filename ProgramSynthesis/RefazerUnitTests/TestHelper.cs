@@ -456,7 +456,6 @@ using RefazerFunctions;
 using RefazerFunctions.Bean;
 using RefazerManager;
 using RefazerObject.Location;
-using RefazerObject.Region;
 using RefazerObject.Transformation;
 using Spg.LocationRefactor.Location;
 using TreeElement;
@@ -581,7 +580,6 @@ namespace RefazerUnitTests
                         }
                     }
                 }
-
                 //Examples
                 var inpExs = inputMethods.Distinct().Select(index => allMethodsInput[index]).ToList();
                 var outExs = inputMethods.Distinct().Select(index => allMethodsOutput[index]).ToList();

@@ -50,7 +50,8 @@ namespace TreeEdit.Spg.Transform
             var versionStamp = VersionStamp.Create();
             var projectInfo = ProjectInfo.Create(projectId, versionStamp, "NewProject", "projName", LanguageNames.CSharp);
             var newProject = workspace.AddProject(projectInfo);
-            var sourceCode = FileUtil.ReadFile(transformations.First().Item1.SyntaxTree.FilePath);
+            var first = transformations.First().Item1.SyntaxTree.FilePath;
+            var sourceCode = FileUtil.ReadFile(first);
             var sourceAST = CSharpSyntaxTree.ParseText(sourceCode, path: transformations.First().Item1.SyntaxTree.FilePath);
             var sourceText = SourceText.From(sourceCode);
             var document = workspace.AddDocument(newProject.Id, transformations.First().Item1.SyntaxTree.FilePath, sourceText);

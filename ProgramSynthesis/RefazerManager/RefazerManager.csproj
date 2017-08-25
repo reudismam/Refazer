@@ -277,6 +277,10 @@
       <Project>{07c1a3bf-5392-4686-923e-ad52280efecd}</Project>
       <Name>RefazerFunctions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TreeEdit\TreeEdit.csproj">
+      <Project>{4bf08076-5ba3-45b8-8da9-bed3c4bca9f7}</Project>
+      <Name>TreeEdit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TreeElement\TreeElement.csproj">
       <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>
       <Name>TreeElement</Name>

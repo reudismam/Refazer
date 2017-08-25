@@ -22,8 +22,8 @@ namespace TreeEdit.Spg.Builder
         {
             SyntaxNodeOrToken newNode = ReconstructTree(tree);
             newNode = newNode.AsNode().NormalizeWhitespace();
-            newNode = newNode.WithLeadingTrivia(target.GetLeadingTrivia());
-            newNode = newNode.WithTrailingTrivia(target.GetTrailingTrivia());
+            //newNode = newNode.WithLeadingTrivia(target.GetLeadingTrivia());
+            //newNode = newNode.WithTrailingTrivia(target.GetTrailingTrivia());
             return newNode;
         }
 

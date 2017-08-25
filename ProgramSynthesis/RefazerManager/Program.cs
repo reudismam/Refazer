@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using TreeEdit.Spg.LogInfo;
+using TreeEdit.Spg.Transform;
 
 namespace RefazerManager
 {
@@ -7,13 +10,15 @@ namespace RefazerManager
     {
         public static void Main()
         {
-            var before = @"C:\Users\SPG-04\Documents\Test\QueryableExtensionsB.cs";
-            var after =  @"C:\Users\SPG-04\Documents\Test\QueryableExtensionsA.cs";
-            var tuple = Tuple.Create(before, after);
+            var before = @"C:\Users\SPG-04\Documents\Test\SyntaxTreeExtensionsB.cs";
+            var after  = @"C:\Users\SPG-04\Documents\Test\SyntaxTreeExtensionsA.cs";
+            var tuple  = Tuple.Create(before, after);
             var examples = new List<Tuple<string, string>>();
             examples.Add(tuple);
             var program = Refazer4CSharp.LearnTransformation(examples);
-            var result = Refazer4CSharp.Apply(program, before);
+            Refazer4CSharp.Apply(program, before);
+            var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
+            var document = transformedDocuments.First().Item2.ToString();
         }
     }
 }
