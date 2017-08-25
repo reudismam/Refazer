@@ -8,10 +8,9 @@ using RefazerFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.TreeEdit.PQ;
-using TreeElement.Spg.Mapping;
 using TreeElement.Spg.Node;
 
-namespace TreeElement.Spg.TreeEdit.Mapping
+namespace TreeElement.Spg.Mapping
 {
     public class GumTreeMapping<T> : ITreeMapping<T>
     {

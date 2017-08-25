@@ -15,7 +15,5 @@ namespace RefazerManager
             var program = Refazer4CSharp.LearnTransformation(examples);
             var result = Refazer4CSharp.Apply(program, before);
         }
-
-
     }
 }

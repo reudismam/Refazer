@@ -92,7 +92,6 @@ namespace RefazerManager
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
             string file = expHome + "programs.txt";
             File.WriteAllText(file, programStrings);
-
             return topK;
         }
 

@@ -20,8 +20,8 @@ using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
+using TreeElement.Spg.Mapping;
 using TreeElement.Spg.Node;
-using TreeElement.Spg.TreeEdit.Mapping;
 
 namespace RefazerFunctions.Spg.Witness
 {
