@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
-using Microsoft.ProgramSynthesis.Utils;
 using RefazerFunctions.Bean;
 using RefazerManager;
 using Spg.Controller.Projects;
@@ -175,9 +174,7 @@ namespace Controller
         {
             var exampleTuples = Tuple.Create(BeforeSourceCodeList, AfterSourceCodeList);
             var examples = GetExamples(exampleTuples);
-            var refazer = new Refazer4CSharp();
-            Grammar = Refazer4CSharp.GetGrammar();
-            CurrentProgram = refazer.LearnTransformation(Grammar, examples);
+            CurrentProgram = Refazer4CSharp.LearnTransformation(examples);
             ExecuteProgram();
             NotifyTransformationFinishedObservers();
         }

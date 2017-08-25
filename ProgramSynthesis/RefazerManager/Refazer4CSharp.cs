@@ -30,7 +30,7 @@ namespace RefazerManager
         public static ProgramNode LearnTransformation(List<Tuple<string, string>> examples)
         {
             _grammar = GetGrammar();
-            //building example methods
+            //building examples
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
             for (int i = 0; i < examples.Count; i++)
             {

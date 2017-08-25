@@ -9,7 +9,6 @@ using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
 using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
-using RefazerFunctions.Spg.Config;
 
 namespace RefazerManager
 {

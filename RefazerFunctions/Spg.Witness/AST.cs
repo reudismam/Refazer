@@ -65,7 +65,6 @@ namespace RefazerFunctions.Spg.Witness
         /// Return a specification for the ConstNode witness function.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
         public static ExampleSpec Const(GrammarRule rule, ExampleSpec spec)
         {

@@ -4,7 +4,6 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using RefazerFunctions.Bean;
-using RefazerFunctions.Substrings;
 using RefazerFunctions.Spg.Witness.Target;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;

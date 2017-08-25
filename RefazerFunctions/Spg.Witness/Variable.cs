@@ -69,33 +69,5 @@ namespace RefazerFunctions.Spg.Witness
             }
             return new DisjunctiveExamplesSpec(treeExamples);
         }
-
-        public static ExampleSpec VariableID(GrammarRule rule, ExampleSpec spec)
-        {
-            return null;
-            var treeExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                if (!WitnessFunctions.Bindings.ContainsKey(input))
-                {
-                    WitnessFunctions.Bindings.Add(input, new Dictionary<string, string>());
-                }
-                    var kMatches = new List<object>();
-                foreach (Tuple<TreeNode<SyntaxNodeOrToken>, int> sot in spec.DisjunctiveExamples[input])
-                {
-                    if (sot.Item1.Children.Any()) continue;
-
-                    if (!WitnessFunctions.Bindings[input].ContainsKey(sot.Item1.Value.ToString()))
-                    {
-                        WitnessFunctions.Bindings[input].Add(sot.Item1.Value.ToString(), $"<exp{1}>");
-                    }
-                    var id = WitnessFunctions.Bindings[input][sot.Item1.Value.ToString()];
-                    kMatches.Add(id);
-                }
-                if (!kMatches.Any()) return null;
-                treeExamples[input] = kMatches;
-            }         
-            return new ExampleSpec(treeExamples);
-        }
     }
 }
