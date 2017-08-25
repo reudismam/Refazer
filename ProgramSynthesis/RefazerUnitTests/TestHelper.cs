@@ -554,7 +554,7 @@ namespace RefazerUnitTests
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
             {
-                string sourceCode = FileUtil.ReadFile(entry.Key);
+                string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
                 Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
                 string sourceCodeAfter = tu.Item1;
 

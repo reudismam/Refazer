@@ -508,7 +508,7 @@ namespace RefazerUnitTests
                         catch (Exception)
                         {
                             // ignored
-                            throw new Exception("Errors in transforming the locations.");
+                            //throw new Exception("Errors in transforming the locations.");
                         }
                         break;
                     }
@@ -525,9 +525,8 @@ namespace RefazerUnitTests
                     catch (Exception)
                     {
                         // ignored
-                        throw new Exception("Errors in transforming the locations.");
+                        //throw new Exception("Errors in transforming the locations.");
                     }
-
                     throw new Exception("A transformation could not be learned using this examples.");
                 }
                 examples.Add(firstProblematicLocation);
@@ -539,7 +538,7 @@ namespace RefazerUnitTests
             var program = helper.Program;
             var dictionarySelection = helper.DictionarySelection;
 
-            Log(commit,
+            /*Log(commit,
                 totalTimeToLearn + totalTimeToExecute,
                 examples.Count,
                 regions.Count,
@@ -548,7 +547,7 @@ namespace RefazerUnitTests
                 program.ToString(),
                 totalTimeToLearn,
                 totalTimeToExecute,
-                mean);
+                mean);*/
             return true;
         }
 
