@@ -19,6 +19,11 @@ namespace TreeEdit.Spg.Log
         /// </summary>
         private static CodeFragmentsInfo _instance;
 
+        private CodeFragmentsInfo()
+        {
+            Locations = new List<SyntaxNodeOrToken>();
+        }
+
         /// <summary>
         /// Get singleton instance
         /// </summary>

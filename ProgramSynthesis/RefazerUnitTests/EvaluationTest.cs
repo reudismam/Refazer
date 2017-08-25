@@ -9,7 +9,7 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RefazerFunctions;
-using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Bean;
 using RefazerManager;
 using TreeElement;
 using TreeElement.Spg.Node;

@@ -15,6 +15,11 @@ namespace TreeEdit.Spg.LogInfo
         /// before and after code fragments
         /// </summary>
         public List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transformations { get; set; }
+
+        public TransformationsInfo()
+        {
+            Transformations = new List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>>();
+        }
         
         /// <summary>
         /// Defines a single instance of this class

@@ -4,7 +4,7 @@ using RefazerFunctions.Spg.Witness;
 using TreeEdit.Spg.Match;
 using TreeElement.Spg.Node;
 
-namespace RefazerFunctions.Spg.Bean
+namespace RefazerFunctions.Bean
 {
     public class K
     {

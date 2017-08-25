@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using RefazerFunctions.Bean;
 using RefazerFunctions.Substrings;
 using RefazerFunctions.List;
-using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Spg.Semantic;
 using TreeEdit.Spg.Builder;
 using TreeEdit.Spg.Log;

@@ -453,7 +453,7 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.ProgramSynthesis.Utils;
 using RefazerFunctions;
-using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Bean;
 using RefazerManager;
 using RefazerObject.Location;
 using RefazerObject.Region;
@@ -594,7 +594,7 @@ namespace RefazerUnitTests
             for (int index = 0; index < examplesInput.Count; index++)
             {
                 var example = examplesInput.ElementAt(index);
-                var treeNode = ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)example);
+                var treeNode = ConverterHelper.ConvertCSharpToTreeNode(example);
                 var inputState = State.Create(_grammar.InputSymbol, new Node(treeNode));
                 ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(index) });
             }

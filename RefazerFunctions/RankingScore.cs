@@ -172,7 +172,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
-using RefazerFunctions.Spg.Bean;
 using System.Text.RegularExpressions;
 
 namespace RefazerFunctions

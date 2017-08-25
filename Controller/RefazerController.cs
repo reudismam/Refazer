@@ -9,7 +9,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Utils;
 using ProseManager;
-using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Bean;
 using Spg.Controller.Projects;
 using TreeEdit.Spg.Log;
 using TreeEdit.Spg.LogInfo;
@@ -177,7 +177,7 @@ namespace Controller
             var examples = GetExamples(exampleTuples);
             var refazer = new Refazer4CSharp();
             Grammar = Refazer4CSharp.GetGrammar();
-            CurrentProgram = refazer.LearnTransformations(Grammar, examples);
+            CurrentProgram = refazer.LearnTransformation(Grammar, examples);
             ExecuteProgram();
             NotifyTransformationFinishedObservers();
         }

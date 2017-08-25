@@ -5,7 +5,7 @@
 
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using RefazerFunctions;
-using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Bean;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;

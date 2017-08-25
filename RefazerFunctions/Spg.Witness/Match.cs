@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
-using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Bean;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
@@ -141,10 +141,10 @@ namespace RefazerFunctions.Spg.Witness
                     }
                     K ki = new K(target, found);
                     var k = ki.GetK(pattern);
-                    if (k == -K.INF)
+                    if (k == -int.MaxValue)
                     {
                         k = ki.GetKParent(pattern);
-                        if (k == -K.INF) continue;
+                        if (k == -int.MaxValue) continue;
                         k = k * -1;
                     }
                     mats.Add(k);
