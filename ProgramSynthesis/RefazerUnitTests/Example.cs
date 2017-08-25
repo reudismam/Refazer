@@ -19,33 +19,50 @@ namespace RefazerUnitTests
         [TestMethod]
         public void E12()
         {
-            CompleteTestBase(@"QueryableExtensions");
+            var classes = new List<string> { "QueryableExtensions" };
+            CompleteTestBase(classes);
         }
 
         [TestMethod]
-        public void E35()
+        public void R35()
         {
-            CompleteTestBase(@"SyntaxTreeExtensions");
+            var classes = new List<string> { "EditAndContinueTestBase", "SyntaxTreeExtensions" };
+            CompleteTestBase(classes);
         }
 
         [TestMethod]
-        public void E20()
+        public void N20()
         {
-            CompleteTestBase(@"PackageRepositoryExtensions");
+            var classes = new List<string> { "QueryableExtensions" };
+            CompleteTestBase(classes);
         }
 
-        private void CompleteTestBase(string exampleId)
+        private void CompleteTestBase(List<string> examplesSet)
         {
             string exampleFolder = GetExampleFolder();
-            var before = exampleFolder +  exampleId + @"B.cs";
-            var after = exampleFolder + exampleId + @"A.cs";
-            var tuple = Tuple.Create(before, after);
             var examples = new List<Tuple<string, string>>();
-            examples.Add(tuple);
+            foreach (var exampleFile in examplesSet)
+            {
+                //just the before version of the file
+                var before = exampleFolder + exampleFile + @"B.cs";
+                //just the after version of the file
+                var after = exampleFolder + exampleFile + @"A.cs";
+                //create the examples
+                var tuple = Tuple.Create(before, after);
+                examples.Add(tuple);
+            }
+            //learn a transformation using Refazer
             var program = Refazer4CSharp.LearnTransformation(examples);
-            Refazer4CSharp.Apply(program, before);
+            //Apply the transformation to some files.
+            foreach (var example in examples)
+            {
+                var before = example.Item1;
+                Refazer4CSharp.Apply(program, before);
+            }
+            //Get the before and after version of each transformed file.
             var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
-            var document = transformedDocuments.First().Item2.ToString();
+            //Get the modified version
+            var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
         }
 
         private void CompleteTestBaseType(string exampleId)

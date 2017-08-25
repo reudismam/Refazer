@@ -62,21 +62,5 @@ namespace Microsoft.CodeAnalysis.CSharp.Extensions.ContextQuery
 
             return false;
         }
-
-        internal static Func<SyntaxNode, SyntaxNode> GetSyntaxMapByKind(MethodSymbol method0, params SyntaxKind[] kinds)
-        {
-            return newNode =>
-            {
-                foreach (SyntaxKind kind in kinds) 
-                {
-                    if (newNode.CSharpKind() == kind)
-                    {
-                        return method0.DeclaringSyntaxReferences.Single().SyntaxTree.GetRoot().DescendantNodes().Single(n => n.CSharpKind() == kind);
-                    }
-                }
-
-                return null;
-            };
-        }
     }
 }
