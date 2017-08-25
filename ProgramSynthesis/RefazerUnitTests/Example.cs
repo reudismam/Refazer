@@ -41,6 +41,7 @@ namespace RefazerUnitTests
         {
             string exampleFolder = GetExampleFolder();
             var examples = new List<Tuple<string, string>>();
+            //Create the before and after version
             foreach (var exampleFile in examplesSet)
             {
                 //just the before version of the file
