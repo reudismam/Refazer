@@ -21,6 +21,7 @@ namespace TreeEdit.Spg.Builder
         public static SyntaxNodeOrToken ReconstructTree(SyntaxNodeOrToken target, TreeNode<SyntaxNodeOrToken> tree)
         {
             SyntaxNodeOrToken newNode = ReconstructTree(tree);
+            if (newNode.IsKind(SyntaxKind.None)) return tree.Value;
             newNode = newNode.AsNode().NormalizeWhitespace();
             //newNode = newNode.WithLeadingTrivia(target.GetLeadingTrivia());
             //newNode = newNode.WithTrailingTrivia(target.GetTrailingTrivia());
@@ -927,6 +928,12 @@ namespace TreeEdit.Spg.Builder
                     acessorList = acessorList.AddAccessors(list.ToArray());
                     return acessorList;
                 }
+            case SyntaxKind.MemberBindingExpression:
+                {
+                    var syntaxName = (SimpleNameSyntax) children.First();
+                    var memberBinding = SyntaxFactory.MemberBindingExpression(syntaxName);
+                    return memberBinding;
+                }
                 /*case SyntaxKind.None:
                     break;
                 case SyntaxKind.List:
@@ -1472,9 +1479,8 @@ namespace TreeEdit.Spg.Builder
                 case SyntaxKind.PointerMemberAccessExpression:
                     break;
                 case SyntaxKind.ConditionalAccessExpression:
-                    break;
-                case SyntaxKind.MemberBindingExpression:
-                    break;
+                    break;*/
+                /*
                 case SyntaxKind.ElementBindingExpression:
                     break;
                 case SyntaxKind.ModuloAssignmentExpression:

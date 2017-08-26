@@ -1,6 +1,4 @@
-using System;
 using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis;
 
 namespace RefazerObject.Region
 {
@@ -52,6 +50,8 @@ namespace RefazerObject.Region
         /// <param name="other">Other region</param>
         public bool IntersectWith(Region other)
         {
+            bool isPath = other.Path.ToUpperInvariant().Equals(Path.ToUpperInvariant());
+            if (!isPath) return false;
             bool thisWithOther = Start <= other.Start && other.Start <= Start + Length;
             bool otherWithThis = other.Start <= Start  && Start <= other.Start + other.Length;
             return thisWithOther || otherWithThis;
@@ -86,7 +86,9 @@ namespace RefazerObject.Region
         {
             if (!(obj is Region)) return false;
             Region other = (Region) obj;
-            return Start.Equals(other.Start) && Length.Equals(other.Length) && Path.ToUpperInvariant().Equals(other.Path.ToUpperInvariant());
+            string otherPath = other.Path.ToUpperInvariant();
+            string thisPath = Path.ToUpperInvariant();
+            return Start.Equals(other.Start) && Length.Equals(other.Length) && thisPath.Equals(otherPath);
         }
     }
 }

@@ -227,7 +227,6 @@
     <Compile Include="Bean\Node.cs" />
     <Compile Include="Bean\Patch.cs" />
     <Compile Include="Bean\Pattern.cs" />
-    <Compile Include="Bean\Region.cs" />
     <Compile Include="Bean\Script.cs" />
     <Compile Include="Spg.Config\SynthesisConfig.cs" />
     <Compile Include="Spg.Semantic\EditOperationSemanticFunctions.cs" />

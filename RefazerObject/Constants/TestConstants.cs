@@ -35,7 +35,7 @@
         /// <summary>
         /// Defines the path to the transformed locations
         /// </summary>
-        public const string TransformedLocationsTool = @"\metadata\transformed_locations.json";
+        public const string TransformedLocationsTool = @"\metadata_tool\transformed_locations.json";
 
         /// <summary>
         /// Defines the path to all transformed locations

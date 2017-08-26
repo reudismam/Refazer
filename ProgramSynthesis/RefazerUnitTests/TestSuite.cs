@@ -474,8 +474,24 @@ namespace RefazerUnitTests
                 helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, execId);
                 helper.Execute(examples);
 
-                var regionsFrags = CodeFragmentsInfo.GetInstance().Locations.Select(o => new Region { Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath }).ToList();
+                var regionsFragments = CodeFragmentsInfo.GetInstance().Locations.Select(o => new Region { Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath }).ToList();
                 string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
+                var regionsFrags = new List<Region>();
+                foreach (var region in regionsFragments)
+                {
+                    if (region.Path.ToUpperInvariant().Contains(expHome.ToUpperInvariant()))
+                    {
+                        var regionPathUpper = region.Path.ToUpperInvariant();
+                        var index = expHome.Length;
+                        var substring = regionPathUpper.Substring(index, regionPathUpper.Length - index);
+                        region.Path = substring;
+                        regionsFrags.Add(region);
+                    }
+                    else
+                    {
+                        regionsFrags.Add(region);
+                    }
+                }
                 JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
                 if (SynthesisConfig.GetInstance().CreateLog)
                 {
@@ -483,7 +499,25 @@ namespace RefazerUnitTests
                     var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
                     mean = sizes.Average();
                 }
-                var beforeafter = TransformationsInfo.GetInstance().Transformations.Select(o => Tuple.Create(new Region { Start = o.Item1.Span.Start, Length = o.Item1.Span.Length, Text = o.Item1.ToString(), Path = o.Item1.SyntaxTree.FilePath }, o.Item2.ToString(), o.Item1.SyntaxTree.FilePath)).ToList();
+                var transformations = TransformationsInfo.GetInstance().Transformations;
+                var beforeafter = new List<Tuple<Region, string, string>>();
+                foreach (var o in transformations)
+                {
+                    var filePath = o.Item1.SyntaxTree.FilePath.ToUpperInvariant();
+                    if (o.Item1.SyntaxTree.FilePath.ToUpperInvariant().Contains(expHome.ToUpperInvariant()))
+                    {
+                        var index = expHome.Length;
+                        filePath = filePath.Substring(index, filePath.Length - index);
+                    }        
+                    var region = new Region
+                    {
+                        Start = o.Item1.Span.Start,
+                        Length = o.Item1.Span.Length,
+                        Text = o.Item1.ToString(),
+                        Path = filePath
+                    };
+                    beforeafter.Add(Tuple.Create(region, o.Item2.ToString(), filePath));
+                }
                 GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
                 var foundLocations = GetEditedLocations(regionsFrags, locations);
                 var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
@@ -497,7 +531,14 @@ namespace RefazerUnitTests
                     JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
                     //Comparing edited locations with baseline
                     var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocations + execId + ".json");
-                    var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfterList, randomList, locations);
+                    var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
+                    foreach (var baseline in baselineBeforeAfterList)
+                    {
+                        var region = baseline.Item1;
+                        region.Path = region.Path.ToUpperInvariant();
+                        baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
+                    }
+                    var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations);
                     if (firstIncorrect == -1)
                     {
                         try
@@ -512,7 +553,6 @@ namespace RefazerUnitTests
                         }
                         break;
                     }
-
                     firstProblematicLocation = firstIncorrect;
                 }
                 if (examples.Contains(firstProblematicLocation))
@@ -601,11 +641,12 @@ namespace RefazerUnitTests
             var notFoundList = baselineBeforeAfterList.Where(o => !toolBeforeAfterList.Contains(o)).ToList();
             if (!notFoundList.Any()) return -1;
             //Computing example locations that do not follow the baseline.
-            var incorrectLocationsList = locations.Where(o => notFoundList.Any(e => o.Region.IntersectWith(e.Item1)));
+            var incorrectLocationsList = locations.Where(o => notFoundList.Any(e => o.Region.IntersectWith(e.Item1))).ToList();
             //Computing the index of the locations that do not follow the baseline.
-            var notFoundIndexList = incorrectLocationsList.Select(o => locations.IndexOf(o));
+            var notFoundIndexList = incorrectLocationsList.Select(o => locations.IndexOf(o)).ToList();
             //Getting the index of the location in the random list.
             var index = randomList.FindIndex(o => notFoundIndexList.Contains(o));
+            if (index == -1) return -1;
             var firstNotFound = randomList[index];
             return firstNotFound;
         }
@@ -613,11 +654,9 @@ namespace RefazerUnitTests
         private static List<Tuple<Region, string, string>> GetBeforeAfterData(List<Tuple<Region, string, string>> regions, List<CodeLocation> locations)
         {
             var dictionary = CreateDictionaryMatch(locations, regions.Select(o => o.Item1).ToList());
-
             var foundList = new List<Region>();
             dictionary.Values.ForEach(o => foundList.AddRange(o));
             foundList = foundList.Distinct().ToList();
-
             var regionsFound = regions.Where(o => foundList.Contains(o.Item1)).ToList();
             return regionsFound;
         }
@@ -692,7 +731,7 @@ namespace RefazerUnitTests
             var dictionary = new Dictionary<CodeLocation, List<Region>>();
             foreach (var v in locations)
             {
-                var matches = regions.Where(o => v.Region.IntersectWith(o));
+                var matches = regions.Where(o => v.Region.IntersectWith(o)).ToList();
                 if (!dictionary.ContainsKey(v))
                 {
                     dictionary[v] = new List<Region>();
@@ -773,421 +812,7 @@ namespace RefazerUnitTests
         }
     }
 }
-/*using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.ProgramSynthesis;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RefazerManager;
-using Spg.ExampleRefactoring.Util;
-using Spg.LocationRefactor.Location;
-using Spg.LocationRefactor.TextRegion;
-using Spg.LocationRefactor.Transform;
-using Taramon.Exceller;
-
-namespace UnitTests
-{
-    [TestClass]
-    public class TestSuite
-    {
-        [TestMethod]
-        public void E1()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\1");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E2()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\3");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E3()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\4", solutionPath: @"EntityFramework\entityframework10\EntityFramework.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E4()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\5");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E5()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\6");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E6()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\7");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E7()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\10");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E8()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\11", solutionPath: @"EntityFramework\entityframework7\EntityFramework.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E9()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\12");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E10()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\13");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E11()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\14", solutionPath: @"EntityFramework\entityframework2\EntityFramework.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void E12()
-        {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\15");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N13()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\16",
-                kinds: new List<SyntaxKind> { SyntaxKind.PropertyDeclaration });
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N14()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\17", solutionPath: @"NuGet\nuget3\NuGet.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N15()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\18");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N16()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\19", solutionPath: @"NuGet\nuget4\NuGet.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N17()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\20");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N18()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\21", solutionPath: @"NuGet\nuget2\NuGet.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N19()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\22");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N20()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\23");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N21()
-        {
-            var isCorrect = CompleteTestBase(@"Nuget\24", solutionPath: @"NuGet\nuget7\NuGet.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N22()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\25");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N23()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\26");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N24()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\27");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N25()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\28");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N26()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\29");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N27()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\30");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N28()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\31", solutionPath: @"NuGet\nuget6\NuGet.sln",
-                kinds: new List<SyntaxKind> { SyntaxKind.AttributeList });
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void N29()
-        {
-            var isCorrect = CompleteTestBase(@"NuGet\32", solutionPath: @"NuGet\nuget10\NuGet.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R30()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\33");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R31()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\34", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration });
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R32()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\35", solutionPath: @"Roslyn\roslyn18\Src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.PropertyDeclaration });
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R33()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\36");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R34()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\37");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R35()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\38", solutionPath: @"Roslyn\roslyn\src\Roslyn.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R36()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\39");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R37()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\40");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R38()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\41");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R39()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\42");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R40()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\43");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R41()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\44", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R42()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\45");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R43()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\46");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R44()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\47");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R45()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\48");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R46()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\49");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R47()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\50");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R48()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\51");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R49()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\52");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R50()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\53", kinds: new List<SyntaxKind> { SyntaxKind.ConstructorDeclaration });
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R51()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\54");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R52()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\55");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R53()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\56");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R54()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\57", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln",
-                kinds: new List<SyntaxKind> { SyntaxKind.UsingDirective });
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R55()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\58");
-            Assert.IsTrue(isCorrect);
-        }
-
-        [TestMethod]
-        public void R56()
-        {
-            var isCorrect = CompleteTestBase(@"Roslyn\59");
-            Assert.IsTrue(isCorrect);
-        }
-
+/*
         static string GetTestDataFolder(string testDataLocation)
         {
             string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
