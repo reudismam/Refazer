@@ -469,7 +469,7 @@ namespace RefazerUnitTests
                 var execId = "ranking";
                 //var execId = seed + "";
                 CodeFragmentsInfo.GetInstance().Init();
-                TransformationsInfo.GetInstance().Init();
+                TransformationInfos.GetInstance().Init();
                 examples.Sort();
                 helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, execId);
                 helper.Execute(examples);
@@ -499,24 +499,24 @@ namespace RefazerUnitTests
                     var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
                     mean = sizes.Average();
                 }
-                var transformations = TransformationsInfo.GetInstance().Transformations;
+                var transformations = TransformationInfos.GetInstance().Transformations;
                 var beforeafter = new List<Tuple<Region, string, string>>();
                 foreach (var o in transformations)
                 {
-                    var filePath = o.Item1.SyntaxTree.FilePath.ToUpperInvariant();
-                    if (o.Item1.SyntaxTree.FilePath.ToUpperInvariant().Contains(expHome.ToUpperInvariant()))
+                    var filePath = o.Before.SyntaxTree.FilePath.ToUpperInvariant();
+                    if (o.Before.SyntaxTree.FilePath.ToUpperInvariant().Contains(expHome.ToUpperInvariant()))
                     {
                         var index = expHome.Length;
                         filePath = filePath.Substring(index, filePath.Length - index);
                     }        
                     var region = new Region
                     {
-                        Start = o.Item1.Span.Start,
-                        Length = o.Item1.Span.Length,
-                        Text = o.Item1.ToString(),
+                        Start = o.Before.Span.Start,
+                        Length = o.Before.Span.Length,
+                        Text = o.Before.ToString(),
                         Path = filePath
                     };
-                    beforeafter.Add(Tuple.Create(region, o.Item2.ToString(), filePath));
+                    beforeafter.Add(Tuple.Create(region, o.After.ToString(), filePath));
                 }
                 GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
                 var foundLocations = GetEditedLocations(regionsFrags, locations);
@@ -543,7 +543,7 @@ namespace RefazerUnitTests
                     {
                         try
                         {
-                            var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
+                            var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
                             GeneratedDiffEdits(commit, transformedDocuments);
                         }
                         catch (Exception)
@@ -559,7 +559,7 @@ namespace RefazerUnitTests
                 {
                     try
                     {
-                        var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
+                        var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
                         GeneratedDiffEdits(commit, transformedDocuments);
                     }
                     catch (Exception)
@@ -657,6 +657,7 @@ namespace RefazerUnitTests
             var foundList = new List<Region>();
             dictionary.Values.ForEach(o => foundList.AddRange(o));
             foundList = foundList.Distinct().ToList();
+            var duplicates = foundList.GroupBy(s => s).SelectMany(grp => grp.Skip(1)).ToList();
             var regionsFound = regions.Where(o => foundList.Contains(o.Item1)).ToList();
             return regionsFound;
         }

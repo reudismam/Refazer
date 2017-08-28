@@ -257,6 +257,10 @@
       <Project>{b66821a8-75db-4165-83b7-91a8b5df8eb0}</Project>
       <Name>LongestCommonSubsequence</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RefazerObject\RefazerObject.csproj">
+      <Project>{e7839ddd-aba8-4968-84af-2d9324dd61b0}</Project>
+      <Name>RefazerObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TreeEdit\TreeEdit.csproj">
       <Project>{4bf08076-5ba3-45b8-8da9-bed3c4bca9f7}</Project>
       <Name>TreeEdit</Name>

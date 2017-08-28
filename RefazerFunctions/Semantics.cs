@@ -18,6 +18,7 @@ using TreeEdit.Spg.Print;
 using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
+using RefazerObject.Transformation;
 
 namespace RefazerFunctions
 {
@@ -179,7 +180,9 @@ namespace RefazerFunctions
             {
                 foreach (var v in edited)
                 {
-                    if (v == null) continue; //if we are unable to transformation an location
+                    if (v == null) {
+                        continue; //if we are unable to transformation an location
+                    }                
                     if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
                     {
                         var before = DicBeforeAfter[v];
@@ -198,14 +201,16 @@ namespace RefazerFunctions
                             PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(v.Value, "", false);
                             n = ASTBuilder.ReconstructTree(node.Value.Value, v.Value);
                         }
-                        TransformationsInfo.GetInstance().Add(Tuple.Create(before.Value.Value, n));
+                        TransformationInfo transformation = new TransformationInfo(before.Value.Value, n);
+                        TransformationInfos.GetInstance().Add(transformation);
                         resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
                     }
                     else
                     {
                         var before = DicBeforeAfter[v];
                         var n = ASTBuilder.ReconstructTree(node.Value.Value, v.Value);
-                        TransformationsInfo.GetInstance().Add(Tuple.Create(before.Value.Value, n));
+                        TransformationInfo transformation = new TransformationInfo(before.Value.Value, n);
+                        TransformationInfos.GetInstance().Add(transformation);
                         var treeNode = new TreeNode<SyntaxNodeOrToken>(n,
                             new TLabel(SyntaxKind.None));
                         resultList.Add(new Node(treeNode));

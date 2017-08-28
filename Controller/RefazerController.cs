@@ -14,6 +14,7 @@ using TreeEdit.Spg.Log;
 using TreeEdit.Spg.LogInfo;
 using TreeElement.Spg.Node;
 using WorkSpaces.Spg.Workspace;
+using RefazerObject.Transformation;
 
 namespace Controller
 {
@@ -39,9 +40,9 @@ namespace Controller
         /// Gets the transformations performed into the source code in terms of
         /// sourceCodeBefore and afterSourceCode code fragments
         /// </summary>
-        public List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> GetTransformations()
+        public List<TransformationInfo> GetTransformations()
         {
-            return TransformationsInfo.GetInstance().Transformations;
+            return TransformationInfos.GetInstance().Transformations;
         }
 
         /// <summary>

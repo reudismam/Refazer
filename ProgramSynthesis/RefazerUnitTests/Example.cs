@@ -61,7 +61,7 @@ namespace RefazerUnitTests
                 Refazer4CSharp.Apply(program, before);
             }
             //Get the before and after version of each transformed file.
-            var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
+            var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
             //Get the modified version
             var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
         }
@@ -77,7 +77,7 @@ namespace RefazerUnitTests
             var exampleMethods = BuildExamples(examples);
             var program = Refazer4CSharp.LearnTransformation(exampleMethods);
             Refazer4CSharp.Apply(program, before);
-            var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
+            var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
             var document = transformedDocuments.First().Item2.ToString();
         }
 

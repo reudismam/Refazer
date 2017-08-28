@@ -163,7 +163,7 @@
     <Compile Include="Spg.ConnectedComponents\TemplateConnectedComponents.cs" />
     <Compile Include="Spg.ConnectedComponents\ConnectedComponentManager.cs" />
     <Compile Include="Spg.LogInfo\CodeFragmentsInfo.cs" />
-    <Compile Include="Spg.LogInfo\TransformationsInfo.cs" />
+    <Compile Include="Spg.LogInfo\TransformationInfos.cs" />
     <Compile Include="Spg.Match\MatchManager.cs" />
     <Compile Include="Spg.Script\Edit.cs" />
     <Compile Include="Spg.Script\InsertBefore.cs" />
@@ -187,6 +187,10 @@
     <ProjectReference Include="..\LCA\LCA.csproj">
       <Project>{f256f0b4-f9b1-49ce-86c2-f70096e96f88}</Project>
       <Name>LCA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefazerObject\RefazerObject.csproj">
+      <Project>{e7839ddd-aba8-4968-84af-2d9324dd61b0}</Project>
+      <Name>RefazerObject</Name>
     </ProjectReference>
     <ProjectReference Include="..\TreeElement\TreeElement.csproj">
       <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>

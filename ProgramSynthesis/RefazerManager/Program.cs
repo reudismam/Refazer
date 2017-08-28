@@ -17,7 +17,7 @@ namespace RefazerManager
             examples.Add(tuple);
             var program = Refazer4CSharp.LearnTransformation(examples);
             Refazer4CSharp.Apply(program, before);
-            var transformedDocuments = ASTTransformer.Transform(TransformationsInfo.GetInstance().Transformations);
+            var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
             var document = transformedDocuments.First().Item2.ToString();
         }
     }
