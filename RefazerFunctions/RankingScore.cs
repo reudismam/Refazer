@@ -172,7 +172,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
-using RefazerFunctions.Spg.Bean;
 using System.Text.RegularExpressions;
 
 namespace RefazerFunctions
@@ -241,7 +240,7 @@ namespace RefazerFunctions
         [FeatureCalculator(nameof(Semantics.ConstNode))]
         public static double Score_Node1(double astScore) => 4.9968;
 
-        // Editing Asbtract
+        // Editing Abstract
         [FeatureCalculator(nameof(Semantics.Abstract))]
         public static double Score_Abstract(double kindScore) => 2.7756;
 

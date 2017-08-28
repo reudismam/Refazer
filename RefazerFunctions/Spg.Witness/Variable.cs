@@ -28,8 +28,8 @@ namespace RefazerFunctions.Spg.Witness
             var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
             foreach (State input in spec.ProvidedInputs)
             {
-                var kids = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
-                @intersect = @intersect.Intersect(kids);
+                var kinds = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>().Select(o => o.Item1.Value.Kind().ToString());
+                @intersect = @intersect.Intersect(kinds);
             }
             var list = new List<object>();
             @intersect.ForEach(o => list.Add(o));
@@ -68,34 +68,6 @@ namespace RefazerFunctions.Spg.Witness
                 spec.ProvidedInputs.ForEach(o => ((List<object>) treeExamples[o]).Add(Token.Expression));
             }
             return new DisjunctiveExamplesSpec(treeExamples);
-        }
-
-        public static ExampleSpec VariableID(GrammarRule rule, ExampleSpec spec)
-        {
-            return null;
-            var treeExamples = new Dictionary<State, object>();
-            foreach (State input in spec.ProvidedInputs)
-            {
-                if (!WitnessFunctions.Bindings.ContainsKey(input))
-                {
-                    WitnessFunctions.Bindings.Add(input, new Dictionary<string, string>());
-                }
-                    var kMatches = new List<object>();
-                foreach (Tuple<TreeNode<SyntaxNodeOrToken>, int> sot in spec.DisjunctiveExamples[input])
-                {
-                    if (sot.Item1.Children.Any()) continue;
-
-                    if (!WitnessFunctions.Bindings[input].ContainsKey(sot.Item1.Value.ToString()))
-                    {
-                        WitnessFunctions.Bindings[input].Add(sot.Item1.Value.ToString(), $"<exp{1}>");
-                    }
-                    var id = WitnessFunctions.Bindings[input][sot.Item1.Value.ToString()];
-                    kMatches.Add(id);
-                }
-                if (!kMatches.Any()) return null;
-                treeExamples[input] = kMatches;
-            }         
-            return new ExampleSpec(treeExamples);
         }
     }
 }

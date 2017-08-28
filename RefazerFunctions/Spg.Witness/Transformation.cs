@@ -12,16 +12,16 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using RefazerFunctions.Bean;
 using RefazerFunctions.Substrings;
-using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Spg.Config;
 using TreeEdit.Spg.Clustering;
 using TreeEdit.Spg.ConnectedComponents;
 using TreeEdit.Spg.Print;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
+using TreeElement.Spg.Mapping;
 using TreeElement.Spg.Node;
-using TreeElement.Spg.TreeEdit.Mapping;
 
 namespace RefazerFunctions.Spg.Witness
 {

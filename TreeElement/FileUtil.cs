@@ -27,19 +27,19 @@ namespace TreeElement
         private static string NormalizePath(string path)
         {
             var result = path.Split(@"\".ToArray(), StringSplitOptions.None);
-                var mypath = @"C:\Users\SPG-09\Documents\";
-                var newresult = result.ToList().GetRange(4, result.Count() - 4).ToArray();
-                //Insert code to remove specific computer path
-                var newpath = Path.Combine(newresult);
-                var resultPath = mypath + newpath;
+            var mypath = @"C:\Users\SPG-09\Documents\";
+            var newresult = result.ToList().GetRange(4, result.Count() - 4).ToArray();
+            //Insert code to remove specific computer path
+            var newpath = Path.Combine(newresult);
+            var resultPath = mypath + newpath;
             return resultPath;
         }
-    /// <summary>
-    /// Write string data to a file
-    /// </summary>
-    /// <param name="path">File path</param>
-    /// <param name="sourceCode">Source code</param>
-    public static void WriteToFile(string path, string sourceCode)
+        /// <summary>
+        /// Write string data to a file
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <param name="sourceCode">Source code</param>
+        public static void WriteToFile(string path, string sourceCode)
         {
             StreamWriter file = new StreamWriter(path);
             file.Write(sourceCode);
@@ -56,13 +56,32 @@ namespace TreeElement
             File.Delete(path);
         }
 
+        /// <summary>
+        /// Specifies the locations where this solution is on.
+        /// </summary>
         public static string GetBasePath()
         {
             string startupPath = Directory.GetCurrentDirectory();
-            var pathItems = startupPath.Split(Path.DirectorySeparatorChar);
-            string projectPath = String.Join(Path.DirectorySeparatorChar.ToString(), pathItems.Take(pathItems.Length - 3));
-            string result = projectPath;
+            string result = GetBasePath(startupPath);
             return result;
+        }
+
+        /// <summary>
+        /// Specifies the locations where this solution is on.
+        /// </summary>
+        private static string GetBasePath(string executionPath)
+        {
+            var path = Path.GetFullPath(executionPath);
+            var directory = Directory.CreateDirectory(path);
+            while (directory != null && !directory.EnumerateFiles().Any(o => o.Extension.Contains("sln")))
+            {
+                directory = directory.Parent;
+            }
+            if (directory == null)
+            {
+                throw new Exception("The path to the folder of the solution could not be found.");
+            }
+            return directory.FullName;
         }
     }
 }

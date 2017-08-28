@@ -7,11 +7,10 @@ using Microsoft.CodeAnalysis.CSharp;
 using RefazerFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeEdit.Spg.Print;
-using TreeEdit.Spg.TreeEdit.Mapping;
 using TreeEdit.Spg.TreeEdit.PQ;
 using TreeElement.Spg.Node;
 
-namespace TreeElement.Spg.TreeEdit.Mapping
+namespace TreeElement.Spg.Mapping
 {
     public class GumTreeMapping<T> : ITreeMapping<T>
     {
@@ -157,7 +156,6 @@ namespace TreeElement.Spg.TreeEdit.Mapping
         /// <param name="t1">First tree</param>
         /// <param name="t2">Second tree</param>
         /// <param name="M">Previous mapping</param>
-        /// <returns></returns>
         public Dictionary<TreeNode<T>, TreeNode<T>> BottomUp(TreeNode<T> t1, TreeNode<T> t2, Dictionary<TreeNode<T>, TreeNode<T>> M)
         {
             var traversal = new TreeTraversal<T>();
@@ -231,14 +229,14 @@ namespace TreeElement.Spg.TreeEdit.Mapping
         {
             var t1String = ConverterHelper.ConvertTreeNodeToString(t1);
             var t2String = ConverterHelper.ConvertTreeNodeToString(t2);
-            var f1 = GetTreeEditDistanceDataFolder(@"\") + @"a.t";
-            var f2 = GetTreeEditDistanceDataFolder(@"\") + @"b.t";
+            var treeEditDistanceDataFolder = FileUtil.GetBasePath() + @"\ProgramSynthesis\";
+            var f1 =  treeEditDistanceDataFolder + @"a.t";
+            var f2 =  treeEditDistanceDataFolder + @"b.t";
             File.WriteAllText(f1, t1String);
             File.WriteAllText(f2, t2String);
 
-            string cmd = @"/c java -jar """ + GetTreeEditDistanceDataFolder(@"\libs") +
-                         $@"\RTED_v1.1.jar"" -f ""{f1}"" ""{f2}"" -c 1 1 1 -s heavy --switch -m";
-            Process proc = new Process();
+            string cmd = @"/c java -jar """ + $"{treeEditDistanceDataFolder}libs" + $@"\RTED_v1.1.jar"" -f ""{f1}"" ""{f2}"" -c 1 1 1 -s heavy --switch -m";
+            var proc = new Process();
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.Arguments = cmd;
             proc.StartInfo.UseShellExecute = false;
@@ -266,7 +264,7 @@ namespace TreeElement.Spg.TreeEdit.Mapping
             }
 
             var dictionary = new Dictionary<TreeNode<T>, TreeNode<T>>();
-            StringReader strReader = new StringReader(output);
+            var strReader = new StringReader(output);
             strReader.ReadLine(); //discard files line
             while (true)
             {
@@ -285,12 +283,16 @@ namespace TreeElement.Spg.TreeEdit.Mapping
             return dictionary;
         }
 
-        static string GetTreeEditDistanceDataFolder(string treeEditFileLocation)
-        {
-            string startupPath = FileUtil.GetBasePath();
-            var result = startupPath + treeEditFileLocation;
-            return result;
-        }
+        ///// <summary>
+        ///// Gets the folder to files related tree edit operation.
+        ///// </summary>
+        ///// <param name="treeEditFileLocation">Relative path to tree edit distance folder</param>
+        //private static string GetTreeEditDistanceDataFolder(string treeEditFileLocation)
+        //{
+        //    string startupPath = FileUtil.GetBasePath();
+        //    var result = startupPath + treeEditFileLocation;
+        //    return result;
+        //}
 
         /// <summary>
         /// This method verify if tree t has some matching children.

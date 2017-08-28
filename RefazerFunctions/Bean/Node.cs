@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using TreeElement.Spg.Node;
 
-namespace RefazerFunctions.Spg.Bean
+namespace RefazerFunctions.Bean
 {
     public class Node
     {

@@ -12,7 +12,6 @@ namespace RefazerFunctions.List
         /// Return the first element of the list.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         public static DisjunctiveExamplesSpec List0(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
@@ -37,7 +36,6 @@ namespace RefazerFunctions.List
         /// Remove the first element and return the remaining of the list.
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Example specification</param>
         public static DisjunctiveExamplesSpec List1(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
@@ -65,7 +63,6 @@ namespace RefazerFunctions.List
         /// Return the first element of the list when the list has a single element
         /// </summary>
         /// <param name="rule">Grammar rule</param>
-        /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         /// <returns></returns>
         public static DisjunctiveExamplesSpec Single(GrammarRule rule, DisjunctiveExamplesSpec spec)

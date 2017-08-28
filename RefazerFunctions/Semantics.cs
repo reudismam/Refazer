@@ -6,17 +6,19 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using RefazerFunctions.Bean;
 using RefazerFunctions.Substrings;
 using RefazerFunctions.List;
-using RefazerFunctions.Spg.Bean;
 using RefazerFunctions.Spg.Semantic;
 using TreeEdit.Spg.Builder;
 using TreeEdit.Spg.Log;
+using TreeEdit.Spg.LogInfo;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Print;
 using TreeElement;
 using TreeElement.Spg.Node;
 using TreeElement.Token;
+using RefazerObject.Transformation;
 
 namespace RefazerFunctions
 {
@@ -178,7 +180,9 @@ namespace RefazerFunctions
             {
                 foreach (var v in edited)
                 {
-                    if (v == null) continue; //if we are unable to transformation an location
+                    if (v == null) {
+                        continue; //if we are unable to transformation an location
+                    }                
                     if (!v.Value.IsLabel(new TLabel(SyntaxKind.None)))
                     {
                         var before = DicBeforeAfter[v];
@@ -186,25 +190,27 @@ namespace RefazerFunctions
                         SyntaxNodeOrToken n;
                         if (v.LeftNode != null)
                         {
-                            n = ASTBuilder.ReconstructTree(v.LeftNode.Value);
+                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.LeftNode.Value);
                         }
                         else if (v.RightNode != null)
                         {
-                            n = ASTBuilder.ReconstructTree(v.RightNode.Value);
+                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.RightNode.Value);
                         }
                         else
                         {
                             PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(v.Value, "", false);
-                            n = ASTBuilder.ReconstructTree(v.Value);
+                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.Value);
                         }
-                        TransformationsLogger.GetInstance().Add(Tuple.Create(before.Value.Value, n));
+                        TransformationInfo transformation = new TransformationInfo(before.Value.Value, n);
+                        TransformationInfos.GetInstance().Add(transformation);
                         resultList.Add(new Node(ConverterHelper.ConvertCSharpToTreeNode(n)));
                     }
                     else
                     {
                         var before = DicBeforeAfter[v];
-                        var n = ASTBuilder.ReconstructTree(v.Value);
-                        TransformationsLogger.GetInstance().Add(Tuple.Create(before.Value.Value, n));
+                        var n = ASTBuilder.ReconstructTree(node.Value.Value, v.Value);
+                        TransformationInfo transformation = new TransformationInfo(before.Value.Value, n);
+                        TransformationInfos.GetInstance().Add(transformation);
                         var treeNode = new TreeNode<SyntaxNodeOrToken>(n,
                             new TLabel(SyntaxKind.None));
                         resultList.Add(new Node(treeNode));
@@ -342,7 +348,7 @@ namespace RefazerFunctions
             var isValid = node.Equals(sx.Value);
             if (isValid)
             {
-                var codeFragmentsLogger = CodeFragmentsLogger.GetInstance();
+                var codeFragmentsLogger = CodeFragmentsInfo.GetInstance();
                 codeFragmentsLogger.Add(node.Value);
             }
             return isValid;

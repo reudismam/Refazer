@@ -44,6 +44,7 @@
     <Reference Include="DbscanImplementation">
       <HintPath>..\libs\DbscanImplementation.exe</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.3.1\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
@@ -161,8 +162,8 @@
     <Compile Include="Spg.ConnectedComponents\ConnectionComparer.cs" />
     <Compile Include="Spg.ConnectedComponents\TemplateConnectedComponents.cs" />
     <Compile Include="Spg.ConnectedComponents\ConnectedComponentManager.cs" />
-    <Compile Include="Spg.Log\TransformationsLogger.cs" />
-    <Compile Include="Spg.Log\CodeFragmentsLogger.cs" />
+    <Compile Include="Spg.LogInfo\CodeFragmentsInfo.cs" />
+    <Compile Include="Spg.LogInfo\TransformationInfos.cs" />
     <Compile Include="Spg.Match\MatchManager.cs" />
     <Compile Include="Spg.Script\Edit.cs" />
     <Compile Include="Spg.Script\InsertBefore.cs" />
@@ -186,6 +187,10 @@
     <ProjectReference Include="..\LCA\LCA.csproj">
       <Project>{f256f0b4-f9b1-49ce-86c2-f70096e96f88}</Project>
       <Name>LCA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefazerObject\RefazerObject.csproj">
+      <Project>{e7839ddd-aba8-4968-84af-2d9324dd61b0}</Project>
+      <Name>RefazerObject</Name>
     </ProjectReference>
     <ProjectReference Include="..\TreeElement\TreeElement.csproj">
       <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>

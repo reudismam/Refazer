@@ -63,9 +63,9 @@ namespace RefazerFunctions
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction(nameof(Semantics.Abstract), 0)]
-        public DisjunctiveExamplesSpec VariableKind(GrammarRule rule, ExampleSpec spec)
+        public DisjunctiveExamplesSpec VariableKind(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
-            return Variable.VariableKind(rule, spec);
+            return Variable.VariableKindDisjunctive(rule, spec);
         }
 
         /// <summary>
@@ -74,10 +74,10 @@ namespace RefazerFunctions
         /// <param name="rule">Literal rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>
-        [WitnessFunction(nameof(Semantics.Variable), 0)]
-        public ExampleSpec AbstractId(GrammarRule rule, ExampleSpec spec)
+        [WitnessFunction(nameof(Semantics.Abstract), 0)]
+        public DisjunctiveExamplesSpec VariableKind(GrammarRule rule, ExampleSpec spec)
         {
-            return Variable.VariableID(rule, spec);
+            return Variable.VariableKind(rule, spec);
         }
 
         /// <summary>
@@ -420,7 +420,6 @@ namespace RefazerFunctions
         /// <summary>
         /// Learn a constant node
         /// </summary>
-        /// <param name="rule">Rule</param>
         /// <param name="rule">Rule</param>
         /// <param name="spec">Example specification</param>
         /// <returns>Disjunctive example specification</returns>

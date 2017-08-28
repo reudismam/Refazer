@@ -1,19 +1,11 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="Transform.cs" company="Company">
-//     Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Globalization;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using EnvDTE;
 using Microsoft.VisualStudio.Text;
-using Spg.Controller;
 using Controller;
 
 namespace RefazerUI
@@ -36,7 +28,7 @@ namespace RefazerUI
         /// <summary>
         /// VS Package that provides this command, not null.
         /// </summary>
-        private readonly Package package;
+        private readonly Package _package;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Transform"/> class.
@@ -45,22 +37,16 @@ namespace RefazerUI
         /// <param name="package">Owner package, not null.</param>
         private Transform(Package package)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException("package");
-            }
-
-            this.package = package;
-
+            _package = package;
             OleMenuCommandService commandService = this.Provider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
-                var menuCommandID = new CommandID(CommandSet, CommandId);
-                var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
+                var menuCommandId = new CommandID(CommandSet, CommandId);
+                var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandId);
                 commandService.AddCommand(menuItem);
             }
 
-            EditorController controller = EditorController.GetInstance();
+            var controller = RefazerController.GetInstance();
             controller.AddEditStartedObserver(this);
         }
 
@@ -76,13 +62,7 @@ namespace RefazerUI
         /// <summary>
         /// Gets the service provider from the owner package.
         /// </summary>
-        private IServiceProvider Provider
-        {
-            get
-            {
-                return this.package;
-            }
-        }
+        private IServiceProvider Provider => _package;
 
         /// <summary>
         /// Initializes the singleton instance of the command.
@@ -103,7 +83,7 @@ namespace RefazerUI
         private void MenuItemCallback(object sender, EventArgs e)
         {
             IVsTextManager txtMgr = (IVsTextManager)Provider.GetService(typeof(SVsTextManager));
-            IVsTextView vTextView = null;
+            IVsTextView vTextView;
             int mustHaveFocus = 1;
             txtMgr.GetActiveView(mustHaveFocus, null, out vTextView);
             IVsUserData userData = vTextView as IVsUserData;
@@ -115,23 +95,52 @@ namespace RefazerUI
             object holder;
             Guid guidViewHost = Microsoft.VisualStudio.Editor.DefGuidList.guidIWpfTextViewHost;
             userData.GetData(ref guidViewHost, out holder);
-            var viewHost = (IWpfTextViewHost)holder;
 
-            DTE dte;
-            dte = (DTE)Provider.GetService(typeof(DTE)); // we have access to GetService here.
+            var dte = (DTE)Provider.GetService(typeof(DTE));
             string fullName = dte.Solution.FullName;
             var document = dte.ActiveDocument;
-            string after = GetText(viewHost);
+            var documentsEnumerator = dte.Documents.GetEnumerator();
+            var documentsList = GetOpenedDocuments(dte);
 
             var proj = dte.Solution.FindProjectItem(document.FullName);
-            //throw new Exception("Error");
             var project = proj.ContainingProject;
-
-            EditorController controller = EditorController.GetInstance();
-            controller.Transform(after);
-            EnableTransformCommand(package, false);
+            var controller = RefazerController.GetInstance();
+            RefazerController.GetInstance().SetSolution(fullName);
+            RefazerController.GetInstance().AfterSourceCodeList = documentsList;
+            controller.Transform();
+            EnableTransformCommand(_package, false);
         }
 
+        /// <summary>
+        /// Gets opened documents in the IDE.
+        /// </summary>
+        /// <param name="dte">The DTE.</param>
+        private List<Tuple<string, string>> GetOpenedDocuments(DTE dte)
+        {
+            var list = new List<Tuple<string, string>>();
+            try
+            {
+                // documents opened in the solution
+                foreach (Document doc in dte.Documents)
+                {
+                    var textDocument = (TextDocument)doc.Object("TextDocument");
+                    var editPoint = textDocument.StartPoint.CreateEditPoint();
+                    var text = editPoint.GetText(textDocument.EndPoint.CreateEditPoint());
+                    list.Add(Tuple.Create(doc.FullName, text));
+                }
+            }
+            catch
+            {
+                //Ignored
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Enable/Disable Transform button
+        /// </summary>
+        /// <param name="package">Meny command</param>
+        /// <param name="flag">Enable or disable button</param>
         public void EnableTransformCommand(Package package, bool flag)
         {
             if (package == null)
@@ -141,15 +150,13 @@ namespace RefazerUI
             OleMenuCommandService commandService = Provider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
-                var menuCommandID = new CommandID(CommandSet, CommandId);
-                //var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
-                //commandService.AddCommand(menuItem);
-                var menuItem = commandService.FindCommand(menuCommandID);
+                var menuCommandId = new CommandID(CommandSet, CommandId);
+                var menuItem = commandService.FindCommand(menuCommandId);
                 menuItem.Enabled = flag;
             }
         }
 
-        static public string GetText(IWpfTextViewHost host)
+        public static string GetText(IWpfTextViewHost host)
         {
             IWpfTextView view = host.TextView;
 
@@ -159,7 +166,7 @@ namespace RefazerUI
 
         public void EditStarted(EditStartedEvent @event)
         {
-            EnableTransformCommand(package, true);
+            EnableTransformCommand(_package, true);
         }
     }
 }

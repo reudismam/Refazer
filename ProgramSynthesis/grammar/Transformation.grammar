@@ -5,7 +5,7 @@
 
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using RefazerFunctions;
-using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Bean;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
@@ -29,7 +29,7 @@ Node operation := Insert(target, ast, c) | InsertBefore(target, ref, ast) |  Upd
 Pattern pattern := Context(kmatch, id);
 Pattern kmatch := token | Pattern(id, children);
 IEnumerable<Pattern> children := SC(kmatch) | CList(kmatch, children);
-Pattern token := Concrete(tree) | Abstract(id) | Variable(id);
+Pattern token := Concrete(tree) | Abstract(id);
 
 Node ast:= const | ref;
 Node const := Node(kind, childrenNodes) | ConstNode(tree);

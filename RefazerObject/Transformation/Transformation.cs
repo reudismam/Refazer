@@ -1,6 +1,6 @@
 using System;
 
-namespace RefazerUnitTests.Spg.Transform
+namespace RefazerObject.Transformation
 {
     /// <summary>
     /// Represents a BeforeAfter
@@ -23,11 +23,11 @@ namespace RefazerUnitTests.Spg.Transform
         /// Constructor
         /// </summary>
         /// <param name="beforeAfter">Before and after BeforeAfter</param>
-        /// <param name="SourcePath">Source path</param>
-        public Transformation(Tuple<string, string> beforeAfter, string SourcePath)
+        /// <param name="sourcePath">Source path</param>
+        public Transformation(Tuple<string, string> beforeAfter, string sourcePath)
         {
             BeforeAfter = beforeAfter;
-            this.SourcePath = SourcePath;
+            SourcePath = sourcePath;
         }
     }
 }

@@ -16,16 +16,14 @@ namespace RefazerFunctions.Spg.Witness
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
-            var comparer = new LiteralCompater();
+            var comparer = new LiteralComparator();
             foreach (State input in spec.ProvidedInputs)
             {
-                var kids = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
-                @intersect = @intersect.Intersect(kids, comparer);
+                var kinds = spec.DisjunctiveExamples[input].Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
+                @intersect = @intersect.Intersect(kinds, comparer);
             }
             var list = new List<object>();
-            @intersect = @intersect.Where(o => !o.Item1.Children.Any());
             if (!@intersect.Any()) return null;
-
             @intersect.ForEach(o => list.Add(o.Item1.Value));
             spec.ProvidedInputs.ForEach(o => treeExamples[o] = list);
             return DisjunctiveExamplesSpec.From(treeExamples);
@@ -41,11 +39,8 @@ namespace RefazerFunctions.Spg.Witness
                 foreach(Tuple<TreeNode<SyntaxNodeOrToken>, int> tsot in spec.DisjunctiveExamples[input].ToList())
                 {
                     var sot = tsot.Item1;
-                    if (!sot.Children.Any())
-                    {
-                        matches.Add(sot);
-                        mats.Add(sot);
-                    }
+                    matches.Add(sot);
+                    mats.Add(sot);
                 }
                 if (!mats.Any()) return null;
             }
@@ -55,16 +50,18 @@ namespace RefazerFunctions.Spg.Witness
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        public class LiteralCompater : IEqualityComparer<Tuple<TreeNode<SyntaxNodeOrToken>, int>>
+        public class LiteralComparator : IEqualityComparer<Tuple<TreeNode<SyntaxNodeOrToken>, int>>
         {
             public bool Equals(Tuple<TreeNode<SyntaxNodeOrToken>, int> x, Tuple<TreeNode<SyntaxNodeOrToken>, int> y)
             {
-                return IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(x.Item1, y.Item1) && x.Item2 == y.Item2;
+                bool isIsomorphic = IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(x.Item1, y.Item1);
+                bool sameLevel = x.Item2 == y.Item2;
+                return isIsomorphic && sameLevel;
             }
 
             public int GetHashCode(Tuple<TreeNode<SyntaxNodeOrToken>, int> x)
             {
-                return x.Item1.Value.GetHashCode();
+                return x.Item1.ToString().GetHashCode();
             }
         }
     }

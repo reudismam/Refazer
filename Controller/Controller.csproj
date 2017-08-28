@@ -317,13 +317,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EditorController.cs" />
     <Compile Include="Event\TransformationFinishedEvent.cs" />
     <Compile Include="Observer\ITransformationFinishedObserver.cs" />
     <Compile Include="Observer\IEditStartedObsever.cs" />
     <Compile Include="ProjectInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Event\EditStartedEvent.cs" />
+    <Compile Include="RefazerController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -338,6 +338,10 @@
     <ProjectReference Include="..\RefazerFunctions\RefazerFunctions.csproj">
       <Project>{07c1a3bf-5392-4686-923e-ad52280efecd}</Project>
       <Name>RefazerFunctions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefazerObject\RefazerObject.csproj">
+      <Project>{e7839ddd-aba8-4968-84af-2d9324dd61b0}</Project>
+      <Name>RefazerObject</Name>
     </ProjectReference>
     <ProjectReference Include="..\TreeEdit\TreeEdit.csproj">
       <Project>{4bf08076-5ba3-45b8-8da9-bed3c4bca9f7}</Project>

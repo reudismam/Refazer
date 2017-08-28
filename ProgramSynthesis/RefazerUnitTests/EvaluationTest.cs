@@ -9,11 +9,10 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Specifications;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RefazerFunctions;
-using RefazerFunctions.Spg.Bean;
+using RefazerFunctions.Bean;
 using RefazerManager;
 using TreeElement;
 using TreeElement.Spg.Node;
-using UnitTests;
 
 namespace RefazerUnitTests
 {
@@ -59,6 +58,7 @@ namespace RefazerUnitTests
         /// Complete test
         /// </summary>
         /// <param name="commit">Commit where the change occurs</param>
+        /// <param name="documents">Documents</param>
         /// <returns>True if pass test</returns>
         public static bool CompleteTestBase(string commit, List<Tuple<string, string>> documents)
         {

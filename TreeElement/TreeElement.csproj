@@ -203,9 +203,9 @@
     <Compile Include="Spg.Node\TreeNode.cs" />
     <Compile Include="Spg.Node\TType.cs" />
     <Compile Include="Spg.Print\PrintUtil.cs" />
-    <Compile Include="Spg.TreeEdit.Mapping\GumTreeMapping.cs" />
-    <Compile Include="Spg.TreeEdit.Mapping\ITreeMapping.cs" />
-    <Compile Include="Spg.TreeEdit.Mapping\TreeAlignment.cs" />
+    <Compile Include="Spg.Mapping\GumTreeMapping.cs" />
+    <Compile Include="Spg.Mapping\ITreeMapping.cs" />
+    <Compile Include="Spg.Mapping\TreeAlignment.cs" />
     <Compile Include="Spg.TreeEdit.PQ\PriotityQueue.cs" />
     <Compile Include="Spg.Walker\BFSWalker.cs" />
     <Compile Include="Token\DynToken.cs" />

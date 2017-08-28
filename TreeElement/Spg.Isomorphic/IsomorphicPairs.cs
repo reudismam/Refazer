@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TreeEdit.Spg.TreeEdit.Mapping;
 using RefazerFunctions.Substrings;
+using TreeElement.Spg.Mapping;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Isomorphic

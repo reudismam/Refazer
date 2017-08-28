@@ -17,7 +17,6 @@ namespace LongestCommonAncestor
         public virtual List<ComparisonResult<T>> FindDifference(List<T> baseline, List<T> revision)
         {
             int[,] differenceMatrix = Matrix(baseline, revision);
-
             return FindDifference(differenceMatrix, baseline, revision, baseline.Count, revision.Count);
         }
 
@@ -29,11 +28,8 @@ namespace LongestCommonAncestor
         public virtual List<T> FindCommon(List<T> baseline, List<T> revision)
         {
             int[,] differenceMatrix = Matrix(baseline, revision);
-
             var diffs = FindDifference(differenceMatrix, baseline, revision, baseline.Count, revision.Count);
-
             var lcs = new List<T>();
-
             foreach (var diff in diffs)
             {
                 if (diff.EditionType.Equals(EditionType.None))
@@ -41,7 +37,6 @@ namespace LongestCommonAncestor
                     lcs.Add(diff.DataCompared);
                 }
             }
-
             return lcs;
         }
 
@@ -52,7 +47,6 @@ namespace LongestCommonAncestor
         public virtual List<T> FindDifference(List<List<T>> baselines)
         {
             if (baselines.Count < 2) throw new ArgumentException("baselines must contains at least two elements.");
-
             var baseline = baselines.First();
             foreach (var revision in baselines)
             {
@@ -117,7 +111,6 @@ namespace LongestCommonAncestor
                     EditionType = EditionType.Deleted
                 });
             }
-
             return results;
         }
 
