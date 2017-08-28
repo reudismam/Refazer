@@ -50,10 +50,6 @@ namespace RefazerObject.Region
         /// <param name="other">Other region</param>
         public bool IntersectWith(Region other)
         {
-            if (this.Start == 83591 && other.Start == 83589)
-            {
-                
-            }
             bool isPath = other.Path.ToUpperInvariant().Equals(Path.ToUpperInvariant());
             if (!isPath) return false;
             bool thisWithOther = Start <= other.Start && other.Start <= Start + Length;

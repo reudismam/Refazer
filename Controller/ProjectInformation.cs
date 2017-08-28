@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Spg.Controller.Projects
+namespace Controller
 {
     /// <summary>
     /// Information related to the project
@@ -26,7 +26,7 @@ namespace Spg.Controller.Projects
 
         private ProjectInformation()
         {
-            this.ProjectPath = new List<string>();
+            ProjectPath = new List<string>();
         }
 
         /// <summary>
@@ -41,12 +41,6 @@ namespace Spg.Controller.Projects
             }
             return _instance;
         }
-
-        //public static void SetInfo(string solutionPath, string projectPath)
-        //{
-        //    GetInstance().SolutionPath = solutionPath;
-        //    GetInstance().ProjectPath = projectPath;
-        //}
     }
 }
 

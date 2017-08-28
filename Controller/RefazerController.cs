@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Controller.Event;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,7 +8,6 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using RefazerFunctions.Bean;
 using RefazerManager;
-using Spg.Controller.Projects;
 using TreeEdit.Spg.Log;
 using TreeEdit.Spg.LogInfo;
 using TreeElement.Spg.Node;

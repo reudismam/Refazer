@@ -467,7 +467,6 @@ namespace RefazerUnitTests
             while (true)
             {
                 var execId = "ranking";
-                //var execId = seed + "";
                 CodeFragmentsInfo.GetInstance().Init();
                 TransformationInfos.GetInstance().Init();
                 examples.Sort();
