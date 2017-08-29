@@ -537,7 +537,8 @@ namespace RefazerUnitTests
                         region.Path = region.Path.ToUpperInvariant();
                         baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
                     }
-                    var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations);
+                    var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
+                    var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
                     if (firstIncorrect == -1)
                     {
                         try
@@ -634,10 +635,12 @@ namespace RefazerUnitTests
             }
         }
 
-        private static int GetFirstIncorrect(List<Tuple<Region, string, string>> toolBeforeAfterList, List<Tuple<Region, string, string>> baselineBeforeAfterList, List<int> randomList, List<CodeLocation> locations)
+        private static int GetFirstIncorrect(List<Tuple<Region, string, string>> toolBeforeAfterList, List<Tuple<Region, string, string>> baselineBeforeAfterList, List<int> randomList, List<CodeLocation> locations, List<Region> notTransformed)
         {
             //computing list of locations that do not follow the baseline.
             var notFoundList = baselineBeforeAfterList.Where(o => !toolBeforeAfterList.Contains(o)).ToList();
+            var notTranformedCodeLocations = notTransformed.Select(o => Tuple.Create(o, o.Path, o.Text)).ToList();
+            notFoundList.AddRange(notTranformedCodeLocations);
             if (!notFoundList.Any()) return -1;
             //Computing example locations that do not follow the baseline.
             var incorrectLocationsList = locations.Where(o => notFoundList.Any(e => o.Region.IntersectWith(e.Item1))).ToList();
@@ -656,7 +659,6 @@ namespace RefazerUnitTests
             var foundList = new List<Region>();
             dictionary.Values.ForEach(o => foundList.AddRange(o));
             foundList = foundList.Distinct().ToList();
-            var duplicates = foundList.GroupBy(s => s).SelectMany(grp => grp.Skip(1)).ToList();
             var regionsFound = regions.Where(o => foundList.Contains(o.Item1)).ToList();
             return regionsFound;
         }
