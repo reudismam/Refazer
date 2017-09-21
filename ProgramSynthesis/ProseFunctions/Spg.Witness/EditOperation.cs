@@ -21,14 +21,14 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">Specification</param>
-        public static ExampleSpec T1Learner<T>(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec T1Learner<T>(GrammarRule rule, ExampleSpec spec)
         {
             foreach (State input in spec.ProvidedInputs)
             {
                 var edit = (Edit<SyntaxNodeOrToken>)spec.Examples[input];
                 var editOperation = edit.EditOperation;
                 if (!(editOperation is T)) return null;
-                return new T1TargetLearner().NodeLearner(rule, parameter, spec);
+                return new T1TargetLearner().NodeLearner(rule, spec);
             }
             return null;
         }
@@ -39,7 +39,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
-        public static ExampleSpec UpdateTo(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec UpdateTo(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
@@ -60,7 +60,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
-        public static ExampleSpec LearnK<T>(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec LearnK<T>(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
@@ -79,7 +79,7 @@ namespace ProseFunctions.Spg.Witness
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
-        public static ExampleSpec Insertast(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec Insertast(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
@@ -93,7 +93,7 @@ namespace ProseFunctions.Spg.Witness
             return new ExampleSpec(kExamples);
         }
 
-        public static ExampleSpec InsertBeforeParentLearner(GrammarRule rule, int parameter, ExampleSpec spec)
+        public static ExampleSpec InsertBeforeParentLearner(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
@@ -121,7 +121,7 @@ namespace ProseFunctions.Spg.Witness
 
         public static TreeNode<SyntaxNodeOrToken> GetNode(TreeNode<SyntaxNodeOrToken> searchedNode)
         {
-            var currentTree = WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
+            TreeNode<SyntaxNodeOrToken> currentTree = null;// WitnessFunctions.GetCurrentTree(searchedNode.SyntaxTree);
             var targetNode = TreeUpdate.FindNode(currentTree, searchedNode.Value);
             if (targetNode == null) return null;
             var targetNodeHeight = targetNode;

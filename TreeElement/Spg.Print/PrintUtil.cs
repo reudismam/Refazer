@@ -5,8 +5,9 @@ using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis.Differencing;
 //using TreeEdit.Spg.Script;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using TreeElement.Spg.Node;
+using TreeElement;
 
 namespace TreeEdit.Spg.Print
 {
@@ -215,21 +216,17 @@ namespace TreeEdit.Spg.Print
         {
             _currentIndex = 0;
             _dic = new Dictionary<Tuple<TreeNode<T>, TreeNode<T>>, int>();
-            string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string startupPath = FileUtil.GetBasePath();
             path = startupPath + path;
             _prettyPrint = new StreamWriter(path);
             PrettyPrintKey(t1, "", true, M);
             _prettyPrint.Close();
-
-            string t1result = File.ReadAllText(path);
-
+            string t1Result = File.ReadAllText(path);
             _prettyPrint = new StreamWriter(path);
             PrettyPrintValue(t2, "", true, M);
             _prettyPrint.Close();
-
-            string t2result = File.ReadAllText(path);
-
-            return null;
+            string t2Result = File.ReadAllText(path);
+            return Tuple.Create(t1Result, t2Result);
         }
     }
 }

@@ -5,8 +5,10 @@ using ProseFunctions.Spg.Bean;
 
 namespace ProseFunctions.Substrings
 {
-    public static class RankingScore
+    public class RankingScore: Feature<double>
     {
+        public RankingScore(Grammar grammar) : base(grammar, "Score") { }
+
         public const double VariableScore = 0;
 
         [FeatureCalculator("EditMap")]
@@ -55,7 +57,7 @@ namespace ProseFunctions.Substrings
         public static double Score_Script1(double inScore, double edit) => inScore + edit;
 
         [FeatureCalculator("Insert")]
-        public static double Score_Insert(double inScore, double astScore, double kScore) => inScore + astScore + kScore;
+        public static double Score_Insert(double inScore, double astScore) => inScore + astScore;
 
         [FeatureCalculator("InsertBefore")]
         public static double Score_InsertBefore(double inScore, double astScore) => inScore + astScore;
@@ -96,19 +98,22 @@ namespace ProseFunctions.Substrings
         [FeatureCalculator("Reference")]
         public static double Score_Reference(double inScore, double patternScore, double kScore) => patternScore;
 
-        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+        [FeatureCalculator("k", Method = CalculationMethod.FromLiteral)]
         public static double KScore(K k) => 1.1;
 
-        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+        [FeatureCalculator("id", Method = CalculationMethod.FromLiteral)]
         public static double KDScore(string kd) => 1.1;
 
-        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+        [FeatureCalculator("rule", Method = CalculationMethod.FromLiteral)]
+        public static double RuleScore(string kd) => 1.1;
+
+        [FeatureCalculator("c", Method = CalculationMethod.FromLiteral)]
         public static double CScore(int c) => 1.1;
 
-        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+        [FeatureCalculator("kind", Method = CalculationMethod.FromLiteral)]
         public static double KindScore(SyntaxKind kd) => 1.1;
 
-        [FeatureCalculator(Method = CalculationMethod.FromLiteral)]
+        [FeatureCalculator("tree", Method = CalculationMethod.FromLiteral)]
         public static double NodeScore(SyntaxNodeOrToken kd) => 1.1;
     }
 }

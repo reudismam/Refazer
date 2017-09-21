@@ -13,7 +13,7 @@ namespace ProseFunctions.Spg.Witness
 {
     public class Literal
     {
-        public static DisjunctiveExamplesSpec LiteralTreeDisjunctive(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec LiteralTreeDisjunctive(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             var @intersect = spec.DisjunctiveExamples.First().Value.Cast<Tuple<TreeNode<SyntaxNodeOrToken>, int>>();
@@ -32,7 +32,7 @@ namespace ProseFunctions.Spg.Witness
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 
-        public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec LiteralTree(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             var matches = new List<TreeNode<SyntaxNodeOrToken>>();

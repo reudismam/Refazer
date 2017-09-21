@@ -1,4 +1,4 @@
-﻿namespace ProseFunctions.Substrings
+﻿namespace RefazerFunctions.Substrings
 {
     public class TLabel
     {

@@ -1,4 +1,4 @@
-﻿using ProseFunctions.Substrings;
+﻿using RefazerFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.Script

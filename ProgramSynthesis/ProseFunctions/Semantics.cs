@@ -110,6 +110,11 @@ namespace ProseFunctions.Substrings
             return result;
         }
 
+        public static string Insert(string target, string newNode)
+        {
+            return null;
+        }
+
         /// <summary>
         /// Insert the newNode node as in the k position of the node in the matching result 
         /// </summary>
@@ -205,6 +210,11 @@ namespace ProseFunctions.Substrings
             return resultList;
         }
 
+        public static Node Transformation(Node node, string patch)
+        {
+            return null;
+        }
+
         /// <summary>
         /// Return a new node
         /// </summary>
@@ -258,6 +268,11 @@ namespace ProseFunctions.Substrings
             itreeNode.Parent = parent;
             var node = new Node(itreeNode);
             return node;
+        }
+
+        public static string ConstNode(string cst)
+        {
+            return null;
         }
 
         public static IEnumerable<Pattern> CList(Pattern child1, IEnumerable<Pattern> cList)

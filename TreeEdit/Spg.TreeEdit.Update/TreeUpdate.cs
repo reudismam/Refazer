@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Match;
 using TreeEdit.Spg.Script;
-using ProseFunctions.Substrings;
+using RefazerFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.TreeEdit.Update
@@ -171,6 +171,11 @@ namespace TreeEdit.Spg.TreeEdit.Update
             }
         }
 
+        /// <summary>
+        /// Finds the node that is within an AST
+        /// </summary>
+        /// <param name="tree">AST</param>
+        /// <param name="node">Node to be matched</param>
         public static TreeNode<SyntaxNodeOrToken> FindNode(TreeNode<SyntaxNodeOrToken> tree, SyntaxNodeOrToken node)
         {
             var nodes = from item in tree.DescendantNodesAndSelf()

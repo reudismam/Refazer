@@ -14,7 +14,7 @@ namespace ProseFunctions.List
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
-        public static DisjunctiveExamplesSpec List0(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec List0(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -39,7 +39,7 @@ namespace ProseFunctions.List
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Example specification</param>
-        public static DisjunctiveExamplesSpec List1(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec List1(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)
@@ -68,7 +68,7 @@ namespace ProseFunctions.List
         /// <param name="parameter">Parameter</param>
         /// <param name="spec">Specification</param>
         /// <returns></returns>
-        public static DisjunctiveExamplesSpec Single(GrammarRule rule, int parameter, DisjunctiveExamplesSpec spec)
+        public static DisjunctiveExamplesSpec Single(GrammarRule rule, DisjunctiveExamplesSpec spec)
         {
             var treeExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (State input in spec.ProvidedInputs)

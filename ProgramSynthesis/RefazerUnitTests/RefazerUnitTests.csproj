@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9A1A1CFA-585B-45B3-8CC6-258AFFA3F1CC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RefazerUnitTests</RootNamespace>
+    <AssemblyName>RefazerUnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr4.Runtime, Version=4.5.0.0, Culture=neutral, PublicKeyToken=09abb75b9ed49849, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Antlr4.Runtime.4.5.3\lib\net45\Antlr4.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.Common.1.3.1\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.1.3.1\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.1.3.1\lib\net45\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.1\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces.Desktop, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.1\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Compiler, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Compound.Extraction.Field, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Compound.Extraction.Field.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Compound.Split, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Compound.Split.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Conditionals, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Conditionals.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Conditionals.Language, Version=0.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Conditionals.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Conditionals.Learning, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Conditionals.Learning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Conditionals.Semantics, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Conditionals.Semantics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.CoreFxLab, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.CoreFxLab.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Json, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Json.Language, Version=0.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Json.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Json.Learning, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Json.Learning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Json.Semantics, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Json.Semantics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Json.Translation.Python, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Json.Translation.Python.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Text, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Text.Language, Version=0.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Text.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Text.Learning, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Text.Learning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Extraction.Text.Semantics, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Extraction.Text.Semantics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Learning, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Learning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Matching.Text, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Matching.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Matching.Text.Language, Version=0.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Matching.Text.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Matching.Text.Learning, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Matching.Text.Learning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Matching.Text.Semantics, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Matching.Text.Semantics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Matching.Text.Translation.Python, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Matching.Text.Translation.Python.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Paraphrasing, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Paraphrasing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.File, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.File.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.File.Language, Version=0.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.File.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.File.Learning, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.File.Learning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.File.Semantics, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.File.Semantics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.Text, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.Text.Language, Version=0.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.Text.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.Text.Learning, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.Text.Learning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.Text.Semantics, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.Text.Semantics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Split.Text.Translation.Python, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Split.Text.Translation.Python.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Transformation.Json, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Transformation.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Transformation.Json.Language, Version=0.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Transformation.Json.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Transformation.Json.Learning, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Transformation.Json.Learning.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Transformation.Json.Semantics, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Transformation.Json.Semantics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Transformation.Text, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Transformation.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Transformation.Text.Language, Version=0.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Transformation.Text.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Transformation.Text.Semantics, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Transformation.Text.Semantics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Transformation.Text.Translation.Python, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Transformation.Text.Translation.Python.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Translation, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Translation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Translation.Python, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Translation.Python.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Translation.R, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Translation.R.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Utils, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Wrangling, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Wrangling.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Wrangling.Json, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Wrangling.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ProgramSynthesis.Wrangling.Translation.Python, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ProgramSynthesis.1.1.0\lib\net45\Microsoft.ProgramSynthesis.Wrangling.Translation.Python.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.AppContext.4.1.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Composition.AttributedModel, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Composition.Convention, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Composition.Hosting, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Composition.Runtime, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Composition.TypedParts, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Diagnostics.FileVersionInfo.4.0.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Diagnostics.StackTrace.4.0.1\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Interactive.3.0.0\lib\net45\System.Interactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection.Metadata, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reflection.Metadata.1.3.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Algorithms.4.2.0\lib\net46\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Encoding.4.0.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Primitives.4.0.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net46\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Text.Encoding.CodePages.4.0.1\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Thread, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Thread.4.0.0\lib\net46\System.Threading.Thread.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.XmlDocument, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Xml.XmlDocument.4.0.1\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Xml.XPath.4.0.1\lib\net46\System.Xml.XPath.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Xml.XPath.XDocument.4.0.1\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="Taramon.Exceller">
+      <HintPath>..\..\..\Refazer\libs\Taramon.Exceller.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EvaluationTest.cs" />
+    <Compile Include="JsonUtil.cs" />
+    <Compile Include="RegionManager.cs" />
+    <Compile Include="TestHelper.cs" />
+    <Compile Include="Example.cs" />
+    <Compile Include="TestSuite.cs" />
+    <Compile Include="TestUtil.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\RefazerFunctions\RefazerFunctions.csproj">
+      <Project>{07c1a3bf-5392-4686-923e-ad52280efecd}</Project>
+      <Name>RefazerFunctions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RefazerObject\RefazerObject.csproj">
+      <Project>{e7839ddd-aba8-4968-84af-2d9324dd61b0}</Project>
+      <Name>RefazerObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TreeEdit\TreeEdit.csproj">
+      <Project>{4BF08076-5BA3-45B8-8DA9-BED3C4BCA9F7}</Project>
+      <Name>TreeEdit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TreeElement\TreeElement.csproj">
+      <Project>{fe305989-4148-4861-a351-d9de83f5428b}</Project>
+      <Name>TreeElement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WorkSpaces\WorkSpaces.csproj">
+      <Project>{64f1217c-f112-40d6-9ba9-d8d7856cf9b0}</Project>
+      <Name>WorkSpaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefazerManager\RefazerManager.csproj">
+      <Project>{d9640d0e-12d7-45fe-b404-5d41bba5f167}</Project>
+      <Name>RefazerManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.props'))" />
+    <Error Condition="!Exists('..\..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\..\packages\MSTest.TestAdapter.1.1.11\build\net45\MSTest.TestAdapter.targets')" />
+</Project>

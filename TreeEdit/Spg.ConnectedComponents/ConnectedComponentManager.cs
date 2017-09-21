@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LCA.Spg.Manager;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using TreeEdit.Spg.Script;
-using ProseFunctions.Substrings;
-using TreeEdit.Spg.TreeEdit.Update;
+using RefazerFunctions.Substrings;
 using TreeElement.Spg.Node;
 
 namespace TreeEdit.Spg.ConnectedComponents
 {
     /// <summary>
-    /// Compute connected components.
+    /// Computes connected components.
     /// </summary>
     public class ConnectedComponentManager<T>
     {
@@ -20,8 +18,6 @@ namespace TreeEdit.Spg.ConnectedComponents
         /// Visited edit operations. Required to compute connected components (DFS implementation).
         /// </summary>
         private static Dictionary<Tuple<T, T, int>, int> _visited;
-
-        private static TreeNode<SyntaxNodeOrToken> _inputTree;
 
         /// <summary>
         /// Edit operations graph
@@ -34,7 +30,7 @@ namespace TreeEdit.Spg.ConnectedComponents
         private static ConnectionComparer<T> ConnectionComparer { get; set; }
 
         /// <summary>
-        /// Compute connected components.
+        /// Computes connected components.
         /// </summary>
         /// <param name="primaryEditions"></param>
         /// <param name="editOperations">edit script</param>
@@ -136,7 +132,6 @@ namespace TreeEdit.Spg.ConnectedComponents
         public static List<List<EditOperation<T>>> ConnectedComponents(List<EditOperation<T>> primaryEditions, List<EditOperation<T>> editOperations, TreeNode<SyntaxNodeOrToken> inpTree)
         {
             ConnectionComparer = new FullConnected(editOperations);
-            _inputTree = inpTree;
             BuildDigraph(editOperations);
             var ccs = ComputeConnectedComponents(primaryEditions, editOperations);
             return ccs;
@@ -223,12 +218,6 @@ namespace TreeEdit.Spg.ConnectedComponents
             var newnode = ConverterHelper.ConvertCSharpToTreeNode(newT2);
             TreeNode<T> newT1 = (TreeNode<T>)(object)newnode;
             return newT1;
-        }
-
-        private static SyntaxNodeOrToken GetSyntaxNode(T value)
-        {
-            SyntaxNodeOrToken newT2 = (SyntaxNodeOrToken)(object)value;
-            return newT2;
         }
 
         /// <summary>

@@ -3,10 +3,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using TreeElement.Spg.Node;
+using RefazerFunctions.Substrings;
 using TreeElement.Token;
 
-namespace ProseFunctions.Substrings
+namespace TreeElement.Spg.Node
 {
     public class ConverterHelper
     {
@@ -20,7 +20,7 @@ namespace ProseFunctions.Substrings
         {
             if (!Valid(st)) return null;
 
-            var list = GetChildren(st); //st.AsNode().ChildNodes();
+            var list = GetChildren(st); 
             if (!list.Any())
             {
                 var treeNode = new TreeNode<SyntaxNodeOrToken>(st, new TLabel(st.Kind()));
@@ -41,6 +41,11 @@ namespace ProseFunctions.Substrings
             return tree;
         }
 
+
+        /// <summary>
+        /// Verify if a node is valid.
+        /// </summary>
+        /// <param name="st">Node</param>
         public static bool Valid(SyntaxNodeOrToken st)
         {
             return st.IsNode || IsAcessModifier(st) || IsModifier(st) || st.IsKind(SyntaxKind.IdentifierToken);
@@ -113,22 +118,22 @@ namespace ProseFunctions.Substrings
             return false;
         }
 
-        public static TreeNode<Token> ConvertITreeNodeToToken(TreeNode<SyntaxNodeOrToken> st)
+        public static TreeNode<Token.Token> ConvertITreeNodeToToken(TreeNode<SyntaxNodeOrToken> st)
         {
-            var token = new Token(new Label(st.Value.Kind().ToString()), st);
+            var token = new Token.Token(new Label(st.Value.Kind().ToString()), st);
             if (!st.Children.Any())
             {
                 var dtoken = new DynToken(new Label(st.Value.Kind().ToString()), st);
-                var dtreeNode = new TreeNode<Token>(dtoken, new TLabel(dtoken.Label));
+                var dtreeNode = new TreeNode<Token.Token>(dtoken, new TLabel(dtoken.Label));
                 return dtreeNode;
             }
-            var children = new List<TreeNode<Token>>();
+            var children = new List<TreeNode<Token.Token>>();
             foreach (var sot in st.Children)
             {
                 var node = ConvertITreeNodeToToken(sot);
                 children.Add(node);
             }
-            var tree = new TreeNode<Token>(token, new TLabel(token.Label), children);
+            var tree = new TreeNode<Token.Token>(token, new TLabel(token.Label), children);
             return tree;
         }
 
@@ -181,7 +186,7 @@ namespace ProseFunctions.Substrings
         /// <param name="st">Syntax tree root</param>
         /// <returns>TreeNode</returns>
         public static string ConvertTreeNodeToString<T>(TreeNode<T> st)
-        {           
+        {
             var list = st.Children;
             if (!list.Any())
             {
@@ -200,7 +205,7 @@ namespace ProseFunctions.Substrings
 
                 if (st.IsLabel(new TLabel(SyntaxKind.Block)))
                 {
-                    content = ""+ st.Label;
+                    content = "" + st.Label;
                 }
 
                 if (st.IsLabel(new TLabel(SyntaxKind.ArgumentList)))
@@ -210,10 +215,10 @@ namespace ProseFunctions.Substrings
                     return argList;
                 }
 
-                var treeNode = "{"+st.Label+"("+content+")}";             
+                var treeNode = "{" + st.Label + "(" + content + ")}";
                 return treeNode;
             }
-            var tree = "{"+ st.Label;
+            var tree = "{" + st.Label;
             foreach (var sot in st.Children)
             {
                 var node = ConvertTreeNodeToString(sot);
@@ -221,6 +226,48 @@ namespace ProseFunctions.Substrings
             }
 
             tree += "}";
+            return tree;
+        }
+
+        /// <summary>
+        /// Convert a syntax tree to a TreeNode
+        /// </summary>
+        /// <param name="st">Syntax tree root</param>
+        /// <returns>TreeNode</returns>
+        public static string ConvertToAUEq<T>(TreeNode<T> st)
+        {
+            var list = st.Children;
+            if (!list.Any())
+            {
+                var value = st.Value;
+                var content = value.ToString().Trim();
+                if (st.IsLabel(new TLabel(SyntaxKind.StringLiteralExpression)))
+                {
+                    content = Regex.Replace(content, "[^0-9a-zA-Z\"]+", " ");
+                }
+
+                if (st.IsLabel(new TLabel(SyntaxKind.Block)))
+                {
+                    content = "" + st.Label;
+                }
+
+                if (st.IsLabel(new TLabel(SyntaxKind.ArgumentList)))
+                {
+                    var argList = "(" + st.Label + ")";
+                    return argList;
+                }
+
+                var treeNode = "(" + st.Label + "_" + content + ")";
+                return treeNode;
+            }
+            var tree = "(" + st.Label;
+            foreach (var sot in st.Children)
+            {
+                var node = ConvertToAUEq(sot);
+                tree += node;
+            }
+
+            tree += ")";
             return tree;
         }
 

@@ -20,7 +20,7 @@ namespace ProseFunctions.Spg.Witness.Target
         /// <param name="rule">Grammar rule</param>
         /// <param name="parameter">parameter</param>
         /// <param name="spec">specification</param>
-        public ExampleSpec NodeLearner(GrammarRule rule, int parameter, ExampleSpec spec)
+        public ExampleSpec NodeLearner(GrammarRule rule, ExampleSpec spec)
         {
             var kExamples = new Dictionary<State, object>();
             foreach (State input in spec.ProvidedInputs)
