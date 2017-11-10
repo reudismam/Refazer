@@ -233,7 +233,7 @@ namespace RefazerFunctions
             TreeNode<SyntaxNodeOrToken> parent = new TreeNode<SyntaxNodeOrToken>(null, new TLabel(kind));
             SyntaxNodeOrToken nodevalue = null;
 
-            if (childrenList.Any(o => o.Value.IsLabel(new TLabel(SyntaxKind.None))))
+            if (childrenList.Any(o => o.Value == null || o.Value.IsLabel(new TLabel(SyntaxKind.None))))
             {
                 var treeNode = new TreeNode<SyntaxNodeOrToken>(default(SyntaxNodeOrToken), new TLabel(SyntaxKind.None));
                 return new Node(treeNode);

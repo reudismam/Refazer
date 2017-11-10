@@ -1,9 +1,7 @@
-﻿/* Abordagem Refazer
-using Microsoft.CodeAnalysis;
+﻿/*using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
-using RefazerFunctions.Spg.Bean;
 using System.Text.RegularExpressions;
 
 namespace RefazerFunctions
@@ -164,9 +162,7 @@ namespace RefazerFunctions
             return vecFeat;
         }
     }
-}
-
-*/
+}*/
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -308,5 +304,5 @@ namespace RefazerFunctions
         [FeatureCalculator("tree", Method = CalculationMethod.FromLiteral)]
         public static double NodeScore(SyntaxNodeOrToken kd) => 0;
     }
-
+    
 }

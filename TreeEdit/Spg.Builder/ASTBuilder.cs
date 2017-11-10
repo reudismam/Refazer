@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -22,9 +23,10 @@ namespace TreeEdit.Spg.Builder
         {
             SyntaxNodeOrToken newNode = ReconstructTree(tree);
             if (newNode.IsKind(SyntaxKind.None)) return tree.Value;
-            newNode = newNode.AsNode().NormalizeWhitespace();
-            //newNode = newNode.WithLeadingTrivia(target.GetLeadingTrivia());
-            //newNode = newNode.WithTrailingTrivia(target.GetTrailingTrivia());
+            if (newNode.IsNode)
+            {
+                newNode = newNode.AsNode().NormalizeWhitespace();
+            }
             return newNode;
         }
 
@@ -55,6 +57,47 @@ namespace TreeEdit.Spg.Builder
             }
             var node = GetSyntaxElement((SyntaxKind)tree.Label.Label, children, tree.Value, identifier);
             return node;
+        }
+
+        public static bool IsCondition(SyntaxKind syntaxKind)
+        {
+            switch (syntaxKind)
+            {
+                case SyntaxKind.GreaterThanExpression:
+                case SyntaxKind.LessThanExpression:
+                case SyntaxKind.LessThanOrEqualExpression:
+                case SyntaxKind.GreaterThanOrEqualExpression:
+                case SyntaxKind.LogicalOrExpression:
+                case SyntaxKind.ExclusiveOrExpression:
+                case SyntaxKind.LogicalAndExpression:
+                {
+                    return true;
+                }
+            default:
+                {
+                    return false;
+                }
+            }
+        }
+
+        public static bool IsIncrement(SyntaxKind syntaxKind)
+        {
+            switch (syntaxKind)
+            {
+                case SyntaxKind.PreIncrementExpression:
+                case SyntaxKind.PreDecrementExpression:
+                case SyntaxKind.UnaryMinusExpression:
+                case SyntaxKind.UnaryPlusExpression:
+                case SyntaxKind.PostIncrementExpression:
+                case SyntaxKind.PostDecrementExpression:
+                {
+                    return true;
+                }
+            default:
+                {
+                    return false;
+                }
+            }
         }
 
         /// <summary>
@@ -223,6 +266,22 @@ namespace TreeEdit.Spg.Builder
                     return method;
                 }
 
+            case SyntaxKind.AnonymousMethodExpression:
+                {
+                    var method = SyntaxFactory.AnonymousMethodExpression();
+                    if (children.Any(o => o.IsKind(SyntaxKind.ParameterList)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.ParameterList));
+                        method = method.WithParameterList((ParameterListSyntax)children[index]);
+                    }
+                    if (children.Any(o => o.IsKind(SyntaxKind.Block)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.Block));
+                        method = method.WithBody((BlockSyntax)children[index]);
+                    }
+                    return method;
+                }
+
             case SyntaxKind.PropertyDeclaration:
                 {
                     var type = (TypeSyntax)children[0];
@@ -365,7 +424,11 @@ namespace TreeEdit.Spg.Builder
             case SyntaxKind.SubtractExpression:
             case SyntaxKind.GreaterThanOrEqualExpression:
             case SyntaxKind.LogicalOrExpression:
+            case SyntaxKind.ExclusiveOrExpression:
             case SyntaxKind.LogicalAndExpression:
+            case SyntaxKind.LeftShiftExpression:
+            case SyntaxKind.RightShiftExpression:
+            case SyntaxKind.ModuloExpression:
                 {
                     var leftExpression = (ExpressionSyntax)children[0];
                     var rightExpresssion = (ExpressionSyntax)children[1];
@@ -378,6 +441,11 @@ namespace TreeEdit.Spg.Builder
             case SyntaxKind.MultiplyAssignmentExpression:
             case SyntaxKind.AddAssignmentExpression:
             case SyntaxKind.SimpleAssignmentExpression:
+            case SyntaxKind.ModuloAssignmentExpression:
+            case SyntaxKind.ExclusiveOrAssignmentExpression:
+            case SyntaxKind.OrAssignmentExpression:
+            case SyntaxKind.LeftShiftAssignmentExpression:
+            case SyntaxKind.RightShiftAssignmentExpression:
                 {
                     var leftExpression = (ExpressionSyntax)children[0];
                     var rightExpression = (ExpressionSyntax)children[1];
@@ -809,9 +877,33 @@ namespace TreeEdit.Spg.Builder
                 }
             case SyntaxKind.QueryBody:
                 {
-                    var selectOrGroupClauseSyntax = (SelectOrGroupClauseSyntax)children.First();
-                    var queryBody = SyntaxFactory.QueryBody(selectOrGroupClauseSyntax);
-                    return queryBody;
+                    SelectOrGroupClauseSyntax selectOrGroup = null;
+                    QueryContinuationSyntax qCont = null;
+                    if (children.Any(o => o.IsKind(SyntaxKind.SelectClause) || o.IsKind(SyntaxKind.GroupClause)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.SelectClause) || o.IsKind(SyntaxKind.GroupClause));
+                        selectOrGroup = (SelectOrGroupClauseSyntax) children[index];
+                    }
+
+                    if (children.Any(o => o.IsKind(SyntaxKind.QueryContinuation)))
+                    {
+                        var index = children.FindIndex(o => o.IsKind(SyntaxKind.QueryContinuation));
+                        qCont = (QueryContinuationSyntax)children[index];
+                    }
+                    var queryClauses = children.Where(o => !o.Equals(selectOrGroup) && !o.IsKind(SyntaxKind.QueryContinuation));
+                    var queries = queryClauses.Select(v => (QueryClauseSyntax)v).ToList();
+                    var queryClausesList = new SyntaxList<QueryClauseSyntax>();
+                    queryClausesList.AddRange(queries);
+                    if (!queries.Any())
+                    {
+                        var queryBody = SyntaxFactory.QueryBody(selectOrGroup);
+                        return queryBody;
+                    }
+                    else
+                    {
+                        var queryBody = SyntaxFactory.QueryBody(queryClausesList, selectOrGroup, qCont);
+                        return queryBody;
+                    }
                 }
             case SyntaxKind.IfStatement:
                 {
@@ -848,6 +940,7 @@ namespace TreeEdit.Spg.Builder
             case SyntaxKind.LogicalNotExpression:
             case SyntaxKind.UnaryMinusExpression:
             case SyntaxKind.UnaryPlusExpression:
+            case SyntaxKind.BitwiseNotExpression:
                 {
                     ExpressionSyntax expression = (ExpressionSyntax)children[0];
                     var unary = SyntaxFactory.PrefixUnaryExpression(kind, expression);
@@ -934,6 +1027,54 @@ namespace TreeEdit.Spg.Builder
                     var memberBinding = SyntaxFactory.MemberBindingExpression(syntaxName);
                     return memberBinding;
                 }
+            case SyntaxKind.ForStatement:
+                {
+                    List<SyntaxNodeOrToken> all = new List<SyntaxNodeOrToken>();
+                    VariableDeclarationSyntax declaration = null;
+                    StatementSyntax statement = null;
+                    ExpressionSyntax condition = null;
+                    if (children.Any(o => o.IsKind(SyntaxKind.VariableDeclaration)))
+                    {
+                        int index = children.FindIndex(o => o.IsKind(SyntaxKind.VariableDeclaration));
+                        declaration = (VariableDeclarationSyntax) children[index];
+                        all.Add(declaration);
+                    }
+                    if (children.Any(o => o.AsNode() != null && o.AsNode() as StatementSyntax != null))
+                    {
+                        int index = children.FindIndex(o => o.AsNode() != null && o.AsNode() as StatementSyntax != null);
+                        statement = (StatementSyntax)children[index];
+                        all.Add(children[index]);
+                    }
+                    if (children.Any(o => IsCondition(o.Kind())))
+                    {
+                        int index = children.FindIndex(o => IsCondition(o.Kind()));
+                        condition = (ExpressionSyntax)children[index];
+                        all.Add(children[index]);
+                    }
+                    var incList = children.Where(o => IsIncrement(o.Kind())).ToList();
+                    incList.ForEach(o => all.Add(o));
+                    var increments = incList.Select(o => (ExpressionSyntax) o);
+                    var spalInc = SyntaxFactory.SeparatedList(increments);
+                    var iniList = new List<SyntaxNodeOrToken>();
+                    foreach (SyntaxNodeOrToken n in children)
+                    {
+                        if (!all.Contains(n))
+                        {
+                            iniList.Add(n);
+                        }
+                    }
+                    var initializers = iniList.Select(o => (ExpressionSyntax) o);
+                    var spalIni = SyntaxFactory.SeparatedList<ExpressionSyntax>(initializers);
+                    ForStatementSyntax forStm = SyntaxFactory.ForStatement(declaration, spalIni, condition, spalInc, statement);
+                    return forStm;
+                }
+            case SyntaxKind.WhileStatement:
+                {
+                    ExpressionSyntax condition = (ExpressionSyntax) children.First();
+                    StatementSyntax statement = (StatementSyntax) children.ElementAt(1);
+                    WhileStatementSyntax whileStam = SyntaxFactory.WhileStatement(condition, statement);
+                    return whileStam;
+                }
                 /*case SyntaxKind.None:
                     break;
                 case SyntaxKind.List:
@@ -982,8 +1123,7 @@ namespace TreeEdit.Spg.Builder
                     break;
                 case SyntaxKind.SingleQuoteToken:
                     break;
-                case SyntaxKind.LessThanToken:
-                    break;
+
                 case SyntaxKind.CommaToken:
                     break;
                 case SyntaxKind.GreaterThanToken:
@@ -1458,8 +1598,6 @@ namespace TreeEdit.Spg.Builder
                     break;
                 case SyntaxKind.OmittedTypeArgument:
                     break;
-                case SyntaxKind.AnonymousMethodExpression:
-                    break;
                 case SyntaxKind.StackAllocArrayCreationExpression:
                     break;
                 case SyntaxKind.OmittedArraySizeExpression:
@@ -1468,13 +1606,9 @@ namespace TreeEdit.Spg.Builder
                     break;
                 case SyntaxKind.ImplicitElementAccess:
                     break;
-                case SyntaxKind.ModuloExpression:
-                    break;
                 case SyntaxKind.LeftShiftExpression:
                     break;
                 case SyntaxKind.RightShiftExpression:
-                    break;
-                case SyntaxKind.ExclusiveOrExpression:
                     break;
                 case SyntaxKind.PointerMemberAccessExpression:
                     break;
@@ -1482,20 +1616,6 @@ namespace TreeEdit.Spg.Builder
                     break;*/
                 /*
                 case SyntaxKind.ElementBindingExpression:
-                    break;
-                case SyntaxKind.ModuloAssignmentExpression:
-                    break;
-                case SyntaxKind.AndAssignmentExpression:
-                    break;
-                case SyntaxKind.ExclusiveOrAssignmentExpression:
-                    break;
-                case SyntaxKind.OrAssignmentExpression:
-                    break;
-                case SyntaxKind.LeftShiftAssignmentExpression:
-                    break;
-                case SyntaxKind.RightShiftAssignmentExpression:
-                    break;
-                case SyntaxKind.BitwiseNotExpression:
                     break;
                 case SyntaxKind.PointerIndirectionExpression:
                     break;
@@ -1565,11 +1685,7 @@ namespace TreeEdit.Spg.Builder
                     break;
                 case SyntaxKind.YieldBreakStatement:
                     break;
-                case SyntaxKind.WhileStatement:
-                    break;
                 case SyntaxKind.DoStatement:
-                    break;
-                case SyntaxKind.ForStatement:
                     break;
                 case SyntaxKind.FixedStatement:
                     break;
@@ -1677,6 +1793,20 @@ namespace TreeEdit.Spg.Builder
                     throw new ArgumentOutOfRangeException(nameof(kind), kind, null);*/
             }
             throw new Exception($"Unsupported kind support: {kind}");
+        }
+
+        public class EqualsComparer<T> : IEqualityComparer<T>
+        {
+            public bool Equals(T x, T y)
+            {
+                bool equals = Object.ReferenceEquals(x, y);
+                return equals;
+            }
+
+            public int GetHashCode(T obj)
+            {
+                return obj.GetHashCode();
+            }
         }
     }
 }
