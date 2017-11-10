@@ -33,7 +33,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void N20()
         {
-            var classes = new List<string> { "QueryableExtensions" };
+            var classes = new List<string> { "PackageRepositoryExtensions" };
             CompleteTestBase(classes);
         }
 
