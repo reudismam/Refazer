@@ -553,7 +553,7 @@ namespace RefazerUnitTests
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
             foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
             {
-                string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
+                string sourceCode = FileUtil.ReadFile(entry.Key);
                 Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
                 string sourceCodeAfter = tu.Item1;
 
@@ -745,5 +745,149 @@ namespace RefazerUnitTests
             t = Tuple.Create(codeTransformation.Location.Region, codeTransformation.Location.Region);
             return t;
         }
+        public List<ProgramNode> LearnPrograms(List<int> examples)
+        {
+            var metadataRegions = examples.Select(index => _regions[index]).ToList();
+            var locationRegions = examples.Select(index => _locations[index]).ToList();
+
+            DictionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
+            //Examples
+            var examplesInput = new List<SyntaxNodeOrToken>();
+            var examplesOutput = new List<SyntaxNodeOrToken>();
+
+            SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
+            //building example methods
+            var ioExamples = new Dictionary<State, IEnumerable<object>>();
+            foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
+            {
+                string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
+                Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
+                string sourceCodeAfter = tu.Item1;
+
+                inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
+                SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
+
+                var allMethodsInput = GetNodesByType(inpTree, _kinds);
+                var allMethodsOutput = GetNodesByType(outTree, _kinds);
+                var inputMethods = new List<int>();
+                foreach (var region in locationRegions.Where(o => o.SourceClass.ToUpperInvariant().Equals(entry.Key.ToUpperInvariant())))
+                {
+                    for (int index = 0; index < allMethodsInput.Count; index++)
+                    {
+                        var method = allMethodsInput[index];
+                        var tRegion = new Region
+                        {
+                            Start = method.SpanStart,
+                            Length = method.Span.Length
+                        };
+
+                        if (region.Region.IsInside(tRegion))
+                        {
+                            inputMethods.Add(index);
+                        }
+                    }
+                }
+
+                //Examples
+                var inpExs = inputMethods.Distinct().Select(index => allMethodsInput[index]).ToList();
+                var outExs = inputMethods.Distinct().Select(index => allMethodsOutput[index]).ToList();
+
+                examplesInput.AddRange(inpExs);
+                examplesOutput.AddRange(outExs);
+            }
+
+            examplesInput = RemoveDuplicates(examplesInput);
+            for (int index = 0; index < examplesInput.Count; index++)
+            {
+                var example = examplesInput.ElementAt(index);
+                var treeNode = ConverterHelper.ConvertCSharpToTreeNode((SyntaxNodeOrToken)example);
+                var inputState = State.Create(_grammar.InputSymbol, new Node(treeNode));
+                ioExamples.Add(inputState, new List<object> { examplesOutput.ElementAt(index) });
+            }
+
+            //Learn program
+            var spec = DisjunctiveExamplesSpec.From(ioExamples);
+            var programList = Utils.LearnASet(_grammar, spec, new RankingScore(_grammar), new WitnessFunctions(_grammar));
+            return programList;
+        }
+
+
+
+        public void Execute(List<int> examples, ProgramNode program)
+        {
+            Program = program;
+            var metadataRegions = examples.Select(index => _regions[index]).ToList();
+            DictionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
+
+            SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
+            //building example methods
+            foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
+            {
+                string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
+                inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
+            }
+
+            var methods = new List<SyntaxNodeOrToken>();
+            if (_solutionPath == null)
+            {
+                //Run program
+                methods = GetNodesByType(inpTree, _kinds);
+            }
+            else
+            {
+                string path = _expHome + _solutionPath;
+                var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
+                foreach (var v in files)
+                {
+                    var tree = CSharpSyntaxTree.ParseText(v.Item1, path: v.Item2).GetRoot();
+                    var vnodes = GetNodesByType(tree, _kinds);
+                    methods.AddRange(vnodes);
+                }
+            }
+
+            Transformed = new List<object>();
+            var dicTrans = new Dictionary<string, List<object>>();
+
+            long millBeforeExecution = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            foreach (var method in methods)
+            {
+                var newInputState = State.Create(_grammar.InputSymbol, new Node(ConverterHelper.ConvertCSharpToTreeNode(method)));
+                object[] output = Program.Invoke(newInputState).ToEnumerable().ToArray();
+                Transformed.AddRange(output);
+                Utils.WriteColored(ConsoleColor.DarkCyan, output.DumpCollection(openDelim: "", closeDelim: "", separator: "\n"));
+
+                if (output.Any())
+                {
+                    if (dicTrans.ContainsKey(method.SyntaxTree.FilePath.ToUpperInvariant()))
+                    {
+                        dicTrans[method.SyntaxTree.FilePath.ToUpperInvariant()].AddRange(output);
+                    }
+                    else
+                    {
+                        dicTrans[method.SyntaxTree.FilePath.ToUpperInvariant()] = output.ToList();
+                    }
+                }
+            }
+            long millAfterExecution = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            TotalTimeToExecute = millAfterExecution - millBeforeExecution;
+
+            string s = "";
+            foreach (var v in dicTrans)
+            {
+                s += $"{v.Key} \n====================\n";
+                v.Value.ForEach(o => s += $"{o}\n");
+            }
+
+            Console.WriteLine($"Count: \n {Transformed.Count}");
+            s += $"Count: \n {Transformed.Count}";
+            FileUtil.WriteToFile(_expHome + @"cprose\" + _commit + @"\result" + _execId + ".res", s);
+        }
+
+
+
     }
+
+
+
+
 }

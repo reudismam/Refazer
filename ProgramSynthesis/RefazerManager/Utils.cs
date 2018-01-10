@@ -80,19 +80,20 @@ namespace RefazerManager
                 LogListener = new LogListener(),
             });
 
-            var consistentPrograms = engine.LearnGrammar(spec);
+            var consistentPrograms = engine.LearnGrammarTopK(spec, scorer, 100);
+            var topK = consistentPrograms.ToList();
             //Max number of programs that we are interested.
-            const ulong a = 200;
-            var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
-            var b = (ulong)topK.Count;
-            topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
+            //const ulong a = 200;
+            //var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
+            //var b = (ulong)topK.Count;
+            //topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
             //Print generated programs
             var programStrings = "";
             topK.ForEach(p => programStrings += $"Score[{p.GetFeatureValue(scorer)}] " + p + "\n");
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
             string file = expHome + "programs.txt";
             File.WriteAllText(file, programStrings);
-            return topK;
+             return topK;
         }
 
         #region Auxiliary methods

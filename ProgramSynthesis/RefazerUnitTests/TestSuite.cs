@@ -420,6 +420,270 @@ namespace RefazerUnitTests
             Assert.IsTrue(isCorrect);
         }
 
+        [TestMethod]
+        public void NJ025()
+        {
+
+            var isCorrect = CompleteTestBase(@"NJ025\");
+            Assert.IsTrue(isCorrect);
+
+        }
+
+        [TestMethod]
+        public void NJ023()
+        {
+            var isCorrect = CompleteTestBase(@"NJ023\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void NJ059()
+        {
+            
+            var isCorrect = CompleteTestBase(@"NJ059\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void NJ224()
+        {
+           
+            var isCorrect = CompleteTestBase(@"NJ224\");
+            Assert.IsTrue(isCorrect);
+        }
+
+
+        [TestMethod]
+        public void NJ225()
+        {
+            
+            var isCorrect = CompleteTestBase(@"NJ225\");
+            Assert.IsTrue(isCorrect);
+        }
+
+
+        [TestMethod]
+        public void NJ234()
+        {
+            
+            var isCorrect = CompleteTestBase(@"NJ234\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void NJ236()
+        {
+            var isCorrect = CompleteTestBase(@"NJ236\");
+            Assert.IsTrue(isCorrect);
+        }
+
+
+        [TestMethod]
+        public void NJ241()
+        {
+           
+            var isCorrect = CompleteTestBase(@"NJ241\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void NJ242()
+        {
+            var isCorrect = CompleteTestBase(@"NJ242\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void NJ844()
+        {
+            var isCorrect = CompleteTestBase(@"NJ844\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void NJ1428()
+        {
+            var isCorrect = CompleteTestBase(@"NJ1428\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void NJ1479()
+        {
+            var isCorrect = CompleteTestBase(@"NJ1479\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void NJ1491()
+        {
+            var isCorrect = CompleteTestBase(@"NJ1491\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S002()
+        {
+            var isCorrect = CompleteTestBase(@"S002\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S007()
+        {
+            var isCorrect = CompleteTestBase(@"S007\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S043()
+        {
+            var isCorrect = CompleteTestBase(@"S043\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S058()
+        {
+            var isCorrect = CompleteTestBase(@"S058\");
+            Assert.IsTrue(isCorrect);
+        }
+
+
+        [TestMethod]
+        public void S044()
+        {
+            var isCorrect = CompleteTestBase(@"S044\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S224()
+        {
+            var isCorrect = CompleteTestBase(@"S224\");
+            Assert.IsTrue(isCorrect);
+        }
+        [TestMethod]
+        public void S236()
+        {
+            var isCorrect = CompleteTestBase(@"S236\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S431()
+        {
+            var isCorrect = CompleteTestBase( @"S431\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S564()
+        {
+            var isCorrect = CompleteTestBase(@"S564\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S571()
+        {
+            var isCorrect = CompleteTestBase(@"S571\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S583()
+        {
+            var isCorrect = CompleteTestBase(@"S583\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S592()
+        {
+            var isCorrect = CompleteTestBase(@"S592\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S761()
+        {
+            var isCorrect = CompleteTestBase(@"S761\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S863()
+        {
+            var isCorrect = CompleteTestBase(@"S863\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S897()
+        {
+            var isCorrect = CompleteTestBase(@"S897\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S1021()
+        {
+            var isCorrect = CompleteTestBase(@"S1021\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S1088()
+        {
+            var isCorrect = CompleteTestBase(@"S1088\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S1549()
+        {
+            var isCorrect = CompleteTestBase(@"S1549\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S1580()
+        {
+            var isCorrect = CompleteTestBase(@"S1580\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S1810()
+        {
+            var isCorrect = CompleteTestBase(@"S1810\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S2076()
+        {
+            var isCorrect = CompleteTestBase(@"S2076\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S3778()
+        {
+            var isCorrect = CompleteTestBase(@"S3778\");
+            Assert.IsTrue(isCorrect);
+        }
+
+        [TestMethod]
+        public void S3791()
+        {
+            var isCorrect = CompleteTestBase(@"S3791\");
+            Assert.IsTrue(isCorrect);
+        }
+
+
+
         /// <summary>
         /// Gets the domain specific grammar
         /// </summary>
@@ -578,7 +842,7 @@ namespace RefazerUnitTests
             var program = helper.Program;
             var dictionarySelection = helper.DictionarySelection;
 
-            /*Log(commit,
+           Log(commit,
                 totalTimeToLearn + totalTimeToExecute,
                 examples.Count,
                 regions.Count,
@@ -587,7 +851,7 @@ namespace RefazerUnitTests
                 program.ToString(),
                 totalTimeToLearn,
                 totalTimeToExecute,
-                mean);*/
+                mean);
             return true;
         }
 
@@ -1324,4 +1588,3 @@ namespace RefazerUnitTests
 }
 
 */
-
