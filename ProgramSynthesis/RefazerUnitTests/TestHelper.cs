@@ -478,15 +478,11 @@ namespace RefazerUnitTests
         /// <summary>
         /// Regions
         /// </summary>
-        private readonly List<Region> _transformedRegions;
-        /// <summary>
-        /// Transformations
-        /// </summary>
-        private readonly List<CodeLocation> _locations;
+        private readonly List<Tuple<Region, string, string>> _transformedRegions;
         /// <summary>
         /// Global transformations
         /// </summary>
-        private readonly Dictionary<string, List<CodeTransformation>> _globalTransformations;
+        private readonly Dictionary<string, List<Tuple<Region, string, string>>> _globalTransformations;
         /// <summary>
         /// Path to experiment
         /// </summary>
@@ -522,13 +518,12 @@ namespace RefazerUnitTests
         /// <summary>
         /// Dictionary selection
         /// </summary>
-        public Dictionary<string, List<Region>> DictionarySelection { get; set; }
+        public Dictionary<string, List<Tuple<Region, string, string>>> DictionarySelection { get; set; }
 
-        public TestHelper(Grammar grammar, List<Region> transformedRegions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, string execId)
+        public TestHelper(Grammar grammar, List<Tuple<Region, string, string>> transformedRegions, Dictionary<string, List<Tuple<Region, string, string>>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, string execId)
         {
             _grammar = grammar;
             _transformedRegions = transformedRegions;
-            _locations = locations;
             _globalTransformations = globalTransformations;
             _expHome = expHome;
             _solutionPath = solutionPath;
@@ -541,9 +536,8 @@ namespace RefazerUnitTests
         public void Execute(List<int> examples)
         {
             var metadataRegions = examples.Select(index => _transformedRegions[index]).ToList();
-            var locationRegions = examples.Select(index => _locations[index]).ToList();
 
-            DictionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
+            DictionarySelection = RegionManager.GetInstance().GroupTransformationsBySourcePath(metadataRegions);
             //Examples
             var examplesInput = new List<SyntaxNodeOrToken>();
             var examplesOutput = new List<SyntaxNodeOrToken>();
@@ -551,9 +545,9 @@ namespace RefazerUnitTests
             SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
             //building example methods
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (KeyValuePair<string, List<Region>> entry in DictionarySelection)
+            foreach (KeyValuePair<string, List<Tuple<Region, string, string>>> entry in DictionarySelection)
             {
-                string sourceCode = FileUtil.ReadFile(entry.Key);
+                string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
                 Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
                 string sourceCodeAfter = tu.Item1;
 
@@ -563,7 +557,7 @@ namespace RefazerUnitTests
                 var allMethodsInput = GetNodesByType(inpTree, _kinds);
                 var allMethodsOutput = GetNodesByType(outTree, _kinds);
                 var inputMethods = new List<int>();
-                foreach (var region in locationRegions.Where(o => o.SourceClass.ToUpperInvariant().Equals(entry.Key.ToUpperInvariant())))
+                foreach (var region in metadataRegions.Where(o => o.Item1.Path.ToUpperInvariant().Equals(entry.Key.ToUpperInvariant())))
                 {
                     for (int index = 0; index < allMethodsInput.Count; index++)
                     {
@@ -574,7 +568,7 @@ namespace RefazerUnitTests
                             Length = method.Span.Length
                         };
 
-                        if (region.Region.IsInside(tRegion))
+                        if (region.Item1.IsInside(tRegion))
                         {
                             inputMethods.Add(index);
                         }
@@ -695,12 +689,12 @@ namespace RefazerUnitTests
             return result;
         }
 
-        public static Tuple<string, List<Region>> Transform(string source, List<CodeTransformation> transformations, List<Region> regions)
+        public static Tuple<string, List<Region>> Transform(string source, List<Tuple<Region, string, string>> transformations, List<Tuple<Region, string, string>> regions)
         {
             List<Region> tRegions = new List<Region>();
             int nextStart = 0;
             string sourceCode = source;
-            foreach (CodeTransformation item in transformations)
+            foreach (Tuple<Region, string, string> item in transformations)
             {
                 Tuple<Region, Region> tregion = GetTRegionShift(regions, item);
                 Region region = tregion.Item1;
@@ -726,26 +720,28 @@ namespace RefazerUnitTests
             //return sourceCode;
         }
 
-        private static Tuple<Region, Region> GetTRegionShift(List<Region> regions, CodeTransformation codeTransformation)
+        private static Tuple<Region, Region> GetTRegionShift(List<Tuple<Region, string, string>> regions, Tuple<Region, string, string> codeTransformation)
         {
             Tuple<Region, Region> t;
-            foreach (Region tr in regions)
+            foreach (Tuple<Region, string, string> ba in regions)
             {
-                if (codeTransformation.Trans.Equals(tr))
+                Region tr = ba.Item1;
+                if (codeTransformation.Item1.Equals(tr))
                 {
                     Region region = new Region();
                     region.Start = tr.Start;
                     region.Length = tr.Length - 2;
                     region.Path = tr.Path;
-                    region.Text = tr.Text;
-                    t = Tuple.Create(codeTransformation.Location.Region, region);
+                    region.Text = ba.Item2;
+                    t = Tuple.Create(tr, region);
                     return t;
                 }
             }
-            t = Tuple.Create(codeTransformation.Location.Region, codeTransformation.Location.Region);
+            t = Tuple.Create(codeTransformation.Item1, codeTransformation.Item1);
             return t;
         }
-        public List<ProgramNode> LearnPrograms(List<int> examples)
+
+        /*public List<ProgramNode> LearnPrograms(List<int> examples)
         {
             var metadataRegions = examples.Select(index => _transformedRegions[index]).ToList();
             var locationRegions = examples.Select(index => _locations[index]).ToList();
@@ -810,8 +806,6 @@ namespace RefazerUnitTests
             var programList = Utils.LearnASet(_grammar, spec, new RankingScore(_grammar), new WitnessFunctions(_grammar));
             return programList;
         }
-
-
 
         public void Execute(List<int> examples, ProgramNode program)
         {
@@ -880,6 +874,6 @@ namespace RefazerUnitTests
             Console.WriteLine($"Count: \n {Transformed.Count}");
             s += $"Count: \n {Transformed.Count}";
             FileUtil.WriteToFile(_expHome + @"cprose\" + _commit + @"\result" + _execId + ".res", s);
-        }
+        } */
     }
 }

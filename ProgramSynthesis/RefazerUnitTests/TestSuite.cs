@@ -13,7 +13,6 @@ using RefazerManager;
 using RefazerObject.Constants;
 using RefazerObject.Location;
 using RefazerObject.Region;
-using RefazerObject.Transformation;
 using Spg.LocationRefactor.Location;
 using Taramon.Exceller;
 using TreeEdit.Spg.Log;
@@ -710,16 +709,14 @@ namespace RefazerUnitTests
             {
                 kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
             }
+            int seed = 86028157;
+            var execId = "ranking";
             //Load grammar
             var grammar = GetGrammar();
-            var pathTransformed = expHome + TestConstants.MetadataFolder + @"\" + commit + TestConstants.TransformedLocations;
-            var codeTransformations = JsonUtil<List<CodeTransformation>>.Read(pathTransformed);
-            List<Region> transfomedRegions = codeTransformations.Select(entry => entry.Trans).ToList();
-            var locations = codeTransformations.Select(entry => entry.Location).ToList();
-            var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
-
+            var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocations + execId + ".json");
+            var locations = baselineBeforeAfterList.Select(O => O.Item1).ToList();
+            var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(baselineBeforeAfterList);
             //Random number generator with a seed.
-            int seed = 86028157;
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
             var examples = randomList.GetRange(0, 2);
@@ -729,11 +726,10 @@ namespace RefazerUnitTests
             double mean = -1.0;
             while (true)
             {
-                var execId = "ranking";
                 CodeFragmentsInfo.GetInstance().Init();
                 TransformationInfos.GetInstance().Init();
                 examples.Sort();
-                helper = new TestHelper(grammar, transfomedRegions, locations, globalTransformations, expHome, solutionPath, commit, kinds, execId);
+                helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations, expHome, solutionPath, commit, kinds, execId);
                 helper.Execute(examples);
 
                 var regionsFrags = GetTransformedLocations(expHome);
@@ -758,9 +754,8 @@ namespace RefazerUnitTests
                     JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
                     JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
                     //Comparing edited locations with baseline
-                    var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocations + execId + ".json");
                     var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
-                    foreach (var baseline in baselineBeforeAfterList)
+                    foreach (var baseline in baselineBeforeAfter)
                     {
                         var region = baseline.Item1;
                         region.Path = region.Path.ToUpperInvariant();
@@ -810,7 +805,7 @@ namespace RefazerUnitTests
            Log(commit,
                 totalTimeToLearn + totalTimeToExecute,
                 examples.Count,
-                transfomedRegions.Count,
+                baselineBeforeAfterList.Count,
                 transformed.Count,
                 dictionarySelection.Count,
                 program.ToString(),
@@ -886,7 +881,7 @@ namespace RefazerUnitTests
             }
         }
 
-        private static int GetFirstIncorrect(List<Tuple<Region, string, string>> toolBeforeAfterList, List<Tuple<Region, string, string>> baselineBeforeAfterList, List<int> randomList, List<CodeLocation> locations, List<Region> notTransformed)
+        private static int GetFirstIncorrect(List<Tuple<Region, string, string>> toolBeforeAfterList, List<Tuple<Region, string, string>> baselineBeforeAfterList, List<int> randomList, List<Region> locations, List<Region> notTransformed)
         {
             //computing list of locations that do not follow the baseline.
             var notFoundList = baselineBeforeAfterList.Where(o => !toolBeforeAfterList.Contains(o)).ToList();
@@ -894,7 +889,7 @@ namespace RefazerUnitTests
             notFoundList.AddRange(notTranformedCodeLocations);
             if (!notFoundList.Any()) return -1;
             //Computing example locations that do not follow the baseline.
-            var incorrectLocationsList = locations.Where(o => notFoundList.Any(e => o.Region.IntersectWith(e.Item1))).ToList();
+            var incorrectLocationsList = locations.Where(o => notFoundList.Any(e => o.IntersectWith(e.Item1))).ToList();
             //Computing the index of the locations that do not follow the baseline.
             var notFoundIndexList = incorrectLocationsList.Select(o => locations.IndexOf(o)).ToList();
             //Getting the index of the location in the random list.
@@ -904,7 +899,7 @@ namespace RefazerUnitTests
             return firstNotFound;
         }
 
-        private static List<Tuple<Region, string, string>> GetBeforeAfterData(List<Tuple<Region, string, string>> regions, List<CodeLocation> locations)
+        private static List<Tuple<Region, string, string>> GetBeforeAfterData(List<Tuple<Region, string, string>> regions, List<Region> locations)
         {
             var dictionary = CreateDictionaryMatch(locations, regions.Select(o => o.Item1).ToList());
             var foundList = new List<Region>();
@@ -951,7 +946,7 @@ namespace RefazerUnitTests
             return fragments;
         }
 
-        private static int GetFirstNotFound(List<CodeLocation> foundLocations, List<CodeLocation> locations, List<int> result)
+        private static int GetFirstNotFound(List<Region> foundLocations, List<Region> locations, List<int> result)
         {
             var notFoundList = locations.Where(o => !foundLocations.Contains(o)).ToList();
             if (!notFoundList.Any()) return -1;
@@ -962,14 +957,14 @@ namespace RefazerUnitTests
             return firstNotFound;
         }
 
-        private static List<CodeLocation> GetEditedLocations(List<Region> regions, List<CodeLocation> locations)
+        private static List<Region> GetEditedLocations(List<Region> regions, List<Region> locations)
         {
             var dictionary = CreateDictionaryMatch(locations, regions);
             var found = dictionary.Where(o => o.Value.Any()).Select(o => o.Key).ToList();
             return found;
         }
 
-        private static List<Region> GetEditionInLocations(List<Region> regions, List<CodeLocation> locations)
+        private static List<Region> GetEditionInLocations(List<Region> regions, List<Region> locations)
         {
             var dictionary = CreateDictionaryMatch(locations, regions);
 
@@ -979,12 +974,12 @@ namespace RefazerUnitTests
             return foundList;
         }
 
-        private static Dictionary<CodeLocation, List<Region>> CreateDictionaryMatch(List<CodeLocation> locations, List<Region> regions)
+        private static Dictionary<Region, List<Region>> CreateDictionaryMatch(List<Region> locations, List<Region> regions)
         {
-            var dictionary = new Dictionary<CodeLocation, List<Region>>();
+            var dictionary = new Dictionary<Region, List<Region>>();
             foreach (var v in locations)
             {
-                var matches = regions.Where(o => v.Region.IntersectWith(o)).ToList();
+                var matches = regions.Where(o => v.IntersectWith(o)).ToList();
                 if (!dictionary.ContainsKey(v))
                 {
                     dictionary[v] = new List<Region>();

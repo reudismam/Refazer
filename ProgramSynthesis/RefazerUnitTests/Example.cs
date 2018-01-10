@@ -369,8 +369,8 @@ namespace RefazerUnitTests
                 List<Region> regions = new List<Region>();
                 foreach(var transInfo in transformations)
                 {
-                    Region region = new Region();
-                    region.Start = 
+                    //Region region = new Region();
+                    //region.Start = 
                 }
                 JsonUtil<List<TransformationInfo>>.Write(transformations, exampleFolder + "transformation_metadata.json");
                 var transformedDocuments = ASTTransformer.Transform(transformations);

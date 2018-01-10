@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using RefazerObject.Location;
 using RefazerObject.Region;
 using RefazerObject.Transformation;
+using System;
 
 namespace Spg.LocationRefactor.Location
 {
@@ -76,6 +77,28 @@ namespace Spg.LocationRefactor.Location
                     dic[path] = value;
                 }
 
+                dic[path].Add(item);
+            }
+            return dic;
+        }
+
+        /// <summary>
+        /// Group region by source file
+        /// </summary>
+        /// <param name="list">List of no grouped regions</param>
+        /// <returns>Regions grouped by source file</returns>
+        public Dictionary<string, List<Tuple<Region, string, string>>> GroupTransformationsBySourcePath(List<Tuple<Region, string, string>> list)
+        {
+            Dictionary<string, List<Tuple<Region, string, string>>> dic = new Dictionary<string, List<Tuple<Region, string, string>>>();
+            foreach (var item in list)
+            {
+                string path = item.Item1.Path.ToUpperInvariant();
+                List<Tuple<Region, string, string>> value;
+                if (!dic.TryGetValue(path, out value))
+                {
+                    value = new List<Tuple<Region, string, string>>();
+                    dic[path] = value;
+                }
                 dic[path].Add(item);
             }
             return dic;
