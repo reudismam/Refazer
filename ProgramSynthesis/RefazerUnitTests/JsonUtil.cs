@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using TreeElement;
+using System.IO;
 
 namespace RefazerUnitTests
 {
@@ -16,7 +17,13 @@ namespace RefazerUnitTests
         /// <param name="path">File path</param>
         public static void Write(T t, string path)
         {
-            System.IO.StreamWriter file = new System.IO.StreamWriter(path);
+            int index = path.LastIndexOf('\\');
+            if (index != -1)
+            {
+                string folder = path.Substring(0, index);
+                Directory.CreateDirectory(folder);
+            }
+            StreamWriter file = new StreamWriter(path);
             string json = "";
             try
             {

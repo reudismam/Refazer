@@ -1,0 +1,46 @@
+[
+  {
+    "Item1": {
+      "Text": "reader.Value.ToString()",
+      "Start": 1855,
+      "Length": 23,
+      "Parent": null,
+      "Path": "NJ224\\XMLNODECONVERTERB.CS"
+    },
+    "Item2": "ConvertTokenToXmlVlue(Value)",
+    "Item3": "NJ224\\XMLNODECONVERTERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "reader.Value.ToString()",
+      "Start": 2004,
+      "Length": 23,
+      "Parent": null,
+      "Path": "NJ224\\XMLNODECONVERTERB.CS"
+    },
+    "Item2": "ConvertTokenToXmlVlue(Value)",
+    "Item3": "NJ224\\XMLNODECONVERTERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "reader.Value.ToString()",
+      "Start": 2156,
+      "Length": 23,
+      "Parent": null,
+      "Path": "NJ224\\XMLNODECONVERTERB.CS"
+    },
+    "Item2": "ConvertTokenToXmlVlue(Value)",
+    "Item3": "NJ224\\XMLNODECONVERTERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "reader.Value.ToString()",
+      "Start": 2330,
+      "Length": 23,
+      "Parent": null,
+      "Path": "NJ224\\XMLNODECONVERTERB.CS"
+    },
+    "Item2": "ConvertTokenToXmlVlue(Value)",
+    "Item3": "NJ224\\XMLNODECONVERTERB.CS"
+  }
+]
