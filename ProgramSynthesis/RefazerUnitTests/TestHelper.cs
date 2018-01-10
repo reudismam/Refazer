@@ -478,7 +478,7 @@ namespace RefazerUnitTests
         /// <summary>
         /// Regions
         /// </summary>
-        private readonly List<Region> _regions;
+        private readonly List<Region> _transformedRegions;
         /// <summary>
         /// Transformations
         /// </summary>
@@ -524,10 +524,10 @@ namespace RefazerUnitTests
         /// </summary>
         public Dictionary<string, List<Region>> DictionarySelection { get; set; }
 
-        public TestHelper(Grammar grammar, List<Region> regions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, string execId)
+        public TestHelper(Grammar grammar, List<Region> transformedRegions, List<CodeLocation> locations, Dictionary<string, List<CodeTransformation>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, string execId)
         {
             _grammar = grammar;
-            _regions = regions;
+            _transformedRegions = transformedRegions;
             _locations = locations;
             _globalTransformations = globalTransformations;
             _expHome = expHome;
@@ -540,7 +540,7 @@ namespace RefazerUnitTests
 
         public void Execute(List<int> examples)
         {
-            var metadataRegions = examples.Select(index => _regions[index]).ToList();
+            var metadataRegions = examples.Select(index => _transformedRegions[index]).ToList();
             var locationRegions = examples.Select(index => _locations[index]).ToList();
 
             DictionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
@@ -747,7 +747,7 @@ namespace RefazerUnitTests
         }
         public List<ProgramNode> LearnPrograms(List<int> examples)
         {
-            var metadataRegions = examples.Select(index => _regions[index]).ToList();
+            var metadataRegions = examples.Select(index => _transformedRegions[index]).ToList();
             var locationRegions = examples.Select(index => _locations[index]).ToList();
 
             DictionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
@@ -816,7 +816,7 @@ namespace RefazerUnitTests
         public void Execute(List<int> examples, ProgramNode program)
         {
             Program = program;
-            var metadataRegions = examples.Select(index => _regions[index]).ToList();
+            var metadataRegions = examples.Select(index => _transformedRegions[index]).ToList();
             DictionarySelection = RegionManager.GetInstance().GroupRegionBySourcePath(metadataRegions);
 
             SyntaxNodeOrToken inpTree = default(SyntaxNodeOrToken);
@@ -877,17 +877,9 @@ namespace RefazerUnitTests
                 s += $"{v.Key} \n====================\n";
                 v.Value.ForEach(o => s += $"{o}\n");
             }
-
             Console.WriteLine($"Count: \n {Transformed.Count}");
             s += $"Count: \n {Transformed.Count}";
             FileUtil.WriteToFile(_expHome + @"cprose\" + _commit + @"\result" + _execId + ".res", s);
         }
-
-
-
     }
-
-
-
-
 }

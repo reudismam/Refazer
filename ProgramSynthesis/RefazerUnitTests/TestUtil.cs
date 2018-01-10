@@ -2,6 +2,8 @@
 using RefazerObject.Location;
 using RefazerObject.Region;
 using RefazerObject.Transformation;
+using System;
+using TreeEdit.Spg.LogInfo;
 
 namespace RefazerUnitTests
 {
@@ -46,10 +48,34 @@ namespace RefazerUnitTests
             return metaLocList;
         }
 
+        public static List<Tuple<Region, string, string>> GetBeforeAfterList(string expHome)
+        {
+            var transformations = TransformationInfos.GetInstance().Transformations;
+            var beforeafter = new List<Tuple<Region, string, string>>();
+            foreach (var o in transformations)
+            {
+                var filePath = o.Before.SyntaxTree.FilePath.ToUpperInvariant();
+                if (o.Before.SyntaxTree.FilePath.ToUpperInvariant().Contains(expHome.ToUpperInvariant()))
+                {
+                    var index = expHome.Length;
+                    filePath = filePath.Substring(index, filePath.Length - index);
+                }
+                var region = new Region
+                {
+                    Start = o.Before.Span.Start,
+                    Length = o.Before.Span.Length,
+                    Text = o.Before.ToString(),
+                    Path = filePath
+                };
+                beforeafter.Add(Tuple.Create(region, o.After.ToString(), filePath));
+            }
+            return beforeafter;
+        }
+
         //public static Dictionary<string, List<Selection>> FilterLocationsNotPresentOnCommit(Dictionary<string, List<Selection>> dictionarySelection, List<CodeLocation> controllerLocations, List<CodeLocation> commitLocations )
         //{
         //    Dictionary<string, List<CodeLocation>> dicLocs = RegionManager.GetInstance().GroupLocationsBySourceFile(controllerLocations);
-  
+
         //    List<Tuple<CodeLocation, Selection>> tupledList = new List<Tuple<CodeLocation, Selection>>();
         //    foreach (KeyValuePair<string, List<Selection>> item in dictionarySelection)
         //    {

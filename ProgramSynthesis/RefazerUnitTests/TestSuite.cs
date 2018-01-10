@@ -714,8 +714,7 @@ namespace RefazerUnitTests
             var grammar = GetGrammar();
             var pathTransformed = expHome + TestConstants.MetadataFolder + @"\" + commit + TestConstants.TransformedLocations;
             var codeTransformations = JsonUtil<List<CodeTransformation>>.Read(pathTransformed);
-
-            List<Region> regions = codeTransformations.Select(entry => entry.Trans).ToList();
+            List<Region> transfomedRegions = codeTransformations.Select(entry => entry.Trans).ToList();
             var locations = codeTransformations.Select(entry => entry.Location).ToList();
             var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
 
@@ -734,27 +733,11 @@ namespace RefazerUnitTests
                 CodeFragmentsInfo.GetInstance().Init();
                 TransformationInfos.GetInstance().Init();
                 examples.Sort();
-                helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, execId);
+                helper = new TestHelper(grammar, transfomedRegions, locations, globalTransformations, expHome, solutionPath, commit, kinds, execId);
                 helper.Execute(examples);
 
-                var regionsFragments = CodeFragmentsInfo.GetInstance().Locations.Select(o => new Region { Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath }).ToList();
+                var regionsFrags = GetTransformedLocations(expHome);
                 string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
-                var regionsFrags = new List<Region>();
-                foreach (var region in regionsFragments)
-                {
-                    if (region.Path.ToUpperInvariant().Contains(expHome.ToUpperInvariant()))
-                    {
-                        var regionPathUpper = region.Path.ToUpperInvariant();
-                        var index = expHome.Length;
-                        var substring = regionPathUpper.Substring(index, regionPathUpper.Length - index);
-                        region.Path = substring;
-                        regionsFrags.Add(region);
-                    }
-                    else
-                    {
-                        regionsFrags.Add(region);
-                    }
-                }
                 JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
                 if (SynthesisConfig.GetInstance().CreateLog)
                 {
@@ -762,25 +745,7 @@ namespace RefazerUnitTests
                     var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
                     mean = sizes.Average();
                 }
-                var transformations = TransformationInfos.GetInstance().Transformations;
-                var beforeafter = new List<Tuple<Region, string, string>>();
-                foreach (var o in transformations)
-                {
-                    var filePath = o.Before.SyntaxTree.FilePath.ToUpperInvariant();
-                    if (o.Before.SyntaxTree.FilePath.ToUpperInvariant().Contains(expHome.ToUpperInvariant()))
-                    {
-                        var index = expHome.Length;
-                        filePath = filePath.Substring(index, filePath.Length - index);
-                    }        
-                    var region = new Region
-                    {
-                        Start = o.Before.Span.Start,
-                        Length = o.Before.Span.Length,
-                        Text = o.Before.ToString(),
-                        Path = filePath
-                    };
-                    beforeafter.Add(Tuple.Create(region, o.After.ToString(), filePath));
-                }
+                var beforeafter = TestUtil.GetBeforeAfterList(expHome);
                 GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
                 var foundLocations = GetEditedLocations(regionsFrags, locations);
                 var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
@@ -845,7 +810,7 @@ namespace RefazerUnitTests
            Log(commit,
                 totalTimeToLearn + totalTimeToExecute,
                 examples.Count,
-                regions.Count,
+                transfomedRegions.Count,
                 transformed.Count,
                 dictionarySelection.Count,
                 program.ToString(),
@@ -853,6 +818,28 @@ namespace RefazerUnitTests
                 totalTimeToExecute,
                 mean);
             return true;
+        }
+
+        public static List<Region> GetTransformedLocations(string expHome)
+        {
+            var regionsFragments = CodeFragmentsInfo.GetInstance().Locations.Select(o => new Region { Start = o.Span.Start, Length = o.Span.Length, Text = o.ToString(), Path = o.SyntaxTree.FilePath }).ToList();
+            var regionsFrags = new List<Region>();
+            foreach (var region in regionsFragments)
+            {
+                if (region.Path.ToUpperInvariant().Contains(expHome.ToUpperInvariant()))
+                {
+                    var regionPathUpper = region.Path.ToUpperInvariant();
+                    var index = expHome.Length;
+                    var substring = regionPathUpper.Substring(index, regionPathUpper.Length - index);
+                    region.Path = substring;
+                    regionsFrags.Add(region);
+                }
+                else
+                {
+                    regionsFrags.Add(region);
+                }
+            }
+            return regionsFrags;
         }
 
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]

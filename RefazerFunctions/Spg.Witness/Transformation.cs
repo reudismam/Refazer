@@ -519,7 +519,6 @@ namespace RefazerFunctions.Spg.Witness
             var inpNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
             var outNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
             var mapping = gumTreeMapping.Mapping(inpNode, outNode);
-
             var generator = new EditScriptGenerator<SyntaxNodeOrToken>();
             var script = generator.EditScript(inpNode, outNode, mapping);
             return script;

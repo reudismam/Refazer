@@ -10,6 +10,8 @@ using TreeEdit.Spg.LogInfo;
 using TreeEdit.Spg.Transform;
 using TreeElement;
 using TreeElement.Spg.Node;
+using RefazerObject.Transformation;
+using RefazerObject.Region;
 
 namespace RefazerUnitTests
 {
@@ -363,10 +365,18 @@ namespace RefazerUnitTests
             try
             {
                 //Get the before and after version of each transformed file.
-                var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
+                var transformations = TransformationInfos.GetInstance().Transformations;
+                List<Region> regions = new List<Region>();
+                foreach(var transInfo in transformations)
+                {
+                    Region region = new Region();
+                    region.Start = 
+                }
+                JsonUtil<List<TransformationInfo>>.Write(transformations, exampleFolder + "transformation_metadata.json");
+                var transformedDocuments = ASTTransformer.Transform(transformations);
                 //Get the modified version
                 var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
-            } catch (Exception e)
+            } catch (Exception)
             {
                 //Ignored.
             }
