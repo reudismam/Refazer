@@ -1,0 +1,46 @@
+[
+  {
+    "Item1": {
+      "Text": "\"user-agent\"",
+      "Start": 3148,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"user-agent\"",
+      "Start": 33712,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"user-agent\"",
+      "Start": 37515,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"user-agent\"",
+      "Start": 1824,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  }
+]

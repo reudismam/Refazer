@@ -1,0 +1,24 @@
+[
+  {
+    "Item1": {
+      "Text": "(dictionary.UnderlyingDictionary)",
+      "Start": 18275,
+      "Length": 33,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+    },
+    "Item2": "(dictionary.UnderlyingDictionary, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(dictionary.UnderlyingDictionary)",
+      "Start": 19105,
+      "Length": 33,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+    },
+    "Item2": "(dictionary.UnderlyingDictionary, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  }
+]

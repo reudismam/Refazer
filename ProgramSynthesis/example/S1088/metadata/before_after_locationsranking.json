@@ -1,0 +1,90 @@
+[
+  {
+    "Item1": {
+      "Text": "shapeType == ShapeType.DrawingText",
+      "Start": 13714,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S1088\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "shapeType == ShapeType.DrawingText || shapeType == ShapeType.DrawingSpeechBalloon",
+    "Item3": "S1088\\SHAPEMANAGERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "shapeType == ShapeType.DrawingText",
+      "Start": 14385,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S1088\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "shapeType == ShapeType.DrawingText || shapeType == ShapeType.DrawingSpeechBalloon",
+    "Item3": "S1088\\SHAPEMANAGERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "shapeType == ShapeType.DrawingText",
+      "Start": 15686,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S1088\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "shapeType == ShapeType.DrawingText || shapeType == ShapeType.DrawingSpeechBalloon",
+    "Item3": "S1088\\SHAPEMANAGERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "shapeType == ShapeType.DrawingText",
+      "Start": 16591,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S1088\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "shapeType == ShapeType.DrawingText || shapeType == ShapeType.DrawingSpeechBalloon",
+    "Item3": "S1088\\SHAPEMANAGERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "shapeType == ShapeType.DrawingText",
+      "Start": 17248,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S1088\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "shapeType == ShapeType.DrawingText || shapeType == ShapeType.DrawingSpeechBalloon",
+    "Item3": "S1088\\SHAPEMANAGERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "shapeType == ShapeType.DrawingText",
+      "Start": 28893,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S1088\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "shapeType == ShapeType.DrawingText || shapeType == ShapeType.DrawingSpeechBalloon",
+    "Item3": "S1088\\SHAPEMANAGERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "shapeType == ShapeType.DrawingText",
+      "Start": 29537,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S1088\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "shapeType == ShapeType.DrawingText || shapeType == ShapeType.DrawingSpeechBalloon",
+    "Item3": "S1088\\SHAPEMANAGERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "shapeType == ShapeType.DrawingText",
+      "Start": 30038,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S1088\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "shapeType == ShapeType.DrawingText || shapeType == ShapeType.DrawingSpeechBalloon",
+    "Item3": "S1088\\SHAPEMANAGERB.CS"
+  }
+]

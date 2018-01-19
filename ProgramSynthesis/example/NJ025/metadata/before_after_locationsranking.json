@@ -1,0 +1,13 @@
+[
+  {
+    "Item1": {
+      "Text": "{\r\n            get { return _dateTimeStyles; }\r\n            set { _dateTimeStyles = value; }\r\n        }",
+      "Start": 2071,
+      "Length": 103,
+      "Parent": null,
+      "Path": "NJ025\\ISODATETIMECONVERTERB.CS"
+    },
+    "Item2": "{\r\n    get\r\n    {\r\n        _dateTimeStyles;\r\n        set;\r\n        {\r\n            _dateTimeStyles = value;\r\n        }\r\n    }\r\n}",
+    "Item3": "NJ025\\ISODATETIMECONVERTERB.CS"
+  }
+]

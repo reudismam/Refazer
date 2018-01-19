@@ -1,0 +1,35 @@
+[
+  {
+    "Item1": {
+      "Text": "form.Mode == RegionCaptureMode.Editor",
+      "Start": 4663,
+      "Length": 37,
+      "Parent": null,
+      "Path": "S583\\SHAPEMANAGERMENUB.CS"
+    },
+    "Item2": "form.IsEditorMode",
+    "Item3": "S583\\SHAPEMANAGERMENUB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "form.Mode == RegionCaptureMode.Editor",
+      "Start": 7420,
+      "Length": 37,
+      "Parent": null,
+      "Path": "S583\\SHAPEMANAGERMENUB.CS"
+    },
+    "Item2": "form.IsEditorMode",
+    "Item3": "S583\\SHAPEMANAGERMENUB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "form.Mode == RegionCaptureMode.Editor",
+      "Start": 6733,
+      "Length": 37,
+      "Parent": null,
+      "Path": "S583\\SHAPEMANAGERB.CS"
+    },
+    "Item2": "form.IsEditorMode",
+    "Item3": "S583\\SHAPEMANAGERB.CS"
+  }
+]

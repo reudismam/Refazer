@@ -422,8 +422,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void NJ025()
         {
-
-            var isCorrect = CompleteTestBase(@"NJ025\");
+            var isCorrect = CompleteTestBase(@"NJ025\", kinds: new List<SyntaxKind> { SyntaxKind.PropertyDeclaration });
             Assert.IsTrue(isCorrect);
 
         }
@@ -719,7 +718,7 @@ namespace RefazerUnitTests
             //Random number generator with a seed.
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-            var examples = randomList.GetRange(0, 2);
+            var examples = randomList.GetRange(0, 1);
 
             //Execution
             TestHelper helper;

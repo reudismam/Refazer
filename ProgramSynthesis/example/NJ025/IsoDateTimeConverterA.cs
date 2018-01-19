@@ -47,7 +47,7 @@ namespace Newtonsoft.Json.Converters
         public DateTimeStyles DateTimeStyles
         {
             get => _dateTimeStyles;
-            set => _dateTimeStyles = value;
+            set { _dateTimeStyles = value; }
         }
 
         /// <summary>
