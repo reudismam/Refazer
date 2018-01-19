@@ -40,11 +40,11 @@ namespace RefazerFunctions.Spg.Config
         /// </summary>
         private SynthesisConfig()
         {
-            UseTokens = true;
+            UseTokens = false;
             CreateLog = true;
             BoundGeneratedPrograms = true;
             DescendantsParentThreshouldForContext = 40;
-            LevelsForContext = Enumerable.Range(0, 3).ToList();
+            LevelsForContext = Enumerable.Range(0, 2).ToList();
         }
 
         /// <summary>

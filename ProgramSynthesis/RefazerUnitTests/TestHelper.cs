@@ -455,13 +455,12 @@ using Microsoft.ProgramSynthesis.Utils;
 using RefazerFunctions;
 using RefazerFunctions.Bean;
 using RefazerManager;
-using RefazerObject.Location;
-using RefazerObject.Transformation;
 using Spg.LocationRefactor.Location;
 using TreeElement;
 using TreeElement.Spg.Node;
 using WorkSpaces.Spg.Workspace;
 using Region = RefazerObject.Region.Region;
+using System.IO;
 
 namespace RefazerUnitTests
 {
@@ -500,6 +499,11 @@ namespace RefazerUnitTests
         /// </summary>
         private readonly List<SyntaxKind> _kinds;
         /// <summary>
+        /// Folder to be edited
+        /// </summary>
+        private string _fileFolder;
+
+        /// <summary>
         /// Total time to execute
         /// </summary>
         public long TotalTimeToExecute { get; set; }
@@ -520,7 +524,10 @@ namespace RefazerUnitTests
         /// </summary>
         public Dictionary<string, List<Tuple<Region, string, string>>> DictionarySelection { get; set; }
 
-        public TestHelper(Grammar grammar, List<Tuple<Region, string, string>> transformedRegions, Dictionary<string, List<Tuple<Region, string, string>>> globalTransformations, string expHome, string solutionPath, string commit, List<SyntaxKind> kinds, string execId)
+        public TestHelper(Grammar grammar, List<Tuple<Region, string, string>> transformedRegions, 
+            Dictionary<string, List<Tuple<Region, string, string>>> globalTransformations, 
+            string expHome, string solutionPath, string commit, 
+            List<SyntaxKind> kinds, string fileFolder, string execId)
         {
             _grammar = grammar;
             _transformedRegions = transformedRegions;
@@ -529,6 +536,7 @@ namespace RefazerUnitTests
             _solutionPath = solutionPath;
             _commit = commit;
             _kinds = kinds;
+            _fileFolder = fileFolder;
             _execId = execId;
             WorkspaceManager.GetInstance().solutionPath = _expHome + _solutionPath;
         }
@@ -600,12 +608,7 @@ namespace RefazerUnitTests
             TotalTimeToLearn = millAfterLearn - millBeforeLearn;
 
             var methods = new List<SyntaxNodeOrToken>();
-            if (_solutionPath == null)
-            {
-                //Run program
-                methods = GetNodesByType(inpTree, _kinds);
-            }
-            else
+            if (_solutionPath != null)
             {
                 string path = _expHome + _solutionPath;
                 var files = WorkspaceManager.GetInstance().GetSourcesFiles(null, path);
@@ -616,7 +619,22 @@ namespace RefazerUnitTests
                     methods.AddRange(vnodes);
                 }
             }
-
+            else if (_fileFolder != null)
+            {
+                string[] files = Directory.GetFiles(_expHome + _fileFolder, "*.cs");
+                foreach (var v in files)
+                {
+                    var text = FileUtil.ReadFile(v);
+                    var tree = CSharpSyntaxTree.ParseText(text, path: v).GetRoot();
+                    var vnodes = GetNodesByType(tree, _kinds);
+                    methods.AddRange(vnodes);
+                }
+            }
+            else
+            {
+                //Run program
+                methods = GetNodesByType(inpTree, _kinds);
+            }
             Transformed = new List<object>();
             var dicTrans = new Dictionary<string, List<object>>();
 

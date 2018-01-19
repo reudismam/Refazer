@@ -578,7 +578,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void S564()
         {
-            var isCorrect = CompleteTestBase(@"S564\");
+            var isCorrect = CompleteTestBase(@"S564\", fileFolder: @"S564\");
             Assert.IsTrue(isCorrect);
         }
 
@@ -699,7 +699,8 @@ namespace RefazerUnitTests
         /// <param name="solutionPath">Path to the solution.</param>
         /// <param name="kinds">Kinds that will be transformed.</param>
         /// <returns>True if pass test</returns>
-        public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null)
+        public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null, 
+            string fileFolder = null)
         {
             string expHome = RefazerObject.Environment.Environment.ExpHome();
             if (expHome.IsEmpty()) throw new Exception("Environment variable for the experiment not defined");
@@ -718,7 +719,7 @@ namespace RefazerUnitTests
             //Random number generator with a seed.
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-            var examples = randomList.GetRange(0, 1);
+            var examples = randomList.GetRange(0, Math.Min(2, locations.Count));
 
             //Execution
             TestHelper helper;
@@ -728,7 +729,8 @@ namespace RefazerUnitTests
                 CodeFragmentsInfo.GetInstance().Init();
                 TransformationInfos.GetInstance().Init();
                 examples.Sort();
-                helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations, expHome, solutionPath, commit, kinds, execId);
+                helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations, 
+                    expHome, solutionPath, commit, kinds, fileFolder, execId);
                 helper.Execute(examples);
 
                 var regionsFrags = GetTransformedLocations(expHome);
