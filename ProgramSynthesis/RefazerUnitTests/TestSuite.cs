@@ -592,7 +592,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void S583()
         {
-            var isCorrect = CompleteTestBase(@"S583\");
+            var isCorrect = CompleteTestBase(@"S583\", fileFolder: @"S583\");
             Assert.IsTrue(isCorrect);
         }
 
@@ -678,142 +678,6 @@ namespace RefazerUnitTests
         {
             var isCorrect = CompleteTestBase(@"S3791\");
             Assert.IsTrue(isCorrect);
-        }
-
-
-
-        /// <summary>
-        /// Gets the domain specific grammar
-        /// </summary>
-        public static Grammar GetGrammar()
-        {
-            string path = FileUtil.GetBasePath() + @"\ProgramSynthesis\grammar\Transformation.grammar";
-            var grammar = Utils.LoadGrammar(path);
-            return grammar;
-        }
-
-        /// <summary>
-        /// Complete test
-        /// </summary>
-        /// <param name="commit">Commit where the change occurs</param>
-        /// <param name="solutionPath">Path to the solution.</param>
-        /// <param name="kinds">Kinds that will be transformed.</param>
-        /// <returns>True if pass test</returns>
-        public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null, 
-            string fileFolder = null)
-        {
-            string expHome = RefazerObject.Environment.Environment.ExpHome();
-            if (expHome.IsEmpty()) throw new Exception("Environment variable for the experiment not defined");
-
-            if (kinds == null)
-            {
-                kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
-            }
-            int seed = 86028157;
-            var execId = "ranking";
-            //Load grammar
-            var grammar = GetGrammar();
-            var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocations + execId + ".json");
-            var locations = baselineBeforeAfterList.Select(O => O.Item1).ToList();
-            var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(baselineBeforeAfterList);
-            //Random number generator with a seed.
-            Random random = new Random(seed);
-            var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-            var examples = randomList.GetRange(0, Math.Min(2, locations.Count));
-
-            //Execution
-            TestHelper helper;
-            double mean = -1.0;
-            while (true)
-            {
-                CodeFragmentsInfo.GetInstance().Init();
-                TransformationInfos.GetInstance().Init();
-                examples.Sort();
-                helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations, 
-                    expHome, solutionPath, commit, kinds, fileFolder, execId);
-                helper.Execute(examples);
-
-                var regionsFrags = GetTransformedLocations(expHome);
-                string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
-                JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
-                if (SynthesisConfig.GetInstance().CreateLog)
-                {
-                    var scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, Constants.ScriptSize);
-                    var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
-                    mean = sizes.Average();
-                }
-                var beforeafter = TestUtil.GetBeforeAfterList(expHome);
-                GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
-                var foundLocations = GetEditedLocations(regionsFrags, locations);
-                var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
-                if (firstProblematicLocation == -1)
-                {
-                    //Generate meta-data for BaselineBeforeAfterList on commit.
-                    var foundList = GetEditionInLocations(regionsFrags, locations);
-                    JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\"+ commit + TestConstants.TransformedLocationsTool + execId + ".json");
-                    var beforeafterList = GetBeforeAfterData(beforeafter, locations);
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
-                    //Comparing edited locations with baseline
-                    var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
-                    foreach (var baseline in baselineBeforeAfter)
-                    {
-                        var region = baseline.Item1;
-                        region.Path = region.Path.ToUpperInvariant();
-                        baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
-                    }
-                    var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
-                    var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
-                    if (firstIncorrect == -1)
-                    {
-                        try
-                        {
-                            var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
-                            GeneratedDiffEdits(commit, transformedDocuments);
-                        }
-                        catch (Exception)
-                        {
-                            // ignored
-                            //throw new Exception("Errors in transforming the locations.");
-                        }
-                        break;
-                    }
-                    firstProblematicLocation = firstIncorrect;
-                }
-                if (examples.Contains(firstProblematicLocation))
-                {
-                    try
-                    {
-                        var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
-                        GeneratedDiffEdits(commit, transformedDocuments);
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                        //throw new Exception("Errors in transforming the locations.");
-                    }
-                    throw new Exception("A transformation could not be learned using this examples.");
-                }
-                examples.Add(firstProblematicLocation);
-            }
-            //end of execution 
-            long totalTimeToLearn = helper.TotalTimeToLearn;
-            long totalTimeToExecute = helper.TotalTimeToLearn;
-            var transformed = helper.Transformed;
-            var program = helper.Program;
-            var dictionarySelection = helper.DictionarySelection;
-
-           Log(commit,
-                totalTimeToLearn + totalTimeToExecute,
-                examples.Count,
-                baselineBeforeAfterList.Count,
-                transformed.Count,
-                dictionarySelection.Count,
-                program.ToString(),
-                totalTimeToLearn,
-                totalTimeToExecute,
-                mean);
-            return true;
         }
 
         public static List<Region> GetTransformedLocations(string expHome)
@@ -996,7 +860,9 @@ namespace RefazerUnitTests
             string commitFirstLetter = commit.ElementAt(0).ToString();
             string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
-            commit = /*commitFirstLetter + "-" +*/ commitId;
+            commit = commitFirstLetter + "" + commitId;
+         //   commit = commit.Substring(0, commit.Length -1);
+
 
             string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
@@ -1034,7 +900,7 @@ namespace RefazerUnitTests
             string commitFirstLetter = commit.ElementAt(0).ToString();
             string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
-            commit = commitId;
+            //commit = commitId;
 
             string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
@@ -1059,9 +925,9 @@ namespace RefazerUnitTests
                 em.Save();
             }
         }
-    }
-}
-/*
+    
+
+
         static string GetTestDataFolder(string testDataLocation)
         {
             string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -1086,139 +952,176 @@ namespace RefazerUnitTests
         }
 
         ///// <summary>
+        ///// Gets the domain specific grammar
+        ///// </summary>
+        //public static Grammar GetGrammar()
+        //{
+        //    string path = FileUtil.GetBasePath() + @"\ProgramSynthesis\grammar\Transformation.grammar";
+        //    var grammar = Utils.LoadGrammar(path);
+        //    return grammar;
+        //}
+
+
+        // Here starts the Log version
+
+        ///// <summary>
         ///// Complete test
         ///// </summary>
         ///// <param name="commit">Commit where the change occurs</param>
+        ///// <param name="solutionPath">Path to the solution.</param>
+        ///// <param name="kinds">Kinds that will be transformed.</param>
         ///// <returns>True if pass test</returns>
-        //public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null)
+        //public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null,
+        //    string fileFolder = null)
         //{
+        //    string expHome = RefazerObject.Environment.Environment.ExpHome();
+        //    if (expHome.IsEmpty()) throw new Exception("Environment variable for the experiment not defined");
+
         //    if (kinds == null)
         //    {
         //        kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
         //    }
-
+        //    int seed = 86028157;
+        //    var execId = "ranking";
         //    //Load grammar
         //    var grammar = GetGrammar();
-
-        //    string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-        //    var codeTransformations = JsonUtil<List<CodeTransformation>>.Read(expHome + @"cprose\" + commit + @"\metadata\transformed_locations.json");
-
-        //    List<Region> regions = codeTransformations.Select(entry => entry.Trans).ToList();
-        //    var locations = codeTransformations.Select(entry => entry.Location).ToList();
-        //    var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
-
+        //    var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocations + execId + ".json");
+        //    var locations = baselineBeforeAfterList.Select(O => O.Item1).ToList();
+        //    var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(baselineBeforeAfterList);
         //    //Random number generator with a seed.
-        //    int seed = 86028157;
-        //    //int seed = 104395301;
-        //    //int seed = 122949829;
-        //    //int seed = 141650963;
-        //    //int seed = 160481219;
         //    Random random = new Random(seed);
         //    var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-        //    var examples = randomList.GetRange(0, 2);
+        //    var examples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
+        //                                                                        //  var examples = randomList.GetRange(0, 1);
 
         //    //Execution
         //    TestHelper helper;
-        //    string scriptsizes;
+        //    double mean = -1.0;
         //    while (true)
         //    {
+        //        CodeFragmentsInfo.GetInstance().Init();
+        //        TransformationInfos.GetInstance().Init();
         //        examples.Sort();
-        //        helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, seed);
+        //        helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations,
+        //            expHome, solutionPath, commit, kinds, fileFolder, execId);
         //        helper.Execute(examples);
 
-        //        string codeFragments = "codefragments";
-        //        var fragments = GetDataAndSaveToFile(commit, expHome, seed, codeFragments);
-        //        var regionsFrags = ConvertFragmentsToRegions(fragments);
-        //        JsonUtil<List<Region>>.Write(regionsFrags, expHome + @"cprose\" + commit + @"\metadata\transformed_locationsAll" + seed + ".json");
-
-        //        string scriptsize = "scriptsize";
-        //        scriptsizes = GetDataAndSaveToFile(commit, expHome, seed, scriptsize);
-
-        //        string beforeafter = "beforeafter";
-        //        beforeafter = GetDataAndSaveToFile(commit, expHome, seed, beforeafter);
-
-        //        string programs = "programs";
-        //        programs = GetDataAndSaveToFile(commit, expHome, seed, programs);
-
-        //        var foundLocations = GetEditedLocations(fragments, locations);
+        //        var regionsFrags = GetTransformedLocations(expHome);
+        //        string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
+        //        JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
+        //        if (SynthesisConfig.GetInstance().CreateLog)
+        //        {
+        //            var scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, Constants.ScriptSize);
+        //            var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
+        //            mean = sizes.Average();
+        //        }
+        //        var beforeafter = TestUtil.GetBeforeAfterList(expHome);
+        //        GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
+        //        var foundLocations = GetEditedLocations(regionsFrags, locations);
         //        var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
-
         //        if (firstProblematicLocation == -1)
         //        {
         //            //Generate meta-data for BaselineBeforeAfterList on commit.
-        //            var foundList = GetEditionInLocations(fragments, locations);
-        //            JsonUtil<List<Region>>.Write(foundList, expHome + @"cprose\" + commit + @"\metadata_tool\transformed_locations"+ seed +".json");
-
+        //            var foundList = GetEditionInLocations(regionsFrags, locations);
+        //            JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsTool + execId + ".json");
         //            var beforeafterList = GetBeforeAfterData(beforeafter, locations);
-        //            JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locations" + seed + ".json");
-        //            var beforeafterListAll = ConvertBeforeAfterToRegions(beforeafter);
-        //            JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterListAll, expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locationsAll" + seed + ".json");
+        //            JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
+        //            JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
         //            //Comparing edited locations with baseline
-        //            var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + @"cprose\" + commit + @"\metadata\before_after_locations" + seed + ".json");
-        //            var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfterList, randomList, locations);
+        //            var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
+        //            foreach (var baseline in baselineBeforeAfter)
+        //            {
+        //                var region = baseline.Item1;
+        //                region.Path = region.Path.ToUpperInvariant();
+        //                baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
+        //            }
+        //            var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
+        //            var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
         //            if (firstIncorrect == -1)
         //            {
-        //                GenerateDiffBeforeAfter(beforeafter, commit);
+        //                try
+        //                {
+        //                    var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
+        //                    GeneratedDiffEdits(commit, transformedDocuments);
+        //                }
+        //                catch (Exception)
+        //                {
+        //                    // ignored
+        //                    //throw new Exception("Errors in transforming the locations.");
+        //                }
         //                break;
         //            }
-
         //            firstProblematicLocation = firstIncorrect;
         //        }
         //        if (examples.Contains(firstProblematicLocation))
         //        {
-        //            GenerateDiffBeforeAfter(beforeafter, commit);
-        //            throw new Exception("A BeforeAfter could not be learned using this examples.");
+        //            try
+        //            {
+        //                var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
+        //                GeneratedDiffEdits(commit, transformedDocuments);
+        //            }
+        //            catch (Exception)
+        //            {
+        //                // ignored
+        //                //throw new Exception("Errors in transforming the locations.");
+        //            }
+        //            throw new Exception("A transformation could not be learned using this examples.");
         //        }
         //        examples.Add(firstProblematicLocation);
         //    }
-
-        //    var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(o => Int32.Parse(o));
-        //    var mean = sizes.Average();
-        //    //Execution end
-
+        //    //end of execution 
         //    long totalTimeToLearn = helper.TotalTimeToLearn;
         //    long totalTimeToExecute = helper.TotalTimeToLearn;
         //    var transformed = helper.Transformed;
         //    var program = helper.Program;
         //    var dictionarySelection = helper.DictionarySelection;
 
-        //    Log(commit, 
-        //        totalTimeToLearn + totalTimeToExecute, 
-        //        examples.Count,
-        //        regions.Count,
-        //        transformed.Count,
-        //        dictionarySelection.Count,
-        //        program.ToString(),
-        //        totalTimeToLearn,
-        //        totalTimeToExecute,
-        //        mean);
+        //    Log(commit,
+        //         totalTimeToLearn + totalTimeToExecute,
+        //         examples.Count,
+        //         baselineBeforeAfterList.Count,
+        //         transformed.Count,
+        //         dictionarySelection.Count,
+        //         program.ToString(),
+        //         totalTimeToLearn,
+        //         totalTimeToExecute,
+        //         mean);
         //    return true;
         //}
+        //Here ends the Log verion 
+
+
+        //Here starts the LogProgram version.
 
         /// <summary>
         /// Complete test
         /// </summary>
         /// <param name="commit">Commit where the change occurs</param>
+        /// <param name="solutionPath">Path to the solution.</param>
+        /// <param name="kinds">Kinds that will be transformed.</param>
         /// <returns>True if pass test</returns>
-        public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null)
+        public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null,
+            string fileFolder = null)
         {
+            string expHome = RefazerObject.Environment.Environment.ExpHome();
+            if (expHome.IsEmpty()) throw new Exception("Environment variable for the experiment not defined");
+
             if (kinds == null)
             {
                 kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
             }
-
+            int seed = 86028157;
+            var execId = "ranking";
             //Load grammar
             var grammar = GetGrammar();
+            var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocations + execId + ".json");
+            var locations = baselineBeforeAfterList.Select(O => O.Item1).ToList();
+            var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(baselineBeforeAfterList);
 
-            string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
-            var codeTransformations = JsonUtil<List<CodeTransformation>>.Read(expHome + @"cprose\" + commit + @"\metadata\transformed_locations.json");
+            //List<Region> regions = codeTransformations.Select(entry => entry.Trans).ToList();
+            //var locations = codeTransformations.Select(entry => entry.Location).ToList();
+            //var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
 
-            List<Region> regions = codeTransformations.Select(entry => entry.Trans).ToList();
-            var locations = codeTransformations.Select(entry => entry.Location).ToList();
-            var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(codeTransformations);
-
-            //Random number generator with a seed.
-            int seed = 86028157;
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
             var examples = randomList.GetRange(0, 2);
@@ -1226,7 +1129,8 @@ namespace RefazerUnitTests
             //Execution
             TestHelper helper;
             examples.Sort();
-            helper = new TestHelper(grammar, regions, locations, globalTransformations, expHome, solutionPath, commit, kinds, seed);
+            helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations,
+                        expHome, solutionPath, commit, kinds, fileFolder, execId);
             var allPrograms = helper.LearnPrograms(examples);
 
             for (var i = 1; i <= allPrograms.Count; i++)
@@ -1234,38 +1138,31 @@ namespace RefazerUnitTests
                 var p = allPrograms[i - 1];
                 helper.Execute(examples, p);
 
-                string codeFragments = "codefragments";
-                var fragments = GetDataAndSaveToFile(commit, expHome, seed, codeFragments);
-                var regionsFrags = ConvertFragmentsToRegions(fragments);
-                JsonUtil<List<Region>>.Write(regionsFrags,
-                    expHome + @"cprose\" + commit + @"\metadata\transformed_locationsAll" + seed + ".json");
-
-                string beforeafter = "beforeafter";
-                beforeafter = GetDataAndSaveToFile(commit, expHome, seed, beforeafter);
-
-                var foundLocations = GetEditedLocations(fragments, locations);
+                var regionsFrags = GetTransformedLocations(expHome);
+                string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
+                JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
+                var beforeafter = TestUtil.GetBeforeAfterList(expHome);
+                //  GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
+                var foundLocations = GetEditedLocations(regionsFrags, locations);
                 var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
-
                 if (firstProblematicLocation == -1)
                 {
                     //Generate meta-data for BaselineBeforeAfterList on commit.
-                    var foundList = GetEditionInLocations(fragments, locations);
-                    JsonUtil<List<Region>>.Write(foundList,
-                        expHome + @"cprose\" + commit + @"\metadata_tool\transformed_locations" + seed + ".json");
-
+                    var foundList = GetEditionInLocations(regionsFrags, locations);
+                    JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsTool + execId + ".json");
                     var beforeafterList = GetBeforeAfterData(beforeafter, locations);
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList,
-                        expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locations" + seed + ".json");
-                    var beforeafterListAll = ConvertBeforeAfterToRegions(beforeafter);
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterListAll,
-                        expHome + @"cprose\" + commit + @"\metadata_tool\before_after_locationsAll" + seed + ".json");
+                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
+                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
                     //Comparing edited locations with baseline
-                    var baselineBeforeAfterList =
-                        JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + @"cprose\" + commit +
-                                                                            @"\metadata\before_after_locations" +
-                                                                            seed + ".json");
-                    var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfterList, randomList,
-                        locations);
+                    var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
+                    foreach (var baseline in baselineBeforeAfter)
+                    {
+                        var region = baseline.Item1;
+                        region.Path = region.Path.ToUpperInvariant();
+                        baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
+                    }
+                    var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
+                    var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
                     if (firstIncorrect == -1)
                     {
                         LogProgram(commit, i, p.ToString(), true);
@@ -1282,6 +1179,7 @@ namespace RefazerUnitTests
             }
             return true;
         }
+        //Here ends the LogProgram version
 
         private static int GetFirstIncorrect(List<Tuple<Region, string, string>> toolBeforeAfterList, List<Tuple<Region, string, string>> baselineBeforeAfterList, List<int> randomList, List<CodeLocation> locations)
         {
@@ -1357,33 +1255,6 @@ namespace RefazerUnitTests
             {
                 FileUtil.WriteToFile(pathoutput, "Occurs an error while running process.");
             }
-        }
-
-        public static List<Tuple<string, string, string>> Transform(Dictionary<string, List<Tuple<Region, string, string>>> transformations)
-        {
-            List<Tuple<string, string, string>> tRegions = new List<Tuple<string, string, string>>();
-            foreach (var item in transformations)
-            {
-                int nextStart = 0;
-                var filePath = item.Value.First().Item3;
-                var source = File.ReadAllText(filePath);
-                string sourceCode = source;
-                foreach (var tregion in item.Value)
-                {
-                    Region region = tregion.Item1;
-                    string BeforeAfter = tregion.Item2;
-
-                    int start = nextStart + region.Start;
-                    int end = start + region.Length;
-                    var sourceCodeUntilStart = sourceCode.Substring(0, start);
-                    var sourceCodeAfterSelection = sourceCode.Substring(end);
-                    sourceCode = sourceCodeUntilStart + BeforeAfter + sourceCodeAfterSelection;
-
-                    nextStart += BeforeAfter.Length - region.Length;
-                }
-                tRegions.Add(Tuple.Create(source, sourceCode, filePath));
-            }
-            return tRegions;
         }
 
         private static List<Tuple<Region, string, string>> ConvertBeforeAfterToRegions(string beforeafter)
@@ -1497,77 +1368,35 @@ namespace RefazerUnitTests
             return regions;
         }
 
-        public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
-            int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
-        {
-            string commitFirstLetter = commit.ElementAt(0).ToString();
-            string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+        //public static void LogProgram(string commit, int programIndex, string program, bool status)
+        //{
+        //    string commitFirstLetter = commit.ElementAt(0).ToString();
+        //    string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
-            commit = /*commitFirstLetter + "-" +*/ /*commitId;
+        //    commit = commitId;
 
-            string path = TestUtil.LogPath;
-            using (ExcelManager em = new ExcelManager())
-            {
+        //    string path = TestUtil.LogProgramStatus;
+        //    using (ExcelManager em = new ExcelManager())
+        //    {
+        //        em.Open(path);
 
-                em.Open(path);
+        //        int empty;
+        //        for (int i = 1; ; i++)
+        //        {
+        //            if (em.GetValue("A" + i, Category.Formatted).ToString().Equals("") ||
+        //                em.GetValue("A" + i, Category.Formatted).ToString().Equals(commit) && em.GetValue("B" + i, Category.Formatted).ToString().Equals(programIndex.ToString()))
+        //            {
+        //                empty = i;
+        //                break;
+        //            }
+        //        }
 
-                int empty;
-                for (int i = 1; ; i++)
-                {
-                    if (em.GetValue("A" + i, Category.Formatted).ToString().Equals("") ||
-                        em.GetValue("A" + i, Category.Formatted).ToString().Equals(commit))
-                    {
-                        empty = i;
-                        break;
-                    }
-                }
-
-                em.SetValue("A" + empty, commit);
-                em.SetValue("B" + empty, time / 1000);
-                em.SetValue("C" + empty, exTransformations);
-                em.SetValue("D" + empty, locations);
-                em.SetValue("E" + empty, acTrasnformation);
-                em.SetValue("F" + empty, documents);
-                em.SetValue("G" + empty, program);
-                em.SetValue("H" + empty, timeToLearnEdit / 1000);
-                em.SetValue("I" + empty, timeToTransformEdit / 1000);
-                em.SetValue("J" + empty, mean);
-                em.Save();
-            }
-        }
-
-
-        public static void LogProgram(string commit, int programIndex, string program, bool status)
-        {
-            string commitFirstLetter = commit.ElementAt(0).ToString();
-            string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
-
-            commit = commitId;
-
-            string path = TestUtil.LogProgramStatus;
-            using (ExcelManager em = new ExcelManager())
-            {
-                em.Open(path);
-
-                int empty;
-                for (int i = 1; ; i++)
-                {
-                    if (em.GetValue("A" + i, Category.Formatted).ToString().Equals("") ||
-                        em.GetValue("A" + i, Category.Formatted).ToString().Equals(commit) && em.GetValue("B" + i, Category.Formatted).ToString().Equals(programIndex.ToString()))
-                    {
-                        empty = i;
-                        break;
-                    }
-                }
-
-                em.SetValue("A" + empty, commit);
-                em.SetValue("B" + empty, programIndex);
-                em.SetValue("C" + empty, program);
-                em.SetValue("D" + empty, status);
-                em.Save();
-            }
-        }
+        //        em.SetValue("A" + empty, commit);
+        //        em.SetValue("B" + empty, programIndex);
+        //        em.SetValue("C" + empty, program);
+        //        em.SetValue("D" + empty, status);
+        //        em.Save();
+        //    }
+        //}
     }
 }
-
-*/

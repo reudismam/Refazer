@@ -66,7 +66,7 @@ namespace Newtonsoft.Json.Converters
         /// <value>The culture used when converting a date to and from JSON.</value>
         public CultureInfo Culture
         {
-            get { return _culture ?? CultureInfo.CurrentCulture; }
+            get => _culture ?? CultureInfo.CurrentCulture;
             set { _culture = value; }
         }
 

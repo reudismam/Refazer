@@ -1,0 +1,35 @@
+[
+  {
+    "Item1": {
+      "Text": "Config.UseDimming",
+      "Start": 6173,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S044\\REGIONCAPTUREFORMB.CS"
+    },
+    "Item2": "!IsEditorMode && Config.UseDimming",
+    "Item3": "S044\\REGIONCAPTUREFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Config.DetectWindows",
+      "Start": 4093,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S044\\REGIONCAPTUREFORMB.CS"
+    },
+    "Item2": "!IsEditorMode && Config.DetectWindows",
+    "Item3": "S044\\REGIONCAPTUREFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Config.ShowHotkeys",
+      "Start": 18389,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S044\\REGIONCAPTUREFORMB.CS"
+    },
+    "Item2": "!IsEditorMode && Config.ShowHotkeys",
+    "Item3": "S044\\REGIONCAPTUREFORMB.CS"
+  }
+]

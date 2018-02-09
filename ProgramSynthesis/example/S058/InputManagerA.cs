@@ -34,7 +34,7 @@ namespace ShareX.ScreenCaptureLib
 
         public Point PreviousMousePosition => oldMouseState.Position;
 
-        public static Point MousePosition0Based => mouseState.ZeroBasedPosition;
+        public Point MousePosition0Based => mouseState.ZeroBasedPosition;
 
         public static Point PreviousMousePosition0Based => oldMouseState.ZeroBasedPosition;
 

@@ -94,70 +94,7 @@ namespace ShareX.ScreenCaptureLib
         private RectangleAnimation regionAnimation;
         private Bitmap bmpBackgroundImage;
 
-        public RegionCaptureForm(RegionCaptureMode mode)
-        {
-            Mode = mode;
-
-            ScreenRectangle = CaptureHelpers.GetScreenBounds();
-            ScreenRectangle0Based = CaptureHelpers.ScreenToClient(ScreenRectangle);
-            ImageRectangle = ScreenRectangle0Based;
-
-            InitializeComponent();
-
-            Config = new RegionCaptureOptions();
-            DrawableObjects = new List<DrawableObject>();
-            timerStart = new Stopwatch();
-            timerFPS = new Stopwatch();
-            regionAnimation = new RectangleAnimation()
-            {
-                Duration = TimeSpan.FromMilliseconds(200)
-            };
-
-            borderPen = new Pen(Color.Black);
-            borderDotPen = new Pen(Color.White) { DashPattern = new float[] { 5, 5 } };
-            borderDotStaticPen = new Pen(Color.White) { DashPattern = new float[] { 5, 5 } };
-            nodeBackgroundBrush = new SolidBrush(Color.White);
-            infoFont = new Font("Verdana", 9);
-            infoFontMedium = new Font("Verdana", 12);
-            infoFontBig = new Font("Verdana", 16, FontStyle.Bold);
-            textBackgroundBrush = new SolidBrush(Color.FromArgb(150, Color.FromArgb(42, 131, 199)));
-            textOuterBorderPen = new Pen(Color.FromArgb(150, Color.White));
-            textInnerBorderPen = new Pen(Color.FromArgb(150, Color.FromArgb(0, 81, 145)));
-            markerPen = new Pen(Color.FromArgb(200, Color.Red));
-        }
-
-        private void InitializeComponent()
-        {
-            components = new Container();
-
-            SuspendLayout();
-
-            AutoScaleDimensions = new SizeF(6F, 13F);
-            AutoScaleMode = AutoScaleMode.Font;
-            Cursor = Helpers.CreateCursor(Resources.Crosshair);
-            Icon = ShareXResources.Icon;
-            StartPosition = FormStartPosition.Manual;
-            FormBorderStyle = FormBorderStyle.None;
-            Bounds = ScreenRectangle;
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            Text = "ShareX - " + Resources.BaseRegionForm_InitializeComponent_Region_capture;
-            ShowInTaskbar = false;
-#if !DEBUG
-            TopMost = true;
-#endif
-
-            Shown += RegionCaptureForm_Shown;
-            KeyDown += RegionCaptureForm_KeyDown;
-            KeyUp += RegionCaptureForm_KeyUp;
-            MouseDown += RegionCaptureForm_MouseDown;
-
-            ResumeLayout(false);
-        }
-
-        public void Prepare()
-        {
-            Prepare(new Screenshot().CaptureFullscreen());
-        }
+        
 
         // Must be called before show form
         public void Prepare(Image img)
@@ -165,7 +102,7 @@ namespace ShareX.ScreenCaptureLib
             InitBackground(img);
 
             ShapeManager = new ShapeManager(this);
-            ShapeManager.WindowCaptureMode = !IsEditorMode && Config.DetectWindows;
+            ShapeManager.WindowCaptureMode = Config.DetectWindows;
             ShapeManager.IncludeControls = Config.DetectControls;
 
             if (Mode == RegionCaptureMode.OneClick || ShapeManager.WindowCaptureMode)
@@ -574,7 +511,7 @@ namespace ShareX.ScreenCaptureLib
             DrawObjects(g);
 
             // Draw F1 tips
-            if (Config.ShowHotkeys)
+            if (!IsEditorMode && Config.ShowHotkeys)
             {
                 DrawTips(g);
             }

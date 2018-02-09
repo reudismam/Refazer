@@ -9,5 +9,27 @@
     },
     "Item2": "{\r\n    get\r\n    {\r\n        _dateTimeStyles;\r\n        set;\r\n        {\r\n            _dateTimeStyles = value;\r\n        }\r\n    }\r\n}",
     "Item3": "NJ025\\ISODATETIMECONVERTERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "{\r\n            get { return _dateTimeFormat ?? string.Empty; }\r\n            set { _dateTimeFormat = (string.IsNullOrEmpty(value)) ? null : value; }\r\n        }",
+      "Start": 2459,
+      "Length": 158,
+      "Parent": null,
+      "Path": "NJ025\\ISODATETIMECONVERTERB.CS"
+    },
+    "Item2": "{\r\n    get\r\n    {\r\n        _dateTimeFormat ?? string.Empty;\r\n        set;\r\n        {\r\n            _dateTimeFormat = (string.IsNullOrEmpty(value)) ? null : value;\r\n        }\r\n    }\r\n}",
+    "Item3": "NJ025\\ISODATETIMECONVERTERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "{\r\n            get { return _culture ?? CultureInfo.CurrentCulture; }\r\n            set { _culture = value; }\r\n        }",
+      "Start": 2882,
+      "Length": 119,
+      "Parent": null,
+      "Path": "NJ025\\ISODATETIMECONVERTERB.CS"
+    },
+    "Item2": "{\r\n    get\r\n    {\r\n        _culture ?? CultureInfo.CurrentCulture;\r\n        set;\r\n        {\r\n            _culture = value;\r\n        }\r\n    }\r\n}",
+    "Item3": "NJ025\\ISODATETIMECONVERTERB.CS"
   }
 ]
