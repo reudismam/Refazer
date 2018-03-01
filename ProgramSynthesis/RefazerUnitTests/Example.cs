@@ -151,7 +151,7 @@ namespace RefazerUnitTests
         public void NJ1491()
         {
             var classes = new List<string> { "JsonSerializerInternalReader" };
-            var classesApply = new List<string> { "JsonSerializerInternalReader" };
+            var classesApply = new List<string> { "JsonSerializerInternalReader", "JsonSerializerInternalWriter" };
             CompleteTestBase(classes, classesApply, @"NJ1491\");
         }
 

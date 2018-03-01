@@ -42,8 +42,8 @@ namespace RefazerFunctions.Spg.Config
         {
             UseTokens = false;
             CreateLog = true;
-            BoundGeneratedPrograms = true;
-            DescendantsParentThreshouldForContext = 40;
+            BoundGeneratedPrograms = true; // original true?
+            DescendantsParentThreshouldForContext = 40; //original 40
             LevelsForContext = Enumerable.Range(0, 2).ToList();
         }
 

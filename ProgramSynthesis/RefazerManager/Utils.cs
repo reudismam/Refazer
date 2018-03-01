@@ -88,12 +88,19 @@ namespace RefazerManager
             //var b = (ulong)topK.Count;
             //topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
             //Print generated programs
+            
             var programStrings = "";
             topK.ForEach(p => programStrings += $"Score[{p.GetFeatureValue(scorer)}] " + p + "\n");
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
             string file = expHome + "programs.txt";
             File.WriteAllText(file, programStrings);
-             return topK;
+            if (topK.Any())
+            {
+                ProgramNode first = topK.ElementAt(0);
+                String firstString = first.ToString();
+                var score = first.GetFeatureValue(scorer);
+            }
+            return topK;
         }
 
         #region Auxiliary methods

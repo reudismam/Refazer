@@ -20,5 +20,148 @@
     },
     "Item2": "(dictionary.UnderlyingDictionary, Serializer.Context)",
     "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(list)",
+      "Start": 20920,
+      "Length": 6,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+    },
+    "Item2": "(list, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(list)",
+      "Start": 21134,
+      "Length": 6,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+    },
+    "Item2": "(list, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(createdObject)",
+      "Start": 25955,
+      "Length": 15,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+    },
+    "Item2": "(createdObject, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(createdObject)",
+      "Start": 26491,
+      "Length": 15,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+    },
+    "Item2": "(createdObject, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(newObject)",
+      "Start": 26702,
+      "Length": 11,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+    },
+    "Item2": "(newObject, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(newObject)",
+      "Start": 29373,
+      "Length": 11,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+    },
+    "Item2": "(newObject, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALREADERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(value)",
+      "Start": 8832,
+      "Length": 7,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+    },
+    "Item2": "(value, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(value)",
+      "Start": 9006,
+      "Length": 7,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+    },
+    "Item2": "(value, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(value)",
+      "Start": 10403,
+      "Length": 7,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+    },
+    "Item2": "(value, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(values)",
+      "Start": 11757,
+      "Length": 8,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+    },
+    "Item2": "(values, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(values)",
+      "Start": 13555,
+      "Length": 8,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+    },
+    "Item2": "(values, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(values)",
+      "Start": 13726,
+      "Length": 8,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+    },
+    "Item2": "(values, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(values)",
+      "Start": 15352,
+      "Length": 8,
+      "Parent": null,
+      "Path": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
+    },
+    "Item2": "(values, Serializer.Context)",
+    "Item3": "NJ1491\\JSONSERIALIZERINTERNALWRITERB.CS"
   }
 ]

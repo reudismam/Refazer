@@ -508,7 +508,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void NJ1479()
         {
-            var isCorrect = CompleteTestBase(@"NJ1479\");
+            var isCorrect = CompleteTestBase(@"NJ1479\", fileFolder: @"NJ1479\");
             Assert.IsTrue(isCorrect);
         }
 
@@ -861,7 +861,7 @@ namespace RefazerUnitTests
             string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
             commit = commitFirstLetter + "" + commitId;
-         //   commit = commit.Substring(0, commit.Length -1);
+            //commit = commit.Substring(0, commit.Length -1);
 
 
             string path = LogData.LogPath();

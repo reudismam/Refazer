@@ -555,7 +555,7 @@ namespace Newtonsoft.Json.Serialization
         switch (reader.TokenType)
         {
           case JsonToken.EndArray:
-            contract.InvokeOnDeserialized(list);
+            contract.InvokeOnDeserialized(list, Serializer.Context);
 
             return wrappedList.UnderlyingCollection;
           case JsonToken.Comment:
