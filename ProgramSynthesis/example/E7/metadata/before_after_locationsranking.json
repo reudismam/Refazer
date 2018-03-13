@@ -1,0 +1,112 @@
+[
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 1076,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 1193,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 1647,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 1764,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 2250,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 2368,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 3273,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 3390,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 3840,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c()",
+      "Start": 3957,
+      "Length": 3,
+      "Parent": null,
+      "Path": "E7\\COMMITFAILURETESTSB.CS"
+    },
+    "Item2": "ExtendedSqlAzureExecutionStrategy.ExecuteNew(c)",
+    "Item3": "E7\\COMMITFAILURETESTSB.CS"
+  }
+]

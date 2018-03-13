@@ -80,13 +80,15 @@ namespace RefazerManager
                 LogListener = new LogListener(),
             });
 
-            var consistentPrograms = engine.LearnGrammarTopK(spec, scorer, 100);
-            var topK = consistentPrograms.ToList();
+            var consistentPrograms = engine.LearnGrammar(spec);
+                //engine.LearnGrammarTopK(spec, scorer, 100);
+            //var topK = consistentPrograms.TopK(scorer, 100).ToList();
             //Max number of programs that we are interested.
-            //const ulong a = 200;
-            //var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
-            //var b = (ulong)topK.Count;
-            //topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
+            const ulong a = 200; //orinal 200
+            //var topK = consistentPrograms.RealizedPrograms.ToList();
+            var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 1000).ToList(); //topK 1000 //201?
+            var b = (ulong)topK.Count;
+            topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
             //Print generated programs
             
             var programStrings = "";

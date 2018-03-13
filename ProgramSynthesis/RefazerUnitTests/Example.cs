@@ -19,18 +19,42 @@ namespace RefazerUnitTests
     [TestClass]
     public class Example
     {
+
+        [TestMethod]
+        public void E3()
+        {
+            var classes = new List<string> { "INTERNALCONTEXT", "HISTORYREPOSITORYTESTS" };
+            var classesApply = new List<string> { "INTERNALCONTEXT", "HISTORYREPOSITORYTESTS" };
+            CompleteTestBase(classes, classesApply, @"E3\");            
+        }
+
+        [TestMethod]
+        public void E7()
+        {
+            var classes = new List<string> { "CommitFailureTests" };
+            var classesApply = new List<string> { "CommitFailureTests" };
+            CompleteTestBase(classes, classesApply, @"E7\");           
+        }
         [TestMethod]
         public void E12()
         {
             var classes = new List<string> { "QueryableExtensions" };
             CompleteTestBase(classes);
         }
+        [TestMethod]
+        public void N14()
+        {
+            var classes = new List<string> { "PACKAGESOURCEPROVIDERTEST"};
+            var classesApply = new List<string> { "PACKAGESOURCEPROVIDERTEST", "VSPACKAGESOURCEPROVIDERTEST" };
+            CompleteTestBase(classes, classesApply, @"N14\");
+        }
 
         [TestMethod]
         public void R35()
         {
             var classes = new List<string> { "SyntaxTreeExtensions" };
-            CompleteTestBase(classes);
+            var classesApply = new List<string> { "SyntaxTreeExtensions" };
+            CompleteTestBase(classes, classesApply, @"E3\");
         }
 
         [TestMethod]

@@ -169,8 +169,8 @@ namespace RefazerFunctions
 
 //// End of Manual Ranking Approach
 
-// Ranking Using ML Approach
-// -----------------------***----------------------------
+//Ranking Using ML Approach
+//-----------------------***----------------------------
 
 //using Microsoft.CodeAnalysis;
 //using Microsoft.CodeAnalysis.CSharp;
