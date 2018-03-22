@@ -235,7 +235,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     new[]
@@ -257,7 +257,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     new[]
@@ -290,7 +290,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     new[]
@@ -324,7 +324,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     new[]
@@ -365,7 +365,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     new[]
@@ -396,7 +396,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     new[]
@@ -426,7 +426,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     new[]
@@ -481,7 +481,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     GetCreateHistoryTableOperation(),
@@ -508,7 +508,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     GetCreateHistoryTableOperation(),
@@ -535,7 +535,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     GetCreateHistoryTableOperation(),
@@ -630,7 +630,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     GetCreateHistoryTableOperation(),
@@ -665,7 +665,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     GetCreateHistoryTableOperation(),
@@ -698,7 +698,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     GetCreateHistoryTableOperation(historyRepository.CurrentSchema),
@@ -731,7 +731,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 ExecuteOperations(
                     GetCreateHistoryTableOperation(),
@@ -931,7 +931,7 @@ namespace System.Data.Entity.Migrations.History
 
             using (var context = CreateContext<ShopContext_v1>())
             {
-                var model = new VersionedModel(context.GetModel());
+                var model = context.GetModel();
 
                 var clonedConnection = DbProviderServices.GetProviderFactory(context.Database.Connection).CreateConnection();
                 clonedConnection.ConnectionString = context.Database.Connection.ConnectionString;

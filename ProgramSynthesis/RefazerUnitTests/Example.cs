@@ -41,13 +41,14 @@ namespace RefazerUnitTests
             var classes = new List<string> { "QueryableExtensions" };
             CompleteTestBase(classes);
         }
-        [TestMethod]
-        public void N14()
-        {
-            var classes = new List<string> { "PACKAGESOURCEPROVIDERTEST"};
-            var classesApply = new List<string> { "PACKAGESOURCEPROVIDERTEST", "VSPACKAGESOURCEPROVIDERTEST" };
-            CompleteTestBase(classes, classesApply, @"N14\");
-        }
+        //[TestMethod]
+        //public void N14()
+        //{
+        //    var classes = new List<string> { "PACKAGESOURCEPROVIDERTEST"};
+        //    var classesApply = new List<string> { "PACKAGESOURCEPROVIDERTEST", "VSPACKAGESOURCEPROVIDERTEST" };
+        //    CompleteTestBase(classes, classesApply, @"N14\");
+        //}
+
 
         [TestMethod]
         public void R35()
@@ -58,10 +59,66 @@ namespace RefazerUnitTests
         }
 
         [TestMethod]
+        public void N18()
+        {
+            var classes = new List<string> { "NuGetPowerShellBaseCommand" };
+            var classesApply = new List<string> { "NuGetPowerShellBaseCommand", "OpenPackagePageCommand"};
+            CompleteTestBase(classes, classesApply, @"N18\");
+        }
+
+        [TestMethod]
         public void N20()
         {
             var classes = new List<string> { "PackageRepositoryExtensions" };
             CompleteTestBase(classes);
+        }
+
+        [TestMethod]
+        public void N21()
+        {
+            var classes = new List<string> { "DataServicePackageRepository", "VSPackageSourceRepository", "PackageRepositoryExtensions" };
+            var classesApply = new List<string> { "DataServicePackageRepository","FallbackRepository", "LazyRepository", "MockServiceBasePackageRepository", "PackageRepositoryExtensions", "ServerPackageRepository", "VSPackageSourceRepository" };
+            CompleteTestBase(classes, classesApply, @"N21\");
+        }
+
+        [TestMethod]
+        public void N28()
+        {
+            var classes = new List<string> { "GetPackageCommand" };
+            var classesApply = new List<string> { "GetPackageCommand", "InstallPackageCommand", "UninstallPackageCommand", "UpdatePackageCommand", "OpenPackagePageCommand" };
+            CompleteTestBase(classes, classesApply, @"N28\");
+        }
+
+        [TestMethod]
+        public void N29()
+        {
+            var classes = new List<string> { "PackageSolutionDetailControlModel" };
+            var classesApply = new List<string> { "PackageSolutionDetailControlModel" };
+            CompleteTestBase(classes, classesApply, @"N29\");
+        }
+
+        [TestMethod]
+        public void R30()
+        {
+            var classes = new List<string> { "LanguageParser" };
+            var classesApply = new List<string> { "LanguageParser" };
+            CompleteTestBase(classes, classesApply, @"R30\");
+        }
+
+        [TestMethod]
+        public void R50()
+        {
+            var classes = new List<string> { "SourceDelegateMethodSymbol" };
+            var classesApply = new List<string> { "SourceDelegateMethodSymbol" };
+            CompleteTestBase(classes, classesApply, @"R50\");
+        }
+
+        [TestMethod]
+        public void R54()
+        {            
+            var classes = new List<string> { "ApplyDiagnosticAnalyzerAttributeFix" };
+            var classesApply = new List<string> { "ApplyDiagnosticAnalyzerAttributeFix", "CA1008CodeFixProviderBase", "CA1012CodeFixProvider", "CA1309CodeFixProviderBase", "CA1309CSharpCodeFixProvider", "CA2101CodeFixProviderBase", "CA2101CSharpCodeFixProvider", "CA2213CSharpCodeFixProvider", "CA2229CodeFixProvider", "CA2235CodeFixProviderBase", "CA2237CodeFixProvider", "CodeGeneration", "EnumWithFlagsCodeFixProviderBase", "ISymbolExtensions", "SymbolEditorTests", "SyntaxNodeTests" };
+            CompleteTestBase(classes, classesApply, @"R54\");
         }
 
         [TestMethod]

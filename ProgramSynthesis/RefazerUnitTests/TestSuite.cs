@@ -19,6 +19,7 @@ using TreeEdit.Spg.Log;
 using TreeEdit.Spg.LogInfo;
 using TreeEdit.Spg.Transform;
 using TreeElement;
+using System.Windows.Forms;
 
 namespace RefazerUnitTests
 {
@@ -857,11 +858,11 @@ namespace RefazerUnitTests
         public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
         {
-            string commitFirstLetter = commit.ElementAt(0).ToString();
-            string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+        //    string commitFirstLetter = commit.ElementAt(0).ToString();
+         //   string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
-            commit = commitFirstLetter + "" + commitId;
-          //  commit = commit.Substring(0, commit.Length -1);
+         //   commit = commitFirstLetter + "" + commitId;
+            commit = commit.Substring(0, commit.Length -1);
 
 
             string path = LogData.LogPath();
@@ -897,10 +898,16 @@ namespace RefazerUnitTests
 
         public static void LogProgram(string commit, int programIndex, string program, bool status)
         {
-            string commitFirstLetter = commit.ElementAt(0).ToString();
-            string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+            //  string commitFirstLetter = commit.ElementAt(0).ToString();
+            //  string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
             //commit = commitId;
+
+            //string commitFirstLetter = commit.ElementAt(0).ToString();
+            //string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+
+            //commit = commitFirstLetter + "" + commitId;
+          //  commit = commit.Substring(0, commit.Length - 1);
 
             string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
@@ -992,8 +999,7 @@ namespace RefazerUnitTests
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
             var examples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
-                                                                                //  var examples = randomList.GetRange(0, 1);
-                                                                                //Execution
+
             TestHelper helper;
             double mean = -1.0;
             while (true)
@@ -1035,8 +1041,29 @@ namespace RefazerUnitTests
                     }
                     var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
                     var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
+                    bool moreThanNeeded = false;
                     if (firstIncorrect == -1)
                     {
+                        //selecting more than needed.
+                        if (beforeafterList.Count > locations.Count)
+                        {
+                            moreThanNeeded = true;
+                            foreach (int x in randomList)
+                            {
+                                if (!examples.Contains(x))
+                                {
+                                    examples.Add(x);
+                                    break;
+                                }
+                            }
+                        }
+                        if (examples.Count == randomList.Count)
+                        {
+                            throw new Exception("Sorry. Good luck next time!!");
+                        }
+                        if (moreThanNeeded) {
+                            continue;
+                        }
                         try
                         {
                             var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
@@ -1117,8 +1144,9 @@ namespace RefazerUnitTests
         //    Random random = new Random(seed);
         //    var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
         //    bool atLeastOneCorrect = false;
-        //    for (int exampleIndex = 1; exampleIndex < locations.Count; exampleIndex++)
+        //    for (int exampleIndex = 1; exampleIndex <= locations.Count; exampleIndex++) // inicia com 1 exemplo originalmente
         //    {
+        //       // MessageBox.Show(exampleIndex + "");
         //        var examples = randomList.GetRange(0, exampleIndex);
         //        //Execution
         //        TestHelper helper;
@@ -1129,6 +1157,8 @@ namespace RefazerUnitTests
         //        for (var i = 1; i <= allPrograms.Count; i++)
         //        {
         //            var p = allPrograms[i - 1];
+        //            CodeFragmentsInfo.GetInstance().Locations.Clear();
+        //            TransformationInfos.GetInstance().Transformations.Clear();
         //            helper.Execute(examples, p);
 
         //            var regionsFrags = GetTransformedLocations(expHome);

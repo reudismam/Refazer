@@ -1,0 +1,57 @@
+[
+  {
+    "Item1": {
+      "Text": "\"object\"",
+      "Start": 7852,
+      "Length": 8,
+      "Parent": null,
+      "Path": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+    },
+    "Item2": "GetUniqueParameterName(parameters, \"object\")",
+    "Item3": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"method\"",
+      "Start": 7949,
+      "Length": 8,
+      "Parent": null,
+      "Path": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+    },
+    "Item2": "GetUniqueParameterName(parameters, \"method\")",
+    "Item3": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"callback\"",
+      "Start": 12285,
+      "Length": 10,
+      "Parent": null,
+      "Path": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+    },
+    "Item2": "GetUniqueParameterName(parameters, \"callback\")",
+    "Item3": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"object\"",
+      "Start": 12409,
+      "Length": 8,
+      "Parent": null,
+      "Path": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+    },
+    "Item2": "GetUniqueParameterName(parameters, \"object\")",
+    "Item3": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"__result\"",
+      "Start": 14213,
+      "Length": 10,
+      "Parent": null,
+      "Path": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+    },
+    "Item2": "GetUniqueParameterName(parameters, \"__result\")",
+    "Item3": "R50\\SOURCEDELEGATEMETHODSYMBOLB.CS"
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "Item1": {
+      "Text": "Client.MessageLevel",
+      "Start": 6028,
+      "Length": 19,
+      "Parent": null,
+      "Node": null,
+      "Path": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+    },
+    "Item2": "MessageLevel",
+    "Item3": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+  },
+  {
+    "Item1": {
+      "Text": "Client.MessageLevel",
+      "Start": 10479,
+      "Length": 19,
+      "Parent": null,
+      "Node": null,
+      "Path": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+    },
+    "Item2": "MessageLevel",
+    "Item3": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+  },
+  {
+    "Item1": {
+      "Text": "Client.MessageLevel",
+      "Start": 10603,
+      "Length": 19,
+      "Parent": null,
+      "Node": null,
+      "Path": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+    },
+    "Item2": "MessageLevel",
+    "Item3": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+  },
+  {
+    "Item1": {
+      "Text": "Client.MessageLevel",
+      "Start": 10731,
+      "Length": 19,
+      "Parent": null,
+      "Node": null,
+      "Path": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+    },
+    "Item2": "MessageLevel",
+    "Item3": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+  },
+  {
+    "Item1": {
+      "Text": "Client.MessageLevel",
+      "Start": 10861,
+      "Length": 19,
+      "Parent": null,
+      "Node": null,
+      "Path": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+    },
+    "Item2": "MessageLevel",
+    "Item3": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+  },
+  {
+    "Item1": {
+      "Text": "Client.MessageLevel",
+      "Start": 10985,
+      "Length": 19,
+      "Parent": null,
+      "Node": null,
+      "Path": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+    },
+    "Item2": "MessageLevel",
+    "Item3": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+  },
+  {
+    "Item1": {
+      "Text": "Client.MessageLevel",
+      "Start": 19507,
+      "Length": 19,
+      "Parent": null,
+      "Node": null,
+      "Path": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+    },
+    "Item2": "MessageLevel",
+    "Item3": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\NuGetPowerShellBaseCommand.cs"
+  },
+  {
+    "Item1": {
+      "Text": "Client.MessageLevel",
+      "Start": 1261,
+      "Length": 19,
+      "Parent": null,
+      "Node": null,
+      "Path": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\OpenPackagePageCommand.cs"
+    },
+    "Item2": "MessageLevel",
+    "Item3": "NuGet\\nuget2\\src\\V3\\NuGet.Client.VisualStudio.PowerShell\\OpenPackagePageCommand.cs"
+  }
+]

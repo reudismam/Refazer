@@ -1,0 +1,178 @@
+[
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 430,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\APPLYDIAGNOSTICANALYZERATTRIBUTEFIXB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\APPLYDIAGNOSTICANALYZERATTRIBUTEFIXB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 371,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA1008CODEFIXPROVIDERBASEB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA1008CODEFIXPROVIDERBASEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 437,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA1012CODEFIXPROVIDERB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA1012CODEFIXPROVIDERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 250,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA1309CODEFIXPROVIDERBASEB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA1309CODEFIXPROVIDERBASEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 348,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA1309CSHARPCODEFIXPROVIDERB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA1309CSHARPCODEFIXPROVIDERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 250,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA2101CODEFIXPROVIDERBASEB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA2101CODEFIXPROVIDERBASEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 353,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA2101CSHARPCODEFIXPROVIDERB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA2101CSHARPCODEFIXPROVIDERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 383,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA2213CSHARPCODEFIXPROVIDERB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA2213CSHARPCODEFIXPROVIDERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 449,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA2229CODEFIXPROVIDERB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA2229CODEFIXPROVIDERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 399,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA2235CODEFIXPROVIDERBASEB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA2235CODEFIXPROVIDERBASEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 370,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CA2237CODEFIXPROVIDERB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CA2237CODEFIXPROVIDERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 390,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\CODEGENERATIONB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\CODEGENERATIONB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 357,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\ENUMWITHFLAGSCODEFIXPROVIDERBASEB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\ENUMWITHFLAGSCODEFIXPROVIDERBASEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 398,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\ISYMBOLEXTENSIONSB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\ISYMBOLEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 82,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\SYMBOLEDITORTESTSB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\SYMBOLEDITORTESTSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CodeGeneration",
+      "Start": 317,
+      "Length": 14,
+      "Parent": null,
+      "Path": "R54\\SYNTAXNODETESTSB.CS"
+    },
+    "Item2": "Editting",
+    "Item3": "R54\\SYNTAXNODETESTSB.CS"
+  }
+]
