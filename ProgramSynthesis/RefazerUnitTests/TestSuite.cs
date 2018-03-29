@@ -36,7 +36,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void E2()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\2");
+            var isCorrect = CompleteTestBase(@"E2\");
             Assert.IsTrue(isCorrect);
         }
 
@@ -50,175 +50,175 @@ namespace RefazerUnitTests
         [TestMethod]
         public void E4()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\4");
+            var isCorrect = CompleteTestBase(@"E4\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void E5()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\5");
+            var isCorrect = CompleteTestBase(@"E5\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void E6()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\6");
+            var isCorrect = CompleteTestBase(@"E6\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void E7()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\7");
+            var isCorrect = CompleteTestBase(@"E7\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void E8()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\8", solutionPath: @"EntityFramework\entityframework7\EntityFramework.sln");
+            var isCorrect = CompleteTestBase(@"E8\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void E9()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\9");
+            var isCorrect = CompleteTestBase(@"E9\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void E10()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\10");
+            var isCorrect = CompleteTestBase(@"E10\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void E11()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\11", solutionPath: @"EntityFramework\entityframework2\EntityFramework.sln");
+            var isCorrect = CompleteTestBase(@"E11\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void E12()
         {
-            var isCorrect = CompleteTestBase(@"EntityFramewok\12");
+            var isCorrect = CompleteTestBase(@"E12\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N13()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\13", kinds: new List<SyntaxKind> { SyntaxKind.PropertyDeclaration });
+            var isCorrect = CompleteTestBase(@"N13\", kinds: new List<SyntaxKind> { SyntaxKind.PropertyDeclaration });
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N14()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\14", solutionPath: @"NuGet\nuget3\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"N14\", fileFolder: @"N14\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N15()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\15");
+            var isCorrect = CompleteTestBase(@"N15\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N16()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\16", solutionPath: @"NuGet\nuget4\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"N16\", fileFolder: @"N16\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N17()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\17");
+            var isCorrect = CompleteTestBase(@"N17\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N18()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\18", solutionPath: @"NuGet\nuget2\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"N18\", fileFolder: @"N18\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N19()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\19");
+            var isCorrect = CompleteTestBase(@"N19\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N20()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\20");
+            var isCorrect = CompleteTestBase(@"N20\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N21()
         {
-            var isCorrect = CompleteTestBase(@"Nuget\21", solutionPath: @"NuGet\nuget7\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"N21\", fileFolder: @"N21\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N22()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\22");
+            var isCorrect = CompleteTestBase(@"N22\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N23()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\23");
+            var isCorrect = CompleteTestBase(@"N23\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N24()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\24");
+            var isCorrect = CompleteTestBase(@"N24\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N25()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\25");
+            var isCorrect = CompleteTestBase(@"N25\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N26()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\26");
+            var isCorrect = CompleteTestBase(@"N26\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N27()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\27");
+            var isCorrect = CompleteTestBase(@"N27\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void N28()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\28", solutionPath: @"NuGet\nuget6\NuGet.sln",
+            var isCorrect = CompleteTestBase(@"N28\", fileFolder: @"N28\",
                 kinds: new List<SyntaxKind> { SyntaxKind.AttributeList });
             Assert.IsTrue(isCorrect);
         }
@@ -226,182 +226,182 @@ namespace RefazerUnitTests
         [TestMethod]
         public void N29()
         {
-            var isCorrect = CompleteTestBase(@"NuGet\29", solutionPath: @"NuGet\nuget10\NuGet.sln");
+            var isCorrect = CompleteTestBase(@"N29\", fileFolder: @"N29\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R30()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\30");
+            var isCorrect = CompleteTestBase(@"R30\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R31()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\31", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration });
+            var isCorrect = CompleteTestBase(@"R31\", fileFolder: @"R31\", kinds: new List<SyntaxKind> { SyntaxKind.ClassDeclaration });
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R32()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\32", solutionPath: @"Roslyn\roslyn18\Src\Roslyn.sln", kinds: new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.PropertyDeclaration });
+            var isCorrect = CompleteTestBase(@"R32\", fileFolder: @"R32\", kinds: new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.PropertyDeclaration });
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R33()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\33");
+            var isCorrect = CompleteTestBase(@"R33\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R34()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\34");
+            var isCorrect = CompleteTestBase(@"R34\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R35()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\35", solutionPath: @"Roslyn\roslyn\src\Roslyn.sln");
+            var isCorrect = CompleteTestBase(@"R35\", fileFolder: @"R35\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R36()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\36");
+            var isCorrect = CompleteTestBase(@"R36\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R37()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\37");
+            var isCorrect = CompleteTestBase(@"R37\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R38()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\38");
+            var isCorrect = CompleteTestBase(@"R38\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R39()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\39");
+            var isCorrect = CompleteTestBase(@"R39\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R40()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\40");
+            var isCorrect = CompleteTestBase(@"R40\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R41()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\41", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln");
+            var isCorrect = CompleteTestBase(@"R41\", fileFolder: @"R41\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R42()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\42");
+            var isCorrect = CompleteTestBase(@"R42\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R43()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\43");
+            var isCorrect = CompleteTestBase(@"R43\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R44()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\44");
+            var isCorrect = CompleteTestBase(@"R44\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R45()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\45");
+            var isCorrect = CompleteTestBase(@"R45\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R46()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\46");
+            var isCorrect = CompleteTestBase(@"R46\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R47()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\47");
+            var isCorrect = CompleteTestBase(@"R47\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R48()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\48");
+            var isCorrect = CompleteTestBase(@"R48\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R49()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\49");
+            var isCorrect = CompleteTestBase(@"R49\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R50()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\50", kinds: new List<SyntaxKind> { SyntaxKind.ConstructorDeclaration });
+            var isCorrect = CompleteTestBase(@"R50\", kinds: new List<SyntaxKind> { SyntaxKind.ConstructorDeclaration });
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R51()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\51");
+            var isCorrect = CompleteTestBase(@"R51\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R52()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\52");
+            var isCorrect = CompleteTestBase(@"R52\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R53()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\53");
+            var isCorrect = CompleteTestBase(@"R53\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R54()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\54", solutionPath: @"Roslyn\roslyn7\src\Roslyn.sln",
+            var isCorrect = CompleteTestBase(@"R54\", fileFolder: @"R54\",
                 kinds: new List<SyntaxKind> { SyntaxKind.UsingDirective });
             Assert.IsTrue(isCorrect);
         }
@@ -409,14 +409,14 @@ namespace RefazerUnitTests
         [TestMethod]
         public void R55()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\55");
+            var isCorrect = CompleteTestBase(@"R55\");
             Assert.IsTrue(isCorrect);
         }
 
         [TestMethod]
         public void R56()
         {
-            var isCorrect = CompleteTestBase(@"Roslyn\56");
+            var isCorrect = CompleteTestBase(@"R56\");
             Assert.IsTrue(isCorrect);
         }
 
@@ -858,11 +858,11 @@ namespace RefazerUnitTests
         public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
         {
-        //    string commitFirstLetter = commit.ElementAt(0).ToString();
-         //   string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+         //   string commitFirstLetter = commit.ElementAt(0).ToString();
+        //    string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
-         //   commit = commitFirstLetter + "" + commitId;
-            commit = commit.Substring(0, commit.Length -1);
+        //    commit = commitFirstLetter + "" + commitId;
+         //   commit = commit.Substring(0, commit.Length -1);
 
 
             string path = LogData.LogPath();
@@ -998,7 +998,7 @@ namespace RefazerUnitTests
             //Random number generator with a seed.
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-            var examples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
+            var examples = randomList.GetRange(0, Math.Min(2, locations.Count));//Aqui minimo 2
 
             TestHelper helper;
             double mean = -1.0;
@@ -1045,7 +1045,7 @@ namespace RefazerUnitTests
                     if (firstIncorrect == -1)
                     {
                         //selecting more than needed.
-                        if (beforeafterList.Count > locations.Count)
+                        if (beforeafter.Count > locations.Count)
                         {
                             moreThanNeeded = true;
                             foreach (int x in randomList)
@@ -1057,7 +1057,7 @@ namespace RefazerUnitTests
                                 }
                             }
                         }
-                        if (examples.Count == randomList.Count)
+                        if (moreThanNeeded && examples.Count == randomList.Count)
                         {
                             throw new Exception("Sorry. Good luck next time!!");
                         }

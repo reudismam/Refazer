@@ -321,258 +321,99 @@
 
 ////Begining of New Training Data ML Approach
 
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.ProgramSynthesis;
-using Microsoft.ProgramSynthesis.AST;
-using System.Text.RegularExpressions;
-
-namespace RefazerFunctions
-{
-    public class RankingScore : Feature<double>
-    {
-        public RankingScore(Grammar grammar) : base(grammar, "Score") { }
-
-        public const double VariableScore = 0;
-
-        // Editing EditMap
-        [FeatureCalculator("EditMap")]
-        public static double Score_EditMap(double scriptScore, double editScore) => 0.57128531 - 3.89013878 + scriptScore + editScore;
-
-        [FeatureCalculator(nameof(Semantics.AllNodes))]
-        public static double Score_Traversal(double scriptScore, double editScore) => 0.57128531 + scriptScore + editScore;
-
-        [FeatureCalculator("EditFilter")]
-        public static double Score_EditFilter(double predScore, double splitScore) => 0.57128531 + (predScore + splitScore);
-
-        [FeatureCalculator(nameof(Semantics.Match))]
-        public static double Score_Match(double inSource, double matchScore) => 0.57128531 + matchScore;
-
-        [FeatureCalculator(nameof(Semantics.SC))]
-        public static double Score_CS(double childScore) => 0.57128531 + childScore;
-
-        [FeatureCalculator(nameof(Semantics.CList))]
-        public static double Score_CList(double childScore, double childrenScore) => 0.57128531 + childScore + childrenScore;
-
-        [FeatureCalculator(nameof(Semantics.SP))]
-        public static double Score_PS(double childScore) => 0.57128531 + childScore;
-
-        [FeatureCalculator(nameof(Semantics.PList))]
-        public static double Score_PList(double childScore, double childrenScore) => 0.57128531 + childScore + childrenScore;
-
-        [FeatureCalculator(nameof(Semantics.SN))]
-        public static double Score_SN(double childScore) => 0.57128531 + childScore;
-
-        [FeatureCalculator(nameof(Semantics.NList))]
-        public static double Score_NList(double childScore, double childrenScore) => 0.57128531 + childScore + childrenScore;
-
-        [FeatureCalculator(nameof(Semantics.SE))]
-        public static double Score_SE(double childScore) => 0.57128531 + childScore;
-
-        [FeatureCalculator(nameof(Semantics.EList))]
-        public static double Score_EList(double childScore, double childrenScore) => 0.57128531 + childScore + childrenScore;
-
-        [FeatureCalculator(nameof(Semantics.Transformation), Method = CalculationMethod.FromChildrenFeatureValues)]
-        public static double Score_Script1(double inScore, double edit) => 0.57128531 + 1.56909801 + edit;
-
-        [FeatureCalculator(nameof(Semantics.Insert))]
-        public static double Score_Insert(double inScore, double astScore) => 0.57128531 + inScore + astScore;
-
-        [FeatureCalculator(nameof(Semantics.InsertBefore))]
-        public static double Score_InsertBefore(double inScore, double astScore) => 0.57128531 + inScore + astScore;
-
-        [FeatureCalculator(nameof(Semantics.Update))]
-        public static double Score_Update(double inScore, double toScore) => 0.57128531 + inScore + toScore;
-
-        [FeatureCalculator(nameof(Semantics.Delete))]
-        public static double Score_Delete(double inScore, double refscore) => 0.57128531 + refscore;
-
-        [FeatureCalculator(nameof(Semantics.Node))]
-        public static double Score_Node1(double kScore, double astScore) => 0.57128531 - 1.01375502 + astScore;
-
-        [FeatureCalculator(nameof(Semantics.ConstNode))]
-        public static double Score_Node1(double astScore) => 0.57128531 -1.02285951;
-
-        // Editing Abstract
-        [FeatureCalculator(nameof(Semantics.Abstract))]
-        public static double Score_Abstract(double kindScore) => 0.57128531 - 0.78242616;
-
-        [FeatureCalculator(nameof(Semantics.Context))]
-        public static double Score_ParentP(double matchScore, double kScore) => 0.57128531 + matchScore + kScore;
-
-        [FeatureCalculator(nameof(Semantics.ContextPPP))]
-        public static double Score_ParentPPP(double matchScore, double kScore) => 0.57128531 + matchScore;
-
-        [FeatureCalculator(nameof(Semantics.Concrete))]
-        public static double Score_Concrete(double treeScore) => 0.57128531 - 1.09397898;
-
-        [FeatureCalculator(nameof(Semantics.Variable))]
-        public static double Score_Variable(double idScore) => 0.57128531 + idScore;
-
-        [FeatureCalculator(nameof(Semantics.Pattern))]
-        public static double Score_Pattern(double kindScore, double expression1Score) => 0.57128531 - 1.25746285 + expression1Score;
-
-        [FeatureCalculator(nameof(Semantics.Reference))]
-        public static double Score_Reference(double inScore, double patternScore, double kScore) => 0.57128531 - 1.08285938 + patternScore;
-
-        [FeatureCalculator("id", Method = CalculationMethod.FromLiteral)]
-        public static double KDScore(string kd)
-        {
-            string parentOne = "\"\\/\\[[0-9]\\]\"";
-            Match f7 = Regex.Match(kd, parentOne);
-            string parentTwo = "\"\\/\\[[0-9]\\]\\/\\[[0-9]\\]\"";
-            Match f8 = Regex.Match(kd, parentTwo);
-
-            string parentThree = "\"\\/\\[[0-9]\\]\\/\\[[0-9]\\]\\/\\[[0-9]\\]\"";
-            Match f9 = Regex.Match(kd, parentThree);
-
-
-            string nodeItSelf = "\\.";
-            Match f10 = Regex.Match(kd, nodeItSelf);
-
-
-            if (f7.Success)
-            {
-                return 0.16255022;
-            }
-            else if (f8.Success)
-            {
-                return 0;
-            }
-            else if (f9.Success)
-            {
-                return 0;
-            }
-            else if (f10.Success)
-            {
-                return 0.97457936;
-
-            }
-
-            return 0;
-
-        }
-
-        [FeatureCalculator("c", Method = CalculationMethod.FromLiteral)]
-        public static double CScore(int c) => 0;
-
-        [FeatureCalculator("kind", Method = CalculationMethod.FromLiteral)]
-        public static double KindScore(SyntaxKind kd) => 0;
-
-        [FeatureCalculator("tree", Method = CalculationMethod.FromLiteral)]
-        public static double NodeScore(SyntaxNodeOrToken kd) => 0;
-    }
-}
-
-//// End of New Training Data ML Approach
-
-//// Begining of Random Approach
-
 //using Microsoft.CodeAnalysis;
 //using Microsoft.CodeAnalysis.CSharp;
 //using Microsoft.ProgramSynthesis;
 //using Microsoft.ProgramSynthesis.AST;
 //using System.Text.RegularExpressions;
-//using System;
 
 //namespace RefazerFunctions
 //{
-
 //    public class RankingScore : Feature<double>
 //    {
 //        public RankingScore(Grammar grammar) : base(grammar, "Score") { }
 
-//        public static int seed = 86028157;
 //        public const double VariableScore = 0;
-//        public static Random rnd = new Random(seed);
-
-
-//        public static double GetRandom(double min, double max)
-//        {
-//            return rnd.NextDouble() * (max - min) + min;
-//        }
-//        public static double temp = GetRandom(-10, 10);
 
 //        // Editing EditMap
 //        [FeatureCalculator("EditMap")]
-//        public static double Score_EditMap(double scriptScore, double editScore) => temp + GetRandom(-10, 10) + scriptScore + editScore;
+//        public static double Score_EditMap(double scriptScore, double editScore) => -0.6406 + 23.7911 + scriptScore + editScore;
 
 //        [FeatureCalculator(nameof(Semantics.AllNodes))]
-//        public static double Score_Traversal(double scriptScore, double editScore) => temp + scriptScore + editScore;
+//        public static double Score_Traversal(double scriptScore, double editScore) => -0.6406 + scriptScore + editScore;
 
 //        [FeatureCalculator("EditFilter")]
-//        public static double Score_EditFilter(double predScore, double splitScore) => temp + (predScore + splitScore);
+//        public static double Score_EditFilter(double predScore, double splitScore) => -0.6406 + (predScore + splitScore);
 
 //        [FeatureCalculator(nameof(Semantics.Match))]
-//        public static double Score_Match(double inSource, double matchScore) => temp + matchScore;
+//        public static double Score_Match(double inSource, double matchScore) => -0.6406 + matchScore;
 
 //        [FeatureCalculator(nameof(Semantics.SC))]
-//        public static double Score_CS(double childScore) => temp + childScore;
+//        public static double Score_CS(double childScore) => -0.6406 + childScore;
 
 //        [FeatureCalculator(nameof(Semantics.CList))]
-//        public static double Score_CList(double childScore, double childrenScore) => temp + childScore + childrenScore;
+//        public static double Score_CList(double childScore, double childrenScore) => -0.6406 + childScore + childrenScore;
 
 //        [FeatureCalculator(nameof(Semantics.SP))]
-//        public static double Score_PS(double childScore) => temp + childScore;
+//        public static double Score_PS(double childScore) => -0.6406 + childScore;
 
 //        [FeatureCalculator(nameof(Semantics.PList))]
-//        public static double Score_PList(double childScore, double childrenScore) => temp + childScore + childrenScore;
+//        public static double Score_PList(double childScore, double childrenScore) => -0.6406 + childScore + childrenScore;
 
 //        [FeatureCalculator(nameof(Semantics.SN))]
-//        public static double Score_SN(double childScore) => temp + childScore;
+//        public static double Score_SN(double childScore) => -0.6406 + childScore;
 
 //        [FeatureCalculator(nameof(Semantics.NList))]
-//        public static double Score_NList(double childScore, double childrenScore) => temp + childScore + childrenScore;
+//        public static double Score_NList(double childScore, double childrenScore) => -0.6406 + childScore + childrenScore;
 
 //        [FeatureCalculator(nameof(Semantics.SE))]
-//        public static double Score_SE(double childScore) => temp + childScore;
+//        public static double Score_SE(double childScore) => -0.6406 + childScore;
 
 //        [FeatureCalculator(nameof(Semantics.EList))]
-//        public static double Score_EList(double childScore, double childrenScore) => temp + childScore + childrenScore;
+//        public static double Score_EList(double childScore, double childrenScore) => -0.6406 + childScore + childrenScore;
 
 //        [FeatureCalculator(nameof(Semantics.Transformation), Method = CalculationMethod.FromChildrenFeatureValues)]
-//        public static double Score_Script1(double inScore, double edit) => temp + GetRandom(-10, 10) + edit;
+//        public static double Score_Script1(double inScore, double edit) => -0.6406 - 21.0728 + edit;
 
 //        [FeatureCalculator(nameof(Semantics.Insert))]
-//        public static double Score_Insert(double inScore, double astScore) => temp + inScore + astScore;
+//        public static double Score_Insert(double inScore, double astScore) => -0.6406 + inScore + astScore;
 
 //        [FeatureCalculator(nameof(Semantics.InsertBefore))]
-//        public static double Score_InsertBefore(double inScore, double astScore) => temp + inScore + astScore;
+//        public static double Score_InsertBefore(double inScore, double astScore) => -0.6406 + inScore + astScore;
 
 //        [FeatureCalculator(nameof(Semantics.Update))]
-//        public static double Score_Update(double inScore, double toScore) => temp + inScore + toScore;
+//        public static double Score_Update(double inScore, double toScore) => -0.6406 + inScore + toScore;
 
 //        [FeatureCalculator(nameof(Semantics.Delete))]
-//        public static double Score_Delete(double inScore, double refscore) => temp + refscore;
+//        public static double Score_Delete(double inScore, double refscore) => -0.6406 + refscore;
 
 //        [FeatureCalculator(nameof(Semantics.Node))]
-//        public static double Score_Node1(double kScore, double astScore) => temp + GetRandom(-10, 10) + astScore;
+//        public static double Score_Node1(double kScore, double astScore) => -0.6406 + 1.1386 + astScore;
 
 //        [FeatureCalculator(nameof(Semantics.ConstNode))]
-//        public static double Score_Node1(double astScore) => temp + GetRandom(-10, 10);
+//        public static double Score_Node1(double astScore) => -0.6406 + 1.0916;
 
 //        // Editing Abstract
 //        [FeatureCalculator(nameof(Semantics.Abstract))]
-//        public static double Score_Abstract(double kindScore) => temp + GetRandom(-10, 10);
+//        public static double Score_Abstract(double kindScore) => -0.6406 + 0.9729;
 
 //        [FeatureCalculator(nameof(Semantics.Context))]
-//        public static double Score_ParentP(double matchScore, double kScore) => temp + matchScore + kScore;
+//        public static double Score_ParentP(double matchScore, double kScore) => -0.6406 + matchScore + kScore;
 
 //        [FeatureCalculator(nameof(Semantics.ContextPPP))]
-//        public static double Score_ParentPPP(double matchScore, double kScore) => temp + matchScore;
+//        public static double Score_ParentPPP(double matchScore, double kScore) => -0.6406 + matchScore;
 
 //        [FeatureCalculator(nameof(Semantics.Concrete))]
-//        public static double Score_Concrete(double treeScore) => temp + GetRandom(-10, 10);
+//        public static double Score_Concrete(double treeScore) => -0.6406 + 1.2855;
 
 //        [FeatureCalculator(nameof(Semantics.Variable))]
-//        public static double Score_Variable(double idScore) => temp + idScore;
+//        public static double Score_Variable(double idScore) => -0.6406 + idScore;
 
 //        [FeatureCalculator(nameof(Semantics.Pattern))]
-//        public static double Score_Pattern(double kindScore, double expression1Score) => temp + GetRandom(-10, 10) + expression1Score;
-
+//        public static double Score_Pattern(double kindScore, double expression1Score) => -0.6406 + 1.3718 + expression1Score;
 
 //        [FeatureCalculator(nameof(Semantics.Reference))]
-//        public static double Score_Reference(double inScore, double patternScore, double kScore) => temp + GetRandom(-10, 10) + patternScore;
+//        public static double Score_Reference(double inScore, double patternScore, double kScore) => -0.6406 + 1.3481 + patternScore;
 
 //        [FeatureCalculator("id", Method = CalculationMethod.FromLiteral)]
 //        public static double KDScore(string kd)
@@ -592,11 +433,11 @@ namespace RefazerFunctions
 
 //            if (f7.Success)
 //            {
-//                return GetRandom(-10, 10);
+//                return -0.3184;
 //            }
 //            else if (f8.Success)
 //            {
-//                return GetRandom(-10, 10);
+//                return 0;
 //            }
 //            else if (f9.Success)
 //            {
@@ -604,7 +445,7 @@ namespace RefazerFunctions
 //            }
 //            else if (f10.Success)
 //            {
-//                return GetRandom(-10, 10);
+//                return -1.1743;
 
 //            }
 
@@ -622,6 +463,124 @@ namespace RefazerFunctions
 //        public static double NodeScore(SyntaxNodeOrToken kd) => 0;
 //    }
 //}
+
+//// End of New Training Data ML Approach
+
+//// Begining of Random Approach
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.ProgramSynthesis;
+using Microsoft.ProgramSynthesis.AST;
+using System.Text.RegularExpressions;
+using System;
+using RefazerFunctions.Spg.Ranking;
+
+namespace RefazerFunctions
+{
+
+    public class RankingScore : Feature<double>
+    {
+        public RankingScore(Grammar grammar) : base(grammar, "Score") { }
+
+        private static RankingFunction ranking = new RandomRanking();
+       // private static RankingFunction ranking = new ManualRanking();
+        //private static RankingFunction ranking = new MLRanking();
+
+        // Editing EditMap
+        [FeatureCalculator("EditMap")]
+        public static double Score_EditMap(double scriptScore, double editScore) => ranking.Score_EditMap(scriptScore, editScore);
+
+        [FeatureCalculator(nameof(Semantics.AllNodes))]
+        public static double Score_Traversal(double scriptScore, double editScore) => ranking.Score_Traversal(scriptScore, editScore);
+
+        [FeatureCalculator("EditFilter")]
+        public static double Score_EditFilter(double predScore, double splitScore) => ranking.Score_EditFilter(predScore, splitScore);
+
+        [FeatureCalculator(nameof(Semantics.Match))]
+        public static double Score_Match(double inSource, double matchScore) => ranking.Score_Match(inSource, matchScore);
+
+        [FeatureCalculator(nameof(Semantics.SC))]
+        public static double Score_CS(double childScore) => ranking.Score_CS(childScore);
+
+        [FeatureCalculator(nameof(Semantics.CList))]
+        public static double Score_CList(double childScore, double childrenScore) => ranking.Score_CList(childScore, childrenScore);
+
+        [FeatureCalculator(nameof(Semantics.SP))]
+        public static double Score_PS(double childScore) => ranking.Score_PS(childScore);
+
+        [FeatureCalculator(nameof(Semantics.PList))]
+        public static double Score_PList(double childScore, double childrenScore) => ranking.Score_PList(childScore, childrenScore);
+
+        [FeatureCalculator(nameof(Semantics.SN))]
+        public static double Score_SN(double childScore) => ranking.Score_SN(childScore);
+
+        [FeatureCalculator(nameof(Semantics.NList))]
+        public static double Score_NList(double childScore, double childrenScore) => ranking.Score_NList(childScore, childrenScore);
+
+        [FeatureCalculator(nameof(Semantics.SE))]
+        public static double Score_SE(double childScore) => ranking.Score_SE(childScore);
+
+        [FeatureCalculator(nameof(Semantics.EList))]
+        public static double Score_EList(double childScore, double childrenScore) => ranking.Score_EList(childScore, childrenScore);
+
+        [FeatureCalculator(nameof(Semantics.Transformation), Method = CalculationMethod.FromChildrenFeatureValues)]
+        public static double Score_Script1(double inScore, double edit) => ranking.Score_Script1(inScore, edit);
+
+        [FeatureCalculator(nameof(Semantics.Insert))]
+        public static double Score_Insert(double inScore, double astScore) => ranking.Score_Insert(inScore, astScore);
+
+        [FeatureCalculator(nameof(Semantics.InsertBefore))]
+        public static double Score_InsertBefore(double inScore, double astScore) => ranking.Score_InsertBefore(inScore, astScore);
+
+        [FeatureCalculator(nameof(Semantics.Update))]
+        public static double Score_Update(double inScore, double toScore) => ranking.Score_Update(inScore, toScore);
+
+        [FeatureCalculator(nameof(Semantics.Delete))]
+        public static double Score_Delete(double inScore, double refscore) => ranking.Score_Delete(inScore, refscore);
+
+        [FeatureCalculator(nameof(Semantics.Node))]
+        public static double Score_Node1(double kScore, double astScore) => ranking.Score_Node1(kScore, astScore);
+
+        [FeatureCalculator(nameof(Semantics.ConstNode))]
+        public static double Score_Node1(double astScore) => ranking.Score_Node1(astScore);
+
+        // Editing Abstract
+        [FeatureCalculator(nameof(Semantics.Abstract))]
+        public static double Score_Abstract(double kindScore) => ranking.Score_Abstract(kindScore);
+
+        [FeatureCalculator(nameof(Semantics.Context))]
+        public static double Score_ParentP(double matchScore, double kScore) => ranking.Score_ParentP(matchScore, kScore);
+
+        [FeatureCalculator(nameof(Semantics.ContextPPP))]
+        public static double Score_ParentPPP(double matchScore, double kScore) => ranking.Score_ParentPPP(matchScore, kScore);
+
+        [FeatureCalculator(nameof(Semantics.Concrete))]
+        public static double Score_Concrete(double treeScore) => ranking.Score_Concrete(treeScore);
+
+        [FeatureCalculator(nameof(Semantics.Variable))]
+        public static double Score_Variable(double idScore) => ranking.Score_Variable(idScore);
+
+        [FeatureCalculator(nameof(Semantics.Pattern))]
+        public static double Score_Pattern(double kindScore, double expression1Score) => ranking.Score_Pattern(kindScore, expression1Score);
+
+
+        [FeatureCalculator(nameof(Semantics.Reference))]
+        public static double Score_Reference(double inScore, double patternScore, double kScore) => ranking.Score_Reference(inScore, patternScore, kScore);
+
+        [FeatureCalculator("id", Method = CalculationMethod.FromLiteral)]
+        public static double KDScore(string kd) => ranking.KDScore(kd);
+
+        [FeatureCalculator("c", Method = CalculationMethod.FromLiteral)]
+        public static double CScore(int c) => ranking.CScore(c);
+
+        [FeatureCalculator("kind", Method = CalculationMethod.FromLiteral)]
+        public static double KindScore(SyntaxKind kd) => ranking.KindScore(kd);
+
+        [FeatureCalculator("tree", Method = CalculationMethod.FromLiteral)]
+        public static double NodeScore(SyntaxNodeOrToken kd) => ranking.NodeScore(kd);
+    }
+}
 ////End of Random Ranking Approach
 
 //// Begining of Null Approach
