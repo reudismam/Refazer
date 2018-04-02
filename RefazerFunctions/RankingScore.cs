@@ -475,98 +475,274 @@ using Microsoft.ProgramSynthesis.AST;
 using System.Text.RegularExpressions;
 using System;
 using RefazerFunctions.Spg.Ranking;
+using System.Collections.Generic;
 
 namespace RefazerFunctions
 {
+    public enum Feature
+    {
+        Intercept,
+        Constants,
+        References,
+        Concrete,
+        Abstract,
+        Nodes,
+        Patterns,
+        ParentOne,
+        ParentTwo,
+        ParentThree,
+        NodeItSelf,
+        Size,
+        Operations,
+        Intercept_squared,
+        Constants_squared,
+        References_squared,
+        Concrete_squared,
+        Abstract_squared,
+        Nodes_squared,
+        Patterns_squared,
+        ParentOne_squared,
+        ParentTwo_squared,
+        ParentThree_squared,
+        NodeItSelf_squared,
+        Size_squared,
+        Operations_squared,
+        Intercept_cubic,
+        Constants_cubic,
+        References_cubic,
+        Concrete_cubic,
+        Abstract_cubic,
+        Nodes_cubic,
+        Patterns_cubic,
+        ParentOne_cubic,
+        ParentTwo_cubic,
+        ParentThree_cubic,
+        NodeItSelf_cubic,
+        Size_cubic,
+        Operations_cubic,
+    }
 
     public class RankingScore : Feature<double>
     {
-        public RankingScore(Grammar grammar) : base(grammar, "Score") { }
+        private static Dictionary<Feature, int> features;
+
+        public static Dictionary<Feature, int>  getFeatures()
+        {
+            return features;
+        }
+
+        public RankingScore(Grammar grammar) : base(grammar, "Score") {
+            features = new Dictionary<Feature, int>();
+            features.Add(Feature.Constants, 0);
+            features.Add(Feature.References, 0);
+            features.Add(Feature.Concrete, 0);
+            features.Add(Feature.Abstract, 0);
+            features.Add(Feature.Nodes, 0);
+            features.Add(Feature.Patterns, 0);
+            features.Add(Feature.ParentOne, 0);
+            features.Add(Feature.ParentTwo, 0);
+            features.Add(Feature.ParentThree, 0);
+            features.Add(Feature.NodeItSelf, 0);
+            features.Add(Feature.Size, 0);
+            features.Add(Feature.Operations, 0);
+        }
 
         private static RankingFunction ranking = new RandomRanking();
-       // private static RankingFunction ranking = new ManualRanking();
+        //private static RankingFunction ranking = new ManualRanking();
         //private static RankingFunction ranking = new MLRanking();
 
         // Editing EditMap
         [FeatureCalculator("EditMap")]
-        public static double Score_EditMap(double scriptScore, double editScore) => ranking.Score_EditMap(scriptScore, editScore);
+        public static double Score_EditMap(double scriptScore, double editScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            features[Feature.Operations] = features[Feature.Operations] + 1;
+            return ranking.Score_EditMap(scriptScore, editScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.AllNodes))]
-        public static double Score_Traversal(double scriptScore, double editScore) => ranking.Score_Traversal(scriptScore, editScore);
+        public static double Score_Traversal(double scriptScore, double editScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_Traversal(scriptScore, editScore);
+        }
 
         [FeatureCalculator("EditFilter")]
-        public static double Score_EditFilter(double predScore, double splitScore) => ranking.Score_EditFilter(predScore, splitScore);
+        public static double Score_EditFilter(double predScore, double splitScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_EditFilter(predScore, splitScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Match))]
-        public static double Score_Match(double inSource, double matchScore) => ranking.Score_Match(inSource, matchScore);
+        public static double Score_Match(double inSource, double matchScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_Match(inSource, matchScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.SC))]
-        public static double Score_CS(double childScore) => ranking.Score_CS(childScore);
+        public static double Score_CS(double childScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_CS(childScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.CList))]
-        public static double Score_CList(double childScore, double childrenScore) => ranking.Score_CList(childScore, childrenScore);
+        public static double Score_CList(double childScore, double childrenScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_CList(childScore, childrenScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.SP))]
-        public static double Score_PS(double childScore) => ranking.Score_PS(childScore);
+        public static double Score_PS(double childScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_PS(childScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.PList))]
-        public static double Score_PList(double childScore, double childrenScore) => ranking.Score_PList(childScore, childrenScore);
+        public static double Score_PList(double childScore, double childrenScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_PList(childScore, childrenScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.SN))]
-        public static double Score_SN(double childScore) => ranking.Score_SN(childScore);
+        public static double Score_SN(double childScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_SN(childScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.NList))]
-        public static double Score_NList(double childScore, double childrenScore) => ranking.Score_NList(childScore, childrenScore);
+        public static double Score_NList(double childScore, double childrenScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_NList(childScore, childrenScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.SE))]
-        public static double Score_SE(double childScore) => ranking.Score_SE(childScore);
+        public static double Score_SE(double childScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_SE(childScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.EList))]
-        public static double Score_EList(double childScore, double childrenScore) => ranking.Score_EList(childScore, childrenScore);
+        public static double Score_EList(double childScore, double childrenScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_EList(childScore, childrenScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Transformation), Method = CalculationMethod.FromChildrenFeatureValues)]
-        public static double Score_Script1(double inScore, double edit) => ranking.Score_Script1(inScore, edit);
+        public static double Score_Script1(double inScore, double edit)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            //intercept
+            return ranking.Score_Script1(inScore, edit);
+        }
 
         [FeatureCalculator(nameof(Semantics.Insert))]
-        public static double Score_Insert(double inScore, double astScore) => ranking.Score_Insert(inScore, astScore);
+        public static double Score_Insert(double inScore, double astScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_Insert(inScore, astScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.InsertBefore))]
-        public static double Score_InsertBefore(double inScore, double astScore) => ranking.Score_InsertBefore(inScore, astScore);
+        public static double Score_InsertBefore(double inScore, double astScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_InsertBefore(inScore, astScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Update))]
-        public static double Score_Update(double inScore, double toScore) => ranking.Score_Update(inScore, toScore);
+        public static double Score_Update(double inScore, double toScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_Update(inScore, toScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Delete))]
-        public static double Score_Delete(double inScore, double refscore) => ranking.Score_Delete(inScore, refscore);
+        public static double Score_Delete(double inScore, double refscore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_Delete(inScore, refscore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Node))]
-        public static double Score_Node1(double kScore, double astScore) => ranking.Score_Node1(kScore, astScore);
+        public static double Score_Node1(double kScore, double astScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            features[Feature.Nodes] = features[Feature.Nodes] + 1;
+            return ranking.Score_Node1(kScore, astScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.ConstNode))]
-        public static double Score_Node1(double astScore) => ranking.Score_Node1(astScore);
+        public static double Score_Node1(double astScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            features[Feature.Constants] = features[Feature.Constants] + 1;//constants = constnode?
+            return ranking.Score_Node1(astScore);
+        }
 
         // Editing Abstract
         [FeatureCalculator(nameof(Semantics.Abstract))]
-        public static double Score_Abstract(double kindScore) => ranking.Score_Abstract(kindScore);
+        public static double Score_Abstract(double kindScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            features[Feature.Abstract] = features[Feature.Abstract] + 1;
+            return ranking.Score_Abstract(kindScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Context))]
-        public static double Score_ParentP(double matchScore, double kScore) => ranking.Score_ParentP(matchScore, kScore);
+        public static double Score_ParentP(double matchScore, double kScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_ParentP(matchScore, kScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.ContextPPP))]
-        public static double Score_ParentPPP(double matchScore, double kScore) => ranking.Score_ParentPPP(matchScore, kScore);
+        public static double Score_ParentPPP(double matchScore, double kScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_ParentPPP(matchScore, kScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Concrete))]
-        public static double Score_Concrete(double treeScore) => ranking.Score_Concrete(treeScore);
+        public static double Score_Concrete(double treeScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            features[Feature.Concrete] = features[Feature.Concrete] + 1;
+            return ranking.Score_Concrete(treeScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Variable))]
-        public static double Score_Variable(double idScore) => ranking.Score_Variable(idScore);
+        public static double Score_Variable(double idScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            return ranking.Score_Variable(idScore);
+        }
 
         [FeatureCalculator(nameof(Semantics.Pattern))]
-        public static double Score_Pattern(double kindScore, double expression1Score) => ranking.Score_Pattern(kindScore, expression1Score);
+        public static double Score_Pattern(double kindScore, double expression1Score)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            features[Feature.Patterns] = features[Feature.Patterns] + 1;
+            return ranking.Score_Pattern(kindScore, expression1Score);
+        }
 
 
         [FeatureCalculator(nameof(Semantics.Reference))]
-        public static double Score_Reference(double inScore, double patternScore, double kScore) => ranking.Score_Reference(inScore, patternScore, kScore);
+        public static double Score_Reference(double inScore, double patternScore, double kScore)
+        {
+            features[Feature.Size] = features[Feature.Size] + 1;
+            features[Feature.References] = features[Feature.References] + 1;
+            return ranking.Score_Reference(inScore, patternScore, kScore);
+        }
 
         [FeatureCalculator("id", Method = CalculationMethod.FromLiteral)]
         public static double KDScore(string kd) => ranking.KDScore(kd);

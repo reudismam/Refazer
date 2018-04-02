@@ -9,6 +9,7 @@ using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
 using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
+using RefazerFunctions;
 
 namespace RefazerManager
 {
@@ -88,14 +89,13 @@ namespace RefazerManager
             //var topK = consistentPrograms.RealizedPrograms.ToList();
             var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 1000).ToList(); //topK 1000 //201?
             var b = (ulong)topK.Count;
-            //topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
-
-            topK = topK.GetRange(0, (int)Math.Min(a, b)).ToList();
+            topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
+            //topK = topK.GetRange(0, (int)Math.Min(a, b)).ToList();
 
             //Print generated programs
 
             var programStrings = "";
-            topK.ForEach(p => programStrings += $"Score[{p.GetFeatureValue(scorer)}] " + p + "\n");
+            topK.ForEach(p => programStrings += $"Score[{p.GetFeatureValue(new RankingScore(grammar))}] " + p + "\n");
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
             string file = expHome + "programs.txt";
             File.WriteAllText(file, programStrings);
