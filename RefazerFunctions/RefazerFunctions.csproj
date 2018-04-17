@@ -255,9 +255,10 @@
     <Compile Include="Spg.Config\SynthesisConfig.cs" />
     <Compile Include="Spg.Ranking\Feature.cs" />
     <Compile Include="Spg.Ranking\ManualRanking.cs" />
+    <Compile Include="Spg.Ranking\MLRankingLogisticRegression.cs" />
     <Compile Include="Spg.Ranking\RandomRanking.cs" />
     <Compile Include="Spg.Ranking\RankingFunction.cs" />
-    <Compile Include="Spg.Ranking\MLRanking.cs" />
+    <Compile Include="Spg.Ranking\MLRankingSVM.cs" />
     <Compile Include="Spg.Semantic\EditOperationSemanticFunctions.cs" />
     <Compile Include="Spg.Semantic\MatchSemanticFunctions.cs" />
     <Compile Include="Spg.Witness\AST.cs" />

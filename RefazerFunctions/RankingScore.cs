@@ -547,9 +547,9 @@ namespace RefazerFunctions
             features.Add(Feature.Operations, 0);
         }
 
-        private static RankingFunction ranking = new RandomRanking();
-        //private static RankingFunction ranking = new ManualRanking();
-        //private static RankingFunction ranking = new MLRanking();
+       // private static RankingFunction ranking = new RandomRanking();
+      //  private static RankingFunction ranking = new ManualRanking();
+        private static RankingFunction ranking = new MLRankingSVM();
 
         // Editing EditMap
         [FeatureCalculator("EditMap")]

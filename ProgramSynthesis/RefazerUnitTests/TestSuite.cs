@@ -858,10 +858,10 @@ namespace RefazerUnitTests
         public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
         {
-         //   string commitFirstLetter = commit.ElementAt(0).ToString();
-        //    string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
+           // string commitFirstLetter = commit.ElementAt(0).ToString();
+          //  string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
-        //    commit = commitFirstLetter + "" + commitId;
+         //   commit = commitFirstLetter + "" + commitId;
          //   commit = commit.Substring(0, commit.Length -1);
 
 
@@ -998,7 +998,7 @@ namespace RefazerUnitTests
             //Random number generator with a seed.
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-            var examples = randomList.GetRange(0, Math.Min(2, locations.Count));//Aqui minimo 2
+            var examples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
 
             TestHelper helper;
             double mean = -1.0;
@@ -1017,7 +1017,7 @@ namespace RefazerUnitTests
                 {
                     var scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, Constants.ScriptSize);
                     var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
-                    mean = sizes.Average();
+                    mean = sizes.Average();     
                 }
                 var beforeafter = TestUtil.GetBeforeAfterList(expHome);
                 GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
@@ -1061,7 +1061,8 @@ namespace RefazerUnitTests
                         {
                             throw new Exception("Sorry. Good luck next time!!");
                         }
-                        if (moreThanNeeded) {
+                        if (moreThanNeeded)
+                        {
                             continue;
                         }
                         try
@@ -1146,7 +1147,7 @@ namespace RefazerUnitTests
         //    bool atLeastOneCorrect = false;
         //    for (int exampleIndex = 1; exampleIndex <= locations.Count; exampleIndex++) // inicia com 1 exemplo originalmente
         //    {
-        //       // MessageBox.Show(exampleIndex + "");
+        //        // MessageBox.Show(exampleIndex + "");
         //        var examples = randomList.GetRange(0, exampleIndex);
         //        //Execution
         //        TestHelper helper;
@@ -1215,7 +1216,7 @@ namespace RefazerUnitTests
         //    }
         //    return true;
         //}
-        //Here ends the LogProgram version
+        //  Here ends the LogProgram version
 
         private static int GetFirstIncorrect(List<Tuple<Region, string, string>> toolBeforeAfterList, List<Tuple<Region, string, string>> baselineBeforeAfterList, List<int> randomList, List<CodeLocation> locations)
         {
