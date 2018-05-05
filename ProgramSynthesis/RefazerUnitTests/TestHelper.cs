@@ -600,7 +600,8 @@ namespace RefazerUnitTests
 
             //Learn program
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
-            var programList = Utils.LearnASet(_grammar, spec, new RankingScore(_grammar), new WitnessFunctions(_grammar));
+            int numberOfExamples = ioExamples.Count;
+            var programList = Utils.LearnASet(_grammar, spec, new RankingScore(_grammar, numberOfExamples), new WitnessFunctions(_grammar));
             return programList;
         }
 
@@ -751,7 +752,7 @@ namespace RefazerUnitTests
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
 
             long millBeforeLearn = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            Program = Utils.Learn(_grammar, spec, new RankingScore(_grammar), new WitnessFunctions(_grammar));
+            Program = Utils.Learn(_grammar, spec, new RankingScore(_grammar, examples.Count), new WitnessFunctions(_grammar));
             long millAfterLearn = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             TotalTimeToLearn = millAfterLearn - millBeforeLearn;
 

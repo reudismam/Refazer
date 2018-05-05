@@ -6,50 +6,50 @@ using System.Text.RegularExpressions;
 
 namespace RefazerFunctions.Spg.Ranking
 {
-    public class MLRankingSVM: RankingFunction
+    public class MLRankingLogisticRegressionNonLinear: RankingFunction
     {
         private static Dictionary<Feature, double> weights;
 
-        public MLRankingSVM()
+        public MLRankingLogisticRegressionNonLinear()
         {
             weights = new Dictionary<Feature, double>();
-            weights.Add(Feature.Intercept, 0.0496);
-            weights.Add(Feature.Constants, 1.4169);
-            weights.Add(Feature.References, -0.9922);
-            weights.Add(Feature.Concrete, 0.0747);
-            weights.Add(Feature.Abstract, 0);
-            weights.Add(Feature.Nodes, -0.4629);
-            weights.Add(Feature.Patterns, 0);
-            weights.Add(Feature.ParentOne, -0.5046);
+            weights.Add(Feature.Intercept, 0.3366);
+            weights.Add(Feature.Constants, 1.9215);
+            weights.Add(Feature.References, -9.6286);
+            weights.Add(Feature.Concrete, 0.3366);
+            weights.Add(Feature.Abstract, -0.2229);
+            weights.Add(Feature.Nodes, -1.6885);
+            weights.Add(Feature.Patterns, 0.0169);
+            weights.Add(Feature.ParentOne, -1.6819);
             weights.Add(Feature.ParentTwo, 0);
             weights.Add(Feature.ParentThree, 0);
-            weights.Add(Feature.NodeItSelf, 0.2563);
-            weights.Add(Feature.Size, 0.0220);
-            weights.Add(Feature.Operations, 0.0371);
-            weights.Add(Feature.Constants_squared, 0);
-            weights.Add(Feature.References_squared, 0);
-            weights.Add(Feature.Concrete_squared, 0);
-            weights.Add(Feature.Abstract_squared, -0.0763);
-            weights.Add(Feature.Nodes_squared, -0.0588);
-            weights.Add(Feature.Patterns_squared, 0.0061);
-            weights.Add(Feature.ParentOne_squared, 0);
+            weights.Add(Feature.NodeItSelf, 0.5745);
+            weights.Add(Feature.Size, -0.0076);
+            weights.Add(Feature.Operations, 1.1343);
+            weights.Add(Feature.Constants_squared, 0.2373);
+            weights.Add(Feature.References_squared, 1.9779);
+            weights.Add(Feature.Concrete_squared, -0.0590);
+            weights.Add(Feature.Abstract_squared, -0.2987);
+            weights.Add(Feature.Nodes_squared, -0.2122);
+            weights.Add(Feature.Patterns_squared, 0.0190);
+            weights.Add(Feature.ParentOne_squared, -0.0099);
             weights.Add(Feature.ParentTwo_squared, 0);
             weights.Add(Feature.ParentThree_squared, 0);
-            weights.Add(Feature.NodeItSelf_squared, 0.0004);
-            weights.Add(Feature.Size_squared, -0.0002);
-            weights.Add(Feature.Operations_squared, 0.0086);
-            weights.Add(Feature.Constants_cubic, 0.0623);
-            weights.Add(Feature.References_cubic, 0.2312);
-            weights.Add(Feature.Concrete_cubic, -0.0084);
-            weights.Add(Feature.Abstract_cubic, 0.0272);
-            weights.Add(Feature.Nodes_cubic, 0.0045);
-            weights.Add(Feature.Patterns_cubic, 0.0001);
-            weights.Add(Feature.ParentOne_cubic, 0.0421);
+            weights.Add(Feature.NodeItSelf_squared, 0);
+            weights.Add(Feature.Size_squared, 0.0007);
+            weights.Add(Feature.Operations_squared, 0.5960);
+            weights.Add(Feature.Constants_cubic, 0.7458);
+            weights.Add(Feature.References_cubic, 1.1460);
+            weights.Add(Feature.Concrete_cubic, -0.0265);
+            weights.Add(Feature.Abstract_cubic, 0.1108);
+            weights.Add(Feature.Nodes_cubic, 0.0125);
+            weights.Add(Feature.Patterns_cubic, -0.0011);
+            weights.Add(Feature.ParentOne_cubic, 0.1603);
             weights.Add(Feature.ParentTwo_cubic, 0);
-            weights.Add(Feature.ParentThree_cubic, 0);
-            weights.Add(Feature.NodeItSelf_cubic, 0.0007);
+            weights.Add(Feature.ParentThree_cubic, 0);//
+            weights.Add(Feature.NodeItSelf_cubic, -0.0428);
             weights.Add(Feature.Size_cubic, 0.000002);
-            weights.Add(Feature.Operations_cubic, 0);
+            weights.Add(Feature.Operations_cubic, 1.4522);
 
             //... colocar as demais
         }
@@ -211,7 +211,6 @@ namespace RefazerFunctions.Spg.Ranking
                 return weights[Feature.NodeItSelf];
             }
             return 0;
-
         }
 
         [FeatureCalculator("c", Method = CalculationMethod.FromLiteral)]

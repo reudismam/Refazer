@@ -99,7 +99,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void E11()
         {
-            var isCorrect = CompleteTestBase(@"E11\");
+            var isCorrect = CompleteTestBase(@"E11\", fileFolder: @"E11\");
             Assert.IsTrue(isCorrect);
         }
 
@@ -516,7 +516,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void NJ1491()
         {
-            var isCorrect = CompleteTestBase(@"NJ1491\");
+            var isCorrect = CompleteTestBase(@"NJ1491\", fileFolder: @"NJ1491\");
             Assert.IsTrue(isCorrect);
         }
 
@@ -862,8 +862,7 @@ namespace RefazerUnitTests
           //  string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
          //   commit = commitFirstLetter + "" + commitId;
-         //   commit = commit.Substring(0, commit.Length -1);
-
+          //  commit = commit.Substring(0, commit.Length -1);
 
             string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
@@ -933,8 +932,6 @@ namespace RefazerUnitTests
             }
         }
     
-
-
         static string GetTestDataFolder(string testDataLocation)
         {
             string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -999,13 +996,22 @@ namespace RefazerUnitTests
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
             var examples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
-
-            TestHelper helper;
+            var incrementalExamples = new List<int>();
+            bool INCREMENTAL_EXAMPLES = false;
+            TestHelper helper = null;
             double mean = -1.0;
             while (true)
             {
                 CodeFragmentsInfo.GetInstance().Init();
                 TransformationInfos.GetInstance().Init();
+                if (INCREMENTAL_EXAMPLES) {
+                   if (incrementalExamples.Count >= locations.Count)
+                   {
+                       break;
+                   }
+                   incrementalExamples.Add(randomList[incrementalExamples.Count]);
+                   examples = new List<int>(incrementalExamples);
+                }
                 examples.Sort();
                 helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations,
                     expHome, solutionPath, commit, kinds, fileFolder, execId);
@@ -1033,7 +1039,7 @@ namespace RefazerUnitTests
                     JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
                     //Comparing edited locations with baseline
                     var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
-                    foreach (var baseline in baselineBeforeAfter)
+                    foreach (var baseline in baselineBeforeAfterList)
                     {
                         var region = baseline.Item1;
                         region.Path = region.Path.ToUpperInvariant();
@@ -1116,8 +1122,7 @@ namespace RefazerUnitTests
         //Here ends the Log verion 
 
 
-        //Here starts the LogProgram version.
-
+        ////Here starts the LogProgram version
         ///// <summary>
         ///// Complete test
         ///// </summary>
@@ -1179,7 +1184,7 @@ namespace RefazerUnitTests
         //                JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
         //                //Comparing edited locations with baseline
         //                var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
-        //                foreach (var baseline in baselineBeforeAfter)
+        //                foreach (var baseline in baselineBeforeAfterList)
         //                {
         //                    var region = baseline.Item1;
         //                    region.Path = region.Path.ToUpperInvariant();
@@ -1216,7 +1221,7 @@ namespace RefazerUnitTests
         //    }
         //    return true;
         //}
-        //  Here ends the LogProgram version
+        ////  Here ends the LogProgram version
 
         private static int GetFirstIncorrect(List<Tuple<Region, string, string>> toolBeforeAfterList, List<Tuple<Region, string, string>> baselineBeforeAfterList, List<int> randomList, List<CodeLocation> locations)
         {

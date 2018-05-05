@@ -24,7 +24,7 @@ namespace RefazerFunctions.Spg.Semantic
             {
                 update.ProcessEditOperation(insert);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }

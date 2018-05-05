@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
@@ -173,8 +172,7 @@ namespace RefazerFunctions
         [SuppressMessage("ReSharper", "LoopCanBePartlyConvertedToQuery")]
         public static IEnumerable<Node> Transformation(Node node, Patch patch)
         {
-            var beforeFlorest = patch.Edits.Select(o => o.ToList());
-
+            var beforeFlorest = patch.Edits.Select(o => o.ToList()).ToList();
             var resultList = new List<Node>();
             foreach (var edited in beforeFlorest)
             {
@@ -190,16 +188,22 @@ namespace RefazerFunctions
                         SyntaxNodeOrToken n;
                         if (v.LeftNode != null)
                         {
-                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.LeftNode.Value);
+                            var children = v.Value.Parent.Children;
+                            int index = children.IndexOf(v.Value) + 1;
+                            var result = EditOperationSemanticFunctions.Insert(new Node(v.Value.Parent), v.LeftNode, index);
+                            n = ASTBuilder.ReconstructTree(result.Value);
                         }
                         else if (v.RightNode != null)
                         {
-                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.RightNode.Value);
+                            var children = v.Value.Parent.Children;
+                            int index = children.IndexOf(v.Value) + 2;
+                            var result = EditOperationSemanticFunctions.Insert(new Node(v.Value.Parent), v.RightNode, index);
+                            n = ASTBuilder.ReconstructTree(result.Value);
                         }
                         else
                         {
                             PrintUtil<SyntaxNodeOrToken>.PrintPrettyDebug(v.Value, "", false);
-                            n = ASTBuilder.ReconstructTree(node.Value.Value, v.Value);
+                            n = ASTBuilder.ReconstructTree(v.Value);
                         }
                         TransformationInfo transformation = new TransformationInfo(before.Value.Value, n);
                         TransformationInfos.GetInstance().Add(transformation);
@@ -208,7 +212,7 @@ namespace RefazerFunctions
                     else
                     {
                         var before = DicBeforeAfter[v];
-                        var n = ASTBuilder.ReconstructTree(node.Value.Value, v.Value);
+                        var n = ASTBuilder.ReconstructTree(v.Value);
                         TransformationInfo transformation = new TransformationInfo(before.Value.Value, n);
                         TransformationInfos.GetInstance().Add(transformation);
                         var treeNode = new TreeNode<SyntaxNodeOrToken>(n,
@@ -268,9 +272,12 @@ namespace RefazerFunctions
         /// <returns>A new constant node.</returns>
         public static Node ConstNode(SyntaxNodeOrToken cst)
         {
-            var parent = new TreeNode<SyntaxNodeOrToken>(cst.Parent, new TLabel(cst.Parent.Kind()));
             var itreeNode = new TreeNode<SyntaxNodeOrToken>(cst, new TLabel(cst.Kind()));
-            itreeNode.Parent = parent;
+            if (cst.Parent != null)
+            {
+                var parent = new TreeNode<SyntaxNodeOrToken>(cst.Parent, new TLabel(cst.Parent.Kind()));
+                itreeNode.Parent = parent;
+            }
             var node = new Node(itreeNode);
             return node;
         }

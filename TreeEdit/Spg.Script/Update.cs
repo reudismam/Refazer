@@ -5,7 +5,7 @@ namespace TreeEdit.Spg.Script
 {
     public class Update<T> : EditOperation<T>
     {
-        public TreeNode<T> To { get; internal set; }
+        public TreeNode<T> To { get; set; }
 
         public TreeNode<T> ToParent { get; set; }
 

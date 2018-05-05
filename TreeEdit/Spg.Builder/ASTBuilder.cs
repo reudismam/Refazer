@@ -18,9 +18,9 @@ namespace TreeEdit.Spg.Builder
         /// <param name="target">Target node</param>
         /// <param name="tree">Tree in another format</param>
         /// <returns>Reconstructed tree</returns>
-        public static SyntaxNodeOrToken ReconstructTree(SyntaxNodeOrToken target, TreeNode<SyntaxNodeOrToken> tree)
+        public static SyntaxNodeOrToken ReconstructTree(TreeNode<SyntaxNodeOrToken> tree)
         {
-            SyntaxNodeOrToken newNode = ReconstructTree(tree);
+            SyntaxNodeOrToken newNode = Reconstruct(tree);
             if (newNode.IsKind(SyntaxKind.None)) return tree.Value;
             if (newNode.IsNode)
             {
@@ -34,7 +34,7 @@ namespace TreeEdit.Spg.Builder
         /// </summary>
         /// <param name="tree">Tree in another format</param>
         /// <returns>Reconstructed tree</returns>
-        public static SyntaxNodeOrToken ReconstructTree(TreeNode<SyntaxNodeOrToken> tree)
+        private static SyntaxNodeOrToken Reconstruct(TreeNode<SyntaxNodeOrToken> tree)
         {
             if (!tree.Children.Any())
             {
@@ -46,7 +46,7 @@ namespace TreeEdit.Spg.Builder
             {
                 if (v.Value.IsNode)
                 {
-                    var result = ReconstructTree(v);
+                    var result = Reconstruct(v);
                     children.Add(result);
                 }
                 else
@@ -1073,6 +1073,10 @@ namespace TreeEdit.Spg.Builder
                     StatementSyntax statement = (StatementSyntax) children.ElementAt(1);
                     WhileStatementSyntax whileStam = SyntaxFactory.WhileStatement(condition, statement);
                     return whileStam;
+                }
+           case SyntaxKind.LabeledStatement:
+                {
+                    break;
                 }
                 /*case SyntaxKind.None:
                     break;

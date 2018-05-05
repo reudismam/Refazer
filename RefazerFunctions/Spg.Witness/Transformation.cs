@@ -22,6 +22,7 @@ using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Mapping;
 using TreeElement.Spg.Node;
+using TreeEdit.Spg.Builder;
 
 namespace RefazerFunctions.Spg.Witness
 {
@@ -198,11 +199,20 @@ namespace RefazerFunctions.Spg.Witness
                 {
                     if (edit.EditOperation is Update<SyntaxNodeOrToken>)
                     {
-                        var update = (Update<SyntaxNodeOrToken>) edit.EditOperation;
+                        var update = (Update<SyntaxNodeOrToken>)edit.EditOperation;
                         var to = update.To;
                         to.Value = outTree;
                         to.Label = new TLabel(outTree.Kind());
                     }
+                }
+                else if (edit.EditOperation is Update<SyntaxNodeOrToken>)
+                {
+                    var update = (Update<SyntaxNodeOrToken>)edit.EditOperation;
+                    var parent = update.To.Parent;
+                    var toReconstructed = ASTBuilder.ReconstructTree(update.To);
+                    var newTo = ConverterHelper.ConvertCSharpToTreeNode(toReconstructed);
+                    newTo.Parent = parent;
+                    update.To = newTo;
                 }
                 newEditOperations.Add(edit);
             }
@@ -271,10 +281,8 @@ namespace RefazerFunctions.Spg.Witness
                     }
                 }
                 var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                {
-                    var operation = new Edit<SyntaxNodeOrToken>(update);
-                    return operation;
-                }
+                var operation = new Edit<SyntaxNodeOrToken>(update);
+                return operation;
             }
             else
             {
