@@ -4,23 +4,14 @@ using Microsoft.ProgramSynthesis;
 
 namespace RefazerFunctions.Spg.Ranking
 {
-    public class HibridRanking: RankingFunction
+    public class HibridRankingRandom: RankingFunction
     {
         private RankingFunction ranking;
         private int examples;
         private int THRESHOULD = 2;
-        public HibridRanking()
+        public HibridRankingRandom()
         {
-            examples = RankingScore.getExamplesCount();
-            if (examples < THRESHOULD)
-            {
-                 ranking = new MLRankingLogisticRegressionNonLinear();
-            }
-            else
-            {
-                ranking = new ManualRanking();
-
-            }
+            ranking = new RandomRanking();
         }
 
         // Editing EditMap
@@ -160,7 +151,7 @@ namespace RefazerFunctions.Spg.Ranking
         [FeatureCalculator(nameof(Semantics.Concrete))]
         public double Score_Concrete(double treeScore)
         {
-            return ranking.Score_Concrete(treeScore);
+            return new ManualRanking().Score_Concrete(treeScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Variable))]

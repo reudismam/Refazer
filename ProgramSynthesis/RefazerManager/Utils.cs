@@ -90,7 +90,7 @@ namespace RefazerManager
             var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 1000).ToList(); //topK 1000 //201?
             var b = (ulong)topK.Count;
             int examplesCount = spec.ProvidedInputs.Count();
-            topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
+            topK = topK.OrderByDescending(o => o.GetFeatureValue(new RankingScore(grammar, examplesCount))).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
             //topK = topK.GetRange(0, (int)Math.Min(a, b)).ToList();
             //Print generated programs
             var programStrings = "";

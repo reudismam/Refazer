@@ -862,7 +862,7 @@ namespace RefazerUnitTests
           //  string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
          //   commit = commitFirstLetter + "" + commitId;
-          //  commit = commit.Substring(0, commit.Length -1);
+         //   commit = commit.Substring(0, commit.Length -1);
 
             string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
@@ -1004,13 +1004,14 @@ namespace RefazerUnitTests
             {
                 CodeFragmentsInfo.GetInstance().Init();
                 TransformationInfos.GetInstance().Init();
-                if (INCREMENTAL_EXAMPLES) {
-                   if (incrementalExamples.Count >= locations.Count)
-                   {
-                       break;
-                   }
-                   incrementalExamples.Add(randomList[incrementalExamples.Count]);
-                   examples = new List<int>(incrementalExamples);
+                if (INCREMENTAL_EXAMPLES)
+                {
+                    if (incrementalExamples.Count >= locations.Count)
+                    {
+                        break;
+                    }
+                    incrementalExamples.Add(randomList[incrementalExamples.Count]);
+                    examples = new List<int>(incrementalExamples);
                 }
                 examples.Sort();
                 helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations,
@@ -1023,7 +1024,7 @@ namespace RefazerUnitTests
                 {
                     var scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, Constants.ScriptSize);
                     var sizes = scriptsizes.Split(new[] { "\n" }, StringSplitOptions.None).Select(int.Parse);
-                    mean = sizes.Average();     
+                    mean = sizes.Average();
                 }
                 var beforeafter = TestUtil.GetBeforeAfterList(expHome);
                 GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);

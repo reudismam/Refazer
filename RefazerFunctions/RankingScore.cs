@@ -543,13 +543,15 @@ namespace RefazerFunctions
             InitFeatures();
         }
 
-        /*public override double Calculate(ProgramNode program, LearningInfo learningInfo)
+        public override double Calculate(ProgramNode program, LearningInfo learningInfo)
         {
-            string pstring = program.ToString();
-            features = FeatureExtractor.Extract(pstring);
-   
+            if (program.GrammarRule != null && program.GrammarRule.Id != null && program.GrammarRule.Id.Equals(nameof(Semantics.Transformation)))
+            {
+                string pstring = program.ToString();
+                features = FeatureExtractor.Extract(pstring);
+            }
             return base.Calculate(program, learningInfo);
-        }*/
+        }
 
         public static void InitFeatures()
         {
@@ -578,98 +580,98 @@ namespace RefazerFunctions
             // private static RankingFunction ranking = new MLRankingLogisticRegression();
             topRanking = new MLRankingLogisticRegressionNonLinear();
             bottomRanking = new MLRankingLogisticRegressionNonLinear();
-       }
+        }
 
         // Editing EditMap
         [FeatureCalculator("EditMap")]
         public static double Score_EditMap(double scriptScore, double editScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
-            features[Feature.Operations] = features[Feature.Operations] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
+            //features[Feature.Operations] = //features[Feature.Operations] + 1;
             return bottomRanking.Score_EditMap(scriptScore, editScore);
         }
 
         [FeatureCalculator(nameof(Semantics.AllNodes))]
         public static double Score_Traversal(double scriptScore, double editScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_Traversal(scriptScore, editScore);
         }
 
         [FeatureCalculator("EditFilter")]
         public static double Score_EditFilter(double predScore, double splitScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            ////features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_EditFilter(predScore, splitScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Match))]
         public static double Score_Match(double inSource, double matchScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_Match(inSource, matchScore);
         }
 
         [FeatureCalculator(nameof(Semantics.SC))]
         public static double Score_CS(double childScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_CS(childScore);
         }
 
         [FeatureCalculator(nameof(Semantics.CList))]
         public static double Score_CList(double childScore, double childrenScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_CList(childScore, childrenScore);
         }
 
         [FeatureCalculator(nameof(Semantics.SP))]
         public static double Score_PS(double childScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_PS(childScore);
         }
 
         [FeatureCalculator(nameof(Semantics.PList))]
         public static double Score_PList(double childScore, double childrenScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_PList(childScore, childrenScore);
         }
 
         [FeatureCalculator(nameof(Semantics.SN))]
         public static double Score_SN(double childScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_SN(childScore);
         }
 
         [FeatureCalculator(nameof(Semantics.NList))]
         public static double Score_NList(double childScore, double childrenScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_NList(childScore, childrenScore);
         }
 
         [FeatureCalculator(nameof(Semantics.SE))]
         public static double Score_SE(double childScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_SE(childScore);
         }
 
         [FeatureCalculator(nameof(Semantics.EList))]
         public static double Score_EList(double childScore, double childrenScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_EList(childScore, childrenScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Transformation), Method = CalculationMethod.FromChildrenFeatureValues)]
         public static double Score_Script1(double inScore, double edit)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             //intercept
             return topRanking.Score_Script1(inScore, edit);
         }
@@ -677,44 +679,44 @@ namespace RefazerFunctions
         [FeatureCalculator(nameof(Semantics.Insert))]
         public static double Score_Insert(double inScore, double astScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_Insert(inScore, astScore);
         }
 
         [FeatureCalculator(nameof(Semantics.InsertBefore))]
         public static double Score_InsertBefore(double inScore, double astScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_InsertBefore(inScore, astScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Update))]
         public static double Score_Update(double inScore, double toScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_Update(inScore, toScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Delete))]
         public static double Score_Delete(double inScore, double refscore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_Delete(inScore, refscore);
         }
 
         [FeatureCalculator(nameof(Semantics.Node))]
         public static double Score_Node1(double kScore, double astScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
-            features[Feature.Nodes] = features[Feature.Nodes] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
+            //features[Feature.Nodes] = //features[Feature.Nodes] + 1;
             return bottomRanking.Score_Node1(kScore, astScore);
         }
 
         [FeatureCalculator(nameof(Semantics.ConstNode))]
         public static double Score_Node1(double astScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
-            features[Feature.Constants] = features[Feature.Constants] + 1;//constants = constnode?
+            //features[Feature.Size] = //features[Feature.Size] + 1;
+            //features[Feature.Constants] = //features[Feature.Constants] + 1;//constants = constnode?
             return bottomRanking.Score_Node1(astScore);
         }
 
@@ -722,45 +724,45 @@ namespace RefazerFunctions
         [FeatureCalculator(nameof(Semantics.Abstract))]
         public static double Score_Abstract(double kindScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
-            features[Feature.Abstract] = features[Feature.Abstract] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
+            //features[Feature.Abstract] = //features[Feature.Abstract] + 1;
             return bottomRanking.Score_Abstract(kindScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Context))]
         public static double Score_ParentP(double matchScore, double kScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_ParentP(matchScore, kScore);
         }
 
         [FeatureCalculator(nameof(Semantics.ContextPPP))]
         public static double Score_ParentPPP(double matchScore, double kScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_ParentPPP(matchScore, kScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Concrete))]
         public static double Score_Concrete(double treeScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
-            features[Feature.Concrete] = features[Feature.Concrete] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
+            //features[Feature.Concrete] = //features[Feature.Concrete] + 1;
             return bottomRanking.Score_Concrete(treeScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Variable))]
         public static double Score_Variable(double idScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
             return bottomRanking.Score_Variable(idScore);
         }
 
         [FeatureCalculator(nameof(Semantics.Pattern))]
         public static double Score_Pattern(double kindScore, double expression1Score)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
-            features[Feature.Patterns] = features[Feature.Patterns] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
+            //features[Feature.Patterns] = //features[Feature.Patterns] + 1;
             return bottomRanking.Score_Pattern(kindScore, expression1Score);
         }
 
@@ -768,8 +770,8 @@ namespace RefazerFunctions
         [FeatureCalculator(nameof(Semantics.Reference))]
         public static double Score_Reference(double inScore, double patternScore, double kScore)
         {
-            features[Feature.Size] = features[Feature.Size] + 1;
-            features[Feature.References] = features[Feature.References] + 1;
+            //features[Feature.Size] = //features[Feature.Size] + 1;
+            //features[Feature.References] = //features[Feature.References] + 1;
             return bottomRanking.Score_Reference(inScore, patternScore, kScore);
         }
 

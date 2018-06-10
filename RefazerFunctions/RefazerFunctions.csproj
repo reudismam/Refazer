@@ -255,8 +255,11 @@
     <Compile Include="Spg.Config\SynthesisConfig.cs" />
     <Compile Include="Spg.Ranking\Feature.cs" />
     <Compile Include="Spg.Ranking\FeatureExtractor.cs" />
+    <Compile Include="Spg.Ranking\HibridRanking3.cs" />
+    <Compile Include="Spg.Ranking\HibridRankingRandom.cs" />
     <Compile Include="Spg.Ranking\ManualRanking.cs" />
     <Compile Include="Spg.Ranking\MLRankingLogisticRegressionLinear.cs" />
+    <Compile Include="Spg.Ranking\HibridRanking2.cs" />
     <Compile Include="Spg.Ranking\MLRankingNN.cs" />
     <Compile Include="Spg.Ranking\MLRankingLogisticRegressionNonLinear.cs" />
     <Compile Include="Spg.Ranking\HibridRanking.cs" />
