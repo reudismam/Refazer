@@ -80,7 +80,6 @@ namespace RefazerManager
                 UseThreads = false,
                 LogListener = new LogListener(),
             });
-
             var consistentPrograms = engine.LearnGrammar(spec);
                 //engine.LearnGrammarTopK(spec, scorer, 100);
             //var topK = consistentPrograms.TopK(scorer, 100).ToList();
