@@ -22,7 +22,7 @@ namespace TreeEdit.Spg.Builder
         {
             SyntaxNodeOrToken newNode = ReconstructTree(tree);
             if (newNode.IsKind(SyntaxKind.None)) return tree.Value;
-            newNode = newNode.AsNode().NormalizeWhitespace();
+            //newNode = newNode.AsNode().NormalizeWhitespace();
             //newNode = newNode.WithLeadingTrivia(target.GetLeadingTrivia());
             //newNode = newNode.WithTrailingTrivia(target.GetTrailingTrivia());
             return newNode;

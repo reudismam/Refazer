@@ -37,6 +37,13 @@ namespace RefazerUnitTests
             CompleteTestBase(classes);
         }
 
+        [TestMethod]
+        public void hello()
+        {
+            var classes = new List<string> { "hello" };
+            CompleteTestBase(classes);
+        }
+
         private void CompleteTestBase(List<string> examplesSet)
         {
             string exampleFolder = GetExampleFolder();
@@ -60,8 +67,9 @@ namespace RefazerUnitTests
                 var before = example.Item1;
                 Refazer4CSharp.Apply(program, before);
             }
+            var transformations = TransformationInfos.GetInstance().Transformations;
             //Get the before and after version of each transformed file.
-            var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
+            var transformedDocuments = ASTTransformer.Transform(transformations);
             //Get the modified version
             var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
         }
