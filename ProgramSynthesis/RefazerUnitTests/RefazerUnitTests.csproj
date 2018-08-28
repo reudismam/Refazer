@@ -322,6 +322,10 @@
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Controller\Controller.csproj">
+      <Project>{D2C1E970-DC22-4E82-BAE7-60842E102C46}</Project>
+      <Name>Controller</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\RefazerFunctions\RefazerFunctions.csproj">
       <Project>{07c1a3bf-5392-4686-923e-ad52280efecd}</Project>
       <Name>RefazerFunctions</Name>

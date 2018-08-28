@@ -35,12 +35,21 @@ namespace RefazerUnitTests
             var classesApply = new List<string> { "CommitFailureTests" };
             CompleteTestBase(classes, classesApply, @"E7\");           
         }
+
         [TestMethod]
         public void E12()
         {
             var classes = new List<string> { "QueryableExtensions" };
             CompleteTestBase(classes);
         }
+
+        [TestMethod]
+        public void helloworld()
+        {
+            var classes = new List<string> { "hello" };
+            CompleteTestBase(classes, classes, @"helloworld\");
+        }
+
         //[TestMethod]
         //public void N14()
         //{
@@ -453,7 +462,7 @@ namespace RefazerUnitTests
                 var transformedDocuments = ASTTransformer.Transform(transformations);
                 //Get the modified version
                 var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
-            } catch (Exception)
+            } catch (Exception e)
             {
                 //Ignored.
             }

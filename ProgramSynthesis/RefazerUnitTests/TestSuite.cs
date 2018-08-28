@@ -995,7 +995,9 @@ namespace RefazerUnitTests
             //Random number generator with a seed.
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
-            var examples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
+            var positiveExamples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
+            var negativeExamples = new List<Region>();
+            var addPositive = false;
             var incrementalExamples = new List<int>();
             bool INCREMENTAL_EXAMPLES = false;
             TestHelper helper = null;
@@ -1011,12 +1013,12 @@ namespace RefazerUnitTests
                         break;
                     }
                     incrementalExamples.Add(randomList[incrementalExamples.Count]);
-                    examples = new List<int>(incrementalExamples);
+                    positiveExamples = new List<int>(incrementalExamples);
                 }
-                examples.Sort();
+                positiveExamples.Sort();
                 helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations,
                     expHome, solutionPath, commit, kinds, fileFolder, execId);
-                helper.Execute(examples);
+                helper.Execute(positiveExamples, negativeExamples);
                 var regionsFrags = GetTransformedLocations(expHome);
                 string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
                 JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
@@ -1035,8 +1037,8 @@ namespace RefazerUnitTests
                     //Generate meta-data for BaselineBeforeAfterList on commit.
                     var foundList = GetEditionInLocations(regionsFrags, locations);
                     JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsTool + execId + ".json");
-                    var beforeafterList = GetBeforeAfterData(beforeafter, locations);
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
+                    var toolBeforeAfterList = GetBeforeAfterData(beforeafter, locations);
+                    JsonUtil<List<Tuple<Region, string, string>>>.Write(toolBeforeAfterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
                     JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
                     //Comparing edited locations with baseline
                     var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
@@ -1046,30 +1048,32 @@ namespace RefazerUnitTests
                         region.Path = region.Path.ToUpperInvariant();
                         baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
                     }
-                    var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
-                    var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
-                    bool moreThanNeeded = false;
+                    var notTransformed = foundList.Except(toolBeforeAfterList.Select(o => o.Item1)).ToList();
+                    var firstIncorrect = GetFirstIncorrect(toolBeforeAfterList, baselineBeforeAfter, randomList, locations, notTransformed);
                     if (firstIncorrect == -1)
                     {
-                        //selecting more than needed.
-                        if (beforeafter.Count > locations.Count)
-                        {
-                            moreThanNeeded = true;
-                            foreach (int x in randomList)
-                            {
-                                if (!examples.Contains(x))
-                                {
-                                    examples.Add(x);
-                                    break;
-                                }
-                            }
-                        }
-                        if (moreThanNeeded && examples.Count == randomList.Count)
-                        {
-                            throw new Exception("Sorry. Good luck next time!!");
-                        }
+                        bool moreThanNeeded = (beforeafter.Count > locations.Count);
                         if (moreThanNeeded)
                         {
+                            var firstMissing = getFirstMissingExample(positiveExamples, randomList);
+                            if (firstMissing != -1)
+                            {
+                                if (addPositive)
+                                {
+                                    positiveExamples.Add(firstMissing);
+                                } else
+                                {
+                                    var mustNotBeSelected = beforeafter.Select(o => o.Item1).Except(locations).ToList();
+                                    var missingNegative = mustNotBeSelected.Except(negativeExamples).ToList();
+                                    negativeExamples.Add(missingNegative.First());
+                                }
+                                addPositive = !addPositive;
+                            } else
+                            {
+                                var mustNotBeSelected = foundList.Except(locations);
+                                var missingNegative = mustNotBeSelected.Except(negativeExamples);
+                                negativeExamples.Add(missingNegative.First());
+                            }
                             continue;
                         }
                         try
@@ -1086,7 +1090,7 @@ namespace RefazerUnitTests
                     }
                     firstProblematicLocation = firstIncorrect;
                 }
-                if (examples.Contains(firstProblematicLocation))
+                if (positiveExamples.Contains(firstProblematicLocation))
                 {
                     try
                     {
@@ -1100,7 +1104,7 @@ namespace RefazerUnitTests
                     }
                     throw new Exception("A transformation could not be learned using this examples.");
                 }
-                examples.Add(firstProblematicLocation);
+                positiveExamples.Add(firstProblematicLocation);
             }
             //end of execution 
             long totalTimeToLearn = helper.TotalTimeToLearn;
@@ -1110,7 +1114,7 @@ namespace RefazerUnitTests
             var dictionarySelection = helper.DictionarySelection;
             Log(commit,
                  totalTimeToLearn + totalTimeToExecute,
-                 examples.Count,
+                 positiveExamples.Count,
                  baselineBeforeAfterList.Count,
                  transformed.Count,
                  dictionarySelection.Count,
@@ -1120,6 +1124,19 @@ namespace RefazerUnitTests
                  mean);
             return true;
         }
+
+        private static int getFirstMissingExample(List<int> examples, List<int> randomList)
+        {
+            foreach (int x in randomList)
+            {
+                if (!examples.Contains(x))
+                {
+                    return x;
+                }
+            }
+            return -1;
+        }
+
         //Here ends the Log verion 
 
 
