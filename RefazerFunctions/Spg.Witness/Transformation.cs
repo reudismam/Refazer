@@ -47,7 +47,12 @@ namespace RefazerFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTreeNode = (Node) input[rule.Body[0]];
-                var inpTree = inpTreeNode.Value.Value;
+                if (inpTreeNode.Kind == Node.ExampleKind.Negative)
+                {
+                    WitnessFunctions.Negatives.Add(inpTreeNode);
+                    continue;
+                }
+                var inpTree = inpTreeNode.Value.Value; ;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
@@ -62,6 +67,10 @@ namespace RefazerFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node)input[rule.Body[0]];
+                if (inpTree.Kind == Node.ExampleKind.Negative)
+                {
+                    continue;
+                }
                 SyntaxNodeOrToken outTree = (SyntaxNodeOrToken) spec.DisjunctiveExamples[input].SingleOrDefault();
                 //Compacted scripts for this input
                 var scriptsInput = new List<List<Script>>();

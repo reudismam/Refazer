@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using RefazerObject.Region;
 using TreeElement.Spg.Node;
 
 namespace RefazerFunctions.Bean
@@ -6,9 +7,30 @@ namespace RefazerFunctions.Bean
     public class Node
     {
         /// <summary>
+        /// Region associated to a node.
+        /// </summary>
+        public Region Region { get; set; }
+
+        /// <summary>
+        /// Enum, which defines the example kind.
+        /// </summary>
+        public enum ExampleKind
+        {
+            Negative,
+            Positive
+        }
+
+        /// <summary>
+        /// Kind of the example, which can be positive or negative.
+        /// </summary>
+        public ExampleKind Kind;
+
+        /// <summary>
         /// Value of the node
         /// </summary>
         public TreeNode<SyntaxNodeOrToken> Value { get; set; }
+
+        public SyntaxNodeOrToken SyntaxTree { get; set; }
 
         /// <summary>
         /// Left Sibling
@@ -27,6 +49,11 @@ namespace RefazerFunctions.Bean
         public Node(TreeNode<SyntaxNodeOrToken> value)
         {
             Value = value;
+        }
+
+        public Node(Region region)
+        {
+            Region = region;
         }
 
         /// <summary>
