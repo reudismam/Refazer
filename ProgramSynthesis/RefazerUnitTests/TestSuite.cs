@@ -20,6 +20,9 @@ using TreeEdit.Spg.LogInfo;
 using TreeEdit.Spg.Transform;
 using TreeElement;
 using System.Windows.Forms;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace RefazerUnitTests
 {
@@ -858,12 +861,6 @@ namespace RefazerUnitTests
         public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
         {
-           // string commitFirstLetter = commit.ElementAt(0).ToString();
-          //  string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
-
-         //   commit = commitFirstLetter + "" + commitId;
-         //   commit = commit.Substring(0, commit.Length -1);
-
             string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
             {
@@ -894,6 +891,54 @@ namespace RefazerUnitTests
                 em.Save();
             }
         }
+
+        /*public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
+            int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
+        {
+            string path = LogData.LogPath();
+            XSSFWorkbook hssfwb;
+            using (FileStream file = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+            {
+                hssfwb = new XSSFWorkbook(file);
+            
+            ISheet sheet = hssfwb.GetSheetAt(0);
+            int empty = sheet.LastRowNum;
+            for (int row = 0; row <= sheet.LastRowNum; row++)
+            {
+                if (sheet.GetRow(row).GetCell(0) == null || //null is when the row only contains empty cells
+                    sheet.GetRow(row).GetCell(0).Equals(commit))  
+                {
+                    empty = row;
+                    break;
+                
+                }
+            }
+           
+            var srow = sheet.CreateRow(empty + 1);
+            MessageBox.Show("aqui: " + srow + commit);
+            
+            MessageBox.Show(srow.ToString());
+            for (int col = 0; col < 10; col++)
+            {
+                if (srow.GetCell(col) == null)
+                {
+                    srow.CreateCell(col);
+                } 
+            }
+            srow.GetCell(0).SetCellValue(commit);
+            srow.GetCell(1).SetCellValue(time / 1000);
+            srow.GetCell(2).SetCellValue(exTransformations);
+            srow.GetCell(3).SetCellValue(locations);
+            srow.GetCell(4).SetCellValue(acTrasnformation);
+            srow.GetCell(5).SetCellValue(documents);
+            srow.GetCell(6).SetCellValue(program);
+            srow.GetCell(7).SetCellValue(timeToLearnEdit / 1000);
+            srow.GetCell(8).SetCellValue(timeToTransformEdit / 1000);
+            srow.GetCell(9).SetCellValue(mean);
+                hssfwb.Write(file);
+                file.Close();
+            }
+        }*/
 
         public static void LogProgram(string commit, int programIndex, string program, bool status)
         {
