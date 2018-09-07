@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using CsvHelper;
 
 namespace RefazerUnitTests
 {
@@ -858,7 +859,7 @@ namespace RefazerUnitTests
             return dictionary;
         }
 
-        public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
+        /*public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
         {
             string path = LogData.LogPath();
@@ -890,7 +891,7 @@ namespace RefazerUnitTests
                 em.SetValue("J" + empty, mean);
                 em.Save();
             }
-        }
+        }*/
 
         /*public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
@@ -923,8 +924,8 @@ namespace RefazerUnitTests
                 if (srow.GetCell(col) == null)
                 {
                     srow.CreateCell(col);
-                } 
-            }
+                    }
+                }
             srow.GetCell(0).SetCellValue(commit);
             srow.GetCell(1).SetCellValue(time / 1000);
             srow.GetCell(2).SetCellValue(exTransformations);
@@ -935,10 +936,39 @@ namespace RefazerUnitTests
             srow.GetCell(7).SetCellValue(timeToLearnEdit / 1000);
             srow.GetCell(8).SetCellValue(timeToTransformEdit / 1000);
             srow.GetCell(9).SetCellValue(mean);
-                hssfwb.Write(file);
-                file.Close();
+            hssfwb.Write(file);
+            file.Close();
             }
         }*/
+
+        public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
+            int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
+        {
+            string filename = LogData.LogPath();
+            TextReader textReader = File.OpenText(filename);
+            var csv = new CsvReader(textReader);
+            var records = csv.GetRecords<Record>().ToList();
+            textReader.Close();
+
+            Record record = new Record();
+            
+            record.Commit = commit;
+            record.Time = time / 1000;
+            record.Examples = exTransformations;
+            record.Locations = locations;
+            record.AcTransformation = acTrasnformation;
+            record.Documents = documents;
+            record.Program = program;
+            record.TimeToLearnEdit = timeToLearnEdit / 1000;
+            record.TimeToTranformEdit = timeToTransformEdit / 1000;
+            record.Mean = mean;
+            records.Add(record);
+
+            TextWriter textWriter = File.CreateText(filename);
+            var csvWriter = new CsvWriter(textWriter);
+            csvWriter.WriteRecords(records);
+            textWriter.Close();
+        }
 
         public static void LogProgram(string commit, int programIndex, string program, bool status)
         {
