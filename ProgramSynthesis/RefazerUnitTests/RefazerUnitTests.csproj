@@ -335,7 +335,6 @@
     <Compile Include="RegionManager.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Example.cs" />
-    <Compile Include="TestSuite.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
