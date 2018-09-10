@@ -11,6 +11,8 @@ using RefazerFunctions.Spg.Witness;
 using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Node;
+using RefazerFunctions.Bean;
+using RefazerObject.Region;
 
 namespace RefazerFunctions
 {
@@ -31,6 +33,8 @@ namespace RefazerFunctions
         /// TreeUpdate mapping.
         /// </summary>
         public static Dictionary<object, TreeUpdate> TreeUpdateDictionary = new Dictionary<object, TreeUpdate>();
+
+        public static List<Node> Negatives = new List<Node>();
 
         /// <summary>
         /// Literal witness function for parameter tree.
@@ -97,12 +101,34 @@ namespace RefazerFunctions
         /// </summary>
         /// <param name="rule">Grammar rule</param>
         /// <param name="spec">Example specification</param>
-        /// <param name="kindBinding">kindRef binding</param>
+        /// <param name="kmatch">kindRef binding</param>
         /// <returns>Disjunctive example specification</returns>
         [WitnessFunction(nameof(Semantics.Context), 1, DependsOnParameters = new[] { 0 })]
-        public DisjunctiveExamplesSpec ContextXPath(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kindBinding)
+        public DisjunctiveExamplesSpec ContextXPath(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kmatch)
         {
-            return new Context().ContextXPath(rule, spec, kindBinding);
+            var pattern = (Pattern)kmatch.Examples.First().Value;
+            foreach (Node input in Negatives)
+            {
+                var allNodes = Semantics.AllNodes(input, "");
+                foreach (var node in allNodes)
+                {
+                    var region = new Region();
+                    region.Start = node.Value.Value.SpanStart;
+                    region.Length = node.Value.Value.Span.Length;
+                    region.Path = node.Value.Value.SyntaxTree.FilePath.ToUpperInvariant();
+                    if (!input.Region.Equals(region))
+                    {
+                        continue;
+                    }
+                    bool match = Semantics.Match(node, pattern);
+                    if (match)
+                    {
+                        return null;
+                    }
+                }
+            }
+            var context = new Context().ContextXPath(rule, spec, kmatch);
+            return context;
         }
 
         /// <summary>
@@ -442,6 +468,21 @@ namespace RefazerFunctions
             }
             return new ExampleSpec(eExamples);
         }
+
+        //[WitnessFunction(nameof(Semantics.Match), 2, DependsOnParameters = new[] { 1 })]
+        //public ExampleSpec IdMatch(GrammarRule rule, DisjunctiveExamplesSpec spec, ExampleSpec kind)
+        //{
+        //    var pattern = (Pattern)kind.Examples.First().Value;
+        //    var eExamples = new Dictionary<State, object>();
+        //    foreach (State input in spec.ProvidedInputs)
+        //    {
+        //        var target = (TreeNode<SyntaxNodeOrToken>)input[rule.Body[0]];
+        //        var parent = ConverterHelper.ConvertCSharpToTreeNode(target.Value.Parent.Parent);
+        //        target = TreeUpdate.FindNode(parent, target.Value);
+        //        eExamples[input] = target;
+        //    }
+        //    return new ExampleSpec(eExamples);
+        //}
 
         public static TreeNode<SyntaxNodeOrToken> GetCurrentTree(object n)
         {

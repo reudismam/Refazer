@@ -1,0 +1,365 @@
+[
+  {
+    "Item1": {
+      "Text": "InitControls",
+      "Start": 1737,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.InitControls",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "UpdateControls",
+      "Start": 1766,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.UpdateControls",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "StartAutoCapture",
+      "Start": 2433,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.StartAutoCapture",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "GetCurrentTasks",
+      "Start": 3124,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.GetCurrentTasks",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Refresh",
+      "Start": 4108,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.Refresh",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Refresh",
+      "Start": 4522,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.Refresh",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CreateHandle",
+      "Start": 7816,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.CreateHandle",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterShownJobs",
+      "Start": 8024,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.AfterShownJobs",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Refresh",
+      "Start": 8145,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.Refresh",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Hide",
+      "Start": 8484,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.Hide",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenDropWindow",
+      "Start": 9760,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenDropWindow",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "UpdateDestinationStates",
+      "Start": 9898,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.UpdateDestinationStates",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "DoScreenRecorder",
+      "Start": 11287,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.DoScreenRecorder",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenAutoCapture",
+      "Start": 11416,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenAutoCapture",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterSettingsJobs",
+      "Start": 11717,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.AfterSettingsJobs",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenScreenColorPicker",
+      "Start": 13323,
+      "Length": 21,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenScreenColorPicker",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenHashCheck",
+      "Start": 13455,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenHashCheck",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenIndexFolder",
+      "Start": 13581,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenIndexFolder",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenImageEffects",
+      "Start": 13710,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenImageEffects",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenMonitorTest",
+      "Start": 13839,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenMonitorTest",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenDNSChanger",
+      "Start": 13966,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenDNSChanger",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "OpenRuler",
+      "Start": 14087,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.OpenRuler",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "UpdateControls",
+      "Start": 16472,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.UpdateControls",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "UpdateControls",
+      "Start": 16697,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.UpdateControls",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "UpdateControls",
+      "Start": 16893,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.UpdateControls",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "RemoveSelectedItems",
+      "Start": 17903,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.RemoveSelectedItems",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "RemoveSelectedItems",
+      "Start": 18256,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.RemoveSelectedItems",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ForceClose",
+      "Start": 19412,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.ForceClose",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "GetCurrentTasks",
+      "Start": 19708,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.GetCurrentTasks",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "RemoveAllItems",
+      "Start": 23769,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.RemoveAllItems",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "UpdateMenu",
+      "Start": 24254,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.UpdateMenu",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "UpdatePreviewSplitter",
+      "Start": 24452,
+      "Length": 21,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.UpdatePreviewSplitter",
+    "Item3": "S3778\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "UpdateControls",
+      "Start": 24490,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S3778\\MAINFORMB.CS"
+    },
+    "Item2": "TaskHelpers.UpdateControls",
+    "Item3": "S3778\\MAINFORMB.CS"
+  }
+]

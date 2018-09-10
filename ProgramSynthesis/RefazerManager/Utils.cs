@@ -9,6 +9,7 @@ using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Learning.Logging;
 using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
+using RefazerFunctions;
 
 namespace RefazerManager
 {
@@ -79,19 +80,29 @@ namespace RefazerManager
                 UseThreads = false,
                 LogListener = new LogListener(),
             });
-
             var consistentPrograms = engine.LearnGrammar(spec);
+                //engine.LearnGrammarTopK(spec, scorer, 100);
+            //var topK = consistentPrograms.TopK(scorer, 100).ToList();
             //Max number of programs that we are interested.
-            const ulong a = 200;
-            var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 5).ToList();
+            const ulong a = 200; //orinal 200
+            //var topK = consistentPrograms.RealizedPrograms.ToList();
+            var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 1000).ToList(); //topK 1000 //201?
             var b = (ulong)topK.Count;
-            topK = topK.OrderByDescending(o => o.GetFeatureValue(scorer)).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
+            int examplesCount = spec.ProvidedInputs.Count();
+            topK = topK.OrderByDescending(o => o.GetFeatureValue(new RankingScore(grammar, examplesCount))).ToList().GetRange(0, (int)Math.Min(a, b)).ToList();
+            //topK = topK.GetRange(0, (int)Math.Min(a, b)).ToList();
             //Print generated programs
             var programStrings = "";
-            topK.ForEach(p => programStrings += $"Score[{p.GetFeatureValue(scorer)}] " + p + "\n");
+            topK.ForEach(p => programStrings += $"Score[{p.GetFeatureValue(new RankingScore(grammar, examplesCount))}] " + p + "\n");
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
             string file = expHome + "programs.txt";
             File.WriteAllText(file, programStrings);
+            if (topK.Any())
+            {
+                ProgramNode first = topK.ElementAt(0);
+                String firstString = first.ToString();
+                var score = first.GetFeatureValue(scorer);
+            }
             return topK;
         }
 

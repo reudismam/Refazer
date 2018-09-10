@@ -41,6 +41,11 @@ namespace TreeElement
         /// <param name="sourceCode">Source code</param>
         public static void WriteToFile(string path, string sourceCode)
         {
+            int index = path.LastIndexOf('/');
+            if (index != -1) {
+                string folder = path.Substring(0, index);
+                Directory.CreateDirectory(folder);
+            }
             StreamWriter file = new StreamWriter(path);
             file.Write(sourceCode);
             file.Close();

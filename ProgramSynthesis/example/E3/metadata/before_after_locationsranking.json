@@ -1,0 +1,230 @@
+[
+  {
+    "Item1": {
+      "Text": "(Owner.GetModel())",
+      "Start": 13680,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\InternalContext.cs"
+    },
+    "Item2": "(new VersionedModel(Owner.GetModel()))",
+    "Item3": "E3\\InternalContext.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 7410,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 8474,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 9562,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 10301,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 11657,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 13106,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 14766,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 16011,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 17255,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 19568,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 20907,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 22148,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 24696,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 25905,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 27305,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 28660,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 29944,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  },
+  {
+    "Item1": {
+      "Text": "context.GetModel()",
+      "Start": 42384,
+      "Length": 18,
+      "Parent": null,
+      "Node": null,
+      "Path": "E3\\HistoryRepositoryTests.cs"
+    },
+    "Item2": "new VersionedModel(context.GetModel())",
+    "Item3": "E3\\HistoryRepositoryTests.cs"
+  }
+]

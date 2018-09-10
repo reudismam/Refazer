@@ -1,0 +1,123 @@
+[
+  {
+    "Item1": {
+      "Text": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions)",
+      "Start": 8921,
+      "Length": 87,
+      "Parent": null,
+      "Path": "N21\\DATASERVICEPACKAGEREPOSITORYB.CS"
+    },
+    "Item2": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions, bool includeDelisted)",
+    "Item3": "N21\\DATASERVICEPACKAGEREPOSITORYB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions)",
+      "Start": 2758,
+      "Length": 87,
+      "Parent": null,
+      "Path": "N21\\FALLBACKREPOSITORYB.CS"
+    },
+    "Item2": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions, bool includeDelisted)",
+    "Item3": "N21\\FALLBACKREPOSITORYB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(searchTerm, targetFrameworks, allowPrereleaseVersions)",
+      "Start": 2902,
+      "Length": 55,
+      "Parent": null,
+      "Path": "N21\\FALLBACKREPOSITORYB.CS"
+    },
+    "Item2": "(searchTerm, targetFrameworks, allowPrereleaseVersions, includeDelisted)",
+    "Item3": "N21\\FALLBACKREPOSITORYB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions)",
+      "Start": 1722,
+      "Length": 87,
+      "Parent": null,
+      "Path": "N21\\LAZYREPOSITORYB.CS"
+    },
+    "Item2": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions, bool includeDelisted)",
+    "Item3": "N21\\LAZYREPOSITORYB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(searchTerm, targetFrameworks, allowPrereleaseVersions)",
+      "Start": 1858,
+      "Length": 55,
+      "Parent": null,
+      "Path": "N21\\LAZYREPOSITORYB.CS"
+    },
+    "Item2": "(searchTerm, targetFrameworks, allowPrereleaseVersions, includeDelisted)",
+    "Item3": "N21\\LAZYREPOSITORYB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions)",
+      "Start": 244,
+      "Length": 87,
+      "Parent": null,
+      "Path": "N21\\MOCKSERVICEBASEPACKAGEREPOSITORYB.CS"
+    },
+    "Item2": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions, bool includeDelisted)",
+    "Item3": "N21\\MOCKSERVICEBASEPACKAGEREPOSITORYB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(searchTerm, targetFrameworks, allowPrereleaseVersions)",
+      "Start": 13347,
+      "Length": 55,
+      "Parent": null,
+      "Path": "N21\\PACKAGEREPOSITORYEXTENSIONSB.CS"
+    },
+    "Item2": "(searchTerm, targetFrameworks, allowPrereleaseVersions, includeDelisted)",
+    "Item3": "N21\\PACKAGEREPOSITORYEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(this IPackageRepository repository, string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions)",
+      "Start": 12869,
+      "Length": 123,
+      "Parent": null,
+      "Path": "N21\\PACKAGEREPOSITORYEXTENSIONSB.CS"
+    },
+    "Item2": "(this IPackageRepository repository, string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions, bool includeDelisted)",
+    "Item3": "N21\\PACKAGEREPOSITORYEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions)",
+      "Start": 4022,
+      "Length": 87,
+      "Parent": null,
+      "Path": "N21\\SERVERPACKAGEREPOSITORYB.CS"
+    },
+    "Item2": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions, bool includeDelisted)",
+    "Item3": "N21\\SERVERPACKAGEREPOSITORYB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions)",
+      "Start": 3478,
+      "Length": 87,
+      "Parent": null,
+      "Path": "N21\\VSPACKAGESOURCEREPOSITORYB.CS"
+    },
+    "Item2": "(string searchTerm, IEnumerable<string> targetFrameworks, bool allowPrereleaseVersions, bool includeDelisted)",
+    "Item3": "N21\\VSPACKAGESOURCEREPOSITORYB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(searchTerm, targetFrameworks, allowPrereleaseVersions)",
+      "Start": 3834,
+      "Length": 55,
+      "Parent": null,
+      "Path": "N21\\VSPACKAGESOURCEREPOSITORYB.CS"
+    },
+    "Item2": "(searchTerm, targetFrameworks, allowPrereleaseVersions, includeDelisted)",
+    "Item3": "N21\\VSPACKAGESOURCEREPOSITORYB.CS"
+  }
+]

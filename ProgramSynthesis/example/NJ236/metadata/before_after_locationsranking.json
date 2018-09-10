@@ -1,0 +1,36 @@
+[
+  
+  {
+    "Item1": {
+      "Text": "value.GetType().AssignableToTypeName(BinaryTypeName)",
+      "Start": 2518,
+      "Length": 52,
+      "Parent": null,
+      "Path": "NJ236\\BINARYCONVERTERB.CS"
+    },
+    "Item2": "value.GetType().FullName == BinaryTypeName",
+    "Item3": "NJ236\\BINARYCONVERTERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "t.AssignableToTypeName(BinaryTypeName)",
+      "Start": 5290,
+      "Length": 38,
+      "Parent": null,
+      "Path": "NJ236\\BINARYCONVERTERB.CS"
+    },
+    "Item2": "t.FullName == BinaryTypeName",
+    "Item3": "NJ236\\BINARYCONVERTERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "objectType.AssignableToTypeName(BinaryTypeName)",
+      "Start": 7202,
+      "Length": 47,
+      "Parent": null,
+      "Path": "NJ236\\BINARYCONVERTERB.CS"
+    },
+    "Item2": "objectType.FullName == BinaryTypeName",
+    "Item3": "NJ236\\BINARYCONVERTERB.CS"
+  }
+]

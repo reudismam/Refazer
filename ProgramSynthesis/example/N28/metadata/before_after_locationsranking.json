@@ -1,0 +1,46 @@
+[
+  {
+    "Item1": {
+      "Text": "\"Package\"",
+      "Start": 687,
+      "Length": 9,
+      "Parent": null,
+      "Path": "N28\\GETPACKAGECOMMANDB.CS"
+    },
+    "Item2": "\"Package2\"",
+    "Item3": "N28\\GETPACKAGECOMMANDB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Package\"",
+      "Start": 910,
+      "Length": 9,
+      "Parent": null,
+      "Path": "N28\\INSTALLPACKAGECOMMANDB.CS"
+    },
+    "Item2": "\"Package2\"",
+    "Item3": "N28\\INSTALLPACKAGECOMMANDB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Package\"",
+      "Start": 346,
+      "Length": 9,
+      "Parent": null,
+      "Path": "N28\\UNINSTALLPACKAGECOMMANDB.CS"
+    },
+    "Item2": "\"Package2\"",
+    "Item3": "N28\\UNINSTALLPACKAGECOMMANDB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Package\"",
+      "Start": 782,
+      "Length": 9,
+      "Parent": null,
+      "Path": "N28\\UPDATEPACKAGECOMMANDB.CS"
+    },
+    "Item2": "\"Package2\"",
+    "Item3": "N28\\UPDATEPACKAGECOMMANDB.CS"
+  }
+]

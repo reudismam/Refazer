@@ -1,4 +1,6 @@
-﻿using TreeElement.Spg.Node;
+﻿using System;
+using Microsoft.ProgramSynthesis;
+using TreeElement.Spg.Node;
 using TreeElement.Token;
 
 namespace RefazerFunctions.Bean

@@ -1,0 +1,7779 @@
+[
+  {
+    "Item1": {
+      "Text": "IncludePreRelease",
+      "Start": 1873,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "latestRelease",
+      "Start": 1934,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "IsPortable",
+      "Start": 1949,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "IsPortable ? true : false",
+      "Start": 1961,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 2201,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"GitHub update check failed\"",
+      "Start": 2204,
+      "Length": 28,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "includePreRelease",
+      "Start": 2538,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "latestRelease",
+      "Start": 2599,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "isPortable",
+      "Start": 2614,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "isBrowserDownloadURL",
+      "Start": 2626,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 2835,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "RequestCacheLevel.NoCacheNoStore",
+      "Start": 3081,
+      "Length": 32,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"user-agent\"",
+      "Start": 3148,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ShareXResources.UserAgent",
+      "Start": 3162,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ReleasesURL",
+      "Start": 3280,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "response",
+      "Start": 3339,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "response",
+      "Start": 3448,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 3906,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => !x.prerelease",
+      "Start": 4031,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "release.tag_name",
+      "Start": 4312,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 4381,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 4479,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "release.tag_name.Substring(1)",
+      "Start": 4452,
+      "Length": 29,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "asset.name",
+      "Start": 5029,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "endsWith",
+      "Start": 5064,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "StringComparison.InvariantCultureIgnoreCase",
+      "Start": 5074,
+      "Length": 43,
+      "Parent": null,
+      "Path": "S564\\GITHUBUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\GITHUBUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 3436,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'.'",
+      "Start": 3510,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "pos + 1",
+      "Start": 3615,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 3813,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'\\\\'",
+      "Start": 3887,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'/'",
+      "Start": 3993,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "pos + 1",
+      "Start": 4117,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 4345,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "extension",
+      "Start": 4380,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'.'",
+      "Start": 4455,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "pos",
+      "Start": 4561,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'.'",
+      "Start": 4669,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "pos + 1",
+      "Start": 4792,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 5116,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 5208,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "directory",
+      "Start": 5270,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFileName",
+      "Start": 5281,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 5326,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newPath",
+      "Start": 5336,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Rename error:\\r\\n\" + e.ToString()",
+      "Start": 5498,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX - \" + Resources.Error",
+      "Start": 5534,
+      "Length": 29,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 5565,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Error",
+      "Start": 5587,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'.'",
+      "Start": 5799,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'.'",
+      "Start": 5832,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 6001,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ext",
+      "Start": 6053,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x",
+      "Start": 6129,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "StringComparison.InvariantCultureIgnoreCase",
+      "Start": 6132,
+      "Length": 43,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => ext.Equals(x, StringComparison.InvariantCultureIgnoreCase)",
+      "Start": 6113,
+      "Length": 63,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 6339,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ImageFileExtensions",
+      "Start": 6349,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 6486,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "TextFileExtensions",
+      "Start": 6496,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 6633,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "VideoFileExtensions",
+      "Start": 6643,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 6781,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 6893,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "digits",
+      "Start": 7140,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'0'",
+      "Start": 7148,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "number.ToString()",
+      "Start": 7276,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "digits",
+      "Start": 7295,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "hour - 12",
+      "Start": 7553,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "hour",
+      "Start": 7612,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "chars.Length - 1",
+      "Start": 7744,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MathHelpers.Random(chars.Length - 1)",
+      "Start": 7725,
+      "Length": 36,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "chars",
+      "Start": 8005,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "GetRandomChar(chars)",
+      "Start": 7991,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Numbers",
+      "Start": 8184,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "length",
+      "Start": 8193,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Alphanumeric",
+      "Start": 8326,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "length",
+      "Start": 8340,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 8506,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(length + 1) * count - 1",
+      "Start": 8509,
+      "Length": 24,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"\"",
+      "Start": 8545,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Alphanumeric",
+      "Start": 8622,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(x, index) => x += index % (length + 1) == 0 ? separator : GetRandomChar(Alphanumeric)",
+      "Start": 8549,
+      "Length": 86,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 8772,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "255",
+      "Start": 8775,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "i => (byte)i",
+      "Start": 8787,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Enumerable.Range(1, 255).Select(i => (byte)i).ToArray()",
+      "Start": 8755,
+      "Length": 55,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "separator",
+      "Start": 9037,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c",
+      "Start": 9150,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c => !invalidFileNameChars.Contains(c)",
+      "Start": 9114,
+      "Length": 38,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fileName.Where(c => !invalidFileNameChars.Contains(c)).ToArray()",
+      "Start": 9099,
+      "Length": 64,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x.ToString()",
+      "Start": 9293,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "separator",
+      "Start": 9307,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => fileName = fileName.Replace(x.ToString(), separator)",
+      "Start": 9260,
+      "Length": 57,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "separator + separator",
+      "Start": 9368,
+      "Length": 21,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "separator",
+      "Start": 9391,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c",
+      "Start": 9657,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c => !invalidPathChars.Contains(c)",
+      "Start": 9625,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "folderPath.Where(c => !invalidPathChars.Contains(c)).ToArray()",
+      "Start": 9608,
+      "Length": 62,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 9816,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 9875,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "folderPath",
+      "Start": 9925,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fileName",
+      "Start": 9986,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "' '",
+      "Start": 10151,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "'_'",
+      "Start": 10156,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 10208,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "input",
+      "Start": 10338,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"(?<={0}>).+?(?=</{0})\"",
+      "Start": 10359,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tag",
+      "Start": 10384,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "string.Format(\"(?<={0}>).+?(?=</{0})\", tag)",
+      "Start": 10345,
+      "Length": 43,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fileName",
+      "Start": 10519,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fileName",
+      "Start": 10593,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ext",
+      "Start": 10659,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ext",
+      "Start": 10745,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "mimeType",
+      "Start": 10800,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ext",
+      "Start": 10982,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Content Type\"",
+      "Start": 11074,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Content Type\"",
+      "Start": 11182,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "mimeType",
+      "Start": 11267,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "typeof(T)",
+      "Start": 11628,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "typeof(T)",
+      "Start": 11756,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => x.GetDescription()",
+      "Start": 11789,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.ResourceManager",
+      "Start": 12362,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "typeof(T)",
+      "Start": 12546,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "resourceManager",
+      "Start": 12610,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => x.GetLocalizedDescription(resourceManager)",
+      "Start": 12579,
+      "Length": 47,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "typeof(T)",
+      "Start": 12744,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "i",
+      "Start": 12873,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "typeof(T)",
+      "Start": 13001,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "i",
+      "Start": 13167,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "i",
+      "Start": 13192,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "names[i]",
+      "Start": 13186,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "BindingFlags.Static | BindingFlags.Public",
+      "Start": 13509,
+      "Length": 41,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "null",
+      "Start": 13666,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(T)fi.GetValue(null)",
+      "Start": 13651,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "i",
+      "Start": 14007,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c",
+      "Start": 14056,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "' '",
+      "Start": 14110,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c",
+      "Start": 14169,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "char.ToLowerInvariant(c)",
+      "Start": 14147,
+      "Length": 24,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "c",
+      "Start": 14265,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 14457,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 14482,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 14583,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 14751,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "$\"OpenFile({filePath}) failed.\"",
+      "Start": 14754,
+      "Length": 31,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.Helpers_OpenFile_File_not_exist_ + Environment.NewLine + filePath",
+      "Start": 14888,
+      "Length": 75,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX\"",
+      "Start": 14965,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 14975,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Information",
+      "Start": 14997,
+      "Length": 26,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "folderPath",
+      "Start": 15191,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "folderPath",
+      "Start": 15223,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "@\"\\\"",
+      "Start": 15293,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "folderPath",
+      "Start": 15456,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 15626,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "$\"OpenFolder({folderPath}) failed.\"",
+      "Start": 15629,
+      "Length": 35,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.Helpers_OpenFolder_Folder_not_exist_ + Environment.NewLine + folderPath",
+      "Start": 15767,
+      "Length": 81,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX\"",
+      "Start": 15850,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 15860,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Information",
+      "Start": 15882,
+      "Length": 26,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 16082,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 16107,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 16232,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 16400,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "$\"OpenFolderWithFile({filePath}) failed.\"",
+      "Start": 16403,
+      "Length": 41,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.Helpers_OpenFile_File_not_exist_ + Environment.NewLine + filePath",
+      "Start": 16547,
+      "Length": 75,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX\"",
+      "Start": 16624,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 16634,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Information",
+      "Start": 16656,
+      "Length": 26,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "version1",
+      "Start": 17059,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "version2",
+      "Start": 17096,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "NormalizeVersion(version2)",
+      "Start": 17079,
+      "Length": 26,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "version2.Normalize()",
+      "Start": 17454,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "version",
+      "Start": 17825,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Application.ProductVersion",
+      "Start": 17834,
+      "Length": 26,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "version",
+      "Start": 17986,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Environment.SpecialFolder.ProgramFiles",
+      "Start": 19374,
+      "Length": 38,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 19473,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ip",
+      "Start": 19598,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ip.Trim()",
+      "Start": 19846,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "pattern",
+      "Start": 19857,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 19985,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 20066,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 20145,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 20210,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 20299,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "@\"(.+) \\((\\d+)\\)\\.\\w+\"",
+      "Start": 20309,
+      "Length": 22,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 20436,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "2",
+      "Start": 20499,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "regex.Groups[2].Value",
+      "Start": 20486,
+      "Length": 21,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "folder",
+      "Start": 20646,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"{0} ({1}){2}\"",
+      "Start": 20668,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 20684,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "number",
+      "Start": 20694,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "extension",
+      "Start": 20702,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "string.Format(\"{0} ({1}){2}\", filename, number, extension)",
+      "Start": 20654,
+      "Length": 58,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 20770,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"{0:00}:{1:00}\"",
+      "Start": 20952,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ts.Minutes",
+      "Start": 20969,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ts.Seconds",
+      "Start": 20981,
+      "Length": 10,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "null",
+      "Start": 21336,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "StreamingContextStates.Clone",
+      "Start": 21363,
+      "Length": 28,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "new StreamingContext(StreamingContextStates.Clone)",
+      "Start": 21342,
+      "Length": 50,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ms",
+      "Start": 21438,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "obj",
+      "Start": 21442,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 21473,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "SeekOrigin.Begin",
+      "Start": 21476,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ms",
+      "Start": 21547,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "stream",
+      "Start": 21856,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() =>\r\n                {\r\n                    using (stream)\r\n                    using (SoundPlayer soundPlayer = new SoundPlayer(stream))\r\n                    {\r\n                        soundPlayer.PlaySync();\r\n                    }\r\n                }",
+      "Start": 21725,
+      "Length": 253,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 22119,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 22144,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 22293,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() =>\r\n                {\r\n                    using (SoundPlayer soundPlayer = new SoundPlayer(filepath))\r\n                    {\r\n                        soundPlayer.PlaySync();\r\n                    }\r\n                }",
+      "Start": 22198,
+      "Length": 219,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX - \" + Resources.Helpers_BrowseFile_Choose_file",
+      "Start": 22606,
+      "Length": 54,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tb",
+      "Start": 22662,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "initialDirectory",
+      "Start": 22666,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "detectSpecialFolders",
+      "Start": 22684,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 23110,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 23194,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 23249,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ofd.InitialDirectory",
+      "Start": 23500,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "initialDirectory",
+      "Start": 23547,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ofd.FileName",
+      "Start": 23852,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX - \" + Resources.Helpers_BrowseFolder_Choose_folder",
+      "Start": 24154,
+      "Length": 58,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tb",
+      "Start": 24214,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "initialDirectory",
+      "Start": 24218,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "detectSpecialFolders",
+      "Start": 24236,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 24624,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 24650,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "initialDirectory",
+      "Start": 24793,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fsd.FileName",
+      "Start": 25048,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 25303,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x",
+      "Start": 25483,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Environment.GetFolderPath(x)",
+      "Start": 25457,
+      "Length": 28,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "$\"%{x}%\"",
+      "Start": 25487,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "StringComparison.InvariantCultureIgnoreCase",
+      "Start": 25497,
+      "Length": 43,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => path = path.Replace(Environment.GetFolderPath(x), $\"%{x}%\", StringComparison.InvariantCultureIgnoreCase)",
+      "Start": 25432,
+      "Length": 109,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 25667,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 25861,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "$\"%{x}%\"",
+      "Start": 26015,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x",
+      "Start": 26051,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Environment.GetFolderPath(x)",
+      "Start": 26025,
+      "Length": 28,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "StringComparison.InvariantCultureIgnoreCase",
+      "Start": 26055,
+      "Length": 43,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => path = path.Replace($\"%{x}%\", Environment.GetFolderPath(x), StringComparison.InvariantCultureIgnoreCase)",
+      "Start": 25990,
+      "Length": 109,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 26169,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 26299,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "interval",
+      "Start": 26756,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "waitStart",
+      "Start": 27129,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "check",
+      "Start": 27198,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "interval",
+      "Start": 27205,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "timeout",
+      "Start": 27215,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() =>\r\n            {\r\n                if (waitStart > 0)\r\n                {\r\n                    Thread.Sleep(waitStart);\r\n                }\r\n\r\n                result = WaitWhile(check, interval, timeout);\r\n            }",
+      "Start": 27019,
+      "Length": 220,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() =>\r\n            {\r\n                if (result) onSuccess();\r\n            }",
+      "Start": 27254,
+      "Length": 77,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "false",
+      "Start": 27333,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 27506,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FileMode.Open",
+      "Start": 27512,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FileAccess.ReadWrite",
+      "Start": 27527,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FileShare.ReadWrite",
+      "Start": 27549,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 27883,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 27910,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 28019,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 28149,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.Helpers_CreateDirectoryIfNotExist_Create_failed_ + \"\\r\\n\\r\\n\" + e",
+      "Start": 28190,
+      "Length": 75,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX\"",
+      "Start": 28267,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 28277,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Error",
+      "Start": 28299,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 28488,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 28582,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Path.GetDirectoryName(path)",
+      "Start": 28560,
+      "Length": 27,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 28757,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 28782,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 28876,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 28941,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"{0}-{1:yyyy-MM}{2}\"",
+      "Start": 29004,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 29026,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "DateTime.Now",
+      "Start": 29036,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "extension",
+      "Start": 29050,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "destinationFolder",
+      "Start": 29113,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFilename",
+      "Start": 29132,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFilepath",
+      "Start": 29182,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFilepath",
+      "Start": 29264,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 29309,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFilepath",
+      "Start": 29319,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "false",
+      "Start": 29332,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 29525,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 29550,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 29644,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 29760,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"{0}-{1:yyyy-MM}-W{2:00}{3}\"",
+      "Start": 29823,
+      "Length": 28,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 29853,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "dateTime",
+      "Start": 29863,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "dateTime.WeekOfYear()",
+      "Start": 29873,
+      "Length": 21,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "extension",
+      "Start": 29896,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "destinationFolder",
+      "Start": 29959,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFilename",
+      "Start": 29978,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFilepath",
+      "Start": 30028,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFilepath",
+      "Start": 30110,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filepath",
+      "Start": 30155,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "newFilepath",
+      "Start": 30165,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "false",
+      "Start": 30178,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"N\"",
+      "Start": 30332,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "offset.X",
+      "Start": 30927,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "offset.Y",
+      "Start": 30937,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "midX",
+      "Start": 31036,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "offset.Y",
+      "Start": 31042,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "right - offset.X",
+      "Start": 31140,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "offset.Y",
+      "Start": 31158,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "offset.X",
+      "Start": 31258,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "midY",
+      "Start": 31268,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "midX",
+      "Start": 31366,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "midY",
+      "Start": 31372,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "right - offset.X",
+      "Start": 31469,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "midY",
+      "Start": 31487,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "offset.X",
+      "Start": 31583,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "bottom - offset.Y",
+      "Start": 31593,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "midX",
+      "Start": 31704,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "bottom - offset.Y",
+      "Start": 31710,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "right - offset.X",
+      "Start": 31820,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "bottom - offset.Y",
+      "Start": 31838,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "IntPtr.Zero",
+      "Start": 32012,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "text",
+      "Start": 32081,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "font",
+      "Start": 32087,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "IntPtr.Zero",
+      "Start": 32268,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "text",
+      "Start": 32337,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "font",
+      "Start": 32343,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "width",
+      "Start": 32349,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "host",
+      "Start": 32486,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 32492,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "host",
+      "Start": 32916,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "3000",
+      "Start": 32922,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "i",
+      "Start": 33043,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "i",
+      "Start": 33192,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "100",
+      "Start": 33265,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\", \"",
+      "Start": 33339,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "status",
+      "Start": 33345,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 33474,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"user-agent\"",
+      "Start": 33712,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ShareXResources.UserAgent",
+      "Start": 33726,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 33883,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 34035,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.Helpers_DownloadString_Download_failed_ + \"\\r\\n\" + e",
+      "Start": 34076,
+      "Length": 62,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX\"",
+      "Start": 34140,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 34150,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Error",
+      "Start": 34172,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"s_userDefaultUICulture\"",
+      "Start": 34494,
+      "Length": 24,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "BindingFlags.SetField | BindingFlags.NonPublic | BindingFlags.Static",
+      "Start": 34520,
+      "Length": 68,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "null",
+      "Start": 34590,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "culture",
+      "Start": 34596,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "new object[] { culture }",
+      "Start": 34605,
+      "Length": 24,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"m_userDefaultUICulture\"",
+      "Start": 34793,
+      "Length": 24,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "BindingFlags.SetField | BindingFlags.NonPublic | BindingFlags.Static",
+      "Start": 34819,
+      "Length": 68,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "null",
+      "Start": 34889,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "culture",
+      "Start": 34895,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "new object[] { culture }",
+      "Start": 34904,
+      "Length": 24,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"SetDefaultUICulture failed: \" + culture.DisplayName",
+      "Start": 35035,
+      "Length": 52,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 35249,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 35294,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AppDomain.CurrentDomain.BaseDirectory",
+      "Start": 35374,
+      "Length": 37,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 35413,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 35474,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 35657,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "extension",
+      "Start": 35663,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "WindowsIdentity.GetCurrent()",
+      "Start": 35786,
+      "Length": 28,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "WindowsBuiltInRole.Administrator",
+      "Start": 35825,
+      "Length": 32,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1970",
+      "Start": 36320,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 36326,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 36329,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 36332,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 36335,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 36338,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 36341,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "DateTimeKind.Utc",
+      "Start": 36344,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "timeInTicks",
+      "Start": 36371,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1970",
+      "Start": 36580,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 36586,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 36589,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 36592,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 36595,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 36598,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "0",
+      "Start": 36601,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "DateTimeKind.Utc",
+      "Start": 36604,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "name",
+      "Start": 36839,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e.ToString()",
+      "Start": 37112,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX - Error\"",
+      "Start": 37126,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 37144,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Error",
+      "Start": 37166,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "sourceDirectory",
+      "Start": 37353,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "targetDirectory",
+      "Start": 37427,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "diSource",
+      "Start": 37468,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "diTarget",
+      "Start": 37478,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "target.FullName",
+      "Start": 37628,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "target.FullName",
+      "Start": 37704,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "target.FullName",
+      "Start": 37850,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fi.Name",
+      "Start": 37867,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Path.Combine(target.FullName, fi.Name)",
+      "Start": 37837,
+      "Length": 38,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "true",
+      "Start": 37877,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "diSourceSubDir.Name",
+      "Start": 38071,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "diSourceSubDir",
+      "Start": 38118,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "nextTargetSubDir",
+      "Start": 38134,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "bytes",
+      "Start": 38318,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "GCHandleType.Pinned",
+      "Start": 38325,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "handle.AddrOfPinnedObject()",
+      "Start": 38431,
+      "Length": 27,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "typeof(T)",
+      "Start": 38460,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "text",
+      "Start": 38756,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"$.\" + jsonPath",
+      "Start": 38774,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "typeof(T)",
+      "Start": 39042,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Type.EmptyTypes",
+      "Start": 39073,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "t",
+      "Start": 39170,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "@\"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\"",
+      "Start": 39399,
+      "Length": 47,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ProductName\"",
+      "Start": 39557,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "productName",
+      "Start": 39632,
+      "Length": 11,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "data",
+      "Start": 40014,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ms",
+      "Start": 40071,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"\\\"{0}\\\"\"",
+      "Start": 40206,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"\\\\\"",
+      "Start": 40230,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"\\\\\\\\\"",
+      "Start": 40236,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"\\\"\"",
+      "Start": 40252,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"\\\\\\\"\"",
+      "Start": 40258,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "text.Replace(\"\\\\\", \"\\\\\\\\\").Replace(\"\\\"\", \"\\\\\\\"\")",
+      "Start": 40217,
+      "Length": 48,
+      "Parent": null,
+      "Path": "S564\\HELPERSB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\HELPERSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 2718,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "null",
+      "Start": 2878,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 3604,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 3986,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.FilePath",
+      "Start": 4104,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 4124,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.FilePath",
+      "Start": 4285,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.TaskSettings",
+      "Start": 4368,
+      "Length": 22,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ext",
+      "Start": 4392,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.FilePath",
+      "Start": 4662,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 5152,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "customFileName",
+      "Start": 5301,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "customFileName",
+      "Start": 5395,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"bmp\"",
+      "Start": 5411,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 5529,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"bmp\"",
+      "Start": 5543,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "imageInfo",
+      "Start": 5550,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 5819,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 5991,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings.AdvancedSettings.TextFileExtension",
+      "Start": 6005,
+      "Length": 47,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 6282,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.UploadTask_CreateURLShortenerTask_Shorten_URL___0__",
+      "Start": 6443,
+      "Length": 61,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings.URLShortenerDestination.GetLocalizedDescription()",
+      "Start": 6506,
+      "Length": 62,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 6800,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.UploadTask_CreateShareURLTask_Share_URL___0__",
+      "Start": 6959,
+      "Length": 55,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings.URLSharingServiceDestination.GetLocalizedDescription()",
+      "Start": 7016,
+      "Length": 67,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 7349,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.FilePath",
+      "Start": 7467,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 7487,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "customFileName",
+      "Start": 7543,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.FilePath",
+      "Start": 7623,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "customFileName",
+      "Start": 7706,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ext",
+      "Start": 7722,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.FilePath",
+      "Start": 7892,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.TaskSettings",
+      "Start": 7975,
+      "Length": 22,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ext",
+      "Start": 7999,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 8395,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 8550,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskSettings",
+      "Start": 8555,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 8624,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "10",
+      "Start": 8629,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 8681,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 8741,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 8898,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Info.TaskSettings",
+      "Start": 8961,
+      "Length": 22,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ext",
+      "Start": 8985,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 9046,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ApartmentState.STA",
+      "Start": 9685,
+      "Length": 18,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.MainForm",
+      "Start": 10239,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "TaskbarProgressBarStatus.Indeterminate",
+      "Start": 10257,
+      "Length": 38,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.DeleteFile",
+      "Start": 11662,
+      "Length": 28,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 11717,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 11747,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 11815,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.Result.URL",
+      "Start": 12033,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.UploadTask_ThreadDoWork_URL_is_empty_",
+      "Start": 12107,
+      "Length": 47,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.UploadTask_DoUploadJob_First_time_upload_warning_text",
+      "Start": 13007,
+      "Length": 63,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX - \" + Resources.UploadTask_DoUploadJob_First_time_upload_warning",
+      "Start": 13089,
+      "Length": 72,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.YesNo",
+      "Start": 13180,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Warning",
+      "Start": 13205,
+      "Length": 22,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.UploadImageToHost",
+      "Start": 13439,
+      "Length": 35,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.UploadTask_DoUploadJob_You_are_attempting_to_upload_a_large_file",
+      "Start": 13958,
+      "Length": 74,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX\"",
+      "Start": 14034,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.YesNo",
+      "Start": 14069,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.UploadManager_IsUploadConfirmed_Don_t_show_this_message_again_",
+      "Start": 14094,
+      "Length": 72,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.MainForm",
+      "Start": 14908,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "TaskbarProgressBarStatus.Normal",
+      "Start": 14926,
+      "Length": 31,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.ShowBeforeUploadWindow",
+      "Start": 15071,
+      "Length": 40,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info",
+      "Start": 15199,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Upload failed. Retrying upload.\"",
+      "Start": 15595,
+      "Length": 33,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "retry",
+      "Start": 15819,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "retry - 1",
+      "Start": 16485,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "retry - 1",
+      "Start": 16599,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "retry - 1",
+      "Start": 16708,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "retry - 1",
+      "Start": 16821,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "retry - 1",
+      "Start": 16930,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1000",
+      "Start": 17036,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Data",
+      "Start": 17375,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 17381,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Data",
+      "Start": 17594,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 17600,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Data",
+      "Start": 17752,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 17758,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Data",
+      "Start": 17910,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 17916,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 18248,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e.ToString()",
+      "Start": 18326,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "uploader.Errors.ToArray()",
+      "Start": 18777,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "errorMessages",
+      "Start": 19176,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.Job == TaskJob.DownloadUpload",
+      "Start": 19574,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempText",
+      "Start": 20169,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.DoOCR",
+      "Start": 20492,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.AddImageEffects",
+      "Start": 20961,
+      "Length": 33,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempImage",
+      "Start": 21069,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings",
+      "Start": 21080,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Error: Applying image effects resulted empty image.\"",
+      "Start": 21204,
+      "Length": 53,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.AnnotateImage",
+      "Start": 21390,
+      "Length": 31,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempImage",
+      "Start": 21501,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 21512,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings",
+      "Start": 21527,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.CopyImageToClipboard",
+      "Start": 21738,
+      "Length": 38,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempImage",
+      "Start": 21838,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Image copied to clipboard.\"",
+      "Start": 21889,
+      "Length": 28,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.SendImageToPrinter",
+      "Start": 21996,
+      "Length": 36,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempImage",
+      "Start": 22090,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.SaveImageToFile",
+      "Start": 22181,
+      "Length": 33,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.SaveImageToFileWithDialog",
+      "Start": 22216,
+      "Length": 43,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.DoOCR",
+      "Start": 22261,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.UploadImageToHost",
+      "Start": 22303,
+      "Length": 35,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempImage",
+      "Start": 22478,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings",
+      "Start": 22489,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 22618,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "imageData.ImageFormat.GetDescription()",
+      "Start": 22633,
+      "Length": 38,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.SaveImageToFile",
+      "Start": 22743,
+      "Length": 33,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.CaptureFolder",
+      "Start": 22871,
+      "Length": 31,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 22904,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings",
+      "Start": 22919,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 22992,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 23130,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Image saved to file: \" + Info.FilePath",
+      "Start": 23197,
+      "Length": 39,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.SaveImageToFileWithDialog",
+      "Start": 23358,
+      "Length": 43,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "lastSaveAsFolder",
+      "Start": 23698,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "lastSaveAsFolder",
+      "Start": 23737,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 24122,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "1",
+      "Start": 24147,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"*{0}|*{0}|All files (*.*)|*.*\"",
+      "Start": 24211,
+      "Length": 31,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 24262,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Path.GetExtension(Info.FileName)",
+      "Start": 24244,
+      "Length": 32,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 24413,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "sfd.FileName",
+      "Start": 24529,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 24724,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 24806,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Image saved to file with dialog: \" + Info.FilePath",
+      "Start": 24979,
+      "Length": 51,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.SaveThumbnailImageToFile",
+      "Start": 25430,
+      "Length": 42,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 25619,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 25728,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 25813,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempImage",
+      "Start": 26164,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "thumbnailFolder",
+      "Start": 26175,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "thumbnailFilename",
+      "Start": 26192,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings",
+      "Start": 26211,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.ThumbnailFilePath",
+      "Start": 26284,
+      "Length": 22,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Thumbnail saved to file: \" + Info.ThumbnailFilePath",
+      "Start": 26387,
+      "Length": 52,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 26652,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 26682,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.PerformActions",
+      "Start": 26776,
+      "Length": 32,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => x.IsActive",
+      "Start": 26977,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 27370,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.CopyFileToClipboard",
+      "Start": 27565,
+      "Length": 37,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 27671,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.CopyFilePathToClipboard",
+      "Start": 27774,
+      "Length": 41,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 27884,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterCaptureTasks.ShowInExplorer",
+      "Start": 27984,
+      "Length": 32,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 28086,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.CaptureFolder",
+      "Start": 28343,
+      "Length": 31,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 28376,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings",
+      "Start": 28391,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filePath",
+      "Start": 28456,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 28590,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 28645,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempText",
+      "Start": 28660,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Encoding.UTF8",
+      "Start": 28670,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Text saved to file: \" + Info.FilePath",
+      "Start": 28729,
+      "Length": 38,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "tempText",
+      "Start": 28861,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "byteArray",
+      "Start": 28909,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterUploadTasks.UseURLShortener",
+      "Start": 29275,
+      "Length": 32,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.Result.URL",
+      "Start": 29588,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "result.Errors",
+      "Start": 29798,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterUploadTasks.ShareURL",
+      "Start": 29955,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.Result.ToString()",
+      "Start": 30087,
+      "Length": 22,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "result.Errors",
+      "Start": 30231,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterUploadTasks.CopyURLToClipboard",
+      "Start": 30516,
+      "Length": 35,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.AdvancedSettings.ClipboardContentFormat",
+      "Start": 30655,
+      "Length": 57,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info",
+      "Start": 30798,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.AdvancedSettings.ClipboardContentFormat",
+      "Start": 30804,
+      "Length": 57,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "txt",
+      "Start": 31063,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "txt",
+      "Start": 31143,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterUploadTasks.OpenURL",
+      "Start": 31255,
+      "Length": 24,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.AdvancedSettings.OpenURLFormat",
+      "Start": 31386,
+      "Length": 48,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info",
+      "Start": 31523,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.AdvancedSettings.OpenURLFormat",
+      "Start": 31529,
+      "Length": 48,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "result",
+      "Start": 31775,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterUploadTasks.ShowQRCode",
+      "Start": 31867,
+      "Length": 27,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.Result.ToString()",
+      "Start": 31983,
+      "Length": 22,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() => new QRCodeForm(Info.Result.ToString()).Show()",
+      "Start": 31962,
+      "Length": 51,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 32142,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e.ToString()",
+      "Start": 32179,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.UploadersConfig",
+      "Start": 32376,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "service",
+      "Start": 32464,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.UploadersConfig",
+      "Start": 32538,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskReferenceHelper",
+      "Start": 32563,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "2",
+      "Start": 32690,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.Settings.BufferSizePower",
+      "Start": 32693,
+      "Length": 32,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "AfterUploadTasks.CopyURLToClipboard",
+      "Start": 32870,
+      "Length": 35,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 33066,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "stream",
+      "Start": 33211,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fileName",
+      "Start": 33219,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 33550,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 33720,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "stream",
+      "Start": 33730,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "x => x.IsValidFilter(filename, stream)",
+      "Start": 33699,
+      "Length": 38,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "service",
+      "Start": 33999,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "stream",
+      "Start": 34008,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "filename",
+      "Start": 34016,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.ImageDestination",
+      "Start": 34332,
+      "Length": 34,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "service",
+      "Start": 34402,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "stream",
+      "Start": 34411,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fileName",
+      "Start": 34419,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.TextDestination",
+      "Start": 34606,
+      "Length": 33,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "service",
+      "Start": 34675,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "stream",
+      "Start": 34684,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fileName",
+      "Start": 34692,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.DataType",
+      "Start": 34926,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.GetFileDestinationByDataType(Info.DataType)",
+      "Start": 34879,
+      "Length": 61,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "service",
+      "Start": 34976,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "stream",
+      "Start": 34985,
+      "Length": 6,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "fileName",
+      "Start": 34993,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.URLShortenerDestination",
+      "Start": 35160,
+      "Length": 41,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.UploadersConfig",
+      "Start": 35244,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "service",
+      "Start": 35332,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.UploadersConfig",
+      "Start": 35424,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "taskReferenceHelper",
+      "Start": 35449,
+      "Length": 19,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 35575,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 35737,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.URLSharingServiceDestination",
+      "Start": 35838,
+      "Length": 46,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.UploadersConfig",
+      "Start": 35931,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "service",
+      "Start": 36027,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 36092,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Program.UploadersConfig",
+      "Start": 36097,
+      "Length": 23,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.WorkerTask_GetInvalidConfigResult__0__configuration_is_invalid_or_missing__Please_check__Destination_settings__window_to_configure_it_",
+      "Start": 36434,
+      "Length": 144,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "uploaderService.ServiceName",
+      "Start": 36597,
+      "Length": 27,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "message",
+      "Start": 36662,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "message",
+      "Start": 36699,
+      "Length": 7,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "uploaderService",
+      "Start": 36757,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings.CaptureFolder",
+      "Start": 37016,
+      "Length": 31,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 37049,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.TaskSettings",
+      "Start": 37064,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 37125,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 37374,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"user-agent\"",
+      "Start": 37515,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ShareXResources.UserAgent",
+      "Start": 37529,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "url",
+      "Start": 37677,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 37682,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 38004,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Resources.UploadManager_DownloadAndUploadFile_Download_failed",
+      "Start": 38059,
+      "Length": 61,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 38122,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "string.Format(Resources.UploadManager_DownloadAndUploadFile_Download_failed, e)",
+      "Start": 38045,
+      "Length": 79,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX\"",
+      "Start": 38126,
+      "Length": 8,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 38136,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Error",
+      "Start": 38158,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Data",
+      "Start": 38418,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FileName",
+      "Start": 38424,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "Info.FilePath",
+      "Start": 38589,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FileMode.Open",
+      "Start": 38604,
+      "Length": 13,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FileAccess.Read",
+      "Start": 38619,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FileShare.Read",
+      "Start": 38636,
+      "Length": 14,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e.Message",
+      "Start": 38749,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ShareX - \" + Resources.TaskManager_task_UploadCompleted_Error",
+      "Start": 38760,
+      "Length": 62,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxButtons.OK",
+      "Start": 38824,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "MessageBoxIcon.Error",
+      "Start": 38846,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "this",
+      "Start": 39471,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() => StatusChanged(this)",
+      "Start": 39451,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "this",
+      "Start": 39675,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() => UploadStarted(this)",
+      "Start": 39655,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "this",
+      "Start": 39885,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() => UploadCompleted(this)",
+      "Start": 39863,
+      "Length": 27,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "this",
+      "Start": 40113,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() => UploadProgressChanged(this)",
+      "Start": 40085,
+      "Length": 33,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "this",
+      "Start": 40650,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "uploaderService",
+      "Start": 40962,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "() => UploadersConfigWindowRequested(uploaderService)",
+      "Start": 40925,
+      "Length": 53,
+      "Parent": null,
+      "Path": "S564\\WORKERTASKB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\WORKERTASKB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "RequestCacheLevel.NoCacheNoStore",
+      "Start": 1753,
+      "Length": 32,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"user-agent\"",
+      "Start": 1824,
+      "Length": 12,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ShareXResources.UserAgent",
+      "Start": 1838,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "URL",
+      "Start": 1986,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "wc.DownloadData(URL)",
+      "Start": 1970,
+      "Length": 20,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ms",
+      "Start": 2059,
+      "Length": 2,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "xml",
+      "Start": 2142,
+      "Length": 3,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Update/{0}/{1}\"",
+      "Start": 2973,
+      "Length": 16,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "ApplicationName",
+      "Start": 2991,
+      "Length": 15,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "node",
+      "Start": 3008,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "path",
+      "Start": 3069,
+      "Length": 4,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Version\"",
+      "Start": 3226,
+      "Length": 9,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "xe.Element(\"Version\").Value",
+      "Start": 3215,
+      "Length": 27,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"URL\"",
+      "Start": 3303,
+      "Length": 5,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "e",
+      "Start": 3615,
+      "Length": 1,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"XML update check failed\"",
+      "Start": 3618,
+      "Length": 25,
+      "Parent": null,
+      "Path": "S564\\XMLUPDATECHECKERB.CS"
+    },
+    "Item2": "HttpRequestHeader.UserAgent",
+    "Item3": "S564\\XMLUPDATECHECKERB.CS"
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "Item1": {
+      "Text": "CaptureScreenshot",
+      "Start": 2299,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S863\\MAINFORMB.CS"
+    },
+    "Item2": "CaptureTaskHelpers.CaptureScreenshot",
+    "Item3": "S863\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CaptureScreenshot",
+      "Start": 2732,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S863\\MAINFORMB.CS"
+    },
+    "Item2": "CaptureTaskHelpers.CaptureScreenshot",
+    "Item3": "S863\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CaptureScreenshot",
+      "Start": 3224,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S863\\MAINFORMB.CS"
+    },
+    "Item2": "CaptureTaskHelpers.CaptureScreenshot",
+    "Item3": "S863\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CaptureScreenshot",
+      "Start": 4346,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S863\\MAINFORMB.CS"
+    },
+    "Item2": "CaptureTaskHelpers.CaptureScreenshot",
+    "Item3": "S863\\MAINFORMB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "CaptureScreenshot",
+      "Start": 5335,
+      "Length": 17,
+      "Parent": null,
+      "Path": "S863\\MAINFORMB.CS"
+    },
+    "Item2": "CaptureTaskHelpers.CaptureScreenshot",
+    "Item3": "S863\\MAINFORMB.CS"
+  }
+]

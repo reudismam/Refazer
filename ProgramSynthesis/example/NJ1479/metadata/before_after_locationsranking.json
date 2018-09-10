@@ -1,0 +1,344 @@
+[
+  
+  {
+    "Item1": {
+      "Text": "jsonSerializer.Serialize",
+      "Start": 2444,
+      "Length": 24,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "Serialize",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 3956,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 4305,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 4635,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 5032,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 5591,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 6835,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 6922,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 7726,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 9052,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 9130,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 9650,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 9766,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 10201,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 10779,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 11194,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 11420,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 11627,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 12181,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 12775,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 13335,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 14871,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 15106,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 15729,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 16751,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 17797,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeObject",
+      "Start": 18183,
+      "Length": 27,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeObject",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeObject<XmlDocument>",
+      "Start": 18555,
+      "Length": 42,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeObject<XmlDocument>",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.SerializeXmlNode",
+      "Start": 19232,
+      "Length": 28,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "SerializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 20290,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "JsonConvert.DeserializeXmlNode",
+      "Start": 20996,
+      "Length": 30,
+      "Parent": null,
+      "Path": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+    },
+    "Item2": "DeserializeXmlNode",
+    "Item3": "NJ1479\\XMLNODECONVERTERTESTB.CS"
+  }
+]
