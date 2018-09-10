@@ -1,0 +1,101 @@
+[
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 9665,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 13885,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 16705,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 20406,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 21934,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 24893,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 25626,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 34645,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "task.Status == TaskStatus.RanToCompletion",
+      "Start": 42598,
+      "Length": 41,
+      "Parent": null,
+      "Path": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+    },
+    "Item2": "task.IsCompletedSucessfully()",
+    "Item3": "NJ059\\JSONTEXTWRITER.ASYNCB.CS"
+  }
+]

@@ -5,7 +5,7 @@
         /// <summary>
         /// Defines the path to the file that logs informations about generated programs.
         /// </summary>
-        public const string LogPathFile = "ProgStatus.xlsx";
+        public const string LogPathFile = "ProgStatus.csv";
 
         /// <summary>
         /// Defines the path to the folder that contains the metadata

@@ -22,6 +22,7 @@ using TreeEdit.Spg.Script;
 using TreeEdit.Spg.TreeEdit.Update;
 using TreeElement.Spg.Mapping;
 using TreeElement.Spg.Node;
+using TreeEdit.Spg.Builder;
 
 namespace RefazerFunctions.Spg.Witness
 {
@@ -46,7 +47,12 @@ namespace RefazerFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTreeNode = (Node) input[rule.Body[0]];
-                var inpTree = inpTreeNode.Value.Value;
+                if (inpTreeNode.Kind == Node.ExampleKind.Negative)
+                {
+                    WitnessFunctions.Negatives.Add(inpTreeNode);
+                    continue;
+                }
+                var inpTree = inpTreeNode.Value.Value; ;
                 foreach (SyntaxNodeOrToken outTree in spec.DisjunctiveExamples[input])
                 {
                     var script = Script(inpTree, outTree);
@@ -61,6 +67,10 @@ namespace RefazerFunctions.Spg.Witness
             foreach (State input in spec.ProvidedInputs)
             {
                 var inpTree = (Node)input[rule.Body[0]];
+                if (inpTree.Kind == Node.ExampleKind.Negative)
+                {
+                    continue;
+                }
                 SyntaxNodeOrToken outTree = (SyntaxNodeOrToken) spec.DisjunctiveExamples[input].SingleOrDefault();
                 //Compacted scripts for this input
                 var scriptsInput = new List<List<Script>>();
@@ -198,11 +208,20 @@ namespace RefazerFunctions.Spg.Witness
                 {
                     if (edit.EditOperation is Update<SyntaxNodeOrToken>)
                     {
-                        var update = (Update<SyntaxNodeOrToken>) edit.EditOperation;
+                        var update = (Update<SyntaxNodeOrToken>)edit.EditOperation;
                         var to = update.To;
                         to.Value = outTree;
                         to.Label = new TLabel(outTree.Kind());
                     }
+                }
+                else if (edit.EditOperation is Update<SyntaxNodeOrToken>)
+                {
+                    var update = (Update<SyntaxNodeOrToken>)edit.EditOperation;
+                    var parent = update.To.Parent;
+                    var toReconstructed = ASTBuilder.ReconstructTree(update.To);
+                    var newTo = ConverterHelper.ConvertCSharpToTreeNode(toReconstructed);
+                    newTo.Parent = parent;
+                    update.To = newTo;
                 }
                 newEditOperations.Add(edit);
             }
@@ -271,10 +290,8 @@ namespace RefazerFunctions.Spg.Witness
                     }
                 }
                 var update = new Update<SyntaxNodeOrToken>(@from, to, parent);
-                {
-                    var operation = new Edit<SyntaxNodeOrToken>(update);
-                    return operation;
-                }
+                var operation = new Edit<SyntaxNodeOrToken>(update);
+                return operation;
             }
             else
             {
@@ -519,7 +536,6 @@ namespace RefazerFunctions.Spg.Witness
             var inpNode = ConverterHelper.ConvertCSharpToTreeNode(inpTree);
             var outNode = ConverterHelper.ConvertCSharpToTreeNode(outTree);
             var mapping = gumTreeMapping.Mapping(inpNode, outNode);
-
             var generator = new EditScriptGenerator<SyntaxNodeOrToken>();
             var script = generator.EditScript(inpNode, outNode, mapping);
             return script;

@@ -1,0 +1,1135 @@
+[
+  {
+    "Item1": {
+      "Text": "getParameterTypes.Method",
+      "Start": 1046,
+      "Length": 24,
+      "Parent": null,
+      "Path": "QUERYABLEEXTENSIONSB.CS"
+    },
+    "Item2": "getParameterTypes",
+    "Item3": "QUERYABLEEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "getParameterTypes.Method",
+      "Start": 1250,
+      "Length": 24,
+      "Parent": null,
+      "Path": "QUERYABLEEXTENSIONSB.CS"
+    },
+    "Item2": "getParameterTypes",
+    "Item3": "QUERYABLEEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "getParameterTypes.Method",
+      "Start": 1450,
+      "Length": 24,
+      "Parent": null,
+      "Path": "QUERYABLEEXTENSIONSB.CS"
+    },
+    "Item2": "getParameterTypes",
+    "Item3": "QUERYABLEEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FilterPackagesByConstraints",
+      "Start": 790,
+      "Length": 27,
+      "Parent": null,
+      "Path": "PACKAGEREPOSITORYEXTENSIONSB.CS"
+    },
+    "Item2": "DependencyResolveUtility.FilterPackagesByConstraints",
+    "Item3": "PACKAGEREPOSITORYEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FilterPackagesByConstraints",
+      "Start": 1966,
+      "Length": 27,
+      "Parent": null,
+      "Path": "PACKAGEREPOSITORYEXTENSIONSB.CS"
+    },
+    "Item2": "DependencyResolveUtility.FilterPackagesByConstraints",
+    "Item3": "PACKAGEREPOSITORYEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "FilterPackagesByConstraints",
+      "Start": 4525,
+      "Length": 27,
+      "Parent": null,
+      "Path": "PACKAGEREPOSITORYEXTENSIONSB.CS"
+    },
+    "Item2": "DependencyResolveUtility.FilterPackagesByConstraints",
+    "Item3": "PACKAGEREPOSITORYEXTENSIONSB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"EventLog\"",
+      "Start": 1549,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"LN\"",
+      "Start": 2088,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Cn\"",
+      "Start": 2318,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 2351,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 2376,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 3915,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 3940,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 4581,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 4606,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 5237,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 5262,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 5941,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 5966,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ET\"",
+      "Start": 6025,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ABO\"",
+      "Start": 6501,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 6535,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 6560,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"MSG\"",
+      "Start": 7085,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"EventLog\"",
+      "Start": 21267,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"LN\"",
+      "Start": 21718,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 21785,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 21810,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 22144,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 22169,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Cn\"",
+      "Start": 22228,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Write\"",
+      "Start": 25270,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"EventLog\"",
+      "Start": 25279,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"LN\"",
+      "Start": 25668,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"SRC\"",
+      "Start": 25964,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ET\"",
+      "Start": 26225,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"ID\"",
+      "Start": 26855,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"EID\"",
+      "Start": 26861,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"MSG\"",
+      "Start": 27146,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"RD\"",
+      "Start": 27405,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 27472,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 27497,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CN\"",
+      "Start": 27719,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"EventLog\"",
+      "Start": 31059,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"LN\"",
+      "Start": 31486,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 31553,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 31578,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CN\"",
+      "Start": 31808,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 31875,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 31900,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"MRD\"",
+      "Start": 32142,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"OFA\"",
+      "Start": 32656,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"EventLog\"",
+      "Start": 39922,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CN\"",
+      "Start": 40294,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"EventLog\"",
+      "Start": 43252,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CRF\"",
+      "Start": 43869,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CN\"",
+      "Start": 44223,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 44256,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 44281,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"LN\"",
+      "Start": 44695,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"MRF\"",
+      "Start": 45167,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"PRF\"",
+      "Start": 45645,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"SRC\"",
+      "Start": 46012,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 46046,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 46071,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"EventLog\"",
+      "Start": 50135,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CN\"",
+      "Start": 50705,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 50738,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 50763,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"LN\"",
+      "Start": 51219,
+      "Length": 4,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 51252,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 51277,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"SRC\"",
+      "Start": 52038,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 52072,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 52097,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\EVENTLOGB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\EVENTLOGB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Write\"",
+      "Start": 810,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Debug\"",
+      "Start": 819,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Msg\"",
+      "Start": 1233,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Write\"",
+      "Start": 2697,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Verbose\"",
+      "Start": 2706,
+      "Length": 9,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Msg\"",
+      "Start": 3126,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Write\"",
+      "Start": 4610,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Warning\"",
+      "Start": 4619,
+      "Length": 9,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Msg\"",
+      "Start": 5039,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Information\"",
+      "Start": 6558,
+      "Length": 13,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Msg\"",
+      "Start": 6947,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Microsoft.Performance\"",
+      "Start": 7175,
+      "Length": 23,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"CA1819:PropertiesShouldNotReturnArrays\"",
+      "Start": 7200,
+      "Length": 40,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Msg\"",
+      "Start": 9416,
+      "Length": 5,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Activity\"",
+      "Start": 11185,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Reason\"",
+      "Start": 11389,
+      "Length": 8,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"TargetName\"",
+      "Start": 11593,
+      "Length": 12,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"TargetType\"",
+      "Start": 11805,
+      "Length": 12,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Write\"",
+      "Start": 15171,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Error\"",
+      "Start": 15180,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITEB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Write\"",
+      "Start": 447,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITECONSOLECMDLETB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITECONSOLECMDLETB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Host\"",
+      "Start": 456,
+      "Length": 6,
+      "Parent": null,
+      "Path": "1014\\WRITECONSOLECMDLETB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITECONSOLECMDLETB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Write\"",
+      "Start": 436,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITE-OBJECTB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITE-OBJECTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Output\"",
+      "Start": 445,
+      "Length": 8,
+      "Parent": null,
+      "Path": "1014\\WRITE-OBJECTB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITE-OBJECTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Write\"",
+      "Start": 488,
+      "Length": 7,
+      "Parent": null,
+      "Path": "1014\\WRITEPROGRESSCMDLETB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEPROGRESSCMDLETB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "\"Progress\"",
+      "Start": 497,
+      "Length": 10,
+      "Parent": null,
+      "Path": "1014\\WRITEPROGRESSCMDLETB.CS"
+    },
+    "Item2": "VerbsCommunications.Write",
+    "Item3": "1014\\WRITEPROGRESSCMDLETB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "{\r\n            get { return _dateTimeStyles; }\r\n            set { _dateTimeStyles = value; }\r\n        }",
+      "Start": 2071,
+      "Length": 103,
+      "Parent": null,
+      "Path": "NJ025\\ISODATETIMECONVERTERB.CS"
+    },
+    "Item2": "{\r\n    get\r\n    {\r\n        _dateTimeStyles;\r\n        set;\r\n        {\r\n            _dateTimeStyles = value;\r\n        }\r\n    }\r\n}",
+    "Item3": "NJ025\\ISODATETIMECONVERTERB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "{\r\n            get { return _culture ?? CultureInfo.CurrentCulture; }\r\n            set { _culture = value; }\r\n        }",
+      "Start": 2882,
+      "Length": 119,
+      "Parent": null,
+      "Path": "NJ025\\ISODATETIMECONVERTERB.CS"
+    },
+    "Item2": "{\r\n    get\r\n    {\r\n        _culture ?? CultureInfo.CurrentCulture;\r\n        set;\r\n        {\r\n            _culture = value;\r\n        }\r\n    }\r\n}",
+    "Item3": "NJ025\\ISODATETIMECONVERTERB.CS"
+  }
+]

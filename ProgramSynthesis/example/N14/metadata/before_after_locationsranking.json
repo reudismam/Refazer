@@ -1,0 +1,816 @@
+[
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 2684,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 2830,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 5189,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 5324,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 5404,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 7778,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 7924,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 8342,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 8431,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 9075,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 9160,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 10417,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 10506,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 11177,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 11262,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 12876,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 13022,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 14387,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 15826,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 17803,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 17921,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 19988,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 20106,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 21990,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 22108,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 25414,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 25532,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 27763,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 27881,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 29300,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 29418,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 29838,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 29927,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 33748,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 33804,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 35042,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 35097,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 36397,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 36452,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 40688,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 40749,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 42255,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 42316,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 44896,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 44985,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 45629,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 45718,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 46642,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 46731,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 48097,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 48198,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 48412,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 49956,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 50057,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 50271,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 50372,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 60629,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 60668,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 2632,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 7726,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 12824,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 17869,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 20054,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 22056,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 25480,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 27829,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "(\"disabledPackageSources\")",
+      "Start": 29366,
+      "Length": 26,
+      "Parent": null,
+      "Path": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "(\"disabledPackageSources\", false)",
+    "Item3": "N14\\PACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 9709,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 12591,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 12655,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 12724,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 15303,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 15367,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+  },
+  {
+    "Item1": {
+      "Text": "<string, string>",
+      "Start": 16949,
+      "Length": 16,
+      "Parent": null,
+      "Path": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+    },
+    "Item2": "<string, string, string>",
+    "Item3": "N14\\VSPACKAGESOURCEPROVIDERTESTB.CS"
+  }
+]

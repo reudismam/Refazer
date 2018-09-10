@@ -49,10 +49,48 @@ namespace TreeEdit.Spg.Log
         /// <summary>
         /// Adds a new location to the list of locations
         /// </summary>
-        /// <param name="location">Location to be added</param>
-        public void Add(SyntaxNodeOrToken location)
+        /// <param name="newLocation">Location to be added</param>
+        public void Add(SyntaxNodeOrToken newLocation)
         {
-            Locations.Add(location);
+            bool toAdd = true;
+            for (int i = 0; i < Locations.Count; i++)
+            {
+                SyntaxNodeOrToken currentLocation = Locations[i];
+                if (isInside(currentLocation, newLocation))
+                {
+                    Locations[i] = newLocation;
+                    toAdd = false;
+                    break;
+                }
+                if (isInside(newLocation, currentLocation))
+                {
+                    toAdd = false;
+                    break;
+                }
+            }
+            if (toAdd)
+            {
+                Locations.Add(newLocation);
+            }
+            //Locations.Add(newLocation);
+        }
+
+        /// <summary>
+        /// Determines if a location is inside other location
+        /// </summary>
+        /// <param name="outer"></param>
+        /// <param name="inner"></param>
+        public bool isInside(SyntaxNodeOrToken outer, SyntaxNodeOrToken inner)
+        {
+            if (!outer.SyntaxTree.FilePath.ToUpperInvariant().Equals(inner.SyntaxTree.FilePath.ToUpperInvariant()))
+            {
+                return false;
+            }
+            int locationStart = outer.SpanStart;
+            int locationEnd = outer.SpanStart + outer.Span.Length;
+            int locStart = inner.SpanStart;
+            int locEnd = inner.SpanStart + inner.Span.Length;
+            return locationStart <= locStart && locEnd <= locationEnd;    
         }
     }
 }

@@ -10,12 +10,32 @@ using TreeEdit.Spg.LogInfo;
 using TreeEdit.Spg.Transform;
 using TreeElement;
 using TreeElement.Spg.Node;
+using RefazerObject.Transformation;
+using RefazerObject.Region;
+using RefazerObject.Constants;
 
 namespace RefazerUnitTests
 {
     [TestClass]
     public class Example
     {
+
+        [TestMethod]
+        public void E3()
+        {
+            var classes = new List<string> { "INTERNALCONTEXT", "HISTORYREPOSITORYTESTS" };
+            var classesApply = new List<string> { "INTERNALCONTEXT", "HISTORYREPOSITORYTESTS" };
+            CompleteTestBase(classes, classesApply, @"E3\");            
+        }
+
+        [TestMethod]
+        public void E7()
+        {
+            var classes = new List<string> { "CommitFailureTests" };
+            var classesApply = new List<string> { "CommitFailureTests" };
+            CompleteTestBase(classes, classesApply, @"E7\");           
+        }
+
         [TestMethod]
         public void E12()
         {
@@ -24,10 +44,26 @@ namespace RefazerUnitTests
         }
 
         [TestMethod]
+        public void helloworld()
+        {
+            var classes = new List<string> { "hello" };
+            CompleteTestBase(classes, classes, @"helloworld\");
+        }
+
+        [TestMethod]
         public void R35()
         {
-            var classes = new List<string> { "EditAndContinueTestBase", "SyntaxTreeExtensions" };
-            CompleteTestBase(classes);
+            var classes = new List<string> { "SyntaxTreeExtensions" };
+            var classesApply = new List<string> { "SyntaxTreeExtensions" };
+            CompleteTestBase(classes, classesApply, @"E3\");
+        }
+
+        [TestMethod]
+        public void N18()
+        {
+            var classes = new List<string> { "NuGetPowerShellBaseCommand" };
+            var classesApply = new List<string> { "NuGetPowerShellBaseCommand", "OpenPackagePageCommand"};
+            CompleteTestBase(classes, classesApply, @"N18\");
         }
 
         [TestMethod]
@@ -37,9 +73,356 @@ namespace RefazerUnitTests
             CompleteTestBase(classes);
         }
 
-        private void CompleteTestBase(List<string> examplesSet)
+        [TestMethod]
+        public void N21()
         {
-            string exampleFolder = GetExampleFolder();
+            var classes = new List<string> { "DataServicePackageRepository", "VSPackageSourceRepository", "PackageRepositoryExtensions" };
+            var classesApply = new List<string> { "DataServicePackageRepository","FallbackRepository", "LazyRepository", "MockServiceBasePackageRepository", "PackageRepositoryExtensions", "ServerPackageRepository", "VSPackageSourceRepository" };
+            CompleteTestBase(classes, classesApply, @"N21\");
+        }
+
+        [TestMethod]
+        public void N28()
+        {
+            var classes = new List<string> { "GetPackageCommand" };
+            var classesApply = new List<string> { "GetPackageCommand", "InstallPackageCommand", "UninstallPackageCommand", "UpdatePackageCommand", "OpenPackagePageCommand" };
+            CompleteTestBase(classes, classesApply, @"N28\");
+        }
+
+        [TestMethod]
+        public void N29()
+        {
+            var classes = new List<string> { "PackageSolutionDetailControlModel" };
+            var classesApply = new List<string> { "PackageSolutionDetailControlModel" };
+            CompleteTestBase(classes, classesApply, @"N29\");
+        }
+
+        [TestMethod]
+        public void R30()
+        {
+            var classes = new List<string> { "LanguageParser" };
+            var classesApply = new List<string> { "LanguageParser" };
+            CompleteTestBase(classes, classesApply, @"R30\");
+        }
+
+        [TestMethod]
+        public void R50()
+        {
+            var classes = new List<string> { "SourceDelegateMethodSymbol" };
+            var classesApply = new List<string> { "SourceDelegateMethodSymbol" };
+            CompleteTestBase(classes, classesApply, @"R50\");
+        }
+
+        [TestMethod]
+        public void R54()
+        {            
+            var classes = new List<string> { "ApplyDiagnosticAnalyzerAttributeFix" };
+            var classesApply = new List<string> { "ApplyDiagnosticAnalyzerAttributeFix", "CA1008CodeFixProviderBase", "CA1012CodeFixProvider", "CA1309CodeFixProviderBase", "CA1309CSharpCodeFixProvider", "CA2101CodeFixProviderBase", "CA2101CSharpCodeFixProvider", "CA2213CSharpCodeFixProvider", "CA2229CodeFixProvider", "CA2235CodeFixProviderBase", "CA2237CodeFixProvider", "CodeGeneration", "EnumWithFlagsCodeFixProviderBase", "ISymbolExtensions", "SymbolEditorTests", "SyntaxNodeTests" };
+            CompleteTestBase(classes, classesApply, @"R54\");
+        }
+
+        [TestMethod]
+        public void P1014()
+        {
+            var classes = new List<string> { "WriteConsoleCmdlet", "Write-Object" };
+            var classesApply = new List<string> { "Eventlog", "write", "WriteConsoleCmdlet", "Write-Object", "WriteProgressCmdlet" };
+            CompleteTestBase(classes, classesApply, @"1014\");
+        }
+
+        [TestMethod]
+        public void NJ025()
+        {
+            var classes = new List<string> { "IsoDateTimeConverter" };
+            var classesApply = new List<string> { "IsoDateTimeConverter" };
+            CompleteTestBase(classes, classesApply, @"NJ025\");
+        }
+
+        [TestMethod]
+        public void NJ023()
+        {
+            var classes = new List<string> { "JToken" };
+            var classesApply = new List<string> { "JToken" };
+            CompleteTestBase(classes, classesApply, @"NJ023\");
+        }
+
+        [TestMethod]
+        public void NJ059()
+        {
+            var classes = new List<string> { "JsonTextWriter.Async" };
+            var classesApply = new List<string> { "JsonTextWriter.Async" };
+            CompleteTestBase(classes, classesApply, @"NJ059\");
+        }
+
+        [TestMethod]
+        public void NJ224()
+        {
+            var classes = new List<string> { "XmlNodeConverter" };
+            var classesApply = new List<string> { "XmlNodeConverter" };
+            CompleteTestBase(classes, classesApply, @"NJ224\");
+        }
+
+
+        [TestMethod]
+        public void NJ225()
+        {
+            var classes = new List<string> { "JArray", "JObject" };
+            var classesApply = new List<string> { "JArray", "JObject", "JToken" };
+            CompleteTestBase(classes, classesApply, @"NJ225\");
+        }
+
+
+        [TestMethod]
+        public void NJ234()
+        {
+            var classes = new List<string> { "JsonTextReader.Async", "JsonTextWriter.Async" };
+            var classesApply = new List<string> { "JsonTextReader.Async", "JsonTextWriter.Async" };
+            CompleteTestBase(classes, classesApply, @"NJ234\");
+        }
+
+        [TestMethod]
+        public void NJ236()
+        {
+            var classes = new List<string> { "BinaryConverter" };
+            var classesApply = new List<string> { "BinaryConverter" };
+            CompleteTestBase(classes, classesApply, @"NJ236\");
+        }
+
+
+        [TestMethod]
+        public void NJ241()
+        {
+            var classes = new List<string> { "JsonTextWriter.Async" };
+            var classesApply = new List<string> { "JsonTextWriter.Async" };
+            CompleteTestBase(classes, classesApply, @"NJ241\");
+        }
+
+        [TestMethod]
+        public void NJ242()
+        {
+            var classes = new List<string> { "JsonTextWriter.Async" };
+            var classesApply = new List<string> { "JsonTextWriter.Async" };
+            CompleteTestBase(classes, classesApply, @"NJ242\");
+        }
+
+        [TestMethod]
+        public void NJ844()
+        {
+            var classes = new List<string> { "DataTableConverter" };
+            var classesApply = new List<string> { "DataTableConverter" };
+            CompleteTestBase(classes, classesApply, @"NJ844\");
+        }
+
+        [TestMethod]
+        public void NJ1428()
+        {
+            var classes = new List<string> { "DynamicProxy" };
+            var classesApply = new List<string> { "DynamicProxy" };
+            CompleteTestBase(classes, classesApply, @"NJ1428\");
+        }
+
+        [TestMethod]
+        public void NJ1479()
+        {
+            var classes = new List<string> { "XmlNodeConverterTest" };
+            var classesApply = new List<string> { "XmlNodeConverterTest" };
+            CompleteTestBase(classes, classesApply, @"NJ1479\");
+        }
+
+        [TestMethod]
+        public void NJ1491()
+        {
+            var classes = new List<string> { "JsonSerializerInternalReader" };
+            var classesApply = new List<string> { "JsonSerializerInternalReader", "JsonSerializerInternalWriter" };
+            CompleteTestBase(classes, classesApply, @"NJ1491\");
+        }
+
+        [TestMethod]
+        public void S002()
+        {
+            var classes = new List<string> { "ShapeManagerMenu" };
+            var classesApply = new List<string> { "ShapeManagerMenu" };
+            CompleteTestBase(classes, classesApply, @"S002\");
+        }
+
+        [TestMethod]
+        public void S007()
+        {
+            var classes = new List<string> { "ShapeManagerMenu" };
+            var classesApply = new List<string> { "ShapeManagerMenu" };
+            CompleteTestBase(classes, classesApply, @"S007\");
+        }
+
+        [TestMethod]
+        public void S043()
+        {
+            var classes = new List<string> { "RegionCaptureForm" };
+            var classesApply = new List<string> { "RegionCaptureForm" };
+            CompleteTestBase(classes, classesApply, @"S043\");
+        }
+
+        [TestMethod]
+        public void S058()
+        {
+            var classes = new List<string> { "InputManager" };
+            var classesApply = new List<string> { "InputManager" };
+            CompleteTestBase(classes, classesApply, @"S058\");
+        }
+
+
+        [TestMethod]
+        public void S044()
+        {
+            var classes = new List<string> { "RegionCaptureForm" };
+            var classesApply = new List<string> { "RegionCaptureForm" };
+            CompleteTestBase(classes, classesApply, @"S044\");
+        }
+
+        [TestMethod]
+        public void S224()
+        {
+            var classes = new List<string> { "UploadersConfigForm" };
+            var classesApply = new List<string> { "UploadersConfigForm" };
+            CompleteTestBase(classes, classesApply, @"S224\");
+        }
+        [TestMethod]
+        public void S236()
+        {
+            var classes = new List<string> { "ShapeManagerMenu" };
+            var classesApply = new List<string> { "ShapeManagerMenu" };
+            CompleteTestBase(classes, classesApply, @"S236\");
+        }
+
+        [TestMethod]
+        public void S431()
+        {
+            var classes = new List<string> { "FFmpegDownloader" };
+            var classesApply = new List<string> { "FFmpegDownloader", "SettingManager" };
+            CompleteTestBase(classes, classesApply, @"S431\");
+        }
+
+        [TestMethod]
+        public void S564()
+        {
+            var classes = new List<string> { "Helpers" };
+            var classesApply = new List<string> { "GitHubUpdateChecker", "Helpers", "WorkerTask", "XMLUpdateChecker" };
+            CompleteTestBase(classes, classesApply, @"S564\");
+        }
+
+        [TestMethod]
+        public void S571()
+        {
+            var classes = new List<string> { "HotkeyInfo" };
+            var classesApply = new List<string> { "HotkeyInfo" };
+            CompleteTestBase(classes, classesApply, @"S571\");
+        }
+
+        [TestMethod]
+        public void S583()
+        {
+            var classes = new List<string> { "ShapeManagerMenu" };
+            var classesApply = new List<string> { "ShapeManagerMenu", "ShapeManager" };
+            CompleteTestBase(classes, classesApply, @"S583\");
+        }
+
+        [TestMethod]
+        public void S592()
+        {
+            var classes = new List<string> { "ShapeManager" };
+            var classesApply = new List<string> { "ShapeManager" };
+            CompleteTestBase(classes, classesApply, @"S592\");
+        }
+
+        [TestMethod]
+        public void S761()
+        {
+            var classes = new List<string> { "Dropbox" };
+            var classesApply = new List<string> { "Dropbox" };
+            CompleteTestBase(classes, classesApply, @"S761\");
+        }
+
+        [TestMethod]
+        public void S863()
+        {
+            var classes = new List<string> { "MainForm" };
+            var classesApply = new List<string> { "MainForm" };
+            CompleteTestBase(classes, classesApply, @"S863\");
+        }
+
+        [TestMethod]
+        public void S897()
+        {
+            var classes = new List<string> { "TextAnimation" };
+            var classesApply = new List<string> { "TextAnimation" };
+            CompleteTestBase(classes, classesApply, @"S897\");
+        }
+
+        [TestMethod]
+        public void S1021()
+        {
+            var classes = new List<string> { "RectangleRegionForm" };
+            var classesApply = new List<string> { "RectangleRegionForm" };
+            CompleteTestBase(classes, classesApply, @"S1021\");
+        }
+
+        [TestMethod]
+        public void S1088()
+        {
+            var classes = new List<string> { "ShapeManager" };
+            var classesApply = new List<string> { "ShapeManager" };
+            CompleteTestBase(classes, classesApply, @"S1088\");
+        }
+
+        [TestMethod]
+        public void S1549()
+        {
+            var classes = new List<string> { "AreaManager" };
+            var classesApply = new List<string> { "AreaManager" };
+            CompleteTestBase(classes, classesApply, @"S1549\");
+        }
+
+        [TestMethod]
+        public void S1580()
+        {
+            var classes = new List<string> { "AreaManager" };
+            var classesApply = new List<string> { "AreaManager" };
+            CompleteTestBase(classes, classesApply, @"S1580\");
+        }
+
+        [TestMethod]
+        public void S1810()
+        {
+            var classes = new List<string> { "ColorPickerForm" };
+            var classesApply = new List<string> { "AutomateForm", "ColorPickerForm", "GradientPickerForm" };
+            CompleteTestBase(classes, classesApply, @"S1810\");
+        }
+
+        [TestMethod]
+        public void S2076()
+        {
+            var classes = new List<string> { "Program" };
+            var classesApply = new List<string> { "Program" };
+            CompleteTestBase(classes, classesApply, @"S2076\");
+        }
+
+        [TestMethod]
+        public void S3778()
+        {
+            var classes = new List<string> { "MainForm" };
+            var classesApply = new List<string> { "MainForm" };
+            CompleteTestBase(classes, classesApply, @"S3778\");
+        }
+
+        [TestMethod]
+        public void S3791()
+        {
+            var classes = new List<string> { "ImageHelpers" };
+            var classesApply = new List<string> { "ImageHelpers" };
+            CompleteTestBase(classes, classesApply, @"S3791\");
+        }
+
+        private void CompleteTestBase(List<string> examplesSet, List<string> toApply, string id = "")
+        {
+            string exampleFolder = GetExampleFolder() + id;
             var examples = new List<Tuple<string, string>>();
             //Create the before and after version
             foreach (var exampleFile in examplesSet)
@@ -55,16 +438,40 @@ namespace RefazerUnitTests
             //learn a transformation using Refazer
             var program = Refazer4CSharp.LearnTransformation(examples);
             //Apply the transformation to some files.
-            foreach (var example in examples)
+            foreach (var exampleFile in toApply)
             {
-                var before = example.Item1;
+                //just the before version of the file
+                var before = exampleFolder + exampleFile + @"B.cs";
                 Refazer4CSharp.Apply(program, before);
             }
-            //Get the before and after version of each transformed file.
-            var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
-            //Get the modified version
-            var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
+            try
+            {
+                //Get the before and after version of each transformed file.
+                var transformations = TransformationInfos.GetInstance().Transformations;
+                var beforeAfter = TestUtil.GetBeforeAfterList(GetExampleFolder());
+                JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeAfter, exampleFolder + TestConstants.BeforeAfterLocations + "ranking" + ".json");
+                var transformedDocuments = ASTTransformer.Transform(transformations);
+                //Get the modified version
+                var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
+            } catch (Exception e)
+            {
+                //Ignored.
+            }
         }
+
+        public void CompleteTestBase(List<string> examples)
+        {
+            var toApply = new List<string>();
+            string exampleFolder = GetExampleFolder();
+            foreach (var example in examples)
+            {
+                //just the before version of the file
+                var before = exampleFolder + example + @"B.cs";
+                toApply.Add(before);
+            }
+            CompleteTestBase(examples, examples);
+        }
+
 
         private void CompleteTestBaseType(string exampleId)
         {
