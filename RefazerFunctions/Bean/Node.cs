@@ -16,8 +16,8 @@ namespace RefazerFunctions.Bean
         /// </summary>
         public enum ExampleKind
         {
-            Negative,
-            Positive
+            Positive,
+            Negative
         }
 
         /// <summary>

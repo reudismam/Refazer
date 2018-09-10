@@ -462,6 +462,7 @@ using WorkSpaces.Spg.Workspace;
 using Region = RefazerObject.Region.Region;
 using System.IO;
 using Controller;
+using TreeEdit.Spg.Transform;
 
 namespace RefazerUnitTests
 {
@@ -643,38 +644,7 @@ namespace RefazerUnitTests
             return result;
         }
 
-        public static Tuple<string, List<Region>> Transform(string source, List<Tuple<Region, string, string>> transformations, List<Tuple<Region, string, string>> regions)
-        {
-            List<Region> tRegions = new List<Region>();
-            int nextStart = 0;
-            string sourceCode = source;
-            foreach (Tuple<Region, string, string> item in transformations)
-            {
-                Tuple<Region, Region> tregion = GetTRegionShift(regions, item);
-                Region region = tregion.Item1;
-                string transformation = tregion.Item2.Text;
-
-                int start = nextStart + region.Start;
-                int end = start + region.Length;
-                var sourceCodeUntilStart = sourceCode.Substring(0, start);
-                var sourceCodeAfterSelection = sourceCode.Substring(end);
-                sourceCode = sourceCodeUntilStart + transformation + sourceCodeAfterSelection;
-
-                Region tr = new Region();
-                tr.Start = start - 1;
-                tr.Length = tregion.Item2.Length + 2;
-                tr.Text = tregion.Item2.Text;
-                tr.Path = tregion.Item1.Path;
-                tRegions.Add(tr);
-
-                nextStart += transformation.Length - region.Length;
-            }
-            Tuple<string, List<Region>> t = Tuple.Create(sourceCode, tRegions);
-            return t;
-            //return sourceCode;
-        }
-
-        private static Tuple<Region, Region> GetTRegionShift(List<Tuple<Region, string, string>> regions, Tuple<Region, string, string> codeTransformation)
+        /*private static Tuple<Region, Region> GetTRegionShift(List<Tuple<Region, string, string>> regions, Tuple<Region, string, string> codeTransformation)
         {
             Tuple<Region, Region> t;
             foreach (Tuple<Region, string, string> ba in regions)
@@ -693,7 +663,7 @@ namespace RefazerUnitTests
             }
             t = Tuple.Create(codeTransformation.Item1, codeTransformation.Item1);
             return t;
-        }
+        }*/
 
         public void Execute(List<int> examples)
         {
@@ -764,10 +734,6 @@ namespace RefazerUnitTests
         public List<ProgramNode> LearnPrograms(List<int> positives, List<Region> negatives)
         {
             var metadataRegions = positives.Select(index => _transformedRegions[index]).ToList();
-            //DictionarySelection = RegionManager.GetInstance().GroupTransformationsBySourcePath(metadataRegions);
-            //var ioExamples = buildExamples(metadataRegions);
-            //var metadataNegative = negatives.Select(index => _transformedRegions[index]).ToList();
-            //DictionarySelection = RegionManager.GetInstance().GroupTransformationsBySourcePath(metadataNegative);
             var ioExamples = buildExamples(metadataRegions, negatives);
             //Learn program
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
@@ -781,7 +747,6 @@ namespace RefazerUnitTests
         public List<ProgramNode> LearnPrograms(List<int> examples)
         {
             var metadataRegions = examples.Select(index => _transformedRegions[index]).ToList();
-            //DictionarySelection = RegionManager.GetInstance().GroupTransformationsBySourcePath(metadataRegions);
             var ioExamples = buildExamples(metadataRegions);
             //Learn program
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
@@ -847,12 +812,9 @@ namespace RefazerUnitTests
             foreach (KeyValuePair<string, List<Tuple<Region, string, string>>> entry in DictionarySelection)
             {
                 string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
-                Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
-                string sourceCodeAfter = tu.Item1;
-
+                string sourceCodeAfter = ASTTransformer.Transform(sourceCode, metadataRegions);
                 inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
                 SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
-
                 var allMethodsInput = GetNodesByType(inpTree, _kinds);
                 var allMethodsOutput = GetNodesByType(outTree, _kinds);
                 var inputMethods = inputEntriesForRegions(inpTree, metadataRegions, entry.Key);
@@ -890,12 +852,9 @@ namespace RefazerUnitTests
             foreach (KeyValuePair<string, List<Tuple<Region, string, string>>> entry in DictionarySelection)
             {
                 string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
-                Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
-                string sourceCodeAfter = tu.Item1;
-
+                string sourceCodeAfter = ASTTransformer.Transform(sourceCode, metadataRegions);
                 inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
                 SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
-
                 var allMethodsInput = GetNodesByType(inpTree, _kinds);
                 var allMethodsOutput = GetNodesByType(outTree, _kinds);
                 var inputMethods = inputEntriesForRegions(inpTree, metadataRegions, entry.Key);
@@ -1026,12 +985,9 @@ namespace RefazerUnitTests
             foreach (KeyValuePair<string, List<Tuple<Region, string, string>>> entry in DictionarySelection)
             {
                 string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
-                Tuple<string, List<Region>> tu = Transform(sourceCode, _globalTransformations[entry.Key.ToUpperInvariant()], metadataRegions);
-                string sourceCodeAfter = tu.Item1;
-
+                string sourceCodeAfter = ASTTransformer.Transform(sourceCode, metadataRegions);
                 inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
                 SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
-
                 var allMethodsInput = GetNodesByType(inpTree, _kinds);
                 var allMethodsOutput = GetNodesByType(outTree, _kinds);
                 var inputMethods = new List<int>();

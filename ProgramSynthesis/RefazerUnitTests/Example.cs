@@ -50,15 +50,6 @@ namespace RefazerUnitTests
             CompleteTestBase(classes, classes, @"helloworld\");
         }
 
-        //[TestMethod]
-        //public void N14()
-        //{
-        //    var classes = new List<string> { "PACKAGESOURCEPROVIDERTEST"};
-        //    var classesApply = new List<string> { "PACKAGESOURCEPROVIDERTEST", "VSPACKAGESOURCEPROVIDERTEST" };
-        //    CompleteTestBase(classes, classesApply, @"N14\");
-        //}
-
-
         [TestMethod]
         public void R35()
         {

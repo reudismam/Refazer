@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.Text;
 using RefazerObject.Transformation;
 using TreeEdit.Spg.Match;
 using TreeElement;
+using RefazerObject.Region;
 
 namespace TreeEdit.Spg.Transform
 {
@@ -25,13 +26,40 @@ namespace TreeEdit.Spg.Transform
             return transformedDocuments;
         }
 
-        private static List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transform(Dictionary<string, List<TransformationInfo>> dic)
+        /*private static List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transform(Dictionary<string, List<TransformationInfo>> dic)
         {
             var transformationList = new List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>>();
             foreach (var item in dic)
             {
                 var transformation = Transformation(item.Value);
                 transformationList.Add(transformation.Result);
+            }
+            return transformationList;
+        }*/
+
+        private static List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transform(Dictionary<string, List<TransformationInfo>> dic)
+        {
+            var transformationList = new List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>>();
+            foreach (var item in dic)
+            {
+                var sourceCode = FileUtil.ReadFile(item.Key);
+                var beforeAST = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(
+                    sourceCode, path: item.Value.First().Before.SyntaxTree.FilePath).GetRoot();
+                var modifiedRegions = new List<Tuple<Region, string, string>>();
+                foreach (var transformation in item.Value)
+                {
+                    var region = new Region();
+                    region.Start = transformation.Before.SpanStart;
+                    region.Length = transformation.Before.Span.Length;
+                    region.Text = transformation.Before.ToString();
+                    region.Path = transformation.Before.SyntaxTree.FilePath;
+                    var tuple = Tuple.Create(region, transformation.After.ToString(), transformation.After.SyntaxTree.FilePath);
+                    modifiedRegions.Add(tuple);
+                }
+                var modifiedCode = Transform(sourceCode, modifiedRegions);
+                var afterAST = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(
+                    modifiedCode, path: item.Value.First().Before.SyntaxTree.FilePath).GetRoot();
+                transformationList.Add(Tuple.Create(beforeAST, afterAST));
             }
             return transformationList;
         }
@@ -69,11 +97,36 @@ namespace TreeEdit.Spg.Transform
             {
                 documentEditor.ReplaceNode(node.Item1, node.Item2);
             }
-            var beforeAST = (SyntaxNodeOrToken) sourceAST.GetRoot();
-            var afterAST = (SyntaxNodeOrToken) documentEditor.GetChangedRoot();
+            var beforeAST = (SyntaxNodeOrToken)sourceAST.GetRoot();
+            var afterAST = (SyntaxNodeOrToken)documentEditor.GetChangedRoot();
             afterAST = Formatter.Format(afterAST.AsNode(), new AdhocWorkspace());
             var result = Tuple.Create(beforeAST, afterAST);
             return result;
+        }
+
+        public static string Transform(string source, List<Tuple<Region, string, string>> transformations)
+        {
+            List<Region> tRegions = new List<Region>();
+            int nextStart = 0;
+            string sourceCode = source;
+            foreach (Tuple<Region, string, string> item in transformations)
+            {
+                Region region = item.Item1;
+                string transformation = item.Item2;
+                int start = nextStart + region.Start;
+                int end = start + region.Length;
+                var sourceCodeUntilStart = sourceCode.Substring(0, start);
+                var sourceCodeAfterSelection = sourceCode.Substring(end);
+                sourceCode = sourceCodeUntilStart + transformation + sourceCodeAfterSelection;
+                Region tr = new Region();
+                tr.Start = start - 1;
+                tr.Length = item.Item1.Length;
+                tr.Text = item.Item1.Text;
+                tr.Path = item.Item1.Path;
+                tRegions.Add(tr);
+                nextStart += transformation.Length - region.Length;
+            }
+            return sourceCode;
         }
 
         public static List<TransformationInfo> RemoveDuplicates(List<TransformationInfo> transformations)
@@ -82,7 +135,7 @@ namespace TreeEdit.Spg.Transform
             var duplicates = transformations.Where(o => transformations.Any(e => o.Before.Span.IntersectsWith(e.Before.Span) && e != o)).ToList();
 
             var hash = new HashSet<SyntaxNodeOrToken>();
-            foreach (var transformation in  duplicates)
+            foreach (var transformation in duplicates)
             {
                 if (!hash.Contains(transformation.Before))
                 {
@@ -93,7 +146,7 @@ namespace TreeEdit.Spg.Transform
                     {
                         hash.Add(item.Before);
                     }
-               }          
+                }
             }
             return nonDuplicates;
         }
