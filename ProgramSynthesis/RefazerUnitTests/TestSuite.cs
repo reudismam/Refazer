@@ -1133,6 +1133,8 @@ namespace RefazerUnitTests
                             var firstMissing = getFirstMissingExample(positiveExamples, randomList);
                             if (firstMissing != -1)
                             {
+                                //coment this line to add negatives and positives.
+                                addPositive = true;
                                 if (addPositive)
                                 {
                                     positiveExamples.Add(firstMissing);
