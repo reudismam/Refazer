@@ -1191,7 +1191,7 @@ namespace RefazerUnitTests
             var dictionarySelection = helper.DictionarySelection;
             Log(commit,
                  totalTimeToLearn + totalTimeToExecute,
-                 positiveExamples.Count,
+                 positiveExamples.Count + negativeExamples.Count,
                  baselineBeforeAfterList.Count,
                  transformed.Count,
                  dictionarySelection.Count,
