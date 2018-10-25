@@ -859,7 +859,7 @@ namespace RefazerUnitTests
             return dictionary;
         }
 
-        /*public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
+        public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
         {
             string path = LogData.LogPath();
@@ -891,7 +891,7 @@ namespace RefazerUnitTests
                 em.SetValue("J" + empty, mean);
                 em.Save();
             }
-        }*/
+        }
 
         /*public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
@@ -941,7 +941,7 @@ namespace RefazerUnitTests
             }
         }*/
 
-        public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
+        /*public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
             int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
         {
             string filename = LogData.LogPath();
@@ -968,7 +968,7 @@ namespace RefazerUnitTests
             var csvWriter = new CsvWriter(textWriter);
             csvWriter.WriteRecords(records);
             textWriter.Close();
-        }
+        }*/
 
         public static void LogProgram(string commit, int programIndex, string program, bool status)
         {
