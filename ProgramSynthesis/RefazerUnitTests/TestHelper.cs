@@ -812,7 +812,7 @@ namespace RefazerUnitTests
             foreach (KeyValuePair<string, List<Tuple<Region, string, string>>> entry in DictionarySelection)
             {
                 string sourceCode = FileUtil.ReadFile(_expHome + entry.Key);
-                string sourceCodeAfter = ASTTransformer.Transform(sourceCode, metadataRegions);
+                string sourceCodeAfter = ASTTransformer.Transform(sourceCode, entry.Value);
                 inpTree = CSharpSyntaxTree.ParseText(sourceCode, path: entry.Key).GetRoot();
                 SyntaxNodeOrToken outTree = CSharpSyntaxTree.ParseText(sourceCodeAfter).GetRoot();
                 var allMethodsInput = GetNodesByType(inpTree, _kinds);

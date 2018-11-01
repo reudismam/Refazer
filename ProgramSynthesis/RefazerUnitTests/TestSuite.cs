@@ -1055,7 +1055,6 @@ namespace RefazerUnitTests
         {
             string expHome = RefazerObject.Environment.Environment.ExpHome();
             if (expHome.IsEmpty()) throw new Exception("Environment variable for the experiment not defined");
-
             if (kinds == null)
             {
                 kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
@@ -1073,6 +1072,7 @@ namespace RefazerUnitTests
             var positiveExamples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
             var negativeExamples = new List<Region>();
             var addPositive = false;
+            var includeNegExamples = true;
             var incrementalExamples = new List<int>();
             bool INCREMENTAL_EXAMPLES = false;
             TestHelper helper = null;
@@ -1097,6 +1097,7 @@ namespace RefazerUnitTests
                 var regionsFrags = GetTransformedLocations(expHome);
                 string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
                 JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
+                
                 if (SynthesisConfig.GetInstance().CreateLog)
                 {
                     var scriptsizes = GetDataAndSaveToFile(commit, expHome, execId, Constants.ScriptSize);
@@ -1113,18 +1114,13 @@ namespace RefazerUnitTests
                     var foundList = GetEditionInLocations(regionsFrags, locations);
                     JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsTool + execId + ".json");
                     var toolBeforeAfterList = GetBeforeAfterData(beforeafter, locations);
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(toolBeforeAfterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
-                    JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
+                    GenerateMetadata(regionsFrags, locations, expHome, commit, execId, beforeafter, toolBeforeAfterList);
                     //Comparing edited locations with baseline
-                    var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
-                    foreach (var baseline in baselineBeforeAfterList)
-                    {
-                        var region = baseline.Item1;
-                        region.Path = region.Path.ToUpperInvariant();
-                        baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
-                    }
-                    var notTransformed = foundList.Except(toolBeforeAfterList.Select(o => o.Item1)).ToList();
-                    var firstIncorrect = GetFirstIncorrect(toolBeforeAfterList, baselineBeforeAfter, randomList, locations, notTransformed);
+                    var firstIncorrect = GetFirstTransformedIncorrectly(locations, baselineBeforeAfterList, toolBeforeAfterList, foundList, randomList);
+                    //coment these lines to add negatives and positives.
+                    addPositive = true;
+                    includeNegExamples = false;
+                    //end of comment
                     if (firstIncorrect == -1)
                     {
                         bool moreThanNeeded = (beforeafter.Count > locations.Count);
@@ -1133,56 +1129,132 @@ namespace RefazerUnitTests
                             var firstMissing = getFirstMissingExample(positiveExamples, randomList);
                             if (firstMissing != -1)
                             {
-                                //coment this line to add negatives and positives.
-                                addPositive = true;
-                                if (addPositive)
-                                {
-                                    positiveExamples.Add(firstMissing);
-                                } else
-                                {
-                                    var mustNotBeSelected = beforeafter.Select(o => o.Item1).Except(locations).ToList();
-                                    var missingNegative = mustNotBeSelected.Except(negativeExamples).ToList();
-                                    negativeExamples.Add(missingNegative.First());
-                                }
+                                AddExample(positiveExamples, locations, negativeExamples, beforeafter, firstMissing, addPositive);
                                 addPositive = !addPositive;
-                            } else
-                            {
-                                var mustNotBeSelected = foundList.Except(locations);
-                                var missingNegative = mustNotBeSelected.Except(negativeExamples);
-                                negativeExamples.Add(missingNegative.First());
+                                continue;
                             }
-                            continue;
+                            else
+                            {
+                                AddNegativeExample(includeNegExamples, foundList, locations, negativeExamples);
+                            }
                         }
-                        try
+                        else
                         {
-                            var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
-                            GeneratedDiffEdits(commit, transformedDocuments);
+                            TryToTransform(commit);
+                            break;
                         }
-                        catch (Exception)
-                        {
-                            // ignored
-                            //throw new Exception("Errors in transforming the locations.");
-                        }
-                        break;
                     }
                     firstProblematicLocation = firstIncorrect;
                 }
-                if (positiveExamples.Contains(firstProblematicLocation))
-                {
-                    try
-                    {
-                        var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
-                        GeneratedDiffEdits(commit, transformedDocuments);
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                        //throw new Exception("Errors in transforming the locations.");
-                    }
-                    throw new Exception("A transformation could not be learned using this examples.");
-                }
+                IsProblematicLocationInExamples(commit, positiveExamples, firstProblematicLocation);
                 positiveExamples.Add(firstProblematicLocation);
             }
+            Log(helper, commit, positiveExamples, negativeExamples, baselineBeforeAfterList, mean);
+            return true;
+        }
+
+        private static int GetFirstTransformedIncorrectly(List<Region> locations, List<Tuple<Region, string, string>> baselineBeforeAfterList, 
+            List<Tuple<Region, string, string>> toolBeforeAfterList, List<Region> foundList, List<int> randomList)
+        {
+            var baselineBeforeAfter = CreateBaselineBeforeAfter(baselineBeforeAfterList);
+            var notTransformed = foundList.Except(toolBeforeAfterList.Select(o => o.Item1)).ToList();
+            var firstIncorrect = GetFirstIncorrect(toolBeforeAfterList, baselineBeforeAfter, randomList, locations, notTransformed);
+            return firstIncorrect;
+        }
+
+        private static void GenerateMetadata(List<Region> regionsFrags, List<Region> locations, string expHome, string commit, string execId, 
+            List<Tuple<Region, string, string>> beforeafter, List<Tuple<Region, string, string>> toolBeforeAfterList)
+        {
+            JsonUtil<List<Tuple<Region, string, string>>>.Write(toolBeforeAfterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
+            JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
+        }
+
+        private static void AddNegativeExample(bool includeNegExamples, List<Region> foundList, List<Region> locations, List<Region> negativeExamples)
+        { 
+            if (includeNegExamples)
+            {
+                var mustNotBeSelected = foundList.Except(locations);
+                var missingNegative = mustNotBeSelected.Except(negativeExamples);
+                negativeExamples.Add(missingNegative.First());
+            }
+            else
+            {
+                //Log
+                throw new Exception("Good luck!");
+            }
+        }
+
+        private static void AddExample(List<int> positiveExamples, List<Region> locations, List<Region> negativeExamples, 
+            List<Tuple<Region, string, string>> beforeafter, int firstMissing, bool addPositive)
+        {
+            if (addPositive)
+            {
+                positiveExamples.Add(firstMissing);
+            }
+            else
+            {
+                var mustNotBeSelected = beforeafter.Select(o => o.Item1).Except(locations).ToList();
+                var missingNegative = mustNotBeSelected.Except(negativeExamples).ToList();
+                negativeExamples.Add(missingNegative.First());
+            }
+        }
+
+        private static void TryToTransform(string commit)
+        {
+            try
+            {
+                var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
+                GeneratedDiffEdits(commit, transformedDocuments);
+            }
+            catch (Exception)
+            {
+                // ignored
+                //throw new Exception("Errors in transforming the locations.");
+            }
+        }
+
+        private static void IsProblematicLocationInExamples(string commit, List<int> positiveExamples, int firstProblematicLocation)
+        {
+            if (positiveExamples.Contains(firstProblematicLocation))
+            {
+                try
+                {
+                    var transformedDocuments = ASTTransformer.Transform(TransformationInfos.GetInstance().Transformations);
+                    GeneratedDiffEdits(commit, transformedDocuments);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                    //throw new Exception("Errors in transforming the locations.");
+                }
+                throw new Exception("A transformation could not be learned using this examples.");
+            }
+        }
+
+        private static List<Tuple<Region, string, string>> CreateBaselineBeforeAfter(List<Tuple<Region, string, string>> baselineBeforeAfterList)
+        {
+            var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
+            foreach (var baseline in baselineBeforeAfterList)
+            {
+                var region = baseline.Item1;
+                region.Path = region.Path.ToUpperInvariant();
+                baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
+            }
+            return baselineBeforeAfter;
+        }
+
+        /// <summary>
+        /// Generates the log
+        /// </summary>
+        /// <param name="helper">Helper class</param>
+        /// <param name="commit">commit</param>
+        /// <param name="positiveExamples">positive examples</param>
+        /// <param name="negativeExamples">negative examples</param>
+        /// <param name="baselineBeforeAfterList">baseline list</param>
+        /// <param name="mean">mean</param>
+        private static void Log(TestHelper helper, string commit, List<int> positiveExamples, 
+            List<Region> negativeExamples, List<Tuple<Region, string, string>> baselineBeforeAfterList, double mean)
+        {
             //end of execution 
             long totalTimeToLearn = helper.TotalTimeToLearn;
             long totalTimeToExecute = helper.TotalTimeToLearn;
@@ -1199,7 +1271,6 @@ namespace RefazerUnitTests
                  totalTimeToLearn,
                  totalTimeToExecute,
                  mean);
-            return true;
         }
 
         private static int getFirstMissingExample(List<int> examples, List<int> randomList)
