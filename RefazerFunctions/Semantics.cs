@@ -359,6 +359,25 @@ namespace RefazerFunctions
                 codeFragmentsLogger.Add(node.Value);
             }
             return isValid;
+            if (isValid)
+            {
+                var codeFragmentsLogger = CodeFragmentsInfo.GetInstance();
+                codeFragmentsLogger.Add(node.Value);
+            }
+        }
+
+        public static bool EvaluateMatch(Node sx, Pattern template)
+        {
+            var patternP = template;
+            var parent = FindParent(sx.Value, patternP.XPath);
+            if (parent == null) return false;
+            var isValue = MatchManager.IsValueEachChild(parent, template.Tree);
+            if (!isValue) return false;
+
+            var node = FindChild(parent, patternP.XPath);
+            if (node == null) return false; //the XPath matches nothing.
+            var isValid = node.Equals(sx.Value);
+            return isValid;
         }
 
         private static TreeNode<SyntaxNodeOrToken> FindParent(TreeNode<SyntaxNodeOrToken> value, string s)

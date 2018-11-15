@@ -860,7 +860,7 @@ namespace RefazerUnitTests
         }
 
         public static void Log(string commit, double time, int exTransformations, int locations, int acTrasnformation,
-            int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean)
+            int documents, string program, double timeToLearnEdit, double timeToTransformEdit, double mean, string gl)
         {
             string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
@@ -889,6 +889,7 @@ namespace RefazerUnitTests
                 em.SetValue("H" + empty, timeToLearnEdit / 1000);
                 em.SetValue("I" + empty, timeToTransformEdit / 1000);
                 em.SetValue("J" + empty, mean);
+                em.SetValue("K" + empty, gl);
                 em.Save();
             }
         }
@@ -1118,24 +1119,35 @@ namespace RefazerUnitTests
                     //Comparing edited locations with baseline
                     var firstIncorrect = GetFirstTransformedIncorrectly(locations, baselineBeforeAfterList, toolBeforeAfterList, foundList, randomList);
                     //coment these lines to add negatives and positives.
-                    addPositive = true;
-                    includeNegExamples = false;
+                //    addPositive = true;
+                //    includeNegExamples = false;
                     //end of comment
                     if (firstIncorrect == -1)
                     {
                         bool moreThanNeeded = (beforeafter.Count > locations.Count);
                         if (moreThanNeeded)
                         {
-                            var firstMissing = getFirstMissingExample(positiveExamples, randomList);
-                            if (firstMissing != -1)
+                            if (includeNegExamples)
                             {
-                                AddExample(positiveExamples, locations, negativeExamples, beforeafter, firstMissing, addPositive);
-                                addPositive = !addPositive;
+                                var identifiedLocations = beforeafter.Select(o => o.Item1).ToList();
+                                var program = helper.Program.ToString();
+                                AddNegativeExample(includeNegExamples, identifiedLocations, locations, negativeExamples);
                                 continue;
                             }
                             else
                             {
-                                AddNegativeExample(includeNegExamples, foundList, locations, negativeExamples);
+                                var firstMissing = getFirstMissingExample(positiveExamples, randomList);
+                                if (firstMissing != -1)
+                                {
+                                    AddExample(positiveExamples, locations, negativeExamples, beforeafter, firstMissing, addPositive);
+                                    addPositive = !addPositive;
+                                    continue;
+                                }
+                                else
+                                {
+                                    Log(helper, commit, positiveExamples, negativeExamples, baselineBeforeAfterList, mean, "GL");
+                                    throw new Exception("Good Luck!");
+                                }
                             }
                         }
                         else
@@ -1171,17 +1183,9 @@ namespace RefazerUnitTests
 
         private static void AddNegativeExample(bool includeNegExamples, List<Region> foundList, List<Region> locations, List<Region> negativeExamples)
         { 
-            if (includeNegExamples)
-            {
-                var mustNotBeSelected = foundList.Except(locations);
-                var missingNegative = mustNotBeSelected.Except(negativeExamples);
+                var mustNotBeSelected = foundList.Except(locations).ToList();
+                var missingNegative = mustNotBeSelected.Except(negativeExamples).ToList();
                 negativeExamples.Add(missingNegative.First());
-            }
-            else
-            {
-                //Log
-                throw new Exception("Good luck!");
-            }
         }
 
         private static void AddExample(List<int> positiveExamples, List<Region> locations, List<Region> negativeExamples, 
@@ -1253,7 +1257,7 @@ namespace RefazerUnitTests
         /// <param name="baselineBeforeAfterList">baseline list</param>
         /// <param name="mean">mean</param>
         private static void Log(TestHelper helper, string commit, List<int> positiveExamples, 
-            List<Region> negativeExamples, List<Tuple<Region, string, string>> baselineBeforeAfterList, double mean)
+            List<Region> negativeExamples, List<Tuple<Region, string, string>> baselineBeforeAfterList, double mean, string gl="")
         {
             //end of execution 
             long totalTimeToLearn = helper.TotalTimeToLearn;
@@ -1270,7 +1274,7 @@ namespace RefazerUnitTests
                  program.ToString(),
                  totalTimeToLearn,
                  totalTimeToExecute,
-                 mean);
+                 mean, gl);
         }
 
         private static int getFirstMissingExample(List<int> examples, List<int> randomList)

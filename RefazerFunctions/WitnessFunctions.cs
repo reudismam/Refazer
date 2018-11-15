@@ -110,17 +110,15 @@ namespace RefazerFunctions
             foreach (Node input in Negatives)
             {
                 var allNodes = Semantics.AllNodes(input, "");
-                foreach (var node in allNodes)
+                //allNodes = allNodes.Select(o => Semantics.FindChild(o.Value, pattern.XPath)).ToList();
+                var filtered = allNodes.Where(o => input.Region.IsInside(new Region() {
+                    Start = o.Value.Value.SpanStart,
+                    Length = o.Value.Value.Span.Length,
+                    Path = o.Value.Value.SyntaxTree.FilePath.ToUpperInvariant()
+                })).ToList();
+                foreach (var node in filtered)
                 {
-                    var region = new Region();
-                    region.Start = node.Value.Value.SpanStart;
-                    region.Length = node.Value.Value.Span.Length;
-                    region.Path = node.Value.Value.SyntaxTree.FilePath.ToUpperInvariant();
-                    if (!input.Region.Equals(region))
-                    {
-                        continue;
-                    }
-                    bool match = Semantics.Match(node, pattern);
+                    bool match = Semantics.EvaluateMatch(node, pattern);
                     if (match)
                     {
                         return null;
