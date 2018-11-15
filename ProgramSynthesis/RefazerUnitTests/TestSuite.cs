@@ -849,7 +849,7 @@ namespace RefazerUnitTests
             var dictionary = new Dictionary<Region, List<Region>>();
             foreach (var v in locations)
             {
-                var matches = regions.Where(o => v.IntersectWith(o)).ToList();
+                var matches = regions.Where(o => v.Equals(o)).ToList();
                 if (!dictionary.ContainsKey(v))
                 {
                     dictionary[v] = new List<Region>();
@@ -1119,8 +1119,8 @@ namespace RefazerUnitTests
                     //Comparing edited locations with baseline
                     var firstIncorrect = GetFirstTransformedIncorrectly(locations, baselineBeforeAfterList, toolBeforeAfterList, foundList, randomList);
                     //coment these lines to add negatives and positives.
-                //    addPositive = true;
-                //    includeNegExamples = false;
+                    addPositive = true;
+                    includeNegExamples = false;
                     //end of comment
                     if (firstIncorrect == -1)
                     {
