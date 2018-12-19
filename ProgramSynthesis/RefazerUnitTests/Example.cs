@@ -51,6 +51,13 @@ namespace RefazerUnitTests
         }
 
         [TestMethod]
+        public void helloworldc()
+        {
+            var classes = new List<string> { "hello" };
+            CompleteTestBase(classes, classes, @"helloworld\", file: "c");
+        }
+
+        [TestMethod]
         public void R35()
         {
             var classes = new List<string> { "SyntaxTreeExtensions" };
@@ -420,7 +427,7 @@ namespace RefazerUnitTests
             CompleteTestBase(classes, classesApply, @"S3791\");
         }
 
-        private void CompleteTestBase(List<string> examplesSet, List<string> toApply, string id = "")
+        private void CompleteTestBase(List<string> examplesSet, List<string> toApply, string id = "", string file = "cs")
         {
             string exampleFolder = GetExampleFolder() + id;
             var examples = new List<Tuple<string, string>>();
@@ -428,20 +435,37 @@ namespace RefazerUnitTests
             foreach (var exampleFile in examplesSet)
             {
                 //just the before version of the file
-                var before = exampleFolder + exampleFile + @"B.cs";
+                var before = exampleFolder + exampleFile + @"B." + file;
                 //just the after version of the file
-                var after = exampleFolder + exampleFile + @"A.cs";
+                var after = exampleFolder + exampleFile + @"A." + file;
                 //create the examples
                 var tuple = Tuple.Create(before, after);
                 examples.Add(tuple);
             }
+            if (file.Equals("cs"))
+            {
+                processCSharp(toApply, file, examples, exampleFolder);
+            }
+            else
+            {
+                processANTLR(toApply, file, examples, exampleFolder);
+            }
+        }
+
+        private void processANTLR(List<string> toApply, string file, List<Tuple<string, string>> examples, string exampleFolder)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void processCSharp(List<string> toApply, string file, List<Tuple<string, string>> examples, string exampleFolder)
+        {
             //learn a transformation using Refazer
             var program = Refazer4CSharp.LearnTransformation(examples);
             //Apply the transformation to some files.
             foreach (var exampleFile in toApply)
             {
                 //just the before version of the file
-                var before = exampleFolder + exampleFile + @"B.cs";
+                var before = exampleFolder + exampleFile + @"B." + file;
                 Refazer4CSharp.Apply(program, before);
             }
             try
@@ -449,11 +473,13 @@ namespace RefazerUnitTests
                 //Get the before and after version of each transformed file.
                 var transformations = TransformationInfos.GetInstance().Transformations;
                 var beforeAfter = TestUtil.GetBeforeAfterList(GetExampleFolder());
-                JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeAfter, exampleFolder + TestConstants.BeforeAfterLocations + "ranking" + ".json");
+                JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeAfter,
+                    exampleFolder + TestConstants.BeforeAfterLocations + "ranking" + ".json");
                 var transformedDocuments = ASTTransformer.Transform(transformations);
                 //Get the modified version
                 var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 //Ignored.
             }

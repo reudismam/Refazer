@@ -8,6 +8,7 @@ using Microsoft.ProgramSynthesis.Specifications;
 using RefazerFunctions.Substrings;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
+using RefazerFunctions.Bean;
 
 namespace RefazerFunctions.Spg.Witness
 {
@@ -80,7 +81,7 @@ namespace RefazerFunctions.Spg.Witness
                     var first = mats.First();
                     if (!IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot)) return null;
                 }
-                treeExamples[input] = mats.First().Value;
+                treeExamples[input] = new Node(mats.First());
             }
             return new ExampleSpec(treeExamples);
         }

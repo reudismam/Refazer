@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
 using System;
 using System.Text.RegularExpressions;
+using RefazerFunctions.Bean;
 
 namespace RefazerFunctions.Spg.Ranking
 {
@@ -96,6 +97,6 @@ namespace RefazerFunctions.Spg.Ranking
         public double KindScore(SyntaxKind kd) => 1.1;
 
         [FeatureCalculator("tree", Method = CalculationMethod.FromLiteral)]
-        public double NodeScore(SyntaxNodeOrToken kd) => 1.1;
+        public double NodeScore(Node kd) => 1.1;
     }
 }

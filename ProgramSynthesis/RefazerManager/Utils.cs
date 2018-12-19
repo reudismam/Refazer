@@ -10,6 +10,7 @@ using Microsoft.ProgramSynthesis.Learning.Logging;
 using Microsoft.ProgramSynthesis.Learning.Strategies;
 using Microsoft.ProgramSynthesis.Specifications;
 using RefazerFunctions;
+using RefazerFunctions.Spg.Config;
 
 namespace RefazerManager
 {
@@ -96,7 +97,10 @@ namespace RefazerManager
             topK.ForEach(p => programStrings += $"Score[{p.GetFeatureValue(new RankingScore(grammar, examplesCount))}] " + p + "\n");
             string expHome = Environment.GetEnvironmentVariable("EXP_HOME", EnvironmentVariableTarget.User);
             string file = expHome + "programs.txt";
-            File.WriteAllText(file, programStrings);
+            if (SynthesisConfig.GetInstance().CreateLog)
+            {
+                File.WriteAllText(file, programStrings);
+            }
             if (topK.Any())
             {
                 ProgramNode first = topK.ElementAt(0);

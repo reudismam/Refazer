@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
+using RefazerFunctions.Bean;
 
 namespace RefazerFunctions.Spg.Ranking
 {
@@ -194,6 +195,6 @@ namespace RefazerFunctions.Spg.Ranking
         public double KindScore(SyntaxKind kd) => ranking.KindScore(kd);
 
         [FeatureCalculator("tree", Method = CalculationMethod.FromLiteral)]
-        public double NodeScore(SyntaxNodeOrToken kd) => ranking.NodeScore(kd);
+        public double NodeScore(Node kd) => ranking.NodeScore(kd);
     }
 }

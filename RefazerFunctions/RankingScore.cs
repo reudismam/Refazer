@@ -475,6 +475,7 @@ using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Features;
 using RefazerFunctions.Spg.Ranking;
 using System.Collections.Generic;
+using RefazerFunctions.Bean;
 
 namespace RefazerFunctions
 {
@@ -785,7 +786,7 @@ namespace RefazerFunctions
         public static double KindScore(SyntaxKind kd) => bottomRanking.KindScore(kd);
 
         [FeatureCalculator("tree", Method = CalculationMethod.FromLiteral)]
-        public static double NodeScore(SyntaxNodeOrToken kd) => bottomRanking.NodeScore(kd);
+        public static double NodeScore(Node kd) => bottomRanking.NodeScore(kd);
     }
 }
 ////End of Random Ranking Approach

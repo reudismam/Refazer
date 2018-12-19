@@ -23,10 +23,11 @@ namespace RefazerFunctions.Spg.Semantic
         /// <summary>
         /// Literal
         /// </summary>
-        /// <param name="tree">Tree</param>
+        /// <param name="nodeTree">Tree</param>
         /// <returns>Literal</returns>
-        public static Pattern Literal(SyntaxNodeOrToken tree)
+        public static Pattern Literal(Node nodeTree)
         {
+            SyntaxNodeOrToken tree = nodeTree.Value.Value;
             var token = new DynToken(new Label(tree.Kind().ToString()), ConverterHelper.ConvertCSharpToTreeNode(tree));
             var label = new TLabel(tree.Kind());
             var inode = new TreeNode<Token>(token, label);

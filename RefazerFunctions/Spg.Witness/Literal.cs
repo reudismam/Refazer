@@ -7,6 +7,7 @@ using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
 using TreeEdit.Spg.Isomorphic;
 using TreeElement.Spg.Node;
+using RefazerFunctions.Bean;
 
 namespace RefazerFunctions.Spg.Witness
 {
@@ -24,7 +25,7 @@ namespace RefazerFunctions.Spg.Witness
             }
             var list = new List<object>();
             if (!@intersect.Any()) return null;
-            @intersect.ForEach(o => list.Add(o.Item1.Value));
+            @intersect.ForEach(o => list.Add(new Node(o.Item1)));
             spec.ProvidedInputs.ForEach(o => treeExamples[o] = list);
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
@@ -46,7 +47,7 @@ namespace RefazerFunctions.Spg.Witness
             }
             var first = matches.First();
             if (!matches.All(sot => IsomorphicManager<SyntaxNodeOrToken>.IsIsomorphic(first, sot))) return null;
-            spec.ProvidedInputs.ForEach(input => treeExamples[input] = new List<object> {first.Value});
+            spec.ProvidedInputs.ForEach(input => treeExamples[input] = new List<object> {new Node(first)});
             return DisjunctiveExamplesSpec.From(treeExamples);
         }
 

@@ -97,7 +97,7 @@ namespace RefazerFunctions
         /// </summary>
         /// <param name="tree">Value</param>
         /// <returns>Literal</returns>
-        public static Pattern Concrete(SyntaxNodeOrToken tree)
+        public static Pattern Concrete(Node tree)
         {
             return MatchSemanticFunctions.Literal(tree);
         }
@@ -270,8 +270,9 @@ namespace RefazerFunctions
         /// </summary>
         /// <param name="cst">Constant</param>
         /// <returns>A new constant node.</returns>
-        public static Node ConstNode(SyntaxNodeOrToken cst)
+        public static Node ConstNode(Node cstNode)
         {
+            SyntaxNodeOrToken cst = cstNode.Value.Value;
             var itreeNode = new TreeNode<SyntaxNodeOrToken>(cst, new TLabel(cst.Kind()));
             if (cst.Parent != null)
             {

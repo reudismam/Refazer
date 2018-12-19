@@ -101,9 +101,7 @@ namespace TreeElement.Spg.Node
         /// <summary>
         /// Update type of node
         /// </summary>
-        /// <param name="value">value</param>
-        /// <param name="label">Label</param>
-        public void updateNodeType(TType nodeType)
+        public void UpdateNodeType(TType nodeType)
         {
             NodeType = new TType(nodeType);
         }
