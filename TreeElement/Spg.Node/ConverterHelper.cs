@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using RefazerFunctions.Substrings;
@@ -41,6 +44,32 @@ namespace TreeElement.Spg.Node
             return tree;
         }
 
+        /// <summary>
+        /// Convert a syntax tree to a TreeNode
+        /// </summary>
+        /// <param name="st">Syntax tree root</param>
+        /// <returns>TreeNode</returns>
+        public static TreeNode<RefazerNode> ConvertANTLRToTreeNode(IParseTree st, CommonTokenStream commonTokenStream)
+        {
+            if (st.ChildCount == 0)
+            {
+                var treeNode = new TreeNode<RefazerNode>(new ANTLRNode(st), new TLabel(st.GetType()));
+                treeNode.Start = commonTokenStream.Get(st.SourceInterval.a).StartIndex;
+                return treeNode;
+            }
+            List<TreeNode<RefazerNode>> children = new List<TreeNode<RefazerNode>>();
+            for (var i = 0; i < st.ChildCount; i++)
+            {
+                IParseTree sot = st.GetChild(i);
+                TreeNode<RefazerNode> node = ConvertANTLRToTreeNode(sot, commonTokenStream);
+                //node.Start = commonTokenStream.Get(st.SourceInterval.a).StartIndex;
+                children.Add(node);
+            }
+            var treeANTLR = new ANTLRNode(st);
+            TreeNode<RefazerNode> tree = new TreeNode<RefazerNode>(treeANTLR, new TLabel(st.GetType()), children);
+            tree.Start = commonTokenStream.Get(st.SourceInterval.a).StartIndex;
+            return tree;
+        }
 
         /// <summary>
         /// Verify if a node is valid.

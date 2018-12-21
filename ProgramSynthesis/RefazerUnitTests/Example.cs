@@ -454,7 +454,9 @@ namespace RefazerUnitTests
 
         private void processANTLR(List<string> toApply, string file, List<Tuple<string, string>> examples, string exampleFolder)
         {
-            throw new NotImplementedException();
+            //learn a transformation using Refazer
+            var program = Refazer4CSharp.LearnTransformationANTLR(examples);
+            //Apply the transformation to some files.
         }
 
         private static void processCSharp(List<string> toApply, string file, List<Tuple<string, string>> examples, string exampleFolder)

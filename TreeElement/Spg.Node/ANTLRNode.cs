@@ -5,6 +5,12 @@ namespace TreeElement.Spg.Node
     public class ANTLRNode : RefazerNode
     {
         public IParseTree Value { get; set; }
+
+        public ANTLRNode(IParseTree value)
+        {
+            Value = value;
+        }
+
         /*public void method()
         {
             string input = "int main(){}";
