@@ -12,7 +12,7 @@ namespace Demo
     public class MyCGrammarExtended : Irony.Parsing.Grammar
     {
         public MyCGrammarExtended()
-        {
+        {  
             #region Declare Terminals Here
             CommentTerminal blockComment = new CommentTerminal("block-comment", "/*", "*/");
             CommentTerminal lineComment = new CommentTerminal("line-comment", "//",
@@ -21,6 +21,7 @@ namespace Demo
             NonGrammarTerminals.Add(lineComment);
 
             NumberLiteral number = new NumberLiteral("number");
+            StringLiteral str = new StringLiteral("str");
             IdentifierTerminal identifier = new IdentifierTerminal("identifier");
             #endregion
 
@@ -61,6 +62,7 @@ namespace Demo
             NonTerminal prefixOperator = new NonTerminal("prefix-operator");
             NonTerminal factor = new NonTerminal("factor");
             NonTerminal identifierExpression = new NonTerminal("identifier-expression");
+            NonTerminal stringLiteralExpression = new NonTerminal("string-literal44");
             #endregion
 
             #region Place Rules Here
@@ -150,7 +152,8 @@ namespace Demo
 
             expression.Rule
                 = relationalExpression + booleanOperator + expression
-                | relationalExpression;
+                | relationalExpression
+                | str;
 
             booleanOperator.Rule
                 = ToTerm("&&")
@@ -196,7 +199,8 @@ namespace Demo
                 = prefixOperator + factor
                 | factor;
 
-            prefixOperator.Rule = ToTerm("!");
+            prefixOperator.Rule = ToTerm("!")
+                | ToTerm("&");
 
             factor.Rule
                 = identifierExpression + parenArguments
@@ -207,6 +211,7 @@ namespace Demo
             identifierExpression.Rule
                 = identifier
                 | identifierExpression + "." + identifier;
+
             #endregion
 
             #region Define Keywords

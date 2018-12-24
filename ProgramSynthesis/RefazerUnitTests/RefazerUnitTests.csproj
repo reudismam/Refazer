@@ -333,6 +333,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EvaluationTest.cs" />
+    <Compile Include="ClusteringTest.cs" />
     <Compile Include="JsonUtil.cs" />
     <Compile Include="Record.cs" />
     <Compile Include="RegionManager.cs" />
@@ -351,6 +352,10 @@
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Clustering\Clustering.csproj">
+      <Project>{18F83048-36FA-4D21-8CE9-3F1E11F52646}</Project>
+      <Name>Clustering</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Controller\Controller.csproj">
       <Project>{D2C1E970-DC22-4E82-BAE7-60842E102C46}</Project>
       <Name>Controller</Name>
