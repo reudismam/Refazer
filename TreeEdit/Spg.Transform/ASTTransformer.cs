@@ -26,16 +26,13 @@ namespace TreeEdit.Spg.Transform
             return transformedDocuments;
         }
 
-        /*private static List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transform(Dictionary<string, List<TransformationInfo>> dic)
+        public static List<string> StringTransformation(List<TransformationInfo> transformations)
         {
-            var transformationList = new List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>>();
-            foreach (var item in dic)
-            {
-                var transformation = Transformation(item.Value);
-                transformationList.Add(transformation.Result);
-            }
-            return transformationList;
-        }*/
+            var groups = transformations.GroupBy(o => o.Before.SyntaxTree.FilePath);
+            var dic = groups.ToDictionary(group => group.Key, group => group.ToList());
+            var transformedDocuments = StringTransformation(dic);
+            return transformedDocuments;
+        }
 
         private static List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> Transform(Dictionary<string, List<TransformationInfo>> dic)
         {
@@ -60,6 +57,29 @@ namespace TreeEdit.Spg.Transform
                 var afterAST = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(
                     modifiedCode, path: item.Value.First().Before.SyntaxTree.FilePath).GetRoot();
                 transformationList.Add(Tuple.Create(beforeAST, afterAST));
+            }
+            return transformationList;
+        }
+
+        private static List<string> StringTransformation(Dictionary<string, List<TransformationInfo>> dic)
+        {
+            var transformationList = new List<string>();
+            foreach (var item in dic)
+            {
+                var sourceCode = FileUtil.ReadFile(item.Key);
+                var modifiedRegions = new List<Tuple<Region, string, string>>();
+                foreach (var transformation in item.Value)
+                {
+                    var region = new Region();
+                    region.Start = transformation.Before.SpanStart;
+                    region.Length = transformation.Before.Span.Length;
+                    region.Text = transformation.Before.ToString();
+                    region.Path = transformation.Before.SyntaxTree.FilePath;
+                    var tuple = Tuple.Create(region, transformation.After.ToString(), transformation.After.SyntaxTree.FilePath);
+                    modifiedRegions.Add(tuple);
+                }
+                var modifiedCode = Transform(sourceCode, modifiedRegions);
+                transformationList.Add(modifiedCode);
             }
             return transformationList;
         }

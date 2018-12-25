@@ -268,7 +268,7 @@ namespace RefazerFunctions
         /// <summary>
         /// Create a constant node
         /// </summary>
-        /// <param name="cst">Constant</param>
+        /// <param name="cstNode">Constant</param>
         /// <returns>A new constant node.</returns>
         public static Node ConstNode(Node cstNode)
         {
@@ -285,7 +285,7 @@ namespace RefazerFunctions
 
         public static string ConstNode(string cst)
         {
-            return null;
+            throw new Exception("Not implemented yet!!");
         }
 
         public static IEnumerable<Pattern> CList(Pattern child1, IEnumerable<Pattern> cList)
@@ -359,12 +359,7 @@ namespace RefazerFunctions
                 var codeFragmentsLogger = CodeFragmentsInfo.GetInstance();
                 codeFragmentsLogger.Add(node.Value);
             }
-            return isValid;
-            if (isValid)
-            {
-                var codeFragmentsLogger = CodeFragmentsInfo.GetInstance();
-                codeFragmentsLogger.Add(node.Value);
-            }
+            return isValid;  
         }
 
         public static bool EvaluateMatch(Node sx, Pattern template)

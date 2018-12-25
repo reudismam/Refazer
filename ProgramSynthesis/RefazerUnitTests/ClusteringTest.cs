@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -23,13 +25,13 @@ namespace RefazerUnitTests
         [TestMethod]
         public void E3()
         {
-            var students = new List<int> {1};
+            var students = new List<int> { 1 };
             var question = 1;
             var toFixStudent = 2;
-            CompleteTestBase(students, question, toFixStudent);            
+            CompleteTestBase(students, question, toFixStudent);
         }
-      
-        private void CompleteTestBase(List<int> students, int question,  int target, string id = @"submissions\")
+
+        private void CompleteTestBase(List<int> students, int question, int target, string id = @"submissions\")
         {
             string exampleFolder = GetExampleFolder() + id;
             var examples = new List<Tuple<string, string>>();
@@ -52,9 +54,41 @@ namespace RefazerUnitTests
                 Refazer4CSharp.Apply(cluster.Program, toApply);
                 //Get the before and after version of each transformed file.
                 var transformations = TransformationInfos.GetInstance().Transformations;
-                var transformedDocuments = ASTTransformer.Transform(transformations);
-                //Get the modified version
-                var document = transformedDocuments.Select(o => o.Item2.ToString()).ToList();
+                var transformedDocuments = ASTTransformer.StringTransformation(transformations);
+                string outputFilePath = exampleFolder + "main.c";
+                FileUtil.WriteToFile(outputFilePath, transformedDocuments.First());
+                EvaluateSubmission(outputFilePath, question);
+            }
+        }
+
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        private static void EvaluateSubmission(string cfile, int q)
+        {
+            var folderOutput = cfile.Substring(0, cfile.LastIndexOf('\\') + 1);
+            var pathoutput = folderOutput + $"q_{q}_output.txt";
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = $"/C gcc -o a.exe \"{cfile}\" | a.exe < \"{folderOutput}q_{q}_input.txt\"";
+            process.StartInfo = startInfo;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.Start();
+            var output = process.StandardOutput.ReadToEnd();
+            var errors = process.StandardError.ReadToEnd();
+            if (!output.IsEmpty())
+            {
+                FileUtil.WriteToFile(folderOutput + $"q_{q}_output_tool.txt", output);
+            }
+            else if (!errors.IsEmpty())
+            {
+                FileUtil.WriteToFile(pathoutput, errors);
+            }
+            else
+            {
+                FileUtil.WriteToFile(pathoutput, "Occurs an error while running process.");
             }
         }
 
@@ -115,9 +149,9 @@ namespace RefazerUnitTests
             {
                 var inputText = FileUtil.ReadFile(example.Item1);
                 var outputText = FileUtil.ReadFile(example.Item2);
-                var inpTree = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(inputText, path: example.Item1).GetRoot();
-                var outTree = (SyntaxNodeOrToken) CSharpSyntaxTree.ParseText(outputText, path: example.Item2).GetRoot();
-                var typesInput = GetNodesByType(inpTree, new List<SyntaxKind> {SyntaxKind.MethodDeclaration});
+                var inpTree = (SyntaxNodeOrToken)CSharpSyntaxTree.ParseText(inputText, path: example.Item1).GetRoot();
+                var outTree = (SyntaxNodeOrToken)CSharpSyntaxTree.ParseText(outputText, path: example.Item2).GetRoot();
+                var typesInput = GetNodesByType(inpTree, new List<SyntaxKind> { SyntaxKind.MethodDeclaration });
                 var typesOutput = GetNodesByType(outTree, new List<SyntaxKind> { SyntaxKind.MethodDeclaration });
                 for (int i = 0; i < typesInput.Count; i++)
                 {
