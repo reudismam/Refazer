@@ -1,56 +1,59 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.ProgramSynthesis;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace RefazerFunctions.Spg.Ranking
 {
-    public class MLRankingLogisticRegressionLinear: RankingFunction
+    public class RandomRanking2: RankingFunction
     {
         private static Dictionary<Feature, double> weights;
+        public static int seed = 86028157;
+        public const double VariableScore = 0;
 
-        public MLRankingLogisticRegressionLinear()
+        public RandomRanking2()
         {
+            Random rnd = new Random(seed);
             weights = new Dictionary<Feature, double>();
-            weights.Add(Feature.Intercept, 0.3366);
-            weights.Add(Feature.Constants, 1.9215);
-            weights.Add(Feature.References, -9.6286);
-            weights.Add(Feature.Concrete, 0.3366);
-            weights.Add(Feature.Abstract, -0.2229);
-            weights.Add(Feature.Nodes, -1.6885);
-            weights.Add(Feature.Patterns, 0.0169);
-            weights.Add(Feature.ParentOne, -1.6819);
-            weights.Add(Feature.ParentTwo, 0);
-            weights.Add(Feature.ParentThree, 0);
-            weights.Add(Feature.NodeItSelf, 0.5745);
-            weights.Add(Feature.Size, -0.0076);
-            weights.Add(Feature.Operations, 1.1343);
-            //weights.Add(Feature.Constants_squared, 0.2373);
-            //weights.Add(Feature.References_squared, 1.9779);
-            //weights.Add(Feature.Concrete_squared, -0.0590);
-            //weights.Add(Feature.Abstract_squared, -0.2987);
-            //weights.Add(Feature.Nodes_squared, -0.2122);
-            //weights.Add(Feature.Patterns_squared, 0.0190);
-            //weights.Add(Feature.ParentOne_squared, -0.0099);
-            //weights.Add(Feature.ParentTwo_squared, 0);
-            //weights.Add(Feature.ParentThree_squared, 0);
-            //weights.Add(Feature.NodeItSelf_squared, 0);
-            //weights.Add(Feature.Size_squared, 0.0007);
-            //weights.Add(Feature.Operations_squared, 0.5960);
-            //weights.Add(Feature.Constants_cubic, 0.7458);
-            //weights.Add(Feature.References_cubic, 1.1460);
-            //weights.Add(Feature.Concrete_cubic, -0.0265);
-            //weights.Add(Feature.Abstract_cubic, 0.1108);
-            //weights.Add(Feature.Nodes_cubic, 0.0125);
-            //weights.Add(Feature.Patterns_cubic, -0.0011);
-            //weights.Add(Feature.ParentOne_cubic, 0.1603);
-            //weights.Add(Feature.ParentTwo_cubic, 0);
-            //weights.Add(Feature.ParentThree_cubic, 0);//
-            //weights.Add(Feature.NodeItSelf_cubic, -0.0428);
-            //weights.Add(Feature.Size_cubic, 0.000002);
-            //weights.Add(Feature.Operations_cubic, 1.4522);
-
+            weights.Add(Feature.Intercept, rnd.NextDouble());
+            weights.Add(Feature.Constants, rnd.NextDouble());
+            weights.Add(Feature.References, rnd.NextDouble());
+            weights.Add(Feature.Concrete, rnd.NextDouble());
+            weights.Add(Feature.Abstract, rnd.NextDouble());
+            weights.Add(Feature.Nodes, rnd.NextDouble());
+            weights.Add(Feature.Patterns, rnd.NextDouble());
+            weights.Add(Feature.ParentOne, rnd.NextDouble());
+            weights.Add(Feature.ParentTwo, rnd.NextDouble());
+            weights.Add(Feature.ParentThree, rnd.NextDouble());
+            weights.Add(Feature.NodeItSelf, rnd.NextDouble());
+            weights.Add(Feature.Size, rnd.NextDouble());
+            weights.Add(Feature.Operations, rnd.NextDouble());
+            weights.Add(Feature.Constants_squared, rnd.NextDouble());
+            weights.Add(Feature.References_squared, rnd.NextDouble());
+            weights.Add(Feature.Concrete_squared, rnd.NextDouble());
+            weights.Add(Feature.Abstract_squared, rnd.NextDouble());
+            weights.Add(Feature.Nodes_squared, rnd.NextDouble());
+            weights.Add(Feature.Patterns_squared, rnd.NextDouble());
+            weights.Add(Feature.ParentOne_squared, rnd.NextDouble());
+            weights.Add(Feature.ParentTwo_squared, rnd.NextDouble());
+            weights.Add(Feature.ParentThree_squared, rnd.NextDouble());
+            weights.Add(Feature.NodeItSelf_squared, rnd.NextDouble());
+            weights.Add(Feature.Size_squared, rnd.NextDouble());
+            weights.Add(Feature.Operations_squared, rnd.NextDouble());
+            weights.Add(Feature.Constants_cubic, rnd.NextDouble());
+            weights.Add(Feature.References_cubic, rnd.NextDouble());
+            weights.Add(Feature.Concrete_cubic, rnd.NextDouble());
+            weights.Add(Feature.Abstract_cubic, rnd.NextDouble());
+            weights.Add(Feature.Nodes_cubic, rnd.NextDouble());
+            weights.Add(Feature.Patterns_cubic, rnd.NextDouble());
+            weights.Add(Feature.ParentOne_cubic, rnd.NextDouble());
+            weights.Add(Feature.ParentTwo_cubic, rnd.NextDouble());
+            weights.Add(Feature.ParentThree_cubic, rnd.NextDouble());//
+            weights.Add(Feature.NodeItSelf_cubic, rnd.NextDouble());
+            weights.Add(Feature.Size_cubic, rnd.NextDouble());
+            weights.Add(Feature.Operations_cubic, rnd.NextDouble());
             //... colocar as demais
         }
 
@@ -95,43 +98,43 @@ namespace RefazerFunctions.Spg.Ranking
         public double Score_Script1(double inScore, double edit)
         {
             Dictionary<Feature, int>  features = RankingScore.getFeatures();
-            return weights[Feature.Intercept] +
-                weights[Feature.Constants] * features[Feature.Constants] +
-                weights[Feature.References] * features[Feature.References] +
-                weights[Feature.Concrete] * features[Feature.Concrete] +
-                weights[Feature.Abstract] * features[Feature.Abstract] +
-                weights[Feature.Nodes] * features[Feature.Nodes] +
-                weights[Feature.Patterns] * features[Feature.Patterns] +
-                weights[Feature.ParentOne] * features[Feature.ParentOne] +
-                weights[Feature.ParentTwo] * features[Feature.ParentTwo] +
-                weights[Feature.ParentThree] * features[Feature.ParentThree] +
-                weights[Feature.NodeItSelf] * features[Feature.NodeItSelf] +
-                weights[Feature.Size] * features[Feature.Size] +
-                weights[Feature.Operations] * features[Feature.Operations];// +
-                //weights[Feature.Constants_squared] * features[Feature.Constants] * features[Feature.Constants] +
-                //weights[Feature.References_squared] * features[Feature.References] * features[Feature.References] +
-                //weights[Feature.Concrete_squared] * features[Feature.Concrete] * features[Feature.Concrete] +
-                //weights[Feature.Abstract_squared] * features[Feature.Abstract] * features[Feature.Abstract] +
-                //weights[Feature.Nodes_squared] * features[Feature.Nodes] * features[Feature.Nodes] +
-                //weights[Feature.Patterns_squared] * features[Feature.Patterns] * features[Feature.Patterns] +
-                //weights[Feature.ParentOne_squared] * features[Feature.ParentOne] * features[Feature.ParentOne] +
-                //weights[Feature.ParentTwo_squared] * features[Feature.ParentTwo] * features[Feature.ParentTwo] +
-                //weights[Feature.ParentThree_squared] * features[Feature.ParentThree] * features[Feature.ParentThree] +
-                //weights[Feature.NodeItSelf_squared] * features[Feature.NodeItSelf] * features[Feature.NodeItSelf] +
-                //weights[Feature.Size_squared] * features[Feature.Size] * features[Feature.Size] +
-                //weights[Feature.Operations_squared] * features[Feature.Operations] * features[Feature.Operations] +
-                //weights[Feature.Constants_cubic] * features[Feature.Constants] * features[Feature.Constants] * features[Feature.Constants] +
-                //weights[Feature.References_cubic] * features[Feature.References] * features[Feature.References] * features[Feature.References] +
-                //weights[Feature.Concrete_cubic] * features[Feature.Concrete] * features[Feature.Concrete] * features[Feature.Concrete] +
-                //weights[Feature.Abstract_cubic] * features[Feature.Abstract] * features[Feature.Abstract] * features[Feature.Abstract] +
-                //weights[Feature.Nodes_cubic] * features[Feature.Nodes] * features[Feature.Nodes] * features[Feature.Nodes] +
-                //weights[Feature.Patterns_cubic] * features[Feature.Patterns] * features[Feature.Patterns] * features[Feature.Patterns] +
-                //weights[Feature.ParentOne_cubic] * features[Feature.ParentOne] * features[Feature.ParentOne] * features[Feature.ParentOne] +
-                //weights[Feature.ParentTwo_cubic] * features[Feature.ParentTwo] * features[Feature.ParentTwo] * features[Feature.ParentTwo] +
-                //weights[Feature.ParentThree_cubic] * features[Feature.ParentThree] * features[Feature.ParentThree] * features[Feature.ParentThree] +
-                //weights[Feature.NodeItSelf_cubic] * features[Feature.NodeItSelf] * features[Feature.NodeItSelf] * features[Feature.NodeItSelf] +
-                //weights[Feature.Size_cubic] * features[Feature.Size] * features[Feature.Size] * features[Feature.Size] +
-                //weights[Feature.Operations_cubic] * features[Feature.Operations] * features[Feature.Operations] * features[Feature.Operations];
+            return weights[Feature.Intercept] + 
+                weights[Feature.Constants] * features[Feature.Constants] + 
+                weights[Feature.References] * features[Feature.References]+
+                weights[Feature.Concrete] * features[Feature.Concrete]+
+                weights[Feature.Abstract] * features[Feature.Abstract]+
+                weights[Feature.Nodes] * features[Feature.Nodes]+
+                weights[Feature.Patterns] * features[Feature.Patterns]+
+                weights[Feature.ParentOne] * features[Feature.ParentOne]+
+                weights[Feature.ParentTwo] * features[Feature.ParentTwo]+
+                weights[Feature.ParentThree] * features[Feature.ParentThree]+
+                weights[Feature.NodeItSelf] * features[Feature.NodeItSelf]+
+                weights[Feature.Size] * features[Feature.Size]+
+                weights[Feature.Operations] * features[Feature.Operations] +
+                weights[Feature.Constants_squared] * features[Feature.Constants] * features[Feature.Constants] +
+                weights[Feature.References_squared] * features[Feature.References] * features[Feature.References] +
+                weights[Feature.Concrete_squared] * features[Feature.Concrete] * features[Feature.Concrete] +
+                weights[Feature.Abstract_squared] * features[Feature.Abstract] * features[Feature.Abstract] +
+                weights[Feature.Nodes_squared] * features[Feature.Nodes] * features[Feature.Nodes] +
+                weights[Feature.Patterns_squared] * features[Feature.Patterns] * features[Feature.Patterns] +
+                weights[Feature.ParentOne_squared] * features[Feature.ParentOne] * features[Feature.ParentOne] +
+                weights[Feature.ParentTwo_squared] * features[Feature.ParentTwo] * features[Feature.ParentTwo] +
+                weights[Feature.ParentThree_squared] * features[Feature.ParentThree] * features[Feature.ParentThree] +
+                weights[Feature.NodeItSelf_squared] * features[Feature.NodeItSelf] * features[Feature.NodeItSelf] +
+                weights[Feature.Size_squared] * features[Feature.Size] * features[Feature.Size] +
+                weights[Feature.Operations_squared] * features[Feature.Operations] * features[Feature.Operations] +
+                weights[Feature.Constants_cubic] * features[Feature.Constants] * features[Feature.Constants] * features[Feature.Constants] +
+                weights[Feature.References_cubic] * features[Feature.References] * features[Feature.References] * features[Feature.References] +
+                weights[Feature.Concrete_cubic] * features[Feature.Concrete] * features[Feature.Concrete] * features[Feature.Concrete] +
+                weights[Feature.Abstract_cubic] * features[Feature.Abstract] * features[Feature.Abstract] * features[Feature.Abstract] +
+                weights[Feature.Nodes_cubic] * features[Feature.Nodes] * features[Feature.Nodes] * features[Feature.Nodes] +
+                weights[Feature.Patterns_cubic] * features[Feature.Patterns] * features[Feature.Patterns] * features[Feature.Patterns] +
+                weights[Feature.ParentOne_cubic] * features[Feature.ParentOne] * features[Feature.ParentOne] * features[Feature.ParentOne] +
+                weights[Feature.ParentTwo_cubic] * features[Feature.ParentTwo] * features[Feature.ParentTwo] * features[Feature.ParentTwo] +
+                weights[Feature.ParentThree_cubic] * features[Feature.ParentThree] * features[Feature.ParentThree] * features[Feature.ParentThree] +
+                weights[Feature.NodeItSelf_cubic] * features[Feature.NodeItSelf] * features[Feature.NodeItSelf] * features[Feature.NodeItSelf] +
+                weights[Feature.Size_cubic] * features[Feature.Size] * features[Feature.Size] * features[Feature.Size] +
+                weights[Feature.Operations_cubic] * features[Feature.Operations] * features[Feature.Operations] * features[Feature.Operations];
         }
 
         [FeatureCalculator(nameof(Semantics.Insert))]

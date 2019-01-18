@@ -442,7 +442,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void NJ059()
         {
-            
+
             var isCorrect = CompleteTestBase(@"NJ059\");
             Assert.IsTrue(isCorrect);
         }
@@ -450,7 +450,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void NJ224()
         {
-           
+
             var isCorrect = CompleteTestBase(@"NJ224\");
             Assert.IsTrue(isCorrect);
         }
@@ -459,7 +459,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void NJ225()
         {
-            
+
             var isCorrect = CompleteTestBase(@"NJ225\");
             Assert.IsTrue(isCorrect);
         }
@@ -468,7 +468,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void NJ234()
         {
-            
+
             var isCorrect = CompleteTestBase(@"NJ234\");
             Assert.IsTrue(isCorrect);
         }
@@ -484,7 +484,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void NJ241()
         {
-           
+
             var isCorrect = CompleteTestBase(@"NJ241\");
             Assert.IsTrue(isCorrect);
         }
@@ -576,7 +576,7 @@ namespace RefazerUnitTests
         [TestMethod]
         public void S431()
         {
-            var isCorrect = CompleteTestBase( @"S431\");
+            var isCorrect = CompleteTestBase(@"S431\");
             Assert.IsTrue(isCorrect);
         }
 
@@ -982,7 +982,7 @@ namespace RefazerUnitTests
             //string commitId = commit.Substring(commit.IndexOf(@"\") + 1);
 
             //commit = commitFirstLetter + "" + commitId;
-          //  commit = commit.Substring(0, commit.Length - 1);
+            //  commit = commit.Substring(0, commit.Length - 1);
 
             string path = LogData.LogPath();
             using (ExcelManager em = new ExcelManager())
@@ -1007,7 +1007,7 @@ namespace RefazerUnitTests
                 em.Save();
             }
         }
-    
+
         static string GetTestDataFolder(string testDataLocation)
         {
             string startupPath = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -1041,8 +1041,8 @@ namespace RefazerUnitTests
         //    return grammar;
         //}
 
-
-        // Here starts the Log version
+        
+        // Here starts the Log version for Number of Examples
 
         /// <summary>
         /// Complete test
@@ -1060,7 +1060,8 @@ namespace RefazerUnitTests
             {
                 kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
             }
-            int seed = 86028157;
+            //int seed = 86028157;
+            int seed = 3;
             var execId = "ranking";
             //Load grammar
             var grammar = GetGrammar();
@@ -1071,6 +1072,7 @@ namespace RefazerUnitTests
             Random random = new Random(seed);
             var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
             var positiveExamples = randomList.GetRange(0, Math.Min(1, locations.Count));//Aqui minimo 2
+            //var positiveExamples = new int [] {3, 21 }.ToList(); //para adicionar o exemplos 1 e 2 explicitamente
             var negativeExamples = new List<Region>();
             var addPositive = false;
             var includeNegExamples = true;
@@ -1106,6 +1108,8 @@ namespace RefazerUnitTests
                     mean = sizes.Average();
                 }
                 var beforeafter = TestUtil.GetBeforeAfterList(expHome);
+                var toolBeforeAfterList = GetBeforeAfterData(beforeafter, locations);
+                GenerateMetadata(regionsFrags, locations, expHome, commit, execId, beforeafter, toolBeforeAfterList);
                 GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
                 var foundLocations = GetEditedLocations(regionsFrags, locations);
                 var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
@@ -1114,13 +1118,13 @@ namespace RefazerUnitTests
                     //Generate meta-data for BaselineBeforeAfterList on commit.
                     var foundList = GetEditionInLocations(regionsFrags, locations);
                     JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsTool + execId + ".json");
-                    var toolBeforeAfterList = GetBeforeAfterData(beforeafter, locations);
-                    GenerateMetadata(regionsFrags, locations, expHome, commit, execId, beforeafter, toolBeforeAfterList);
+                    //var toolBeforeAfterList = GetBeforeAfterData(beforeafter, locations);
+                    //GenerateMetadata(regionsFrags, locations, expHome, commit, execId, befo6reafter, toolBeforeAfterList);
                     //Comparing edited locations with baseline
                     var firstIncorrect = GetFirstTransformedIncorrectly(locations, baselineBeforeAfterList, toolBeforeAfterList, foundList, randomList);
                     //coment these lines to add negatives and positives.
-                    addPositive = true;
-                    includeNegExamples = false;
+              //      addPositive = true;
+              //      includeNegExamples = false;
                     //end of comment
                     if (firstIncorrect == -1)
                     {
@@ -1164,8 +1168,8 @@ namespace RefazerUnitTests
             Log(helper, commit, positiveExamples, negativeExamples, baselineBeforeAfterList, mean);
             return true;
         }
-
-        private static int GetFirstTransformedIncorrectly(List<Region> locations, List<Tuple<Region, string, string>> baselineBeforeAfterList, 
+        
+        private static int GetFirstTransformedIncorrectly(List<Region> locations, List<Tuple<Region, string, string>> baselineBeforeAfterList,
             List<Tuple<Region, string, string>> toolBeforeAfterList, List<Region> foundList, List<int> randomList)
         {
             var baselineBeforeAfter = CreateBaselineBeforeAfter(baselineBeforeAfterList);
@@ -1174,7 +1178,7 @@ namespace RefazerUnitTests
             return firstIncorrect;
         }
 
-        private static void GenerateMetadata(List<Region> regionsFrags, List<Region> locations, string expHome, string commit, string execId, 
+        private static void GenerateMetadata(List<Region> regionsFrags, List<Region> locations, string expHome, string commit, string execId,
             List<Tuple<Region, string, string>> beforeafter, List<Tuple<Region, string, string>> toolBeforeAfterList)
         {
             JsonUtil<List<Tuple<Region, string, string>>>.Write(toolBeforeAfterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
@@ -1182,13 +1186,16 @@ namespace RefazerUnitTests
         }
 
         private static void AddNegativeExample(bool includeNegExamples, List<Region> foundList, List<Region> locations, List<Region> negativeExamples)
-        { 
-                var mustNotBeSelected = foundList.Except(locations).ToList();
-                var missingNegative = mustNotBeSelected.Except(negativeExamples).ToList();
+        {
+            var mustNotBeSelected = foundList.Except(locations).ToList();
+            var missingNegative = mustNotBeSelected.Except(negativeExamples).ToList();
+            if (!missingNegative.IsEmpty())
+            {
                 negativeExamples.Add(missingNegative.First());
+            }
         }
 
-        private static void AddExample(List<int> positiveExamples, List<Region> locations, List<Region> negativeExamples, 
+        private static void AddExample(List<int> positiveExamples, List<Region> locations, List<Region> negativeExamples,
             List<Tuple<Region, string, string>> beforeafter, int firstMissing, bool addPositive)
         {
             if (addPositive)
@@ -1256,8 +1263,8 @@ namespace RefazerUnitTests
         /// <param name="negativeExamples">negative examples</param>
         /// <param name="baselineBeforeAfterList">baseline list</param>
         /// <param name="mean">mean</param>
-        private static void Log(TestHelper helper, string commit, List<int> positiveExamples, 
-            List<Region> negativeExamples, List<Tuple<Region, string, string>> baselineBeforeAfterList, double mean, string gl="")
+        private static void Log(TestHelper helper, string commit, List<int> positiveExamples,
+            List<Region> negativeExamples, List<Tuple<Region, string, string>> baselineBeforeAfterList, double mean, string gl = "")
         {
             //end of execution 
             long totalTimeToLearn = helper.TotalTimeToLearn;
@@ -1292,7 +1299,8 @@ namespace RefazerUnitTests
         //Here ends the Log verion 
 
 
-        ////Here starts the LogProgram version
+
+        ////Here starts the LogProgram version for Labels
         ///// <summary>
         ///// Complete test
         ///// </summary>
@@ -1320,63 +1328,64 @@ namespace RefazerUnitTests
         //    Random random = new Random(seed);
         //    var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
         //    bool atLeastOneCorrect = false;
-        //    for (int exampleIndex = 1; exampleIndex <= locations.Count; exampleIndex++) // inicia com 1 exemplo originalmente
+        //    var negativeExamples = new List<Region>();
+        //    //for (int exampleIndex = 1; exampleIndex <= locations.Count; exampleIndex++) // inicia com 1 exemplo originalmente
+        //    //{
+        //    var exampleIndex = 1;
+        //    // MessageBox.Show(exampleIndex + "");
+        //    var examples = randomList.GetRange(0, exampleIndex);
+        //    //Execution
+        //    TestHelper helper;
+        //    examples.Sort();
+        //    helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations,
+        //                expHome, solutionPath, commit, kinds, fileFolder, execId);
+        //    helper.Execute(examples);
+        //    var beforeafter = TestUtil.GetBeforeAfterList(expHome);
+        //    var identifiedLocations = beforeafter.Select(o => o.Item1).ToList();
+        //    AddNegativeExample(true, identifiedLocations, locations, negativeExamples);
+        //    var allPrograms = helper.LearnPrograms(examples, negativeExamples);
+        //    for (var i = 1; i <= Math.Min(10, allPrograms.Count); i++)
         //    {
-        //        // MessageBox.Show(exampleIndex + "");
-        //        var examples = randomList.GetRange(0, exampleIndex);
-        //        //Execution
-        //        TestHelper helper;
-        //        examples.Sort();
-        //        helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations,
-        //                    expHome, solutionPath, commit, kinds, fileFolder, execId);
-        //        var allPrograms = helper.LearnPrograms(examples);
-        //        for (var i = 1; i <= allPrograms.Count; i++)
-        //        {
-        //            var p = allPrograms[i - 1];
-        //            CodeFragmentsInfo.GetInstance().Locations.Clear();
-        //            TransformationInfos.GetInstance().Transformations.Clear();
-        //            helper.Execute(examples, p);
+        //        var p = allPrograms[i - 1];
+        //        CodeFragmentsInfo.GetInstance().Locations.Clear();
+        //        TransformationInfos.GetInstance().Transformations.Clear();
+        //        helper.Execute(examples, p);
 
-        //            var regionsFrags = GetTransformedLocations(expHome);
-        //            string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
-        //            JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
-        //            var beforeafter = TestUtil.GetBeforeAfterList(expHome);
-        //            //  GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
-        //            var foundLocations = GetEditedLocations(regionsFrags, locations);
-        //            var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
-        //            if (firstProblematicLocation == -1)
+        //        var regionsFrags = GetTransformedLocations(expHome);
+        //        string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
+        //        JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
+        //        beforeafter = TestUtil.GetBeforeAfterList(expHome);
+        //        //  GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
+        //        var foundLocations = GetEditedLocations(regionsFrags, locations);
+        //        var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
+        //        if (firstProblematicLocation == -1)
+        //        {
+        //            //Generate meta-data for BaselineBeforeAfterList on commit.
+        //            var foundList = GetEditionInLocations(regionsFrags, locations);
+        //            JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsTool + execId + ".json");
+        //            var beforeafterList = GetBeforeAfterData(beforeafter, locations);
+        //            JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
+        //            JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
+        //            //Comparing edited locations with baseline
+        //            var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
+        //            foreach (var baseline in baselineBeforeAfterList)
         //            {
-        //                //Generate meta-data for BaselineBeforeAfterList on commit.
-        //                var foundList = GetEditionInLocations(regionsFrags, locations);
-        //                JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsTool + execId + ".json");
-        //                var beforeafterList = GetBeforeAfterData(beforeafter, locations);
-        //                JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
-        //                JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
-        //                //Comparing edited locations with baseline
-        //                var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
-        //                foreach (var baseline in baselineBeforeAfterList)
+        //                var region = baseline.Item1;
+        //                region.Path = region.Path.ToUpperInvariant();
+        //                baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
+        //            }
+        //            var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
+        //            var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
+        //            if (firstIncorrect == -1)
+        //            {
+        //                if (beforeafterList.Count > locations.Count)
         //                {
-        //                    var region = baseline.Item1;
-        //                    region.Path = region.Path.ToUpperInvariant();
-        //                    baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
-        //                }
-        //                var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
-        //                var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
-        //                if (firstIncorrect == -1)
-        //                {
-        //                    if (beforeafterList.Count > locations.Count)
-        //                    {
-        //                        LogProgram(commit, i, p.ToString(), false);
-        //                    }
-        //                    else
-        //                    {
-        //                        atLeastOneCorrect = true;
-        //                        LogProgram(commit, i, p.ToString(), true);
-        //                    }
+        //                    LogProgram(commit, i, p.ToString(), false);
         //                }
         //                else
         //                {
-        //                    LogProgram(commit, i, p.ToString(), false);
+        //                    atLeastOneCorrect = true;
+        //                    LogProgram(commit, i, p.ToString(), true);
         //                }
         //            }
         //            else
@@ -1384,14 +1393,123 @@ namespace RefazerUnitTests
         //                LogProgram(commit, i, p.ToString(), false);
         //            }
         //        }
-        //        if (atLeastOneCorrect)
+        //        else
         //        {
-        //            break;
+        //            LogProgram(commit, i, p.ToString(), false);
         //        }
         //    }
+        //    if (atLeastOneCorrect)
+        //    {
+        //        //break;
+        //    }
+        //    //}
         //    return true;
         //}
-        ////  Here ends the LogProgram version
+        ////  Here ends the LogProgram version for Label
+
+        /*
+    //Here ends the Log verion 
+    //Here starts the LogProgram version
+    /// <summary>
+    /// Complete test
+    /// </summary>
+    /// <param name="commit">Commit where the change occurs</param>
+    /// <param name="solutionPath">Path to the solution.</param>
+    /// <param name="kinds">Kinds that will be transformed.</param>
+    /// <returns>True if pass test</returns>
+    public static bool CompleteTestBase(string commit, string solutionPath = null, List<SyntaxKind> kinds = null,
+        string fileFolder = null)
+    {
+        string expHome = RefazerObject.Environment.Environment.ExpHome();
+        if (expHome.IsEmpty()) throw new Exception("Environment variable for the experiment not defined");
+
+        if (kinds == null)
+        {
+            kinds = new List<SyntaxKind> { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
+        }
+        int seed = 86028157;
+        var execId = "ranking";
+        //Load grammar
+        var grammar = GetGrammar();
+        var baselineBeforeAfterList = JsonUtil<List<Tuple<Region, string, string>>>.Read(expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocations + execId + ".json");
+        var locations = baselineBeforeAfterList.Select(O => O.Item1).ToList();
+        var globalTransformations = RegionManager.GetInstance().GroupTransformationsBySourcePath(baselineBeforeAfterList);
+        Random random = new Random(seed);
+        var randomList = Enumerable.Range(0, locations.Count).OrderBy(o => random.Next()).ToList();
+        bool atLeastOneCorrect = false;
+        for (int exampleIndex = 1; exampleIndex <= locations.Count; exampleIndex++) // inicia com 1 exemplo originalmente
+        {
+        // MessageBox.Show(exampleIndex + "");
+        var examples = randomList.GetRange(0, exampleIndex);
+        //Execution
+        TestHelper helper;
+        examples.Sort();
+        helper = new TestHelper(grammar, baselineBeforeAfterList, globalTransformations,
+                    expHome, solutionPath, commit, kinds, fileFolder, execId);
+        var allPrograms = helper.LearnPrograms(examples);
+        for (var i = 1; i <= allPrograms.Count; i++)
+        {
+            var p = allPrograms[i - 1];
+            CodeFragmentsInfo.GetInstance().Locations.Clear();
+            TransformationInfos.GetInstance().Transformations.Clear();
+            helper.Execute(examples, p);
+
+            var regionsFrags = GetTransformedLocations(expHome);
+            string transformedPath = expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsAll + execId + ".json";
+            JsonUtil<List<Region>>.Write(regionsFrags, transformedPath);
+            var beforeafter = TestUtil.GetBeforeAfterList(expHome);
+            //  GetDataAndSaveToFile(commit, expHome, execId, Constants.Programs);
+            var foundLocations = GetEditedLocations(regionsFrags, locations);
+            var firstProblematicLocation = GetFirstNotFound(foundLocations, locations, randomList);
+            if (firstProblematicLocation == -1)
+            {
+                //Generate meta-data for BaselineBeforeAfterList on commit.
+                var foundList = GetEditionInLocations(regionsFrags, locations);
+                JsonUtil<List<Region>>.Write(foundList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.TransformedLocationsTool + execId + ".json");
+                var beforeafterList = GetBeforeAfterData(beforeafter, locations);
+                JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafterList, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsTool + execId + ".json");
+                JsonUtil<List<Tuple<Region, string, string>>>.Write(beforeafter, expHome + TestConstants.MetadataFolder + "\\" + commit + TestConstants.BeforeAfterLocationsAll + execId + ".json");
+                //Comparing edited locations with baseline
+                var baselineBeforeAfter = new List<Tuple<Region, string, string>>();
+                foreach (var baseline in baselineBeforeAfterList)
+                {
+                    var region = baseline.Item1;
+                    region.Path = region.Path.ToUpperInvariant();
+                    baselineBeforeAfter.Add(Tuple.Create(region, baseline.Item2, baseline.Item3.ToUpperInvariant()));
+                }
+                var notTransformed = foundList.Except(beforeafterList.Select(o => o.Item1)).ToList();
+                var firstIncorrect = GetFirstIncorrect(beforeafterList, baselineBeforeAfter, randomList, locations, notTransformed);
+                if (firstIncorrect == -1)
+                {
+                    if (beforeafterList.Count > locations.Count)
+                    {
+                        LogProgram(commit, i, p.ToString(), false);
+                    }
+                    else
+                    {
+                        atLeastOneCorrect = true;
+                        LogProgram(commit, i, p.ToString(), true);
+                    }
+                }
+                else
+                {
+                    LogProgram(commit, i, p.ToString(), false);
+                }
+            }
+            else
+            {
+                LogProgram(commit, i, p.ToString(), false);
+            }
+        }
+        if (atLeastOneCorrect)
+        {
+           break;
+        }
+      }
+        return true;
+    }
+    ////  Here ends the LogProgram version
+    */
 
         private static int GetFirstIncorrect(List<Tuple<Region, string, string>> toolBeforeAfterList, List<Tuple<Region, string, string>> baselineBeforeAfterList, List<int> randomList, List<CodeLocation> locations)
         {

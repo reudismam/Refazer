@@ -53,7 +53,8 @@ namespace RefazerFunctions.Spg.Witness
 
         private static void AnalyseParent(Tuple<TreeNode<SyntaxNodeOrToken>, int> parent, List<Tuple<TreeNode<SyntaxNodeOrToken>, int>> mats)
         {
-            int tolerance = 40;
+            SynthesisConfig config = SynthesisConfig.GetInstance();
+            int tolerance = config.DescendantsParentThreshouldForContext;
             var parentDescendants = parent.Item1.DescendantNodesAndSelf();
             if (parentDescendants.Count < tolerance) mats.Add(parent);
         }

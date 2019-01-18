@@ -85,7 +85,8 @@ namespace RefazerManager
             //var topK = consistentPrograms.TopK(scorer, 100).ToList();
             //Max number of programs that we are interested.
             const ulong a = 200; //orinal 200
-            //var topK = consistentPrograms.RealizedPrograms.ToList();
+            var tamanho = consistentPrograms.Size;
+            //var topK = consistentBPrograms.RealizedPrograms.ToList();
             var topK = consistentPrograms.Size < 201 ? consistentPrograms.RealizedPrograms.ToList() : consistentPrograms.TopK(scorer, 1000).ToList(); //topK 1000 //201?
             var b = (ulong)topK.Count;
             int examplesCount = spec.ProvidedInputs.Count();

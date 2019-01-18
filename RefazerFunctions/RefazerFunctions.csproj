@@ -258,6 +258,8 @@
     <Compile Include="Spg.Ranking\HibridRanking3.cs" />
     <Compile Include="Spg.Ranking\HibridRankingRandom.cs" />
     <Compile Include="Spg.Ranking\ManualRanking.cs" />
+    <Compile Include="Spg.Ranking\MLRankingRankSVMNonLinear.cs" />
+    <Compile Include="Spg.Ranking\RandomRanking2.cs" />
     <Compile Include="Spg.Ranking\MLRankingLogisticRegressionLinear.cs" />
     <Compile Include="Spg.Ranking\HibridRanking2.cs" />
     <Compile Include="Spg.Ranking\MLRankingNN.cs" />

@@ -578,8 +578,8 @@ namespace RefazerFunctions
             // private static RankingFunction topRanking = new MLRankingLogisticRegressionNonLinear();
             //  private static RankingFunction bottomRanking = new ManualRanking();
             // private static RankingFunction ranking = new MLRankingLogisticRegression();
-            topRanking = new RandomRanking();
-            bottomRanking = new RandomRanking();
+            topRanking = new MLRankingRankSVMNonLinear();
+            bottomRanking = new MLRankingRankSVMNonLinear();
         }
 
         // Editing EditMap
