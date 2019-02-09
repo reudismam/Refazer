@@ -67,7 +67,8 @@ namespace RefazerManager
 
         public static ProgramNode LearnTransformationANTLR(List<Tuple<string, string>> examples)
         {
-            _grammar = GetGrammar();
+            return null;
+            /*_grammar = GetGrammar();
             //building examples
             var ioExamples = new Dictionary<State, IEnumerable<object>>();
             for (int i = 0; i < examples.Count; i++)
@@ -99,7 +100,7 @@ namespace RefazerManager
             //Learn program
             var spec = DisjunctiveExamplesSpec.From(ioExamples);
             ProgramNode program = Utils.Learn(_grammar, spec, new RankingScore(_grammar), new WitnessFunctions(_grammar));
-            return program;
+            return program;*/
         }
 
         public static ProgramNode LearnTransformation(List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>> examples)
