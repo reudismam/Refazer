@@ -21,11 +21,13 @@ namespace Clustering
                 cluster.Program = program;
                 clusters.Add(cluster);
             }
+            var toRemove = new List<TransformationCluster>();
             foreach (var cluster in clusters)
             {
-                foreach (var tuplej in submissions)
+                for (var j = 0; j < submissions.Count; j++)
                 {
-                    if (!cluster.Examples.Contains(tuplej))
+                    var tuplej = submissions[j];
+                    if (!cluster.Examples.Contains(tuplej) && !toRemove.Contains(clusters[j]))
                     {
                         var examples = new List<Tuple<SyntaxNodeOrToken, SyntaxNodeOrToken>>(cluster.Examples);
                         examples.Add(tuplej);
@@ -34,10 +36,12 @@ namespace Clustering
                         {
                             cluster.Examples.Add(tuplej);
                             cluster.Program = program;
+                            toRemove.Add(clusters[j]);
                         }
                     }
                 }
             }
+            clusters.RemoveAll(r => toRemove.Contains(r));
             return clusters;
         }
 
